@@ -83,12 +83,14 @@ class SessionModel extends Model {
       defaultValue: false,
       onChanges: (setValue) {
         if (websocket == null) return;
+
         /// Listen for all incoming data
         websocket.messageStream.listen(
           (json) {
             if (json["type"] == "pro") {
               final userStatus = json["message"]["userStatus"];
-              final isProUser = userStatus != null && userStatus.toString() == "active";
+              final isProUser =
+                  userStatus != null && userStatus.toString() == "active";
               setValue(isProUser);
             }
           },
@@ -270,7 +272,7 @@ class SessionModel extends Model {
       fromJsonModel: devicesFromJson,
       defaultValue: null,
       builder: builder,
-    );    
+    );
   }
 
   Future<void> setProxyAll<T>(bool on) async {
@@ -454,22 +456,22 @@ class SessionModel extends Model {
   Plan planFromJson(Map<String, dynamic> item) {
     final locale = Localization.locale;
     final formatCurrency = NumberFormat.simpleCurrency(locale: locale);
-    final currency = formatCurrency.currencyName != null ? formatCurrency.currencyName!.toLowerCase() : "usd";
+    final currency = formatCurrency.currencyName != null
+        ? formatCurrency.currencyName!.toLowerCase()
+        : "usd";
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
     if (plan.expectedMonthlyPrice[currency] != null) {
       var monthlyPrice = plan.expectedMonthlyPrice[currency]!.toInt();
-      plan.oneMonthCost = formatCurrency
-        .format(monthlyPrice / 100)
-        .toString();
+      plan.oneMonthCost = formatCurrency.format(monthlyPrice / 100).toString();
     }
     if (plan.price[currency] != null) {
       final price = plan.price[currency] as Int64;
       plan.totalCost = formatCurrency.format(price.toInt() / 100).toString();
       plan.totalCostBilledOneTime =
-        formatCurrency.format(price.toInt() / 100).toString() +
-            ' ' +
-            'billed_one_time'.i18n;
+          formatCurrency.format(price.toInt() / 100).toString() +
+              ' ' +
+              'billed_one_time'.i18n;
     }
     return plan;
   }
@@ -649,7 +651,8 @@ class SessionModel extends Model {
         print('value $value');
       });
     }
-    ffiRedeemResellerCode(email.toNativeUtf8(), currency.toNativeUtf8(), deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
+    ffiRedeemResellerCode(email.toNativeUtf8(), currency.toNativeUtf8(),
+        deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
   }
 
   Future<void> submitBitcoinPayment(
@@ -682,13 +685,13 @@ class SessionModel extends Model {
     String provider,
     String deviceName,
   ) async {
-    final resp = await ffiPaymentRedirect(
+    final resp = ffiPaymentRedirect(
         planID.toNativeUtf8(),
         currency.toNativeUtf8(),
         provider.toNativeUtf8(),
         email.toNativeUtf8(),
         deviceName.toNativeUtf8());
-    return resp.toDartString();
+    return resp;
   }
 
   Future<void> submitStripePayment(
@@ -698,8 +701,7 @@ class SessionModel extends Model {
     String expDate,
     String cvc,
   ) async {
-    return methodChannel
-        .invokeMethod('submitStripePayment', <String, dynamic>{
+    return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
       'planID': planID,
       'email': email,
       'cardNumber': cardNumber,

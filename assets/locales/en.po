@@ -1478,4 +1478,8 @@ msgstr "Incorrect reseller code. Please verify and try again."
 msgid "report_issue_error"
 msgstr "We're experiencing technical difficulties. Try again later."
 
+msgid "we_are_experiencing_technical_difficulties"
+msgstr "We're experiencing technical difficulties. Try again later."
+
+
 

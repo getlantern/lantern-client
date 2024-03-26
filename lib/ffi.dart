@@ -94,21 +94,27 @@ Pointer<Utf8> ffiOnBoardingStatus() =>
 Pointer<Utf8> ffiServerInfo() => _bindings.serverInfo().cast<Utf8>();
 
 Pointer<Utf8> ffiReportIssue(email, issueType, description) {
-final result =  _bindings.reportIssue(email, issueType, description);
+  final result = _bindings.reportIssue(email, issueType, description);
   if (result.r1 != nullptr) {
     // Got error throw error to show error ui state
     final errorCode = result.r1.cast<Utf8>().toDartString();
-    throw PlatformException(code: errorCode, message: 'report_issue_error'.i18n);
+    throw PlatformException(
+        code: errorCode, message: 'report_issue_error'.i18n);
   }
   return result.r0.cast<Utf8>();
 }
 
-
-Pointer<Utf8> ffiPaymentRedirect(
-        planID, currency, provider, email, deviceName) =>
-    _bindings
-        .paymentRedirect(planID, currency, provider, email, deviceName)
-        .cast<Utf8>();
+String ffiPaymentRedirect(planID, currency, provider, email, deviceName) {
+  final result =
+      _bindings.paymentRedirect(planID, currency, provider, email, deviceName);
+  if (result.r1 != nullptr) {
+    // Got error throw error to show error ui state
+    final errorCode = result.r1.cast<Utf8>().toDartString();
+    throw PlatformException(
+        code: errorCode, message: 'we_are_experiencing_technical_difficulties'.i18n);
+  }
+  return result.r0.cast<Utf8>().toDartString();
+}
 
 const String _libName = 'liblantern';
 
