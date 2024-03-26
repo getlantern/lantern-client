@@ -47,6 +47,19 @@ var (
 	proClient *client.Client
 )
 
+var issueMap = map[string]string{
+	"Cannot access blocked sites": "3",
+	"Cannot complete purchase":    "0",
+	"Cannot sign in":              "1",
+	"Spinner loads endlessly":     "2",
+	"Slow":                        "4",
+	"Chat not working":            "7",
+	"Discover not working":        "8",
+	"Cannot link device":          "5",
+	"Application crashes":         "6",
+	"Other":                       "9",
+}
+
 //export start
 func start() {
 	runtime.LockOSThread()
@@ -128,11 +141,7 @@ func sendError(err error) *C.char {
 	if err == nil {
 		return C.CString("")
 	}
-	errors := map[string]interface{}{
-		"error": err.Error(),
-	}
-	b, _ := json.Marshal(errors)
-	return C.CString(string(b))
+	return C.CString(err.Error())
 }
 
 //export selectedTab
@@ -248,14 +257,21 @@ func emailExists(email *C.char) *C.char {
 	return C.CString("false")
 }
 
+// The function returns two C strings: the first represents success, and the second represents an error.
+// If the redemption is successful, the first string contains "true", and the second string is nil.
+// If an error occurs during redemption, the first string is nil, and the second string contains the error message.
+//
 //export redeemResellerCode
-func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.char {
+func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) (*C.char, *C.char) {
 	_, err := proClient.RedeemResellerCode(userConfig(), C.GoString(email), C.GoString(resellerCode),
 		C.GoString(deviceName), C.GoString(currency))
 	if err != nil {
-		return sendError(err)
+		log.Debugf("DEBUG: error while redeeming reseller code: %v", err)
+		return nil, C.CString(err.Error())
+		// return sendError(err)
 	}
-	return C.CString("true")
+	log.Debugf("DEBUG: redeeming reseller code success: %v", err)
+	return C.CString("true"), nil
 }
 
 //export referral
@@ -352,7 +368,7 @@ func deviceLinkingCode() *C.char {
 }
 
 //export paymentRedirect
-func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
+func paymentRedirect(planID, currency, provider, email, deviceName *C.char) (*C.char, *C.char) {
 	country := a.Settings().GetCountry()
 	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
@@ -363,9 +379,9 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 		CountryCode: country,
 	})
 	if err != nil {
-		return sendError(err)
+		return nil, sendError(err)
 	}
-	return C.CString(resp.Redirect)
+	return C.CString(resp.Redirect), nil
 }
 
 //export developmentMode
@@ -388,19 +404,6 @@ func replicaAddr() *C.char {
 	return C.CString("")
 }
 
-var issueMap = map[string]string{
-	"Cannot access blocked sites": "3",
-	"Cannot complete purchase":    "0",
-	"Cannot sign in":              "1",
-	"Spinner loads endlessly":     "2",
-	"Slow":                        "4",
-	"Chat not working":            "7",
-	"Discover not working":        "8",
-	"Cannot link device":          "5",
-	"Application crashes":         "6",
-	"Other":                       "9",
-}
-
 func userConfig() *common.UserConfigData {
 	settings := a.Settings()
 	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
@@ -415,13 +418,13 @@ func userConfig() *common.UserConfigData {
 }
 
 //export reportIssue
-func reportIssue(email, issueType, description *C.char) *C.char {
+func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 	deviceID := a.Settings().GetDeviceID()
-	issueTypeInt, err := strconv.Atoi(C.GoString(issueType))
+	issueIndex := issueMap[C.GoString(issueType)]
+	issueTypeInt, err := strconv.Atoi(issueIndex)
 	if err != nil {
-		return sendError(err)
+		return nil, sendError(err)
 	}
-
 	uc := userConfig()
 
 	subscriptionLevel := "free"
@@ -448,10 +451,10 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 		nil,
 	)
 	if err != nil {
-		return sendError(err)
+		return nil, sendError(err)
 	}
 	log.Debug("Successfully reported issue")
-	return C.CString("true")
+	return C.CString("true"), nil
 }
 
 //export checkUpdates
