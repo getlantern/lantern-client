@@ -5,6 +5,7 @@ import 'package:lantern/common/ui/app_webview.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
+import 'package:intl/intl.dart';
 
 @RoutePage(name: 'Checkout')
 class Checkout extends StatefulWidget {
@@ -156,28 +157,41 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
+  Future<void> openDesktopWebview() async {
+    try {
+      String os = Platform.operatingSystem;
+      Locale locale = Localizations.localeOf(context);
+      final format = NumberFormat.simpleCurrency(locale: locale.toString());
+      final currencyName = format.currencyName ?? "USD";
+      final redirectUrl = await sessionModel.paymentRedirect(
+        widget.plan.id,
+        currencyName,
+        emailController.text,
+        "stripe",
+        os,
+      );
+      switch (Platform.operatingSystem) {
+        case 'windows':
+          await AppBrowser.openWindowsWebview(redirectUrl);
+          break;
+        case 'macos':
+          final browser = AppBrowser(onClose: checkProUser);
+          await browser.openMacWebview(redirectUrl);
+          break;
+        default:
+          await context.pushRoute(AppWebview(url: redirectUrl));
+      }
+    } catch (e) {
+      showError(context, error: e);
+    }
+  }
+
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
         // * Stripe selected
         if (isDesktop()) {
-          String os = Platform.operatingSystem;
-          final redirectUrl = await sessionModel.paymentRedirect(
-              widget.plan.id,
-              emailController.text,
-              "stripe",
-              os,
-            );
-          if (!Platform.isMacOS && !Platform.isWindows) {
-            await context.pushRoute(AppWebview(url: redirectUrl));
-          } else {
-            if (Platform.isWindows) {
-              await AppBrowser.openWindowsWebview(redirectUrl);
-            } else {
-              final browser = AppBrowser(onClose: checkProUser);
-              await browser.openMacWebview(redirectUrl);
-            }
-          }
+          await openDesktopWebview();
           return;
         }
         await context.pushRoute(
@@ -230,7 +244,8 @@ class _CheckoutState extends State<Checkout>
   }
 
   bool enableContinueButton() {
-    final isEmailValid = !emailController.value.text.isEmpty && emailFieldKey.currentState!.validate();
+    final isEmailValid = !emailController.value.text.isEmpty &&
+        emailFieldKey.currentState!.validate();
     if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
       return isEmailValid;
     }
@@ -287,6 +302,10 @@ class _CheckoutState extends State<Checkout>
                           autovalidateMode: widget.isPro
                               ? AutovalidateMode.always
                               : AutovalidateMode.disabled,
+                          contentPadding: const EdgeInsetsDirectional.only(
+                            top: 8.0,
+                            bottom: 8.0,
+                          ),
                           label: 'email'.i18n,
                           keyboardType: TextInputType.emailAddress,
                           prefixIcon: const CAssetImage(path: ImagePaths.email),
@@ -312,9 +331,15 @@ class _CheckoutState extends State<Checkout>
                                 child: CTextField(
                                   controller: refCodeController,
                                   autovalidateMode: AutovalidateMode.disabled,
+                                  contentPadding:
+                                      const EdgeInsetsDirectional.only(
+                                    top: 8.0,
+                                    bottom: 8.0,
+                                  ),
                                   onChanged: (text) {
                                     setState(() {
-                                      showContinueButton = enableContinueButton();
+                                      showContinueButton =
+                                          enableContinueButton();
                                     });
                                   },
                                   textCapitalization:
@@ -371,7 +396,9 @@ class _CheckoutState extends State<Checkout>
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: Platform.isAndroid ? paymentOptions(paymentMethods) : desktopPaymentOptions(),
+                        children: Platform.isAndroid
+                            ? paymentOptions(paymentMethods)
+                            : desktopPaymentOptions(),
                       ),
                     ),
                     // * Price summary, unused pro time disclaimer, Continue button

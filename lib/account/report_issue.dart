@@ -141,11 +141,12 @@ class _ReportIssueState extends State<ReportIssue> {
                         items: <String>[
                           'cannot_access_blocked_sites'.i18n,
                           'cannot_complete_purchase'.i18n,
-                          'cannot_login'.i18n,
-                          'loading_spinner_spins_endlessly'.i18n,
+                          'cannot_sign_in'.i18n,
+                          'discover_not_working'.i18n,
+                          'spinner_loads_endlessly'.i18n,
                           'slow'.i18n,
                           'cannot_link_devices'.i18n,
-                          'lantern_crashes'.i18n,
+                          'application_crashes'.i18n,
                           'other'.i18n
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
@@ -158,7 +159,7 @@ class _ReportIssueState extends State<ReportIssue> {
               Form(
                 key: descFieldKey,
                 child: CTextField(
-                  tooltipMessage: AppKeys.reportDescription,
+                  tooltipMessage: 'report_description'.i18n,
                   controller: descController,
                   contentPadding: const EdgeInsetsDirectional.all(8.0),
                   label: '',
@@ -212,9 +213,9 @@ class _ReportIssueState extends State<ReportIssue> {
       );
       await sessionModel.reportIssue(emailController.value.text,
           issueController.value.text, descController.value.text);
-      if (Platform.isIOS) {
-        AppLoadingDialog.dismissLoadingDialog(context);
-      }
+
+      AppLoadingDialog.dismissLoadingDialog(context);
+
       CDialog.showInfo(
         context,
         title: 'report_sent'.i18n,
@@ -226,9 +227,8 @@ class _ReportIssueState extends State<ReportIssue> {
         },
       );
     } catch (error, stackTrace) {
-      if (Platform.isIOS) {
-        AppLoadingDialog.dismissLoadingDialog(context);
-      }
+      AppLoadingDialog.dismissLoadingDialog(context);
+
       CDialog.showError(
         context,
         error: error,
