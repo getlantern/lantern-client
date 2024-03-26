@@ -21,7 +21,6 @@ class PlayCheckout extends StatefulWidget {
 
 class _PlayCheckoutState extends State<PlayCheckout>
     with SingleTickerProviderStateMixin {
-  final _formKey = GlobalKey<FormState>();
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
@@ -111,9 +110,11 @@ class _PlayCheckoutState extends State<PlayCheckout>
       if (emailFieldKey.currentState?.validate() == false) {
         showError(context, error: 'please_enter_a_valid_email_address'.i18n);
       } else {
+        context.loaderOverlay.show();
         // Await the result of the payment submission.
         await sessionModel.submitPlayPayment(
             widget.plan.id, emailController.value.text);
+        context.loaderOverlay.hide();
         // ignore: use_build_context_synchronously
         showSuccessDialog(context, widget.isPro);
       }
