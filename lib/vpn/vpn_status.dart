@@ -1,4 +1,5 @@
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/common/common_desktop.dart';
 
 class VPNStatus extends StatelessWidget {
   @override

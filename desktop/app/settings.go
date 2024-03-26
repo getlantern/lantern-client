@@ -39,6 +39,7 @@ const (
 	SNLocalHTTPToken SettingName = "localHTTPToken"
 
 	SNDeviceID                  SettingName = "deviceID"
+	SNEmailAddress              SettingName = "emailAddress"
 	SNUserID                    SettingName = "userID"
 	SNUserToken                 SettingName = "userToken"
 	SNMigratedDeviceIDForUserID SettingName = "migratedDeviceIDForUserID"
@@ -80,6 +81,7 @@ var settingMeta = map[SettingName]struct {
 	SNLocalHTTPToken: {stString, true, true},
 
 	// SNDeviceID: intentionally omit, to avoid setting it from UI
+	SNEmailAddress:              {stString, true, true},
 	SNUserID:                    {stNumber, true, true},
 	SNUserToken:                 {stString, true, true},
 	SNMigratedDeviceIDForUserID: {stNumber, true, true},
@@ -483,6 +485,16 @@ func (s *Settings) SetUIAddr(uiaddr string) {
 // GetAddr gets the HTTP proxy address.
 func (s *Settings) GetAddr() string {
 	return s.getString(SNAddr)
+}
+
+// GetEmailAddress gets the email address of pro users.
+func (s *Settings) GetEmailAddress() string {
+	return s.getString(SNEmailAddress)
+}
+
+// SetEmailAddress locally stores the email address of a pro user
+func (s *Settings) SetEmailAddress(email string) {
+	s.setVal(SNEmailAddress, email)
 }
 
 // GetUIAddr returns the address of the UI, stored across runs to avoid a

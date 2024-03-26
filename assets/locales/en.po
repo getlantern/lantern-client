@@ -162,11 +162,15 @@ msgstr "Cannot access blocked sites"
 msgid "cannot_complete_purchase"
 msgstr "Cannot complete purchase"
 
+
+msgid "discover_not_working"
+msgstr "Discover not working "
+
 msgid "cannot_sign_in"
 msgstr "Cannot sign in"
 
-msgid "loading_spinner_spins_endlessly"
-msgstr "Loading spinner spins endlessly"
+msgid "spinner_loads_endlessly"
+msgstr "Spinner loads endlessly"
 
 msgid "slow"
 msgstr "Slow"
@@ -174,8 +178,8 @@ msgstr "Slow"
 msgid "cannot_link_devices"
 msgstr "Cannot link devices"
 
-msgid "lantern_crashes"
-msgstr "Lantern crashes"
+msgid "application_crashes"
+msgstr "Application crashes"
 
 msgid "other"
 msgstr "Other"
@@ -247,6 +251,9 @@ msgstr "Lantern Pro Email"
 
 msgid "lantern_desktop"
 msgstr "Lantern Desktop"
+
+msgid "report_description"
+msgstr "Issue Description"
 
 msgid "report_issue"
 msgstr "Report Issue"
@@ -1481,4 +1488,11 @@ msgstr "Terms of Service"
 msgid "invalid_verification_code"
 msgstr "Invalid verification code"
 
+msgid "wrong_seller_code"
+msgstr "Incorrect reseller code. Please verify and try again."
 
+msgid "report_issue_error"
+msgstr "We're experiencing technical difficulties. Try again later."
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr "We're experiencing technical difficulties. Try again later."
