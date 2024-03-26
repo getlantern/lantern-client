@@ -93,16 +93,20 @@ Pointer<Utf8> ffiOnBoardingStatus() =>
 
 Pointer<Utf8> ffiServerInfo() => _bindings.serverInfo().cast<Utf8>();
 
-Pointer<Utf8> ffiReportIssue(email, issueType, description) {
-  final result = _bindings.reportIssue(email, issueType, description);
+Future<void> ffiReportIssue(List<String> list) {
+  final email = list[0].toNativeUtf8();
+  final issueType = list[1].toNativeUtf8();
+  final description = list[2].toNativeUtf8();
+  final result = _bindings.reportIssue(email as Pointer<Char>, issueType as Pointer<Char>, description as Pointer<Char>);
   if (result.r1 != nullptr) {
     // Got error throw error to show error ui state
     final errorCode = result.r1.cast<Utf8>().toDartString();
     throw PlatformException(
         code: errorCode, message: 'report_issue_error'.i18n);
   }
-  return result.r0.cast<Utf8>();
+  return Future.value();
 }
+
 
 String ffiPaymentRedirect(planID, currency, provider, email, deviceName) {
   final result =
@@ -111,7 +115,8 @@ String ffiPaymentRedirect(planID, currency, provider, email, deviceName) {
     // Got error throw error to show error ui state
     final errorCode = result.r1.cast<Utf8>().toDartString();
     throw PlatformException(
-        code: errorCode, message: 'we_are_experiencing_technical_difficulties'.i18n);
+        code: errorCode,
+        message: 'we_are_experiencing_technical_difficulties'.i18n);
   }
   return result.r0.cast<Utf8>().toDartString();
 }

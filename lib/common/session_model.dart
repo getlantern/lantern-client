@@ -548,9 +548,7 @@ class SessionModel extends Model {
   Future<void> reportIssue(
       String email, String issue, String description) async {
     if (isDesktop()) {
-      ffiReportIssue(email.toNativeUtf8(), issue.toNativeUtf8(),
-          description.toNativeUtf8());
-      return;
+      return await compute(ffiReportIssue, [email, issue, description]);
     }
     return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
       'email': email,
