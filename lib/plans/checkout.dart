@@ -179,7 +179,7 @@ class _CheckoutState extends State<Checkout>
           await browser.openMacWebview(redirectUrl);
           break;
         default:
-          await context.pushRoute(AppWebview(url: redirectUrl));
+          await context.pushRoute(AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
       }
     } catch (e) {
       showError(context, error: e);
