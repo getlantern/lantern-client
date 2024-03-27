@@ -1,19 +1,10 @@
+import 'package:lantern/account/follow_us.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
 @RoutePage<void>(name: 'Account')
-class AccountMenu extends StatefulWidget {
+class AccountMenu extends StatelessWidget {
   const AccountMenu({Key? key}) : super(key: key);
-
-  @override
-  State<AccountMenu> createState() => _AccountMenuState();
-}
-
-class _AccountMenuState extends State<AccountMenu> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());
@@ -32,6 +23,18 @@ class _AccountMenuState extends State<AccountMenu> {
 
   void upgradeToLanternPro(BuildContext context) async =>
       await context.pushRoute(const PlansPage());
+
+  void showSocialBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+      builder: (context) {
+        return FollowUs();
+      },
+    );
+  }
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
@@ -59,14 +62,15 @@ class _AccountMenuState extends State<AccountMenu> {
                 )
               : const SizedBox(),
         ),
-      ListItemFactory.settingsItem(
-        key: AppKeys.upgrade_lantern_pro,
-        icon: ImagePaths.pro_icon_black,
-        content: 'Upgrade to Lantern Pro'.i18n,
-        onTap: () {
-          upgradeToLanternPro(context);
-        },
-      ),
+      if (Platform.isAndroid)
+        ListItemFactory.settingsItem(
+          key: AppKeys.upgrade_lantern_pro,
+          icon: ImagePaths.pro_icon_black,
+          content: 'Upgrade to Lantern Pro'.i18n,
+          onTap: () {
+            upgradeToLanternPro(context);
+          },
+        ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
@@ -124,7 +128,7 @@ class _AccountMenuState extends State<AccountMenu> {
 
   List<Widget> commonItems(BuildContext context) {
     return [
-      if (Platform.isAndroid)
+      if (isMobile())
         ListItemFactory.settingsItem(
           icon: ImagePaths.desktop,
           content: 'desktop_version'.i18n,
@@ -132,6 +136,13 @@ class _AccountMenuState extends State<AccountMenu> {
             openDesktopVersion(context);
           },
         ),
+      ListItemFactory.settingsItem(
+        icon: ImagePaths.thumbUp,
+        content: 'follow_us'.i18n,
+        onTap: () {
+          showSocialBottomSheet(context);
+        },
+      ),
       ListItemFactory.settingsItem(
         key: AppKeys.support,
         icon: ImagePaths.support,

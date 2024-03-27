@@ -166,9 +166,6 @@ msgstr "Cannot complete purchase"
 msgid "discover_not_working"
 msgstr "Discover not working "
 
-
-
-
 msgid "cannot_sign_in"
 msgstr "Cannot sign in"
 
@@ -1479,14 +1476,38 @@ msgstr "Your device has been successfully added. If you do not see the device co
 msgid "search_apps"
 msgstr "Search Apps"
 
+msgid "cannot_login"
+msgstr "Cannot login"
+
+msgid "privacy_policy"
+msgstr "Privacy Policy"
+
+msgid "terms_of_service"
+msgstr "Terms of Service"
+
+msgid "invalid_verification_code"
+msgstr "Invalid verification code"
+
 msgid "wrong_seller_code"
 msgstr "Incorrect reseller code. Please verify and try again."
+
+msgid "follow_us"
+msgstr "Follow Us"
+
+msgid "follow_us_telegram"
+msgstr "Follow us Telegram "
+
+msgid "follow_us_instagram"
+msgstr "Follow us Instagram"
+
+msgid "follow_us_facebook"
+msgstr "Follow us Facebook "
+
+msgid "follow_us_x"
+msgstr "Follow us X "
 
 msgid "report_issue_error"
 msgstr "We're experiencing technical difficulties. Try again later."
 
 msgid "we_are_experiencing_technical_difficulties"
 msgstr "We're experiencing technical difficulties. Try again later."
-
-
-

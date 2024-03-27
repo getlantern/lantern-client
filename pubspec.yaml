@@ -90,7 +90,7 @@ dependencies:
   hexcolor: ^3.0.1
 
   # URL & Sharing utilities
-  url_launcher: ^6.1.12
+  url_launcher: ^6.2.5
   share_plus: ^7.1.0
   flutter_inappwebview: ^6.0.0
   flutter_windows_webview:
@@ -129,7 +129,7 @@ dependencies:
   ffi: ^2.1.0
   # Deeplink handling
   app_links: ^3.5.1
-  # Animated loading border
+  #Loading
   animated_loading_border: ^0.0.2
 
 

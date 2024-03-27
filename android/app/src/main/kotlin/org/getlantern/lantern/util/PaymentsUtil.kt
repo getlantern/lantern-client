@@ -1,6 +1,8 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
+import android.app.ProgressDialog
+import androidx.appcompat.app.AlertDialog
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
@@ -25,6 +27,7 @@ import org.getlantern.mobilesdk.Logger
 
 class PaymentsUtil(private val activity: Activity) {
     private val session: LanternSessionManager = LanternApp.getSession()
+
 
     fun submitStripePayment(
         planID: String,
@@ -153,6 +156,7 @@ class PaymentsUtil(private val activity: Activity) {
         planID: String,
         methodCallResult: MethodChannel.Result,
     ) {
+
         val inAppBilling = LanternApp.getInAppBilling()
         val currency =
             LanternApp.getSession().planByID(planID)?.let {
@@ -169,6 +173,7 @@ class PaymentsUtil(private val activity: Activity) {
                     purchases: MutableList<Purchase>?,
                 ) {
                     if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+
                         methodCallResult.error(
                             "unknownError",
                             activity.resources.getString(R.string.error_making_purchase),
@@ -187,6 +192,7 @@ class PaymentsUtil(private val activity: Activity) {
                             TAG,
                             "Unexpected number of purchased products, not proceeding with purchase",
                         )
+
                         methodCallResult.error(
                             "unknownError",
                             activity.resources.getString(R.string.error_making_purchase),
@@ -196,7 +202,7 @@ class PaymentsUtil(private val activity: Activity) {
                     }
 
                     sendPurchaseRequest(
-                        plan + "-" + currency,
+                        "$plan-$currency",
                         email,
                         tokens[0],
                         PaymentProvider.GooglePlay,
@@ -337,6 +343,7 @@ class PaymentsUtil(private val activity: Activity) {
                             Logger.e(TAG, "User detail : $userData")
                             session.setIsProUser(true)
                             activity.runOnUiThread {
+
                                 methodCallResult.success("purchaseSuccessful")
                             }
 
@@ -345,6 +352,7 @@ class PaymentsUtil(private val activity: Activity) {
                         override fun onFailure(throwable: Throwable?, error: ProError?) {
                             Logger.error(TAG, "Unable to fetch user data: $throwable.message")
                             activity.runOnUiThread {
+
                                 methodCallResult.success("purchaseSuccessful")
                             }
 
@@ -358,6 +366,7 @@ class PaymentsUtil(private val activity: Activity) {
                     t: Throwable?,
                     error: ProError?,
                 ) {
+
                     Logger.e(TAG, "Error with purchase request: $error")
                     methodCallResult.error(
                         "errorMakingPurchase",

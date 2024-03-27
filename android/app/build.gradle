@@ -375,7 +375,7 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
-    implementation "androidx.webkit:webkit:1.9.0"
+    implementation 'androidx.webkit:webkit:1.8.0'
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
 
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
@@ -394,7 +394,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Google Play libraries
-    implementation 'com.android.billingclient:billing:6.1.0'
+    implementation 'com.android.billingclient:billing:6.2.0'
 //    implementation 'com.android.billingclient:billing-ktx:6.1.0'
     implementation 'com.google.android.gms:play-services-base:18.2.0'
     implementation 'com.google.android.gms:play-services-ads:22.4.0'
@@ -432,8 +432,8 @@ dependencies {
     // from https://github.com/getlantern/opus_android
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
-    implementation 'com.github.getlantern:messaging-android:e9e7ef7417'
-    implementation 'com.github.getlantern:db-android:b58762fe00'
+    implementation 'com.github.getlantern:messaging-android:e36af5da7e'
+    implementation 'com.github.getlantern:db-android:36239c103c'
 
 //    implementation 'com.cleveradssolutions:cas:3.3.1'
 }

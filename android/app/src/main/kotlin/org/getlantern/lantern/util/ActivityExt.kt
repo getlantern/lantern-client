@@ -50,6 +50,8 @@ fun Activity.restartApp() {
     Process.killProcess(Process.myPid())
 }
 
+
+
 @JvmOverloads
 fun Activity.showAlertDialog(
     title: CharSequence? = null,

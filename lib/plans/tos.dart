@@ -35,14 +35,13 @@ class TOS extends StatelessWidget {
   }
 
   Future<void> onUrlTap(BuildContext context) async {
-    const href = 'https://s3.amazonaws.com/lantern/Lantern-TOS.pdf';
-    if (await canLaunchUrl(Uri.parse(href))) {
+    if (await canLaunchUrl(Uri.parse(AppSecret.tos))) {
       CDialog(
         title: 'open_url'.i18n,
-        description: 'are_you_sure_you_want_to_open'.i18n.fill([href]),
+        description: 'are_you_sure_you_want_to_open'.i18n.fill([AppSecret.tos]),
         agreeText: 'continue'.i18n,
         agreeAction: () async {
-          await launchUrl(Uri.parse(href));
+          await launchUrl(Uri.parse(AppSecret.tos));
           return true;
         },
       ).show(context);

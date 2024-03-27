@@ -1,16 +1,17 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/common_desktop.dart';
-import 'package:lantern/plans/utils.dart';
+import 'package:lantern/common/ui/app_loading_dialog.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
+  final String title;
   final String url;
 
   const AppWebView({
     super.key,
     required this.url,
+    required this.title,
   });
 
   @override
@@ -32,10 +33,13 @@ class _AppWebViewState extends State<AppWebView> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: "",
+      title: widget.title,
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
         initialSettings: settings,
+        onProgressChanged: (controller, progress) {
+          appLogger.i("Progress: $progress");
+        },
       ),
     );
   }
@@ -54,37 +58,37 @@ class AppBrowser extends InAppBrowser {
 
   @override
   Future onBrowserCreated() async {
-    print("Browser created");
+    appLogger.i("Browser created");
   }
 
   @override
   Future onLoadStart(url) async {
-    print("Started displaying $url");
+    appLogger.i("Started displaying $url");
   }
 
   @override
   Future onLoadStop(url) async {
-    print("Stopped displaying $url");
-    this.onClose?.call();
+    appLogger.i("Stopped displaying $url");
+    onClose?.call();
   }
 
   @override
   void onReceivedError(WebResourceRequest request, WebResourceError error) {
-    print("Can't load ${request.url}.. Error: ${error.description}");
+    appLogger.i("Can't load ${request.url}.. Error: ${error.description}");
   }
 
   @override
   void onProgressChanged(progress) {
-    print("Progress: $progress");
+    appLogger.i("Progress: $progress");
   }
 
   @override
   void onExit() {
-    print("Browser closed");
+    appLogger.i("Browser closed");
   }
 
   Future<void> openMacWebview(String url) async {
-    await this.openUrlRequest(
+    await openUrlRequest(
         urlRequest: URLRequest(url: WebUri(url)), settings: settings);
   }
 

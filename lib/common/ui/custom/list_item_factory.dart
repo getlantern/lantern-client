@@ -190,7 +190,6 @@ class ListItemFactory extends StatelessWidget {
         key: key,
         color: transparent,
         child: CInkWell(
-
           disableSplash: disableSplash ?? false,
           overrideColor: overrideColor,
           onTap: onTap ?? () {},
