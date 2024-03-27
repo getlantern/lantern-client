@@ -167,10 +167,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
 
     private fun hasInstallPackagesPermission(): Boolean {
         return PackageManager.PERMISSION_GRANTED ==
-                packageManager.checkPermission(
-                    Manifest.permission.REQUEST_INSTALL_PACKAGES,
-                    packageName
-                )
+                packageManager.checkPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES, packageName)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -193,11 +190,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         when {
             Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 -> installUpdate()
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> startInstallO()
-            !hasInstallPackagesPermission() -> ActivityCompat.requestPermissions(
-                this,
-                arrayOf<String>(Manifest.permission.INSTALL_PACKAGES),
-                1
-            )
+            !hasInstallPackagesPermission() -> ActivityCompat.requestPermissions(this, arrayOf<String>(Manifest.permission.INSTALL_PACKAGES), 1)
         }
     }
 

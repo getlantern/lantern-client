@@ -1,0 +1,96 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:id="@+id/updater_view"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/update_border"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="18dip"
+        android:paddingRight="18dip">
+
+        <ImageView
+            android:id="@+id/update_icon"
+            android:layout_marginTop="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:src="@drawable/update_icon" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:lineSpacingExtra="7sp"
+            android:text="@string/update_lantern"
+            android:textAppearance="@style/title"
+            android:translationY="-3.62sp" />
+
+        <TextView
+            android:id="@+id/subTitle"
+            android:layout_width="232dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:lineSpacingExtra="7sp"
+            android:text="@string/update_available"
+            android:textAppearance="@style/subTitle"
+            android:translationY="-3.3sp" />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/progressBarLayout"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="gone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:progressDrawable="@drawable/progress_drawable_blue"
+                android:progress="0"/>
+            <TextView
+                android:id="@+id/percentage"
+                android:textColor="#000000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/progressBar"
+                />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/updateButtons"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/notNow"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="63dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:onClick="onClick"
+                android:layout_marginRight="85dp"
+                android:layout_alignParentRight="true"
+                android:text="@string/not_now"
+                android:textColor="#707070"
+                android:textSize="14sp" />
+            <Button
+                android:id="@+id/installUpdate"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="63dp"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:onClick="onClick"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:text="@string/install_update"
+                android:textColor="#DB0A5B"
+                android:textSize="14sp" />
+        </RelativeLayout>
+    </LinearLayout>
+</merge>
