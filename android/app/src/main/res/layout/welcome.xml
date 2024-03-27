@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="320dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
@@ -10,7 +9,7 @@
     android:paddingLeft="30dp"
     android:paddingRight="30dp"
     android:background="@color/accent_white"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/wall"
@@ -21,7 +20,7 @@
         android:scaleType="fitXY"
         android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:src="@drawable/wall"/>
+        android:src="@drawable/wall" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -34,7 +33,7 @@
         android:gravity="center"
         android:textColor="@color/black"
         android:textStyle="bold"
-        android:text="@string/welcome_to_lantern"/>
+        android:text="@string/welcome_to_lantern" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/now_using"
@@ -44,7 +43,7 @@
         android:textSize="13sp"
         android:gravity="center"
         android:textColor="@color/black"
-        android:text="@string/now_using"/>
+        android:text="@string/now_using" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/unlimited_data"
@@ -54,7 +53,7 @@
         android:textSize="13sp"
         android:gravity="center"
         android:textColor="@color/black"
-        android:text="@string/to_get_unlimited"/>
+        android:text="@string/to_get_unlimited" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/startUsingBtn"
@@ -70,6 +69,6 @@
         android:textSize="14sp"
         android:textAllCaps="true"
         android:textColor="@color/accent_white"
-        android:clickable = "true"
-        android:background="@color/pink"/>
+        android:clickable="true"
+        android:background="@color/pink" />
 </LinearLayout>

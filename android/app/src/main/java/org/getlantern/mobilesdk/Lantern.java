@@ -7,8 +7,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import internalsdk.Session;
@@ -41,10 +41,10 @@ public abstract class Lantern {
      * lantern
      */
     public static StartResult enable(final Context context,
-            final String locale,
-            final Settings settings,
-            final Session session)
-        throws LanternNotRunningException {
+                                     final String locale,
+                                     final Settings settings,
+                                     final Session session)
+            throws LanternNotRunningException {
         return doEnable(context, locale, settings,
                 "org.getlantern.mobilesdk.embedded.EmbeddedLantern", session);
     }
@@ -62,7 +62,7 @@ public abstract class Lantern {
     public static StartResult enableAsService(
             final Context context, final String locale,
             final Settings settings, final Session session)
-        throws LanternNotRunningException {
+            throws LanternNotRunningException {
         return doEnable(context, locale, settings,
                 "org.getlantern.mobilesdk.LanternServiceManager", session);
     }
@@ -71,7 +71,7 @@ public abstract class Lantern {
             final Context context, final String locale,
             final Settings settings,
             String implClassName, Session session)
-        throws LanternNotRunningException {
+            throws LanternNotRunningException {
 
         initConfigDir(context);
 
@@ -161,13 +161,13 @@ public abstract class Lantern {
     }
 
     private static void copyFile(String fileName, File dstFile,
-            InputStream in,
-            OutputStream out) throws IOException {
+                                 InputStream in,
+                                 OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
 
         Logger.d(TAG, String.format("Copying %s to %s", fileName,
-                    dstFile.getAbsolutePath()));
+                dstFile.getAbsolutePath()));
 
         while ((read = in.read(buffer)) != -1) {
             out.write(buffer, 0, read);
@@ -184,7 +184,7 @@ public abstract class Lantern {
      * @param fileName
      */
     private static void copyAssetFile(Context context,
-            String fileName) {
+                                      String fileName) {
 
         InputStream in = null;
         OutputStream out = null;

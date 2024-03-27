@@ -24,7 +24,8 @@ import java.util.concurrent.ConcurrentHashMap
 
 class InAppBilling(
     private val context: Context,
-    private val builder: BillingClient.Builder = BillingClient.newBuilder(context).enablePendingPurchases(),
+    private val builder: BillingClient.Builder = BillingClient.newBuilder(context)
+        .enablePendingPurchases(),
     private val googleApiAvailability: GoogleApiAvailability = GoogleApiAvailability.getInstance(),
 ) : PurchasesUpdatedListener, InAppBillingInterface {
     companion object {

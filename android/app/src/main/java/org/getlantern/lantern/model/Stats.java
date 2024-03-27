@@ -41,5 +41,7 @@ public class Stats {
         return String.valueOf(adsBlocked);
     }
 
-    public boolean isHasSucceedingProxy() { return hasSucceedingProxy; }
+    public boolean isHasSucceedingProxy() {
+        return hasSucceedingProxy;
+    }
 }

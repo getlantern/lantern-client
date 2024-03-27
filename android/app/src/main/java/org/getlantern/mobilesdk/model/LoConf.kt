@@ -25,13 +25,6 @@ class LoConf {
     @SerializedName("defaultLocale")
     var defaultLocale: String? = null
 
-    @Expose
-    @SerializedName("ads")
-    var ads: Map<String, BannerAd>? = null
-
-    @Expose
-    @SerializedName("popUpAds")
-    var popUpAds: Map<String, PopUpAd>? = null
 
     companion object {
         private val TAG = LoConf::class.java.name

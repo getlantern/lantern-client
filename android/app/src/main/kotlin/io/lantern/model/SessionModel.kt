@@ -2,7 +2,6 @@ package io.lantern.model
 
 import android.app.Activity
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
 import internalsdk.Internalsdk
@@ -12,7 +11,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.lantern.apps.AppsDataProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.FormBody
 import okhttp3.RequestBody
@@ -34,7 +32,6 @@ import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.restartApp
-import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.IssueReporter

@@ -1,5 +1,7 @@
 package org.getlantern.mobilesdk.util;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
@@ -22,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static android.content.Context.CONNECTIVITY_SERVICE;
 
 /**
  * Provides a facility for detecting the current DNS server.

@@ -47,7 +47,7 @@ class InAppBillingTest {
 
     private lateinit var inAppBilling: InAppBilling
 
-	@Before
+    @Before
     fun setUp() {
         val context = mockk<Context>(relaxed = true)
         MockKAnnotations.init(this, relaxUnitFun = true)
@@ -56,7 +56,7 @@ class InAppBillingTest {
         inAppBilling = InAppBilling(context, builder, availability)
     }
 
-    private fun playServicesAvailable() = 
+    private fun playServicesAvailable() =
         every { availability.isGooglePlayServicesAvailable(any()) } returns ConnectionResult.SUCCESS
 
     @Test

@@ -1,30 +1,17 @@
 package io.lantern.model
 
-import android.app.DownloadManager
-import android.content.Context
 import android.content.pm.PackageManager
 import android.media.audiofx.AutomaticGainControl
 import android.media.audiofx.NoiseSuppressor
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
-import io.lantern.db.SnippetConfig
-import io.lantern.messaging.Messaging
-import io.lantern.messaging.Model
 import io.lantern.messaging.WebRTCSignal
-import io.lantern.messaging.dbPath
-import io.lantern.messaging.directContactPath
-import io.lantern.messaging.inputStream
 import org.getlantern.lantern.MainActivity
-import org.getlantern.lantern.R
-import org.getlantern.lantern.util.restartApp
-import org.whispersystems.signalservice.internal.util.Util
 import top.oply.opuslib.OpusRecorder
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
 import java.util.concurrent.atomic.AtomicReference
 
 class MessagingModel constructor(

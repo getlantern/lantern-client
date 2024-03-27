@@ -39,11 +39,14 @@
         android:persistent="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
-        tools:replace="allowBackup, label"
-        >
+        tools:replace="allowBackup, label">
 
-        <meta-data android:name="io.sentry.dsn" android:value="https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353" />
-        <meta-data android:name="io.sentry.auto-init" android:value="false" />
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353" />
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
 
         <activity
             android:name=".MainActivity"
@@ -85,7 +88,7 @@
             android:name=".service.LanternService_"
             android:enabled="true"
             android:exported="false"
-            android:stopWithTask="false"/>
+            android:stopWithTask="false" />
 
         <receiver android:name=".model.DeclineCallBroadcastReceiver" />
 
@@ -104,7 +107,7 @@
         <activity
             android:name=".activity.WelcomeActivity_"
             android:noHistory="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activity.WebViewActivity_"

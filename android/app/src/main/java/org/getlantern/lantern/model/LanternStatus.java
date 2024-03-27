@@ -18,6 +18,6 @@ public class LanternStatus {
 
     public boolean isOn() {
         return status != null &&
-            status.equals(Status.ON);
+                status.equals(Status.ON);
     }
 }

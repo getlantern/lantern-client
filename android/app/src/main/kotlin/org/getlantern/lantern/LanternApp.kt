@@ -1,5 +1,6 @@
 package org.getlantern.lantern
 
+//import org.getlantern.lantern.util.SentryUtil
 import android.app.Application
 import android.content.Context
 import android.os.StrictMode
@@ -7,10 +8,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
-import org.getlantern.lantern.plausible.Plausible
-import org.getlantern.lantern.util.debugOnly
 import org.getlantern.lantern.util.LanternProxySelector
-//import org.getlantern.lantern.util.SentryUtil
+import org.getlantern.lantern.util.debugOnly
 import org.getlantern.mobilesdk.util.HttpClient
 
 open class LanternApp : Application() {

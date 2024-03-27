@@ -2,7 +2,6 @@ package org.getlantern.lantern.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -15,6 +14,7 @@ import org.androidannotations.annotations.EActivity
 import org.androidannotations.annotations.Extra
 import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.ProError
@@ -22,7 +22,6 @@ import org.getlantern.lantern.util.FreeKassa
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.json.JSONException
-import org.getlantern.lantern.MainActivity
 
 
 // See here for an overview of how Freekassa purchase flow works in Lantern:

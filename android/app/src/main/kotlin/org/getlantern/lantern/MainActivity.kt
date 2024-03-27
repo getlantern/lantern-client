@@ -343,7 +343,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     proPlans: Map<String, ProPlan>,
                     paymentMethods: List<PaymentMethods>,
 
-                ) {
+                    ) {
                     Logger.debug(TAG, "Successfully fetched payment methods")
                     processPaymentMethods(proPlans, paymentMethods)
                 }
@@ -356,7 +356,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         proPlans: Map<String, ProPlan>,
         paymentMethods: List<PaymentMethods>,
 
-    ) {
+        ) {
         for (planId in proPlans.keys) {
             proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
         }

@@ -1,315 +1,315 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">Lantern</string>
-  <string name="action_settings">Configurações</string>
-  <string name="proxy_all_setting">Proxy todo o tráfego</string>
-  <string name="proxy_all_on_header">Ligado (Opção mais segura)</string>
-  <string name="proxy_all_off_header">Desligado (Opção mais rápida)</string>
-  <string name="button_text">Iniciar</string>
-  <string name="drawer_open">Gaveta aberta</string>
-  <string name="drawer_close">Gaveta fechada</string>
-  <string name="default_fragment">Fragmento padrão</string>
-  <string name="receive_lantern">Receber Lantern desktop por email</string>
-  <string name="lantern_desktop">Lantern Desktop</string>
-  <string name="email_hint">Email</string>
-  <string name="send_button">Enviar</string>
-  <string name="send_desktop">Enviar para a área de trabalho</string>
-  <string name="send_email">Enviar Email</string>
-  <string name="your_email">Seu Email</string>
-  <string name="your_email_address">Seu endereço de email</string>
-  <string name="please_enter">Por favor digite, e confirme seu endereço de email.</string>
-  <string name="please_enter_register">Por favor digite e confirme seu endereço de email para registrar sua conta Lantern Pro.</string>
-  <string name="your_referral_code">Seu código de referência</string>
-  <string name="report_an_issue">Relatar um problema</string>
-  <string name="select_issue">Por favor selecione um problema</string>
-  <string name="select_issue_desc">Por favor deixe-nos uma breve descrição de seu problema aqui, e vamos retornar para você o mais breve possível.</string>
-  <string name="submit">Enviar</string>
-  <string name="submit_issue">Enviar problema</string>
-  <string name="no_issue_selected">Por favor selecione um problema antes de enviar um relatório</string>
-  <string name="cannot_find_email">Oops! Estamos tendo problemas para encontrar esse endereço de email.</string>
-  <string name="no_purchase_date">Por favor selecione uma data aproximada de quando você comprou o Lantern Pro</string>
-  <string name="purchase_date">Data de compra</string>
-  <string-array name="common_issue_list">
-    <item>Não é possível acessar sites bloqueados</item>
-    <item>Não é possível completar a compra</item>
-    <item>Não é possível fazer login</item>
-    <item>Spinner carrega sem parar</item>
-    <item>Lento</item>
-    <item>Outro</item>
-  </string-array>
-  <string name="submit_code">Confirmar código</string>
-  <string name="on_text">Ligado</string>
-  <string name="off_text">Desligado</string>
-  <string name="lantern_off">Lantern está desligado. Vire o interruptor para acessar sites e serviços bloqueados! </string>
-  <string name="lantern_on">Lantern está ligado. Você agora pode acessar sites e serviços bloqueados!</string>
-  <string name="on_desc">Você agora pode acessar sites e serviços bloqueados</string>
-  <string name="off_desc">Clique no botão para acessar sites e serviços bloqueados</string>
-  <string name="desktop_option">Versão Desktop</string>
-  <string name="contact_option">Contato</string>
-  <string name="check_for_update">Verificar atualizações</string>
-  <string name="no_update_available">Você está atualizado!</string>
-  <string name="error_making_purchase">Erro ao tentar fazer a compra</string>
-  <string name="cancel">Cancela</string>
-  <string name="newsfeed_option">Experimente o Feed do Lantern</string>
-  <string name="newsfeed_off_option">Desligar Feed</string>
-  <string name="privacy_policy">Política de Privacidade</string>
-  <string name="share_option">Compartilhar</string>
-  <string name="quit_option">Fechar</string>
-  <string name="share_email_native"></string>
-  <string name="share_email_subject">Lantern Android</string>
-  <string name="fatal_error">Lantern encontrou um erro fatal e não está mais rodando</string>
-  <string name="share_twitter">Confira o Lantern Android: https://bit.ly/lanternapk</string>
-  <string name="share_facebook">Estou usando Lantern para Android, está disponível aqui: https://bit.ly/lanternapk</string>
-  <string name="share_email_gmail">Estou usando o Lantern para Android, e anexei o arquivo APK!</string>
-  <string name="share_sms">Estou usando o Lantern para Android, baixei-o aqui: https://bit.ly/lanternapk</string>
-  <string name="share_chooser_text">Compartilhar Lantern Android</string>
-  <string name="card">Cartão</string>
-  <string name="credit_card">Cartão de crédito</string>
-  <string name="Alipay">Alipay</string>
-  <string name="alipay_account">Conta Alipay</string>
-  <string name="month">Mês</string>
-  <string name="year">Ano</string>
-  <string name="success_email">Lantern Desktop foi enviado por email para você!</string>
-  <string name="send_logs">Enviar registros</string>
-  <string name="help_survey">Ajude a tornar o Lantern melhor, faça uma pergunta da pesquisa agora!</string>
-  <string name="take_survey">Responder à pesquisa!</string>
-  <string name="thanks_survey">Obrigado por responder nossa pesquisa!\n</string>
-  <string name="invalid_email">Endereço de e-mail inválido</string>
-  <string name="error_payment_gateway">Erro ao entrar em contato com o gateway de pagamento</string>
-  <string name="emails_do_not_match">Campos de email não coincidem</string>
-  <string name="invalid_reseller_code">O código de revendedor que você digitou é inválido</string>
-  <string name="invalid_referral_code">Código de referência inválido</string>
-  <string name="invalid_voucher_code">Código de comprovante inválido</string>
-  <string name="cannot_use_own_referral_code">Não pode usar seu próprio código de referência para promoção</string>
-  <string name="no_internet_connection">Conexão com a Internet não disponível!</string>
-  <string name="unable_remove_device">Incapaz de remover o dispositivo. Por favor tente novamente mais tarde!</string>
-  <string name="remove">Remover</string>
-  <string name="contact_email">team@getlantern.org</string>
-  <string name="contact_message">Ajude-me</string>
-  <string name="contact_subject">Lantern Android</string>
-  <string name="not_now">Agora não</string>
-  <string name="install_update">Atualizar</string>
-  <string name="error_update">Erro ao baixar atualização</string>
-  <string name="loading">Carregando...</string>
-  <string name="manual_update">Tente instalar manualmente a última versão &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
-  <string name="pro_welcome_text">Bem vindo ao Lantern Pro!</string>
-  <string name="happy_anniversary">FELIZ ANIVERSÁRIO LANTERNA!</string>
-  <string name="welcome_greeting">Bem vindo ao Lanterna</string>
-  <string name="upgrade_for">Atualize para a última\n veloz &amp; estável</string>
-  <string name="what_kind_of_lantern">Que tipo de Lantern\n você gostaria?</string>
-  <string name="lantern_pro_radio">Lantern Pro - Dados Ilimitados</string>
-  <string name="lantern_free_radio">Lantern Basic - 500MB de Dados</string>
-  <string name="welcome_to_lantern">Bem vindo ao novo e melhorado Lantern</string>
-  <string name="to_get_unlimited">Para obter dados ilimitados, velocidades máximas e resistência ao bloqueio ainda mais forte\nATUALIZE para Pro!</string>
-  <string name="renew_pro_account">Renove sua conta Pro</string>
-  <string name="logout">Sair</string>
-  <string name="change_phone_number">Mudar número de telefone</string>
-  <string name="change_email_address">Mudar endereço de email</string>
-  <string name="pro_account_expires">Sua conta Pro expira em %1$s</string>
-  <string name="includes_free_months">Isso inclue seus %2$d meses de bônus! </string>
-  <string name="verified_phone_number">Número de telefone verificado:</string>
-  <string name="devices_authorized">Dispositivos autorizados para usar sua conta Pro</string>
-  <string name="send_us_your_logs">Envie-nos seus registros</string>
-  <string name="thanks_purchase">Obrigado por sua compra do Lantern Pro!</string>
-  <string name="start_inviting">\r\nComece a convidar!</string>
-  <string name="sending_request">Processando requisição</string>
-  <string name="invite_friends">Digite seu e-mail para receber um código para compartilhar com seus amigos. Receba um mês grátis de PRO quando eles se inscreverem!</string>
-  <string name="invite_friends_welcome">Quando seus amigos comprarem o plano de dois anos, cada um receberá 3 meses grátis, o plano de um ano permite a cada um obter 1 mês grátis</string>
-  <string name="invite_friends_btn">Convide amigos</string>
-  <string name="share_friends_text">Compartilhe com amigos para ganhar meses grátis!</string>
-  <string name="email_address">Endereço de email</string>
-  <string name="continue_to_pro">Continue na versão Pro</string>
-  <string name="continue_to_basic">Continuar na versão Básica</string>
-  <string name="continue_">Continue</string>
-  <string name="continue_to_payment">Continue ao Pagamento</string>
-  <string name="purchase_voucher">Comprar Voucher</string>
-  <string name="skip_to_checkout">Pular para Sair</string>
-  <string name="free_pro_credits">Créditos Pro Grátis</string>
-  <string name="get_pro_credits">Obter gratuitamente créditos Pro </string>
-  <string name="get_free_months">Obter meses grátis</string>
-  <string name="text_invite">Convite por texto</string>
-  <string name="email_invite">Convite por email</string>
-  <string name="share_your_referral_code">Compartilhe seu código de referência</string>
-  <string name="get_code">Obter código</string>
-  <string name="get_code_text">Digite seu email para receber um código para compartilhar com seus amigos, receba um mês grátis de PRO quando eles se inscreverem!</string>
-  <string name="enter_your_email">Digite seu email para receber um código de referência</string>
-  <string name="fastworldpay_text">Quando você clicar em continuar a compra,\nvocê será redirecionado para um site externo para completar\n o pagamento e conseguir o código de ativação</string>
-  <string name="share_referral_text">Use meu código %1$s para receber até 3 meses adicionais gratuitamente depois da compra. Baixe o Lantern https://bit.ly/lanternapk</string>
-  <string name="previous_code">Se você já recebeu um código de referência\r\npor favor certifique-se de usar o mesmo endereço de email.</string>
-  <string name="payment_plans">Planos de pagamento do Lantern PRO</string>
-  <string name="features_text">Características do Lantern PRO</string>
-  <string name="checkout">Sair</string>
-  <string name="cvc">CVC</string>
-  <string name="cc_number">Cartão de crédito</string>
-  <string name="card_number">Número do cartão</string>
-  <string name="card_expiration">MM/AA</string>
-  <string name="validation_errors">Erros de validação</string>
-  <string name="ok">OK</string>
-  <string name="progressMessage">Processando requisição...</string>
-  <string name="progressMessage2">Recuperando código de referência</string>
-  <string name="language">Idioma</string>
-  <string name="settings">Configurações</string>
-  <string name="referral_applied">Seus meses gratuitos serão adicionados a você e seus amigos uma vez que o pagamento esteja completo!</string>
-  <string name="all_feeds">todos</string>
-  <string name="feed.error.oops">Oops!</string>
-  <string name="feed.error.error_fetching_feed">Erro ao buscar Feed</string>
-  <string name="feed.error.try_again">Por favor tente novamente</string>
-  <string name="authorize_device_pro">Autorizar dispositivo para Pro</string>
-  <string name="add_device">Adicionar dispositivo</string>
-  <string name="now_authorized">Esse dispositivo agora está autorizado para usar sua conta Pro!</string>
-  <string name="i_have_another">Tenho outro dispositivo Lantern Pro</string>
-  <string name="link_this_device">Vincular este dispositivo</string>
-  <string name="or">OU</string>
-  <string name="need_to_recover">Preciso recuperar minha conta Lantern Pro</string>
-  <string name="start_recovery">Iniciar recuperação</string>
-  <string name="account_recovery">Recuperação de conta</string>
-  <string name="account_recovery_code">Código de recuperação da conta</string>
-  <string name="thanks_report">Obrigado, o suporte ao cliente Lantern estará em contato dentro de 48 horas.</string>
-  <string name="enter_valid_code">Por favor digite um código de recuperação válido.</string>
-  <string name="too_many_devices">O limite de dispositivos que pode ser vinculado a sua conta Pro foi alcançado.</string>
-  <string name="check_spam_folder">* Por favor cheque sua pasta de spam se não recebeu o email</string>
-  <string name="by_referral">Recebido Pro por encaminhar um amigo</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item>Cartão de Crédito</item>
-    <item>Recebido Pro por encamnhar um amigo</item>
-  </string-array>
-  <string name="payment_method">Método de pagamento</string>
-  <string name="payment_account">Conta de pagamento</string>
-  <string name="oops_having_trouble">Oops! Estamos tendo problemas para encontrar este endereço de email. Por favor forneça a informação abaixo para nos ajudar a localizar sua conta.</string>
-  <string name="locate_account">Tenha atenção a qualquer outra informação que pode nos ajudar a localizar sua conta.</string>
-  <string name="resend_email">Reenviar email</string>
-  <string name="dont_remember">Não lembra de seu email?</string>
-  <string name="device_code">Código de vinculação do dispositivo</string>
-  <string name="device_now_linked">Você vinculou com sucesso seu dispositivo!\n</string>
-  <string name="device_linked_success">Sucesso! Seu novo dispositivo será vinculado em breve.\n</string>
-  <string name="link_this_device_0">Para vincular esse dispositivo a sua conta Pro:</string>
-  <string name="link_this_device_1"><b>1.</b> Abra o item \'Adicionar dispositivo\' no menu de seu dispositivo Pro.</string>
-  <string name="link_this_device_2"><b>2.</b> Digite o código de vinculação do dispositivo e envie.</string>
-  <string name="make_sure_updated">* Verifique se você está atualizado com a última versão do Lantern em seu dispositivo Pro.</string>
-  <string name="make_sure_updated_2">* Verifique se você está atualizado com a última versão do Lantern em seu dispositivo não autorizado.</string>
-  <string name="error_device_code">Erro ao recuperar o código de vinculação do dispositivo! Por favor, tente novamente mais tarde.</string>
-  <string name="decline_offer">Tem certeza que quer\n Recusar esta oferta?</string>
-  <string-array name="renewal_confirm">
-    <item>Sim, Vou renovar depois</item>
-    <item>Não me mostre isso novamente</item>
-  </string-array>
-  <string-array name="pro_features">
-    <item>Velocidade mais rápida</item>
-    <item>Dados ilimitados</item>
-    <item>Resistente à bloqueio</item>
-    <item>Três dispositivos</item>
-    <item>Sem anúncios</item>
-  </string-array>
-  <string-array name="pro_features_new">
-    <item>Velocidade mais rápida</item>
-    <item>Bloqueio resistente</item>
-    <item>Mais confiável</item>
-    <item>Registre até 3 dispositivos</item>
-    <item>Dados ilimitados</item>
-    <item>Yinbi grátis com a compra!</item>
-  </string-array>
-  <string-array name="yinbi_renew_features">
-    <item>Criptomoeda Yinbi grátis</item>
-    <item>Meses gratuitos</item>
-    <item>Oferta por tempo limitado, Aja agora!</item>
-  </string-array>
-  <string-array name="pro_features_welcome">
-    <item>Dados em alta velocidade ilimitado</item>
-    <item>Forte resistência a bloqueio</item>
-    <item>Seleção de servidor otimizada</item>
-    <item>Conexões segura e confiável</item>
-  </string-array>
-  <string-array name="basic_features">
-    <item>500MB de dados\/mês de alta velocidade</item>
-    <item>Acesso confiável e seguro para a internet aberta</item>
-  </string-array>
-  <string name="purchased_from_reseller">Lantern Pro comprado de um revendedor? Clique aqui!</string>
-  <string-array name="authorize_device_list">
-    <item><b>1.</b> Abra o item \'Dispositivo autorizado para Pro\' no menu de seu dispositivo não autorizado.</item>
-    <item><b>2.</b> Digite o código de vinculação obtido do passo 1 e envie</item>
-  </string-array>
-  <string-array name="enter_code_steps_referral">
-    <item>Digite o código de verificação recebido por email para continuar Pro!</item>
-    <item>Não recebeu um código? Verifique sua pasta de spam e certifique-se de que digitou o seu endereço de email corretamente.</item>
-  </string-array>
-  <string-array name="enter_email_list">
-    <item>Digite seu endereço de email para autorizar esse dispositivo a usar seus meses gratuitos de Lantern Pro</item>
-    <item>Enviaremos à você um código de autorização via email</item>
-  </string-array>
-  <string name="only_one_device">Somente um dispositivo</string>
-  <string name="sorry_cannot_remove">Desculpe, mas você não pode remover seu último dispositivo autorizado</string>
-  <string name="send_link">Envie Link</string>
-  <string name="click_button">Clique no botão para acessar sites e serviços bloqueados</string>
-  <string name="lantern_pro">Lantern Pro</string>
-  <string name="lantern_pro_checkout">Sair do Lantern Pro</string>
-  <string name="invite_friends_header">Convidar amigos</string>
-  <string name="pro_desc">Mais rápido, mais inteligente, mais resiliente</string>
-  <string name="free_month">Receba um mês grátis de Pro para cada inscrição</string>
-  <string name="get_pro_now">Receba Pro agora</string>
-  <string name="inviting_friends">Receba créditos Pro convidando amigos</string>
-  <string name="select">Selecionar</string>
-  <string name="special_launch">Preço especial de lançamento!</string>
-  <string name="best_value">Melhor valor!</string>
-  <string name="referral_code_opt">Código de referência (opcional)</string>
-  <string name="total">Total:</string>
-  <string name="pro_account_header">Gerenciamento da conta Pro</string>
-  <string name="pro_account_month_text">Atualmente você tem uma conta Lantern PRO mensal. Sua conta será cobrada automaticamente por um outro mês de Lantern Pro no final do ciclo de faturamento.</string>
-  <string name="pro_account_year_text">Atualmente você tem uma conta Lantern PRO anual. Sua conta será cobrada automaticamente por um outro ano no final do ciclo de faturamento.</string>
-  <string name="cancel_pro_account">Cancelar conta Pro</string>
-  <string name="account_verification">Verificação de conta</string>
-  <string name="enter_verification_code">Digitar código de verificação</string>
-  <string name="referral_code">Código de referência</string>
-  <string name="get_lantern_pro">Obter Lantern Pro</string>
-  <string name="upgrade_to_lantern_pro">Atualizar para Lantern Pro</string>
-  <string name="pro_available_for">Para Windows, Android, Mac e Ubuntu. iOS em breve</string>
-  <string name="upgrade">Atualizar</string>
-  <string name="next">Próximo</string>
-  <string name="become_reseller">Faça dinheiro! Torne-se um revendedor Lantern Pro. Clique aqui</string>
-  <string name="reseller_email_subject">Fale-me sobre o Programa de Revendedor do Lantern</string>
-  <string name="reseller_email_message">Quando você se tornar um Revendedor Latern você terá a oportunidade de fazer até 25% o sobre cada venda de uma assinatura do Lantern Pro. Conte-nos, abaixo, um pouco sobre o motivo pelo qual você quer se tornar um revendedor.</string>
-  <string name="no_email_client">Não há clientes de email instalados.</string>
-  <string name="no_wall_at_all">Sem barreiras</string>
-  <string name="buy_pro_now">Comprar Pro Agora</string>
-  <string name="update_billing_info">Atualizar Informações de Pagamento</string>
-  <string name="pro_credits_text">Convidar amigos, receber mais Pro</string>
-  <string name="could_not_complete_purchase">Não foi possível concluir a compra do Pro neste momento. Tente novamente mais tarde!</string>
-  <string name="invalid_verification_code">Código de verificação inválido</string>
-  <string name="invalid_payment_method">Método de pagamento inválido</string>
-  <string name="unable_to_cancel_account">Incapaz de cancelar a conta Pro! Por favor contate team@getlantern.org</string>
-  <string name="earn_free_month">Ganhe um mês grátis para cada amigo que se inscrever</string>
-  <string name="credits_applied">Seus créditos serão aplicados à sua conta no próximo ciclo de faturamento.</string>
-  <string name="pro_invitation_subject">Convite para participar do Lantern Pro</string>
-  <string name="receive_free_month">Para um mês grátis de Lantern Pro, use esse código de referência: %1$s ; Você pode baixá-lo aqui: https://lantern.io/download</string>
-  <string name="share_feed_item">Estou lendo sobre \"%1$s\" à %2$s via Lantern. Use o Lantern para acessar sites e serviços bloqueados. Você pode baixá-lo para Android aqui: https://bit.ly/lanternapk</string>
-  <string name="cancel_pro_confirmation">Você tem certeza? Esta ação não pode ser desfeita! Você pode assinar o Pro novamente a qualquer momento.</string>
-  <string name="unauthorize_confirmation">Você tem certeza que quer desvincular esse dispositivo de sua conta Pro?</string>
-  <string name="yes">Sim</string>
-  <string name="no">Não</string>
-  <string name="item_image_contentDescription">Bandeira do país</string>
-  <string name="item_preview_country">Estados Unidos</string>
-  <string name="item_preview_dialCode">+1</string>
-  <string name="refresh">Atualizar</string>
-  <string name="find">Encontrar</string>
-  <string name="share_via">Compartilhar via</string>
-  <string name="copy_link">Copiar Link</string>
-  <string name="open_with">Abrir com</string>
-  <string name="copied_to_clipboard">Copiado para a área de transferência</string>
-  <string name="welcome_to_new">Bem vindo ao novo e melhorado Lantern!</string>
-  <string name="now_using">Agora você está usando o mais rápido e mais estável Lantern até o momento.</string>
-  <string name="get_unlimited_data">Para obter dados ilimitados, velocidades máximas, e ainda resistência ao bloqueio ainda mais forte\nATUALIZAR para Pro!</string>
-  <string name="start_using">Comece a usar o Lantern</string>
-  <string name="device_already_registered">Este endereço de email já é um assinante Pro. Por favor, autorize este dispositivo aqui.</string>
-  <string name="email_in_use">O email atualmente está em uso por outro usuário.</string>
-  <string name="congratulations">Parabéns!</string>
-  <string name="referral_code_used">Um amigo que você indicou, comprou o Lantern Pro. %d meses grátis de Pro foram aplicados à sua conta.</string>
-  <string name="enter_email">Digite o endereço de email</string>
-  <string name="confirm_email">Confirmar Email</string>
-  <string name="confirm_email_address">Confirmar endereço de email</string>
-  <string name="register_pro_account">Registrar conta Pro</string>
-  <string name="enter_pro_activation_code">Por favor, digite seu código de ativação de 25 caracteres do Lantern Pro acima. Se você não recebeu um código, por favor contate o revendedor de quem você comprou.</string>
-  <string name="apply_referral_code">Aplicar código de referência</string>
-  <string name="terms_of_service">Termos de Serviço</string>
-  <string name="date">Data</string>
-  <string name="status">Estado</string>
+    <string name="app_name">Lantern</string>
+    <string name="action_settings">Configurações</string>
+    <string name="proxy_all_setting">Proxy todo o tráfego</string>
+    <string name="proxy_all_on_header">Ligado (Opção mais segura)</string>
+    <string name="proxy_all_off_header">Desligado (Opção mais rápida)</string>
+    <string name="button_text">Iniciar</string>
+    <string name="drawer_open">Gaveta aberta</string>
+    <string name="drawer_close">Gaveta fechada</string>
+    <string name="default_fragment">Fragmento padrão</string>
+    <string name="receive_lantern">Receber Lantern desktop por email</string>
+    <string name="lantern_desktop">Lantern Desktop</string>
+    <string name="email_hint">Email</string>
+    <string name="send_button">Enviar</string>
+    <string name="send_desktop">Enviar para a área de trabalho</string>
+    <string name="send_email">Enviar Email</string>
+    <string name="your_email">Seu Email</string>
+    <string name="your_email_address">Seu endereço de email</string>
+    <string name="please_enter">Por favor digite, e confirme seu endereço de email.</string>
+    <string name="please_enter_register">Por favor digite e confirme seu endereço de email para registrar sua conta Lantern Pro.</string>
+    <string name="your_referral_code">Seu código de referência</string>
+    <string name="report_an_issue">Relatar um problema</string>
+    <string name="select_issue">Por favor selecione um problema</string>
+    <string name="select_issue_desc">Por favor deixe-nos uma breve descrição de seu problema aqui, e vamos retornar para você o mais breve possível.</string>
+    <string name="submit">Enviar</string>
+    <string name="submit_issue">Enviar problema</string>
+    <string name="no_issue_selected">Por favor selecione um problema antes de enviar um relatório</string>
+    <string name="cannot_find_email">Oops! Estamos tendo problemas para encontrar esse endereço de email.</string>
+    <string name="no_purchase_date">Por favor selecione uma data aproximada de quando você comprou o Lantern Pro</string>
+    <string name="purchase_date">Data de compra</string>
+    <string-array name="common_issue_list">
+        <item>Não é possível acessar sites bloqueados</item>
+        <item>Não é possível completar a compra</item>
+        <item>Não é possível fazer login</item>
+        <item>Spinner carrega sem parar</item>
+        <item>Lento</item>
+        <item>Outro</item>
+    </string-array>
+    <string name="submit_code">Confirmar código</string>
+    <string name="on_text">Ligado</string>
+    <string name="off_text">Desligado</string>
+    <string name="lantern_off">Lantern está desligado. Vire o interruptor para acessar sites e serviços bloqueados! </string>
+    <string name="lantern_on">Lantern está ligado. Você agora pode acessar sites e serviços bloqueados!</string>
+    <string name="on_desc">Você agora pode acessar sites e serviços bloqueados</string>
+    <string name="off_desc">Clique no botão para acessar sites e serviços bloqueados</string>
+    <string name="desktop_option">Versão Desktop</string>
+    <string name="contact_option">Contato</string>
+    <string name="check_for_update">Verificar atualizações</string>
+    <string name="no_update_available">Você está atualizado!</string>
+    <string name="error_making_purchase">Erro ao tentar fazer a compra</string>
+    <string name="cancel">Cancela</string>
+    <string name="newsfeed_option">Experimente o Feed do Lantern</string>
+    <string name="newsfeed_off_option">Desligar Feed</string>
+    <string name="privacy_policy">Política de Privacidade</string>
+    <string name="share_option">Compartilhar</string>
+    <string name="quit_option">Fechar</string>
+    <string name="share_email_native"></string>
+    <string name="share_email_subject">Lantern Android</string>
+    <string name="fatal_error">Lantern encontrou um erro fatal e não está mais rodando</string>
+    <string name="share_twitter">Confira o Lantern Android: https://bit.ly/lanternapk</string>
+    <string name="share_facebook">Estou usando Lantern para Android, está disponível aqui: https://bit.ly/lanternapk</string>
+    <string name="share_email_gmail">Estou usando o Lantern para Android, e anexei o arquivo APK!</string>
+    <string name="share_sms">Estou usando o Lantern para Android, baixei-o aqui: https://bit.ly/lanternapk</string>
+    <string name="share_chooser_text">Compartilhar Lantern Android</string>
+    <string name="card">Cartão</string>
+    <string name="credit_card">Cartão de crédito</string>
+    <string name="Alipay">Alipay</string>
+    <string name="alipay_account">Conta Alipay</string>
+    <string name="month">Mês</string>
+    <string name="year">Ano</string>
+    <string name="success_email">Lantern Desktop foi enviado por email para você!</string>
+    <string name="send_logs">Enviar registros</string>
+    <string name="help_survey">Ajude a tornar o Lantern melhor, faça uma pergunta da pesquisa agora!</string>
+    <string name="take_survey">Responder à pesquisa!</string>
+    <string name="thanks_survey">Obrigado por responder nossa pesquisa!\n</string>
+    <string name="invalid_email">Endereço de e-mail inválido</string>
+    <string name="error_payment_gateway">Erro ao entrar em contato com o gateway de pagamento</string>
+    <string name="emails_do_not_match">Campos de email não coincidem</string>
+    <string name="invalid_reseller_code">O código de revendedor que você digitou é inválido</string>
+    <string name="invalid_referral_code">Código de referência inválido</string>
+    <string name="invalid_voucher_code">Código de comprovante inválido</string>
+    <string name="cannot_use_own_referral_code">Não pode usar seu próprio código de referência para promoção</string>
+    <string name="no_internet_connection">Conexão com a Internet não disponível!</string>
+    <string name="unable_remove_device">Incapaz de remover o dispositivo. Por favor tente novamente mais tarde!</string>
+    <string name="remove">Remover</string>
+    <string name="contact_email">team@getlantern.org</string>
+    <string name="contact_message">Ajude-me</string>
+    <string name="contact_subject">Lantern Android</string>
+    <string name="not_now">Agora não</string>
+    <string name="install_update">Atualizar</string>
+    <string name="error_update">Erro ao baixar atualização</string>
+    <string name="loading">Carregando...</string>
+    <string name="manual_update">Tente instalar manualmente a última versão &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+    <string name="pro_welcome_text">Bem vindo ao Lantern Pro!</string>
+    <string name="happy_anniversary">FELIZ ANIVERSÁRIO LANTERNA!</string>
+    <string name="welcome_greeting">Bem vindo ao Lanterna</string>
+    <string name="upgrade_for">Atualize para a última\n veloz &amp; estável</string>
+    <string name="what_kind_of_lantern">Que tipo de Lantern\n você gostaria?</string>
+    <string name="lantern_pro_radio">Lantern Pro - Dados Ilimitados</string>
+    <string name="lantern_free_radio">Lantern Basic - 500MB de Dados</string>
+    <string name="welcome_to_lantern">Bem vindo ao novo e melhorado Lantern</string>
+    <string name="to_get_unlimited">Para obter dados ilimitados, velocidades máximas e resistência ao bloqueio ainda mais forte\nATUALIZE para Pro!</string>
+    <string name="renew_pro_account">Renove sua conta Pro</string>
+    <string name="logout">Sair</string>
+    <string name="change_phone_number">Mudar número de telefone</string>
+    <string name="change_email_address">Mudar endereço de email</string>
+    <string name="pro_account_expires">Sua conta Pro expira em %1$s</string>
+    <string name="includes_free_months">Isso inclue seus %2$d meses de bônus! </string>
+    <string name="verified_phone_number">Número de telefone verificado:</string>
+    <string name="devices_authorized">Dispositivos autorizados para usar sua conta Pro</string>
+    <string name="send_us_your_logs">Envie-nos seus registros</string>
+    <string name="thanks_purchase">Obrigado por sua compra do Lantern Pro!</string>
+    <string name="start_inviting">\r\nComece a convidar!</string>
+    <string name="sending_request">Processando requisição</string>
+    <string name="invite_friends">Digite seu e-mail para receber um código para compartilhar com seus amigos. Receba um mês grátis de PRO quando eles se inscreverem!</string>
+    <string name="invite_friends_welcome">Quando seus amigos comprarem o plano de dois anos, cada um receberá 3 meses grátis, o plano de um ano permite a cada um obter 1 mês grátis</string>
+    <string name="invite_friends_btn">Convide amigos</string>
+    <string name="share_friends_text">Compartilhe com amigos para ganhar meses grátis!</string>
+    <string name="email_address">Endereço de email</string>
+    <string name="continue_to_pro">Continue na versão Pro</string>
+    <string name="continue_to_basic">Continuar na versão Básica</string>
+    <string name="continue_">Continue</string>
+    <string name="continue_to_payment">Continue ao Pagamento</string>
+    <string name="purchase_voucher">Comprar Voucher</string>
+    <string name="skip_to_checkout">Pular para Sair</string>
+    <string name="free_pro_credits">Créditos Pro Grátis</string>
+    <string name="get_pro_credits">Obter gratuitamente créditos Pro </string>
+    <string name="get_free_months">Obter meses grátis</string>
+    <string name="text_invite">Convite por texto</string>
+    <string name="email_invite">Convite por email</string>
+    <string name="share_your_referral_code">Compartilhe seu código de referência</string>
+    <string name="get_code">Obter código</string>
+    <string name="get_code_text">Digite seu email para receber um código para compartilhar com seus amigos, receba um mês grátis de PRO quando eles se inscreverem!</string>
+    <string name="enter_your_email">Digite seu email para receber um código de referência</string>
+    <string name="fastworldpay_text">Quando você clicar em continuar a compra,\nvocê será redirecionado para um site externo para completar\n o pagamento e conseguir o código de ativação</string>
+    <string name="share_referral_text">Use meu código %1$s para receber até 3 meses adicionais gratuitamente depois da compra. Baixe o Lantern https://bit.ly/lanternapk</string>
+    <string name="previous_code">Se você já recebeu um código de referência\r\npor favor certifique-se de usar o mesmo endereço de email.</string>
+    <string name="payment_plans">Planos de pagamento do Lantern PRO</string>
+    <string name="features_text">Características do Lantern PRO</string>
+    <string name="checkout">Sair</string>
+    <string name="cvc">CVC</string>
+    <string name="cc_number">Cartão de crédito</string>
+    <string name="card_number">Número do cartão</string>
+    <string name="card_expiration">MM/AA</string>
+    <string name="validation_errors">Erros de validação</string>
+    <string name="ok">OK</string>
+    <string name="progressMessage">Processando requisição...</string>
+    <string name="progressMessage2">Recuperando código de referência</string>
+    <string name="language">Idioma</string>
+    <string name="settings">Configurações</string>
+    <string name="referral_applied">Seus meses gratuitos serão adicionados a você e seus amigos uma vez que o pagamento esteja completo!</string>
+    <string name="all_feeds">todos</string>
+    <string name="feed.error.oops">Oops!</string>
+    <string name="feed.error.error_fetching_feed">Erro ao buscar Feed</string>
+    <string name="feed.error.try_again">Por favor tente novamente</string>
+    <string name="authorize_device_pro">Autorizar dispositivo para Pro</string>
+    <string name="add_device">Adicionar dispositivo</string>
+    <string name="now_authorized">Esse dispositivo agora está autorizado para usar sua conta Pro!</string>
+    <string name="i_have_another">Tenho outro dispositivo Lantern Pro</string>
+    <string name="link_this_device">Vincular este dispositivo</string>
+    <string name="or">OU</string>
+    <string name="need_to_recover">Preciso recuperar minha conta Lantern Pro</string>
+    <string name="start_recovery">Iniciar recuperação</string>
+    <string name="account_recovery">Recuperação de conta</string>
+    <string name="account_recovery_code">Código de recuperação da conta</string>
+    <string name="thanks_report">Obrigado, o suporte ao cliente Lantern estará em contato dentro de 48 horas.</string>
+    <string name="enter_valid_code">Por favor digite um código de recuperação válido.</string>
+    <string name="too_many_devices">O limite de dispositivos que pode ser vinculado a sua conta Pro foi alcançado.</string>
+    <string name="check_spam_folder">* Por favor cheque sua pasta de spam se não recebeu o email</string>
+    <string name="by_referral">Recebido Pro por encaminhar um amigo</string>
+    <string-array name="payment_method_list">
+        <item>Alipay</item>
+        <item>Cartão de Crédito</item>
+        <item>Recebido Pro por encamnhar um amigo</item>
+    </string-array>
+    <string name="payment_method">Método de pagamento</string>
+    <string name="payment_account">Conta de pagamento</string>
+    <string name="oops_having_trouble">Oops! Estamos tendo problemas para encontrar este endereço de email. Por favor forneça a informação abaixo para nos ajudar a localizar sua conta.</string>
+    <string name="locate_account">Tenha atenção a qualquer outra informação que pode nos ajudar a localizar sua conta.</string>
+    <string name="resend_email">Reenviar email</string>
+    <string name="dont_remember">Não lembra de seu email?</string>
+    <string name="device_code">Código de vinculação do dispositivo</string>
+    <string name="device_now_linked">Você vinculou com sucesso seu dispositivo!\n</string>
+    <string name="device_linked_success">Sucesso! Seu novo dispositivo será vinculado em breve.\n</string>
+    <string name="link_this_device_0">Para vincular esse dispositivo a sua conta Pro:</string>
+    <string name="link_this_device_1"><b>1.</b> Abra o item \'Adicionar dispositivo\' no menu de seu dispositivo Pro.</string>
+    <string name="link_this_device_2"><b>2.</b> Digite o código de vinculação do dispositivo e envie.</string>
+    <string name="make_sure_updated">* Verifique se você está atualizado com a última versão do Lantern em seu dispositivo Pro.</string>
+    <string name="make_sure_updated_2">* Verifique se você está atualizado com a última versão do Lantern em seu dispositivo não autorizado.</string>
+    <string name="error_device_code">Erro ao recuperar o código de vinculação do dispositivo! Por favor, tente novamente mais tarde.</string>
+    <string name="decline_offer">Tem certeza que quer\n Recusar esta oferta?</string>
+    <string-array name="renewal_confirm">
+        <item>Sim, Vou renovar depois</item>
+        <item>Não me mostre isso novamente</item>
+    </string-array>
+    <string-array name="pro_features">
+        <item>Velocidade mais rápida</item>
+        <item>Dados ilimitados</item>
+        <item>Resistente à bloqueio</item>
+        <item>Três dispositivos</item>
+        <item>Sem anúncios</item>
+    </string-array>
+    <string-array name="pro_features_new">
+        <item>Velocidade mais rápida</item>
+        <item>Bloqueio resistente</item>
+        <item>Mais confiável</item>
+        <item>Registre até 3 dispositivos</item>
+        <item>Dados ilimitados</item>
+        <item>Yinbi grátis com a compra!</item>
+    </string-array>
+    <string-array name="yinbi_renew_features">
+        <item>Criptomoeda Yinbi grátis</item>
+        <item>Meses gratuitos</item>
+        <item>Oferta por tempo limitado, Aja agora!</item>
+    </string-array>
+    <string-array name="pro_features_welcome">
+        <item>Dados em alta velocidade ilimitado</item>
+        <item>Forte resistência a bloqueio</item>
+        <item>Seleção de servidor otimizada</item>
+        <item>Conexões segura e confiável</item>
+    </string-array>
+    <string-array name="basic_features">
+        <item>500MB de dados\/mês de alta velocidade</item>
+        <item>Acesso confiável e seguro para a internet aberta</item>
+    </string-array>
+    <string name="purchased_from_reseller">Lantern Pro comprado de um revendedor? Clique aqui!</string>
+    <string-array name="authorize_device_list">
+        <item><b>1.</b> Abra o item \'Dispositivo autorizado para Pro\' no menu de seu dispositivo não autorizado.</item>
+        <item><b>2.</b> Digite o código de vinculação obtido do passo 1 e envie</item>
+    </string-array>
+    <string-array name="enter_code_steps_referral">
+        <item>Digite o código de verificação recebido por email para continuar Pro!</item>
+        <item>Não recebeu um código? Verifique sua pasta de spam e certifique-se de que digitou o seu endereço de email corretamente.</item>
+    </string-array>
+    <string-array name="enter_email_list">
+        <item>Digite seu endereço de email para autorizar esse dispositivo a usar seus meses gratuitos de Lantern Pro</item>
+        <item>Enviaremos à você um código de autorização via email</item>
+    </string-array>
+    <string name="only_one_device">Somente um dispositivo</string>
+    <string name="sorry_cannot_remove">Desculpe, mas você não pode remover seu último dispositivo autorizado</string>
+    <string name="send_link">Envie Link</string>
+    <string name="click_button">Clique no botão para acessar sites e serviços bloqueados</string>
+    <string name="lantern_pro">Lantern Pro</string>
+    <string name="lantern_pro_checkout">Sair do Lantern Pro</string>
+    <string name="invite_friends_header">Convidar amigos</string>
+    <string name="pro_desc">Mais rápido, mais inteligente, mais resiliente</string>
+    <string name="free_month">Receba um mês grátis de Pro para cada inscrição</string>
+    <string name="get_pro_now">Receba Pro agora</string>
+    <string name="inviting_friends">Receba créditos Pro convidando amigos</string>
+    <string name="select">Selecionar</string>
+    <string name="special_launch">Preço especial de lançamento!</string>
+    <string name="best_value">Melhor valor!</string>
+    <string name="referral_code_opt">Código de referência (opcional)</string>
+    <string name="total">Total:</string>
+    <string name="pro_account_header">Gerenciamento da conta Pro</string>
+    <string name="pro_account_month_text">Atualmente você tem uma conta Lantern PRO mensal. Sua conta será cobrada automaticamente por um outro mês de Lantern Pro no final do ciclo de faturamento.</string>
+    <string name="pro_account_year_text">Atualmente você tem uma conta Lantern PRO anual. Sua conta será cobrada automaticamente por um outro ano no final do ciclo de faturamento.</string>
+    <string name="cancel_pro_account">Cancelar conta Pro</string>
+    <string name="account_verification">Verificação de conta</string>
+    <string name="enter_verification_code">Digitar código de verificação</string>
+    <string name="referral_code">Código de referência</string>
+    <string name="get_lantern_pro">Obter Lantern Pro</string>
+    <string name="upgrade_to_lantern_pro">Atualizar para Lantern Pro</string>
+    <string name="pro_available_for">Para Windows, Android, Mac e Ubuntu. iOS em breve</string>
+    <string name="upgrade">Atualizar</string>
+    <string name="next">Próximo</string>
+    <string name="become_reseller">Faça dinheiro! Torne-se um revendedor Lantern Pro. Clique aqui</string>
+    <string name="reseller_email_subject">Fale-me sobre o Programa de Revendedor do Lantern</string>
+    <string name="reseller_email_message">Quando você se tornar um Revendedor Latern você terá a oportunidade de fazer até 25% o sobre cada venda de uma assinatura do Lantern Pro. Conte-nos, abaixo, um pouco sobre o motivo pelo qual você quer se tornar um revendedor.</string>
+    <string name="no_email_client">Não há clientes de email instalados.</string>
+    <string name="no_wall_at_all">Sem barreiras</string>
+    <string name="buy_pro_now">Comprar Pro Agora</string>
+    <string name="update_billing_info">Atualizar Informações de Pagamento</string>
+    <string name="pro_credits_text">Convidar amigos, receber mais Pro</string>
+    <string name="could_not_complete_purchase">Não foi possível concluir a compra do Pro neste momento. Tente novamente mais tarde!</string>
+    <string name="invalid_verification_code">Código de verificação inválido</string>
+    <string name="invalid_payment_method">Método de pagamento inválido</string>
+    <string name="unable_to_cancel_account">Incapaz de cancelar a conta Pro! Por favor contate team@getlantern.org</string>
+    <string name="earn_free_month">Ganhe um mês grátis para cada amigo que se inscrever</string>
+    <string name="credits_applied">Seus créditos serão aplicados à sua conta no próximo ciclo de faturamento.</string>
+    <string name="pro_invitation_subject">Convite para participar do Lantern Pro</string>
+    <string name="receive_free_month">Para um mês grátis de Lantern Pro, use esse código de referência: %1$s ; Você pode baixá-lo aqui: https://lantern.io/download</string>
+    <string name="share_feed_item">Estou lendo sobre \"%1$s\" à %2$s via Lantern. Use o Lantern para acessar sites e serviços bloqueados. Você pode baixá-lo para Android aqui: https://bit.ly/lanternapk</string>
+    <string name="cancel_pro_confirmation">Você tem certeza? Esta ação não pode ser desfeita! Você pode assinar o Pro novamente a qualquer momento.</string>
+    <string name="unauthorize_confirmation">Você tem certeza que quer desvincular esse dispositivo de sua conta Pro?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="item_image_contentDescription">Bandeira do país</string>
+    <string name="item_preview_country">Estados Unidos</string>
+    <string name="item_preview_dialCode">+1</string>
+    <string name="refresh">Atualizar</string>
+    <string name="find">Encontrar</string>
+    <string name="share_via">Compartilhar via</string>
+    <string name="copy_link">Copiar Link</string>
+    <string name="open_with">Abrir com</string>
+    <string name="copied_to_clipboard">Copiado para a área de transferência</string>
+    <string name="welcome_to_new">Bem vindo ao novo e melhorado Lantern!</string>
+    <string name="now_using">Agora você está usando o mais rápido e mais estável Lantern até o momento.</string>
+    <string name="get_unlimited_data">Para obter dados ilimitados, velocidades máximas, e ainda resistência ao bloqueio ainda mais forte\nATUALIZAR para Pro!</string>
+    <string name="start_using">Comece a usar o Lantern</string>
+    <string name="device_already_registered">Este endereço de email já é um assinante Pro. Por favor, autorize este dispositivo aqui.</string>
+    <string name="email_in_use">O email atualmente está em uso por outro usuário.</string>
+    <string name="congratulations">Parabéns!</string>
+    <string name="referral_code_used">Um amigo que você indicou, comprou o Lantern Pro. %d meses grátis de Pro foram aplicados à sua conta.</string>
+    <string name="enter_email">Digite o endereço de email</string>
+    <string name="confirm_email">Confirmar Email</string>
+    <string name="confirm_email_address">Confirmar endereço de email</string>
+    <string name="register_pro_account">Registrar conta Pro</string>
+    <string name="enter_pro_activation_code">Por favor, digite seu código de ativação de 25 caracteres do Lantern Pro acima. Se você não recebeu um código, por favor contate o revendedor de quem você comprou.</string>
+    <string name="apply_referral_code">Aplicar código de referência</string>
+    <string name="terms_of_service">Termos de Serviço</string>
+    <string name="date">Data</string>
+    <string name="status">Estado</string>
 </resources>

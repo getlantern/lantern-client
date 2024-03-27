@@ -2,7 +2,6 @@ package org.getlantern.lantern.notification
 
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent

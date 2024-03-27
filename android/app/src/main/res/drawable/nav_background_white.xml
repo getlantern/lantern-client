@@ -6,35 +6,55 @@
     <item>
         <shape>
             <solid android:color="#10CCCCCC" />
-            <padding android:top="0dp" android:right="0dp" android:bottom="1dp" android:left="0dp" />
+            <padding
+                android:top="0dp"
+                android:right="0dp"
+                android:bottom="1dp"
+                android:left="0dp" />
         </shape>
     </item>
 
     <item>
         <shape>
             <solid android:color="#20CCCCCC" />
-            <padding android:top="0dp" android:right="0dp" android:bottom="1dp" android:left="0dp" />
+            <padding
+                android:top="0dp"
+                android:right="0dp"
+                android:bottom="1dp"
+                android:left="0dp" />
         </shape>
     </item>
 
     <item>
         <shape>
             <solid android:color="#40CCCCCC" />
-            <padding android:top="0dp" android:right="0dp" android:bottom="1dp" android:left="0dp" />
+            <padding
+                android:top="0dp"
+                android:right="0dp"
+                android:bottom="1dp"
+                android:left="0dp" />
         </shape>
     </item>
 
     <item>
         <shape>
             <solid android:color="#50CCCCCC" />
-            <padding android:top="0dp" android:right="0dp" android:bottom="1dp" android:left="0dp" />
+            <padding
+                android:top="0dp"
+                android:right="0dp"
+                android:bottom="1dp"
+                android:left="0dp" />
         </shape>
     </item>
 
     <item>
         <shape>
             <solid android:color="#60CCCCCC" />
-            <padding android:top="0dp" android:right="0dp" android:bottom="1dp" android:left="0dp" />
+            <padding
+                android:top="0dp"
+                android:right="0dp"
+                android:bottom="1dp"
+                android:left="0dp" />
         </shape>
     </item>
 

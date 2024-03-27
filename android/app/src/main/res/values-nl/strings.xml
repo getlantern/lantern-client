@@ -1,275 +1,275 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">Lantern</string>
-  <string name="action_settings">Instellingen</string>
-  <string name="proxy_all_setting">Proxy al het verkeer</string>
-  <string name="proxy_all_on_header">AAN (Veiligste optie)</string>
-  <string name="proxy_all_off_header">UIT (Snelste optie)</string>
-  <string name="button_text">Begin</string>
-  <string name="drawer_open">Drawer Open</string>
-  <string name="drawer_close">Drawer Gesloten</string>
-  <string name="default_fragment">Standaard Fragment</string>
-  <string name="receive_lantern">Ontvang Lantern desktop via e-mail</string>
-  <string name="lantern_desktop">Lantern Desktop</string>
-  <string name="email_hint">E-mail</string>
-  <string name="send_button">Versturen</string>
-  <string name="send_desktop">Versturen</string>
-  <string name="send_email">Verstuur E-mail</string>
-  <string name="your_email">Uw e-mail</string>
-  <string name="your_email_address">Je e-mailadres</string>
-  <string name="please_enter">AUB vul in en bevestig je e-mailadres.</string>
-  <string name="please_enter_register">AUB vul in en bevestig je e-mailadres om je Lantern Pro account te registreren.</string>
-  <string name="your_referral_code">Je verwijscode</string>
-  <string name="report_an_issue">Rapport verzenden</string>
-  <string name="select_issue">Selecteer een probleem</string>
-  <string name="select_issue_desc">Laat een korte omschrijving achter m.b.t. uw probleem,\n we reageren zo snel mogelijk.</string>
-  <string name="submit">Indienen</string>
-  <string name="submit_issue">Melding versturen</string>
-  <string name="no_issue_selected">Selecteer een probleem voordat u dit rapport verzend</string>
-  <string name="cannot_find_email">Oeps! Klopt het e-mailadres want we kunnen het niet vinden.</string>
-  <string name="no_purchase_date">Wanneer heb je ongeveer Lantern Pro aangeschaft? Kies een datum.</string>
-  <string name="purchase_date">Aankoopdatum</string>
-  <string-array name="common_issue_list">
-    <item>Kan geblokkeerde websites niet openen</item>
-    <item>Kan aankoop niet voltooien</item>
-    <item>Kan niet registreren</item>
-    <item>Cirkeltje blijft draaien</item>
-    <item>Langzaam</item>
-    <item>Anders</item>
-  </string-array>
-  <string name="submit_code">Code bevestigen</string>
-  <string name="on_text">AAN</string>
-  <string name="off_text">UIT</string>
-  <string name="lantern_off">Lantern is uitgeschakeld. Druk op de schakelaar om toegang te krijgen tot alle geblokkeerde content en services!</string>
-  <string name="lantern_on">Lantern is ingeschakeld. U kunt nu alle geblokkeerde sites en services zien!</string>
-  <string name="on_desc">U heeft nu toegang tot \r\nblocked sites en services</string>
-  <string name="off_desc">Klik op de knop om toegang te krijgen tot geblokkeerde sites en diensten</string>
-  <string name="desktop_option">Desktop Versie</string>
-  <string name="contact_option">Contact</string>
-  <string name="check_for_update">Controleer op update</string>
-  <string name="no_update_available">U heeft de laatste versie!</string>
-  <string name="cancel">Annuleren</string>
-  <string name="newsfeed_option">Probeer Lanten Feed</string>
-  <string name="newsfeed_off_option">Feed uitzetten</string>
-  <string name="privacy_policy">Privacybeleid</string>
-  <string name="share_option">Delen</string>
-  <string name="quit_option">Stoppen</string>
-  <string name="share_email_native"></string>
-  <string name="share_email_subject">Lantern Android</string>
-  <string name="fatal_error">Lantern heeft een ernstige fout ondervonden en werkt niet langer</string>
-  <string name="share_twitter">Zie ook Lantern Android: https://bit.ly/lanternapk</string>
-  <string name="share_facebook">Ik gebruik Lantern op Android: https://bit.ly/lanternapk</string>
-  <string name="share_email_gmail">Ik gebruik Lantern voor Android en heb het APK bestand bijgevoegd!</string>
-  <string name="share_sms">Ik gebruik Lantern op Android: https://bit.ly/lanternapk</string>
-  <string name="share_chooser_text">Deel Lantern Android</string>
-  <string name="card">Kaart</string>
-  <string name="credit_card">Credit Card</string>
-  <string name="Alipay">Alipay</string>
-  <string name="alipay_account">Alipay account</string>
-  <string name="month">Maand</string>
-  <string name="year">Jaar</string>
-  <string name="success_email">Lantern Desktop is naar u toe gemaild! </string>
-  <string name="send_logs">Logs versturen</string>
-  <string name="help_survey">Help ons Lantern te verbeteren. Vul deze rondvraag nu in!</string>
-  <string name="take_survey">Rondvraag!</string>
-  <string name="thanks_survey">Bedankt voor het invullen van onze rondvraag!\n</string>
-  <string name="invalid_email">Ongeldig e-mailadres</string>
-  <string name="emails_do_not_match">E-mailvelden stemmen niet overeen</string>
-  <string name="invalid_reseller_code">De ingevulde reseller code is ongeldig</string>
-  <string name="invalid_referral_code">Ongeldige verwijscode</string>
-  <string name="cannot_use_own_referral_code">Kan je eigen verwijscode niet gebruiken voor promotie</string>
-  <string name="no_internet_connection">Geen internetconnectie gevonden!</string>
-  <string name="unable_remove_device">Kon apparaat niet verwijderen. Probeer opnieuw!</string>
-  <string name="remove">Verwijder</string>
-  <string name="contact_email">team@getlantern.org</string>
-  <string name="contact_message">Hulp</string>
-  <string name="contact_subject">Lantern Android</string>
-  <string name="not_now">Niet nu</string>
-  <string name="install_update">Update</string>
-  <string name="error_update">Fout Downloaden Update</string>
-  <string name="loading">Bezig met laden...</string>
-  <string name="manual_update">Probeer handmatig de laatste versie te installeren via &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
-  <string name="pro_welcome_text">Welkom bij Lantern Pro!</string>
-  <string name="welcome_to_lantern">Welkom bij het nieuwe en verbeterde Lantern</string>
-  <string name="to_get_unlimited">Om ongelimiteerde data te verkrijgen, hoogste snelheid en zelfs sterkere blokkade resistentie\nUPGRADE naar Pro!</string>
-  <string name="renew_pro_account">Pro Account hernieuwen</string>
-  <string name="logout">Uitloggen</string>
-  <string name="change_phone_number">Telefoonnummer wijzigen</string>
-  <string name="change_email_address">Emailadres wijzigen</string>
-  <string name="pro_account_expires">Uw Pro account verloopt op %1$s</string>
-  <string name="includes_free_months">Dit is inclusief uw %2$d bonus maanden!</string>
-  <string name="verified_phone_number">Geverifieerde telefoonnummer:</string>
-  <string name="devices_authorized">Apparaten die je Pro account mogen gebruiken</string>
-  <string name="send_us_your_logs">Stuur uw Logs</string>
-  <string name="thanks_purchase">Bedankt voor het aanschaffen van Lantern Pro!</string>
-  <string name="start_inviting">\r\nStart met uitnodigen!</string>
-  <string name="sending_request">Verzoek ana het verwerken</string>
-  <string name="invite_friends">Vul je e-mailadres in om een code te ontvangen die je kunt delen met je vrienden. Ontvang een gratis maand voor Pro als deze zich registreren!</string>
-  <string name="invite_friends_welcome">Wanneer je vrienden een tweejarig abonnement nemen ontvangt ieder van jullie 3 maanden gratis erbij. Bij een eenjarig abonnement krijgt een ieder 1 maand gratis.</string>
-  <string name="invite_friends_btn">Vrienden uitnodigen</string>
-  <string name="share_friends_text">Deel met vrienden voor gratis maanden!</string>
-  <string name="email_address">Emailadres</string>
-  <string name="continue_to_pro">Doorgaan met PRO</string>
-  <string name="continue_">Ga verder</string>
-  <string name="continue_to_payment">Naar betaling</string>
-  <string name="skip_to_checkout">Naar betalen</string>
-  <string name="free_pro_credits">Gratis Pro Credits</string>
-  <string name="get_pro_credits">Krijg gratis Pro Credits</string>
-  <string name="get_free_months">Krijg gratis maanden</string>
-  <string name="text_invite">Uitnodigen via tekst</string>
-  <string name="email_invite">Uitnodigen via e-mail</string>
-  <string name="share_your_referral_code">Deel je verwijscode</string>
-  <string name="get_code">Code bemachtigen</string>
-  <string name="get_code_text">Vul je e-mailadres in om een code te ontvangen die je kunt delen met je vrienden. Ontvang een gratis maand voor Pro als deze zich registreren!</string>
-  <string name="enter_your_email">Vul je e-mailadres in om een verwijscode te ontvangen</string>
-  <string name="referral_copied_to_clipboard">Verwijscode gekopieerd naar klembord!</string>
-  <string name="share_referral_text">Gebruik mijn code %1$s en krijg maximaal 3 extra gratis maanden na aankoop. Download Lantern https://bit.ly/lanternapk</string>
-  <string name="previous_code">Als je eerder een verwijscode ontvangen\r\nhebt gebruik dan hetzelfde e-mailadres.</string>
-  <string name="payment_plans">Lantern PRO Betalingsplan</string>
-  <string name="features_text">Lantern PRO Features</string>
-  <string name="checkout">Winkelmandje</string>
-  <string name="cvc">CVC</string>
-  <string name="cc_number">Credit Card</string>
-  <string name="card_number">Kaartnummer</string>
-  <string name="validation_errors">Autorisatiefouten</string>
-  <string name="ok">OK</string>
-  <string name="progressMessage">Verzoek verwerken...</string>
-  <string name="progressMessage2">Verwijscode ophalen</string>
-  <string name="language">Taal</string>
-  <string name="settings">Instellingen</string>
-  <string name="referral_applied">Je gratis maanden worden toegevoegd voor jou en je vriend nadat de afrekening is voltooid!</string>
-  <string name="all_feeds">alles</string>
-  <string name="feed.error.oops">Oops!</string>
-  <string name="feed.error.error_fetching_feed">Fout tijdens ophalen Feed</string>
-  <string name="feed.error.try_again">Probeer opnieuw</string>
-  <string name="authorize_device_pro">Autoriseer apparaat voor Pro</string>
-  <string name="add_device">Apparaat toevoegen</string>
-  <string name="now_authorized">Dit apparaat is nu goedgekeurd om je Pro account te gebruiken!</string>
-  <string name="i_have_another">Ik heb nog een Lantern Pro apparaat</string>
-  <string name="link_this_device">Dit apparaat linken</string>
-  <string name="or">OF</string>
-  <string name="need_to_recover">Ik moet mijn Lantern Pro account herstellen</string>
-  <string name="start_recovery">Begin herstel</string>
-  <string name="account_recovery">Account-herstel</string>
-  <string name="account_recovery_code">Account-herstel code</string>
-  <string name="thanks_report">Bedankt. Lantern klantenservice neemt contact met u op binnen 48 uur.</string>
-  <string name="enter_valid_code">Vul AUB een geldige herstelcode in.</string>
-  <string name="too_many_devices">De grens van het maximaal aantal apparaten die via je Pro-account kunt linken is bereikt.</string>
-  <string name="check_spam_folder">* Indien u de mail niet ontvangt is deze mogelijk als spam aangemerkt door uw e-mailprogramma. </string>
-  <string name="by_referral">Pro ontvangen door Een vriend doorverwijzen</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item>Credit Card</item>
-    <item>Pro ontvangen Een vriend doorverwijzen</item>
-  </string-array>
-  <string name="payment_method">Betaalwijze</string>
-  <string name="payment_account">Betaalaccount</string>
-  <string name="oops_having_trouble">Oeps! We kunnen dat e-mailadres niet vinden. Geef onderstaand de nodige informatie aan ons door zodat we je accountgegevens kunnen traceren.</string>
-  <string name="locate_account">Noteer ook andere informatie die ons kan helpen om je account te traceren.</string>
-  <string name="resend_email">E-mail opnieuw versturen</string>
-  <string name="dont_remember">Weet je je e-mailadres niet meer?</string>
-  <string name="device_code">Apparaat link-code </string>
-  <string name="device_now_linked">Het linken van je apparaat is gelukt!\n</string>
-  <string name="device_linked_success">Gelukt! Je nieuwe apparaat wordt binnenkort gelinkt.\n</string>
-  <string name="link_this_device_0">Om dit apparaat te linken aan je Pro-account:</string>
-  <string name="link_this_device_1"><b>1.</b> Open \'Apparaat toevoegen\' in het menu in je Pro apparaat.</string>
-  <string name="link_this_device_2"><b>2.</b> Vul de apparaat link-code in en klik op versturen. </string>
-  <string name="make_sure_updated">* Controleer of je de nieuwste versie van Lantern gebruikt op je Pro-apparaat.</string>
-  <string name="make_sure_updated_2">* Controleer of je de nieuwste versie van Lantern gebruikt op je niet-geautoriseerde apparaat.</string>
-  <string name="error_device_code">Fout tijdens herstel van apparaat link-code! Probeer het later opnieuw.</string>
-  <string-array name="pro_features">
-    <item>Hogere snelheid</item>
-    <item>Ongelimiteerde data</item>
-    <item>Blokkade resistent</item>
-    <item>Drie apparaten</item>
-    <item>Geen advertenties</item>
-  </string-array>
-  <string name="purchased_from_reseller">Lantern Pro verkregen van een wederverkoper? Klik hier!</string>
-  <string-array name="authorize_device_list">
-    <item><b>1.</b> Open het \'Autoriseer apparaat voor Pro\' menupunt in je niet-geautoriseerd apparaat.</item>
-    <item><b>2.</b> Vul de link-code in die je hebt ontvangen van stap 1 en indienenl</item>
-  </string-array>
-  <string-array name="enter_code_steps_referral">
-    <item>Vul de verificatie-code in die je hebt ontvangen per mail om verder te gaan naar Pro!</item>
-    <item>Heb je geen code ontvangen? Check in je spam en controleer of je je e-mailadres correct hebt opgegeven.</item>
-  </string-array>
-  <string-array name="enter_email_list">
-    <item>Vul je e-mailadres in om dit apparaat te autoriseren om je gratis Lantern Pro maanden te gebruiken</item>
-    <item>Wij sturen je een autorisatiecode per e-mail</item>
-  </string-array>
-  <string name="only_one_device">Maar één apparaat</string>
-  <string name="sorry_cannot_remove">Sorry maar je kunt het apparaat niet verwijderen dat je als laatste hebt geautoriseerd</string>
-  <string name="send_link">Link versturen</string>
-  <string name="click_button">Klik op de knop om toegang te krijgen tot geblokkeerde sites en diensten</string>
-  <string name="lantern_pro">Lantern Pro</string>
-  <string name="lantern_pro_checkout">Lantern Pro afrekenen</string>
-  <string name="invite_friends_header">Vrienden uitnodigen</string>
-  <string name="pro_desc">Sneller, Slimmer en Weerbaarder</string>
-  <string name="free_month">Krijg een gratis maand bij elke aanmelding</string>
-  <string name="get_pro_now">Koop Pro nu</string>
-  <string name="inviting_friends">Nodig vrienden uit en verdien een Pro bonus</string>
-  <string name="select">Selecteer</string>
-  <string name="special_launch">Speciale kennismakingsprijs!</string>
-  <string name="best_value">Beste prijs-kwaliteitsverhouding!</string>
-  <string name="referral_code_opt">Verwijscode (optioneel)</string>
-  <string name="total">Totaal:</string>
-  <string name="pro_account_header">Pro Account Beheer</string>
-  <string name="pro_account_month_text">Je hebt nu een Lantern Pro maand-account. Je account wordt automatisch verlengd met een maand en berekend.</string>
-  <string name="pro_account_year_text">Je hebt nu een Lantern Pro jaar-account. Je account wordt automatisch verlengd met een jaar en berekend.</string>
-  <string name="cancel_pro_account">Pro Account annuleren</string>
-  <string name="account_verification">Account verificatie</string>
-  <string name="enter_verification_code">Vul verificatiecode in</string>
-  <string name="referral_code">Verwijscode</string>
-  <string name="get_lantern_pro">Krijg Lantern Pro</string>
-  <string name="upgrade_to_lantern_pro">Upgrade naar Lantern Pro</string>
-  <string name="pro_available_for">Voor Windows, Android, Mac en Ubuntu. iOS komt binnenkort</string>
-  <string name="data_remaining">%1$s%% over van uw gratis mandelijkse zeer snelle data</string>
-  <string name="upgrade">Upgrade</string>
-  <string name="next">Volgende</string>
-  <string name="become_reseller">Geld verdienen! Word een Lantern Pro reseller. Klik hier</string>
-  <string name="reseller_email_subject">Wat betekent Lantern reseller!</string>
-  <string name="reseller_email_message">Wanneer je een Lantern reseller bent heb je de mogelijkheid om 25% op elke verkoop te verdienen van een Lantern Pro abonnement. Vertel ons hieronder waarom je een reseller wilt worden.</string>
-  <string name="no_email_client">Geen e-mailprogramma geïnstalleerd</string>
-  <string name="no_wall_at_all">Geen enkele muur.</string>
-  <string name="buy_pro_now">Koop Pro nu</string>
-  <string name="update_billing_info">Betaalinfo wijzigen</string>
-  <string name="pro_credits_text">Nodig vrienden uit en krijg meer Pro</string>
-  <string name="could_not_complete_purchase">Kon nu de Pro aanschaf niet voltooien. Probeer het later opnieuw!</string>
-  <string name="invalid_verification_code">Ongeldige verificatiecode</string>
-  <string name="invalid_payment_method">Ongeldige betaalmethode</string>
-  <string name="unable_to_cancel_account">Kan Pro Account niet annuleren! Neem contact op team@getlantern.org</string>
-  <string name="earn_free_month">Verdien een gratis maand voor elke vriend die zich aanmeld</string>
-  <string name="credits_applied">Je bonus wordt bijgeschreven op je account met de volgende factuur.</string>
-  <string name="pro_invitation_subject">Uitnodiging voor deelname Lantern Pro</string>
-  <string name="receive_free_month">Voor een gratis maand Lantern Pro gebruik deze verwijscode:  %1$s  Je kunt deze hier downloaden:  https://lantern.io/download</string>
-  <string name="share_feed_item">Ik lees over \"%1$s\" bij %2$s met Lantern. Gebruik Lantern om toegang te krijgen op geblokkeerde websites en diensten. Je kunt dit hier downloaden voor Android: https://bit.ly/lanternapk</string>
-  <string name="cancel_pro_confirmation">Weet je het zeker? Dit kan niet teruggedraaid worden! Je kunt je op ieder moment opnieuw registeren voor Pro.</string>
-  <string name="unauthorize_confirmation">Weet je zeker dat je dit apparaat wilt verwijderen van je Pro-account?</string>
-  <string name="yes">Ja</string>
-  <string name="no">Nee</string>
-  <string name="item_image_contentDescription">Nationaliteit</string>
-  <string name="item_preview_country">Verenigde Staten</string>
-  <string name="item_preview_dialCode">+1</string>
-  <string name="refresh">Verversen</string>
-  <string name="find">Vind</string>
-  <string name="share_via">Deel via</string>
-  <string name="copy_link">Kopieer link</string>
-  <string name="open_with">Open met</string>
-  <string name="copied_to_clipboard">Kopieer naar klembord</string>
-  <string name="welcome_to_new">Welkom bij het nieuwe verbeterde Lantern!</string>
-  <string name="now_using">Je gebruikt nu het snelste en stabielste Lantern ooit.</string>
-  <string name="get_unlimited_data">Om ongelimiteerde data te verkrijgen, hoogste snelheid en zelfs sterkere blokkade resistentie\nUPGRADE naar Pro!</string>
-  <string name="start_using">Begin Lantern te gebruiken</string>
-  <string name="device_already_registered">Dit e-mailadres is reeds een Pro-abonnee. Autoriseer dit apparaat hier.</string>
-  <string name="email_in_use">Dit e-mailadres wordt al door iemand anders gebruikt.</string>
-  <string name="congratulations">Gefeliciteerd!</string>
-  <string name="referral_code_used">Een vriend die je hebt doorverwezen heeft Lantern Pro aangeschaft. %d gratis Pro maanden zijn bijgeschreven op je account.</string>
-  <string name="enter_email">Voer e-mailadres in</string>
-  <string name="confirm_email">Bevestig e-mail</string>
-  <string name="confirm_email_address">Bevestig het e-mailadres</string>
-  <string name="register_pro_account">Registreren Pro account</string>
-  <string name="enter_pro_activation_code">Vul de 25 tekens in van de Lantern Pro activatiecode hierboven. Als je geen code hebt ontvangen, neem contact op je de reseller waar je het gekocht hebt.</string>
-  <string name="apply_referral_code">Verwijscode toepassen</string>
-  <string name="terms_of_service">Servicevoorwaarden</string>
-  <string name="status">Status</string>
+    <string name="app_name">Lantern</string>
+    <string name="action_settings">Instellingen</string>
+    <string name="proxy_all_setting">Proxy al het verkeer</string>
+    <string name="proxy_all_on_header">AAN (Veiligste optie)</string>
+    <string name="proxy_all_off_header">UIT (Snelste optie)</string>
+    <string name="button_text">Begin</string>
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Gesloten</string>
+    <string name="default_fragment">Standaard Fragment</string>
+    <string name="receive_lantern">Ontvang Lantern desktop via e-mail</string>
+    <string name="lantern_desktop">Lantern Desktop</string>
+    <string name="email_hint">E-mail</string>
+    <string name="send_button">Versturen</string>
+    <string name="send_desktop">Versturen</string>
+    <string name="send_email">Verstuur E-mail</string>
+    <string name="your_email">Uw e-mail</string>
+    <string name="your_email_address">Je e-mailadres</string>
+    <string name="please_enter">AUB vul in en bevestig je e-mailadres.</string>
+    <string name="please_enter_register">AUB vul in en bevestig je e-mailadres om je Lantern Pro account te registreren.</string>
+    <string name="your_referral_code">Je verwijscode</string>
+    <string name="report_an_issue">Rapport verzenden</string>
+    <string name="select_issue">Selecteer een probleem</string>
+    <string name="select_issue_desc">Laat een korte omschrijving achter m.b.t. uw probleem,\n we reageren zo snel mogelijk.</string>
+    <string name="submit">Indienen</string>
+    <string name="submit_issue">Melding versturen</string>
+    <string name="no_issue_selected">Selecteer een probleem voordat u dit rapport verzend</string>
+    <string name="cannot_find_email">Oeps! Klopt het e-mailadres want we kunnen het niet vinden.</string>
+    <string name="no_purchase_date">Wanneer heb je ongeveer Lantern Pro aangeschaft? Kies een datum.</string>
+    <string name="purchase_date">Aankoopdatum</string>
+    <string-array name="common_issue_list">
+        <item>Kan geblokkeerde websites niet openen</item>
+        <item>Kan aankoop niet voltooien</item>
+        <item>Kan niet registreren</item>
+        <item>Cirkeltje blijft draaien</item>
+        <item>Langzaam</item>
+        <item>Anders</item>
+    </string-array>
+    <string name="submit_code">Code bevestigen</string>
+    <string name="on_text">AAN</string>
+    <string name="off_text">UIT</string>
+    <string name="lantern_off">Lantern is uitgeschakeld. Druk op de schakelaar om toegang te krijgen tot alle geblokkeerde content en services!</string>
+    <string name="lantern_on">Lantern is ingeschakeld. U kunt nu alle geblokkeerde sites en services zien!</string>
+    <string name="on_desc">U heeft nu toegang tot \r\nblocked sites en services</string>
+    <string name="off_desc">Klik op de knop om toegang te krijgen tot geblokkeerde sites en diensten</string>
+    <string name="desktop_option">Desktop Versie</string>
+    <string name="contact_option">Contact</string>
+    <string name="check_for_update">Controleer op update</string>
+    <string name="no_update_available">U heeft de laatste versie!</string>
+    <string name="cancel">Annuleren</string>
+    <string name="newsfeed_option">Probeer Lanten Feed</string>
+    <string name="newsfeed_off_option">Feed uitzetten</string>
+    <string name="privacy_policy">Privacybeleid</string>
+    <string name="share_option">Delen</string>
+    <string name="quit_option">Stoppen</string>
+    <string name="share_email_native"></string>
+    <string name="share_email_subject">Lantern Android</string>
+    <string name="fatal_error">Lantern heeft een ernstige fout ondervonden en werkt niet langer</string>
+    <string name="share_twitter">Zie ook Lantern Android: https://bit.ly/lanternapk</string>
+    <string name="share_facebook">Ik gebruik Lantern op Android: https://bit.ly/lanternapk</string>
+    <string name="share_email_gmail">Ik gebruik Lantern voor Android en heb het APK bestand bijgevoegd!</string>
+    <string name="share_sms">Ik gebruik Lantern op Android: https://bit.ly/lanternapk</string>
+    <string name="share_chooser_text">Deel Lantern Android</string>
+    <string name="card">Kaart</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="Alipay">Alipay</string>
+    <string name="alipay_account">Alipay account</string>
+    <string name="month">Maand</string>
+    <string name="year">Jaar</string>
+    <string name="success_email">Lantern Desktop is naar u toe gemaild! </string>
+    <string name="send_logs">Logs versturen</string>
+    <string name="help_survey">Help ons Lantern te verbeteren. Vul deze rondvraag nu in!</string>
+    <string name="take_survey">Rondvraag!</string>
+    <string name="thanks_survey">Bedankt voor het invullen van onze rondvraag!\n</string>
+    <string name="invalid_email">Ongeldig e-mailadres</string>
+    <string name="emails_do_not_match">E-mailvelden stemmen niet overeen</string>
+    <string name="invalid_reseller_code">De ingevulde reseller code is ongeldig</string>
+    <string name="invalid_referral_code">Ongeldige verwijscode</string>
+    <string name="cannot_use_own_referral_code">Kan je eigen verwijscode niet gebruiken voor promotie</string>
+    <string name="no_internet_connection">Geen internetconnectie gevonden!</string>
+    <string name="unable_remove_device">Kon apparaat niet verwijderen. Probeer opnieuw!</string>
+    <string name="remove">Verwijder</string>
+    <string name="contact_email">team@getlantern.org</string>
+    <string name="contact_message">Hulp</string>
+    <string name="contact_subject">Lantern Android</string>
+    <string name="not_now">Niet nu</string>
+    <string name="install_update">Update</string>
+    <string name="error_update">Fout Downloaden Update</string>
+    <string name="loading">Bezig met laden...</string>
+    <string name="manual_update">Probeer handmatig de laatste versie te installeren via &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+    <string name="pro_welcome_text">Welkom bij Lantern Pro!</string>
+    <string name="welcome_to_lantern">Welkom bij het nieuwe en verbeterde Lantern</string>
+    <string name="to_get_unlimited">Om ongelimiteerde data te verkrijgen, hoogste snelheid en zelfs sterkere blokkade resistentie\nUPGRADE naar Pro!</string>
+    <string name="renew_pro_account">Pro Account hernieuwen</string>
+    <string name="logout">Uitloggen</string>
+    <string name="change_phone_number">Telefoonnummer wijzigen</string>
+    <string name="change_email_address">Emailadres wijzigen</string>
+    <string name="pro_account_expires">Uw Pro account verloopt op %1$s</string>
+    <string name="includes_free_months">Dit is inclusief uw %2$d bonus maanden!</string>
+    <string name="verified_phone_number">Geverifieerde telefoonnummer:</string>
+    <string name="devices_authorized">Apparaten die je Pro account mogen gebruiken</string>
+    <string name="send_us_your_logs">Stuur uw Logs</string>
+    <string name="thanks_purchase">Bedankt voor het aanschaffen van Lantern Pro!</string>
+    <string name="start_inviting">\r\nStart met uitnodigen!</string>
+    <string name="sending_request">Verzoek ana het verwerken</string>
+    <string name="invite_friends">Vul je e-mailadres in om een code te ontvangen die je kunt delen met je vrienden. Ontvang een gratis maand voor Pro als deze zich registreren!</string>
+    <string name="invite_friends_welcome">Wanneer je vrienden een tweejarig abonnement nemen ontvangt ieder van jullie 3 maanden gratis erbij. Bij een eenjarig abonnement krijgt een ieder 1 maand gratis.</string>
+    <string name="invite_friends_btn">Vrienden uitnodigen</string>
+    <string name="share_friends_text">Deel met vrienden voor gratis maanden!</string>
+    <string name="email_address">Emailadres</string>
+    <string name="continue_to_pro">Doorgaan met PRO</string>
+    <string name="continue_">Ga verder</string>
+    <string name="continue_to_payment">Naar betaling</string>
+    <string name="skip_to_checkout">Naar betalen</string>
+    <string name="free_pro_credits">Gratis Pro Credits</string>
+    <string name="get_pro_credits">Krijg gratis Pro Credits</string>
+    <string name="get_free_months">Krijg gratis maanden</string>
+    <string name="text_invite">Uitnodigen via tekst</string>
+    <string name="email_invite">Uitnodigen via e-mail</string>
+    <string name="share_your_referral_code">Deel je verwijscode</string>
+    <string name="get_code">Code bemachtigen</string>
+    <string name="get_code_text">Vul je e-mailadres in om een code te ontvangen die je kunt delen met je vrienden. Ontvang een gratis maand voor Pro als deze zich registreren!</string>
+    <string name="enter_your_email">Vul je e-mailadres in om een verwijscode te ontvangen</string>
+    <string name="referral_copied_to_clipboard">Verwijscode gekopieerd naar klembord!</string>
+    <string name="share_referral_text">Gebruik mijn code %1$s en krijg maximaal 3 extra gratis maanden na aankoop. Download Lantern https://bit.ly/lanternapk</string>
+    <string name="previous_code">Als je eerder een verwijscode ontvangen\r\nhebt gebruik dan hetzelfde e-mailadres.</string>
+    <string name="payment_plans">Lantern PRO Betalingsplan</string>
+    <string name="features_text">Lantern PRO Features</string>
+    <string name="checkout">Winkelmandje</string>
+    <string name="cvc">CVC</string>
+    <string name="cc_number">Credit Card</string>
+    <string name="card_number">Kaartnummer</string>
+    <string name="validation_errors">Autorisatiefouten</string>
+    <string name="ok">OK</string>
+    <string name="progressMessage">Verzoek verwerken...</string>
+    <string name="progressMessage2">Verwijscode ophalen</string>
+    <string name="language">Taal</string>
+    <string name="settings">Instellingen</string>
+    <string name="referral_applied">Je gratis maanden worden toegevoegd voor jou en je vriend nadat de afrekening is voltooid!</string>
+    <string name="all_feeds">alles</string>
+    <string name="feed.error.oops">Oops!</string>
+    <string name="feed.error.error_fetching_feed">Fout tijdens ophalen Feed</string>
+    <string name="feed.error.try_again">Probeer opnieuw</string>
+    <string name="authorize_device_pro">Autoriseer apparaat voor Pro</string>
+    <string name="add_device">Apparaat toevoegen</string>
+    <string name="now_authorized">Dit apparaat is nu goedgekeurd om je Pro account te gebruiken!</string>
+    <string name="i_have_another">Ik heb nog een Lantern Pro apparaat</string>
+    <string name="link_this_device">Dit apparaat linken</string>
+    <string name="or">OF</string>
+    <string name="need_to_recover">Ik moet mijn Lantern Pro account herstellen</string>
+    <string name="start_recovery">Begin herstel</string>
+    <string name="account_recovery">Account-herstel</string>
+    <string name="account_recovery_code">Account-herstel code</string>
+    <string name="thanks_report">Bedankt. Lantern klantenservice neemt contact met u op binnen 48 uur.</string>
+    <string name="enter_valid_code">Vul AUB een geldige herstelcode in.</string>
+    <string name="too_many_devices">De grens van het maximaal aantal apparaten die via je Pro-account kunt linken is bereikt.</string>
+    <string name="check_spam_folder">* Indien u de mail niet ontvangt is deze mogelijk als spam aangemerkt door uw e-mailprogramma. </string>
+    <string name="by_referral">Pro ontvangen door Een vriend doorverwijzen</string>
+    <string-array name="payment_method_list">
+        <item>Alipay</item>
+        <item>Credit Card</item>
+        <item>Pro ontvangen Een vriend doorverwijzen</item>
+    </string-array>
+    <string name="payment_method">Betaalwijze</string>
+    <string name="payment_account">Betaalaccount</string>
+    <string name="oops_having_trouble">Oeps! We kunnen dat e-mailadres niet vinden. Geef onderstaand de nodige informatie aan ons door zodat we je accountgegevens kunnen traceren.</string>
+    <string name="locate_account">Noteer ook andere informatie die ons kan helpen om je account te traceren.</string>
+    <string name="resend_email">E-mail opnieuw versturen</string>
+    <string name="dont_remember">Weet je je e-mailadres niet meer?</string>
+    <string name="device_code">Apparaat link-code </string>
+    <string name="device_now_linked">Het linken van je apparaat is gelukt!\n</string>
+    <string name="device_linked_success">Gelukt! Je nieuwe apparaat wordt binnenkort gelinkt.\n</string>
+    <string name="link_this_device_0">Om dit apparaat te linken aan je Pro-account:</string>
+    <string name="link_this_device_1"><b>1.</b> Open \'Apparaat toevoegen\' in het menu in je Pro apparaat.</string>
+    <string name="link_this_device_2"><b>2.</b> Vul de apparaat link-code in en klik op versturen. </string>
+    <string name="make_sure_updated">* Controleer of je de nieuwste versie van Lantern gebruikt op je Pro-apparaat.</string>
+    <string name="make_sure_updated_2">* Controleer of je de nieuwste versie van Lantern gebruikt op je niet-geautoriseerde apparaat.</string>
+    <string name="error_device_code">Fout tijdens herstel van apparaat link-code! Probeer het later opnieuw.</string>
+    <string-array name="pro_features">
+        <item>Hogere snelheid</item>
+        <item>Ongelimiteerde data</item>
+        <item>Blokkade resistent</item>
+        <item>Drie apparaten</item>
+        <item>Geen advertenties</item>
+    </string-array>
+    <string name="purchased_from_reseller">Lantern Pro verkregen van een wederverkoper? Klik hier!</string>
+    <string-array name="authorize_device_list">
+        <item><b>1.</b> Open het \'Autoriseer apparaat voor Pro\' menupunt in je niet-geautoriseerd apparaat.</item>
+        <item><b>2.</b> Vul de link-code in die je hebt ontvangen van stap 1 en indienenl</item>
+    </string-array>
+    <string-array name="enter_code_steps_referral">
+        <item>Vul de verificatie-code in die je hebt ontvangen per mail om verder te gaan naar Pro!</item>
+        <item>Heb je geen code ontvangen? Check in je spam en controleer of je je e-mailadres correct hebt opgegeven.</item>
+    </string-array>
+    <string-array name="enter_email_list">
+        <item>Vul je e-mailadres in om dit apparaat te autoriseren om je gratis Lantern Pro maanden te gebruiken</item>
+        <item>Wij sturen je een autorisatiecode per e-mail</item>
+    </string-array>
+    <string name="only_one_device">Maar één apparaat</string>
+    <string name="sorry_cannot_remove">Sorry maar je kunt het apparaat niet verwijderen dat je als laatste hebt geautoriseerd</string>
+    <string name="send_link">Link versturen</string>
+    <string name="click_button">Klik op de knop om toegang te krijgen tot geblokkeerde sites en diensten</string>
+    <string name="lantern_pro">Lantern Pro</string>
+    <string name="lantern_pro_checkout">Lantern Pro afrekenen</string>
+    <string name="invite_friends_header">Vrienden uitnodigen</string>
+    <string name="pro_desc">Sneller, Slimmer en Weerbaarder</string>
+    <string name="free_month">Krijg een gratis maand bij elke aanmelding</string>
+    <string name="get_pro_now">Koop Pro nu</string>
+    <string name="inviting_friends">Nodig vrienden uit en verdien een Pro bonus</string>
+    <string name="select">Selecteer</string>
+    <string name="special_launch">Speciale kennismakingsprijs!</string>
+    <string name="best_value">Beste prijs-kwaliteitsverhouding!</string>
+    <string name="referral_code_opt">Verwijscode (optioneel)</string>
+    <string name="total">Totaal:</string>
+    <string name="pro_account_header">Pro Account Beheer</string>
+    <string name="pro_account_month_text">Je hebt nu een Lantern Pro maand-account. Je account wordt automatisch verlengd met een maand en berekend.</string>
+    <string name="pro_account_year_text">Je hebt nu een Lantern Pro jaar-account. Je account wordt automatisch verlengd met een jaar en berekend.</string>
+    <string name="cancel_pro_account">Pro Account annuleren</string>
+    <string name="account_verification">Account verificatie</string>
+    <string name="enter_verification_code">Vul verificatiecode in</string>
+    <string name="referral_code">Verwijscode</string>
+    <string name="get_lantern_pro">Krijg Lantern Pro</string>
+    <string name="upgrade_to_lantern_pro">Upgrade naar Lantern Pro</string>
+    <string name="pro_available_for">Voor Windows, Android, Mac en Ubuntu. iOS komt binnenkort</string>
+    <string name="data_remaining">%1$s%% over van uw gratis mandelijkse zeer snelle data</string>
+    <string name="upgrade">Upgrade</string>
+    <string name="next">Volgende</string>
+    <string name="become_reseller">Geld verdienen! Word een Lantern Pro reseller. Klik hier</string>
+    <string name="reseller_email_subject">Wat betekent Lantern reseller!</string>
+    <string name="reseller_email_message">Wanneer je een Lantern reseller bent heb je de mogelijkheid om 25% op elke verkoop te verdienen van een Lantern Pro abonnement. Vertel ons hieronder waarom je een reseller wilt worden.</string>
+    <string name="no_email_client">Geen e-mailprogramma geïnstalleerd</string>
+    <string name="no_wall_at_all">Geen enkele muur.</string>
+    <string name="buy_pro_now">Koop Pro nu</string>
+    <string name="update_billing_info">Betaalinfo wijzigen</string>
+    <string name="pro_credits_text">Nodig vrienden uit en krijg meer Pro</string>
+    <string name="could_not_complete_purchase">Kon nu de Pro aanschaf niet voltooien. Probeer het later opnieuw!</string>
+    <string name="invalid_verification_code">Ongeldige verificatiecode</string>
+    <string name="invalid_payment_method">Ongeldige betaalmethode</string>
+    <string name="unable_to_cancel_account">Kan Pro Account niet annuleren! Neem contact op team@getlantern.org</string>
+    <string name="earn_free_month">Verdien een gratis maand voor elke vriend die zich aanmeld</string>
+    <string name="credits_applied">Je bonus wordt bijgeschreven op je account met de volgende factuur.</string>
+    <string name="pro_invitation_subject">Uitnodiging voor deelname Lantern Pro</string>
+    <string name="receive_free_month">Voor een gratis maand Lantern Pro gebruik deze verwijscode:  %1$s  Je kunt deze hier downloaden:  https://lantern.io/download</string>
+    <string name="share_feed_item">Ik lees over \"%1$s\" bij %2$s met Lantern. Gebruik Lantern om toegang te krijgen op geblokkeerde websites en diensten. Je kunt dit hier downloaden voor Android: https://bit.ly/lanternapk</string>
+    <string name="cancel_pro_confirmation">Weet je het zeker? Dit kan niet teruggedraaid worden! Je kunt je op ieder moment opnieuw registeren voor Pro.</string>
+    <string name="unauthorize_confirmation">Weet je zeker dat je dit apparaat wilt verwijderen van je Pro-account?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nee</string>
+    <string name="item_image_contentDescription">Nationaliteit</string>
+    <string name="item_preview_country">Verenigde Staten</string>
+    <string name="item_preview_dialCode">+1</string>
+    <string name="refresh">Verversen</string>
+    <string name="find">Vind</string>
+    <string name="share_via">Deel via</string>
+    <string name="copy_link">Kopieer link</string>
+    <string name="open_with">Open met</string>
+    <string name="copied_to_clipboard">Kopieer naar klembord</string>
+    <string name="welcome_to_new">Welkom bij het nieuwe verbeterde Lantern!</string>
+    <string name="now_using">Je gebruikt nu het snelste en stabielste Lantern ooit.</string>
+    <string name="get_unlimited_data">Om ongelimiteerde data te verkrijgen, hoogste snelheid en zelfs sterkere blokkade resistentie\nUPGRADE naar Pro!</string>
+    <string name="start_using">Begin Lantern te gebruiken</string>
+    <string name="device_already_registered">Dit e-mailadres is reeds een Pro-abonnee. Autoriseer dit apparaat hier.</string>
+    <string name="email_in_use">Dit e-mailadres wordt al door iemand anders gebruikt.</string>
+    <string name="congratulations">Gefeliciteerd!</string>
+    <string name="referral_code_used">Een vriend die je hebt doorverwezen heeft Lantern Pro aangeschaft. %d gratis Pro maanden zijn bijgeschreven op je account.</string>
+    <string name="enter_email">Voer e-mailadres in</string>
+    <string name="confirm_email">Bevestig e-mail</string>
+    <string name="confirm_email_address">Bevestig het e-mailadres</string>
+    <string name="register_pro_account">Registreren Pro account</string>
+    <string name="enter_pro_activation_code">Vul de 25 tekens in van de Lantern Pro activatiecode hierboven. Als je geen code hebt ontvangen, neem contact op je de reseller waar je het gekocht hebt.</string>
+    <string name="apply_referral_code">Verwijscode toepassen</string>
+    <string name="terms_of_service">Servicevoorwaarden</string>
+    <string name="status">Status</string>
 </resources>

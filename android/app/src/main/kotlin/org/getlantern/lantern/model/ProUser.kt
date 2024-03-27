@@ -18,7 +18,8 @@ data class ProUser(
 ) {
     private fun isUserStatus(status: String) = userStatus == status
 
-    private fun expirationDate() = if (expiration == null) null else LocalDateTime(expiration * 1000)
+    private fun expirationDate() =
+        if (expiration == null) null else LocalDateTime(expiration * 1000)
 
     fun monthsLeft(): Int {
         val expDate = expirationDate()

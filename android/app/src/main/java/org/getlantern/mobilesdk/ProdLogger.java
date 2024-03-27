@@ -1,8 +1,8 @@
 package org.getlantern.mobilesdk;
 
 import android.content.Context;
+
 import internalsdk.Internalsdk;
-import android.util.Log;
 
 public class ProdLogger extends Logger {
     protected ProdLogger() {

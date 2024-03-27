@@ -1,267 +1,267 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">Lantern</string>
-  <string name="action_settings">Settings</string>
-  <string name="proxy_all_setting">Bütün trafiki proksidən keçir</string>
-  <string name="button_text">Başla</string>
-  <string name="drawer_open">Yeşik Açıldı</string>
-  <string name="drawer_close">Yeşik Bağlandı</string>
-  <string name="default_fragment">Başlanğıc Fraqment</string>
-  <string name="receive_lantern">Lantern desktopu emaillə əldə et</string>
-  <string name="lantern_desktop">Kompüter üçün Lantern</string>
-  <string name="email_hint">Email</string>
-  <string name="send_button">Göndər</string>
-  <string name="send_desktop">Send</string>
-  <string name="send_email">Email göndər</string>
-  <string name="your_email">Emailiniz</string>
-  <string name="your_email_address">Email ünvanınız</string>
-  <string name="please_enter">Email ünvanınızı yazın və təsdiq edin.</string>
-  <string name="please_enter_register">Xahiş edirik email ünvanınızı daxil edin və təsdiqləyin ki Lanter Pro Hesabından istifadə edəsiniz.</string>
-  <string name="your_referral_code">Məsləhət kodunuz</string>
-  <string name="report_an_issue">Məsələni xəbər ver</string>
-  <string name="select_issue">Məsləni seç</string>
-  <string name="select_issue_desc">Məslənin qısa məzmununu qeyd edin,\n v biz sizinlə dərhal əlaqə saxlayacağıq.</string>
-  <string name="submit">Göndər</string>
-  <string name="submit_issue">Məsələni göndər</string>
-  <string name="no_issue_selected">Hesabatı verməmişdən əvvəl məsələni seç</string>
-  <string name="cannot_find_email">Ay! Email ünvanını tapmaqda çətinlik çəkirik.</string>
-  <string name="no_purchase_date">Lantern Pro-nu əldə etdiyiniz təxmini tarixi yazın.</string>
-  <string name="purchase_date">Alınma tarixi</string>
-  <string-array name="common_issue_list">
-    <item>Bloklanan saytlara girə bilmədi</item>
-    <item>Ödəniş edilmədi</item>
-    <item>Daxil olmadı</item>
-    <item>Yüklənmə dayanmır</item>
-    <item>Yavaş</item>
-    <item>Digər</item>
-  </string-array>
-  <string name="submit_code">Kodu təsdiqlə</string>
-  <string name="on_text">Açıq</string>
-  <string name="off_text">Qapalı</string>
-  <string name="lantern_off">Landern qapalıdır.Bloklanan sayt və servislərə giriş üçün yandırın!</string>
-  <string name="lantern_on">Lantern açıqdır. İndi blokanmış sayt və xidmətlərdən istifadə edə bilərsiniz!</string>
-  <string name="on_desc">İndi bloklanan sayt və xidmətlərə daxil\r\nola bilərsiniz.</string>
-  <string name="off_desc">Bloklanan xidmət və saytlara girmək üçün düyməni basın</string>
-  <string name="desktop_option">Desktop Versiyası</string>
-  <string name="contact_option">Contact</string>
-  <string name="check_for_update">Yeniləməni yoxlayın</string>
-  <string name="no_update_available">Yeniləndi!</string>
-  <string name="cancel">Cancel</string>
-  <string name="newsfeed_option">Lantern axını</string>
-  <string name="newsfeed_off_option">Axını söndür</string>
-  <string name="privacy_policy">Gizlilik Siyasəti</string>
-  <string name="share_option">Paylaş</string>
-  <string name="quit_option">Quit</string>
-  <string name="share_email_native"></string>
-  <string name="share_email_subject">Lantern Android</string>
-  <string name="fatal_error">Lanterndə ciddi xəta baş verdi və o işləmir</string>
-  <string name="share_twitter">Lantern Android ünvanı: https://bit.ly/lanternapk</string>
-  <string name="share_facebook">Mən Android Lanterndən istifadə edirəm, o burdadır: https://bit.ly/lanternapk</string>
-  <string name="share_email_gmail">Mən Android üçün Lantern istifadə edirəm və APK faylı yükləmişəm!</string>
-  <string name="share_sms">Mən Android Lanterndən istifadə edirəm, burdan yüklə: https://bit.ly/lanternapk</string>
-  <string name="share_chooser_text">Lantern Androidi Paylaş</string>
-  <string name="card">Kart</string>
-  <string name="credit_card">Kredit Kartı</string>
-  <string name="Alipay">Alipay</string>
-  <string name="alipay_account">Alipay hesabı</string>
-  <string name="month">Ay</string>
-  <string name="year">İl</string>
-  <string name="success_email">Lantern Desktop sənə emaillə göndərilib!</string>
-  <string name="send_logs">Girişləri göndər</string>
-  <string name="help_survey">Lanterni daha yaxşı etmək üçün kömək et və sorğuda iştirak et!</string>
-  <string name="take_survey">Sorğuda iştirak et!</string>
-  <string name="thanks_survey">Sorğudan iştiraka görə minnətdarıq!\n</string>
-  <string name="invalid_email">Səhv email ünvan</string>
-  <string name="emails_do_not_match">Email sahələri uyğun gəlmir</string>
-  <string name="invalid_reseller_code">Satıcı kodu səhvdir</string>
-  <string name="invalid_referral_code">Səhv məsləhət kodu</string>
-  <string name="cannot_use_own_referral_code">Şəxsi məsləhət kodunuzu istifadə edə bilməzsiniz</string>
-  <string name="no_internet_connection">İnternet qoşuması yoxdur!</string>
-  <string name="unable_remove_device">Aləti çıxarmaq olmur. Yenidən sınayın!</string>
-  <string name="remove">Xaric et</string>
-  <string name="contact_email">team@getlantern.org</string>
-  <string name="contact_message">Mənə Kömək Et</string>
-  <string name="contact_subject">Lantern Android</string>
-  <string name="not_now">İndi Yox</string>
-  <string name="install_update">Yenilə</string>
-  <string name="error_update">Yenilənmənin Yüklənməsində Xəta</string>
-  <string name="manual_update">Yeni versiyanı yükləmək üçün &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
-  <string name="pro_welcome_text">Lantern Pro-ya xoş gəldiniz!</string>
-  <string name="welcome_to_lantern">Yenilənmiş Lanternə xoş gəldiniz</string>
-  <string name="to_get_unlimited">Limitsiz məzmun, əla sürət və daha yaxşı blokaçma imkanlarını\nYENİLƏMƏ ilə PRoda əldə edin!</string>
-  <string name="renew_pro_account">Pro heabını yeniləyin</string>
-  <string name="logout">Çıx</string>
-  <string name="change_phone_number">Telefon npmrəsini dəyiş</string>
-  <string name="change_email_address">Email ünvanı dəyiş</string>
-  <string name="pro_account_expires">Sizin Pro hesabınız %1$s tarixində bitir</string>
-  <string name="includes_free_months">Bura %2$d binus ayları daxildir!</string>
-  <string name="verified_phone_number">Təsdiqlənmiş telefon nömrəsi:</string>
-  <string name="devices_authorized">Sizin Pro hesabınızda istifadə edə bilən alətlər</string>
-  <string name="send_us_your_logs">Daxilolmalarınızı göndərin</string>
-  <string name="thanks_purchase">Lantern Pro aldığınıza görə minnətdarıq!</string>
-  <string name="start_inviting">\r\nDəvətnamə göndərin!</string>
-  <string name="sending_request">Gözləyin</string>
-  <string name="invite_friends">Dostlarınızla paylaşmağa kodu almaq üün email ünvanınızı qeyd edin. Onlar qeydiyyatdan keçəndə pulsuz PRO aylar əldə edin. </string>
-  <string name="invite_friends_welcome">Dostlarınız 2 illik planı aldıqda 3 ay, bir illik plan aldıqda hər biriniz bir ay pulsuz əldə edəcəksiniz.</string>
-  <string name="invite_friends_btn">Dostları dəvət et</string>
-  <string name="share_friends_text">Pulsuz aylar qazanmaq üçün dostlarınızla paylaşın!</string>
-  <string name="email_address">Email ünvan</string>
-  <string name="continue_to_pro">PRO ilə davam et</string>
-  <string name="continue_">Continue</string>
-  <string name="continue_to_payment">Ödənişə davam</string>
-  <string name="skip_to_checkout">Ödənişə keçin</string>
-  <string name="free_pro_credits">Pulsuz Pro kreditlər</string>
-  <string name="get_pro_credits">Pulsuz Pro krediti alın</string>
-  <string name="get_free_months">Pulsuz aylar alın</string>
-  <string name="text_invite">Dəvətnamə</string>
-  <string name="email_invite">Email dəvəti</string>
-  <string name="share_your_referral_code">Təklif kodunuzu paylaşın</string>
-  <string name="get_code">Kodu al</string>
-  <string name="get_code_text">Email ünvanınızı qeyd edin ki, dostlarınızla paylaşasınız və PRO ilə pulsuz aylar alasınız. </string>
-  <string name="enter_your_email">Məsləhət kodu almaq üçün emailinizi qeyd edin</string>
-  <string name="share_referral_text">Mənim kodum %1$s üç ay əlavə pulsuz əldə etməyə imkan verir. Lanterni yüklə https://bit.ly/lanternapk</string>
-  <string name="previous_code">Əgər əvvəllər məsləhət kodu\r\n almısınızsa, əmin oliun ki eyni emaildən istifadə edirsiniz.</string>
-  <string name="payment_plans">Lantern PRO ödəniş planları</string>
-  <string name="features_text">Lantern PRO imkanları</string>
-  <string name="checkout">Ödəniş</string>
-  <string name="cvc">CVC</string>
-  <string name="cc_number">Kredit Kartı</string>
-  <string name="card_number">Kart nömrəsi</string>
-  <string name="validation_errors">Təsdiqləmə xətaları</string>
-  <string name="progressMessage">Tələb işlənilir...</string>
-  <string name="progressMessage2">Məsləhət kodu yaradılır</string>
-  <string name="language">Language</string>
-  <string name="settings">Seçimlər</string>
-  <string name="referral_applied">Ödəniş bitən kimi sizin və dostunuzun hesabına pulsuz aylar əlavə olunacaq!</string>
-  <string name="all_feeds">hamısı</string>
-  <string name="feed.error.oops">Ay!</string>
-  <string name="feed.error.error_fetching_feed">Axını yükləmədə xəta</string>
-  <string name="feed.error.try_again">Yenidən sınayın</string>
-  <string name="authorize_device_pro">Alətinizin Pro olması üçün təsdiqləyin</string>
-  <string name="add_device">Alət artır</string>
-  <string name="now_authorized">Bu alət sizin Pro hesabınızı istifadə edə bilər!</string>
-  <string name="i_have_another">Başqa Lantern Pro alətim var</string>
-  <string name="link_this_device">Aləti qoşun</string>
-  <string name="or">və ya</string>
-  <string name="need_to_recover">Lantern Pro hesabımı açmaq istəyirəm</string>
-  <string name="start_recovery">Düzəltməyə başla</string>
-  <string name="account_recovery">Hesabın yadasalınması</string>
-  <string name="account_recovery_code">Hesab yadasalma kodu</string>
-  <string name="thanks_report">Çox sağ olun, Lantern Müştəri xidmətləri 48 saat ərzində əlaqə saxlayacaq.</string>
-  <string name="enter_valid_code">Zəhmət olmasa düzgün kodu daxil edin.</string>
-  <string name="too_many_devices">Pro hesabına qoşula biləcək alətlərin sayı limiti keçib.</string>
-  <string name="check_spam_folder">Zəhmət olmasa emaili almadığınız təqdirdə spam qovluğunu yoxlayın</string>
-  <string name="by_referral">Dostu məsləhət görməklə Pro aldınız</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item>Bank Kartı</item>
-    <item>Dostu məsləhət görməklə Pro aldınız</item>
-  </string-array>
-  <string name="payment_method">Ödəniş üsulu</string>
-  <string name="payment_account">Ödəmə hesabı</string>
-  <string name="oops_having_trouble">Ay! Email ünvanı tapmaqda çətinlik çəkirik. Zəhmət olmasa aşağıdakı məlumatları əlavə edin ki, sizin hesabınızı müəyyənləşdirək.</string>
-  <string name="locate_account">Nəzərə alın ki, başqa digər məlumatlar sizin hesabınızı tapmağa kömək edəcək.</string>
-  <string name="resend_email">Yenidən email göndər</string>
-  <string name="dont_remember">Emailini unutmusan?</string>
-  <string name="device_code">Alətin qoşulma kodu</string>
-  <string name="device_now_linked">Alətiniz uğurla qoşuldu!\n</string>
-  <string name="device_linked_success">Uğurlu! Yeni alətiniz hesabınıza tezliklə qoşulacaq!\n</string>
-  <string name="link_this_device_0">Pro hesabınızla bu aləti birləşdirmək üçün:</string>
-  <string name="link_this_device_1"><b>1.</b> Pro alətinizdə \"Alət əlavə et\" menyusunu açın.</string>
-  <string name="link_this_device_2"><b>2.</b> Aləti qoşan kodu əlavə edin və göndərin.</string>
-  <string name="make_sure_updated">* Əmin olun ki, Pro alətinizdə Lanternin son versiyasını yükləmisiniz.</string>
-  <string name="make_sure_updated_2">* Əmin olun ki, təsdiqlənməmiş alətinizdə Lanternin son versiyasını yükləmisiniz.</string>
-  <string name="error_device_code">Alətin qoşma kodunu işlətməkdə xəta! Yenidən sınayın.</string>
-  <string-array name="pro_features">
-    <item>Yüksək sürət</item>
-    <item>Limitsiz məlumat</item>
-    <item>Qarşsı alınmaz</item>
-    <item>Üç alət</item>
-    <item>Reklamsız</item>
-  </string-array>
-  <string name="purchased_from_reseller">Lantern Pro-nu satıcıdan almısınız? Klikləyin!</string>
-  <string-array name="authorize_device_list">
-    <item><b>1.</b> Təsdiqlənməmiş alətinizdə \"Pro üçün aləti təsdiqlə\" menyusunu açın.</item>
-    <item><b>2.</b> Birinci addımdan əldə olunan qoşma kodunu əlavə edin və göndərin</item>
-  </string-array>
-  <string-array name="enter_code_steps_referral">
-    <item>Pro ilə davam etmək üçün emaillə aldığınız təsdiqləmə kodunu yapışdırın!</item>
-    <item>Kodu almamısınız? Spam qovluğunu və email ünvanınızı düzgün daxil etdiyinizi yoxlayın.</item>
-  </string-array>
-  <string-array name="enter_email_list">
-    <item>Lantern Pro pulsuz planını alətinizdə istifadə etmək üçün email ünvanınızı daxil edin</item>
-    <item>Biz sizə təsdiqləmə emailini emaillə göndərəcəyik</item>
-  </string-array>
-  <string name="only_one_device">Yalnız bir alət</string>
-  <string name="sorry_cannot_remove">Üzr istəyirik, amma siz son tsdiqlənmiş alətinizi çıxara bilməzsiniz</string>
-  <string name="send_link">Link göndər</string>
-  <string name="click_button">Bloklanan xidmət və saytlara girmək üçün düyməni basın</string>
-  <string name="lantern_pro">Lantern Pro</string>
-  <string name="lantern_pro_checkout">Lantern Pro Ödəniş</string>
-  <string name="invite_friends_header">Dost dəvət et</string>
-  <string name="pro_desc">Sürətli, Ağıllı, daha Dözümlü</string>
-  <string name="free_month">Hər qeydiyyat üçün pulsuz ay əldə et</string>
-  <string name="get_pro_now">Pro əldə et</string>
-  <string name="inviting_friends">Dostları dəvət etməklə Pro kredit əldə et</string>
-  <string name="select">Seç</string>
-  <string name="special_launch">Xüsusi qiymət!</string>
-  <string name="best_value">Düzgün seçim!</string>
-  <string name="referral_code_opt">Məsləhət kodu (vacib deyil)</string>
-  <string name="total">Cəmi:</string>
-  <string name="pro_account_header">Pro Hesab İdarəçiliyi</string>
-  <string name="pro_account_month_text">Hazırda Lantern Pro aylıq hesabınız var. Ödəniş dövrünün sonunda hesabınızdan avtomatik olaraq daha bir aylıq ödəniş tələb olunacaq.</string>
-  <string name="pro_account_year_text">Hazırda Lantern Pro illik hesabınız var. Ödəniş dövrünün sonunda hesabınızdan avtomatik olaraq daha bir aylıq ödəniş tələb olunacaq.</string>
-  <string name="cancel_pro_account">Pro hesabını dayandır</string>
-  <string name="account_verification">Hesab təsdiqlənməsi</string>
-  <string name="enter_verification_code">Təsdiqləmə kodunu əlavə et</string>
-  <string name="referral_code">Məsləhət kodu</string>
-  <string name="get_lantern_pro">Lantern Pro əldə et</string>
-  <string name="upgrade_to_lantern_pro">Lantern Pro-ya yüksəlt</string>
-  <string name="pro_available_for">Windows, Android, Mac və Ubuntu üçün. iOS versiyası yaxında</string>
-  <string name="upgrade">Yüksəlt</string>
-  <string name="next">Növbəti</string>
-  <string name="become_reseller">Pul qazan! Lantern Pro satıcısı ol. Kliklə.</string>
-  <string name="reseller_email_subject">Lantern Satıcısı proqramı haqda öyrənmək istəyirəm!</string>
-  <string name="reseller_email_message">Lantern Satıcısı olanda hər Lantern Pro abunəliyi üçün 25% ondan qazanacaqsınız. Aşağıda özünüz haqqında məlumat verin və niyə satıcı olmağınızı izah edin.</string>
-  <string name="no_wall_at_all">Gözləmə.</string>
-  <string name="buy_pro_now">Pro-nu indi al</string>
-  <string name="update_billing_info">Ödəniş məlumatını yenilə</string>
-  <string name="pro_credits_text">Dostlar dəvət et, daha çox Pro al</string>
-  <string name="could_not_complete_purchase">Pro alışını bitirə bilmədik. Bir daha sınayın!</string>
-  <string name="invalid_verification_code">Səhv təsdiqləmə kodu</string>
-  <string name="invalid_payment_method">Səhv ödəniş üsulu</string>
-  <string name="unable_to_cancel_account">Pro hesabı ydayandırmaq alınmadı. team@getlantern.org ilə əlaqə saxlayın</string>
-  <string name="earn_free_month">Hər yeni dost qeydiyyatı üçün pulsuz aylar qazanın</string>
-  <string name="credits_applied">Kreditləriniz növbəti ödəniş dövründə əlavə olunacaq.</string>
-  <string name="pro_invitation_subject">Lantern Pro-ya qoşulmaq üçün dəvətnamə.</string>
-  <string name="receive_free_month">Pulsuz Lantern Pro ayı üçün bu koddan istifadə edin: %1$s ; Onu biradan yükləyə bilərsiniz: https://lantern.io/download</string>
-  <string name="share_feed_item">Mən Lantern vasitəsilə \"%1$s\" haqqında %2$s oxuyuram. Bloklanan saytlar və xidmətlər üçün LAnterndə istifadə edin. Android üçün burdan yükləyin: https://bit.ly/lanternapk</string>
-  <string name="cancel_pro_confirmation">Əminsiniz? Bunu geri qaytarmaq olmayacaq. İstənilən vaxt Pro üçün yenidən qeydiyyatdan keçə bilərsiniz.</string>
-  <string name="unauthorize_confirmation">Pro hesabınızdan bu aləti çıxarmaq istədiyinizə əminsiniz?</string>
-  <string name="yes">Bəli</string>
-  <string name="no">Xeyr</string>
-  <string name="item_image_contentDescription">Ölkə bayrağı</string>
-  <string name="item_preview_country">United States</string>
-  <string name="item_preview_dialCode">+1</string>
-  <string name="refresh">Yenilə</string>
-  <string name="find">Tap</string>
-  <string name="share_via">Paylaş</string>
-  <string name="copy_link">Linki kopyala</string>
-  <string name="open_with">Açma üsulu</string>
-  <string name="copied_to_clipboard">Yaddaşa kopyalanıb</string>
-  <string name="welcome_to_new">Yeni və yaxşılaşdırılmış Lanetrnə xoş gəldiniz!</string>
-  <string name="now_using">Hazırda ən yüksək sürətli və ən stabil Lanterndən istifadə edirsiniz.</string>
-  <string name="get_unlimited_data">Limitsiz həcm, əla sürət və hətta bloklamağa qaşı daha davamlıolmaq üçün\nYENİLƏYİN!</string>
-  <string name="start_using">Lanterni istifadə etməyə başla</string>
-  <string name="device_already_registered">Bu email ümvanı artıq Pro abunəçisidir. Zəhmət olmasa aləti burda təsdiqləyin.</string>
-  <string name="email_in_use">Bu email başqa istifadəçi tərəfindən artıq istifadə olunur.</string>
-  <string name="congratulations">Təbriklər!</string>
-  <string name="referral_code_used">Məsləhət gördüyünüz dostunuz Lantern Pro əldə edib. %d ay pusluz Pro sizin hesabınıza əlavə olunub.</string>
-  <string name="enter_email">Email ünvanı əlavə et</string>
-  <string name="confirm_email">Emaili təsdiqlə</string>
-  <string name="confirm_email_address">Email ünvanı təsdiqlə</string>
-  <string name="register_pro_account">Pro hesabı qeydiyyatı</string>
-  <string name="enter_pro_activation_code">25 işarəli Lantern Pro aktivasiya kodunu yuxarı əlavə edin. Kodu almamısınızsaa, alış-veriş etdiyiniz satıcı ilə əlaqə saxlayın.</string>
-  <string name="apply_referral_code">Məsləhət kodunu tətbiq et</string>
-  <string name="date">Tarix</string>
+    <string name="app_name">Lantern</string>
+    <string name="action_settings">Settings</string>
+    <string name="proxy_all_setting">Bütün trafiki proksidən keçir</string>
+    <string name="button_text">Başla</string>
+    <string name="drawer_open">Yeşik Açıldı</string>
+    <string name="drawer_close">Yeşik Bağlandı</string>
+    <string name="default_fragment">Başlanğıc Fraqment</string>
+    <string name="receive_lantern">Lantern desktopu emaillə əldə et</string>
+    <string name="lantern_desktop">Kompüter üçün Lantern</string>
+    <string name="email_hint">Email</string>
+    <string name="send_button">Göndər</string>
+    <string name="send_desktop">Send</string>
+    <string name="send_email">Email göndər</string>
+    <string name="your_email">Emailiniz</string>
+    <string name="your_email_address">Email ünvanınız</string>
+    <string name="please_enter">Email ünvanınızı yazın və təsdiq edin.</string>
+    <string name="please_enter_register">Xahiş edirik email ünvanınızı daxil edin və təsdiqləyin ki Lanter Pro Hesabından istifadə edəsiniz.</string>
+    <string name="your_referral_code">Məsləhət kodunuz</string>
+    <string name="report_an_issue">Məsələni xəbər ver</string>
+    <string name="select_issue">Məsləni seç</string>
+    <string name="select_issue_desc">Məslənin qısa məzmununu qeyd edin,\n v biz sizinlə dərhal əlaqə saxlayacağıq.</string>
+    <string name="submit">Göndər</string>
+    <string name="submit_issue">Məsələni göndər</string>
+    <string name="no_issue_selected">Hesabatı verməmişdən əvvəl məsələni seç</string>
+    <string name="cannot_find_email">Ay! Email ünvanını tapmaqda çətinlik çəkirik.</string>
+    <string name="no_purchase_date">Lantern Pro-nu əldə etdiyiniz təxmini tarixi yazın.</string>
+    <string name="purchase_date">Alınma tarixi</string>
+    <string-array name="common_issue_list">
+        <item>Bloklanan saytlara girə bilmədi</item>
+        <item>Ödəniş edilmədi</item>
+        <item>Daxil olmadı</item>
+        <item>Yüklənmə dayanmır</item>
+        <item>Yavaş</item>
+        <item>Digər</item>
+    </string-array>
+    <string name="submit_code">Kodu təsdiqlə</string>
+    <string name="on_text">Açıq</string>
+    <string name="off_text">Qapalı</string>
+    <string name="lantern_off">Landern qapalıdır.Bloklanan sayt və servislərə giriş üçün yandırın!</string>
+    <string name="lantern_on">Lantern açıqdır. İndi blokanmış sayt və xidmətlərdən istifadə edə bilərsiniz!</string>
+    <string name="on_desc">İndi bloklanan sayt və xidmətlərə daxil\r\nola bilərsiniz.</string>
+    <string name="off_desc">Bloklanan xidmət və saytlara girmək üçün düyməni basın</string>
+    <string name="desktop_option">Desktop Versiyası</string>
+    <string name="contact_option">Contact</string>
+    <string name="check_for_update">Yeniləməni yoxlayın</string>
+    <string name="no_update_available">Yeniləndi!</string>
+    <string name="cancel">Cancel</string>
+    <string name="newsfeed_option">Lantern axını</string>
+    <string name="newsfeed_off_option">Axını söndür</string>
+    <string name="privacy_policy">Gizlilik Siyasəti</string>
+    <string name="share_option">Paylaş</string>
+    <string name="quit_option">Quit</string>
+    <string name="share_email_native"></string>
+    <string name="share_email_subject">Lantern Android</string>
+    <string name="fatal_error">Lanterndə ciddi xəta baş verdi və o işləmir</string>
+    <string name="share_twitter">Lantern Android ünvanı: https://bit.ly/lanternapk</string>
+    <string name="share_facebook">Mən Android Lanterndən istifadə edirəm, o burdadır: https://bit.ly/lanternapk</string>
+    <string name="share_email_gmail">Mən Android üçün Lantern istifadə edirəm və APK faylı yükləmişəm!</string>
+    <string name="share_sms">Mən Android Lanterndən istifadə edirəm, burdan yüklə: https://bit.ly/lanternapk</string>
+    <string name="share_chooser_text">Lantern Androidi Paylaş</string>
+    <string name="card">Kart</string>
+    <string name="credit_card">Kredit Kartı</string>
+    <string name="Alipay">Alipay</string>
+    <string name="alipay_account">Alipay hesabı</string>
+    <string name="month">Ay</string>
+    <string name="year">İl</string>
+    <string name="success_email">Lantern Desktop sənə emaillə göndərilib!</string>
+    <string name="send_logs">Girişləri göndər</string>
+    <string name="help_survey">Lanterni daha yaxşı etmək üçün kömək et və sorğuda iştirak et!</string>
+    <string name="take_survey">Sorğuda iştirak et!</string>
+    <string name="thanks_survey">Sorğudan iştiraka görə minnətdarıq!\n</string>
+    <string name="invalid_email">Səhv email ünvan</string>
+    <string name="emails_do_not_match">Email sahələri uyğun gəlmir</string>
+    <string name="invalid_reseller_code">Satıcı kodu səhvdir</string>
+    <string name="invalid_referral_code">Səhv məsləhət kodu</string>
+    <string name="cannot_use_own_referral_code">Şəxsi məsləhət kodunuzu istifadə edə bilməzsiniz</string>
+    <string name="no_internet_connection">İnternet qoşuması yoxdur!</string>
+    <string name="unable_remove_device">Aləti çıxarmaq olmur. Yenidən sınayın!</string>
+    <string name="remove">Xaric et</string>
+    <string name="contact_email">team@getlantern.org</string>
+    <string name="contact_message">Mənə Kömək Et</string>
+    <string name="contact_subject">Lantern Android</string>
+    <string name="not_now">İndi Yox</string>
+    <string name="install_update">Yenilə</string>
+    <string name="error_update">Yenilənmənin Yüklənməsində Xəta</string>
+    <string name="manual_update">Yeni versiyanı yükləmək üçün &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+    <string name="pro_welcome_text">Lantern Pro-ya xoş gəldiniz!</string>
+    <string name="welcome_to_lantern">Yenilənmiş Lanternə xoş gəldiniz</string>
+    <string name="to_get_unlimited">Limitsiz məzmun, əla sürət və daha yaxşı blokaçma imkanlarını\nYENİLƏMƏ ilə PRoda əldə edin!</string>
+    <string name="renew_pro_account">Pro heabını yeniləyin</string>
+    <string name="logout">Çıx</string>
+    <string name="change_phone_number">Telefon npmrəsini dəyiş</string>
+    <string name="change_email_address">Email ünvanı dəyiş</string>
+    <string name="pro_account_expires">Sizin Pro hesabınız %1$s tarixində bitir</string>
+    <string name="includes_free_months">Bura %2$d binus ayları daxildir!</string>
+    <string name="verified_phone_number">Təsdiqlənmiş telefon nömrəsi:</string>
+    <string name="devices_authorized">Sizin Pro hesabınızda istifadə edə bilən alətlər</string>
+    <string name="send_us_your_logs">Daxilolmalarınızı göndərin</string>
+    <string name="thanks_purchase">Lantern Pro aldığınıza görə minnətdarıq!</string>
+    <string name="start_inviting">\r\nDəvətnamə göndərin!</string>
+    <string name="sending_request">Gözləyin</string>
+    <string name="invite_friends">Dostlarınızla paylaşmağa kodu almaq üün email ünvanınızı qeyd edin. Onlar qeydiyyatdan keçəndə pulsuz PRO aylar əldə edin. </string>
+    <string name="invite_friends_welcome">Dostlarınız 2 illik planı aldıqda 3 ay, bir illik plan aldıqda hər biriniz bir ay pulsuz əldə edəcəksiniz.</string>
+    <string name="invite_friends_btn">Dostları dəvət et</string>
+    <string name="share_friends_text">Pulsuz aylar qazanmaq üçün dostlarınızla paylaşın!</string>
+    <string name="email_address">Email ünvan</string>
+    <string name="continue_to_pro">PRO ilə davam et</string>
+    <string name="continue_">Continue</string>
+    <string name="continue_to_payment">Ödənişə davam</string>
+    <string name="skip_to_checkout">Ödənişə keçin</string>
+    <string name="free_pro_credits">Pulsuz Pro kreditlər</string>
+    <string name="get_pro_credits">Pulsuz Pro krediti alın</string>
+    <string name="get_free_months">Pulsuz aylar alın</string>
+    <string name="text_invite">Dəvətnamə</string>
+    <string name="email_invite">Email dəvəti</string>
+    <string name="share_your_referral_code">Təklif kodunuzu paylaşın</string>
+    <string name="get_code">Kodu al</string>
+    <string name="get_code_text">Email ünvanınızı qeyd edin ki, dostlarınızla paylaşasınız və PRO ilə pulsuz aylar alasınız. </string>
+    <string name="enter_your_email">Məsləhət kodu almaq üçün emailinizi qeyd edin</string>
+    <string name="share_referral_text">Mənim kodum %1$s üç ay əlavə pulsuz əldə etməyə imkan verir. Lanterni yüklə https://bit.ly/lanternapk</string>
+    <string name="previous_code">Əgər əvvəllər məsləhət kodu\r\n almısınızsa, əmin oliun ki eyni emaildən istifadə edirsiniz.</string>
+    <string name="payment_plans">Lantern PRO ödəniş planları</string>
+    <string name="features_text">Lantern PRO imkanları</string>
+    <string name="checkout">Ödəniş</string>
+    <string name="cvc">CVC</string>
+    <string name="cc_number">Kredit Kartı</string>
+    <string name="card_number">Kart nömrəsi</string>
+    <string name="validation_errors">Təsdiqləmə xətaları</string>
+    <string name="progressMessage">Tələb işlənilir...</string>
+    <string name="progressMessage2">Məsləhət kodu yaradılır</string>
+    <string name="language">Language</string>
+    <string name="settings">Seçimlər</string>
+    <string name="referral_applied">Ödəniş bitən kimi sizin və dostunuzun hesabına pulsuz aylar əlavə olunacaq!</string>
+    <string name="all_feeds">hamısı</string>
+    <string name="feed.error.oops">Ay!</string>
+    <string name="feed.error.error_fetching_feed">Axını yükləmədə xəta</string>
+    <string name="feed.error.try_again">Yenidən sınayın</string>
+    <string name="authorize_device_pro">Alətinizin Pro olması üçün təsdiqləyin</string>
+    <string name="add_device">Alət artır</string>
+    <string name="now_authorized">Bu alət sizin Pro hesabınızı istifadə edə bilər!</string>
+    <string name="i_have_another">Başqa Lantern Pro alətim var</string>
+    <string name="link_this_device">Aləti qoşun</string>
+    <string name="or">və ya</string>
+    <string name="need_to_recover">Lantern Pro hesabımı açmaq istəyirəm</string>
+    <string name="start_recovery">Düzəltməyə başla</string>
+    <string name="account_recovery">Hesabın yadasalınması</string>
+    <string name="account_recovery_code">Hesab yadasalma kodu</string>
+    <string name="thanks_report">Çox sağ olun, Lantern Müştəri xidmətləri 48 saat ərzində əlaqə saxlayacaq.</string>
+    <string name="enter_valid_code">Zəhmət olmasa düzgün kodu daxil edin.</string>
+    <string name="too_many_devices">Pro hesabına qoşula biləcək alətlərin sayı limiti keçib.</string>
+    <string name="check_spam_folder">Zəhmət olmasa emaili almadığınız təqdirdə spam qovluğunu yoxlayın</string>
+    <string name="by_referral">Dostu məsləhət görməklə Pro aldınız</string>
+    <string-array name="payment_method_list">
+        <item>Alipay</item>
+        <item>Bank Kartı</item>
+        <item>Dostu məsləhət görməklə Pro aldınız</item>
+    </string-array>
+    <string name="payment_method">Ödəniş üsulu</string>
+    <string name="payment_account">Ödəmə hesabı</string>
+    <string name="oops_having_trouble">Ay! Email ünvanı tapmaqda çətinlik çəkirik. Zəhmət olmasa aşağıdakı məlumatları əlavə edin ki, sizin hesabınızı müəyyənləşdirək.</string>
+    <string name="locate_account">Nəzərə alın ki, başqa digər məlumatlar sizin hesabınızı tapmağa kömək edəcək.</string>
+    <string name="resend_email">Yenidən email göndər</string>
+    <string name="dont_remember">Emailini unutmusan?</string>
+    <string name="device_code">Alətin qoşulma kodu</string>
+    <string name="device_now_linked">Alətiniz uğurla qoşuldu!\n</string>
+    <string name="device_linked_success">Uğurlu! Yeni alətiniz hesabınıza tezliklə qoşulacaq!\n</string>
+    <string name="link_this_device_0">Pro hesabınızla bu aləti birləşdirmək üçün:</string>
+    <string name="link_this_device_1"><b>1.</b> Pro alətinizdə \"Alət əlavə et\" menyusunu açın.</string>
+    <string name="link_this_device_2"><b>2.</b> Aləti qoşan kodu əlavə edin və göndərin.</string>
+    <string name="make_sure_updated">* Əmin olun ki, Pro alətinizdə Lanternin son versiyasını yükləmisiniz.</string>
+    <string name="make_sure_updated_2">* Əmin olun ki, təsdiqlənməmiş alətinizdə Lanternin son versiyasını yükləmisiniz.</string>
+    <string name="error_device_code">Alətin qoşma kodunu işlətməkdə xəta! Yenidən sınayın.</string>
+    <string-array name="pro_features">
+        <item>Yüksək sürət</item>
+        <item>Limitsiz məlumat</item>
+        <item>Qarşsı alınmaz</item>
+        <item>Üç alət</item>
+        <item>Reklamsız</item>
+    </string-array>
+    <string name="purchased_from_reseller">Lantern Pro-nu satıcıdan almısınız? Klikləyin!</string>
+    <string-array name="authorize_device_list">
+        <item><b>1.</b> Təsdiqlənməmiş alətinizdə \"Pro üçün aləti təsdiqlə\" menyusunu açın.</item>
+        <item><b>2.</b> Birinci addımdan əldə olunan qoşma kodunu əlavə edin və göndərin</item>
+    </string-array>
+    <string-array name="enter_code_steps_referral">
+        <item>Pro ilə davam etmək üçün emaillə aldığınız təsdiqləmə kodunu yapışdırın!</item>
+        <item>Kodu almamısınız? Spam qovluğunu və email ünvanınızı düzgün daxil etdiyinizi yoxlayın.</item>
+    </string-array>
+    <string-array name="enter_email_list">
+        <item>Lantern Pro pulsuz planını alətinizdə istifadə etmək üçün email ünvanınızı daxil edin</item>
+        <item>Biz sizə təsdiqləmə emailini emaillə göndərəcəyik</item>
+    </string-array>
+    <string name="only_one_device">Yalnız bir alət</string>
+    <string name="sorry_cannot_remove">Üzr istəyirik, amma siz son tsdiqlənmiş alətinizi çıxara bilməzsiniz</string>
+    <string name="send_link">Link göndər</string>
+    <string name="click_button">Bloklanan xidmət və saytlara girmək üçün düyməni basın</string>
+    <string name="lantern_pro">Lantern Pro</string>
+    <string name="lantern_pro_checkout">Lantern Pro Ödəniş</string>
+    <string name="invite_friends_header">Dost dəvət et</string>
+    <string name="pro_desc">Sürətli, Ağıllı, daha Dözümlü</string>
+    <string name="free_month">Hər qeydiyyat üçün pulsuz ay əldə et</string>
+    <string name="get_pro_now">Pro əldə et</string>
+    <string name="inviting_friends">Dostları dəvət etməklə Pro kredit əldə et</string>
+    <string name="select">Seç</string>
+    <string name="special_launch">Xüsusi qiymət!</string>
+    <string name="best_value">Düzgün seçim!</string>
+    <string name="referral_code_opt">Məsləhət kodu (vacib deyil)</string>
+    <string name="total">Cəmi:</string>
+    <string name="pro_account_header">Pro Hesab İdarəçiliyi</string>
+    <string name="pro_account_month_text">Hazırda Lantern Pro aylıq hesabınız var. Ödəniş dövrünün sonunda hesabınızdan avtomatik olaraq daha bir aylıq ödəniş tələb olunacaq.</string>
+    <string name="pro_account_year_text">Hazırda Lantern Pro illik hesabınız var. Ödəniş dövrünün sonunda hesabınızdan avtomatik olaraq daha bir aylıq ödəniş tələb olunacaq.</string>
+    <string name="cancel_pro_account">Pro hesabını dayandır</string>
+    <string name="account_verification">Hesab təsdiqlənməsi</string>
+    <string name="enter_verification_code">Təsdiqləmə kodunu əlavə et</string>
+    <string name="referral_code">Məsləhət kodu</string>
+    <string name="get_lantern_pro">Lantern Pro əldə et</string>
+    <string name="upgrade_to_lantern_pro">Lantern Pro-ya yüksəlt</string>
+    <string name="pro_available_for">Windows, Android, Mac və Ubuntu üçün. iOS versiyası yaxında</string>
+    <string name="upgrade">Yüksəlt</string>
+    <string name="next">Növbəti</string>
+    <string name="become_reseller">Pul qazan! Lantern Pro satıcısı ol. Kliklə.</string>
+    <string name="reseller_email_subject">Lantern Satıcısı proqramı haqda öyrənmək istəyirəm!</string>
+    <string name="reseller_email_message">Lantern Satıcısı olanda hər Lantern Pro abunəliyi üçün 25% ondan qazanacaqsınız. Aşağıda özünüz haqqında məlumat verin və niyə satıcı olmağınızı izah edin.</string>
+    <string name="no_wall_at_all">Gözləmə.</string>
+    <string name="buy_pro_now">Pro-nu indi al</string>
+    <string name="update_billing_info">Ödəniş məlumatını yenilə</string>
+    <string name="pro_credits_text">Dostlar dəvət et, daha çox Pro al</string>
+    <string name="could_not_complete_purchase">Pro alışını bitirə bilmədik. Bir daha sınayın!</string>
+    <string name="invalid_verification_code">Səhv təsdiqləmə kodu</string>
+    <string name="invalid_payment_method">Səhv ödəniş üsulu</string>
+    <string name="unable_to_cancel_account">Pro hesabı ydayandırmaq alınmadı. team@getlantern.org ilə əlaqə saxlayın</string>
+    <string name="earn_free_month">Hər yeni dost qeydiyyatı üçün pulsuz aylar qazanın</string>
+    <string name="credits_applied">Kreditləriniz növbəti ödəniş dövründə əlavə olunacaq.</string>
+    <string name="pro_invitation_subject">Lantern Pro-ya qoşulmaq üçün dəvətnamə.</string>
+    <string name="receive_free_month">Pulsuz Lantern Pro ayı üçün bu koddan istifadə edin: %1$s ; Onu biradan yükləyə bilərsiniz: https://lantern.io/download</string>
+    <string name="share_feed_item">Mən Lantern vasitəsilə \"%1$s\" haqqında %2$s oxuyuram. Bloklanan saytlar və xidmətlər üçün LAnterndə istifadə edin. Android üçün burdan yükləyin: https://bit.ly/lanternapk</string>
+    <string name="cancel_pro_confirmation">Əminsiniz? Bunu geri qaytarmaq olmayacaq. İstənilən vaxt Pro üçün yenidən qeydiyyatdan keçə bilərsiniz.</string>
+    <string name="unauthorize_confirmation">Pro hesabınızdan bu aləti çıxarmaq istədiyinizə əminsiniz?</string>
+    <string name="yes">Bəli</string>
+    <string name="no">Xeyr</string>
+    <string name="item_image_contentDescription">Ölkə bayrağı</string>
+    <string name="item_preview_country">United States</string>
+    <string name="item_preview_dialCode">+1</string>
+    <string name="refresh">Yenilə</string>
+    <string name="find">Tap</string>
+    <string name="share_via">Paylaş</string>
+    <string name="copy_link">Linki kopyala</string>
+    <string name="open_with">Açma üsulu</string>
+    <string name="copied_to_clipboard">Yaddaşa kopyalanıb</string>
+    <string name="welcome_to_new">Yeni və yaxşılaşdırılmış Lanetrnə xoş gəldiniz!</string>
+    <string name="now_using">Hazırda ən yüksək sürətli və ən stabil Lanterndən istifadə edirsiniz.</string>
+    <string name="get_unlimited_data">Limitsiz həcm, əla sürət və hətta bloklamağa qaşı daha davamlıolmaq üçün\nYENİLƏYİN!</string>
+    <string name="start_using">Lanterni istifadə etməyə başla</string>
+    <string name="device_already_registered">Bu email ümvanı artıq Pro abunəçisidir. Zəhmət olmasa aləti burda təsdiqləyin.</string>
+    <string name="email_in_use">Bu email başqa istifadəçi tərəfindən artıq istifadə olunur.</string>
+    <string name="congratulations">Təbriklər!</string>
+    <string name="referral_code_used">Məsləhət gördüyünüz dostunuz Lantern Pro əldə edib. %d ay pusluz Pro sizin hesabınıza əlavə olunub.</string>
+    <string name="enter_email">Email ünvanı əlavə et</string>
+    <string name="confirm_email">Emaili təsdiqlə</string>
+    <string name="confirm_email_address">Email ünvanı təsdiqlə</string>
+    <string name="register_pro_account">Pro hesabı qeydiyyatı</string>
+    <string name="enter_pro_activation_code">25 işarəli Lantern Pro aktivasiya kodunu yuxarı əlavə edin. Kodu almamısınızsaa, alış-veriş etdiyiniz satıcı ilə əlaqə saxlayın.</string>
+    <string name="apply_referral_code">Məsləhət kodunu tətbiq et</string>
+    <string name="date">Tarix</string>
 </resources>

@@ -3,44 +3,24 @@ package org.getlantern.lantern.model;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.text.method.MovementMethod;
-import android.text.style.UnderlineSpan;
-import android.util.Patterns;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.getlantern.lantern.BuildConfig;
-import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Logger;
 
-import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -63,7 +43,6 @@ public class Utils {
     }
 
 
-
     public static String appVersion(final Context context) {
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
@@ -75,8 +54,8 @@ public class Utils {
     }
 
     public static void showAlertDialog(final Activity activity,
-            CharSequence title, CharSequence msg,
-            final boolean finish) {
+                                       CharSequence title, CharSequence msg,
+                                       final boolean finish) {
         Utils.showAlertDialog(activity, title, msg, "OK", finish, null, true);
     }
 
@@ -143,12 +122,11 @@ public class Utils {
 
     /**
      * getDateAppInstalled gets the date the app was installed on.
-     *
-    */
+     */
     public static Date getDateAppInstalled(final Context context) {
         try {
             final PackageInfo packageInfo = context.getPackageManager()
-                .getPackageInfo(context.getPackageName(), 0);
+                    .getPackageInfo(context.getPackageName(), 0);
             return new Date(packageInfo.firstInstallTime);
         } catch (NameNotFoundException e) {
             Logger.error(TAG, "Could not get info about app:", e);
@@ -164,13 +142,13 @@ public class Utils {
     // switch is inactive
     public static boolean isNetworkAvailable(final Context context) {
         final ConnectivityManager connectivityManager =
-            ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
+                ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE));
         return connectivityManager.getActiveNetworkInfo() != null &&
-            connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
+                connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
     public static boolean isServiceRunning(final Context context,
-            Class<?> serviceClass) {
+                                           Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
@@ -182,6 +160,7 @@ public class Utils {
 
     /**
      * Converts the given number from Eastern Arabic to Hindu-Arabic decimal
+     *
      * @param number the number to convert
      * @return the converted number
      */

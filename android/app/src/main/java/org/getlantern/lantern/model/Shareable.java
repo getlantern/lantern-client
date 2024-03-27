@@ -61,7 +61,7 @@ public class Shareable {
     // createCachedFile is used to copy the APK file to external storage
     // to prevent issues GMail 5.0 security checks
     public static File createCachedFile(Context context, String fileName,
-            File apkFile) throws IOException {
+                                        File apkFile) throws IOException {
 
         File cacheFile = new File(context.getExternalCacheDir() + File.separator
                 + fileName);
@@ -144,29 +144,29 @@ public class Shareable {
             // Extract the label, append it, and repackage it in a LabeledIntent
             ResolveInfo ri = resInfo.get(i);
             String packageName = ri.activityInfo.packageName;
-            if(packageName.contains("android.email")) {
+            if (packageName.contains("android.email")) {
                 emailIntent.setPackage(packageName);
 
             } else if ("com.twitter.android.composer.ComposerActivity".equals(ri.activityInfo.name) ||
-                packageName.contains("facebook") ||
-                "com.tencent.mm.ui.tools.ShareImgUI".equals(ri.activityInfo.name) ||
-                packageName.contains("weibo") ||
-                packageName.contains("mms") || packageName.contains("android.gm")) {
+                    packageName.contains("facebook") ||
+                    "com.tencent.mm.ui.tools.ShareImgUI".equals(ri.activityInfo.name) ||
+                    packageName.contains("weibo") ||
+                    packageName.contains("mms") || packageName.contains("android.gm")) {
 
                 Intent intent = new Intent();
                 intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
                 intent.setAction(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                if(packageName.contains("twitter") || packageName.contains("tencent.mm")) {
+                if (packageName.contains("twitter") || packageName.contains("tencent.mm")) {
                     intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_twitter));
-                } else if(packageName.contains("facebook")) {
+                } else if (packageName.contains("facebook")) {
                     // Warning: Facebook IGNORES our text. They say "These fields are intended for users to express themselves. Pre-filling these fields erodes the authenticity of the user voice."
                     // One workaround is to use the Facebook SDK to post, but that doesn't allow the user to choose how they want to share. We can also make a custom landing page, and the link
                     // will show the <meta content ="..."> text from that page with our link in Facebook.
                     intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_facebook));
-                } else if(packageName.contains("mms")) {
+                } else if (packageName.contains("mms")) {
                     intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.share_sms));
-                } else if(packageName.contains("android.gm")) { // If Gmail shows up twice, try removing this else-if clause and the reference to "android.gm" above
+                } else if (packageName.contains("android.gm")) { // If Gmail shows up twice, try removing this else-if clause and the reference to "android.gm" above
 
                     intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(resources.getString(R.string.share_email_gmail)));
                     intent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.share_email_subject));
@@ -194,7 +194,7 @@ public class Shareable {
         }
 
         // convert intentList to array
-        LabeledIntent[] extraIntents = intentList.toArray( new LabeledIntent[ intentList.size() ]);
+        LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
 
         openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
         activity.startActivityForResult(openInChooser, 0);
