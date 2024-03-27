@@ -149,9 +149,6 @@ APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
 PACKAGED_YAML := .packaged-$(APP_YAML)
 
-
-# By default, build APKs containing support for ARM only 32 bit. Since we're using multi-architecture
-# app bundles for play store, we no longer need to include 64 bit in our APKs that we distribute.
 ANDROID_ARCH ?= arm32
 
 ifeq ($(ANDROID_ARCH), x86)
@@ -179,7 +176,7 @@ else ifeq ($(ANDROID_ARCH), all)
 # native libs, 32 bit Intel devices will just emulate ARM.
 # DO NOT ADD x86 TO THIS LIST!!
   ANDROID_ARCH_JAVA := arm64-v8a x86_64
-  ANDROID_ARCH_GOMOBILE := android/arm64,android/amd64
+  ANDROID_ARCH_GOMOBILE := android
   APK_QUALIFIER :=
 else
   $(error unsupported ANDROID_ARCH "$(ANDROID_ARCH)")
