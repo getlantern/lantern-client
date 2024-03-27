@@ -51,7 +51,6 @@ android {
 
         jniLibs {
             useLegacyPackaging true
-            excludes += ['lib/armeabi-v7a/libgojni.so', 'lib/x86/libgojni.so']
         }
     }
 
