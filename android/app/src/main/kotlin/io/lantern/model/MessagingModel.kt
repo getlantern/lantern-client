@@ -6,7 +6,6 @@ import android.media.audiofx.NoiseSuppressor
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.MethodCall
 import io.lantern.messaging.WebRTCSignal
 import org.getlantern.lantern.MainActivity
 import top.oply.opuslib.OpusRecorder
