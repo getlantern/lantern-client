@@ -32,8 +32,6 @@ android {
 
     useLibrary 'org.apache.http.legacy'
 
-//    useLibrary 'android.test.runner'
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
