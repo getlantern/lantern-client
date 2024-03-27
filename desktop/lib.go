@@ -310,7 +310,7 @@ func lang() *C.char {
 
 //export setSelectLang
 func setSelectLang(lang *C.char) {
-	a.Settings().SetLanguage(C.GoString(lang))
+	a.SetLanguage(C.GoString(lang))
 }
 
 //export country

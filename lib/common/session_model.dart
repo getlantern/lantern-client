@@ -83,16 +83,12 @@ class SessionModel extends Model {
       defaultValue: false,
       onChanges: (setValue) {
         if (websocket == null) return;
-
-        /// Listen for all incoming data
         websocket.messageStream.listen(
           (json) {
-            if (json["type"] == "pro") {
-              final userStatus = json["message"]["userStatus"];
-              final isProUser =
-                  userStatus != null && userStatus.toString() == "active";
-              setValue(isProUser);
-            }
+            if (json["type"] != "pro") return;
+            final userStatus = json["message"]["userStatus"];
+            final isProUser = userStatus != null && userStatus.toString() == "active";
+            setValue(isProUser);
           },
           onError: (error) => print(error),
         );
@@ -183,9 +179,21 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<String>(
       'lang',
       defaultValue: 'en',
+      onChanges: (setValue) {
+        if (websocket == null) return;
+        websocket.messageStream.listen(
+          (json) {
+            if (json["type"] != "pro") return;
+            final language = json["message"]["language"];
+            if (language != null && language != "") setValue(language);
+          },
+          onError: (error) => print(error),
+        );
+      },
       ffiLang,
       builder: builder,
     );

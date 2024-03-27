@@ -407,6 +407,12 @@ func (app *App) GetLanguage() string {
 // SetLanguage sets the user language
 func (app *App) SetLanguage(lang string) {
 	app.settings.SetLanguage(lang)
+	if app.ws != nil {
+		app.ws.SendMessage("pro", map[string]interface{}{
+			"type":     "pro",
+			"language": lang,
+		})
+	}
 }
 
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
