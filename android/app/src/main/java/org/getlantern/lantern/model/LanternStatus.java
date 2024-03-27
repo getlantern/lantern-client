@@ -2,10 +2,10 @@ package org.getlantern.lantern.model;
 
 public class LanternStatus {
 
-    private Status status;
+    private final Status status;
 
     public enum Status {
-        ON, OFF;
+        ON, OFF
     }
 
     public LanternStatus(final Status status) {

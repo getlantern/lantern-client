@@ -209,11 +209,6 @@
         <item>Dados ilimitados</item>
         <item>Yinbi grátis com a compra!</item>
     </string-array>
-    <string-array name="yinbi_renew_features">
-        <item>Criptomoeda Yinbi grátis</item>
-        <item>Meses gratuitos</item>
-        <item>Oferta por tempo limitado, Aja agora!</item>
-    </string-array>
     <string-array name="pro_features_welcome">
         <item>Dados em alta velocidade ilimitado</item>
         <item>Forte resistência a bloqueio</item>

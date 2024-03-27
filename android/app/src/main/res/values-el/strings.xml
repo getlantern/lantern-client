@@ -22,7 +22,6 @@
     <string name="your_referral_code">Ο δικός σας κωδικός προώθησης</string>
     <string name="report_an_issue">Αναφορά Προβλήματος</string>
     <string name="select_issue">Επιλέξτε ένα θέμα</string>
-    <string name="select_issue_desc">Παρακαλώ αφήστε μας μια σύντομη περιγραφή του προβλήματος σας εδώ,\nκαι θα επικοινωνήσουμε μαζί σας το συντομότερο δυνατόν.</string>
     <string name="submit">Υποβολή</string>
     <string name="submit_issue">Υποβολή Προβλήματος</string>
     <string name="no_issue_selected">Επιλέξτε ένα θέμα πριν από την υποβολή</string>
@@ -170,11 +169,6 @@
     <string name="too_many_devices">Έχετε φτάσει το μέγιστο αριθμό συσκευών που μπορούν να συνδεθούν στον Pro λογαριασμό σας.</string>
     <string name="check_spam_folder">* Ελέγξτε το φάκελο ανεπιθύμητης αλληλογραφίας εάν δεν λάβετε το email</string>
     <string name="by_referral">Λήψη του Pro από προώθηση σε φίλο</string>
-    <string-array name="payment_method_list">
-        <item>Alipay</item>
-        <item>Πιστωτική κάρτα</item>
-        <item>Λήψη του Pro από προώθηση σε φίλο</item>
-    </string-array>
     <string name="payment_method">Τρόπος πληρωμής</string>
     <string name="payment_account">Λογαριασμός πληρωμής</string>
     <string name="oops_having_trouble">Ωχ! Δεν μπορούμε να βρούμε αυτή τη διεύθυνση email. Καταχωρίστε τις παρακάτω πληροφορίες για να μας βοηθήσετε να εντοπίσουμε το λογαριασμό σας.</string>

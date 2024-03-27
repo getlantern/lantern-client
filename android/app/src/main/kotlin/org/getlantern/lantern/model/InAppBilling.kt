@@ -181,7 +181,7 @@ class InAppBilling(
                     isRetriable(billingResult).then { updateProducts() }
                     return@queryProductDetailsAsync
                 }
-                Logger.d(TAG, "Got ${skuDetailsList?.size} skus")
+                Logger.d(TAG, "Got ${skuDetailsList.size} skus")
                 synchronized(this) {
                     plans.clear()
                     skus.clear()

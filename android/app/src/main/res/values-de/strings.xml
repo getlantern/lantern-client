@@ -24,14 +24,6 @@
     <string name="no_issue_selected">Bitte wählen Sie ein Problem aus, bevor Sie einen Bericht absenden</string>
     <string name="cannot_find_email">Hoppla! Wir haben Probleme bei der Suche dieser E-Mail-Adresse.</string>
     <string name="purchase_date">Kaufdatum</string>
-    <string-array name="common_issue_list">
-        <item>Kann nicht auf blockierte Seiten zugreifen</item>
-        <item>Kann Kauf nicht abschließen</item>
-        <item>Kann mich nicht anmelden</item>
-        <item>Spinner lädt endlos</item>
-        <item>Langsam</item>
-        <item>Anderes</item>
-    </string-array>
     <string name="submit_code">Code bestätigen</string>
     <string name="on_text">EIN</string>
     <string name="off_text">AUS</string>

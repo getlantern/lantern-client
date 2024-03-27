@@ -4,8 +4,6 @@
     <string name="action_settings">Settings</string>
     <string name="proxy_all_setting">Bütün trafiki proksidən keçir</string>
     <string name="button_text">Başla</string>
-    <string name="drawer_open">Yeşik Açıldı</string>
-    <string name="drawer_close">Yeşik Bağlandı</string>
     <string name="default_fragment">Başlanğıc Fraqment</string>
     <string name="receive_lantern">Lantern desktopu emaillə əldə et</string>
     <string name="lantern_desktop">Kompüter üçün Lantern</string>
@@ -20,21 +18,12 @@
     <string name="your_referral_code">Məsləhət kodunuz</string>
     <string name="report_an_issue">Məsələni xəbər ver</string>
     <string name="select_issue">Məsləni seç</string>
-    <string name="select_issue_desc">Məslənin qısa məzmununu qeyd edin,\n v biz sizinlə dərhal əlaqə saxlayacağıq.</string>
     <string name="submit">Göndər</string>
     <string name="submit_issue">Məsələni göndər</string>
     <string name="no_issue_selected">Hesabatı verməmişdən əvvəl məsələni seç</string>
     <string name="cannot_find_email">Ay! Email ünvanını tapmaqda çətinlik çəkirik.</string>
     <string name="no_purchase_date">Lantern Pro-nu əldə etdiyiniz təxmini tarixi yazın.</string>
     <string name="purchase_date">Alınma tarixi</string>
-    <string-array name="common_issue_list">
-        <item>Bloklanan saytlara girə bilmədi</item>
-        <item>Ödəniş edilmədi</item>
-        <item>Daxil olmadı</item>
-        <item>Yüklənmə dayanmır</item>
-        <item>Yavaş</item>
-        <item>Digər</item>
-    </string-array>
     <string name="submit_code">Kodu təsdiqlə</string>
     <string name="on_text">Açıq</string>
     <string name="off_text">Qapalı</string>
@@ -116,8 +105,6 @@
     <string name="text_invite">Dəvətnamə</string>
     <string name="email_invite">Email dəvəti</string>
     <string name="share_your_referral_code">Təklif kodunuzu paylaşın</string>
-    <string name="get_code">Kodu al</string>
-    <string name="get_code_text">Email ünvanınızı qeyd edin ki, dostlarınızla paylaşasınız və PRO ilə pulsuz aylar alasınız. </string>
     <string name="enter_your_email">Məsləhət kodu almaq üçün emailinizi qeyd edin</string>
     <string name="share_referral_text">Mənim kodum %1$s üç ay əlavə pulsuz əldə etməyə imkan verir. Lanterni yüklə https://bit.ly/lanternapk</string>
     <string name="previous_code">Əgər əvvəllər məsləhət kodu\r\n almısınızsa, əmin oliun ki eyni emaildən istifadə edirsiniz.</string>
@@ -152,11 +139,6 @@
     <string name="too_many_devices">Pro hesabına qoşula biləcək alətlərin sayı limiti keçib.</string>
     <string name="check_spam_folder">Zəhmət olmasa emaili almadığınız təqdirdə spam qovluğunu yoxlayın</string>
     <string name="by_referral">Dostu məsləhət görməklə Pro aldınız</string>
-    <string-array name="payment_method_list">
-        <item>Alipay</item>
-        <item>Bank Kartı</item>
-        <item>Dostu məsləhət görməklə Pro aldınız</item>
-    </string-array>
     <string name="payment_method">Ödəniş üsulu</string>
     <string name="payment_account">Ödəmə hesabı</string>
     <string name="oops_having_trouble">Ay! Email ünvanı tapmaqda çətinlik çəkirik. Zəhmət olmasa aşağıdakı məlumatları əlavə edin ki, sizin hesabınızı müəyyənləşdirək.</string>
@@ -223,7 +205,6 @@
     <string name="become_reseller">Pul qazan! Lantern Pro satıcısı ol. Kliklə.</string>
     <string name="reseller_email_subject">Lantern Satıcısı proqramı haqda öyrənmək istəyirəm!</string>
     <string name="reseller_email_message">Lantern Satıcısı olanda hər Lantern Pro abunəliyi üçün 25% ondan qazanacaqsınız. Aşağıda özünüz haqqında məlumat verin və niyə satıcı olmağınızı izah edin.</string>
-    <string name="no_wall_at_all">Gözləmə.</string>
     <string name="buy_pro_now">Pro-nu indi al</string>
     <string name="update_billing_info">Ödəniş məlumatını yenilə</string>
     <string name="pro_credits_text">Dostlar dəvət et, daha çox Pro al</string>
@@ -234,7 +215,6 @@
     <string name="earn_free_month">Hər yeni dost qeydiyyatı üçün pulsuz aylar qazanın</string>
     <string name="credits_applied">Kreditləriniz növbəti ödəniş dövründə əlavə olunacaq.</string>
     <string name="pro_invitation_subject">Lantern Pro-ya qoşulmaq üçün dəvətnamə.</string>
-    <string name="receive_free_month">Pulsuz Lantern Pro ayı üçün bu koddan istifadə edin: %1$s ; Onu biradan yükləyə bilərsiniz: https://lantern.io/download</string>
     <string name="share_feed_item">Mən Lantern vasitəsilə \"%1$s\" haqqında %2$s oxuyuram. Bloklanan saytlar və xidmətlər üçün LAnterndə istifadə edin. Android üçün burdan yükləyin: https://bit.ly/lanternapk</string>
     <string name="cancel_pro_confirmation">Əminsiniz? Bunu geri qaytarmaq olmayacaq. İstənilən vaxt Pro üçün yenidən qeydiyyatdan keçə bilərsiniz.</string>
     <string name="unauthorize_confirmation">Pro hesabınızdan bu aləti çıxarmaq istədiyinizə əminsiniz?</string>

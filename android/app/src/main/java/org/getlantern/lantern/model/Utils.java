@@ -103,7 +103,7 @@ public class Utils {
     public static Snackbar formatSnackbar(Snackbar snackbar) {
         View snackView = snackbar.getView();
         snackView.setBackgroundColor(Color.BLACK);
-        TextView tv = (TextView) snackView.findViewById(com.google.android.material.R.id.snackbar_text);
+        TextView tv = snackView.findViewById(com.google.android.material.R.id.snackbar_text);
         tv.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
         tv.setTextColor(Color.WHITE);
         tv.setTextSize(14);

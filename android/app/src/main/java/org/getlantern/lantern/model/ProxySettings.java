@@ -148,11 +148,11 @@ public class ProxySettings {
         } catch (Exception e) {
             Logger.error("ProxySettings",
                     "Exception setting WebKit proxy through android.net.ProxyProperties: "
-                            + e.toString());
+                            + e);
         } catch (Error e) {
             Logger.error("ProxySettings",
                     "Exception setting WebKit proxy through android.webkit.Network: "
-                            + e.toString());
+                            + e);
         }
 
         return false;
@@ -175,7 +175,7 @@ public class ProxySettings {
 
         try {
             Class wvcClass = Class.forName("android.webkit.WebViewClassic");
-            Class wvParams[] = new Class[1];
+            Class[] wvParams = new Class[1];
             wvParams[0] = Class.forName("android.webkit.WebView");
             Method fromWebView = wvcClass.getDeclaredMethod("fromWebView", wvParams);
             Object webViewClassic = fromWebView.invoke(null, webview);
@@ -193,14 +193,14 @@ public class ProxySettings {
             Object sJavaBridge = getFieldValueSafely(sJavaBridgeField, mBrowserFrame);
 
             Class ppclass = Class.forName("android.net.ProxyProperties");
-            Class pparams[] = new Class[3];
+            Class[] pparams = new Class[3];
             pparams[0] = String.class;
             pparams[1] = int.class;
             pparams[2] = String.class;
             Constructor ppcont = ppclass.getConstructor(pparams);
 
             Class jwcjb = Class.forName("android.webkit.JWebCoreJavaBridge");
-            Class params[] = new Class[1];
+            Class[] params = new Class[1];
             params[0] = Class.forName("android.net.ProxyProperties");
             Method updateProxyInstance = jwcjb.getDeclaredMethod("updateProxy", params);
 

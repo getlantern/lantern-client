@@ -122,7 +122,6 @@
     <string name="get_code">Code bemachtigen</string>
     <string name="get_code_text">Vul je e-mailadres in om een code te ontvangen die je kunt delen met je vrienden. Ontvang een gratis maand voor Pro als deze zich registreren!</string>
     <string name="enter_your_email">Vul je e-mailadres in om een verwijscode te ontvangen</string>
-    <string name="referral_copied_to_clipboard">Verwijscode gekopieerd naar klembord!</string>
     <string name="share_referral_text">Gebruik mijn code %1$s en krijg maximaal 3 extra gratis maanden na aankoop. Download Lantern https://bit.ly/lanternapk</string>
     <string name="previous_code">Als je eerder een verwijscode ontvangen\r\nhebt gebruik dan hetzelfde e-mailadres.</string>
     <string name="payment_plans">Lantern PRO Betalingsplan</string>

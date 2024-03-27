@@ -186,7 +186,6 @@
     <string name="apply_referral_code">使用邀請碼</string>
     <string name="terms_of_service">服務條款</string>
     <string name="enter_lantern_pro_codes">輸入 Lantern Pro 優惠碼</string>
-    <string name="enter_bulk_pro_codes">輸入 Lantern Pro 優惠碼</string>
     <string name="purchase">購買</string>
     <string name="status">狀態</string>
 </resources>

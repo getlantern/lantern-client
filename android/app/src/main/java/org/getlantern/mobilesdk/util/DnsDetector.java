@@ -91,8 +91,7 @@ public class DnsDetector {
             String ip = address.getHostAddress();
             if (!fakeDnsIP.equals(ip)) {
                 try {
-                    if (address instanceof Inet6Address) {
-                        Inet6Address ipv6Address = (Inet6Address) address;
+                    if (address instanceof Inet6Address ipv6Address) {
                         if (ipv6Address.isLinkLocalAddress()) {
                             // For IPv6, the DNS server address can be a link-local address.
                             // For Go to know how to route this, it needs to know the zone

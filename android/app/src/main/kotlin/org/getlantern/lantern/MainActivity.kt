@@ -318,7 +318,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     if (user.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
                     // Switch to free account if device it not linked
-                    devices?.filter { it.id == deviceID }?.run {
+                    devices.filter { it.id == deviceID }.run {
                         if (isEmpty()) {
                             LanternApp.getSession().logout()
                             restartApp()

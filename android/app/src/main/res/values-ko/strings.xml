@@ -119,7 +119,6 @@
     <string name="get_code">코드 받기</string>
     <string name="get_code_text">친구에게 공유할 코드를 받기 위해 이메일 주소를 입력해 주세요. 친구가 가입할 때 무료 프로 구독권을 드립니다.</string>
     <string name="enter_your_email">이메일을 입력하고 추천 코드를 받으세요.</string>
-    <string name="referral_copied_to_clipboard">추천 코드가 클립보드에 복사되었습니다!</string>
     <string name="share_referral_text">제 추천 코드 %1$s 를 쓰고 구입 후에 3달을 더 받으세요. https://bit.ly/lanternapk 에서 랜턴을 받을 수 있습니다.</string>
     <string name="previous_code">추천 코드를 받은 적이 있다면\r\n동일한 이메일 주소를 사용하세요.</string>
     <string name="payment_plans">랜턴 프로 상품</string>

@@ -4,8 +4,6 @@
     <string name="action_settings">Paràmetres</string>
     <string name="proxy_all_setting">Direcciona/Filtra tot el trànsit</string>
     <string name="button_text">Inici</string>
-    <string name="drawer_open">Calaix obert</string>
-    <string name="drawer_close">Calaix tancat</string>
     <string name="default_fragment">Fragment per defecte</string>
     <string name="receive_lantern">Rebre Lantern Escriptori per correu electrònic</string>
     <string name="lantern_desktop">Lantern Escriptori</string>
@@ -62,8 +60,6 @@
     <string name="get_free_months">Obtenir mesos gratuïts</string>
     <string name="text_invite">Escriviu la invitació</string>
     <string name="email_invite">Envieu la invitació per correu</string>
-    <string name="get_code">Obtén Codi</string>
-    <string name="get_code_text">Introduïu l\'adreça de correu electrònic per rebre un codi per compartir amb els amics. Obteniu un mes gratuït del PRO quan s\'inscriguin. </string>
     <string name="enter_your_email">Introduïu l\'adreça de correu electrònic per rebre un codi de referència</string>
     <string name="previous_code">Si ja heu rebut un codi de referència\r\n assegureu-vos d\'utilitzar la mateixa adreça de correu electrònic.</string>
     <string name="payment_plans">Plans de pagament del Lantern PRO</string>
@@ -105,7 +101,6 @@
     <string name="pro_available_for">Per a Windows, Android, Mac i Ubuntu. Aviat per a iOS</string>
     <string name="upgrade">Actualitza</string>
     <string name="next">Següent</string>
-    <string name="no_wall_at_all">Sense murs.</string>
     <string name="buy_pro_now">Compreu el Pro ara</string>
     <string name="update_billing_info">Actualitza la informació de facturació</string>
     <string name="pro_credits_text">Convideu els amics, obteniu més Pro</string>

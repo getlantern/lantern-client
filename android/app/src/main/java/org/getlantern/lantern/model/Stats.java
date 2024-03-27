@@ -1,10 +1,12 @@
 package org.getlantern.lantern.model;
 
 public class Stats {
-    private String city, country, countryCode;
-    private long httpsUpgrades;
-    private long adsBlocked;
-    private boolean hasSucceedingProxy;
+    private final String city;
+    private final String country;
+    private final String countryCode;
+    private final long httpsUpgrades;
+    private final long adsBlocked;
+    private final boolean hasSucceedingProxy;
 
     public Stats(
             String city,

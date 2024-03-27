@@ -44,7 +44,7 @@ class ApkInstaller(
             }
 
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
-                createInstallIntentContentUri()?.let(this::launchInstaller)
+                createInstallIntentContentUri().let(this::launchInstaller)
             }
 
             else -> {
