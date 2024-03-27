@@ -22,6 +22,7 @@ import org.getlantern.lantern.util.FreeKassa
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.json.JSONException
+import org.getlantern.lantern.MainActivity
 
 
 // See here for an overview of how Freekassa purchase flow works in Lantern:
@@ -156,7 +157,7 @@ open class FreeKassaActivity : BaseFragmentActivity() {
     // using it to make a purchase. The purchase state will be "pending" in the
     // backend, but it'll eventually fail.
     private fun convertToPro() {
-        val intent = Intent(this, WelcomeActivity_::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         LanternApp.getSession().linkDevice()
         LanternApp.getSession().setIsProUser(true)
         intent.putExtra("provider", "freekassa")

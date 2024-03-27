@@ -1,31 +1,30 @@
 package org.getlantern.lantern.model;
 
-import android.content.Intent;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.LabeledIntent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageInfo;
-import android.text.Html;
-import android.content.ComponentName;
 import android.net.Uri;
+import android.text.Html;
+
+import org.getlantern.lantern.MainActivity;
+import org.getlantern.lantern.R;
+import org.getlantern.mobilesdk.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.getlantern.lantern.MainActivity;
-import org.getlantern.lantern.R;
-
-import org.getlantern.mobilesdk.Logger;
 
 public class Shareable {
     private static final String TAG = "Shareable";

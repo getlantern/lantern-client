@@ -1,25 +1,22 @@
 package org.getlantern.lantern.model;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Proxy;
+import android.os.Build;
+import android.os.Parcelable;
+import android.util.ArrayMap;
+import android.webkit.WebView;
+
+import org.apache.http.HttpHost;
+import org.getlantern.mobilesdk.Logger;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import org.apache.http.HttpHost;
-
-import android.content.Context;
-import android.os.Build;
-
-import android.webkit.WebView;
-import android.util.ArrayMap;
-import android.net.Proxy;
-import java.io.StringWriter;
-import java.io.PrintWriter;
-
-import android.content.Intent;
-import android.os.Parcelable;
-
-import org.getlantern.mobilesdk.Logger;
 
 /**
  * Utility class for setting WebKit proxy used by Android WebView
