@@ -87,8 +87,7 @@ class SessionModel extends Model {
           (json) {
             if (json["type"] != "pro") return;
             final userStatus = json["message"]["userStatus"];
-            final isProUser = userStatus != null && userStatus.toString() == "active";
-            setValue(isProUser);
+            if (userStatus != null && userStatus.toString() == "active") setValue(true);
           },
           onError: (error) => print(error),
         );
