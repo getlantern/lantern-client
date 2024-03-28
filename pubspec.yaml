@@ -110,8 +110,8 @@ dependencies:
 
   # Error handling
   device_info_plus: ^9.0.3
-  flutter_mailer: ^2.0.0
-  fluttertoast: ^8.2.2
+#  flutter_mailer: ^2.0.0
+#  fluttertoast: ^8.2.2
 
   # Package information
   package_info_plus: ^4.1.0

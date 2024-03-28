@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.google.android.material.snackbar.Snackbar;
+
 
 import org.getlantern.mobilesdk.Logger;
 
@@ -100,16 +100,6 @@ public class Utils {
         });
     }
 
-    public static Snackbar formatSnackbar(Snackbar snackbar) {
-        View snackView = snackbar.getView();
-        snackView.setBackgroundColor(Color.BLACK);
-        TextView tv = snackView.findViewById(com.google.android.material.R.id.snackbar_text);
-        tv.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-        tv.setTextColor(Color.WHITE);
-        tv.setTextSize(14);
-        tv.setMaxLines(4);
-        return snackbar;
-    }
 
 
     /**
