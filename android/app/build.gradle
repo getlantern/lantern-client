@@ -32,8 +32,6 @@ android {
 
     useLibrary 'org.apache.http.legacy'
 
-//    useLibrary 'android.test.runner'
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
@@ -50,6 +48,10 @@ android {
         exclude 'META-INF/maven/commons-io/commons-io/pom.properties'
         exclude("META-INF/*.kotlin_module")
         exclude 'README.txt'
+
+        jniLibs {
+            useLegacyPackaging true
+        }
     }
 
     buildFeatures {
@@ -75,6 +77,8 @@ android {
     }
 
     defaultConfig {
+
+        multiDexEnabled = true
 
         // Include this CMakeLists.txt file in the build pipeline
         externalNativeBuild {
@@ -201,7 +205,7 @@ android {
             buildConfigField "String", "TERMS_OF_SERVICE_URL", '"https://s3.amazonaws.com/lantern/Lantern-TOS.pdf"'
 
             signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         play {
