@@ -32,8 +32,6 @@ android {
 
     useLibrary 'org.apache.http.legacy'
 
-//    useLibrary 'android.test.runner'
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
@@ -50,6 +48,10 @@ android {
         exclude 'META-INF/maven/commons-io/commons-io/pom.properties'
         exclude("META-INF/*.kotlin_module")
         exclude 'README.txt'
+
+        jniLibs {
+            useLegacyPackaging true
+        }
     }
 
 
@@ -76,6 +78,8 @@ android {
     }
 
     defaultConfig {
+
+        multiDexEnabled = true
 
         // Include this CMakeLists.txt file in the build pipeline
         externalNativeBuild {
