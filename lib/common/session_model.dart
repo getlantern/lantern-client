@@ -89,7 +89,7 @@ class SessionModel extends Model {
             final userStatus = json["message"]["userStatus"];
             if (userStatus != null && userStatus.toString() == "active") setValue(true);
           },
-          onError: (error) => print(error),
+          onError: (error) => appLogger.i("websocket error: ${error.description}"),
         );
       },
       ffiProUser,
@@ -190,7 +190,7 @@ class SessionModel extends Model {
             final language = json["message"]["language"];
             if (language != null && language != "") setValue(language);
           },
-          onError: (error) => print(error),
+          onError: (error) => appLogger.i("websocket error: ${error.description}"),
         );
       },
       ffiLang,
@@ -263,7 +263,7 @@ class SessionModel extends Model {
         devices.add(Device.create()..mergeFromProto3Json(element));
       } on Exception catch (e) {
         // Handle parsing errors as needed
-        print("Error parsing device data: $e");
+        appLogger.i("Error parsing device data: $e");
       }
     }
     return Devices.create()..devices.addAll(devices);
