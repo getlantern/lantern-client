@@ -73,6 +73,13 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
+  // wsMessageProp parses the given json, checks if it represents a pro user message and
+  // returns the value (if any) in the map for the given property.
+  String? wsMessageProp(Map<String, dynamic> json, String field) {
+    if (json["type"] != "pro") return null;
+    return json["message"][field];
+  }
+
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -85,8 +92,7 @@ class SessionModel extends Model {
         if (websocket == null) return;
         websocket.messageStream.listen(
           (json) {
-            if (json["type"] != "pro") return;
-            final userStatus = json["message"]["userStatus"];
+            final userStatus = wsMessageProp(json, "userStatus");
             if (userStatus != null && userStatus.toString() == "active") setValue(true);
           },
           onError: (error) => appLogger.i("websocket error: ${error.description}"),
@@ -186,8 +192,7 @@ class SessionModel extends Model {
         if (websocket == null) return;
         websocket.messageStream.listen(
           (json) {
-            if (json["type"] != "pro") return;
-            final language = json["message"]["language"];
+            final language = wsMessageProp(json, "language");
             if (language != null && language != "") setValue(language);
           },
           onError: (error) => appLogger.i("websocket error: ${error.description}"),
