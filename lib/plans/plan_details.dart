@@ -125,16 +125,16 @@ class PlanCard extends StatelessWidget {
         throw Exception("Not support at the moment");
         break;
       default:
+        // proceed to the default checkout page on Android and desktop
         _checkOut(context);
         break;
     }
   }
 
-  // proceed to the default checkout page on Android and desktop
   Future<void> _checkOut(BuildContext context) async {
     final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
-    // * Play version
+    // * Play version (Android only)
     if (isPlayVersion && !inRussia) {
       await context.pushRoute(
         PlayCheckout(
