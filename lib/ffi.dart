@@ -62,6 +62,8 @@ Pointer<Utf8> ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
     final errorCode = result.r1.cast<Utf8>().toDartString();
     throw PlatformException(code: errorCode, message: 'wrong_seller_code'.i18n);
   }
+  // if successful redeeming a reseller code, immediately refresh Pro user data
+  ffiProUser();
   return result.r0.cast<Utf8>();
 }
 

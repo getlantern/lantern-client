@@ -671,7 +671,6 @@ class SessionModel extends Model {
     }
     ffiRedeemResellerCode(email.toNativeUtf8(), currency.toNativeUtf8(),
         deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
-    ffiProUser();
   }
 
   Future<void> submitBitcoinPayment(
