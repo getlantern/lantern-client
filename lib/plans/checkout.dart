@@ -402,13 +402,14 @@ class _CheckoutState extends State<Checkout>
                       ),
                     ),
                     // * Price summary, unused pro time disclaimer, Continue button
-
                     Center(
                       child: Tooltip(
                         message: AppKeys.continueCheckout,
                         child: Button(
                           text: 'continue'.i18n,
-                          disabled: !showContinueButton,
+                          // for Pro users renewing their accounts, we always have an e-mail address
+                          // so it's unnecessary to disable the continue button
+                          disabled: !widget.isPro ? !showContinueButton : false,
                           onPressed: onContinueTapped,
                         ),
                       ),

@@ -73,6 +73,13 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
+  // wsMessageProp parses the given json, checks if it represents a pro user message and
+  // returns the value (if any) in the map for the given property.
+  String? wsMessageProp(Map<String, dynamic> json, String field) {
+    if (json["type"] != "pro") return null;
+    return json["message"][field];
+  }
+
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -83,18 +90,12 @@ class SessionModel extends Model {
       defaultValue: false,
       onChanges: (setValue) {
         if (websocket == null) return;
-
-        /// Listen for all incoming data
         websocket.messageStream.listen(
           (json) {
-            if (json["type"] == "pro") {
-              final userStatus = json["message"]["userStatus"];
-              final isProUser =
-                  userStatus != null && userStatus.toString() == "active";
-              setValue(isProUser);
-            }
+            final userStatus = wsMessageProp(json, "userStatus");
+            if (userStatus != null && userStatus.toString() == "active") setValue(true);
           },
-          onError: (error) => print(error),
+          onError: (error) => appLogger.i("websocket error: ${error.description}"),
         );
       },
       ffiProUser,
@@ -183,9 +184,20 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<String>(
       'lang',
       defaultValue: 'en',
+      onChanges: (setValue) {
+        if (websocket == null) return;
+        websocket.messageStream.listen(
+          (json) {
+            final language = wsMessageProp(json, "language");
+            if (language != null && language != "") setValue(language);
+          },
+          onError: (error) => appLogger.i("websocket error: ${error.description}"),
+        );
+      },
       ffiLang,
       builder: builder,
     );
@@ -256,7 +268,7 @@ class SessionModel extends Model {
         devices.add(Device.create()..mergeFromProto3Json(element));
       } on Exception catch (e) {
         // Handle parsing errors as needed
-        print("Error parsing device data: $e");
+        appLogger.i("Error parsing device data: $e");
       }
     }
     return Devices.create()..devices.addAll(devices);
@@ -608,11 +620,13 @@ class SessionModel extends Model {
     String url,
     String title,
   ) async {
-    return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
-      'name': name,
-      'url': url,
-      'title': title,
-    });
+    if (isMobile()) {
+      return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
+        'name': name,
+        'url': url,
+        'title': title,
+      });
+    }
   }
 
   Future<String> requestLinkCode() {

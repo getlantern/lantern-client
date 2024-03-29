@@ -121,23 +121,20 @@ class PlanCard extends StatelessWidget {
 
   void onPlanTap(BuildContext context) {
     switch (Platform.operatingSystem) {
-      case 'android':
-        _androidCheckOut(context);
-        break;
       case 'ios':
         throw Exception("Not support at the moment");
         break;
       default:
-        throw Exception("Not support at the moment");
-        // * Fallback code
+        // proceed to the default checkout page on Android and desktop
+        _checkOut(context);
         break;
     }
   }
 
-  Future<void> _androidCheckOut(BuildContext context) async {
+  Future<void> _checkOut(BuildContext context) async {
     final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
-    // * Play version
+    // * Play version (Android only)
     if (isPlayVersion && !inRussia) {
       await context.pushRoute(
         PlayCheckout(
