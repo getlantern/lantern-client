@@ -620,11 +620,13 @@ class SessionModel extends Model {
     String url,
     String title,
   ) async {
-    return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
-      'name': name,
-      'url': url,
-      'title': title,
-    });
+    if (isMobile()) {
+      return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
+        'name': name,
+        'url': url,
+        'title': title,
+      });
+    }
   }
 
   Future<String> requestLinkCode() {
@@ -669,6 +671,7 @@ class SessionModel extends Model {
     }
     ffiRedeemResellerCode(email.toNativeUtf8(), currency.toNativeUtf8(),
         deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
+    ffiProUser();
   }
 
   Future<void> submitBitcoinPayment(
