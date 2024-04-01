@@ -4,6 +4,8 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -22,6 +24,7 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/pro"
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/jibber_jabber"
@@ -70,7 +73,13 @@ func start() {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = proclient.NewProClient(settings)
+	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &proclient.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		},
+		Settings: settings,
+	})
 
 	a = app.NewApp(flags, cdir, proClient, settings)
 

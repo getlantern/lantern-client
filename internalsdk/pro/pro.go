@@ -3,14 +3,11 @@ package pro
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
@@ -22,16 +19,19 @@ import (
 )
 
 var (
-	log        = golog.LoggerFor("webclient")
-	httpClient = &http.Client{
-		Transport: proxied.ParallelForIdempotent(),
-		Timeout:   30 * time.Second,
-	}
+	log = golog.LoggerFor("webclient")
 )
 
 type proClient struct {
 	settings  *settings.Settings
 	webclient webclient.RESTClient
+}
+
+type Opts struct {
+	// HttpClient represents an http.Client that should be used by the resty client
+	HttpClient *http.Client
+	// Settings are the user settings that the pro client is configured with
+	Settings *settings.Settings
 }
 
 type ProClient interface {
@@ -44,11 +44,15 @@ type ProClient interface {
 	UserData(ctx context.Context) (*UserDataResponse, error)
 }
 
-// NewProClient creates a new instance of ProClient
-func NewProClient(settings *settings.Settings) ProClient {
-	url := fmt.Sprintf("https://%s", common.ProAPIHost)
-	client := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, url, setUserHeaders(settings), nil))
-	return &proClient{settings, client}
+// NewClient creates a new instance of ProClient
+func NewClient(baseURL string, opts *Opts) ProClient {
+	httpClient := opts.HttpClient
+	if httpClient == nil {
+		httpClient = &http.Client{}
+	}
+
+	client := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, setUserHeaders(opts.Settings), nil))
+	return &proClient{opts.Settings, client}
 }
 
 func userConfig(settings *settings.Settings) *common.UserConfigData {
@@ -100,10 +104,9 @@ func (c *proClient) defaultParams() map[string]interface{} {
 
 func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error) {
 	var resp protos.BaseResponse
-	params := map[string]interface{}{
+	err := c.webclient.GetJSON(ctx, "/email-exists", map[string]interface{}{
 		"email": email,
-	}
-	err := c.webclient.GetJSON(ctx, "/email-exists", params, &resp)
+	}, &resp)
 	if err != nil {
 		return nil, err
 	}
