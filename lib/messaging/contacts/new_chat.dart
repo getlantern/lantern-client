@@ -36,7 +36,7 @@ class _NewChatState extends State<NewChat> {
             .fill([_updatedContact!.displayNameOrFallback]),
         duration: const Duration(milliseconds: 4000),
         action: SnackBarAction(
-          textColor: pink3,
+          textColor: yellow4,
           label: 'start_chat'.i18n.toUpperCase(),
           onPressed: () async {
             await context.pushRoute(

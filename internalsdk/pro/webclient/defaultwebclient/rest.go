@@ -28,17 +28,23 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 	}
 	c.SetBaseURL(baseURL)
 
-	return func(ctx context.Context, method string, path string, params map[string]interface{}, body []byte) ([]byte, error) {
+	return func(ctx context.Context, method string, path string, reqParams any, body []byte) ([]byte, error) {
 		req := c.R().SetContext(ctx)
-		if params != nil {
-			stringParams := make(map[string]string, len(params))
-			for key, value := range params {
-				stringParams[key] = fmt.Sprint(value)
-			}
-			if method == http.MethodGet {
-				req.SetQueryParams(stringParams)
-			} else {
-				req.SetFormData(stringParams)
+		if reqParams != nil {
+			switch reqParams.(type) {
+			case map[string]interface{}:
+				params := reqParams.(map[string]interface{})
+				stringParams := make(map[string]string, len(params))
+				for key, value := range params {
+					stringParams[key] = fmt.Sprint(value)
+				}
+				if method == http.MethodGet {
+					req.SetQueryParams(stringParams)
+				} else {
+					req.SetFormData(stringParams)
+				}
+			default:
+				req.SetBody(reqParams)
 			}
 		} else if body != nil {
 			req.Body = body

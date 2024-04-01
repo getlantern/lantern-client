@@ -73,6 +73,13 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
+  // wsMessageProp parses the given json, checks if it represents a pro user message and
+  // returns the value (if any) in the map for the given property.
+  String? wsMessageProp(Map<String, dynamic> json, String field) {
+    if (json["type"] != "pro") return null;
+    return json["message"][field];
+  }
+
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -83,16 +90,12 @@ class SessionModel extends Model {
       defaultValue: false,
       onChanges: (setValue) {
         if (websocket == null) return;
-        /// Listen for all incoming data
         websocket.messageStream.listen(
           (json) {
-            if (json["type"] == "pro") {
-              final userStatus = json["message"]["userStatus"];
-              final isProUser = userStatus != null && userStatus.toString() == "active";
-              setValue(isProUser);
-            }
+            final userStatus = wsMessageProp(json, "userStatus");
+            if (userStatus != null && userStatus.toString() == "active") setValue(true);
           },
-          onError: (error) => print(error),
+          onError: (error) => appLogger.i("websocket error: ${error.description}"),
         );
       },
       ffiProUser,
@@ -181,9 +184,20 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<String>(
       'lang',
       defaultValue: 'en',
+      onChanges: (setValue) {
+        if (websocket == null) return;
+        websocket.messageStream.listen(
+          (json) {
+            final language = wsMessageProp(json, "language");
+            if (language != null && language != "") setValue(language);
+          },
+          onError: (error) => appLogger.i("websocket error: ${error.description}"),
+        );
+      },
       ffiLang,
       builder: builder,
     );
@@ -247,11 +261,17 @@ class SessionModel extends Model {
   }
 
   Devices devicesFromJson(dynamic item) {
-    final items = item as List<dynamic>;
-    if (items.length == 0) return Devices.create();
-
-    final res = jsonEncode(items);
-    return Devices.create()..mergeFromProto3Json(jsonDecode(res));
+    final devices = <Device>[];
+    for (final element in item) {
+      if (element is! Map) continue;
+      try {
+        devices.add(Device.create()..mergeFromProto3Json(element));
+      } on Exception catch (e) {
+        // Handle parsing errors as needed
+        appLogger.i("Error parsing device data: $e");
+      }
+    }
+    return Devices.create()..devices.addAll(devices);
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {
@@ -270,7 +290,7 @@ class SessionModel extends Model {
       fromJsonModel: devicesFromJson,
       defaultValue: null,
       builder: builder,
-    );    
+    );
   }
 
   Future<void> setProxyAll<T>(bool on) async {
@@ -293,6 +313,7 @@ class SessionModel extends Model {
       });
     }
     // Desktop users
+    Localization.locale = lang;
     final newLang = lang.toNativeUtf8();
     Localization.locale = lang;
     setLang(newLang);
@@ -553,9 +574,7 @@ class SessionModel extends Model {
   Future<void> reportIssue(
       String email, String issue, String description) async {
     if (isDesktop()) {
-      await ffiReportIssue(email.toNativeUtf8(), issue.toNativeUtf8(),
-          description.toNativeUtf8());
-      return;
+      return await compute(ffiReportIssue, [email, issue, description]);
     }
     return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
       'email': email,
@@ -609,11 +628,13 @@ class SessionModel extends Model {
     String url,
     String title,
   ) async {
-    return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
-      'name': name,
-      'url': url,
-      'title': title,
-    });
+    if (isMobile()) {
+      return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
+        'name': name,
+        'url': url,
+        'title': title,
+      });
+    }
   }
 
   Future<String> requestLinkCode() {
@@ -644,14 +665,20 @@ class SessionModel extends Model {
 
   Future<void> redeemResellerCode(
     String email,
+    String currency,
+    String deviceName,
     String resellerCode,
   ) async {
-    return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
-      'email': email,
-      'resellerCode': resellerCode,
-    }).then((value) {
-      print('value $value');
-    });
+    if (isMobile()) {
+      return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
+        'email': email,
+        'resellerCode': resellerCode,
+      }).then((value) {
+        print('value $value');
+      });
+    }
+    ffiRedeemResellerCode(email.toNativeUtf8(), currency.toNativeUtf8(),
+        deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
   }
 
   Future<void> submitBitcoinPayment(
@@ -684,13 +711,13 @@ class SessionModel extends Model {
     String provider,
     String deviceName,
   ) async {
-    final resp = await ffiPaymentRedirect(
+    final resp = ffiPaymentRedirect(
         planID.toNativeUtf8(),
         currency.toNativeUtf8(),
         provider.toNativeUtf8(),
         email.toNativeUtf8(),
         deviceName.toNativeUtf8());
-    return resp.toDartString();
+    return resp;
   }
 
   Future<void> submitStripePayment(
@@ -700,8 +727,7 @@ class SessionModel extends Model {
     String expDate,
     String cvc,
   ) async {
-    return methodChannel
-        .invokeMethod('submitStripePayment', <String, dynamic>{
+    return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
       'planID': planID,
       'email': email,
       'cardNumber': cardNumber,

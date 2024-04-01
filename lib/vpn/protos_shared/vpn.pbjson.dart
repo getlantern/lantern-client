@@ -147,14 +147,28 @@ const PaymentProviders$json = {
   '1': 'PaymentProviders',
   '2': [
     {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'logoUrls', '3': 2, '4': 3, '5': 9, '10': 'logoUrls'},
+    {'1': 'data', '3': 2, '4': 3, '5': 11, '6': '.PaymentProviders.DataEntry', '10': 'data'},
+    {'1': 'logoUrls', '3': 3, '4': 3, '5': 9, '10': 'logoUrls'},
   ],
+  '3': [PaymentProviders_DataEntry$json],
+};
+
+@$core.Deprecated('Use paymentProvidersDescriptor instead')
+const PaymentProviders_DataEntry$json = {
+  '1': 'DataEntry',
+  '2': [
+    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    {'1': 'value', '3': 2, '4': 1, '5': 9, '10': 'value'},
+  ],
+  '7': {'7': true},
 };
 
 /// Descriptor for `PaymentProviders`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List paymentProvidersDescriptor = $convert.base64Decode(
-    'ChBQYXltZW50UHJvdmlkZXJzEhIKBG5hbWUYASABKAlSBG5hbWUSGgoIbG9nb1VybHMYAiADKA'
-    'lSCGxvZ29Vcmxz');
+    'ChBQYXltZW50UHJvdmlkZXJzEhIKBG5hbWUYASABKAlSBG5hbWUSLwoEZGF0YRgCIAMoCzIbLl'
+    'BheW1lbnRQcm92aWRlcnMuRGF0YUVudHJ5UgRkYXRhEhoKCGxvZ29VcmxzGAMgAygJUghsb2dv'
+    'VXJscxo3CglEYXRhRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKAlSBXZhbH'
+    'VlOgI4AQ==');
 
 @$core.Deprecated('Use paymentMethodDescriptor instead')
 const PaymentMethod$json = {
@@ -213,4 +227,57 @@ const BaseResponse$json = {
 final $typed_data.Uint8List baseResponseDescriptor = $convert.base64Decode(
     'CgxCYXNlUmVzcG9uc2USFgoGc3RhdHVzGAEgASgJUgZzdGF0dXMSFAoFZXJyb3IYAiABKAlSBW'
     'Vycm9yEhgKB2Vycm9ySWQYAyABKAlSB2Vycm9ySWQ=');
+
+@$core.Deprecated('Use paymentRedirectRequestDescriptor instead')
+const PaymentRedirectRequest$json = {
+  '1': 'PaymentRedirectRequest',
+  '2': [
+    {'1': 'plan', '3': 1, '4': 1, '5': 9, '10': 'plan'},
+    {'1': 'provider', '3': 2, '4': 1, '5': 9, '10': 'provider'},
+    {'1': 'currency', '3': 3, '4': 1, '5': 9, '10': 'currency'},
+    {'1': 'email', '3': 4, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'deviceName', '3': 5, '4': 1, '5': 9, '10': 'deviceName'},
+    {'1': 'countryCode', '3': 6, '4': 1, '5': 9, '10': 'countryCode'},
+    {'1': 'locale', '3': 7, '4': 1, '5': 9, '10': 'locale'},
+  ],
+};
+
+/// Descriptor for `PaymentRedirectRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List paymentRedirectRequestDescriptor = $convert.base64Decode(
+    'ChZQYXltZW50UmVkaXJlY3RSZXF1ZXN0EhIKBHBsYW4YASABKAlSBHBsYW4SGgoIcHJvdmlkZX'
+    'IYAiABKAlSCHByb3ZpZGVyEhoKCGN1cnJlbmN5GAMgASgJUghjdXJyZW5jeRIUCgVlbWFpbBgE'
+    'IAEoCVIFZW1haWwSHgoKZGV2aWNlTmFtZRgFIAEoCVIKZGV2aWNlTmFtZRIgCgtjb3VudHJ5Q2'
+    '9kZRgGIAEoCVILY291bnRyeUNvZGUSFgoGbG9jYWxlGAcgASgJUgZsb2NhbGU=');
+
+@$core.Deprecated('Use paymentRedirectResponseDescriptor instead')
+const PaymentRedirectResponse$json = {
+  '1': 'PaymentRedirectResponse',
+  '2': [
+    {'1': 'redirect', '3': 1, '4': 1, '5': 9, '10': 'redirect'},
+  ],
+};
+
+/// Descriptor for `PaymentRedirectResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List paymentRedirectResponseDescriptor = $convert.base64Decode(
+    'ChdQYXltZW50UmVkaXJlY3RSZXNwb25zZRIaCghyZWRpcmVjdBgBIAEoCVIIcmVkaXJlY3Q=');
+
+@$core.Deprecated('Use redeemResellerCodeRequestDescriptor instead')
+const RedeemResellerCodeRequest$json = {
+  '1': 'RedeemResellerCodeRequest',
+  '2': [
+    {'1': 'email', '3': 1, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'resellerCode', '3': 2, '4': 1, '5': 9, '10': 'resellerCode'},
+    {'1': 'deviceName', '3': 3, '4': 1, '5': 9, '10': 'deviceName'},
+    {'1': 'currency', '3': 4, '4': 1, '5': 9, '10': 'currency'},
+    {'1': 'idempotencyKey', '3': 5, '4': 1, '5': 9, '10': 'idempotencyKey'},
+    {'1': 'provider', '3': 6, '4': 1, '5': 9, '10': 'provider'},
+  ],
+};
+
+/// Descriptor for `RedeemResellerCodeRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List redeemResellerCodeRequestDescriptor = $convert.base64Decode(
+    'ChlSZWRlZW1SZXNlbGxlckNvZGVSZXF1ZXN0EhQKBWVtYWlsGAEgASgJUgVlbWFpbBIiCgxyZX'
+    'NlbGxlckNvZGUYAiABKAlSDHJlc2VsbGVyQ29kZRIeCgpkZXZpY2VOYW1lGAMgASgJUgpkZXZp'
+    'Y2VOYW1lEhoKCGN1cnJlbmN5GAQgASgJUghjdXJyZW5jeRImCg5pZGVtcG90ZW5jeUtleRgFIA'
+    'EoCVIOaWRlbXBvdGVuY3lLZXkSGgoIcHJvdmlkZXIYBiABKAlSCHByb3ZpZGVy');
 

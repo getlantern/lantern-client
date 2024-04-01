@@ -14,10 +14,10 @@ var (
 
 type RESTClient interface {
 	// Gets a JSON document from the given path with the given querystring parameters, reading the result into target.
-	GetJSON(ctx context.Context, path string, params map[string]interface{}, target interface{}) error
+	GetJSON(ctx context.Context, path string, params any, target interface{}) error
 
 	// Post the given parameters as form data and reads the result JSON into target.
-	PostFormReadingJSON(ctx context.Context, path string, params map[string]interface{}, target interface{}) error
+	PostFormReadingJSON(ctx context.Context, path string, params any, target interface{}) error
 
 	// Post the given body as JSON and reads the result JSON into target.
 	PostJSONReadingJSON(ctx context.Context, path string, body, target interface{}) error
@@ -27,7 +27,7 @@ type RESTClient interface {
 // If specified, params should be encoded as query params for GET requests and as form data for POST and PUT requests.
 // If specified, the body bytes should be sent as the body for POST and PUT requests.
 // Returns the response body as bytes.
-type SendRequest func(ctx context.Context, method string, path string, params map[string]interface{}, body []byte) ([]byte, error)
+type SendRequest func(ctx context.Context, method string, path string, params any, body []byte) ([]byte, error)
 
 type restClient struct {
 	send SendRequest
@@ -40,7 +40,7 @@ func NewRESTClient(send SendRequest) RESTClient {
 	}
 }
 
-func (c *restClient) GetJSON(ctx context.Context, path string, params map[string]interface{}, target interface{}) error {
+func (c *restClient) GetJSON(ctx context.Context, path string, params any, target interface{}) error {
 	b, err := c.send(ctx, http.MethodGet, path, params, nil)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func (c *restClient) GetJSON(ctx context.Context, path string, params map[string
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) PostFormReadingJSON(ctx context.Context, path string, params map[string]interface{}, target interface{}) error {
+func (c *restClient) PostFormReadingJSON(ctx context.Context, path string, params any, target interface{}) error {
 	b, err := c.send(ctx, http.MethodPost, path, params, nil)
 	if err != nil {
 		return err

@@ -579,11 +579,15 @@ class Plan extends $pb.GeneratedMessage {
 class PaymentProviders extends $pb.GeneratedMessage {
   factory PaymentProviders({
     $core.String? name,
+    $core.Map<$core.String, $core.String>? data,
     $core.Iterable<$core.String>? logoUrls,
   }) {
     final $result = create();
     if (name != null) {
       $result.name = name;
+    }
+    if (data != null) {
+      $result.data.addAll(data);
     }
     if (logoUrls != null) {
       $result.logoUrls.addAll(logoUrls);
@@ -596,7 +600,8 @@ class PaymentProviders extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PaymentProviders', createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
-    ..pPS(2, _omitFieldNames ? '' : 'logoUrls', protoName: 'logoUrls')
+    ..m<$core.String, $core.String>(2, _omitFieldNames ? '' : 'data', entryClassName: 'PaymentProviders.DataEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS)
+    ..pPS(3, _omitFieldNames ? '' : 'logoUrls', protoName: 'logoUrls')
     ..hasRequiredFields = false
   ;
 
@@ -631,7 +636,10 @@ class PaymentProviders extends $pb.GeneratedMessage {
   void clearName() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.List<$core.String> get logoUrls => $_getList(1);
+  $core.Map<$core.String, $core.String> get data => $_getMap(1);
+
+  @$pb.TagNumber(3)
+  $core.List<$core.String> get logoUrls => $_getList(2);
 }
 
 class PaymentMethod extends $pb.GeneratedMessage {
@@ -967,6 +975,310 @@ class BaseResponse extends $pb.GeneratedMessage {
   $core.bool hasErrorId() => $_has(2);
   @$pb.TagNumber(3)
   void clearErrorId() => clearField(3);
+}
+
+class PaymentRedirectRequest extends $pb.GeneratedMessage {
+  factory PaymentRedirectRequest({
+    $core.String? plan,
+    $core.String? provider,
+    $core.String? currency,
+    $core.String? email,
+    $core.String? deviceName,
+    $core.String? countryCode,
+    $core.String? locale,
+  }) {
+    final $result = create();
+    if (plan != null) {
+      $result.plan = plan;
+    }
+    if (provider != null) {
+      $result.provider = provider;
+    }
+    if (currency != null) {
+      $result.currency = currency;
+    }
+    if (email != null) {
+      $result.email = email;
+    }
+    if (deviceName != null) {
+      $result.deviceName = deviceName;
+    }
+    if (countryCode != null) {
+      $result.countryCode = countryCode;
+    }
+    if (locale != null) {
+      $result.locale = locale;
+    }
+    return $result;
+  }
+  PaymentRedirectRequest._() : super();
+  factory PaymentRedirectRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PaymentRedirectRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PaymentRedirectRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'plan')
+    ..aOS(2, _omitFieldNames ? '' : 'provider')
+    ..aOS(3, _omitFieldNames ? '' : 'currency')
+    ..aOS(4, _omitFieldNames ? '' : 'email')
+    ..aOS(5, _omitFieldNames ? '' : 'deviceName', protoName: 'deviceName')
+    ..aOS(6, _omitFieldNames ? '' : 'countryCode', protoName: 'countryCode')
+    ..aOS(7, _omitFieldNames ? '' : 'locale')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  PaymentRedirectRequest clone() => PaymentRedirectRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  PaymentRedirectRequest copyWith(void Function(PaymentRedirectRequest) updates) => super.copyWith((message) => updates(message as PaymentRedirectRequest)) as PaymentRedirectRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static PaymentRedirectRequest create() => PaymentRedirectRequest._();
+  PaymentRedirectRequest createEmptyInstance() => create();
+  static $pb.PbList<PaymentRedirectRequest> createRepeated() => $pb.PbList<PaymentRedirectRequest>();
+  @$core.pragma('dart2js:noInline')
+  static PaymentRedirectRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PaymentRedirectRequest>(create);
+  static PaymentRedirectRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get plan => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set plan($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPlan() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPlan() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get provider => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set provider($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasProvider() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearProvider() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get currency => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set currency($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasCurrency() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearCurrency() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get email => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set email($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasEmail() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearEmail() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get deviceName => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set deviceName($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasDeviceName() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDeviceName() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get countryCode => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set countryCode($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasCountryCode() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearCountryCode() => clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get locale => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set locale($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasLocale() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearLocale() => clearField(7);
+}
+
+class PaymentRedirectResponse extends $pb.GeneratedMessage {
+  factory PaymentRedirectResponse({
+    $core.String? redirect,
+  }) {
+    final $result = create();
+    if (redirect != null) {
+      $result.redirect = redirect;
+    }
+    return $result;
+  }
+  PaymentRedirectResponse._() : super();
+  factory PaymentRedirectResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PaymentRedirectResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PaymentRedirectResponse', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'redirect')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  PaymentRedirectResponse clone() => PaymentRedirectResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  PaymentRedirectResponse copyWith(void Function(PaymentRedirectResponse) updates) => super.copyWith((message) => updates(message as PaymentRedirectResponse)) as PaymentRedirectResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static PaymentRedirectResponse create() => PaymentRedirectResponse._();
+  PaymentRedirectResponse createEmptyInstance() => create();
+  static $pb.PbList<PaymentRedirectResponse> createRepeated() => $pb.PbList<PaymentRedirectResponse>();
+  @$core.pragma('dart2js:noInline')
+  static PaymentRedirectResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PaymentRedirectResponse>(create);
+  static PaymentRedirectResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get redirect => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set redirect($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasRedirect() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearRedirect() => clearField(1);
+}
+
+class RedeemResellerCodeRequest extends $pb.GeneratedMessage {
+  factory RedeemResellerCodeRequest({
+    $core.String? email,
+    $core.String? resellerCode,
+    $core.String? deviceName,
+    $core.String? currency,
+    $core.String? idempotencyKey,
+    $core.String? provider,
+  }) {
+    final $result = create();
+    if (email != null) {
+      $result.email = email;
+    }
+    if (resellerCode != null) {
+      $result.resellerCode = resellerCode;
+    }
+    if (deviceName != null) {
+      $result.deviceName = deviceName;
+    }
+    if (currency != null) {
+      $result.currency = currency;
+    }
+    if (idempotencyKey != null) {
+      $result.idempotencyKey = idempotencyKey;
+    }
+    if (provider != null) {
+      $result.provider = provider;
+    }
+    return $result;
+  }
+  RedeemResellerCodeRequest._() : super();
+  factory RedeemResellerCodeRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RedeemResellerCodeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'RedeemResellerCodeRequest', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'email')
+    ..aOS(2, _omitFieldNames ? '' : 'resellerCode', protoName: 'resellerCode')
+    ..aOS(3, _omitFieldNames ? '' : 'deviceName', protoName: 'deviceName')
+    ..aOS(4, _omitFieldNames ? '' : 'currency')
+    ..aOS(5, _omitFieldNames ? '' : 'idempotencyKey', protoName: 'idempotencyKey')
+    ..aOS(6, _omitFieldNames ? '' : 'provider')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  RedeemResellerCodeRequest clone() => RedeemResellerCodeRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  RedeemResellerCodeRequest copyWith(void Function(RedeemResellerCodeRequest) updates) => super.copyWith((message) => updates(message as RedeemResellerCodeRequest)) as RedeemResellerCodeRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static RedeemResellerCodeRequest create() => RedeemResellerCodeRequest._();
+  RedeemResellerCodeRequest createEmptyInstance() => create();
+  static $pb.PbList<RedeemResellerCodeRequest> createRepeated() => $pb.PbList<RedeemResellerCodeRequest>();
+  @$core.pragma('dart2js:noInline')
+  static RedeemResellerCodeRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RedeemResellerCodeRequest>(create);
+  static RedeemResellerCodeRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get email => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set email($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasEmail() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearEmail() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get resellerCode => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set resellerCode($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasResellerCode() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearResellerCode() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get deviceName => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set deviceName($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasDeviceName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearDeviceName() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get currency => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set currency($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasCurrency() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearCurrency() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get idempotencyKey => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set idempotencyKey($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasIdempotencyKey() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearIdempotencyKey() => clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get provider => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set provider($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasProvider() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearProvider() => clearField(6);
 }
 
 

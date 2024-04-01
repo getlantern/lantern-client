@@ -67,36 +67,16 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
           sessionModel.eventManager.subscribe(Event.All, (event, params) {
         switch (event) {
           case Event.SurveyAvailable:
-            final message = params['message'] as String;
-            final buttonText = params['buttonText'] as String;
-            final snackBar = SnackBar(
-              backgroundColor: Colors.black,
-              duration: const Duration(days: 99999),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsetsDirectional.only(
-                  start: 8, end: 8, bottom: 16),
-              // simple way to show indefinitely
-              content: CText(
-                message,
-                style: CTextStyle(
-                  fontSize: 14,
-                  lineHeight: 21,
-                  color: white,
-                ),
-              ),
-              action: SnackBarAction(
-                textColor: pink3,
-                label: buttonText.toUpperCase(),
+            // show survey snackbar
+            showSuerySnackbar(
+                context: context,
+                buttonText: params['buttonText'] as String,
+                message: params['message'] as String,
                 onPressed: () {
                   mainMethodChannel?.invokeMethod('showLastSurvey');
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                },
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                });
+
             break;
           default:
             break;
@@ -130,6 +110,8 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void onTrayMenuItemClick(MenuItem menuItem) async {
     switch (menuItem.key) {
+      case 'show':
+        windowManager.show();
       case 'exit':
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       case 'status':

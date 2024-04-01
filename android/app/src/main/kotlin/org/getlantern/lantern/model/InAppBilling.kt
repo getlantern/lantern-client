@@ -5,19 +5,18 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.UiThread
+import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClient.SkuType
-import com.android.billingclient.api.BillingClient.SkuType.*
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.ConsumeResponseListener
+import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
-import com.android.billingclient.api.SkuDetailsParams.*
+import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import org.getlantern.mobilesdk.Logger
@@ -39,9 +38,9 @@ class InAppBilling(
     @get:Synchronized
     @set:Synchronized
     @Volatile
-    var billingClient: BillingClient? = null
+    private var billingClient: BillingClient? = null
 
-    private val skus: ConcurrentHashMap<String, SkuDetails> = ConcurrentHashMap()
+    private val skus: ConcurrentHashMap<String, ProductDetails> = ConcurrentHashMap()
     private val handler = Handler(Looper.getMainLooper())
 
     val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap()
@@ -60,17 +59,17 @@ class InAppBilling(
             Logger.d(TAG, "Billing client already initialized")
             return
         }
-        Logger.d(TAG, "Starting connection")
         builder.setListener(this).build().also {
             billingClient = it
             it.startConnection(
                 object : BillingClientStateListener {
                     override fun onBillingSetupFinished(billingResult: BillingResult) {
+                        // The BillingClient is ready. You can query purchases here.
                         val responseCode = billingResult.responseCode
                         Logger.d(TAG, "onBillingSetupFinished with response code: $responseCode")
                         if (billingResult.responseCodeOK()) {
-                            updateSkus()
-                            handlePendingPurchases()
+                            updateProducts()
+                            handlePurchases()
                             return
                         }
                         isRetriable(billingResult).then {
@@ -79,10 +78,14 @@ class InAppBilling(
                         }
                     }
 
-                    override fun onBillingServiceDisconnected() = Logger.d(TAG, "onBillingServiceDisconnected")
+                    override fun onBillingServiceDisconnected() =
+                        Logger.d(TAG, "onBillingServiceDisconnected")
                 },
             )
+
         }
+
+        Logger.d(TAG, "Starting connection")
     }
 
     override fun endConnection() {
@@ -96,7 +99,9 @@ class InAppBilling(
         }
     }
 
-    private fun BillingResult.responseCodeOK() = responseCode == BillingClient.BillingResponseCode.OK
+
+    private fun BillingResult.responseCodeOK() =
+        responseCode == BillingClient.BillingResponseCode.OK
 
     @Synchronized
     fun startPurchase(
@@ -105,16 +110,22 @@ class InAppBilling(
         cb: PurchasesUpdatedListener,
     ) {
         this.purchasesUpdated = cb
-        val skuDetails = skus.get(planID.lowercase())
+        val skuDetails = skus[planID.lowercase()]
         if (skuDetails == null) {
             Logger.e(TAG, "Unable to find sku details for plan: $planID")
             return
         }
-        Logger.d(TAG, "Launching billing flow for plan $planID, sku ${skuDetails.sku}")
+        val productDetailsParamsList = listOf(
+            BillingFlowParams.ProductDetailsParams.newBuilder()
+                .setProductDetails(skuDetails)
+                .build()
+        )
+
+        Logger.d(TAG, "Launching billing flow for plan $planID, sku ${skuDetails.productId}")
         launchBillingFlow(
             activity,
             BillingFlowParams.newBuilder()
-                .setSkuDetails(skuDetails)
+                .setProductDetailsParamsList(productDetailsParamsList)
                 .build(),
         )
     }
@@ -128,7 +139,10 @@ class InAppBilling(
             launchBillingFlow(activity, params)
                 .takeIf { billingResult -> !billingResult.responseCodeOK() }
                 ?.let { result ->
-                    Logger.e(TAG, "Unexpected response code trying to launch billing flow: ${result.responseCode}")
+                    Logger.e(
+                        TAG,
+                        "Unexpected response code trying to launch billing flow: ${result.responseCode}"
+                    )
                 }
         }
     }
@@ -144,46 +158,54 @@ class InAppBilling(
         }
     }
 
-    private fun updateSkus() {
+    private fun updateProducts() {
         Logger.d(TAG, "Updating SKUs")
-        val skuList = listOf("1y", "2y")
-        val params =
-            newBuilder()
-                .setType(INAPP)
-                .setSkusList(skuList)
+        val productList =
+            listOf(
+                QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId("1y")
+                    .setProductType(BillingClient.ProductType.INAPP)
+                    .build(),
+                QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId("2y")
+                    .setProductType(BillingClient.ProductType.INAPP)
+                    .build()
+            )
+
+        val params = QueryProductDetailsParams.newBuilder().setProductList(productList).build()
+
         ensureConnected {
-            querySkuDetailsAsync(
-                params.build(),
-            ) { billingResult: BillingResult, skuDetailsList: List<SkuDetails>? ->
+            queryProductDetailsAsync(params) { billingResult, skuDetailsList ->
                 if (!billingResult.responseCodeOK()) {
-                    isRetriable(billingResult).then { updateSkus() }
-                    return@querySkuDetailsAsync
+                    isRetriable(billingResult).then { updateProducts() }
+                    return@queryProductDetailsAsync
                 }
                 Logger.d(TAG, "Got ${skuDetailsList?.size} skus")
                 synchronized(this) {
                     plans.clear()
                     skus.clear()
-                    skuDetailsList?.forEach {
-                        val currency = it.priceCurrencyCode.lowercase()
-                        val id = it.sku
-                        val years = it.sku.substring(0, 1)
-                        val price = it.priceAmountMicros / 10000
-                        val priceWithoutTax = it.originalPriceAmountMicros / 10000
-                        plans.put(
+                    skuDetailsList.forEach {
+                        val currency =
+                            it.oneTimePurchaseOfferDetails!!.priceCurrencyCode.lowercase()
+                        val id = it.productId
+                        val years = it.productId.substring(0, 1)
+                        val price = it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
+                        // Todo no originalPriceAmountMicros found in latest lib
+                        val priceWithoutTax =
+                            it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
+                        plans[id] = ProPlan(
                             id,
-                            ProPlan(
-                                id,
-                                hashMapOf(currency to price.toLong()),
-                                hashMapOf(currency to priceWithoutTax.toLong()),
-                                "2" == years,
-                                hashMapOf("years" to years.toInt()),
-                            ),
+                            hashMapOf(currency to price.toLong()),
+                            hashMapOf(currency to priceWithoutTax.toLong()),
+                            "2" == years,
+                            hashMapOf("years" to years.toInt()),
                         )
-                        skus.put(id, it)
+                        skus[id] = it
                     }
                 }
             }
         }
+
     }
 
     private inline fun Boolean.then(crossinline block: () -> Unit) {
@@ -208,21 +230,21 @@ class InAppBilling(
      * In either case, we'll let the pro-server know about the purchase to make sure that it gets
      * correctly applied to the user's account.
      */
-    override fun handlePendingPurchases() {
+    override fun handlePurchases() {
         Logger.d(TAG, "Checking for pending purchases")
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.INAPP)
         ensureConnected {
             queryPurchasesAsync(
-                INAPP,
+                params.build(),
             ) { billingResult: BillingResult, purchases: List<Purchase>? ->
                 if (!billingResult.responseCodeOK()) {
-                    isRetriable(billingResult).then { handlePendingPurchases() }
+                    isRetriable(billingResult).then { handlePurchases() }
                     return@queryPurchasesAsync
                 }
                 if (purchases == null) {
                     return@queryPurchasesAsync
                 }
-                val pendingPurchases = purchases.filter { it.purchaseState == Purchase.PurchaseState.PENDING }
-                if (pendingPurchases.isEmpty()) return@queryPurchasesAsync
                 Logger.d(TAG, "Got ${purchases.size} purchases")
                 handleAcknowledgedPurchases(purchases)
             }
@@ -232,6 +254,24 @@ class InAppBilling(
     private fun handleAcknowledgedPurchases(purchases: List<Purchase>) {
         for (purchase in purchases) {
             ensureConnected {
+                /// if not acknowledged form server, acknowledge it
+                if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                    if (!purchase.isAcknowledged) {
+                        val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                            .setPurchaseToken(purchase.purchaseToken)
+                        acknowledgePurchase(acknowledgePurchaseParams.build()) { billingResult ->
+                            if (!billingResult.responseCodeOK()) {
+                                isRetriable(billingResult).then { handlePurchases() }
+                                return@acknowledgePurchase
+                            }
+                            Logger.d(
+                                TAG,
+                                "Acknowledged purchase ${purchase.purchaseToken}"
+                            )
+                        }
+                    }
+                }
+
                 val consumeParams =
                     ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
                         .build()
@@ -244,7 +284,10 @@ class InAppBilling(
                 // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
                 // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
                 // been consumed, we just do this every time we start up.
-                Logger.d(TAG, "Consuming already acknowledged purchase ${purchase.purchaseToken}")
+                Logger.d(
+                    TAG,
+                    "Consuming already acknowledged purchase ${purchase.purchaseToken}"
+                )
                 consumeAsync(consumeParams, listener)
             }
         }
@@ -258,11 +301,18 @@ class InAppBilling(
             BillingClient.BillingResponseCode.SERVICE_UNAVAILABLE,
             BillingClient.BillingResponseCode.USER_CANCELED,
             -> {
-                Logger.e(TAG, "Transient error communicating with Google Play Billing, will retry: $responseCode | $message")
+                Logger.e(
+                    TAG,
+                    "Transient error communicating with Google Play Billing, will retry: $responseCode | $message"
+                )
                 true
             }
+
             else -> {
-                Logger.e(TAG, "Non-transient error communicating with Google Play Billing, will not retry: $responseCode | $message")
+                Logger.e(
+                    TAG,
+                    "Non-transient error communicating with Google Play Billing, will not retry: $responseCode | $message"
+                )
                 false
             }
         }

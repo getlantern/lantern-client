@@ -52,6 +52,21 @@ Pointer<Utf8> ffiEmailAddress() => _bindings.emailAddress().cast<Utf8>();
 Pointer<Utf8> ffiEmailExists(email) =>
     _bindings.emailExists(email).cast<Utf8>();
 
+Pointer<Utf8> ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
+  final result =
+      _bindings.redeemResellerCode(email, currency, deviceName, resellerCode);
+  // Check for error
+  // it means you need to check r1
+  if (result.r1 != nullptr) {
+    // Got error throw error to show error ui state
+    final errorCode = result.r1.cast<Utf8>().toDartString();
+    throw PlatformException(code: errorCode, message: 'wrong_seller_code'.i18n);
+  }
+  // if successful redeeming a reseller code, immediately refresh Pro user data
+  ffiProUser();
+  return result.r0.cast<Utf8>();
+}
+
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
 
 Pointer<Utf8> ffiReplicaAddr() => _bindings.replicaAddr().cast<Utf8>();
@@ -80,14 +95,33 @@ Pointer<Utf8> ffiOnBoardingStatus() =>
 
 Pointer<Utf8> ffiServerInfo() => _bindings.serverInfo().cast<Utf8>();
 
-Pointer<Utf8> ffiReportIssue(email, issueType, description) =>
-    _bindings.reportIssue(email, issueType, description).cast<Utf8>();
+Future<void> ffiReportIssue(List<String> list) {
+  final email = list[0].toNativeUtf8();
+  final issueType = list[1].toNativeUtf8();
+  final description = list[2].toNativeUtf8();
+  final result = _bindings.reportIssue(email as Pointer<Char>, issueType as Pointer<Char>, description as Pointer<Char>);
+  if (result.r1 != nullptr) {
+    // Got error throw error to show error ui state
+    final errorCode = result.r1.cast<Utf8>().toDartString();
+    throw PlatformException(
+        code: errorCode, message: 'report_issue_error'.i18n);
+  }
+  return Future.value();
+}
 
-Pointer<Utf8> ffiPaymentRedirect(
-        planID, currency, provider, email, deviceName) =>
-    _bindings
-        .paymentRedirect(planID, currency, provider, email, deviceName)
-        .cast<Utf8>();
+
+String ffiPaymentRedirect(planID, currency, provider, email, deviceName) {
+  final result =
+      _bindings.paymentRedirect(planID, currency, provider, email, deviceName);
+  if (result.r1 != nullptr) {
+    // Got error throw error to show error ui state
+    final errorCode = result.r1.cast<Utf8>().toDartString();
+    throw PlatformException(
+        code: errorCode,
+        message: 'we_are_experiencing_technical_difficulties'.i18n);
+  }
+  return result.r0.cast<Utf8>().toDartString();
+}
 
 const String _libName = 'liblantern';
 

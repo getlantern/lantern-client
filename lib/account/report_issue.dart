@@ -142,10 +142,11 @@ class _ReportIssueState extends State<ReportIssue> {
                           'cannot_access_blocked_sites'.i18n,
                           'cannot_complete_purchase'.i18n,
                           'cannot_sign_in'.i18n,
-                          'loading_spinner_spins_endlessly'.i18n,
+                          'discover_not_working'.i18n,
+                          'spinner_loads_endlessly'.i18n,
                           'slow'.i18n,
                           'cannot_link_devices'.i18n,
-                          'lantern_crashes'.i18n,
+                          'application_crashes'.i18n,
                           'other'.i18n
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
@@ -207,14 +208,10 @@ class _ReportIssueState extends State<ReportIssue> {
 
   Future<void> onSendReportTap() async {
     try {
-      AppLoadingDialog.showLoadingDialog(
-        context,
-      );
+      AppLoadingDialog.showLoadingDialog(context);
       await sessionModel.reportIssue(emailController.value.text,
           issueController.value.text, descController.value.text);
-      if (Platform.isIOS) {
-        AppLoadingDialog.dismissLoadingDialog(context);
-      }
+      AppLoadingDialog.dismissLoadingDialog(context);
       CDialog.showInfo(
         context,
         title: 'report_sent'.i18n,
@@ -226,9 +223,7 @@ class _ReportIssueState extends State<ReportIssue> {
         },
       );
     } catch (error, stackTrace) {
-      if (Platform.isIOS) {
-        AppLoadingDialog.dismissLoadingDialog(context);
-      }
+      AppLoadingDialog.dismissLoadingDialog(context);
       CDialog.showError(
         context,
         error: error,

@@ -38,8 +38,9 @@ type ProClient interface {
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
-	PaymentRedirect(ctx context.Context, params map[string]interface{}) (*PaymentRedirectResponse, error)
+	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
 	Plans(ctx context.Context) (*PlansResponse, error)
+	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
 }
 
@@ -109,11 +110,11 @@ func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.Base
 	return &resp, nil
 }
 
-func (c *proClient) PaymentRedirect(ctx context.Context, params map[string]interface{}) (*PaymentRedirectResponse, error) {
+func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error) {
 	var resp PaymentRedirectResponse
 	uc := userConfig(c.settings)
-	params["locale"] = uc.GetLanguage()
-	err := c.webclient.GetJSON(ctx, "/payment-redirect", params, &resp)
+	req.Locale = uc.GetLanguage()
+	err := c.webclient.GetJSON(ctx, "/payment-redirect", req, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -146,6 +147,17 @@ func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
 	}
+	return &resp, nil
+}
+
+// RedeemResellerCode redeems a reseller code for the given user
+func (c *proClient) RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error) {
+	var resp protos.BaseResponse
+	if err := c.webclient.PostFormReadingJSON(ctx, "/link-code-request", req, &resp); err != nil {
+		log.Errorf("Failed to redeem reseller code: %v", err)
+		return nil, err
+	}
+
 	return &resp, nil
 }
 

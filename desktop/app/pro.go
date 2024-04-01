@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/getlantern/errors"
@@ -108,8 +109,12 @@ func (app *App) servePro(channel ws.UIChannel) error {
 		}
 	}
 	service, err := channel.Register("pro", helloFn)
+	if err != nil {
+		return err
+	}
 	pro.OnUserData(func(current *client.User, new *client.User) {
-		log.Debugf("Sending updated user data to all clients: %v", new)
+		b, _ := json.Marshal(new)
+		log.Debugf("Sending updated user data to all clients: %s", string(b))
 		service.Out <- new
 	})
 	return err

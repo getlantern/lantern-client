@@ -12,6 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.lantern.apps.AppsDataProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.FormBody
 import okhttp3.RequestBody
@@ -201,7 +202,11 @@ class SessionModel(
 
             "trackUserAction" -> {
                 val props: Map<String, String> = mapOf("title" to call.argument("title")!!)
-                Plausible.event(call.argument("name")!!, url = call.argument("url")!!, props = props)
+                Plausible.event(
+                    call.argument("name")!!,
+                    url = call.argument("url")!!,
+                    props = props
+                )
             }
 
             "acceptTerms" -> {
@@ -318,7 +323,8 @@ class SessionModel(
                         tx.put(
                             path,
                             Vpn.AppData.newBuilder()
-                                .setPackageName(it.packageName).setName(it.name).setIcon(ByteString.copyFrom(it.icon))
+                                .setPackageName(it.packageName).setName(it.name)
+                                .setIcon(ByteString.copyFrom(it.icon))
                                 .build()
                         )
                     }
@@ -419,13 +425,34 @@ class SessionModel(
                     Logger.debug(TAG, "Successfully redeemed link code")
                     val userID = result["userID"].asLong
                     val token = result["token"].asString
+                    //Set the new user id
                     LanternApp.getSession().setUserIdAndToken(userID, token)
-                    LanternApp.getSession().linkDevice()
-                    LanternApp.getSession().setIsProUser(true)
-                    val intent = Intent(activity, MainActivity::class.java).apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    }
-                    activity.startActivity(intent)
+                    //Refresh all the user data
+                    lanternClient.userData(object : ProUserCallback {
+                        override fun onSuccess(response: Response, userData: ProUser) {
+                            Logger.debug(TAG, "Successfully updated userData")
+                            activity.runOnUiThread {
+                                //todo find better solution restart the app is the good option
+                                //Restart the app
+                                val intent = Intent(activity, MainActivity::class.java).apply {
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                }
+                                activity.startActivity(intent)
+//                                methodCallResult.success("redeemedLinkCode")
+
+                            }
+                        }
+
+                        override fun onFailure(t: Throwable?, error: ProError?) {
+                            Logger.error(TAG, "Unable to fetch user data: $t.message")
+                            methodCallResult.error(
+                                "errorUpdatingUserData",
+                                t?.message,
+                                error?.message
+                            )
+                        }
+                    })
+
                     // methodCallResult.success(null)
                 }
             },
@@ -560,23 +587,21 @@ class SessionModel(
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error approving device link code: $error")
                     activity.runOnUiThread {
-                        methodCallResult.error("errorApprovingDevice", t?.message, error?.message)
+                        val errorMessage =
+                            activity.resources.getString(R.string.invalid_verification_code)
+                        methodCallResult.error("errorApprovingDevice", errorMessage, errorMessage)
                     }
-                    activity.showErrorDialog(activity.resources.getString(R.string.invalid_verification_code))
                 }
 
                 override fun onSuccess(response: Response?, result: JsonObject?) {
+                    //Add one second dealy to api
+                    Thread.sleep(1000)
                     lanternClient.userData(object : ProUserCallback {
                         override fun onSuccess(response: Response, userData: ProUser) {
                             Logger.debug(TAG, "Successfully updated userData")
                             activity.runOnUiThread {
                                 methodCallResult.success("approvedDevice")
                             }
-                            activity.showAlertDialog(
-                                activity.resources.getString(R.string.device_added),
-                                activity.resources.getString(R.string.device_authorized_pro),
-                                ContextCompat.getDrawable(activity, R.drawable.ic_filled_check)
-                            )
                         }
 
                         override fun onFailure(t: Throwable?, error: ProError?) {

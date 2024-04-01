@@ -78,3 +78,27 @@ message BaseResponse {
   string error = 2;
   string errorId = 3;
 }
+
+message PaymentRedirectRequest {
+    string plan = 1;
+    string provider = 2;
+    string currency = 3;
+    string email = 4;
+    string deviceName = 5;
+    string countryCode = 6;
+    string locale = 7;
+}
+
+message PaymentRedirectResponse {
+    string redirect = 1;
+}
+
+message RedeemResellerCodeRequest {
+  string email = 1;
+  string resellerCode = 2;
+  string deviceName = 3;
+  string currency = 4;
+  string idempotencyKey = 5;
+  string provider = 6;
+}
+
