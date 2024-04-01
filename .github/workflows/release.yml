@@ -15,8 +15,7 @@ env:
   S3_BUCKET: lantern
 jobs:
     set-version:
-      runs-on:
-        group: large-runners
+      runs-on: ubuntu-latest
       outputs:
         version: ${{ steps.set-version.outputs.version }}
         prefix: ${{ steps.set-version.outputs.prefix }}
@@ -240,8 +239,7 @@ jobs:
           s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
 
     push-binaries:
-      runs-on:
-        group: large-runners
+      runs-on: ubuntu-latest
       needs: [ set-version, build-android, build-darwin, build-linux, build-windows-x64 ]
       env:
         version: ${{ needs.set-version.outputs.version }}
