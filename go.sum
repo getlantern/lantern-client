@@ -280,14 +280,8 @@ github.com/getlantern/flashlight/v7 v7.6.59 h1:4Ev1f7K1TPXOwUe4UFhdzXVvqXNTbwgM4
 github.com/getlantern/flashlight/v7 v7.6.59/go.mod h1:I90ekr9DZ5NyDWyR3HYQFCy1Vdt3EI1MciRBMdRyJfc=
 github.com/getlantern/flashlight/v7 v7.6.60 h1:Fz7+5PaDfa+pqiNAyvVtpqj9Rvoj34brQCtVRpkDFus=
 github.com/getlantern/flashlight/v7 v7.6.60/go.mod h1:I90ekr9DZ5NyDWyR3HYQFCy1Vdt3EI1MciRBMdRyJfc=
-github.com/getlantern/flashlight/v7 v7.6.61-0.20240320200400-2ed658df2cf1 h1:OJHvrfQ2PLx0mlaiQVLnVAZH1uXKIqWLUHmM9XQZpis=
-github.com/getlantern/flashlight/v7 v7.6.61-0.20240320200400-2ed658df2cf1/go.mod h1:I90ekr9DZ5NyDWyR3HYQFCy1Vdt3EI1MciRBMdRyJfc=
-github.com/getlantern/flashlight/v7 v7.6.61-0.20240320200556-5a3b313753c1 h1:1Mo6fRUpZqs5ueOfmOuG+8ccLAXSeO4uEL0Cc1vqD8s=
-github.com/getlantern/flashlight/v7 v7.6.61-0.20240320200556-5a3b313753c1/go.mod h1:I90ekr9DZ5NyDWyR3HYQFCy1Vdt3EI1MciRBMdRyJfc=
 github.com/getlantern/flashlight/v7 v7.6.68 h1:SyUDOCwb9aTGFNKtXokzGOaAC2l1NqFD5PlvyZD4hDY=
 github.com/getlantern/flashlight/v7 v7.6.68/go.mod h1:1yQUv9KUFk7exXlAZYQopGI7qgPcNdiRyjoNQAVR/LU=
-github.com/getlantern/flashlight/v7 v7.6.69-0.20240401114003-6173ecf90eee h1:hyYZvdJEehmNyqvSUfuFGOhihXaJum9CfW/fvP+AdvE=
-github.com/getlantern/flashlight/v7 v7.6.69-0.20240401114003-6173ecf90eee/go.mod h1:1yQUv9KUFk7exXlAZYQopGI7qgPcNdiRyjoNQAVR/LU=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 h1:r/Z/SPPIfLXDI3QA7/tE6nOfPncrqeUPDjiFjnNGP50=
@@ -327,7 +321,10 @@ github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770 h1:cSrD9ryDfTV2y
 github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770/go.mod h1:GOQsoDnEHl6ZmNIL+5uVo+JWRFWozMEp18Izcb++H+A=
 github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20231118011407-9f16767b92eb h1:pR+bEMoHwZPzIrJp/Q8O/00Mbi09s7cH3FxhykNGAbw=
 github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20231118011407-9f16767b92eb/go.mod h1:UkN8RlXXnSSmLIupSmXB06gdcm9rbsz7IGT15D/D1MQ=
+<<<<<<< HEAD
 github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240328104604-a38ea762477d h1:zZ/tEBPrFL58U/i5Uf5j/BHPICGjD7MN3r+fZacgryw=
+=======
+>>>>>>> origin/main
 github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240328104604-a38ea762477d/go.mod h1:ryO/THZDlxiN0YukBmmztYsp3DzyKUYGtX7XwltS3j4=
 github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca h1:Of3VwFEfKbVnK5/VGy05XUbi6QvTs5Y2eLDfPv3O50E=
 github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca/go.mod h1:TNC/xJFmctsSGyXqcnVWwCRCPD/4zGQP7yBVnLDRa/U=
