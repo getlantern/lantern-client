@@ -133,10 +133,13 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void onTrayMenuItemClick(MenuItem menuItem) async {
     switch (menuItem.key) {
+      case 'show':
+        windowManager.show();
       case 'exit':
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       case 'status':
-        bool isConnected = await vpnStatus() == "connected";
+        final status = await ffiVpnStatus().toDartString();
+        bool isConnected = status == "connected";
         if (isConnected) {
           sysProxyOff();
           await setupMenu(false);
@@ -262,7 +265,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                 ? Chats()
                 : Welcome();
       case TAB_VPN:
-        return const VPNTab();
+        return VPNTab();
       case TAB_REPLICA:
         return ReplicaTab();
       case TAB_ACCOUNT:

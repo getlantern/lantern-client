@@ -37,6 +37,12 @@ class ImagePaths {
   static const forum = 'assets/images/forum.svg';
   static const webMoney = 'assets/images/webmoney.svg';
   static const bitcoin = 'assets/images/bitcoin.svg';
+  static const thumbUp = 'assets/images/thumb_up.svg';
+  static const facebook = 'assets/images/facebook.svg';
+  static const instagram = 'assets/images/instagram.svg';
+  static const x = 'assets/images/x.svg';
+  static const telegram = 'assets/images/telegram.svg';
+  static const instagramPng = 'assets/images/instagram_png.png';
 
   // Messaging
   static const more_vert = 'assets/images/more_vert.svg';

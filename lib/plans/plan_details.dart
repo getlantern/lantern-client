@@ -20,27 +20,7 @@ class PlanCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
       child: CInkWell(
-        onTap: () async {
-          final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
-          final inRussia = sessionModel.country.value == 'RU';
-          // * Play version
-          if (isPlayVersion && !inRussia) {
-            await context.pushRoute(
-              PlayCheckout(
-                plan: plan,
-                isPro: isPro,
-              ),
-            );
-          } else {
-            // * Proceed to our own Checkout
-            await context.pushRoute(
-              Checkout(
-                plan: plan,
-                isPro: isPro,
-              ),
-            );
-          }
-        },
+        onTap: () => onPlanTap(context),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -137,6 +117,40 @@ class PlanCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void onPlanTap(BuildContext context) {
+    switch (Platform.operatingSystem) {
+      case 'ios':
+        throw Exception("Not support at the moment");
+        break;
+      default:
+        // proceed to the default checkout page on Android and desktop
+        _checkOut(context);
+        break;
+    }
+  }
+
+  Future<void> _checkOut(BuildContext context) async {
+    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+    final inRussia = sessionModel.country.value == 'RU';
+    // * Play version (Android only)
+    if (isPlayVersion && !inRussia) {
+      await context.pushRoute(
+        PlayCheckout(
+          plan: plan,
+          isPro: isPro,
+        ),
+      );
+    } else {
+      // * Proceed to our own Checkout
+      await context.pushRoute(
+        Checkout(
+          plan: plan,
+          isPro: isPro,
+        ),
+      );
+    }
   }
 }
 

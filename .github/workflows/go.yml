@@ -11,8 +11,7 @@ on:
 jobs:
 
   build:
-    runs-on:
-      group: large-runners
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Install libpcap

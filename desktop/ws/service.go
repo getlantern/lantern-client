@@ -21,6 +21,8 @@ type UIChannel interface {
 	// Register registers a service with an optional helloFn to send initial
 	// message to connected clients.
 	Register(t string, helloFn helloFnType) (*Service, error)
+	// SendMessage sends data over the given websocket channel
+	SendMessage(ch string, data any) error
 	// RegisterWithMsgInitializer is similar to Register, but with an additional
 	// newMsgFn to initialize the message data type to-be received from WebSocket
 	// client, instead of letting JSON unmarshaler to guess the data type.
@@ -116,6 +118,15 @@ type uiChannel struct {
 
 func (c *uiChannel) Handler() http.Handler {
 	return c.clients
+}
+
+func (c *uiChannel) SendMessage(t string, data any) error {
+	service := c.services[t]
+	if service == nil {
+		return fmt.Errorf("No service registered %s", t)
+	}
+	service.writeMsg(data, c.clients.Out)
+	return nil
 }
 
 func (c *uiChannel) Register(t string, helloFn helloFnType) (*Service, error) {

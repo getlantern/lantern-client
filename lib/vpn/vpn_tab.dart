@@ -8,12 +8,12 @@ import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
 class VPNTab extends StatelessWidget {
-  const VPNTab({Key? key}) : super(key: key);
+  VPNTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel
-        .proUser((BuildContext context, bool proUser, Widget? child) {
+    return sessionModel.proUser(
+        (BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
         title: SvgPicture.asset(
           proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,

@@ -63,7 +63,7 @@ abstract class Model {
     void Function(void Function(T?) setValue)? onChanges,
     WebSocketChannel? channel,
     T Function(Uint8List serialized)? deserialize,
-    T Function(Map<String, dynamic> json)? fromJsonModel,
+    T Function(dynamic json)? fromJsonModel,
   }) {
     var notifier = ffiValueNotifier(
       ffiFunction,
@@ -102,7 +102,7 @@ abstract class Model {
       void Function(void Function(T?) setValue)? onChanges,
       WebSocketChannel? channel,
       T Function(Uint8List serialized)? deserialize,
-      T Function(Map<String, dynamic> json)? fromJsonModel,
+      T Function(dynamic json)? fromJsonModel,
   }) {
     return FfiValueNotifier(
       ffiFunction,

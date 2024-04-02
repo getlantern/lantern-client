@@ -94,6 +94,7 @@ abstract class $AppRouter extends _i42.RootStackRouter {
         child: _i4.AppWebView(
           key: args.key,
           url: args.url,
+          title: args.title,
         ),
       );
     },
@@ -495,12 +496,14 @@ class AppWebview extends _i42.PageRouteInfo<AppWebviewArgs> {
   AppWebview({
     _i44.Key? key,
     required String url,
+    required String title,
     List<_i42.PageRouteInfo>? children,
   }) : super(
           AppWebview.name,
           args: AppWebviewArgs(
             key: key,
             url: url,
+            title: title,
           ),
           initialChildren: children,
         );
@@ -515,15 +518,18 @@ class AppWebviewArgs {
   const AppWebviewArgs({
     this.key,
     required this.url,
+    required this.title,
   });
 
   final _i44.Key? key;
 
   final String url;
 
+  final String title;
+
   @override
   String toString() {
-    return 'AppWebviewArgs{key: $key, url: $url}';
+    return 'AppWebviewArgs{key: $key, url: $url, title: $title}';
   }
 }
 

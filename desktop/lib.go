@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"runtime/debug"
 	"strconv"
+	"strings"
 	"syscall"
 
 	"github.com/getlantern/appdir"
@@ -22,6 +23,7 @@ import (
 	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
+	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -33,11 +35,28 @@ import (
 
 import "C"
 
+const (
+	defaultLocale = "en-US"
+)
+
 var (
 	log       = golog.LoggerFor("lantern-desktop.main")
 	a         *app.App
 	proClient *client.Client
 )
+
+var issueMap = map[string]string{
+	"Cannot access blocked sites": "3",
+	"Cannot complete purchase":    "0",
+	"Cannot sign in":              "1",
+	"Spinner loads endlessly":     "2",
+	"Slow":                        "4",
+	"Chat not working":            "7",
+	"Discover not working":        "8",
+	"Cannot link device":          "5",
+	"Application crashes":         "6",
+	"Other":                       "9",
+}
 
 //export start
 func start() {
@@ -108,11 +127,7 @@ func sendError(err error) *C.char {
 	if err == nil {
 		return C.CString("")
 	}
-	errors := map[string]interface{}{
-		"error": err.Error(),
-	}
-	b, _ := json.Marshal(errors)
-	return C.CString(string(b))
+	return C.CString(err.Error())
 }
 
 //export selectedTab
@@ -155,13 +170,46 @@ func paymentMethods() *C.char {
 	return C.CString(string(b))
 }
 
-//export userData
-func userData() *C.char {
+func getUserData() (*client.User, error) {
 	resp, err := proClient.UserData(userConfig())
+	if err != nil {
+		return nil, err
+	}
+	user := resp.User
+	if user.Email != "" {
+		a.Settings().SetEmailAddress(user.Email)
+	}
+	return &user, nil
+}
+
+//export devices
+func devices() *C.char {
+	user, err := getUserData()
 	if err != nil {
 		return sendError(err)
 	}
-	b, _ := json.Marshal(resp.User)
+	b, _ := json.Marshal(user.Devices)
+	return C.CString(string(b))
+}
+
+//export expiryDate
+func expiryDate() *C.char {
+	user, err := getUserData()
+	if err != nil {
+		return sendError(err)
+	}
+	tm := time.Unix(user.Expiration, 0)
+	exp := tm.Format("01/02/2006")
+	return C.CString(string(exp))
+}
+
+//export userData
+func userData() *C.char {
+	user, err := getUserData()
+	if err != nil {
+		return sendError(err)
+	}
+	b, _ := json.Marshal(user)
 	return C.CString(string(b))
 }
 
@@ -182,7 +230,7 @@ func serverInfo() *C.char {
 
 //export emailAddress
 func emailAddress() *C.char {
-	return C.CString("")
+	return C.CString(a.Settings().GetEmailAddress())
 }
 
 //export emailExists
@@ -193,6 +241,23 @@ func emailExists(email *C.char) *C.char {
 		return sendError(err)
 	}
 	return C.CString("false")
+}
+
+// The function returns two C strings: the first represents success, and the second represents an error.
+// If the redemption is successful, the first string contains "true", and the second string is nil.
+// If an error occurs during redemption, the first string is nil, and the second string contains the error message.
+//
+//export redeemResellerCode
+func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) (*C.char, *C.char) {
+	_, err := proClient.RedeemResellerCode(userConfig(), C.GoString(email), C.GoString(resellerCode),
+		C.GoString(deviceName), C.GoString(currency))
+	if err != nil {
+		log.Debugf("DEBUG: error while redeeming reseller code: %v", err)
+		return nil, C.CString(err.Error())
+		// return sendError(err)
+	}
+	log.Debugf("DEBUG: redeeming reseller code success: %v", err)
+	return C.CString("true"), nil
 }
 
 //export referral
@@ -224,14 +289,14 @@ func lang() *C.char {
 	lang := a.Settings().GetLanguage()
 	if lang == "" {
 		// Default language is English
-		lang = "en-US"
+		lang = defaultLocale
 	}
 	return C.CString(lang)
 }
 
 //export setSelectLang
 func setSelectLang(lang *C.char) {
-	a.Settings().SetLanguage(C.GoString(lang))
+	a.SetLanguage(C.GoString(lang))
 }
 
 //export country
@@ -270,6 +335,8 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
+	// refresh user data when home page is loaded on desktop
+	go pro.FetchUserData(a.Settings())
 	if isProUser, ok := a.IsProUser(); isProUser && ok {
 		return C.CString("true")
 	}
@@ -287,20 +354,20 @@ func deviceLinkingCode() *C.char {
 }
 
 //export paymentRedirect
-func paymentRedirect(planID, provider, email, deviceName *C.char) *C.char {
+func paymentRedirect(planID, currency, provider, email, deviceName *C.char) (*C.char, *C.char) {
 	country := a.Settings().GetCountry()
 	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
 		Provider:    C.GoString(provider),
-		Currency:    "USD",
+		Currency:    strings.ToUpper(C.GoString(currency)),
 		Email:       C.GoString(email),
 		DeviceName:  C.GoString(deviceName),
 		CountryCode: country,
 	})
 	if err != nil {
-		return sendError(err)
+		return nil, sendError(err)
 	}
-	return C.CString(resp.Redirect)
+	return C.CString(resp.Redirect), nil
 }
 
 //export developmentMode
@@ -323,19 +390,6 @@ func replicaAddr() *C.char {
 	return C.CString("")
 }
 
-var issueMap = map[string]string{
-	"Cannot access blocked sites": "3",
-	"Cannot complete purchase":    "0",
-	"Cannot sign in":              "1",
-	"Spinner loads endlessly":     "2",
-	"Slow":                        "4",
-	"Chat not working":            "7",
-	"Discover not working":        "8",
-	"Cannot link device":          "5",
-	"Application crashes":         "6",
-	"Other":                       "9",
-}
-
 func userConfig() *common.UserConfigData {
 	settings := a.Settings()
 	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
@@ -350,17 +404,17 @@ func userConfig() *common.UserConfigData {
 }
 
 //export reportIssue
-func reportIssue(email, issueType, description *C.char) *C.char {
+func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 	deviceID := a.Settings().GetDeviceID()
-	issueTypeInt, err := strconv.Atoi(C.GoString(issueType))
+	issueIndex := issueMap[C.GoString(issueType)]
+	issueTypeInt, err := strconv.Atoi(issueIndex)
 	if err != nil {
-		return sendError(err)
+		return nil, sendError(err)
 	}
-
 	uc := userConfig()
 
 	subscriptionLevel := "free"
-	if a.IsPro() {
+	if isProUser, ok := a.IsProUser(); ok && isProUser {
 		subscriptionLevel = "pro"
 	}
 
@@ -383,10 +437,10 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 		nil,
 	)
 	if err != nil {
-		return sendError(err)
+		return nil, sendError(err)
 	}
 	log.Debug("Successfully reported issue")
-	return C.CString("true")
+	return C.CString("true"), nil
 }
 
 //export checkUpdates
@@ -459,6 +513,18 @@ func runApp(a *app.App) {
 	a.Run(true)
 }
 
+// useOSLocale detect OS locale for current user and let i18n to use it
+func useOSLocale() (string, error) {
+	userLocale, err := jibber_jabber.DetectIETF()
+	if err != nil || userLocale == "C" {
+		log.Debugf("Ignoring OS locale and using default")
+		userLocale = defaultLocale
+	}
+	log.Debugf("Using OS locale of current user: %v", userLocale)
+	a.SetLanguage(userLocale)
+	return userLocale, nil
+}
+
 func i18nInit(a *app.App) {
 	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
 		return a.GetTranslations(filename)
@@ -468,10 +534,11 @@ func i18nInit(a *app.App) {
 	if _, err := i18n.SetLocale(locale); err != nil {
 		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
 
-		// On startup GetLanguage will return '', as the browser has not set the language yet.
-		// We use the OS locale instead and make sure the language is populated.
-		if locale, err := i18n.UseOSLocale(); err != nil {
+		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
+		// populated.
+		if locale, err := useOSLocale(); err != nil {
 			log.Debugf("i18n.UseOSLocale: %q", err)
+			a.SetLanguage(defaultLocale)
 		} else {
 			a.SetLanguage(locale)
 		}

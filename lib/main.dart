@@ -31,6 +31,7 @@ Future<void> main() async {
 
   if (isDesktop()) {
     loadLibrary();
+    await WebsocketImpl.instance()!.connect();
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
       size: ui.Size(360, 712),

@@ -18,22 +18,20 @@ class _LinkDeviceState extends State<LinkDevice> {
   void initState() {
     super.initState();
     if (Platform.isAndroid) {
-      sessionModel.requestLinkCode().then(
-            (code) => {
-              print("requestLinkCode success code is $code"),
-              retry(
-                // Make a GET request
-                () => sessionModel
-                    .redeemLinkCode()
-                    .timeout(const Duration(hours: 1)),
-                onRetry: (e) => print("error , retry: $e"),
-              ).then(
-                (x) => {
-                  print("redeemLinkCode success"),
-                },
-              )
-            },
-          );
+      requestLinkCode();
+    }
+  }
+
+  Future<void> requestLinkCode() async {
+    try {
+      await sessionModel.requestLinkCode();
+      // We need to call redeemLinkCode multiple times when user enter code we redeem it
+      // then it will show on the device list
+      retry(
+        () => {sessionModel.redeemLinkCode()},
+      );
+    } catch (e) {
+      appLogger.e("error while requesting link code: $e", error: e);
     }
   }
 

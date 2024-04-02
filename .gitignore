@@ -80,6 +80,8 @@ android/app/libs/liblantern-all.aar
 lantern-installer.dmg
 liblantern.h
 liblantern.dylib
+liblantern_arm64.dylib
+liblantern_amd64.dylib
 lib/generated_bindings.dart
 
 *.env
