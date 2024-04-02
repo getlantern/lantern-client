@@ -137,16 +137,6 @@ func sysProxyOff() {
 	a.SysProxyOff()
 }
 
-func sendError(err error) *C.char {
-	if err == nil {
-		return C.CString("")
-	}
-	b, _ := json.Marshal(map[string]interface{}{
-		"error": err.Error(),
-	})
-	return C.CString(string(b))
-}
-
 //export selectedTab
 func selectedTab() *C.char {
 	return C.CString(string(a.SelectedTab()))
@@ -212,6 +202,15 @@ func devices() *C.char {
 func sendJson(resp any) *C.char {
 	b, _ := json.Marshal(resp)
 	return C.CString(string(b))
+}
+
+func sendError(err error) *C.char {
+	if err == nil {
+		return C.CString("")
+	}
+	return sendJson(map[string]interface{}{
+		"error": err.Error(),
+	})
 }
 
 //export approveDevice
