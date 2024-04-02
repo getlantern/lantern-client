@@ -60,20 +60,19 @@ func (c testSession) UpdateStats(string, string, string, int, int, bool) error {
 
 func (c testSession) UpdateAdSettings(AdSettings) error { return nil }
 
-func (c testSession) GetAppName() string                            { return "lantern" }
-func (c testSession) AppVersion() (string, error)                   { return "6.9.0", nil }
-func (c testSession) Code() (string, error)                         { return "1", nil }
-func (c testSession) Currency() (string, error)                     { return "usd", nil }
-func (c testSession) DeviceOS() (string, error)                     { return "android", nil }
-func (c testSession) Email() (string, error)                        { return "test@getlantern.org", nil }
-func (c testSession) GetCountryCode() (string, error)               { return "us", nil }
-func (c testSession) IsStoreVersion() (bool, error)                 { return false, nil }
-func (c testSession) Provider() (string, error)                     { return "stripe", nil }
-func (c testSession) SetChatEnabled(enabled bool)                   {}
-func (c testSession) SetMatomoEnabled(bool)                         {}
-func (c testSession) IsPlayVersion() (bool, error)                  { return false, nil }
-func (c testSession) SetShowInterstitialAdsEnabled(enabled bool)    {}
-func (c testSession) SetCASShowInterstitialAdsEnabled(enabled bool) {}
+func (c testSession) GetAppName() string                         { return "lantern" }
+func (c testSession) AppVersion() (string, error)                { return "6.9.0", nil }
+func (c testSession) Code() (string, error)                      { return "1", nil }
+func (c testSession) Currency() (string, error)                  { return "usd", nil }
+func (c testSession) DeviceOS() (string, error)                  { return "android", nil }
+func (c testSession) Email() (string, error)                     { return "test@getlantern.org", nil }
+func (c testSession) GetCountryCode() (string, error)            { return "us", nil }
+func (c testSession) IsStoreVersion() (bool, error)              { return false, nil }
+func (c testSession) Provider() (string, error)                  { return "stripe", nil }
+func (c testSession) SetChatEnabled(enabled bool)                {}
+func (c testSession) SetMatomoEnabled(bool)                      {}
+func (c testSession) IsPlayVersion() (bool, error)               { return false, nil }
+func (c testSession) SetShowInterstitialAdsEnabled(enabled bool) {}
 
 func (c testSession) SerializedInternalHeaders() (string, error) {
 	return c.serializedInternalHeaders, nil
