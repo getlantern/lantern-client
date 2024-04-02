@@ -1,8 +1,6 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
-import android.app.ProgressDialog
-import androidx.appcompat.app.AlertDialog
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
@@ -46,6 +44,18 @@ class PaymentsUtil(private val activity: Activity) {
                     date[1].toInt(), // expYear
                     cvc,
                 )
+
+            val stripeKey = session.stripePubKey()
+            //Make sure if key null throw error
+            if (stripeKey.isNullOrEmpty()) {
+                Logger.error(TAG, "Stripe public key is not set")
+                methodCallResult.error(
+                    "errorSubmittingToStripe",
+                    activity.getString(R.string.error_making_purchase),
+                    null,
+                )
+                return
+            }
             val stripe = Stripe(activity, session.stripePubKey()!!)
             stripe.createCardToken(
                 card,
