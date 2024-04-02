@@ -248,11 +248,7 @@ jobs:
         - name: Download the mac build output
           uses: actions/download-artifact@v4
           with:
-            name: mac-build
-        - name: Download the mac arm build output
-          uses: actions/download-artifact@v4
-          with:
-            name: mac_arm-build
+            name: osx-build
         - name: Download the linux build output
           uses: actions/download-artifact@v4
           with:
