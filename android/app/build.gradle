@@ -399,10 +399,6 @@ dependencies {
 
     // Google Play libraries
     implementation 'com.android.billingclient:billing:6.2.0'
-//    implementation 'com.android.billingclient:billing-ktx:6.1.0'
-    implementation 'com.google.android.gms:play-services-base:18.2.0'
-    implementation 'com.google.android.gms:play-services-ads:22.4.0'
-
 
     // lib that simplifies event bus communication between activities, fragments, threads, services, etc
     implementation 'org.greenrobot:eventbus:3.3.1'
@@ -438,8 +434,6 @@ dependencies {
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:messaging-android:e36af5da7e'
     implementation 'com.github.getlantern:db-android:36239c103c'
-
-//    implementation 'com.cleveradssolutions:cas:3.3.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

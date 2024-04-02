@@ -66,7 +66,6 @@ class SessionModel(
         const val PATH_USER_LEVEL = "userLevel"
 
         const val PATH_SPLIT_TUNNELING = "/splitTunneling"
-        const val SHOULD_SHOW_CAS_ADS = "shouldShowCASAds"
         const val SHOULD_SHOW_GOOGLE_ADS = "shouldShowGoogleAds"
         const val PATH_APPS_DATA = "/appsData/"
 
@@ -108,7 +107,7 @@ class SessionModel(
         if (LanternApp.getSession().isProUser) {
             db.mutate { tx ->
                 tx.put(SHOULD_SHOW_GOOGLE_ADS, false)
-                tx.put(SHOULD_SHOW_CAS_ADS, false)
+
             }
             return
         }
@@ -120,16 +119,9 @@ class SessionModel(
                 LanternApp.getSession().shouldShowAdsEnabled()
             }"
         )
-        val casAds = shouldShowAdsBasedRegion { LanternApp.getSession().shouldCASShowAdsEnabled() }
-        Logger.debug(
-            TAG,
-            "checkAdsAvailability with cas values $googleAds enable ${
-                LanternApp.getSession().shouldCASShowAdsEnabled()
-            }"
-        )
         db.mutate { tx ->
             tx.put(SHOULD_SHOW_GOOGLE_ADS, googleAds)
-            tx.put(SHOULD_SHOW_CAS_ADS, casAds)
+
         }
     }
 

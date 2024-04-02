@@ -361,13 +361,6 @@ class SessionModel extends Model {
     );
   }
 
-  Widget shouldShowCASAds(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
-      'shouldShowCASAds',
-      builder: builder,
-    );
-  }
-
   Widget selectedTab(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
