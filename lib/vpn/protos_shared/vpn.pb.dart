@@ -892,15 +892,19 @@ class User extends $pb.GeneratedMessage {
 
 class APIResponse extends $pb.GeneratedMessage {
   factory APIResponse({
+    $core.String? status,
     $core.String? error,
-    $core.String? code,
+    $core.String? errorId,
   }) {
     final $result = create();
+    if (status != null) {
+      $result.status = status;
+    }
     if (error != null) {
       $result.error = error;
     }
-    if (code != null) {
-      $result.code = code;
+    if (errorId != null) {
+      $result.errorId = errorId;
     }
     return $result;
   }
@@ -909,8 +913,9 @@ class APIResponse extends $pb.GeneratedMessage {
   factory APIResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'APIResponse', createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'error')
-    ..aOS(2, _omitFieldNames ? '' : 'code')
+    ..aOS(1, _omitFieldNames ? '' : 'status')
+    ..aOS(2, _omitFieldNames ? '' : 'error')
+    ..aOS(3, _omitFieldNames ? '' : 'errorId', protoName: 'errorId')
     ..hasRequiredFields = false
   ;
 
@@ -936,22 +941,31 @@ class APIResponse extends $pb.GeneratedMessage {
   static APIResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get error => $_getSZ(0);
+  $core.String get status => $_getSZ(0);
   @$pb.TagNumber(1)
-  set error($core.String v) { $_setString(0, v); }
+  set status($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
-  $core.bool hasError() => $_has(0);
+  $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)
-  void clearError() => clearField(1);
+  void clearStatus() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get code => $_getSZ(1);
+  $core.String get error => $_getSZ(1);
   @$pb.TagNumber(2)
-  set code($core.String v) { $_setString(1, v); }
+  set error($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasCode() => $_has(1);
+  $core.bool hasError() => $_has(1);
   @$pb.TagNumber(2)
-  void clearCode() => clearField(2);
+  void clearError() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get errorId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set errorId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasErrorId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearErrorId() => clearField(3);
 }
 
 
