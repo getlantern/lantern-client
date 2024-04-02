@@ -890,6 +890,70 @@ class User extends $pb.GeneratedMessage {
   void clearYinbiEnabled() => clearField(12);
 }
 
+class APIResponse extends $pb.GeneratedMessage {
+  factory APIResponse({
+    $core.String? error,
+    $core.String? code,
+  }) {
+    final $result = create();
+    if (error != null) {
+      $result.error = error;
+    }
+    if (code != null) {
+      $result.code = code;
+    }
+    return $result;
+  }
+  APIResponse._() : super();
+  factory APIResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory APIResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'APIResponse', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'error')
+    ..aOS(2, _omitFieldNames ? '' : 'code')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  APIResponse clone() => APIResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  APIResponse copyWith(void Function(APIResponse) updates) => super.copyWith((message) => updates(message as APIResponse)) as APIResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static APIResponse create() => APIResponse._();
+  APIResponse createEmptyInstance() => create();
+  static $pb.PbList<APIResponse> createRepeated() => $pb.PbList<APIResponse>();
+  @$core.pragma('dart2js:noInline')
+  static APIResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<APIResponse>(create);
+  static APIResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get error => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set error($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasError() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearError() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get code => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set code($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasCode() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCode() => clearField(2);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

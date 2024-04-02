@@ -141,7 +141,10 @@ func sendError(err error) *C.char {
 	if err == nil {
 		return C.CString("")
 	}
-	return C.CString(err.Error())
+	b, _ := json.Marshal(map[string]interface{}{
+		"error": err.Error(),
+	})
+	return C.CString(string(b))
 }
 
 //export selectedTab
@@ -204,6 +207,30 @@ func devices() *C.char {
 	}
 	b, _ := json.Marshal(user.Devices)
 	return C.CString(string(b))
+}
+
+func sendJson(resp any) *C.char {
+	b, _ := json.Marshal(resp)
+	return C.CString(string(b))
+}
+
+//export approveDevice
+func approveDevice(code *C.char) *C.char {
+	resp, err := proClient.LinkCodeApprove(userConfig(), C.GoString(code))
+	if err != nil {
+		return sendError(err)
+	}
+	return sendJson(resp)
+}
+
+//export removeDevice
+func removeDevice(deviceId *C.char) *C.char {
+	resp, err := proClient.DeviceRemove(userConfig(), C.GoString(deviceId))
+	if err != nil {
+		log.Error(err)
+		return sendError(err)
+	}
+	return sendJson(resp)
 }
 
 //export expiryDate

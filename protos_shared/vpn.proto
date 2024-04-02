@@ -70,3 +70,9 @@ message User {
   string token = 11;
   bool yinbiEnabled = 12;
 }
+
+message APIResponse {
+  string status = 1;
+  string error = 2;
+  string errorId = 3;
+}

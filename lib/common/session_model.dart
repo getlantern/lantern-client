@@ -331,16 +331,22 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<String> approveDevice(String code) {
-    return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
-      'code': code,
-    }).then((value) => value as String);
+  Future<String> approveDevice(String code) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
+        'code': code,
+      }).then((value) => value as String);
+    }
+    return await ffiApproveDevice(code.toNativeUtf8());
   }
 
-  Future<void> removeDevice(String deviceId) {
-    return methodChannel.invokeMethod('removeDevice', <String, dynamic>{
-      'deviceId': deviceId,
-    });
+  Future<void> removeDevice(String deviceId) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('removeDevice', <String, dynamic>{
+        'deviceId': deviceId,
+      });
+    }
+    return await ffiRemoveDevice(deviceId.toNativeUtf8());
   }
 
   Future<void> resendRecoveryCode() {

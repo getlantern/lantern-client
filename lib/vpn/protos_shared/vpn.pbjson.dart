@@ -199,3 +199,17 @@ final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
     'JyYWwSFAoFdG9rZW4YCyABKAlSBXRva2VuEiIKDHlpbmJpRW5hYmxlZBgMIAEoCFIMeWluYmlF'
     'bmFibGVk');
 
+@$core.Deprecated('Use aPIResponseDescriptor instead')
+const APIResponse$json = {
+  '1': 'APIResponse',
+  '2': [
+    {'1': 'error', '3': 1, '4': 1, '5': 9, '10': 'error'},
+    {'1': 'code', '3': 2, '4': 1, '5': 9, '10': 'code'},
+  ],
+};
+
+/// Descriptor for `APIResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List aPIResponseDescriptor = $convert.base64Decode(
+    'CgtBUElSZXNwb25zZRIUCgVlcnJvchgBIAEoCVIFZXJyb3ISEgoEY29kZRgCIAEoCVIEY29kZQ'
+    '==');
+

@@ -40,6 +40,28 @@ Future<User> ffiUserData() async {
   return User.create()..mergeFromProto3Json(jsonDecode(res));
 }
 
+// checkAPIError creates and returns an API response from the given json.
+// It throws an exception if the response contains an error
+APIResponse checkAPIError(json, errorMessage) {
+  final result = APIResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  if (result.error != "") {
+    throw PlatformException(code: result.error, message: errorMessage);
+  }
+  return result;
+}
+
+Future<String> ffiApproveDevice(code) async {
+  final json = await _bindings.approveDevice(code).cast<Utf8>().toDartString();
+  checkAPIError(json, 'cannot_link_devices'.i18n);
+  return json;
+}
+
+Future<void> ffiRemoveDevice(deviceId) async {
+  final json = await _bindings.removeDevice(deviceId).cast<Utf8>().toDartString();
+  checkAPIError(json, 'cannot_link_devices'.i18n);
+  return;
+}
+
 Pointer<Utf8> ffiDevices() => _bindings.devices().cast<Utf8>();
 
 Pointer<Utf8> ffiDevelopmentMode() => _bindings.developmentMode().cast<Utf8>();
