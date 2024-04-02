@@ -1,7 +1,6 @@
 package org.getlantern.lantern.model
 
 import android.app.Application
-import android.text.TextUtils
 import io.lantern.model.Vpn
 import org.getlantern.lantern.activity.WelcomeActivity_
 import org.getlantern.mobilesdk.Logger
@@ -339,11 +338,16 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                 if (methods.providers.isEmpty()) {
                     return@forEachIndexed
                 }
+
                 val path = PAYMENT_METHODS + index
                 val planItem =
                     Vpn.PaymentMethod.newBuilder().setMethod(methods.method.toString().lowercase())
                         .addAllProviders(
                             methods.providers.map {
+                                // Check if payment provider is stipe add pubkey
+                                if (it.name == PaymentProvider.Stripe) {
+                                    setStripePubKey(it.data["pubKey"] as String)
+                                }
                                 Vpn.PaymentProviders.newBuilder()
                                     .setName(it.name.toString().lowercase())
                                     .addAllLogoUrls(it.logoUrl)

@@ -46,7 +46,7 @@ class PaymentsUtil(private val activity: Activity) {
                     date[1].toInt(), // expYear
                     cvc,
                 )
-            val stripe: Stripe = Stripe(activity, session.stripePubKey()!!)
+            val stripe = Stripe(activity, session.stripePubKey()!!)
             stripe.createCardToken(
                 card,
                 callback =
