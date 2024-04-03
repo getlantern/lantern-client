@@ -185,11 +185,11 @@ func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, confi
 }
 
 func (c *iosClient) start() (ClientWriter, error) {
-	if err := c.loadUserConfig(); err != nil {
-		return nil, log.Errorf("error loading user config: %v", err)
-	}
+	// if err := c.loadUserConfig(); err != nil {
+	// 	return nil, log.Errorf("error loading user config: %v", err)
+	// }
 
-	log.Debugf("Running client for device '%v' at config path '%v'", c.uc.GetDeviceID(), c.configDir)
+	log.Debugf("Running client at config path '%v'", c.configDir)
 	log.Debugf("Max buffer bytes: %d", buffers.MaxBufferBytes())
 
 	dialers, err := c.loadDialers()
