@@ -66,6 +66,8 @@ Future<void> ffiRemoveDevice(String deviceId) async {
   final json = await _bindings.removeDevice(deviceId.toPointerChar()).cast<Utf8>().toDartString();
   final result = LinkResponse.create()..mergeFromProto3Json(jsonDecode(json));
   checkAPIError(result, 'cannot_remove_device'.i18n);
+  // refresh user data after removing a device
+  await ffiUserData();
   return;
 }
 
