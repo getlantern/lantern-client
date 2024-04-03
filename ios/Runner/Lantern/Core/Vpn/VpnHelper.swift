@@ -20,7 +20,7 @@ class VpnHelper: NSObject {
   // MARK: State
   static let didUpdateStateNotification = Notification.Name("Lantern.didUpdateState")
   enum VPNState: Equatable {
-    case configuring
+    //    case configuring
     case idle(Error?)
     case connecting
     case connected
@@ -30,12 +30,6 @@ class VpnHelper: NSObject {
       return false
     }
   }
-  var configuring: Bool {
-    didSet {
-      guard oldValue != configuring else { return }
-      notificationCenter.post(name: VpnHelper.didUpdateStateNotification, object: nil)
-    }
-  }
 
   private let stateLock = NSLock()
   private var _state: VPNState
@@ -43,9 +37,6 @@ class VpnHelper: NSObject {
     get {
       stateLock.lock()
       defer { stateLock.unlock() }
-      if configuring {
-        return .configuring
-      }
       return _state
     }
 
@@ -72,9 +63,6 @@ class VpnHelper: NSObject {
   let vpnManager: VPNBase
   var configFetchTimer: Timer!
   var hasConfiguredThisSession = false
-  var hasFetchedConfigOnce: Bool {
-    return (userDefaults.value(forKey: VpnHelper.hasFetchedConfigDefaultsKey) as? Bool) ?? false
-  }
 
   init(
     constants: Constants,
@@ -91,12 +79,8 @@ class VpnHelper: NSObject {
     self.notificationCenter = notificationCenter
     self.flashlightManager = flashlightManager
     self.vpnManager = vpnManager
-    configuring = true
     _state = .idle(nil)
     super.init()
-    if self.hasFetchedConfigOnce {
-      self.configuring = false
-    }
     performAppSetUp()
   }
 
@@ -124,7 +108,7 @@ class VpnHelper: NSObject {
     // create process-specific directory @ ~/app
 
     do {
-        try fileManager.ensureDirectoryExists(at: Constants.lanternDirectory)
+      try fileManager.ensureDirectoryExists(at: Constants.lanternDirectory)
     } catch {
       logger.error("Failed to create directory @ \(Constants.lanternDirectory.path)")
     }
@@ -163,10 +147,9 @@ class VpnHelper: NSObject {
     onError: ((Error) -> Void)? = nil,
     onSuccess: (() -> Void)? = nil
   ) {
-    //guard state.isIdle else { return }
-    logger.debug("VpnHelper startVPN called")
+    logger.debug("VpnHelper startVPN called  \(state)")
     guard state.isIdle else { return }
-    self.configuring = false
+    logger.debug("VpnHelper state \(state)")
     initiateVPNStart(onError: onError, onSuccess: onSuccess)
   }
 
@@ -241,30 +224,3 @@ extension VpnHelper {
   }
 }
 
-extension VpnHelper {
-  // MARK: Pro
-  var userID: Int {
-    return self.userDefaults.integer(forKey: Constants.userID)
-  }
-
-  var proToken: String? {
-    return self.userDefaults.string(forKey: Constants.proToken)
-  }
-
-  var isPro: Bool {
-    if !self.userDefaults.bool(forKey: Constants.isPro) {
-      return false
-    }
-
-    if self.userID == 0 {
-      return false
-    }
-
-    let pt = self.proToken
-    if pt == nil || pt?.isEmpty == true {
-      return false
-    }
-
-    return true
-  }
-}

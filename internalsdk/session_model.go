@@ -231,29 +231,29 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if err != nil {
 		return err
 	}
-	// Check if user is already registered or not
-	userId, err := m.GetUserID()
-	if err != nil {
-		return err
-	}
-	log.Debugf("UserId is %v", userId)
-	if userId == 0 {
-		local, err := m.Locale()
-		if err != nil {
-			return err
-		}
-		// Create user
-		err = userCreate(m.baseModel, local)
-		if err != nil {
-			return err
-		}
-	}
+	// // Check if user is already registered or not
+	// userId, err := m.GetUserID()
+	// if err != nil {
+	// 	return err
+	// }
+	// log.Debugf("UserId is %v", userId)
+	// if userId == 0 {
+	// 	local, err := m.Locale()
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	// Create user
+	// 	err = userCreate(m.baseModel, local)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// }
 
-	// Get all user details
-	err = userDetail(m)
-	if err != nil {
-		return err
-	}
+	// // Get all user details
+	// err = userDetail(m)
+	// if err != nil {
+	// 	return err
+	// }
 	return checkAdsEnabled(m)
 }
 
