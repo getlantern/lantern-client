@@ -2,9 +2,6 @@ import 'package:lantern/ad_helper.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
-import 'package:tray_manager/tray_manager.dart';
-
-import '../ad_helper.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -98,6 +95,19 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
                 );
               }));
         });
+        adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
+        return Transform.scale(
+            scale: 2,
+            child: vpnModel.vpnStatus(
+                (BuildContext context, String vpnStatus, Widget? child) {
+              return FlutterSwitch(
+                value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+                activeColor: onSwitchColor,
+                inactiveColor: offSwitchColor,
+                onToggle: (bool newValue) =>
+                    vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
+              );
+            }));
       });
     } else {
       // This ui for desktop
