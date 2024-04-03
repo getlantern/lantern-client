@@ -126,7 +126,7 @@ For compiled code lives in `./ios/internalsdk/` and is called `Internalsdk.xcfra
 The desktop app lives under `desktop` .. To build the Go shared library on macOS:
 
 ```
-make darwin
+make darwin ffigen
 ```
 
 Then to run the Flutter app on macOS:
