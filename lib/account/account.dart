@@ -116,8 +116,8 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      if (Platform.isAndroid)
-        ListItemFactory.settingsItem(
+
+      ListItemFactory.settingsItem(
           icon: ImagePaths.devices,
           content: 'add_device'.i18n,
           onTap: () async => await context.pushRoute(ApproveDevice()),

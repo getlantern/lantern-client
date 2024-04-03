@@ -331,16 +331,22 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<String> approveDevice(String code) {
-    return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
-      'code': code,
-    }).then((value) => value as String);
+  Future<String> approveDevice(String code) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
+        'code': code,
+      }).then((value) => value as String);
+    }
+    return await compute(ffiApproveDevice, code);
   }
 
-  Future<void> removeDevice(String deviceId) {
-    return methodChannel.invokeMethod('removeDevice', <String, dynamic>{
-      'deviceId': deviceId,
-    });
+  Future<void> removeDevice(String deviceId) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('removeDevice', <String, dynamic>{
+        'deviceId': deviceId,
+      });
+    }
+    return await compute(ffiRemoveDevice, deviceId);
   }
 
   Future<void> resendRecoveryCode() {
@@ -742,7 +748,7 @@ class SessionModel extends Model {
         'emailAddress': email,
       }).then((value) => value as String);
     }
-    await ffiEmailExists(email.toNativeUtf8());
+    await compute(ffiEmailExists, email);
   }
 
   Future<void> openWebview(String url) {
