@@ -337,7 +337,7 @@ class SessionModel extends Model {
         'code': code,
       }).then((value) => value as String);
     }
-    return await ffiApproveDevice(code.toNativeUtf8());
+    return await compute(ffiApproveDevice, code);
   }
 
   Future<void> removeDevice(String deviceId) async {
@@ -346,7 +346,7 @@ class SessionModel extends Model {
         'deviceId': deviceId,
       });
     }
-    return await ffiRemoveDevice(deviceId.toNativeUtf8());
+    return await compute(ffiRemoveDevice, deviceId);
   }
 
   Future<void> resendRecoveryCode() {
@@ -748,7 +748,7 @@ class SessionModel extends Model {
         'emailAddress': email,
       }).then((value) => value as String);
     }
-    await ffiEmailExists(email.toNativeUtf8());
+    await compute(ffiEmailExists, email);
   }
 
   Future<void> openWebview(String url) {

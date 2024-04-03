@@ -6,6 +6,12 @@ import 'package:lantern/common/common.dart';
 
 import 'generated_bindings.dart';
 
+extension StringEx on String {
+  Pointer<Char> toPointerChar() {
+    return this.toNativeUtf8().cast<Char>();
+  }
+}
+
 void sysProxyOn() => _bindings.sysProxyOn();
 
 void sysProxyOff() => _bindings.sysProxyOff();
@@ -47,8 +53,8 @@ void checkAPIError(result, errorMessage) {
   }
 }
 
-Future<String> ffiApproveDevice(code) async {
-  final json = await _bindings.approveDevice(code).cast<Utf8>().toDartString();
+Future<String> ffiApproveDevice(String code) async {
+  final json = await _bindings.approveDevice(code.toPointerChar()).cast<Utf8>().toDartString();
   final result = APIResponse.create()..mergeFromProto3Json(jsonDecode(json));
   checkAPIError(result, 'wrong_device_linking_code'.i18n);
   // refresh user data after successfully linking device
@@ -56,8 +62,8 @@ Future<String> ffiApproveDevice(code) async {
   return json;
 }
 
-Future<void> ffiRemoveDevice(deviceId) async {
-  final json = await _bindings.removeDevice(deviceId).cast<Utf8>().toDartString();
+Future<void> ffiRemoveDevice(String deviceId) async {
+  final json = await _bindings.removeDevice(deviceId.toPointerChar()).cast<Utf8>().toDartString();
   final result = LinkResponse.create()..mergeFromProto3Json(jsonDecode(json));
   checkAPIError(result, 'cannot_remove_device'.i18n);
   return;
@@ -72,8 +78,8 @@ Pointer<Utf8> ffiAcceptedTermsVersion() =>
 
 Pointer<Utf8> ffiEmailAddress() => _bindings.emailAddress().cast<Utf8>();
 
-Pointer<Utf8> ffiEmailExists(email) =>
-    _bindings.emailExists(email).cast<Utf8>();
+Pointer<Utf8> ffiEmailExists(String email) =>
+    _bindings.emailExists(email.toPointerChar()).cast<Utf8>();
 
 Pointer<Utf8> ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
   final result =
