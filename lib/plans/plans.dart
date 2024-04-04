@@ -11,6 +11,7 @@ class PlansPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FullScreenDialog(
+      bgColor: white,
       widget: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return sessionModel.plans(
@@ -20,6 +21,7 @@ class PlansPage extends StatelessWidget {
             Widget? child,
           ) {
             if (plans.isEmpty) {
+              // show user option to retry
               return RetryWidget(onRetryTap: () => onRetryTap(context));
             }
             return Column(
@@ -40,7 +42,7 @@ class PlansPage extends StatelessWidget {
                         child: Column(
                           children: [
                             // * Renewal text or upsell
-                            if (proUser && plans.last.value.renewalText != '')
+                            if (plans.last.value.renewalText != '')
                               Padding(
                                 padding: const EdgeInsetsDirectional.only(
                                   bottom: 12.0,
@@ -136,9 +138,9 @@ class PlansPage extends StatelessWidget {
 
   Widget _buildFooter(BuildContext context, bool proUser) {
     return Container(
-      // height: 45,
       alignment: Alignment.center,
       width: double.infinity,
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(width: 1.0, color: grey3),
@@ -149,7 +151,7 @@ class PlansPage extends StatelessWidget {
         onTap: () async => await context.pushRoute(
           ResellerCodeCheckout(isPro: proUser),
         ),
-        child: CText(
+        child: Text(
           'Have a Lantern Pro activation code? Click here.',
           style: tsBody1.copiedWith(color: grey5),
         ),

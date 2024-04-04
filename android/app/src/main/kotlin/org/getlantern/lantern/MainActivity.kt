@@ -269,7 +269,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
-//        sessionModel.updatePaymentMethods()
+        sessionModel.updatePaymentMethods(null)
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
