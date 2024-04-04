@@ -241,7 +241,6 @@ func (app *App) Run(isMain bool) {
 			app.Flags.VPN,
 			func() bool { return app.settings.getBool(SNDisconnected) }, // check whether we're disconnected
 			app.settings.GetProxyAll,
-			app.settings.GetGoogleAds,
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
 			app.Flags.AsMap(),
@@ -251,16 +250,7 @@ func (app *App) Run(isMain bool) {
 			app.statsTracker,
 			app.IsPro,
 			app.settings.GetLanguage,
-			func() string {
-				isPro, statusKnown := app.isProUserFast()
-				if (isPro || !statusKnown) && !common.ForceAds() {
-					// pro user (or status unknown), don't ad swap
-					return ""
-				}
-				return app.PlansURL()
-			},
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-			app.AdTrackURL,
 			app.analyticsSession.EventWithLabel,
 		)
 		if err != nil {
@@ -407,6 +397,12 @@ func (app *App) GetLanguage() string {
 // SetLanguage sets the user language
 func (app *App) SetLanguage(lang string) {
 	app.settings.SetLanguage(lang)
+	if app.ws != nil {
+		app.ws.SendMessage("pro", map[string]interface{}{
+			"type":     "pro",
+			"language": lang,
+		})
+	}
 }
 
 // OnSettingChange sets a callback cb to get called when attr is changed from server.

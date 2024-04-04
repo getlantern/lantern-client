@@ -273,14 +273,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
-  clever_ads_solutions:
-    dependency: "direct main"
-    description:
-      name: clever_ads_solutions
-      sha256: "2e5ad684a2c105ffd296cf47c19c589e2385854fc9674810834776deec62d19e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.4"
   cli_util:
     dependency: transitive
     description:
@@ -377,14 +369,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
-  dartz:
-    dependency: transitive
-    description:
-      name: dartz
-      sha256: e6acf34ad2e31b1eb00948692468c30ab48ac8250e0f0df661e29f12dd252168
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.1"
   dbus:
     dependency: transitive
     description:
@@ -812,10 +796,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_mobile_ads
-      sha256: d2ef5ec1e1f31137fc241bdeab3037c31062d387dd221fd884fb1160444c788b
+      sha256: f07d4e2ebf56181e8dd18ee810607e84aeac8add5251bb44c1c886af47ff021a
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "5.0.0"
   graphs:
     dependency: transitive
     description:
@@ -1638,10 +1622,10 @@ packages:
     dependency: "direct main"
     description:
       name: tray_manager
-      sha256: "4ab709d70a4374af172f8c39e018db33a4271265549c6fc9d269a65e5f4b0225"
+      sha256: e0ac9a88b2700f366b8629b97e8663b6ef450a2f169560a685dc167bfe9c9c29
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.1"
+    version: "0.2.2"
   typed_data:
     dependency: transitive
     description:

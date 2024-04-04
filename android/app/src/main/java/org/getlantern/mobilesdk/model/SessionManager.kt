@@ -244,17 +244,8 @@ abstract class SessionManager(application: Application) : Session {
         prefs.edit().putBoolean(ADS_ENABLED, enabled).apply()
     }
 
-    override fun setCASShowInterstitialAdsEnabled(enabled: Boolean) {
-        Logger.d(TAG, "Setting $CAS_ADS_ENABLED to $enabled")
-        prefs.edit().putBoolean(CAS_ADS_ENABLED, enabled).apply()
-    }
-
     fun shouldShowAdsEnabled(): Boolean {
         return prefs.getBoolean(ADS_ENABLED, false)
-    }
-
-    fun shouldCASShowAdsEnabled(): Boolean {
-        return prefs.getBoolean(CAS_ADS_ENABLED, false)
     }
 
     //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)

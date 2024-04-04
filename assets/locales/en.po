@@ -178,6 +178,12 @@ msgstr "Slow"
 msgid "cannot_link_devices"
 msgstr "Cannot link devices"
 
+msgid "wrong_device_linking_code"
+msgstr "Wrong or invalid device linking code"
+
+msgid "cannot_remove_device"
+msgstr "Cannot remove device"
+
 msgid "application_crashes"
 msgstr "Application crashes"
 

@@ -44,7 +44,19 @@ class PaymentsUtil(private val activity: Activity) {
                     date[1].toInt(), // expYear
                     cvc,
                 )
-            val stripe: Stripe = Stripe(activity, session.stripePubKey()!!)
+
+            val stripeKey = session.stripePubKey()
+            //Make sure if key null throw error
+            if (stripeKey.isNullOrEmpty()) {
+                Logger.error(TAG, "Stripe public key is not set")
+                methodCallResult.error(
+                    "errorSubmittingToStripe",
+                    activity.getString(R.string.error_making_purchase),
+                    null,
+                )
+                return
+            }
+            val stripe = Stripe(activity, session.stripePubKey()!!)
             stripe.createCardToken(
                 card,
                 callback =

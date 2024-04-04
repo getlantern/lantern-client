@@ -15,8 +15,7 @@ env:
   S3_BUCKET: lantern
 jobs:
     set-version:
-      runs-on:
-        group: large-runners
+      runs-on: ubuntu-latest
       outputs:
         version: ${{ steps.set-version.outputs.version }}
         prefix: ${{ steps.set-version.outputs.prefix }}
@@ -240,8 +239,7 @@ jobs:
           s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
 
     push-binaries:
-      runs-on:
-        group: large-runners
+      runs-on: ubuntu-latest
       needs: [ set-version, build-android, build-darwin, build-linux, build-windows-x64 ]
       env:
         version: ${{ needs.set-version.outputs.version }}
@@ -250,11 +248,7 @@ jobs:
         - name: Download the mac build output
           uses: actions/download-artifact@v4
           with:
-            name: mac-build
-        - name: Download the mac arm build output
-          uses: actions/download-artifact@v4
-          with:
-            name: mac_arm-build
+            name: osx-build
         - name: Download the linux build output
           uses: actions/download-artifact@v4
           with:
@@ -296,8 +290,7 @@ jobs:
             diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
             diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
             mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
-            mv -f lantern-installer-mac.dmg ${{ env.prefix }}-mac.dmg
-            mv -f lantern-installer-mac_arm.dmg ${{ env.prefix }}-mac_arm.dmg
+            mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
             diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
         - name: Prepare sha256 sums
           run: |

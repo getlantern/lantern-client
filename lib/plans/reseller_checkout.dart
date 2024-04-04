@@ -201,19 +201,5 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
             .toString(), // This is coming localized
       );
     }
-
-    // .timeout(
-    // const Duration(seconds: 20),
-    // onTimeout: () => onAPIcallTimeout(
-    // code: 'redeemresellerCodeTimeout',
-    // message: 'reseller_timeout'.i18n,
-    // ),
-    // )
-    //     .then((value) {
-    // context.loaderOverlay.hide();
-    // showSuccessDialog(context, widget.isPro, true);
-    // }).onError((error, stackTrace) {
-    //
-    // });
   }
 }
