@@ -1517,3 +1517,12 @@ msgstr "We're experiencing technical difficulties. Try again later."
 
 msgid "we_are_experiencing_technical_difficulties"
 msgstr "We're experiencing technical difficulties. Try again later."
+
+msgid "a_temporary_error_occurred"
+msgstr "A temporary error occurred"
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr "Sorry, we are unable to load that page at the moment, please tap ‘Refresh’ to try again."
+
+msgid "refresh"
+msgstr "Refresh"

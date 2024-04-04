@@ -2,7 +2,6 @@ package io.lantern.model
 
 import android.app.Activity
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
 import internalsdk.Internalsdk
@@ -12,7 +11,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.lantern.apps.AppsDataProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.FormBody
 import okhttp3.RequestBody
@@ -25,16 +23,18 @@ import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.restartApp
-import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.IssueReporter
@@ -177,6 +177,7 @@ class SessionModel(
             )
 
             "userStatus" -> userStatus(result)
+            "updatePaymentPlans" -> updatePaymentMethods(result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -285,6 +286,52 @@ class SessionModel(
         }
     }
 
+    fun updatePaymentMethods(result: MethodChannel.Result?) {
+        lanternClient.plansV3(
+            object : LanternHttpClient.PlansV3Callback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    result?.let {
+                        val errorId = error?.id
+                        activity.runOnUiThread {
+                            result.error("payment_method_fail", errorId, null)
+                        }
+                    }
+                    Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
+                }
+
+                override fun onSuccess(
+                    proPlans: Map<String, ProPlan>,
+                    paymentMethods: List<PaymentMethods>,
+
+                    ) {
+                    Logger.debug(TAG, "Successfully fetched payment methods")
+                    processPaymentMethods(proPlans, paymentMethods)
+                    result?.let {
+                        activity.runOnUiThread {
+                            result.success("Payment method successfully updated")
+                        }
+                    }
+                }
+            }
+        )
+    }
+
+
+    fun processPaymentMethods(
+        proPlans: Map<String, ProPlan>,
+        paymentMethods: List<PaymentMethods>,
+
+        ) {
+        for (planId in proPlans.keys) {
+            proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+        }
+        LanternApp.getSession().setUserPlans(proPlans)
+        LanternApp.getSession().setPaymentMethods(paymentMethods)
+    }
+
     // updateAppData looks up the app data for the given package name and updates whether or
     // not the app is allowed access to the VPN connection in the database
     private fun updateAppData(packageName: String, allowedAccess: Boolean) {
@@ -323,24 +370,6 @@ class SessionModel(
                 }
             }
 
-//            // Then add icons
-//            db.mutate { tx ->
-//                appsList.forEach {
-//                    val path = PATH_APPS_DATA + it.packageName
-//                    tx.get<Vpn.AppData>(path)?.let { existing ->
-//                        if (existing.icon.isEmpty) {
-//                            it.icon.let { icon ->
-//                                tx.put(
-//                                    path,
-//                                    existing.toBuilder()
-//                                        .setIcon(ByteString.copyFrom(icon))
-//                                        .build(),
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 
