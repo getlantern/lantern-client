@@ -5,6 +5,8 @@ import 'package:lantern/replica/search.dart';
 /// ReplicaHomeScreen is the entrypoint for the user to search through Replica.
 /// See docs/replica_home.png for a preview
 class ReplicaHomeScreen extends StatefulWidget {
+  const ReplicaHomeScreen({super.key});
+
   @override
   State<StatefulWidget> createState() => _ReplicaHomeScreenState();
 }
@@ -60,61 +62,10 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
       return ReplicaSearchScreen(
         currentQuery: currentQuery,
         currentTab: currentTab,
+        onBackButtonPressed: onBackButtonPressed,
       );
     }
-
-    // No active query, return the landing search bar instead
-    return GestureDetector(
-      onTap: () {
-        // Dismiss keyboard when clicking anywhere
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: BaseScreen(
-        actionButton: renderFap(context),
-        centerTitle: true,
-        title: 'discover'.i18n,
-        body: Stack(
-          children: [
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsetsDirectional.only(bottom: 46, top: 30),
-                      child: CAssetImage(
-                        path: ImagePaths.lantern_logo,
-                        size: 72,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 10.0, end: 10.0),
-                      child: SearchField(
-                        controller: _textEditingController,
-                        search: (query) async {
-                          await replicaModel.setSearchTerm(query);
-                          if (query != '') {
-                            setState(() {
-                              currentQuery = query;
-                              showResults = true;
-                            });
-                          }
-                        },
-                        onClear: () async {
-                          await replicaModel.setSearchTerm('');
-                          await replicaModel.setSearchTab(0);
-                        },
-                      ),
-                    ),
-                    renderDiscoverText(),
-                ],
-              ),
-            ),
-            // if (!showNewModal) renderNewDialog(context)
-          ],
-        ),
-      ),
-    );
+    return _buildSearchView();
   }
 
   void Function() renderNewDialog(BuildContext context, setSearchTab) {
@@ -130,6 +81,63 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
       },
       includeCancel: false,
     ).show(context);
+  }
+
+  Widget _buildSearchView() {
+    // No active query, return the landing search bar instead
+    return GestureDetector(
+      onTap: () {
+        // Dismiss keyboard when clicking anywhere
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: BaseScreen(
+        actionButton: renderFap(context),
+        centerTitle: true,
+        title: 'discover'.i18n,
+        automaticallyImplyLeading: false,
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsetsDirectional.only(bottom: 46, top: 30),
+                    child: CAssetImage(
+                      path: ImagePaths.lantern_logo,
+                      size: 72,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 10.0, end: 10.0),
+                    child: SearchField(
+                      controller: _textEditingController,
+                      search: (query) async {
+                        await replicaModel.setSearchTerm(query);
+                        if (query != '') {
+                          setState(() {
+                            currentQuery = query;
+                            showResults = true;
+                          });
+                        }
+                      },
+                      onClear: () async {
+                        await replicaModel.setSearchTerm('');
+                        await replicaModel.setSearchTab(0);
+                      },
+                    ),
+                  ),
+                  renderDiscoverText(),
+                ],
+              ),
+            ),
+            // if (!showNewModal) renderNewDialog(context)
+          ],
+        ),
+      ),
+    );
   }
 
   Widget renderDiscoverText() {
@@ -157,5 +165,14 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         await onUploadButtonPressed(context);
       },
     );
+  }
+
+//class methods
+  Future<void> onBackButtonPressed() async {
+    setState(() {
+      showResults = false;
+    });
+    await replicaModel.setSearchTerm('');
+    await replicaModel.setSearchTab(0);
   }
 }

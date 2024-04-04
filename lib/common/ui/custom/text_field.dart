@@ -86,6 +86,7 @@ class _CTextFieldState extends State<CTextField> {
   @override
   void initState() {
     super.initState();
+
     widget.controller.focusNode.addListener(() {
       setState(() {
         hasFocus = widget.controller.focusNode.hasFocus;

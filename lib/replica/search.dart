@@ -6,14 +6,17 @@ import 'package:lantern/replica/common.dart';
 // 'image' tab, which is a child of GridView)
 // Looks like this: docs/replica_search_tabs.png
 class ReplicaSearchScreen extends StatefulWidget {
-  ReplicaSearchScreen({
-    Key? key,
+  const ReplicaSearchScreen({
+    super.key,
     required this.currentQuery,
     required this.currentTab,
+    required this.onBackButtonPressed,
   });
 
   final String currentQuery;
   final int currentTab;
+
+  final VoidCallback onBackButtonPressed;
 
   @override
   _ReplicaSearchScreenState createState() => _ReplicaSearchScreenState();
@@ -41,6 +44,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
   Widget build(BuildContext context) {
     return BaseScreen(
       centerTitle: true,
+      onBackButtonPressed: widget.onBackButtonPressed,
       title: GestureDetector(
         child: CText(
           'discover'.i18n,
@@ -85,7 +89,8 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
             ),
             const SizedBox(
               height: 10,
-            ), // <08-22-22, echo> I feel like the standard list view under tabs scrolls directly under tab (no padding) no?
+            ),
+            // <08-22-22, echo> I feel like the standard list view under tabs scrolls directly under tab (no padding) no?
             TabBar(
               controller: tabController,
               onTap: (tab) async => await replicaModel.setSearchTab(tab),
