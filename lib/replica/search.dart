@@ -42,6 +42,7 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
 
   @override
   Widget build(BuildContext context) {
+    print("Replica Search");
     return BaseScreen(
       centerTitle: true,
       onBackButtonPressed: widget.onBackButtonPressed,
@@ -72,24 +73,13 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
             const SizedBox(height: 30),
             SearchField(
               controller: textEditingController,
-              search: (query) async {
-                FocusScope.of(context).requestFocus(FocusNode());
-                await replicaModel.setSearchTerm(query);
-                await replicaModel.setSearchTab(tabController.index);
-                if (textEditingController.text != '') {
-                  setState(() {
-                    searchQuery = textEditingController.text;
-                  });
-                }
-              },
+              search: onSearch,
               onClear: () async {
                 await replicaModel.setSearchTerm('');
                 await replicaModel.setSearchTab(0);
               },
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             // <08-22-22, echo> I feel like the standard list view under tabs scrolls directly under tab (no padding) no?
             TabBar(
               controller: tabController,
@@ -101,21 +91,11 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
               labelStyle: tsSubtitle2,
               labelColor: pink4,
               tabs: <Widget>[
-                Tab(
-                  text: 'videos'.i18n,
-                ),
-                Tab(
-                  text: 'images'.i18n,
-                ),
-                Tab(
-                  text: 'audio'.i18n,
-                ),
-                Tab(
-                  text: 'document'.i18n,
-                ),
-                Tab(
-                  text: 'app'.i18n,
-                ),
+                Tab(text: 'videos'.i18n),
+                Tab(text: 'images'.i18n),
+                Tab(text: 'audio'.i18n),
+                Tab(text: 'document'.i18n),
+                Tab(text: 'app'.i18n),
               ],
             ),
             const SizedBox(height: 10),
@@ -158,5 +138,17 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
         );
       }),
     );
+  }
+
+  // class methods
+  Future<void> onSearch(String query) async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    await replicaModel.setSearchTerm(query);
+    await replicaModel.setSearchTab(tabController.index);
+    if (textEditingController.text != '') {
+      setState(() {
+        searchQuery = textEditingController.text;
+      });
+    }
   }
 }

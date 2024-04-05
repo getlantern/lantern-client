@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/vpn/vpn.dart';
@@ -415,4 +416,17 @@ String humanizeCreationDate(BuildContext context, String creationDate) {
   final humanizedCreationDate = DateTime.parse(creationDate);
   final formattedDate = dateFormat.format(humanizedCreationDate);
   return 'replica_layout_creation_date'.i18n.fill([formattedDate]);
+}
+
+class CustomCacheManager {
+  static const key = 'replica_image_cache_manager';
+  static CacheManager instance = CacheManager(
+    Config(
+      key,
+      stalePeriod: const Duration(days: 2),
+      maxNrOfCacheObjects: 100,
+      repo: JsonCacheInfoRepository(databaseName: key),
+      fileService: HttpFileService(),
+    ),
+  );
 }

@@ -4,8 +4,8 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 
 abstract class ReplicaCommonListView extends StatefulWidget {
-  ReplicaCommonListView({
-    Key? key,
+  const ReplicaCommonListView({
+    super.key,
     required this.replicaApi,
     required this.searchQuery,
     required this.searchCategory,
@@ -23,7 +23,7 @@ abstract class ReplicaCommonListViewState extends State<ReplicaCommonListView> {
 
   @override
   void initState() {
-    logger.v('applistview: $lastSearchQuery');
+    logger.t('applistview: $lastSearchQuery');
 
     lastSearchQuery = widget.searchQuery;
     pagingController.addPageRequestListener((pageKey) {

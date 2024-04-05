@@ -4,7 +4,7 @@ import 'package:lantern/replica/common.dart';
 
 // @echo
 class ReplicaVideoListItem extends StatelessWidget {
-  ReplicaVideoListItem({
+  const ReplicaVideoListItem({
     required this.item,
     required this.onTap,
     required this.replicaApi,
@@ -19,11 +19,14 @@ class ReplicaVideoListItem extends StatelessWidget {
   // CachedNetworkVideo takes care of the caching for list items in a sensible way.
   // If there's no duration (i.e., request failed), don't render it.
   // If there's no thumbnail (i.e., request failed), render a black box
-  Widget renderMetadata() {
+  Widget renderMetadata(BuildContext context) {
     // <08-22-22, kalli> Keeps throwing uncaught exceptions
     // See https://github.com/Baseflow/flutter_cached_network_image/issues/273 - really annoying!! 😠
     // Maybe try this: https://github.com/Baseflow/flutter_cached_network_image/issues/536#issuecomment-1216715184
     return CachedNetworkImage(
+      cacheManager: CustomCacheManager.instance,
+      maxHeightDiskCache: 150,
+      maxWidthDiskCache: (MediaQuery.of(context).size.width * .5).toInt(),
       imageBuilder: (context, imageProvider) {
         return Padding(
           padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
@@ -147,7 +150,7 @@ class ReplicaVideoListItem extends StatelessWidget {
       content: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          renderMetadata(),
+          renderMetadata(context),
           Expanded(
             child: Padding(
               padding: const EdgeInsetsDirectional.all(8.0),
