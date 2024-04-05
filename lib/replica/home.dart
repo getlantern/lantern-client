@@ -13,8 +13,8 @@ class ReplicaHomeScreen extends StatefulWidget {
 
 class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
-  late final _textEditingController =
-      CustomTextEditingController(formKey: _formKey);
+  CustomTextEditingController? _textEditingController;
+
   late bool showResults = false;
   late String currentQuery = '';
   late int currentTab = 0;
@@ -31,7 +31,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
     super.initState();
     replicaModel.getSearchTerm().then((String cachedSearchTerm) {
       if (cachedSearchTerm.isNotEmpty) {
-        _textEditingController.initialValue = cachedSearchTerm;
+        _textEditingController?.initialValue = cachedSearchTerm;
         setState(() {
           currentQuery = cachedSearchTerm;
           showResults = true;
@@ -55,6 +55,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("Home called");
     // We are showing the ReplicaSearchScreen here since we want the bottom tabs to be visible (they are not if it's its own route)
     // <08-23-22, kalli>  Not ideal UX - maybe add a spinner? Not sure
     // <09-07-22, kalli> Update after testing a debug build - this is not very noticeable.
@@ -65,6 +66,8 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         onBackButtonPressed: onBackButtonPressed,
       );
     }
+    // we need to initialize controller again coz we when switch widget controller is getting disposed
+    _textEditingController = CustomTextEditingController(formKey: _formKey);
     return _buildSearchView();
   }
 
@@ -113,7 +116,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
                     padding: const EdgeInsetsDirectional.only(
                         start: 10.0, end: 10.0),
                     child: SearchField(
-                      controller: _textEditingController,
+                      controller: _textEditingController!,
                       search: (query) async {
                         await replicaModel.setSearchTerm(query);
                         if (query != '') {
