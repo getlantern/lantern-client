@@ -29,7 +29,6 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
   late final TabController tabController =
       // Video + Image + Audio + Document + App  = 5 categories
       TabController(length: 5, vsync: this);
-  final formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
   late final CustomTextEditingController textEditingController = widget.textEditingController;
   late String searchQuery = widget.currentQuery;
   late int searchTab = widget.currentTab;
