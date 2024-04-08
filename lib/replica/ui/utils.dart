@@ -6,6 +6,7 @@ import 'package:lantern/replica/common.dart';
 import 'package:lantern/vpn/vpn.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -419,14 +420,55 @@ String humanizeCreationDate(BuildContext context, String creationDate) {
 }
 
 class CustomCacheManager {
+  static final CustomCacheManager _instance = CustomCacheManager._internal();
+
+  CustomCacheManager._internal();
+
+  factory CustomCacheManager() {
+    return _instance;
+  }
+
   static const key = 'replica_image_cache_manager';
-  static CacheManager instance = CacheManager(
+  static const int _maxCacheSize = 100 * 1024 * 1024; // 100 MB cache limit
+
+  static CacheManager customCacheInstance = CacheManager(
     Config(
       key,
-      stalePeriod: const Duration(days: 2),
-      maxNrOfCacheObjects: 100,
+      stalePeriod: const Duration(days: 3),
+      maxNrOfCacheObjects: 200,
       repo: JsonCacheInfoRepository(databaseName: key),
       fileService: HttpFileService(),
     ),
   );
+
+  Future<void> _cleanUpCache() async {
+    final cacheManager = DefaultCacheManager();
+    await cacheManager.emptyCache();
+  }
+
+  Future<void> clearCacheIfExceeded() async {
+    final cacheDir = await getTemporaryDirectory();
+    final cacheSize = _calculateCacheSize(cacheDir);
+
+    if (cacheSize > _maxCacheSize) {
+      _cleanUpCache();
+      appLogger.i('Cache cleared due to exceeding limit.');
+    } else {
+      appLogger.i('Cache size within limit: $cacheSize bytes.');
+    }
+  }
+
+  int _calculateCacheSize(FileSystemEntity file) {
+    if (file is File) {
+      return file.lengthSync();
+    } else if (file is Directory) {
+      int sum = 0;
+      List<FileSystemEntity> children = file.listSync();
+      for (FileSystemEntity child in children) {
+        sum += _calculateCacheSize(child);
+      }
+      return sum;
+    }
+    return 0;
+  }
 }
