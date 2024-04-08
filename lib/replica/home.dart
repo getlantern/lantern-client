@@ -12,7 +12,8 @@ class ReplicaHomeScreen extends StatefulWidget {
 }
 
 class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
-  final textEditingController = CustomTextEditingController(formKey: GlobalKey<FormState>(debugLabel: 'replicaSearchInput'));
+  final textEditingController = CustomTextEditingController(
+      formKey: GlobalKey<FormState>(debugLabel: 'replicaSearchInput'));
 
   late bool showResults = false;
   late String currentQuery = '';
