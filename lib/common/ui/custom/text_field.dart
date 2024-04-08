@@ -78,24 +78,23 @@ class CTextField extends StatefulWidget {
 }
 
 class _CTextFieldState extends State<CTextField> {
-  var hasFocus = false;
-
+  final _focusNode = FocusNode();
   final fieldKey = GlobalKey<FormFieldState>();
   final scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-
-    widget.controller.focusNode.addListener(() {
-      setState(() {
-        hasFocus = widget.controller.focusNode.hasFocus;
-      });
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        FocusScope.of(context).requestFocus(_focusNode);
+      }
     });
   }
 
   @override
   void dispose() {
+    _focusNode.dispose();
     widget.controller.dispose();
     super.dispose();
   }
@@ -127,7 +126,7 @@ class _CTextFieldState extends State<CTextField> {
                 controller: widget.controller,
                 scrollPhysics: defaultScrollPhysics,
                 autovalidateMode: widget.autovalidateMode,
-                focusNode: widget.controller.focusNode,
+                focusNode: _focusNode,
                 keyboardType: widget.keyboardType,
                 maxLength: widget.maxLength,
                 validator: (value) {
@@ -209,11 +208,11 @@ class _CTextFieldState extends State<CTextField> {
             ? Container(
                 margin: const EdgeInsetsDirectional.only(start: 11),
                 padding: EdgeInsetsDirectional.only(
-                  start: hasFocus ? 2 : 0,
-                  end: hasFocus ? 2 : 0,
+                  start: _focusNode.hasFocus ? 2 : 0,
+                  end: _focusNode.hasFocus ? 2 : 0,
                 ),
                 color: white,
-                child: !hasFocus && widget.controller.value.text.isEmpty
+                child: !_focusNode.hasFocus && widget.controller.value.text.isEmpty
                     ? Container()
                     : CText(
                         widget.label,
