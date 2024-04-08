@@ -672,7 +672,7 @@ class SessionModel extends Model {
         deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
   }
 
-  Future<void> submitBitcoinPayment(
+  Future<String> submitBitcoinPayment(
     String planID,
     String email,
     String refCode,

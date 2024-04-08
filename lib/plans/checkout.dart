@@ -1,18 +1,18 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/common/ui/app_webview.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
-import 'package:intl/intl.dart';
 
 @RoutePage(name: 'Checkout')
 class Checkout extends StatefulWidget {
   final Plan plan;
   final bool isPro;
 
-  Checkout({
+  const Checkout({
     required this.plan,
     required this.isPro,
     Key? key,
@@ -75,183 +75,6 @@ class _CheckoutState extends State<Checkout>
     super.dispose();
   }
 
-  Widget options() => CInkWell(
-        onTap: () {
-          setState(() {
-            showMoreOptions = !showMoreOptions;
-          });
-        },
-        child: Container(
-          padding: const EdgeInsetsDirectional.only(bottom: 24),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CText(
-                showMoreOptions ? 'fewer_options'.i18n : 'more_options'.i18n,
-                style: tsBody1,
-              ),
-              const Padding(
-                padding: EdgeInsetsDirectional.only(start: 8),
-                child: CAssetImage(
-                  path: ImagePaths.down_arrow,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-  void selectPaymentProvider(Providers provider) {
-    setState(
-      () => selectedPaymentProvider = provider,
-    );
-  }
-
-  List<Widget> desktopPaymentOptions() {
-    var widgets = <Widget>[];
-    widgets.add(
-      PaymentProvider(
-        logoPaths: [
-          ImagePaths.visa,
-          ImagePaths.mastercard,
-          ImagePaths.unionpay
-        ],
-        onChanged: () => selectPaymentProvider(Providers.stripe),
-        selectedPaymentProvider: selectedPaymentProvider!,
-        paymentType: Providers.stripe,
-      ),
-    );
-    return widgets;
-  }
-
-  List<Widget> paymentOptions(
-    Iterable<PathAndValue<PaymentMethod>> paymentMethods,
-  ) {
-    var widgets = <Widget>[];
-    for (final paymentMethod in paymentMethods) {
-      if (widgets.length == 2) {
-        widgets.add(options());
-        if (!showMoreOptions) break;
-      }
-      for (final provider in paymentMethod.value.providers) {
-        widgets.add(
-          PaymentProvider(
-            logoPaths: provider.logoUrls,
-            onChanged: () => selectPaymentProvider(Providers.stripe),
-            selectedPaymentProvider: selectedPaymentProvider!,
-            paymentType: provider.name.toPaymentEnum(),
-            useNetwork: true,
-          ),
-        );
-      }
-    }
-    return widgets;
-  }
-
-  Future<void> checkProUser() async {
-    final res = await ffiProUser();
-    if (!widget.isPro && res.toDartString() == "true") {
-      // show success dialog if user becomes Pro during browser session
-      showSuccessDialog(context, widget.isPro);
-    }
-  }
-
-  Future<void> openDesktopWebview() async {
-    try {
-      String os = Platform.operatingSystem;
-      Locale locale = Localizations.localeOf(context);
-      final format = NumberFormat.simpleCurrency(locale: locale.toString());
-      final currencyName = format.currencyName ?? "USD";
-      final redirectUrl = await sessionModel.paymentRedirect(
-        widget.plan.id,
-        currencyName,
-        emailController.text,
-        "stripe",
-        os,
-      );
-      switch (Platform.operatingSystem) {
-        case 'windows':
-          await AppBrowser.openWindowsWebview(redirectUrl);
-          break;
-        case 'macos':
-          final browser = AppBrowser(onClose: checkProUser);
-          await browser.openMacWebview(redirectUrl);
-          break;
-        default:
-          await context.pushRoute(AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
-      }
-    } catch (e) {
-      showError(context, error: e);
-    }
-  }
-
-  Future<void> resolvePaymentRoute() async {
-    switch (selectedPaymentProvider!) {
-      case Providers.stripe:
-        // * Stripe selected
-        if (isDesktop()) {
-          await openDesktopWebview();
-          return;
-        }
-        await context.pushRoute(
-          StripeCheckout(
-            email: emailController.text,
-            refCode: refCodeController.text,
-            plan: widget.plan,
-            isPro: widget.isPro,
-          ),
-        );
-        break;
-      case Providers.btcpay:
-        // * BTC payment selected
-        context.loaderOverlay.show();
-        await sessionModel
-            .submitBitcoinPayment(
-              widget.plan.id,
-              emailController.text,
-              refCodeController.text,
-            )
-            .timeout(
-              defaultTimeoutDuration,
-              onTimeout: () => onAPIcallTimeout(
-                code: 'submitBitcoinTimeout',
-                message: 'bitcoin_timeout'.i18n,
-              ),
-            )
-            .then((value) async {
-          context.loaderOverlay.hide();
-          final btcPayURL = value as String;
-          await sessionModel.openWebview(btcPayURL);
-        }).onError((error, stackTrace) {
-          context.loaderOverlay.hide();
-          showError(context, error: error, stackTrace: stackTrace);
-        });
-        break;
-      case Providers.freekassa:
-        var strs = widget.plan.id.split('-');
-        if (strs.length < 2) break;
-        var currency = strs[1];
-        var currencyCost = widget.plan.price[currency];
-        if (currencyCost == null) break;
-        await sessionModel.submitFreekassa(
-          emailController.text,
-          widget.plan.id,
-          currencyCost.toString(),
-        );
-        break;
-    }
-  }
-
-  bool enableContinueButton() {
-    final isEmailValid = !emailController.value.text.isEmpty &&
-        emailFieldKey.currentState!.validate();
-    if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
-      return isEmailValid;
-    }
-    return isEmailValid && refCodeFieldKey.currentState!.validate();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -312,79 +135,51 @@ class _CheckoutState extends State<Checkout>
                         ),
                       ),
                     ),
-                    // * Referral Code field - initially hidden
-                    Visibility(
-                      visible: isRefCodeFieldShowing,
-                      child: Container(
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 8,
-                          bottom: 16,
+                    if (isRefCodeFieldShowing)
+                      Form(
+                        key: refCodeFieldKey,
+                        child: CTextField(
+                          controller: refCodeController,
+                          autovalidateMode: AutovalidateMode.disabled,
+                          contentPadding: const EdgeInsetsDirectional.only(
+                            top: 8.0,
+                            bottom: 8.0,
+                          ),
+                          onChanged: (text) {
+                            setState(() {
+                              showContinueButton = enableContinueButton();
+                            });
+                          },
+                          textCapitalization: TextCapitalization.characters,
+                          label: 'referral_code'.i18n,
+                          keyboardType: TextInputType.text,
+                          prefixIcon: const CAssetImage(path: ImagePaths.star),
                         ),
+                      )
+                    else
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isRefCodeFieldShowing = true;
+                          });
+                        },
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Flexible(
-                              flex: 2,
-                              child: Form(
-                                key: refCodeFieldKey,
-                                child: CTextField(
-                                  controller: refCodeController,
-                                  autovalidateMode: AutovalidateMode.disabled,
-                                  contentPadding:
-                                      const EdgeInsetsDirectional.only(
-                                    top: 8.0,
-                                    bottom: 8.0,
-                                  ),
-                                  onChanged: (text) {
-                                    setState(() {
-                                      showContinueButton =
-                                          enableContinueButton();
-                                    });
-                                  },
-                                  textCapitalization:
-                                      TextCapitalization.characters,
-                                  label: 'referral_code'.i18n,
-                                  keyboardType: TextInputType.text,
-                                  prefixIcon:
-                                      const CAssetImage(path: ImagePaths.star),
-                                ),
+                            const CAssetImage(path: ImagePaths.add),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                start: 8.0,
+                              ),
+                              child: CText(
+                                'add_referral_code'.i18n,
+                                style: tsBody1,
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    // * Add Referral code
-                    Visibility(
-                      visible: !isRefCodeFieldShowing,
-                      child: GestureDetector(
-                        onTap: () async =>
-                            setState(() => isRefCodeFieldShowing = true),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsetsDirectional.only(
-                            top: 8,
-                            bottom: 16,
-                          ),
-                          child: Row(
-                            children: [
-                              const CAssetImage(path: ImagePaths.add),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                  start: 8.0,
-                                ),
-                                child: CText(
-                                  'add_referral_code'.i18n,
-                                  style: tsBody1,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    // * Step 3
+
+                    const SizedBox(height: 16.0),
                     PlanStep(
                       stepNum: '3',
                       description: 'choose_payment_method'.i18n,
@@ -422,6 +217,192 @@ class _CheckoutState extends State<Checkout>
         ));
   }
 
+  Widget options() => CInkWell(
+        onTap: () {
+          setState(() {
+            showMoreOptions = !showMoreOptions;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsetsDirectional.only(bottom: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CText(
+                showMoreOptions ? 'fewer_options'.i18n : 'more_options'.i18n,
+                style: tsBody1,
+              ),
+              const Padding(
+                padding: EdgeInsetsDirectional.only(start: 8),
+                child: CAssetImage(
+                  path: ImagePaths.down_arrow,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  List<Widget> desktopPaymentOptions() {
+    var widgets = <Widget>[];
+    widgets.add(
+      PaymentProvider(
+        logoPaths: const [
+          ImagePaths.visa,
+          ImagePaths.mastercard,
+          ImagePaths.unionpay
+        ],
+        onChanged: () => selectPaymentProvider(Providers.stripe),
+        selectedPaymentProvider: selectedPaymentProvider!,
+        paymentType: Providers.stripe,
+      ),
+    );
+    return widgets;
+  }
+
+  List<Widget> paymentOptions(
+    Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+  ) {
+    var widgets = <Widget>[];
+    for (final paymentMethod in paymentMethods) {
+      if (widgets.length == 2) {
+        widgets.add(options());
+        if (!showMoreOptions) break;
+      }
+      for (final provider in paymentMethod.value.providers) {
+        widgets.add(
+          PaymentProvider(
+            logoPaths: provider.logoUrls,
+            onChanged: () =>
+                selectPaymentProvider(provider.name.toPaymentEnum()),
+            selectedPaymentProvider: selectedPaymentProvider!,
+            paymentType: provider.name.toPaymentEnum(),
+            useNetwork: true,
+          ),
+        );
+      }
+    }
+    return widgets;
+  }
+
+  bool enableContinueButton() {
+    final isEmailValid = !emailController.value.text.isEmpty &&
+        emailFieldKey.currentState!.validate();
+    if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
+      return isEmailValid;
+    }
+    return isEmailValid && refCodeFieldKey.currentState!.validate();
+  }
+
+  //Class methods
+  void selectPaymentProvider(Providers provider) {
+    setState(
+      () => selectedPaymentProvider = provider,
+    );
+  }
+
+  Future<void> checkProUser() async {
+    final res = await ffiProUser();
+    if (!widget.isPro && res.toDartString() == "true") {
+      // show success dialog if user becomes Pro during browser session
+      showSuccessDialog(context, widget.isPro);
+    }
+  }
+
+  Future<void> openDesktopWebview() async {
+    try {
+      String os = Platform.operatingSystem;
+      Locale locale = Localizations.localeOf(context);
+      final format = NumberFormat.simpleCurrency(locale: locale.toString());
+      final currencyName = format.currencyName ?? "USD";
+      final redirectUrl = await sessionModel.paymentRedirect(
+        widget.plan.id,
+        currencyName,
+        emailController.text,
+        "stripe",
+        os,
+      );
+      switch (Platform.operatingSystem) {
+        case 'windows':
+          await AppBrowser.openWindowsWebview(redirectUrl);
+          break;
+        case 'macos':
+          final browser = AppBrowser(onClose: checkProUser);
+          await browser.openMacWebview(redirectUrl);
+          break;
+        default:
+          await context.pushRoute(
+              AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
+      }
+    } catch (e) {
+      showError(context, error: e);
+    }
+  }
+
+  Future<void> resolvePaymentRoute() async {
+    switch (selectedPaymentProvider!) {
+      case Providers.stripe:
+        _proceedWithStripe();
+        break;
+      case Providers.btcpay:
+        _proceedWithBTCPay();
+        break;
+      case Providers.freekassa:
+        _proceedWithFreekassa();
+        break;
+    }
+  }
+
+  Future<void> _proceedWithStripe() async {
+    // * Stripe selected
+    if (isDesktop()) {
+      await openDesktopWebview();
+      return;
+    }
+    await context.pushRoute(
+      StripeCheckout(
+        email: emailController.text,
+        refCode: refCodeController.text,
+        plan: widget.plan,
+        isPro: widget.isPro,
+      ),
+    );
+  }
+
+  void _proceedWithBTCPay() async {
+    try {
+      context.loaderOverlay.show();
+      final value = await sessionModel.submitBitcoinPayment(
+          widget.plan.id, emailController.text, refCodeController.text);
+
+      context.loaderOverlay.hide();
+      final btcPayURL = value;
+      await sessionModel.openWebview(btcPayURL);
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
+  }
+
+  // It starts native activity to proceed with Freekassa
+  Future<void> _proceedWithFreekassa() async {
+    try {
+      var strs = widget.plan.id.split('-');
+      if (strs.length < 2) return;
+      var currency = strs[1];
+      var currencyCost = widget.plan.price[currency];
+      if (currencyCost == null) return;
+      await sessionModel.submitFreekassa(
+        emailController.text,
+        widget.plan.id,
+        currencyCost.toString(),
+      );
+    } catch (e) {
+      showError(context, error: e);
+    }
+  }
+
   void defaultProviderIfNecessary(List<PathAndValue<PaymentMethod>> list) {
     if (selectedPaymentProvider != null) {
       return;
@@ -438,35 +419,40 @@ class _CheckoutState extends State<Checkout>
     selectedPaymentProvider = paymentMethod.providers[0].name.toPaymentEnum();
   }
 
-  void onContinueTapped() {
+  Future<void> onContinueTapped() async {
+    final emailFound = await checkIfEmailExits();
+    if (emailFound) {
+      return;
+    }
+    // Check for referral code
     var refCode = refCodeController.value;
-    Future.wait(
-      [
-        sessionModel
-            .checkEmailExists(
-          emailController.value.text,
-        )
-            .onError((error, stackTrace) {
-          showError(
-            context,
-            error: error,
-            stackTrace: stackTrace,
-          );
-        }),
-        if (refCode.text.isNotEmpty)
-          sessionModel
-              .applyRefCode(
-                refCode.text,
-              )
-              .then((value) => resolvePaymentRoute())
-              .onError((error, stackTrace) {
-            refCodeController.error =
-                'invalid_or_incomplete_referral_code'.i18n;
-          })
-        else
-          resolvePaymentRoute(),
-      ],
-      eagerError: true,
-    );
+    try {
+      if (refCode.text.isNotEmpty) {
+        await sessionModel.applyRefCode(refCode.text);
+      }
+      resolvePaymentRoute();
+    } catch (e) {
+      if (refCode.text.isNotEmpty) {
+        refCodeController.error = 'invalid_or_incomplete_referral_code'.i18n;
+        return;
+      }
+      showError(context, error: e);
+    }
+  }
+
+  Future<bool> checkIfEmailExits() async {
+    try {
+      await sessionModel.checkEmailExists(
+        emailController.value.text,
+      );
+      return false;
+    } catch (error, stackTrace) {
+      showError(
+        context,
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return false;
+    }
   }
 }
