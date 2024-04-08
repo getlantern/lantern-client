@@ -55,7 +55,7 @@ void checkAPIError(result, errorMessage) {
 
 Future<String> ffiApproveDevice(String code) async {
   final json = await _bindings.approveDevice(code.toPointerChar()).cast<Utf8>().toDartString();
-  final result = APIResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
   checkAPIError(result, 'wrong_device_linking_code'.i18n);
   // refresh user data after successfully linking device
   await ffiUserData();
