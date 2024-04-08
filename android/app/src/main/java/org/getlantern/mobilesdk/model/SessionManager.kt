@@ -248,11 +248,7 @@ abstract class SessionManager(application: Application) : Session {
         return prefs.getBoolean(ADS_ENABLED, false)
     }
 
-    //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
-    // for now, disable Chat completely
-    fun chatEnabled(): Boolean {
-        return false
-    }
+    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
 
     fun appVersion(): String {
         return appVersion
