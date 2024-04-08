@@ -580,7 +580,7 @@ func run(configDir, locale string,
 		replicaServer.CheckEnabled()
 		chatEnabled := runner.FeatureEnabled("chat", ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
-		//session.SetChatEnabled(chatEnabled)
+		session.SetChatEnabled(chatEnabled)
 
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
