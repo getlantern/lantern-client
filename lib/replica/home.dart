@@ -55,10 +55,6 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Home called");
-    // We are showing the ReplicaSearchScreen here since we want the bottom tabs to be visible (they are not if it's its own route)
-    // <08-23-22, kalli>  Not ideal UX - maybe add a spinner? Not sure
-    // <09-07-22, kalli> Update after testing a debug build - this is not very noticeable.
     if (showResults) {
       return ReplicaSearchScreen(
         currentQuery: currentQuery,
@@ -67,7 +63,6 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
         onBackButtonPressed: onBackButtonPressed,
       );
     }
-    // we need to initialize controller again coz we when switch widget controller is getting disposed
     return _buildSearchView();
   }
 
