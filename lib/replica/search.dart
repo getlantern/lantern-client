@@ -11,10 +11,12 @@ class ReplicaSearchScreen extends StatefulWidget {
     required this.currentQuery,
     required this.currentTab,
     required this.onBackButtonPressed,
+    required this.textEditingController,
   });
 
   final String currentQuery;
   final int currentTab;
+  final CustomTextEditingController textEditingController;
 
   final VoidCallback onBackButtonPressed;
 
@@ -28,15 +30,13 @@ class _ReplicaSearchScreenState extends State<ReplicaSearchScreen>
       // Video + Image + Audio + Document + App  = 5 categories
       TabController(length: 5, vsync: this);
   final formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
-  late final CustomTextEditingController textEditingController;
+  late final CustomTextEditingController textEditingController = widget.textEditingController;
   late String searchQuery = widget.currentQuery;
   late int searchTab = widget.currentTab;
 
   @override
   void initState() {
     super.initState();
-    textEditingController =
-        CustomTextEditingController(formKey: formKey, text: searchQuery);
     tabController.index = searchTab;
   }
 

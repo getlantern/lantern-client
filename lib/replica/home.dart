@@ -13,7 +13,7 @@ class ReplicaHomeScreen extends StatefulWidget {
 
 class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
   final _formKey = GlobalKey<FormState>(debugLabel: 'replicaSearchInput');
-  CustomTextEditingController? _textEditingController;
+  late final textEditingController = CustomTextEditingController(formKey: _formKey);
 
   late bool showResults = false;
   late String currentQuery = '';
@@ -31,7 +31,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
     super.initState();
     replicaModel.getSearchTerm().then((String cachedSearchTerm) {
       if (cachedSearchTerm.isNotEmpty) {
-        _textEditingController?.initialValue = cachedSearchTerm;
+        textEditingController.initialValue = cachedSearchTerm;
         setState(() {
           currentQuery = cachedSearchTerm;
           showResults = true;
@@ -63,11 +63,11 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
       return ReplicaSearchScreen(
         currentQuery: currentQuery,
         currentTab: currentTab,
+        textEditingController: textEditingController,
         onBackButtonPressed: onBackButtonPressed,
       );
     }
     // we need to initialize controller again coz we when switch widget controller is getting disposed
-    _textEditingController = CustomTextEditingController(formKey: _formKey);
     return _buildSearchView();
   }
 
@@ -116,7 +116,7 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
                     padding: const EdgeInsetsDirectional.only(
                         start: 10.0, end: 10.0),
                     child: SearchField(
-                      controller: _textEditingController!,
+                      controller: textEditingController,
                       search: (query) async {
                         await replicaModel.setSearchTerm(query);
                         if (query != '') {
