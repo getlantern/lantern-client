@@ -1,7 +1,6 @@
 package org.getlantern.lantern.model
 
 import android.app.Application
-import android.text.TextUtils
 import io.lantern.model.Vpn
 import org.getlantern.lantern.activity.WelcomeActivity_
 import org.getlantern.mobilesdk.Logger
@@ -222,13 +221,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         prefs.edit().putString(REFERRAL_CODE, referral).apply()
     }
 
-    fun setStripeToken(token: String?) {
-        prefs.edit().putString(STRIPE_TOKEN, token).apply()
-    }
-
-    fun stripeToken(): String? {
-        return prefs.getString(STRIPE_TOKEN, "")
-    }
 
     fun resellerCode(): String? {
         return prefs.getString(RESELLER_CODE, "")
@@ -339,11 +331,16 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                 if (methods.providers.isEmpty()) {
                     return@forEachIndexed
                 }
+
                 val path = PAYMENT_METHODS + index
                 val planItem =
                     Vpn.PaymentMethod.newBuilder().setMethod(methods.method.toString().lowercase())
                         .addAllProviders(
                             methods.providers.map {
+                                // Check if payment provider is stipe add pubkey
+                                if (it.name == PaymentProvider.Stripe) {
+                                    setStripePubKey(it.data["pubKey"] as String)
+                                }
                                 Vpn.PaymentProviders.newBuilder()
                                     .setName(it.name.toString().lowercase())
                                     .addAllLogoUrls(it.logoUrl)
@@ -381,7 +378,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val PRO_MONTHS_LEFT = "promonthsleft"
         private const val PRO_DAYS_LEFT = "prodaysleft"
         private const val EXPIRY_DATE_STR = "expirydatestr"
-        private const val STRIPE_TOKEN = "stripe_token"
         private const val STRIPE_API_KEY = "stripe_api_key"
         private const val DEFAULT_CURRENCY_CODE = "usd"
         private const val DEVICE_LINKED = "DeviceLinked"

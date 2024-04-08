@@ -24,6 +24,12 @@ type UserDataResponse struct {
 	*protos.User         `json:",inline"`
 }
 
+type LinkResponse struct {
+	*protos.BaseResponse `json:",inline"`
+	UserID               int    `json:"userID"`
+	ProToken             string `json:"token"`
+}
+
 type LinkCodeResponse struct {
 	*protos.BaseResponse `json:",inline"`
 	Code                 string

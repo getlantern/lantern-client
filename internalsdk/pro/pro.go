@@ -35,12 +35,15 @@ type Opts struct {
 }
 
 type ProClient interface {
+	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
+	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
 	Plans(ctx context.Context) (*PlansResponse, error)
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
+	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
 }
 
@@ -144,6 +147,15 @@ func (c *proClient) Plans(ctx context.Context) (*PlansResponse, error) {
 	return &resp, nil
 }
 
+func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
+	var resp UserDataResponse
+	err := c.webclient.PostFormReadingJSON(ctx, "/user-create", nil, &resp)
+	if err != nil {
+		return nil, errors.New("error fetching user data: %v", err)
+	}
+	return &resp, nil
+}
+
 func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
 	err := c.webclient.GetJSON(ctx, "/user-data", nil, &resp)
@@ -164,6 +176,29 @@ func (c *proClient) RedeemResellerCode(ctx context.Context, req *protos.RedeemRe
 	return &resp, nil
 }
 
+// DeviceRemove removes the device with the given ID from a user's Pro account
+func (c *proClient) DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error) {
+	var resp LinkResponse
+	params := c.defaultParams()
+	params["deviceID"] = deviceId
+	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-remove", params, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error) {
+	var resp protos.BaseResponse
+	params := c.defaultParams()
+	params["code"] = code
+	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-approve", params, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
 func (c *proClient) LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error) {
 	var resp LinkCodeResponse
 	info, _ := host.Info()
@@ -172,7 +207,7 @@ func (c *proClient) LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, err
 		"deviceName": info.Hostname,
 		"locale":     uc.GetLanguage(),
 	}
-	err := c.webclient.PostFormReadingJSON(ctx, "/link-code-request", params, &resp)
+	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-request", params, &resp)
 	if err != nil {
 		return nil, err
 	}

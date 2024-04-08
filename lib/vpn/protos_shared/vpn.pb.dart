@@ -1281,6 +1281,112 @@ class RedeemResellerCodeRequest extends $pb.GeneratedMessage {
   void clearProvider() => clearField(6);
 }
 
+class LinkResponse extends $pb.GeneratedMessage {
+  factory LinkResponse({
+    $fixnum.Int64? userID,
+    $core.String? token,
+    $core.String? status,
+    $core.String? error,
+    $core.String? errorId,
+  }) {
+    final $result = create();
+    if (userID != null) {
+      $result.userID = userID;
+    }
+    if (token != null) {
+      $result.token = token;
+    }
+    if (status != null) {
+      $result.status = status;
+    }
+    if (error != null) {
+      $result.error = error;
+    }
+    if (errorId != null) {
+      $result.errorId = errorId;
+    }
+    return $result;
+  }
+  LinkResponse._() : super();
+  factory LinkResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory LinkResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LinkResponse', createEmptyInstance: create)
+    ..aInt64(1, _omitFieldNames ? '' : 'userID', protoName: 'userID')
+    ..aOS(2, _omitFieldNames ? '' : 'token')
+    ..aOS(3, _omitFieldNames ? '' : 'status')
+    ..aOS(4, _omitFieldNames ? '' : 'error')
+    ..aOS(5, _omitFieldNames ? '' : 'errorId', protoName: 'errorId')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  LinkResponse clone() => LinkResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  LinkResponse copyWith(void Function(LinkResponse) updates) => super.copyWith((message) => updates(message as LinkResponse)) as LinkResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LinkResponse create() => LinkResponse._();
+  LinkResponse createEmptyInstance() => create();
+  static $pb.PbList<LinkResponse> createRepeated() => $pb.PbList<LinkResponse>();
+  @$core.pragma('dart2js:noInline')
+  static LinkResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LinkResponse>(create);
+  static LinkResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $fixnum.Int64 get userID => $_getI64(0);
+  @$pb.TagNumber(1)
+  set userID($fixnum.Int64 v) { $_setInt64(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUserID() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUserID() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get token => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set token($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasToken() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearToken() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get status => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set status($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasStatus() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearStatus() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get error => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set error($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasError() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearError() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get errorId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set errorId($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasErrorId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearErrorId() => clearField(5);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

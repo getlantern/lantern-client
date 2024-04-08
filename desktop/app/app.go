@@ -142,7 +142,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 
 	log.Debugf("Using configdir: %v", configDir)
 
-	app.issueReporter = newIssueReporter(app.settings, app.getCapturedPackets, app.getProxies)
+	app.issueReporter = newIssueReporter(app)
 	app.translations.Set(os.DirFS("locale/translation"))
 
 	return app
@@ -365,9 +365,10 @@ func (app *App) beforeStart(listenAddr string) {
 		app.Exit(nil)
 		os.Exit(0)
 	}
-	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, app.IsProUser, func() string {
-		return app.AddToken("/img/lantern_logo.png")
-	}))
+	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour,
+		func() (bool, bool) { return app.IsProUser(context.Background()) }, func() string {
+			return app.AddToken("/img/lantern_logo.png")
+		}))
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
@@ -602,7 +603,7 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.isProUserFast()
+	isPro, _ := app.isProUserFast(context.Background())
 	return isPro
 }
 

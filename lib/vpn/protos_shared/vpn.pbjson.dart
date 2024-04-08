@@ -281,3 +281,21 @@ final $typed_data.Uint8List redeemResellerCodeRequestDescriptor = $convert.base6
     'Y2VOYW1lEhoKCGN1cnJlbmN5GAQgASgJUghjdXJyZW5jeRImCg5pZGVtcG90ZW5jeUtleRgFIA'
     'EoCVIOaWRlbXBvdGVuY3lLZXkSGgoIcHJvdmlkZXIYBiABKAlSCHByb3ZpZGVy');
 
+@$core.Deprecated('Use linkResponseDescriptor instead')
+const LinkResponse$json = {
+  '1': 'LinkResponse',
+  '2': [
+    {'1': 'userID', '3': 1, '4': 1, '5': 3, '10': 'userID'},
+    {'1': 'token', '3': 2, '4': 1, '5': 9, '10': 'token'},
+    {'1': 'status', '3': 3, '4': 1, '5': 9, '10': 'status'},
+    {'1': 'error', '3': 4, '4': 1, '5': 9, '10': 'error'},
+    {'1': 'errorId', '3': 5, '4': 1, '5': 9, '10': 'errorId'},
+  ],
+};
+
+/// Descriptor for `LinkResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List linkResponseDescriptor = $convert.base64Decode(
+    'CgxMaW5rUmVzcG9uc2USFgoGdXNlcklEGAEgASgDUgZ1c2VySUQSFAoFdG9rZW4YAiABKAlSBX'
+    'Rva2VuEhYKBnN0YXR1cxgDIAEoCVIGc3RhdHVzEhQKBWVycm9yGAQgASgJUgVlcnJvchIYCgdl'
+    'cnJvcklkGAUgASgJUgdlcnJvcklk');
+

@@ -102,3 +102,10 @@ message RedeemResellerCodeRequest {
   string provider = 6;
 }
 
+message LinkResponse {
+  int64 userID = 1;
+  string token = 2;
+  string status = 3;
+  string error = 4;
+  string errorId = 5;
+}

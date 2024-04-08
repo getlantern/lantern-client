@@ -23,7 +23,6 @@ import (
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
-	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
@@ -127,11 +126,11 @@ func fetchOrCreate() error {
 	settings := a.Settings()
 	userID := settings.GetUserID()
 	if userID == 0 {
-		user, err := pro.NewUser(settings)
+		resp, err := proClient.UserCreate(context.Background())
 		if err != nil {
 			return errors.New("Could not create new Pro user: %v", err)
 		}
-		settings.SetUserIDAndToken(user.Auth.ID, user.Auth.Token)
+		settings.SetUserIDAndToken(resp.User.UserId, resp.User.Token)
 	}
 	return nil
 }
@@ -144,13 +143,6 @@ func sysProxyOn() {
 //export sysProxyOff
 func sysProxyOff() {
 	a.SysProxyOff()
-}
-
-func sendError(err error) *C.char {
-	if err == nil {
-		return C.CString("")
-	}
-	return C.CString(err.Error())
 }
 
 //export selectedTab
@@ -213,6 +205,39 @@ func devices() *C.char {
 	}
 	b, _ := json.Marshal(user.Devices)
 	return C.CString(string(b))
+}
+
+func sendJson(resp any) *C.char {
+	b, _ := json.Marshal(resp)
+	return C.CString(string(b))
+}
+
+func sendError(err error) *C.char {
+	if err == nil {
+		return C.CString("")
+	}
+	return sendJson(map[string]interface{}{
+		"error": err.Error(),
+	})
+}
+
+//export approveDevice
+func approveDevice(code *C.char) *C.char {
+	resp, err := proClient.LinkCodeApprove(context.Background(), C.GoString(code))
+	if err != nil {
+		return sendError(err)
+	}
+	return sendJson(resp)
+}
+
+//export removeDevice
+func removeDevice(deviceId *C.char) *C.char {
+	resp, err := proClient.DeviceRemove(context.Background(), C.GoString(deviceId))
+	if err != nil {
+		log.Error(err)
+		return sendError(err)
+	}
+	return sendJson(resp)
 }
 
 //export expiryDate
@@ -364,9 +389,11 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
+	ctx := context.Background()
 	// refresh user data when home page is loaded on desktop
-	go pro.FetchUserData(a.Settings())
-	if isProUser, ok := a.IsProUser(); isProUser && ok {
+	go proClient.UserData(ctx)
+	uc := a.Settings()
+	if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
 		return C.CString("true")
 	}
 	return C.CString("false")
@@ -438,11 +465,11 @@ func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 	if err != nil {
 		return nil, sendError(err)
 	}
-
+	ctx := context.Background()
 	uc := userConfig(a.Settings())
 
 	subscriptionLevel := "free"
-	if isProUser, ok := a.IsProUser(); ok && isProUser {
+	if isProUser, ok := app.IsProUserFast(ctx, uc); ok && isProUser {
 		subscriptionLevel = "pro"
 	}
 
