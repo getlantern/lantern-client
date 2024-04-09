@@ -5,7 +5,7 @@ import 'package:lantern/replica/ui/list_item/news_list_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ReplicaListLayout extends ReplicaCommonListView {
-  ReplicaListLayout({
+  const ReplicaListLayout({
     Key? key,
     required ReplicaApi replicaApi,
     required String searchQuery,
