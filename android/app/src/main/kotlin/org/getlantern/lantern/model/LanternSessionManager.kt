@@ -2,7 +2,6 @@ package org.getlantern.lantern.model
 
 import android.app.Application
 import io.lantern.model.Vpn
-import org.getlantern.lantern.activity.WelcomeActivity_
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
@@ -84,10 +83,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun stripePubKey(): String? {
         return prefs.getString(STRIPE_API_KEY, "")
-    }
-
-    fun welcomeActivity(): Class<*> {
-        return WelcomeActivity_::class.java
     }
 
     fun setVerifyCode(code: String) {

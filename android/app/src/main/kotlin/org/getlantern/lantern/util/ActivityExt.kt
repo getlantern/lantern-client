@@ -12,8 +12,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.getlantern.lantern.R
 import org.getlantern.lantern.MainActivity
+import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Utils
 import org.getlantern.mobilesdk.Logger
 
@@ -49,7 +49,6 @@ fun Activity.restartApp() {
     mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
     Process.killProcess(Process.myPid())
 }
-
 
 
 @JvmOverloads

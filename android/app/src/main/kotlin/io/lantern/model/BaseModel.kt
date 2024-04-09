@@ -150,7 +150,7 @@ abstract class BaseModel(
                         errorDetails: Any?
                     ) {
                         mainHandler.post {
-                            mcResult.error(errorCode!!, errorMessage, errorDetails)
+                            mcResult.error(errorCode, errorMessage, errorDetails)
                         }
                     }
 

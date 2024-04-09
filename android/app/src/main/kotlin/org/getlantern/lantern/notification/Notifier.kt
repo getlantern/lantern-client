@@ -72,7 +72,8 @@ class Notifier : BroadcastReceiver() {
         builder.setContentIntent(resultPendingIntent)
         val notification = builder.build()
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(notificationId, notification)
     }
 
@@ -109,11 +110,16 @@ class Notifier : BroadcastReceiver() {
 
         @TargetApi(Build.VERSION_CODES.O)
         private fun createNotificationChannels() {
-            val notificationManager = LanternApp.getAppContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager = LanternApp.getAppContext()
+                .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             // create a channel for data usage notifications
             notificationManager.createNotificationChannel(
-                NotificationChannel(CHANNEL_DATA_USAGE, CHANNEL_DATA_USAGE, NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationChannel(
+                    CHANNEL_DATA_USAGE,
+                    CHANNEL_DATA_USAGE,
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
             )
 
             // create other notification channels

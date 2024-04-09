@@ -19,7 +19,10 @@ object PlansUtil {
         var formattedDiscount = ""
         if (plan.discount > 0) {
             formattedDiscount =
-                activity.resources.getString(R.string.discount, Math.round(plan.discount * 100).toString())
+                activity.resources.getString(
+                    R.string.discount,
+                    Math.round(plan.discount * 100).toString()
+                )
         }
         val oneMonthCost = plan.formattedPriceOneMonth
         plan.renewalText = proRenewalText(activity.resources, formattedBonus)
@@ -35,23 +38,29 @@ object PlansUtil {
         val proExpiration = LanternApp.getSession().getExpiration()
         if (proExpiration == null) return ""
         return when {
-                proExpiration.isBefore() -> {
-                    resources.getString(R.string.membership_has_expired, formattedBonus)
-                }
-                proExpiration.isToday() -> {
-                    resources.getString(R.string.membership_ends_today, formattedBonus)
-                }
-                proExpiration.isBefore(LocalDateTime.now().plusMonths(3)) -> {
-                    resources.getString(R.string.membership_end_soon, formattedBonus)
-                }
-                else -> ""
+            proExpiration.isBefore() -> {
+                resources.getString(R.string.membership_has_expired, formattedBonus)
             }
+
+            proExpiration.isToday() -> {
+                resources.getString(R.string.membership_ends_today, formattedBonus)
+            }
+
+            proExpiration.isBefore(LocalDateTime.now().plusMonths(3)) -> {
+                resources.getString(R.string.membership_end_soon, formattedBonus)
+            }
+
+            else -> ""
+        }
     }
+
     // Formats the renewal bonus
     // longForm == false -> a day-only format (e.g. "45 days")
     // longForm == true -> month and day format (e.g. "1 month and 15 days"
-    private fun formatRenewalBonusExpected(activity: Activity, planBonus: MutableMap<String, Int>, 
-        longForm: Boolean): String {
+    private fun formatRenewalBonusExpected(
+        activity: Activity, planBonus: MutableMap<String, Int>,
+        longForm: Boolean
+    ): String {
         val bonusMonths: Int? = planBonus["months"]
         val bonusDays: Int? = planBonus["days"]
         val bonusParts: MutableList<String?> = java.util.ArrayList()
@@ -68,11 +77,21 @@ object PlansUtil {
                 )
             }
             if (bonusDays != null && bonusDays > 0) {
-                bonusParts.add(activity.resources.getQuantityString(R.plurals.day, bonusDays.toInt(), bonusDays))
+                bonusParts.add(
+                    activity.resources.getQuantityString(
+                        R.plurals.day,
+                        bonusDays.toInt(),
+                        bonusDays
+                    )
+                )
             }
             return TextUtils.join(" ", bonusParts)
         } else {
-            return activity.resources.getQuantityString(R.plurals.day, (bonusMonths!! * 30 + bonusDays!!), (bonusMonths * 30 + bonusDays))
+            return activity.resources.getQuantityString(
+                R.plurals.day,
+                (bonusMonths!! * 30 + bonusDays!!),
+                (bonusMonths * 30 + bonusDays)
+            )
         }
     }
 }

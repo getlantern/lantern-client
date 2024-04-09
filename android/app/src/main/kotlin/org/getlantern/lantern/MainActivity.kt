@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
@@ -29,9 +30,12 @@ import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
+import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
+import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
@@ -41,6 +45,7 @@ import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PermissionUtil
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -74,7 +79,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     ) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
-        messagingModel = MessagingModel(this, flutterEngine)
+        messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
@@ -125,6 +130,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
+
+        // if not in dev mode, prevent screenshots of this activity by other apps
+        if (!BuildConfig.DEVELOPMENT_MODE) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
@@ -269,7 +280,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
-        sessionModel.updatePaymentMethods(null)
+        updatePaymentMethods()
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -314,7 +325,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     if (user.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
                     // Switch to free account if device it not linked
-                    devices?.filter { it.id == deviceID }?.run {
+                    devices.filter { it.id == deviceID }.run {
                         if (isEmpty()) {
                             LanternApp.getSession().logout()
                             restartApp()
@@ -325,6 +336,40 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         )
     }
 
+    private fun updatePaymentMethods() {
+        lanternClient.plansV3(
+            object : PlansV3Callback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
+                }
+
+                override fun onSuccess(
+                    proPlans: Map<String, ProPlan>,
+                    paymentMethods: List<PaymentMethods>,
+
+                    ) {
+                    Logger.debug(TAG, "Successfully fetched payment methods")
+                    processPaymentMethods(proPlans, paymentMethods)
+                }
+            }
+        )
+    }
+
+
+    fun processPaymentMethods(
+        proPlans: Map<String, ProPlan>,
+        paymentMethods: List<PaymentMethods>,
+
+        ) {
+        for (planId in proPlans.keys) {
+            proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+        }
+        LanternApp.getSession().setUserPlans(proPlans)
+        LanternApp.getSession().setPaymentMethods(paymentMethods)
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {

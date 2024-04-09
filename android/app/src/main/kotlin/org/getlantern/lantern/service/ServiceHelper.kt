@@ -80,7 +80,8 @@ class ServiceHelper(
     private fun createNotificationChannel(): String {
         val channelId = "lantern_service"
         val channelName = LanternApp.getAppContext().resources.getString(R.string.lantern_service)
-        val mNotificationManager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val mNotificationManager =
+            service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.createNotificationChannel(
             NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
         )

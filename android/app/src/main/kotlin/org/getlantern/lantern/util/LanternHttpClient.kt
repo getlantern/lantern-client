@@ -215,7 +215,9 @@ open class LanternHttpClient : HttpClient() {
                 .headers(headers.toHeaders())
                 .url(url)
         if (method == "POST") {
-            var requestBody = if (body != null) body else RequestBody.create(null, ByteArray(0))
+            var requestBody = if (body != null) body else ByteArray(0).toRequestBody(
+                null
+            )
             builder = builder.post(requestBody)
         }
 

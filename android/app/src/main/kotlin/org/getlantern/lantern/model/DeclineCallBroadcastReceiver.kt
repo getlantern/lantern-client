@@ -1,12 +1,8 @@
 package org.getlantern.lantern.model
 
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import io.lantern.messaging.WebRTCSignal
-import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.util.Json
 
 // see https://www.tutorialspoint.com/how-to-create-android-notification-with-broadcastreceiver
 

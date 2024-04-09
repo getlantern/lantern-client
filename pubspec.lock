@@ -673,7 +673,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_mailer:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_mailer
       sha256: "4fffaa35e911ff5ec2e5a4ebbca62c372e99a154eb3bb2c0bf79f09adf6ecf4c"
@@ -756,7 +756,7 @@ packages:
     source: git
     version: "0.0.1"
   fluttertoast:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: fluttertoast
       sha256: dfdde255317af381bfc1c486ed968d5a43a2ded9c931e87cbecd88767d6a71c1
