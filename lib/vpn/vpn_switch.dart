@@ -10,7 +10,7 @@ class VPNSwitch extends StatefulWidget {
   State<VPNSwitch> createState() => _VPNSwitchState();
 }
 
-class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
+class _VPNSwitchState extends State<VPNSwitch> {
   //final adHelper = AdHelper();
   String vpnStatus = 'disconnected';
 
