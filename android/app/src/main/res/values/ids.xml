@@ -1,28 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="versionNum" type="id"/>
-    <item name="updater" type="id"/>
-    <item name="radioPlans" type="id"/>
-    <item name="radioFWP" type="id"/>
-    <item name="powerLantern" type="id"/>
-    <item name="auctionInfoHeader" type="id"/>
-    <item name="featuresCard" type="id"/>
-    <item name="settings_icon" type="id"/>
-    <item name="toast_on" type="id"/>
-    <item name="toast_off" type="id"/>
-    <item name="editbox_shape" type="id"/>
-    <item name="update_available" type="id"/>
-    <item name="topSection" type="id"/>
-
-    <item name="get_lantern_pro" type="id"/>
-    <item name="invite_friends" type="id"/>
-    <item name="pro_account" type="id"/>
-    <item name="add_device" type="id"/>
-    <item name="authorize_device_pro" type="id"/>
-    <item name="check_for_update" type="id"/>
-    <item name="desktop_option" type="id"/>
-    <item name="language" type="id"/>
-    <item name="action_settings" type="id"/>
-    <item name="report_an_issue" type="id"/>
+    <item name="powerLantern" type="id" />
 
 </resources>

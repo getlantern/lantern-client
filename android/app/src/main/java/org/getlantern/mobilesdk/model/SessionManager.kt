@@ -57,7 +57,7 @@ abstract class SessionManager(application: Application) : Session {
     private val appVersion: String
     private var startResult: StartResult? = null
     private var locale: Locale? = null
-    public val dnsDetector = DnsDetector(application, fakeDnsIP)
+    val dnsDetector = DnsDetector(application, fakeDnsIP)
 
     fun setStartResult(result: StartResult?) {
         startResult = result
@@ -248,11 +248,7 @@ abstract class SessionManager(application: Application) : Session {
         return prefs.getBoolean(ADS_ENABLED, false)
     }
 
-    //    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
-    // for now, disable Chat completely
-    fun chatEnabled(): Boolean {
-        return false
-    }
+    fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
 
     fun appVersion(): String {
         return appVersion
@@ -447,7 +443,7 @@ abstract class SessionManager(application: Application) : Session {
     }
 
     fun hasFirstSessionCompleted(): Boolean {
-        return prefs.getBoolean(HAS_FIRST_SESSION_COMPLETED, false);
+        return prefs.getBoolean(HAS_FIRST_SESSION_COMPLETED, false)
     }
 
     fun getInternalHeaders(): Map<String, String> {
@@ -540,9 +536,9 @@ abstract class SessionManager(application: Application) : Session {
         val PLAY_VERSION = "playVersion"
 
         private const val REPLICA_ADDR = "replicaAddr"
-        public const val CHAT_ENABLED = "chatEnabled"
-        public const val ADS_ENABLED = "adsEnabled"
-        public const val CAS_ADS_ENABLED = "casAsEnabled"
+        const val CHAT_ENABLED = "chatEnabled"
+        const val ADS_ENABLED = "adsEnabled"
+        const val CAS_ADS_ENABLED = "casAsEnabled"
 
         private val chineseLocales = arrayOf<Locale?>(
             Locale("zh", "CN"),

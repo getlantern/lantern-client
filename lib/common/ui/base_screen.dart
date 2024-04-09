@@ -19,6 +19,8 @@ class BaseScreen extends StatelessWidget {
   final bool automaticallyImplyLeading;
   final List<Widget>? persistentFooterButtons;
 
+  final VoidCallback? onBackButtonPressed;
+
   BaseScreen({
     this.title,
     this.actions,
@@ -34,6 +36,7 @@ class BaseScreen extends StatelessWidget {
     this.showAppBar = true,
     this.automaticallyImplyLeading = true,
     this.persistentFooterButtons,
+    this.onBackButtonPressed,
     Key? key,
   }) : super(key: key) {
     this.foregroundColor = foregroundColor ?? black;
@@ -67,37 +70,46 @@ class BaseScreen extends StatelessWidget {
         appBar: !showAppBar
             ? null
             : PreferredSize(
-                preferredSize: Size.fromHeight(appBarHeight+verticalCorrection),
+                preferredSize:
+                    Size.fromHeight(appBarHeight + verticalCorrection),
                 child: SafeArea(
                   child: Column(
-                      children: [
-                        ConnectivityWarning(
-                          dy: verticalCorrection,
-                        ),
-                        AppBar(
-                          automaticallyImplyLeading: automaticallyImplyLeading,
-                          leading: automaticallyImplyLeading ? IconButton(
-                            icon: Icon(Icons.arrow_back, color: Colors.black),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ) : null,
-                          title: title is String
-                              ? CText(
-                                  title,
-                                  style: tsHeading3
-                                      .copiedWith(color: foregroundColor)
-                                      .short,
-                                )
-                              : title,
-                          elevation: 1,
-                          shadowColor: grey3,
-                          foregroundColor: foregroundColor,
-                          backgroundColor: backgroundColor,
-                          iconTheme: IconThemeData(color: foregroundColor),
-                          centerTitle: centerTitle,
-                          titleSpacing: 0,
-                          actions: actions,
-                        ),
-                      ],
+                    children: [
+                      ConnectivityWarning(
+                        dy: verticalCorrection,
+                      ),
+                      AppBar(
+                        automaticallyImplyLeading: automaticallyImplyLeading,
+                        leading: automaticallyImplyLeading
+                            ? IconButton(
+                                icon: const Icon(Icons.arrow_back,
+                                    color: Colors.black),
+                                onPressed: () {
+                                  if (onBackButtonPressed != null) {
+                                    onBackButtonPressed?.call();
+                                    return;
+                                  }
+                                  Navigator.of(context).pop();
+                                })
+                            : null,
+                        title: title is String
+                            ? CText(
+                                title,
+                                style: tsHeading3
+                                    .copiedWith(color: foregroundColor)
+                                    .short,
+                              )
+                            : title,
+                        elevation: 1,
+                        shadowColor: grey3,
+                        foregroundColor: foregroundColor,
+                        backgroundColor: backgroundColor,
+                        iconTheme: IconThemeData(color: foregroundColor),
+                        centerTitle: centerTitle,
+                        titleSpacing: 0,
+                        actions: actions,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -105,7 +117,7 @@ class BaseScreen extends StatelessWidget {
           padding: EdgeInsetsDirectional.only(
             start: padHorizontal ? 16 : 0,
             end: padHorizontal ? 16 : 0,
-            top: padVertical ? 16:0,
+            top: padVertical ? 16 : 0,
             bottom: padVertical ? 16 : 0,
           ),
           child: body,

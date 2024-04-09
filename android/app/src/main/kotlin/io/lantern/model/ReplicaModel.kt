@@ -38,16 +38,19 @@ class ReplicaModel(
                     tx.put(PATH_SEARCH_TERM, call.argument<String>("searchTerm")!!)
                 }
             }
+
             "setSearchTab" -> {
                 db.mutate { tx ->
                     tx.put(PATH_SEARCH_TAB, call.argument<String>("searchTab")!!)
                 }
             }
+
             "setShowNewBadge" -> {
                 db.mutate { tx ->
                     tx.put(PATH_TO_SHOW_NEW_BADGE, call.argument<Boolean>("showNewBadge")!!)
                 }
             }
+
             else -> super.doMethodCall(call, notImplemented)
         }
     }

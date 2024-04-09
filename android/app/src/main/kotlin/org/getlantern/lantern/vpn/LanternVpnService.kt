@@ -7,10 +7,8 @@ import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.mobilesdk.Logger
-import internalsdk.Internalsdk
 
 class LanternVpnService : VpnService(), Runnable {
 
@@ -27,6 +25,7 @@ class LanternVpnService : VpnService(), Runnable {
             Logger.e(TAG, "LanternService disconnected, disconnecting VPN")
             stop()
         }
+
         override fun onServiceConnected(name: ComponentName, service: IBinder) {}
     }
 
@@ -115,7 +114,8 @@ class LanternVpnService : VpnService(), Runnable {
         }
     }
 
-    @Synchronized fun getOrInitProvider(): Provider? {
+    @Synchronized
+    fun getOrInitProvider(): Provider? {
         Logger.d(TAG, "getOrInitProvider()")
         if (provider == null) {
             Logger.d(TAG, "Using Go tun2socks")
