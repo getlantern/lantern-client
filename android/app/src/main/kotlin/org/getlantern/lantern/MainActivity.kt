@@ -317,20 +317,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     response: Response,
                     user: ProUser,
                 ) {
-                    val devices = user.devices
-                    val deviceID = LanternApp.getSession().deviceID()
-                    // if the payment test mode is enabled
-                    // then do nothing To avoid restarting app while debugging
-                    // we are setting static user for payment mode
-                    if (user.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
-
-                    // Switch to free account if device it not linked
-                    devices.filter { it.id == deviceID }.run {
-                        if (isEmpty()) {
-                            LanternApp.getSession().logout()
-                            restartApp()
-                        }
-                    }
+                    // save latest user data
+                    LanternApp.getSession().storeUserData(user)
                 }
             },
         )
