@@ -48,6 +48,13 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
     doGetCachedTab();
   }
 
+  @override
+  void dispose() {
+    _textEditingController?.dispose();
+    _formKey.currentState?.dispose();
+    super.dispose();
+  }
+
   void doGetCachedTab() async {
     final cachedTab = await replicaModel.getSearchTab();
     setSearchTab(int.parse(cachedTab));
