@@ -42,9 +42,11 @@ class ApkInstaller(
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
                 installWithPackageInstaller()
             }
+
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
-                createInstallIntentContentUri()?.let(this::launchInstaller)
+                createInstallIntentContentUri().let(this::launchInstaller)
             }
+
             else -> {
                 createInstallIntentFileUri()?.let(this::launchInstaller)
             }
@@ -140,7 +142,8 @@ class ApkInstaller(
         }
 
     // SessionCallback is used to observe events of a Session lifecycle
-    private class SessionCallback(private val activity: Activity) : PackageInstaller.SessionCallback() {
+    private class SessionCallback(private val activity: Activity) :
+        PackageInstaller.SessionCallback() {
         override fun onCreated(sessionId: Int) {
             Logger.debug(TAG, "onCreated: sessionId=$sessionId")
         }

@@ -1,8 +1,8 @@
 package org.getlantern.lantern.plausible
 
 import android.content.Context
-import java.util.concurrent.atomic.AtomicReference
 import org.getlantern.mobilesdk.Logger
+import java.util.concurrent.atomic.AtomicReference
 
 // Singleton for sending events to Plausible.
 object Plausible {
@@ -27,7 +27,10 @@ object Plausible {
             ?.let {
                 it.enable = enable
             }
-            ?: Logger.d("Plausible", "Ignoring call to enable(). Did you forget to call Plausible.init()?")
+            ?: Logger.d(
+                "Plausible",
+                "Ignoring call to enable(). Did you forget to call Plausible.init()?"
+            )
     }
 
     /**
@@ -44,7 +47,10 @@ object Plausible {
             ?.let {
                 it.userAgent = userAgent
             }
-            ?: Logger.d("Plausible", "Ignoring call to setUserAgent(). Did you forget to call Plausible.init()?")
+            ?: Logger.d(
+                "Plausible",
+                "Ignoring call to setUserAgent(). Did you forget to call Plausible.init()?"
+            )
     }
 
     /**
@@ -100,8 +106,14 @@ object Plausible {
                     ?.let { config ->
                         client.event(config.domain, name, url, referrer, config.screenWidth, props)
                     }
-                    ?: Logger.d("Plausible", "Ignoring call to event(). Did you forget to call Plausible.init()?")
+                    ?: Logger.d(
+                        "Plausible",
+                        "Ignoring call to event(). Did you forget to call Plausible.init()?"
+                    )
             }
-            ?: Logger.d("Plausible", "Ignoring call to event(). Did you forget to call Plausible.init()?")
+            ?: Logger.d(
+                "Plausible",
+                "Ignoring call to event(). Did you forget to call Plausible.init()?"
+            )
     }
 }

@@ -1,49 +1,48 @@
 package org.getlantern.lantern.test;
 
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+import android.app.Activity;
+import android.content.Context;
+import android.view.View;
 
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.InstrumentationRegistry;
-import androidx.test.uiautomator.UiDevice;
-
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.FailureHandler;
 import androidx.test.espresso.base.DefaultFailureHandler;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.UiDevice;
 
-import android.content.Context;
 import org.hamcrest.Matcher;
-import android.view.View;
-import android.app.Activity;
-import java.lang.Throwable;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 
 
 public class MyActivityTestRule<T extends Activity> extends ActivityTestRule<T> {
 
-  UiDevice mDevice;
-  
-  public MyActivityTestRule(java.lang.Class<T> cls, boolean initialTouchMode, boolean launchActivity) {
-    super(cls, initialTouchMode, launchActivity);
-    mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-  }
+    UiDevice mDevice;
 
-  public MyActivityTestRule(java.lang.Class<T> cls) {
-    this(cls, false, true);
-  }
+    public MyActivityTestRule(java.lang.Class<T> cls, boolean initialTouchMode, boolean launchActivity) {
+        super(cls, initialTouchMode, launchActivity);
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    }
 
-  @Override
-  public Statement apply(Statement base, Description description) {
-    final String testClassName = description.getClassName();
-    final String testMethodName = description.getMethodName();
-    final Context context =  InstrumentationRegistry.getTargetContext();
-    Espresso.setFailureHandler(new FailureHandler() {
-      @Override public void handle(Throwable throwable, Matcher<View> matcher) {
-        seq++;
-        new DefaultFailureHandler(context).handle(throwable, matcher);
-      }
-    });
-    return super.apply(base, description);
-  }
+    public MyActivityTestRule(java.lang.Class<T> cls) {
+        this(cls, false, true);
+    }
 
-  private static int seq;
+    @Override
+    public Statement apply(Statement base, Description description) {
+        final String testClassName = description.getClassName();
+        final String testMethodName = description.getMethodName();
+        final Context context = InstrumentationRegistry.getTargetContext();
+        Espresso.setFailureHandler(new FailureHandler() {
+            @Override
+            public void handle(Throwable throwable, Matcher<View> matcher) {
+                seq++;
+                new DefaultFailureHandler(context).handle(throwable, matcher);
+            }
+        });
+        return super.apply(base, description);
+    }
+
+    private static int seq;
 }

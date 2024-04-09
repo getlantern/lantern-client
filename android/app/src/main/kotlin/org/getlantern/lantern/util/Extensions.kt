@@ -1,8 +1,8 @@
 package org.getlantern.lantern.util
 
-import org.getlantern.lantern.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.getlantern.lantern.BuildConfig
 
 inline fun debugOnly(block: () -> Unit) {
     if (BuildConfig.DEBUG) {

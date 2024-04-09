@@ -13,10 +13,7 @@
          running.
 
          This Theme is only used starting with V2 of Flutter's Android embedding. -->
-    <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name="android:windowBackground">?android:colorBackground</item>
-    </style><!-- styles.xml -->
-
+    <!-- styles.xml -->
 
 
     <!-- Base application theme. -->
@@ -51,14 +48,7 @@
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyApp.MaterialAlertDialog</item>
         <item name="radioButtonStyle">@style/Widget.MyApp.RadioButton</item>
     </style>
-    <style name="title">
-      <item name="android:textSize">16sp</item>
-      <item name="android:textColor">#000000</item>
-    </style>
-    <style name="subTitle">
-      <item name="android:textSize">14sp</item>
-      <item name="android:textColor">#707070</item>
-    </style>
+
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/secondary_pink</item>
     </style>
@@ -68,209 +58,18 @@
         <item name="color">#39C2D6</item>
     </style>
 
-    <style name="WelcomeButtonTheme" parent="@style/AppTheme">
-        <item name="colorControlActivated">@color/black</item>
-        <item name="colorControlNormal">@color/black</item>
-    </style>
-
-    <style name="SwitchButtonMD">
-        <item name="kswThumbDrawable">@drawable/ksw_md_thumb</item>
-        <item name="kswBackColor">@color/ksw_md_back_color</item>
-        <item name="kswBackMeasureRatio">1.45</item>
-        <item name="kswThumbMarginLeft">-16dp</item>
-        <item name="kswThumbMarginTop">-14dp</item>
-        <item name="kswThumbMarginRight">-16dp</item>
-        <item name="kswThumbMarginBottom">-14dp</item>
-        <item name="kswThumbWidth">@dimen/ksw_md_thumb_ripple_size</item>
-        <item name="kswThumbHeight">@dimen/ksw_md_thumb_ripple_size</item>
-    </style>
-
-    <style name="SwitchButtonMainStyle">
-        <item name="kswThumbWidth">57dp</item>
-        <item name="kswThumbHeight">57dp</item>
-        <item name="kswTextOn">@string/on_text</item>
-        <item name="kswTextOff">@string/off_text</item>
-        <item name="kswThumbColor">@color/accent_white</item>
-        <item name="kswBackColor">@color/black</item>
-        <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/ksw_md_back_color</item>
-        <item name="android:fontFamily">@string/sans_serif_medium</item>
-    </style>
-
-    <style name="SwitchButtonSettingStyle">
-        <item name="kswThumbWidth">24dp</item>
-        <item name="kswThumbHeight">24dp</item>
-        <item name="kswTextMarginH">0dp</item>
-        <item name="kswThumbColor">@color/accent_white</item>
-        <item name="kswBackColor">@color/setting_off</item>
-        <item name="android:fontFamily">@string/sans_serif_medium</item>
-    </style>
-
-
-    <style name="TextField" parent="@android:style/Widget.EditText">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/editText</item>
-        <item name="android:background">@color/pro_blue_color</item>
-    </style>
-
-    <style name="CardNumber" parent="@style/TextField">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:inputType">numberDecimal</item>
-        <item name="android:hint">@string/card_number</item>
-    </style>
-
-    <style name="CVC" parent="@style/TextField">
-        <item name="android:inputType">numberDecimal</item>
-        <item name="android:hint">@string/cvc</item>
-        <item name="android:layout_weight">0.7</item>
-        <item name="android:layout_width">0dp</item>
-    </style>
-
-    <style name="Button" parent="@android:style/Widget.Button">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:textColor">@color/buttonText</item>
-        <item name="android:background">@color/pink</item>
-    </style>
-
-    <style name="Save" parent="@style/Button">
-        <item name="android:layout_width">160dp</item>
-        <item name="android:layout_marginTop">4dp</item>
-        <item name="android:text">@string/checkout</item>
-    </style>
-
-    <style name="Spinner" parent="@android:style/Widget.Spinner">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@null</item>
-        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
-    </style>
-
-    <style name="SpinnerItem" parent="@android:style/Widget.TextView.SpinnerItem">
-
-        <item name="android:textAppearance">@style/TextAppearance.SpinnerItem</item>
-        <item name="android:textColor">@color/edittext_color</item>
-    </style>
-
-    <style name="TextAppearance.SpinnerItem" parent="@android:style/TextAppearance.Widget.TextView.SpinnerItem">
-        <item name="android:textColor">@color/edittext_color</item>
-    </style>
-
-    <style name="ExpMonth" parent="@style/Spinner">
-        <item name="android:textSize">16dp</item>
-        <item name="android:entries">@array/month_array</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">1.0</item>
-    </style>
-
-    <style name="ExpYear" parent="@style/Spinner">
-        <item name="android:textSize">16dp</item>
-        <item name="android:entries">@array/year_array</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">0.8</item>
-    </style>
-
-    <style name="ExpLatestYear" parent="@style/Spinner">
-        <item name="android:entries">@array/latest_year_array</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">0.8</item>
-    </style>
-
-
-    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabTextAppearance">@style/MyCustomTabText</item>
-        <item name="tabSelectedTextColor">@color/blue_color</item>
-    </style>
-
-    <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">
-        <item name="android:background">@color/accent_white</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/blue_color</item>
-    </style>
 
     <declare-styleable name="ShadowLayout">
-        <attr name="slCornerRadius" format="dimension"/>
-        <attr name="slShadowSize" format="dimension"/>
-        <attr name="slShadowColor" format="color"/>
-        <attr name="slDx" format="dimension"/>
-        <attr name="slDy" format="dimension"/>
+        <attr name="slCornerRadius" format="dimension" />
+        <attr name="slShadowSize" format="dimension" />
+        <attr name="slShadowColor" format="color" />
+        <attr name="slDx" format="dimension" />
+        <attr name="slDy" format="dimension" />
     </declare-styleable>
-
-    <style name="MaterialFieldErrorLayout" parent="TextAppearance.AppCompat.Medium">
-        <item name="android:textColor">@color/error</item>
-        <item name="android:textSize">10sp</item>
-        <item name="android:lineSpacingExtra">4sp</item>
-    </style>
-
-    <style name="MaterialFieldLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="boxStrokeColor">#0095a8</item>
-        <item name="boxStrokeWidth">2dp</item>
-        <item name="errorTextAppearance">@style/MaterialFieldErrorLayout</item>
-        <item name="errorEnabled">true</item>
-        <item name="boxCornerRadiusTopStart">4dp</item>
-        <item name="boxCornerRadiusTopEnd">4dp</item>
-        <item name="boxCornerRadiusBottomStart">4dp</item>
-        <item name="boxCornerRadiusBottomEnd">4dp</item>
-        <item name="android:fontFamily">@string/sans_serif</item>
-    </style>
-
-    <style name="MaterialField" parent="@android:style/Widget.EditText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">48dp</item>
-        <item name="android:drawablePadding">10dp</item>
-        <item name="android:background">@null</item>
-        <item name="android:fontFamily">@string/sans_serif</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:autoText">false</item>
-        <item name="errorEnabled">false</item>
-    </style>
-
-    <style name="MaterialButton" parent="@style/TextAppearance.MaterialComponents.Button">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:fontFamily">@string/sans_serif_medium</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:lineSpacingExtra">5sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:padding">10sp</item>
-        <item name="backgroundTint">@color/material_button_background</item>
-        <item name="cornerRadius">4sp</item>
-    </style>
-
-    <style name="Divider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">2dp</item>
-        <item name="android:background">#bfbfbf</item>
-    </style>
-
-    <style name="RegularText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@string/sans_serif</item>
-        <item name="fontFamily">@string/sans_serif</item>
-    </style>
-
-    <style name="ThinText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@string/sans_serif_thin</item>
-        <item name="fontFamily">@string/sans_serif_thin</item>
-    </style>
-
-    <style name="LightText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@string/sans_serif_light</item>
-        <item name="fontFamily">@string/sans_serif_light</item>
-    </style>
 
     <style name="MediumText" parent="@style/TextAppearance.AppCompat.Body1">
         <item name="android:fontFamily">@string/sans_serif_medium</item>
         <item name="fontFamily">@string/sans_serif_medium</item>
-    </style>
-
-    <style name="BlackText" parent="@style/TextAppearance.AppCompat.Body1">
-        <item name="android:fontFamily">@string/sans_serif_black</item>
-        <item name="fontFamily">@string/sans_serif_black</item>
     </style>
 
     <style name="TextAppearance.MyApp.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
@@ -295,12 +94,6 @@
     <style name="TextAppearance.MyApp.Overline" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">10sp</item>
-    </style>
-
-    <style name="TextAppearance.MyApp.Overline.Small">
-        <item name="android:textSize">8sp</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="TextAppearance.MyApp.Body1" parent="TextAppearance.MaterialComponents.Body1">
@@ -337,15 +130,6 @@
         <item name="android:insetBottom">0dp</item>
     </style>
 
-    <style name="Widget.MyApp.Button.TextButton.Small" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
-        <item name="textColor">@color/secondary_pink</item>
-        <item name="android:textColor">@color/secondary_pink</item>
-        <item name="fontFamily">sans-serif-medium</item>
-        <item name="textAllCaps">true</item>
-        <item name="android:textAllCaps">true</item>
-    </style>
-
     <style name="Widget.MyApp.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textAppearance">?attr/textAppearanceBody2</item>
         <item name="textColor">@color/secondary_pink</item>
@@ -358,14 +142,6 @@
         <item name="android:insetBottom">0dp</item>
         <item name="strokeColor">@color/secondary_pink</item>
         <item name="strokeWidth">@dimen/stroke_large</item>
-    </style>
-
-    <style name="Widget.MyApp.Button.TextButton.Normal" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
-        <item name="textColor">@color/secondary_pink</item>
-        <item name="android:textColor">@color/secondary_pink</item>
-        <item name="fontFamily">sans-serif-medium</item>
-        <item name="textAllCaps">true</item>
     </style>
 
     <style name="ThemeOverlay.MyApp.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
@@ -389,23 +165,17 @@
         <item name="android:textColor">@color/grey_5</item>
     </style>
 
-    <style name="Widget.MyApp.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="hintTextColor">@color/tertiary_green</item>
-        <item name="boxStrokeColor">@color/box_stroke_color</item>
-        <item name="android:textColorHint">@color/grey_5</item>
-        <item name="startIconTint">@color/black</item>
-        <item name="endIconTint">@color/black</item>
-    </style>
-
-    <style name="Widget.MyApp.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-        <item name="hintTextColor">@color/tertiary_green</item>
-        <item name="boxStrokeColor">@color/box_stroke_color</item>
-        <item name="android:textColorHint">@color/grey_5</item>
-        <item name="startIconTint">@color/black</item>
-        <item name="endIconTint">@color/black</item>
-    </style>
-
     <style name="Widget.MyApp.RadioButton" parent="Widget.MaterialComponents.CompoundButton.RadioButton">
         <item name="buttonTint">@color/button_tint</item>
     </style>
+
+    <style name="title">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+    <style name="subTitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#707070</item>
+    </style>
+
 </resources>

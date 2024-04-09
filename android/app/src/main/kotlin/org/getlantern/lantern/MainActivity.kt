@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
@@ -78,7 +79,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     ) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
-        messagingModel = MessagingModel(this, flutterEngine)
+        messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         sessionModel = SessionModel(this, flutterEngine)
         replicaModel = ReplicaModel(this, flutterEngine)
@@ -129,6 +130,12 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
+
+        // if not in dev mode, prevent screenshots of this activity by other apps
+        if (!BuildConfig.DEVELOPMENT_MODE) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
+
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
@@ -318,7 +325,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     if (user.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
 
                     // Switch to free account if device it not linked
-                    devices?.filter { it.id == deviceID }?.run {
+                    devices.filter { it.id == deviceID }.run {
                         if (isEmpty()) {
                             LanternApp.getSession().logout()
                             restartApp()
@@ -343,7 +350,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     proPlans: Map<String, ProPlan>,
                     paymentMethods: List<PaymentMethods>,
 
-                ) {
+                    ) {
                     Logger.debug(TAG, "Successfully fetched payment methods")
                     processPaymentMethods(proPlans, paymentMethods)
                 }
@@ -356,7 +363,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         proPlans: Map<String, ProPlan>,
         paymentMethods: List<PaymentMethods>,
 
-    ) {
+        ) {
         for (planId in proPlans.keys) {
             proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
         }

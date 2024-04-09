@@ -1,29 +1,25 @@
 package org.getlantern.lantern.model;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Proxy;
+import android.os.Build;
+import android.os.Parcelable;
+import android.util.ArrayMap;
+import android.webkit.WebView;
+
+import org.apache.http.HttpHost;
+import org.getlantern.mobilesdk.Logger;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.http.HttpHost;
-
-import android.content.Context;
-import android.os.Build;
-
-import android.webkit.WebView;
-import android.util.ArrayMap;
-import android.net.Proxy;
-import java.io.StringWriter;
-import java.io.PrintWriter;
-
-import android.content.Intent;
-import android.os.Parcelable;
-
-import org.getlantern.mobilesdk.Logger;
-
 /**
  * Utility class for setting WebKit proxy used by Android WebView
- *
  */
 public class ProxySettings {
 
@@ -45,7 +41,7 @@ public class ProxySettings {
         Object ret = null;
         Class networkClass = Class.forName("android.webkit.Network");
         if (networkClass != null) {
-            Object networkObj = invokeMethod(networkClass, "getInstance", new Object[] { ctx },
+            Object networkObj = invokeMethod(networkClass, "getInstance", new Object[]{ctx},
                     Context.class);
             if (networkObj != null) {
                 ret = getDeclaredField(networkObj, "mRequestQueue");
@@ -88,8 +84,7 @@ public class ProxySettings {
     /**
      * Override WebKit Proxy settings
      *
-     * @param ctx
-     *            Android ApplicationContext
+     * @param ctx  Android ApplicationContext
      * @param host
      * @param port
      * @return true if Proxy was successfully set
@@ -110,9 +105,9 @@ public class ProxySettings {
                     setDeclaredField(requestQueueObject, "mProxyHost", httpHost);
                     ret = true;
                 }
-            } else if (Build.VERSION.SDK_INT <= 15)  {
+            } else if (Build.VERSION.SDK_INT <= 15) {
                 ret = setICSProxy(ctx, host, port);
-            }  else if (Build.VERSION.SDK_INT <= 18) {
+            } else if (Build.VERSION.SDK_INT <= 18) {
                 return setProxyJB(webview, host, port);
             }
             // 4.4 (KK)
@@ -126,23 +121,19 @@ public class ProxySettings {
         return ret;
     }
 
-    private static boolean setICSProxy(Context ctx, String host, int port) throws Exception
-    {
+    private static boolean setICSProxy(Context ctx, String host, int port) throws Exception {
 
-        try
-        {
+        try {
             Class webViewCoreClass = Class.forName("android.webkit.WebViewCore");
 
             Class proxyPropertiesClass = Class.forName("android.net.ProxyProperties");
-            if (webViewCoreClass != null && proxyPropertiesClass != null)
-            {
+            if (webViewCoreClass != null && proxyPropertiesClass != null) {
                 Method m = webViewCoreClass.getDeclaredMethod("sendStaticMessage", Integer.TYPE,
                         Object.class);
                 Constructor c = proxyPropertiesClass.getConstructor(String.class, Integer.TYPE,
                         String.class);
 
-                if (m != null && c != null)
-                {
+                if (m != null && c != null) {
                     m.setAccessible(true);
                     c.setAccessible(true);
                     Object properties = c.newInstance(host, port, null);
@@ -151,20 +142,17 @@ public class ProxySettings {
                     m.invoke(null, PROXY_CHANGED, properties);
                     Logger.debug("ProxySettings", "Successfully set webview proxy");
                     return true;
-                }
-                else
+                } else
                     return false;
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Logger.error("ProxySettings",
                     "Exception setting WebKit proxy through android.net.ProxyProperties: "
-                            + e.toString());
-        } catch (Error e)
-        {
+                            + e);
+        } catch (Error e) {
             Logger.error("ProxySettings",
                     "Exception setting WebKit proxy through android.webkit.Network: "
-                            + e.toString());
+                            + e);
         }
 
         return false;
@@ -187,7 +175,7 @@ public class ProxySettings {
 
         try {
             Class wvcClass = Class.forName("android.webkit.WebViewClassic");
-            Class wvParams[] = new Class[1];
+            Class[] wvParams = new Class[1];
             wvParams[0] = Class.forName("android.webkit.WebView");
             Method fromWebView = wvcClass.getDeclaredMethod("fromWebView", wvParams);
             Object webViewClassic = fromWebView.invoke(null, webview);
@@ -205,20 +193,20 @@ public class ProxySettings {
             Object sJavaBridge = getFieldValueSafely(sJavaBridgeField, mBrowserFrame);
 
             Class ppclass = Class.forName("android.net.ProxyProperties");
-            Class pparams[] = new Class[3];
+            Class[] pparams = new Class[3];
             pparams[0] = String.class;
             pparams[1] = int.class;
             pparams[2] = String.class;
             Constructor ppcont = ppclass.getConstructor(pparams);
 
             Class jwcjb = Class.forName("android.webkit.JWebCoreJavaBridge");
-            Class params[] = new Class[1];
+            Class[] params = new Class[1];
             params[0] = Class.forName("android.net.ProxyProperties");
             Method updateProxyInstance = jwcjb.getDeclaredMethod("updateProxy", params);
 
             updateProxyInstance.invoke(sJavaBridge, ppcont.newInstance(host, port, null));
         } catch (Exception ex) {
-            Logger.error(LOG_TAG,"Setting proxy with >= 4.1 API failed with error: " + ex.getMessage());
+            Logger.error(LOG_TAG, "Setting proxy with >= 4.1 API failed with error: " + ex.getMessage());
             return false;
         }
 

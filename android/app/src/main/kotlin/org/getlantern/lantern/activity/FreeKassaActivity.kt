@@ -2,7 +2,6 @@ package org.getlantern.lantern.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -15,6 +14,7 @@ import org.androidannotations.annotations.EActivity
 import org.androidannotations.annotations.Extra
 import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.ProError
@@ -156,7 +156,7 @@ open class FreeKassaActivity : BaseFragmentActivity() {
     // using it to make a purchase. The purchase state will be "pending" in the
     // backend, but it'll eventually fail.
     private fun convertToPro() {
-        val intent = Intent(this, WelcomeActivity_::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         LanternApp.getSession().linkDevice()
         LanternApp.getSession().setIsProUser(true)
         intent.putExtra("provider", "freekassa")

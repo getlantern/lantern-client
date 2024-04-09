@@ -60,8 +60,8 @@ public class ProPlan {
         // default constructor
     }
 
-    public ProPlan(String id, Map<String, Long> price, Map<String, Long> priceWithoutTax, 
-        boolean bestValue, Map<String, Integer> duration) {
+    public ProPlan(String id, Map<String, Long> price, Map<String, Long> priceWithoutTax,
+                   boolean bestValue, Map<String, Integer> duration) {
         this.id = id;
         this.price = price;
         this.priceWithoutTax = priceWithoutTax;

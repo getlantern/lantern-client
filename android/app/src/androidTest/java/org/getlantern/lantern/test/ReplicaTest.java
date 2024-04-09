@@ -1,7 +1,6 @@
 package org.getlantern.lantern.test;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.test.filters.LargeTest;
@@ -9,7 +8,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.getlantern.lantern.LanternApp;
-import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Settings;
 import org.getlantern.mobilesdk.StartResult;
 import org.getlantern.mobilesdk.embedded.EmbeddedLantern;
@@ -18,13 +16,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import internalsdk.Internalsdk;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
