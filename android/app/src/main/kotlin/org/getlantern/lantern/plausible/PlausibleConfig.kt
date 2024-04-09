@@ -73,9 +73,9 @@ open class ThreadSafePlausibleConfig(
 class AndroidResourcePlausibleConfig(context: Context) : ThreadSafePlausibleConfig(
     eventDir = File(context.applicationContext.filesDir, "events"),
     screenWidth =
-        with(Resources.getSystem().displayMetrics) {
-            widthPixels / density
-        }.roundToInt(),
+    with(Resources.getSystem().displayMetrics) {
+        widthPixels / density
+    }.roundToInt(),
 ) {
     init {
         domain = context.resources.getString(R.string.plausible_domain)

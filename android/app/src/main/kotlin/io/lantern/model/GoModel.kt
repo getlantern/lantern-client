@@ -11,7 +11,7 @@ import io.lantern.db.DB
 import minisql.Value
 import org.getlantern.mobilesdk.Logger
 
-open class GoModel<M : internalsdk.Model> constructor(
+open class GoModel<M : internalsdk.Model>(
     val name: String,
     flutterEngine: FlutterEngine,
     db: DB,
@@ -76,24 +76,24 @@ open class GoModel<M : internalsdk.Model> constructor(
     }
 }
 
-private class Arguments constructor(private val call: MethodCall) : Arguments {
+private class Arguments(private val call: MethodCall) : Arguments {
     override fun get(key: String): Value? =
         when (val arg = call.argument<Any>(key)) {
-            is Long -> minisql.Value(arg)
-            is Int -> minisql.Value(arg.toLong())
-            is String -> minisql.Value(arg)
-            is Boolean -> minisql.Value(arg)
-            is ByteArray -> minisql.Value(arg)
+            is Long -> Value(arg)
+            is Int -> Value(arg.toLong())
+            is String -> Value(arg)
+            is Boolean -> Value(arg)
+            is ByteArray -> Value(arg)
             else -> null
         }
 
     override fun scalar(): Value? =
         when (val arg = call.arguments) {
-            is Long -> minisql.Value(arg)
-            is Int -> minisql.Value(arg.toLong())
-            is String -> minisql.Value(arg)
-            is Boolean -> minisql.Value(arg)
-            is ByteArray -> minisql.Value(arg)
+            is Long -> Value(arg)
+            is Int -> Value(arg.toLong())
+            is String -> Value(arg)
+            is Boolean -> Value(arg)
+            is ByteArray -> Value(arg)
             else -> null
         }
 }

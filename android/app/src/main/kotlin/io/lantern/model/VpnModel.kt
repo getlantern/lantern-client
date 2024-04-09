@@ -51,7 +51,7 @@ class VpnModel(
                 bandwidth.ttlSeconds,
             )
         } catch (t: Throwable) {
-            Logger.error("VPNModel","Error updating bandwidth", t)
+            Logger.error("VPNModel", "Error updating bandwidth", t)
         }
     }
 }

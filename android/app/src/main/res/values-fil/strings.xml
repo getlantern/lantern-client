@@ -1,329 +1,329 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">Lantern</string>
-  <string name="action_settings">Settings</string>
-  <string name="proxy_all_setting">I-proxy lahat ng traffic</string>
-  <string name="proxy_all_on_header">BUKAS (Pinakaligtas na opsyon)</string>
-  <string name="proxy_all_off_header">SARADO (Pinakamabilis na opsyon)</string>
-  <string name="button_text">Magsimula</string>
-  <string name="drawer_open">Bukas ang Drawer</string>
-  <string name="drawer_close">Nakasara ang Drawer</string>
-  <string name="default_fragment">Default Fragment</string>
-  <string name="receive_lantern">Tumanggap ng Lantern desktop mula sa email</string>
-  <string name="lantern_desktop">Lantern Desktop</string>
-  <string name="email_hint">Email</string>
-  <string name="send_button">Ipadala</string>
-  <string name="send_desktop">Ipadala ang Desktop</string>
-  <string name="send_email">Ipadala ang Emai</string>
-  <string name="your_email">Iyong Email</string>
-  <string name="your_email_address">Iyong Email Address</string>
-  <string name="please_enter">Pakilagay at kumpirmahin ang iyong email address.</string>
-  <string name="please_enter_register">Pakilagay at kumpirmahin ang iyong email address upang magrehistro ng iyong Lantern Pro Account.</string>
-  <string name="your_referral_code">Iyong Referral Code</string>
-  <string name="report_an_issue">Mag-ulat ng Isyu</string>
-  <string name="select_issue">Mangyaring pumili ng isyu</string>
-  <string name="select_issue_desc">Mangyaring mag-iwan ng maikling detalye ng iyong isyu dito \nat makikipag-ugnayan kami agad sa iyo.</string>
-  <string name="submit">Isumite</string>
-  <string name="submit_issue">Isumite ang isyu</string>
-  <string name="no_issue_selected">Mangyaring pumili ng isyu bago isumite ang ulat</string>
-  <string name="cannot_find_email">Oops! Nagkakaroon kami ng problema sa paghanap ng email address na ito.</string>
-  <string name="no_purchase_date">Mangyaring pumili ng tinatayang petsa kung kailan bumili ng Lantern Pro</string>
-  <string name="purchase_date">Petsa ng Pagbili</string>
-  <string-array name="common_issue_list">
-    <item>Hindi makapasok sa mga naka-block na site</item>
-    <item>Hindi makumpleto ang pagbili</item>
-    <item>Hindi makapag-sign in</item>
-    <item>Ang spinner ay walang katapusang naglo-load</item>
-    <item>Mabagal</item>
-    <item>Iba pa</item>
-  </string-array>
-  <string name="submit_code">Kumpirmahin ang Code</string>
-  <string name="on_text">BUKAS</string>
-  <string name="off_text">SARADO</string>
-  <string name="lantern_off">Ang Lantern ay Sarado. Pindutin ang switch upang makapasok sa mga naka-block na site at serbisyo!</string>
-  <string name="lantern_on">Ang Lantern ay Nakabukas. Makakapasok ka na ngayon sa mga naka-block na site at serbisyo!</string>
-  <string name="on_desc">Maaari ka na ngayong makapasok sa\r\nmga naka-block na site at serbisyo</string>
-  <string name="off_desc">Pindutin ang button upang makapasok sa mga naka-block na site at serbisyo!</string>
-  <string name="desktop_option">Bersyon ng Desktop</string>
-  <string name="contact_option">Makipag-ugnayan</string>
-  <string name="check_for_update">Tumingin ng Update</string>
-  <string name="no_update_available">Ikaw ay up to date!</string>
-  <string name="error_making_purchase">May problema sa pagbili</string>
-  <string name="cancel">Kanselahin</string>
-  <string name="newsfeed_option">Subukan ang Lantern Feed</string>
-  <string name="newsfeed_off_option">Ihinto ang Feed</string>
-  <string name="privacy_policy">Polisiya sa Pagkapribado</string>
-  <string name="share_option">Ibahagi</string>
-  <string name="quit_option">Umalis</string>
-  <string name="share_email_native"></string>
-  <string name="share_email_subject">Lantern Android</string>
-  <string name="fatal_error">Nakatagpo ang Lantern ng malubhang error at hindi na umaandar</string>
-  <string name="share_twitter">Tingnan ang Lantern Android: https://bit.ly/lanternapk</string>
-  <string name="share_facebook">Gumagamit ako ng Lantern para sa Android, makikita ito dito: https://bit.ly/lanternapk</string>
-  <string name="share_email_gmail">Gumagamit ako ng Lantern para sa Android, in-attach ko ang APK file!</string>
-  <string name="share_sms">Gumagamit ako ng Lantern para sa Android, i-download ito dito: https://bit.ly/lanternapk</string>
-  <string name="share_chooser_text">Ibahagi ang Lantern Android</string>
-  <string name="card">Card</string>
-  <string name="credit_card">Credit Card</string>
-  <string name="Alipay">Alipay</string>
-  <string name="alipay_account">Alipay account</string>
-  <string name="month">Buwan</string>
-  <string name="year">Taon</string>
-  <string name="success_email">Ang Lantern Desktop ay in-email sa iyo!</string>
-  <string name="send_logs">Ipadala ang mga Log</string>
-  <string name="help_survey">Tumulong na maging mas maganda ang Lantern, sagutan ang isang tanong na survey ngayon!</string>
-  <string name="take_survey">Sagutan ang Survey!</string>
-  <string name="thanks_survey">Salamat sa pagsagot sa aming survey!\n</string>
-  <string name="invalid_email">Hindi wastong email address</string>
-  <string name="error_payment_gateway">Nagkaroon ng problema sa pakikipag-ugnayan sa gateway ng pagbabayad</string>
-  <string name="emails_do_not_match">Hindi magkapareho ang mga email field</string>
-  <string name="invalid_reseller_code">Ang reseller code na iyong inilagay ay hindi wasto</string>
-  <string name="invalid_referral_code">Hindi wastong referral code</string>
-  <string name="cannot_use_own_referral_code">Hindi magagamit ang iyong sariling referral code para sa promosyon.</string>
-  <string name="no_internet_connection">Walang koneksyon sa Internet sa magagamit!</string>
-  <string name="unable_remove_device">Hindi matanggal ang device. Pakisubukang muli mamaya!</string>
-  <string name="remove">Tanggalin</string>
-  <string name="contact_email">team@getlantern.org</string>
-  <string name="contact_message">Tulungan Ako</string>
-  <string name="contact_subject">Lantern Android</string>
-  <string name="not_now">Hindi Ngayon</string>
-  <string name="install_update">Update</string>
-  <string name="error_update">Nagkaproblema sa Pag-download ng Update</string>
-  <string name="loading">Nagloload..</string>
-  <string name="manual_update">Subukan ang manu-manong pag-install ng pinakabagong bersyon &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
-  <string name="pro_welcome_text">Maligayang Pagdating sa Lantern Pro</string>
-  <string name="happy_anniversary">MALIGAYANG ANIBERSARYO SA LANTERN!</string>
-  <string name="welcome_greeting">Maligayang Pagdating sa Lantern</string>
-  <string name="upgrade_for">Mag-upgrade para sa \nhindi nagbabagong &amp; bilis</string>
-  <string name="what_kind_of_lantern">Anong klaseng Lantern \nang iyong gusto?</string>
-  <string name="lantern_pro_radio">Lantern Pro - Walang Limitasyong Data</string>
-  <string name="lantern_free_radio">Lantern Basic - 500MB Data</string>
-  <string name="welcome_to_lantern">Maligayang pagdating sa bago at pinagandang Lantern</string>
-  <string name="to_get_unlimited">Upang magkaroon ng walang limitasyong data, mabilis at mas malakas na blocking resistance \nMAG-UPGRADE sa Pro!</string>
-  <string name="renew_pro_account">Mag-renew ng Pro Account</string>
-  <string name="logout">Log out</string>
-  <string name="change_phone_number">Baguhin ang Numero sa Telepono</string>
-  <string name="change_email_address">Baguhin ang Email Address</string>
-  <string name="pro_account_expires">Ang iyong Pro account ay mag-eexpire sa %1$s</string>
-  <string name="includes_free_months">Kasama dito ang iyong %2$d buwang bonus!</string>
-  <string name="verified_phone_number">Beripikahin ang Numero sa Telepono:</string>
-  <string name="devices_authorized">Ang mga device na awtorisadong gumamit ng iyong Pro account</string>
-  <string name="send_us_your_logs">Ipadala sa amin ang iyong mga Log</string>
-  <string name="thanks_purchase">Salamat sa pagbili ng Lantern Pro!</string>
-  <string name="start_inviting">\r\nMagsimulang mag-imbita!</string>
-  <string name="sending_request">Pinoproseso ang kahilingan</string>
-  <string name="invite_friends">Ilagay ang iyong e-mail upang makatanggap ng code na maibabahagi sa iyong mga kaibigan. Magkaroon ng libreng buwan sa PRO kapag sila ay nag-sign up!</string>
-  <string name="invite_friends_welcome">Kapag ang iyong kaibigan ay bumili ng dalawang taong plan magkakaroon kayo pareho ng libreng 3 buwan, kapag isang taong plan makakakuha kayo pareho ng libreng 1 buwan.</string>
-  <string name="invite_friends_btn">Imbitahan ang mga Kaibigan</string>
-  <string name="share_friends_text">Ibahagi ang iyong mga kaibigan upan magkaroon ng libreng buwan!</string>
-  <string name="email_address">Email Address</string>
-  <string name="continue_to_pro">Magpatuloy sa PRO</string>
-  <string name="continue_to_basic">Magpatuloy sa Basic na Bersyon</string>
-  <string name="continue_">Magpatuloy</string>
-  <string name="continue_to_payment">Magpatuloy sa Pagbabayd</string>
-  <string name="skip_to_checkout">Lagpasan ang Checkout</string>
-  <string name="free_pro_credits">Libreng Pro Credit</string>
-  <string name="get_pro_credits">Kumuha ng Libreng Pro Credit</string>
-  <string name="get_free_months">Kumuha ng Libreng Buwan</string>
-  <string name="text_invite">Imbitasyon sa Pag-text</string>
-  <string name="email_invite">Imbitasyon sa Pag-emai</string>
-  <string name="share_your_referral_code">Ibahagi ang Iyong Referral Code</string>
-  <string name="get_code">Kumuha ng Code</string>
-  <string name="get_code_text">Ilagay ang iyong e-mail upang makatanggap ng code na maibabahagi sa iyong mga kaibigan, magkaroon ng libreng buwan sa PRO kapag sila ay nag-sign up!</string>
-  <string name="enter_your_email">Ilagay ang iyong e-mail address upang makatanggap ng referral code</string>
-  <string name="referral_copied_to_clipboard">Nakopya na ang referral code sa clipboard!</string>
-  <string name="share_referral_text">Gamitin ang aking code na %1$s upang makakuha ng libreng 3 buwan pagkatapos bumili. I-download ang Lantern dito https://bit.ly/lanternapk</string>
-  <string name="previous_code">Kung nakatanggap ka na dati ng referral code \r\nmangyaring siguruhin na gumagamit ng parehong email address.</string>
-  <string name="payment_plans">Mga Plan sa Pagbabayad ng Lantern PRO</string>
-  <string name="features_text">Mga Tampok sa Lantern PRO</string>
-  <string name="checkout">Checkout</string>
-  <string name="cvc">CVC</string>
-  <string name="cc_number">Credit Card</string>
-  <string name="card_number">Numero sa Card</string>
-  <string name="validation_errors">Nagkaproblema sa Pagva-validate</string>
-  <string name="progressMessage">Pinoproseso ang Kahilingan...</string>
-  <string name="progressMessage2">Nire-retrieve ang referral code</string>
-  <string name="language">Wika</string>
-  <string name="settings">Settings</string>
-  <string name="referral_applied">Ang iyong libreng buwan ay idadagdag sa iyo at sa iyong kaibigan kapag kumpleto na ang pag-checkout!</string>
-  <string name="all_feeds">lahat</string>
-  <string name="feed.error.oops">Oops!</string>
-  <string name="feed.error.error_fetching_feed">Nagkaproblema sa Pagkuha ng Feed</string>
-  <string name="feed.error.try_again">Pakisubukang muli</string>
-  <string name="authorize_device_pro">Mag-awtorisado ng Device Para sa Pro</string>
-  <string name="add_device">Magdagdag ng Device</string>
-  <string name="now_authorized">Ang device na ito ay awtorisado ng gamitin ang iyong Pro Account!</string>
-  <string name="i_have_another">Mayroon akong iba pang Lantern Pro device</string>
-  <string name="link_this_device">I-link ang Device na Ito</string>
-  <string name="or">O</string>
-  <string name="need_to_recover">Kailangan kong i-recover ang aking Lantern Pro account</string>
-  <string name="start_recovery">Simulan ang Pagrecover</string>
-  <string name="account_recovery">Account Recovery</string>
-  <string name="account_recovery_code">Account Recovery Code</string>
-  <string name="thanks_report">Salamat, makikipag-ugnayan ang Lantern Customer support sa loob ng 48 oras.</string>
-  <string name="enter_valid_code">Pakilagay ang wastong recovery code.</string>
-  <string name="too_many_devices">Ang limitasyon ng device na maaaring i-link sa iyong Pro account ay naabot na.</string>
-  <string name="check_spam_folder">Pakitingnan ang iyong spam folder kung hindi mo natanggap ang email</string>
-  <string name="by_referral">Tumanggap ng Pro sa Pag-refer sa Kaibigan</string>
-  <string-array name="payment_method_list">
-    <item>Alipay</item>
-    <item>Credit Card</item>
-    <item>Tumanggap ng Pro sa Pag-refer sa Kaibigan</item>
-  </string-array>
-  <string name="payment_method">Pamamaraan sa pagbayad</string>
-  <string name="payment_account">Account sa pagbabayad</string>
-  <string name="oops_having_trouble">Oops! Nagkakaroon kami ng problema sa paghanap ng email address na ito. Mangyaring ibigay ang impormasyon sa ibaba upang matulungan kaming mahanap ang iyong account.</string>
-  <string name="locate_account">Pakilagay ang iba pang impormasyon na makakatulong sa amin na mahanap ang iyong account.</string>
-  <string name="resend_email">Muling Ipadala ang Email</string>
-  <string name="dont_remember">Hindi Maalala ang Iyong Email Address?</string>
-  <string name="device_code">Device Linking Code</string>
-  <string name="device_now_linked">Matagumpay mong nai-link ang iyong device!\n</string>
-  <string name="device_linked_success">Tagumpay! Ang iyong bagong device ay mali-link maya-maya lamang.\n</string>
-  <string name="link_this_device_0">Upang i-link ang device na ito sa iyong Pro account:</string>
-  <string name="link_this_device_1"><b>1.</b> Buksan ang \"Magdagdag ng Device\" na item sa menu ng iyong Pro device.</string>
-  <string name="link_this_device_2"><b>2.</b> Ilagay ang device linking code, at isumite.</string>
-  <string name="make_sure_updated">* Siguraduhing ikaw ay updated sa pinakabagong bersyon ng Lantern sa iyong Pro device</string>
-  <string name="make_sure_updated_2">* Siguraduhin na ikaw ay updated sa pinakabagong bersyon ng Lantern sa iyong hindi awtorisadong device.</string>
-  <string name="error_device_code">Nagkaroon ng problema sa pag-retrieve ng linking code. Pakisubukang muli mamaya.</string>
-  <string name="decline_offer">Sigurado ka bang nais mong \ntanggihan ang alok na ito?</string>
-  <string-array name="renewal_confirm">
-    <item>Oo, magre-renew ako mamaya</item>
-    <item>Huwag na itong ipakita muli sa\'kin</item>
-  </string-array>
-  <string-array name="pro_features">
-    <item>Mas Mabilis</item>
-    <item>Walang Limitasyong Data</item>
-    <item>Blocking Resistant</item>
-    <item>Tatlong Device</item>
-    <item>Walang Ads</item>
-  </string-array>
-  <string-array name="pro_features_welcome">
-    <item>Walang limitasyong mabilis na data</item>
-    <item>Malakas na blocking resistance</item>
-    <item>Pinagandang pagpili ng server</item>
-    <item>Maaasahan at ligtas na koneksyon</item>
-  </string-array>
-  <string-array name="basic_features">
-    <item>500MB na mabilis na data bawat buwan</item>
-    <item>Maaasahan at ligtas na access sa bukas na Internet</item>
-  </string-array>
-  <string name="purchased_from_reseller">Bumili ng Lantern Pro mula sa isang reseller? Pindutin dito!</string>
-  <string-array name="authorize_device_list">
-    <item><b>1.</b> Buksan ang \'Mag-awtorisa ng Device Para sa Pro\' na item sa menu ng iyong hindi awtorisadong device.</item>
-    <item><b>2.</b> Ilagay ang linking code na nakuha mula sa unang hakbang at isumite</item>
-  </string-array>
-  <string-array name="enter_code_steps_referral">
-    <item>Ilagay ang verification code na iyong natanggap sa email upang magpatuloy sa Pro!</item>
-    <item>Hindi natanggap ang code? Tingnan ang iyong spam folder at siguraduhin na nailagay mo ng tama ang iyong email address.</item>
-  </string-array>
-  <string-array name="enter_email_list">
-    <item>Ilagay ang iyong email address upang maging awtorisado ang device na ito na gamitin ang iyong libreng buwan sa Lantern Pro</item>
-    <item>Papadalhan ka namin ng authorization code sa email</item>
-  </string-array>
-  <string name="only_one_device">Isang Device Lamang</string>
-  <string name="sorry_cannot_remove">Pasensya na, ngunit hindi mo maaaring tanggalin ang iyong huling awtorisadong device</string>
-  <string name="send_link">Ipadala ang Link</string>
-  <string name="click_button">Pindutin ang button upang makapasok sa mga naka-block na site at serbisyo!</string>
-  <string name="lantern_pro">Lantern Pro</string>
-  <string name="lantern_pro_header">Lantern Pro:</string>
-  <string name="lantern_pro_checkout">Lantern Pro Checkout</string>
-  <string name="invite_friends_header">Imbitahan ang mga kaibigan</string>
-  <string name="pro_desc">Mas Mabilis, mas Magaling, mas Matibay</string>
-  <string name="free_month">Magkaroon ng libreng buwan sa pro sa bawat sign up</string>
-  <string name="get_pro_now">Kumuha ng Pro Ngayon</string>
-  <string name="inviting_friends">Magkaroon ng Pro credit sa pag-imbita ng iyong mga kaibigan</string>
-  <string name="select">Pumili</string>
-  <string name="special_launch">Espesyal na Inilunsad na Presyo!</string>
-  <string name="best_value">Pinakamagandang Halaga!</string>
-  <string name="referral_code_opt">Referral Code (opsyonal)</string>
-  <string name="total">Kabuuan:</string>
-  <string name="pro_account_header">Pamamahala ng Pro Account</string>
-  <string name="pro_account_month_text">Kasalukuyan kang may buwanang account sa Lantern PRO. Ang iyong account ay awtomatikong sisingilin para sa isa pang buwan sa Lantern Pro sa katapusan ng billing cycle. </string>
-  <string name="pro_account_year_text">Kasalukuyan kang may taunang account sa Lantern PRO. Ang iyong account ay awtomatikong sisingilin para sa isa pang taon sa Lantern Pro sa katapusan ng billing cycle. </string>
-  <string name="cancel_pro_account">Kanselahin ang Pro Account</string>
-  <string name="account_verification">Beripikasyon ng Account</string>
-  <string name="enter_verification_code">Ilagay ang Verification Code</string>
-  <string name="referral_code">Referral Code</string>
-  <string name="get_lantern_pro">Kumuha ng Lantern Pro</string>
-  <string name="upgrade_to_lantern_pro">Mag-upgrade sa Lantern Pro</string>
-  <string name="pro_available_for">Para sa Windows, Android, Mac at Ubuntu. Parating na sa iOS</string>
-  <string name="data_remaining">%1$s%% na natitira mula sa iyong libreng buwanang mabilis na data</string>
-  <string name="upgrade">Upgrade</string>
-  <string name="upgrade_pro">Mag-upgrade sa Pro</string>
-  <string name="upgrade_now">Mag-upgrade Ngayon</string>
-  <string name="next">Kasunod</string>
-  <string name="become_reseller">Kumita! Maging tagabenta ng Lantern Pro. Pindutin Dito</string>
-  <string name="faster_stronger">Mas mabilis. Mas malakas. Walang limitasyon. Ligtas</string>
-  <string name="reseller_email_subject">Sabihin mo sa akin ang tungkol sa Lantern Pro Reseller Program!</string>
-  <string name="reseller_email_message">Kapag ikaw ay naging Lantern Reseller magkakaroon ka ng oportunidad na magkaroon ng hanggang 25% sa bawat benta ng suskripsyon sa Lantern Pro. Sabihin mo samin kahit konti, kung bakit nais mong maging reseller sa ibaba.</string>
-  <string name="no_email_client">Walang email client na naka-install.</string>
-  <string name="no_wall_at_all">Walang kahit na anong wall.</string>
-  <string name="buy_pro_now">Bumili ng Pro Ngayon</string>
-  <string name="update_billing_info">I-update ang Impormasyon sa Billing</string>
-  <string name="pro_credits_text">Imbitahan ang mga kaibigan, magkaroon ng mas maraming Pro</string>
-  <string name="could_not_complete_purchase">Hindi makumpleto ang pagbili ng Pro sa ngayon. Pakisubukang muli mamaya!</string>
-  <string name="invalid_verification_code">Hindi wastong verification code</string>
-  <string name="invalid_payment_method">Hindi wastong Pamamaraan sa pagbayad</string>
-  <string name="unable_to_cancel_account">Hindi makansela ang Pro Account! Mangyaring makipag-ugnayan sa team@getlantern.org</string>
-  <string name="earn_free_month">Kumita ng libreng buwan sa bawat kaibigan na magsa-sign up</string>
-  <string name="credits_applied">Ang iyong credit ay lalabas sa kasunod na billing cycle ng iyong account.</string>
-  <string name="pro_invitation_subject">Imbitasyon upang Sumali sa Lantern Pro</string>
-  <string name="receive_free_month">Para sa libreng buwan sa Lantern Pro, gamitin ang referral code na ito: %1$s; Maaari mo itong ma-download dito: https://lantern.io/download</string>
-  <string name="share_feed_item">Binabasa ko ang tungkol sa \"%1$s\" sa %2$s gamit ang Lantern. Gamitin ang Lantern upang makapasok sa mga naka-block na site at serbisyo. Maaari mo itong i-download para sa Android dito: https://bit.ly/lanternapk</string>
-  <string name="cancel_pro_confirmation">Sigurado ka ba? Ang aksyong ito ay hindi na mababawi! Maaari kang mag-sign up muli sa Pro anumang oras.</string>
-  <string name="unauthorize_confirmation">Sigurado ka bang nais mong tanggalin ang device na ito sa pagkaka-link mula sa iyong Pro account?</string>
-  <string name="yes">Oo</string>
-  <string name="no">Hindi</string>
-  <string name="item_image_contentDescription">Watawat ng bansa</string>
-  <string name="item_preview_country">Estados Unidos</string>
-  <string name="item_preview_dialCode">+1</string>
-  <string name="refresh">Refresh</string>
-  <string name="find">Humanap</string>
-  <string name="share_via">Ibahagi gamit ang</string>
-  <string name="copy_link">Kopyahin ang Link</string>
-  <string name="open_with">Buksan sa</string>
-  <string name="copied_to_clipboard">Nakopya na sa clipboard</string>
-  <string name="welcome_to_new">Maligayang pagdating sa bago at pinagandang Lantern!</string>
-  <string name="now_using">Ginagamit mo ngayon ang pinakamabilis at pinakamatatag na Lantern sa kasalukuyan.</string>
-  <string name="get_unlimited_data">Upang magkaroon ng walang limitasyong data, mabilis, at mas malakas na blocking resistance \nMAG-UPGRADE sa Pro!</string>
-  <string name="start_using">Magsimula ng Gumamit ng Lantern</string>
-  <string name="device_already_registered">Ang email address na ito ay mayroon ng suskripsyon sa Pro. Mangyaring bigyan ng awtorisasyon ang device na ito dito.</string>
-  <string name="email_in_use">Ang email na ito ay kasalukuyang ginagamit ng ibang user.</string>
-  <string name="congratulations">Binabati ka nami!</string>
-  <string name="referral_code_used">Isang kaibigan na iyong ini-refer ang bumili ng Lantern Pro. %d buwang libreng Pro ang inilagay sa iyong account. </string>
-  <string name="enter_email">Ilagay ang Email Address</string>
-  <string name="confirm_email">Kumpirmahin ang Email Address</string>
-  <string name="confirm_email_address">Kumpirmahin ang Email Addres</string>
-  <string name="register_pro_account">Magrehistro ng Pro Account</string>
-  <string name="renew_now">Mag-renew ngayon at magkaroon ng \nlibreng 3 buwan</string>
-  <string name="renew_ends_tomorrow">Ang diskwento sa pag-renew ay matatapos na bukas!</string>
-  <string name="renew_ends_today">Huling pagkakataon para sa libreng 3 buwan!</string>
-  <string name="renew_after">Mag-renew para sa ekstrang 45 araw na libre!</string>
-  <string name="renew_sub">TANDAAN: Ang iyong bagong biling plan na oras \nay idadagdag sa iyong kasalukuyang \nplan na oras.</string>
-  <string name="offer_ends_tomorrow">Ang alok ay matatapos bukas.</string>
-  <string name="offer_ends_today">Ang alok ay matatapos ngayon.</string>
-  <string name="limited_time_offer">Limitadong oras na alok.</string>
-  <string name="months_free">buwang LIBRE</string>
-  <string name="month_free">buwang LIBRE</string>
-  <string name="days_free">araw na LIBRE</string>
-  <string name="enter_pro_activation_code">Pakilagay ang iyong 25 character Lantern Pro activation code sa itaas. Kung hindi mo natanggap ang code, mangyaring makipag-ugnayan sa reseller na iyong binilhan.</string>
-  <string name="no_title">Walang Pamagat</string>
-  <string name="current_location_desc">Gumagamit ang Lantern ng matalinong pagpili ng server upang ikonekta ka sa aming pinakamagandang data center. Mag-upgrade sa Lantern Pro para sa mabilis at pinagandang pagpili ng server mula sa aming eksklusibong mga Lantern Pro data center.</string>
-  <string name="ad_blocking_desc">Bina-block ng Lantern ang mga nakakainis na ad upang pabilisin ang pag-load ng web page, makatipid sa bandwidth, at bigyan ka ng mas magandang karanasan sa pag-browse.</string>
-  <string name="https_upgrade_desc">Awtomatikong ina-upgrade ng Lantern ang hindi ligtas na HTTP connection sa encrypted na HTTPS connection kapag posible upang mapanatiling pribado ang iyong impormasyon habang nagsu-surf sa web.</string>
-  <string name="account_left_desc">Mayroon kang %1$d buwang natitira sa iyong Lantern Pro account</string>
-  <string name="optimized_location">Pinagandang lokasyon ng server</string>
-  <string name="current_location">Kasalukuyang Lokasyon:</string>
-  <string name="disconnected">Nadiskonekta</string>
-  <string name="https_upgrades">Mga Upgrade sa HTTPS</string>
-  <string name="data_usage">Paggamit ng Data</string>
-  <string name="pro_account">Pro Account</string>
-  <string name="blocked_ads">Naka-block na Ads</string>
-  <string name="upgrade_now_data">Mag-upgrade ngayon para sa walang limitasyong mabilis na serbisyo!</string>
-  <string name="renew_your_account">I-renew ang iyong account upang magdagdag ng mas maraming oras</string>
-  <string name="turn_on_lantern">Buksan ang Lantern para sa mas mabilis at ligtas na pagpasok sa mga naka-block na site at serbisyo.</string>
-  <string name="lantern_on_text">Ikaw ay nakakonekta sa pinakamabilis na Lantern server, Magsimula ng Mag-browse!</string>
-  <string name="lantern_notification">Abiso Mula sa Lantern</string>
-  <string name="apply_referral_code">Maglagay ng Referral Code</string>
-  <string name="terms_of_service">Mga Tuntunin ng Serbisyo</string>
+    <string name="app_name">Lantern</string>
+    <string name="action_settings">Settings</string>
+    <string name="proxy_all_setting">I-proxy lahat ng traffic</string>
+    <string name="proxy_all_on_header">BUKAS (Pinakaligtas na opsyon)</string>
+    <string name="proxy_all_off_header">SARADO (Pinakamabilis na opsyon)</string>
+    <string name="button_text">Magsimula</string>
+    <string name="drawer_open">Bukas ang Drawer</string>
+    <string name="drawer_close">Nakasara ang Drawer</string>
+    <string name="default_fragment">Default Fragment</string>
+    <string name="receive_lantern">Tumanggap ng Lantern desktop mula sa email</string>
+    <string name="lantern_desktop">Lantern Desktop</string>
+    <string name="email_hint">Email</string>
+    <string name="send_button">Ipadala</string>
+    <string name="send_desktop">Ipadala ang Desktop</string>
+    <string name="send_email">Ipadala ang Emai</string>
+    <string name="your_email">Iyong Email</string>
+    <string name="your_email_address">Iyong Email Address</string>
+    <string name="please_enter">Pakilagay at kumpirmahin ang iyong email address.</string>
+    <string name="please_enter_register">Pakilagay at kumpirmahin ang iyong email address upang magrehistro ng iyong Lantern Pro Account.</string>
+    <string name="your_referral_code">Iyong Referral Code</string>
+    <string name="report_an_issue">Mag-ulat ng Isyu</string>
+    <string name="select_issue">Mangyaring pumili ng isyu</string>
+    <string name="select_issue_desc">Mangyaring mag-iwan ng maikling detalye ng iyong isyu dito \nat makikipag-ugnayan kami agad sa iyo.</string>
+    <string name="submit">Isumite</string>
+    <string name="submit_issue">Isumite ang isyu</string>
+    <string name="no_issue_selected">Mangyaring pumili ng isyu bago isumite ang ulat</string>
+    <string name="cannot_find_email">Oops! Nagkakaroon kami ng problema sa paghanap ng email address na ito.</string>
+    <string name="no_purchase_date">Mangyaring pumili ng tinatayang petsa kung kailan bumili ng Lantern Pro</string>
+    <string name="purchase_date">Petsa ng Pagbili</string>
+    <string-array name="common_issue_list">
+        <item>Hindi makapasok sa mga naka-block na site</item>
+        <item>Hindi makumpleto ang pagbili</item>
+        <item>Hindi makapag-sign in</item>
+        <item>Ang spinner ay walang katapusang naglo-load</item>
+        <item>Mabagal</item>
+        <item>Iba pa</item>
+    </string-array>
+    <string name="submit_code">Kumpirmahin ang Code</string>
+    <string name="on_text">BUKAS</string>
+    <string name="off_text">SARADO</string>
+    <string name="lantern_off">Ang Lantern ay Sarado. Pindutin ang switch upang makapasok sa mga naka-block na site at serbisyo!</string>
+    <string name="lantern_on">Ang Lantern ay Nakabukas. Makakapasok ka na ngayon sa mga naka-block na site at serbisyo!</string>
+    <string name="on_desc">Maaari ka na ngayong makapasok sa\r\nmga naka-block na site at serbisyo</string>
+    <string name="off_desc">Pindutin ang button upang makapasok sa mga naka-block na site at serbisyo!</string>
+    <string name="desktop_option">Bersyon ng Desktop</string>
+    <string name="contact_option">Makipag-ugnayan</string>
+    <string name="check_for_update">Tumingin ng Update</string>
+    <string name="no_update_available">Ikaw ay up to date!</string>
+    <string name="error_making_purchase">May problema sa pagbili</string>
+    <string name="cancel">Kanselahin</string>
+    <string name="newsfeed_option">Subukan ang Lantern Feed</string>
+    <string name="newsfeed_off_option">Ihinto ang Feed</string>
+    <string name="privacy_policy">Polisiya sa Pagkapribado</string>
+    <string name="share_option">Ibahagi</string>
+    <string name="quit_option">Umalis</string>
+    <string name="share_email_native"></string>
+    <string name="share_email_subject">Lantern Android</string>
+    <string name="fatal_error">Nakatagpo ang Lantern ng malubhang error at hindi na umaandar</string>
+    <string name="share_twitter">Tingnan ang Lantern Android: https://bit.ly/lanternapk</string>
+    <string name="share_facebook">Gumagamit ako ng Lantern para sa Android, makikita ito dito: https://bit.ly/lanternapk</string>
+    <string name="share_email_gmail">Gumagamit ako ng Lantern para sa Android, in-attach ko ang APK file!</string>
+    <string name="share_sms">Gumagamit ako ng Lantern para sa Android, i-download ito dito: https://bit.ly/lanternapk</string>
+    <string name="share_chooser_text">Ibahagi ang Lantern Android</string>
+    <string name="card">Card</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="Alipay">Alipay</string>
+    <string name="alipay_account">Alipay account</string>
+    <string name="month">Buwan</string>
+    <string name="year">Taon</string>
+    <string name="success_email">Ang Lantern Desktop ay in-email sa iyo!</string>
+    <string name="send_logs">Ipadala ang mga Log</string>
+    <string name="help_survey">Tumulong na maging mas maganda ang Lantern, sagutan ang isang tanong na survey ngayon!</string>
+    <string name="take_survey">Sagutan ang Survey!</string>
+    <string name="thanks_survey">Salamat sa pagsagot sa aming survey!\n</string>
+    <string name="invalid_email">Hindi wastong email address</string>
+    <string name="error_payment_gateway">Nagkaroon ng problema sa pakikipag-ugnayan sa gateway ng pagbabayad</string>
+    <string name="emails_do_not_match">Hindi magkapareho ang mga email field</string>
+    <string name="invalid_reseller_code">Ang reseller code na iyong inilagay ay hindi wasto</string>
+    <string name="invalid_referral_code">Hindi wastong referral code</string>
+    <string name="cannot_use_own_referral_code">Hindi magagamit ang iyong sariling referral code para sa promosyon.</string>
+    <string name="no_internet_connection">Walang koneksyon sa Internet sa magagamit!</string>
+    <string name="unable_remove_device">Hindi matanggal ang device. Pakisubukang muli mamaya!</string>
+    <string name="remove">Tanggalin</string>
+    <string name="contact_email">team@getlantern.org</string>
+    <string name="contact_message">Tulungan Ako</string>
+    <string name="contact_subject">Lantern Android</string>
+    <string name="not_now">Hindi Ngayon</string>
+    <string name="install_update">Update</string>
+    <string name="error_update">Nagkaproblema sa Pag-download ng Update</string>
+    <string name="loading">Nagloload..</string>
+    <string name="manual_update">Subukan ang manu-manong pag-install ng pinakabagong bersyon &lt;a href=\"https://github.com/getlantern/lantern\"&gt;here&lt;/a&gt;</string>
+    <string name="pro_welcome_text">Maligayang Pagdating sa Lantern Pro</string>
+    <string name="happy_anniversary">MALIGAYANG ANIBERSARYO SA LANTERN!</string>
+    <string name="welcome_greeting">Maligayang Pagdating sa Lantern</string>
+    <string name="upgrade_for">Mag-upgrade para sa \nhindi nagbabagong &amp; bilis</string>
+    <string name="what_kind_of_lantern">Anong klaseng Lantern \nang iyong gusto?</string>
+    <string name="lantern_pro_radio">Lantern Pro - Walang Limitasyong Data</string>
+    <string name="lantern_free_radio">Lantern Basic - 500MB Data</string>
+    <string name="welcome_to_lantern">Maligayang pagdating sa bago at pinagandang Lantern</string>
+    <string name="to_get_unlimited">Upang magkaroon ng walang limitasyong data, mabilis at mas malakas na blocking resistance \nMAG-UPGRADE sa Pro!</string>
+    <string name="renew_pro_account">Mag-renew ng Pro Account</string>
+    <string name="logout">Log out</string>
+    <string name="change_phone_number">Baguhin ang Numero sa Telepono</string>
+    <string name="change_email_address">Baguhin ang Email Address</string>
+    <string name="pro_account_expires">Ang iyong Pro account ay mag-eexpire sa %1$s</string>
+    <string name="includes_free_months">Kasama dito ang iyong %2$d buwang bonus!</string>
+    <string name="verified_phone_number">Beripikahin ang Numero sa Telepono:</string>
+    <string name="devices_authorized">Ang mga device na awtorisadong gumamit ng iyong Pro account</string>
+    <string name="send_us_your_logs">Ipadala sa amin ang iyong mga Log</string>
+    <string name="thanks_purchase">Salamat sa pagbili ng Lantern Pro!</string>
+    <string name="start_inviting">\r\nMagsimulang mag-imbita!</string>
+    <string name="sending_request">Pinoproseso ang kahilingan</string>
+    <string name="invite_friends">Ilagay ang iyong e-mail upang makatanggap ng code na maibabahagi sa iyong mga kaibigan. Magkaroon ng libreng buwan sa PRO kapag sila ay nag-sign up!</string>
+    <string name="invite_friends_welcome">Kapag ang iyong kaibigan ay bumili ng dalawang taong plan magkakaroon kayo pareho ng libreng 3 buwan, kapag isang taong plan makakakuha kayo pareho ng libreng 1 buwan.</string>
+    <string name="invite_friends_btn">Imbitahan ang mga Kaibigan</string>
+    <string name="share_friends_text">Ibahagi ang iyong mga kaibigan upan magkaroon ng libreng buwan!</string>
+    <string name="email_address">Email Address</string>
+    <string name="continue_to_pro">Magpatuloy sa PRO</string>
+    <string name="continue_to_basic">Magpatuloy sa Basic na Bersyon</string>
+    <string name="continue_">Magpatuloy</string>
+    <string name="continue_to_payment">Magpatuloy sa Pagbabayd</string>
+    <string name="skip_to_checkout">Lagpasan ang Checkout</string>
+    <string name="free_pro_credits">Libreng Pro Credit</string>
+    <string name="get_pro_credits">Kumuha ng Libreng Pro Credit</string>
+    <string name="get_free_months">Kumuha ng Libreng Buwan</string>
+    <string name="text_invite">Imbitasyon sa Pag-text</string>
+    <string name="email_invite">Imbitasyon sa Pag-emai</string>
+    <string name="share_your_referral_code">Ibahagi ang Iyong Referral Code</string>
+    <string name="get_code">Kumuha ng Code</string>
+    <string name="get_code_text">Ilagay ang iyong e-mail upang makatanggap ng code na maibabahagi sa iyong mga kaibigan, magkaroon ng libreng buwan sa PRO kapag sila ay nag-sign up!</string>
+    <string name="enter_your_email">Ilagay ang iyong e-mail address upang makatanggap ng referral code</string>
+    <string name="referral_copied_to_clipboard">Nakopya na ang referral code sa clipboard!</string>
+    <string name="share_referral_text">Gamitin ang aking code na %1$s upang makakuha ng libreng 3 buwan pagkatapos bumili. I-download ang Lantern dito https://bit.ly/lanternapk</string>
+    <string name="previous_code">Kung nakatanggap ka na dati ng referral code \r\nmangyaring siguruhin na gumagamit ng parehong email address.</string>
+    <string name="payment_plans">Mga Plan sa Pagbabayad ng Lantern PRO</string>
+    <string name="features_text">Mga Tampok sa Lantern PRO</string>
+    <string name="checkout">Checkout</string>
+    <string name="cvc">CVC</string>
+    <string name="cc_number">Credit Card</string>
+    <string name="card_number">Numero sa Card</string>
+    <string name="validation_errors">Nagkaproblema sa Pagva-validate</string>
+    <string name="progressMessage">Pinoproseso ang Kahilingan...</string>
+    <string name="progressMessage2">Nire-retrieve ang referral code</string>
+    <string name="language">Wika</string>
+    <string name="settings">Settings</string>
+    <string name="referral_applied">Ang iyong libreng buwan ay idadagdag sa iyo at sa iyong kaibigan kapag kumpleto na ang pag-checkout!</string>
+    <string name="all_feeds">lahat</string>
+    <string name="feed.error.oops">Oops!</string>
+    <string name="feed.error.error_fetching_feed">Nagkaproblema sa Pagkuha ng Feed</string>
+    <string name="feed.error.try_again">Pakisubukang muli</string>
+    <string name="authorize_device_pro">Mag-awtorisado ng Device Para sa Pro</string>
+    <string name="add_device">Magdagdag ng Device</string>
+    <string name="now_authorized">Ang device na ito ay awtorisado ng gamitin ang iyong Pro Account!</string>
+    <string name="i_have_another">Mayroon akong iba pang Lantern Pro device</string>
+    <string name="link_this_device">I-link ang Device na Ito</string>
+    <string name="or">O</string>
+    <string name="need_to_recover">Kailangan kong i-recover ang aking Lantern Pro account</string>
+    <string name="start_recovery">Simulan ang Pagrecover</string>
+    <string name="account_recovery">Account Recovery</string>
+    <string name="account_recovery_code">Account Recovery Code</string>
+    <string name="thanks_report">Salamat, makikipag-ugnayan ang Lantern Customer support sa loob ng 48 oras.</string>
+    <string name="enter_valid_code">Pakilagay ang wastong recovery code.</string>
+    <string name="too_many_devices">Ang limitasyon ng device na maaaring i-link sa iyong Pro account ay naabot na.</string>
+    <string name="check_spam_folder">Pakitingnan ang iyong spam folder kung hindi mo natanggap ang email</string>
+    <string name="by_referral">Tumanggap ng Pro sa Pag-refer sa Kaibigan</string>
+    <string-array name="payment_method_list">
+        <item>Alipay</item>
+        <item>Credit Card</item>
+        <item>Tumanggap ng Pro sa Pag-refer sa Kaibigan</item>
+    </string-array>
+    <string name="payment_method">Pamamaraan sa pagbayad</string>
+    <string name="payment_account">Account sa pagbabayad</string>
+    <string name="oops_having_trouble">Oops! Nagkakaroon kami ng problema sa paghanap ng email address na ito. Mangyaring ibigay ang impormasyon sa ibaba upang matulungan kaming mahanap ang iyong account.</string>
+    <string name="locate_account">Pakilagay ang iba pang impormasyon na makakatulong sa amin na mahanap ang iyong account.</string>
+    <string name="resend_email">Muling Ipadala ang Email</string>
+    <string name="dont_remember">Hindi Maalala ang Iyong Email Address?</string>
+    <string name="device_code">Device Linking Code</string>
+    <string name="device_now_linked">Matagumpay mong nai-link ang iyong device!\n</string>
+    <string name="device_linked_success">Tagumpay! Ang iyong bagong device ay mali-link maya-maya lamang.\n</string>
+    <string name="link_this_device_0">Upang i-link ang device na ito sa iyong Pro account:</string>
+    <string name="link_this_device_1"><b>1.</b> Buksan ang \"Magdagdag ng Device\" na item sa menu ng iyong Pro device.</string>
+    <string name="link_this_device_2"><b>2.</b> Ilagay ang device linking code, at isumite.</string>
+    <string name="make_sure_updated">* Siguraduhing ikaw ay updated sa pinakabagong bersyon ng Lantern sa iyong Pro device</string>
+    <string name="make_sure_updated_2">* Siguraduhin na ikaw ay updated sa pinakabagong bersyon ng Lantern sa iyong hindi awtorisadong device.</string>
+    <string name="error_device_code">Nagkaroon ng problema sa pag-retrieve ng linking code. Pakisubukang muli mamaya.</string>
+    <string name="decline_offer">Sigurado ka bang nais mong \ntanggihan ang alok na ito?</string>
+    <string-array name="renewal_confirm">
+        <item>Oo, magre-renew ako mamaya</item>
+        <item>Huwag na itong ipakita muli sa\'kin</item>
+    </string-array>
+    <string-array name="pro_features">
+        <item>Mas Mabilis</item>
+        <item>Walang Limitasyong Data</item>
+        <item>Blocking Resistant</item>
+        <item>Tatlong Device</item>
+        <item>Walang Ads</item>
+    </string-array>
+    <string-array name="pro_features_welcome">
+        <item>Walang limitasyong mabilis na data</item>
+        <item>Malakas na blocking resistance</item>
+        <item>Pinagandang pagpili ng server</item>
+        <item>Maaasahan at ligtas na koneksyon</item>
+    </string-array>
+    <string-array name="basic_features">
+        <item>500MB na mabilis na data bawat buwan</item>
+        <item>Maaasahan at ligtas na access sa bukas na Internet</item>
+    </string-array>
+    <string name="purchased_from_reseller">Bumili ng Lantern Pro mula sa isang reseller? Pindutin dito!</string>
+    <string-array name="authorize_device_list">
+        <item><b>1.</b> Buksan ang \'Mag-awtorisa ng Device Para sa Pro\' na item sa menu ng iyong hindi awtorisadong device.</item>
+        <item><b>2.</b> Ilagay ang linking code na nakuha mula sa unang hakbang at isumite</item>
+    </string-array>
+    <string-array name="enter_code_steps_referral">
+        <item>Ilagay ang verification code na iyong natanggap sa email upang magpatuloy sa Pro!</item>
+        <item>Hindi natanggap ang code? Tingnan ang iyong spam folder at siguraduhin na nailagay mo ng tama ang iyong email address.</item>
+    </string-array>
+    <string-array name="enter_email_list">
+        <item>Ilagay ang iyong email address upang maging awtorisado ang device na ito na gamitin ang iyong libreng buwan sa Lantern Pro</item>
+        <item>Papadalhan ka namin ng authorization code sa email</item>
+    </string-array>
+    <string name="only_one_device">Isang Device Lamang</string>
+    <string name="sorry_cannot_remove">Pasensya na, ngunit hindi mo maaaring tanggalin ang iyong huling awtorisadong device</string>
+    <string name="send_link">Ipadala ang Link</string>
+    <string name="click_button">Pindutin ang button upang makapasok sa mga naka-block na site at serbisyo!</string>
+    <string name="lantern_pro">Lantern Pro</string>
+    <string name="lantern_pro_header">Lantern Pro:</string>
+    <string name="lantern_pro_checkout">Lantern Pro Checkout</string>
+    <string name="invite_friends_header">Imbitahan ang mga kaibigan</string>
+    <string name="pro_desc">Mas Mabilis, mas Magaling, mas Matibay</string>
+    <string name="free_month">Magkaroon ng libreng buwan sa pro sa bawat sign up</string>
+    <string name="get_pro_now">Kumuha ng Pro Ngayon</string>
+    <string name="inviting_friends">Magkaroon ng Pro credit sa pag-imbita ng iyong mga kaibigan</string>
+    <string name="select">Pumili</string>
+    <string name="special_launch">Espesyal na Inilunsad na Presyo!</string>
+    <string name="best_value">Pinakamagandang Halaga!</string>
+    <string name="referral_code_opt">Referral Code (opsyonal)</string>
+    <string name="total">Kabuuan:</string>
+    <string name="pro_account_header">Pamamahala ng Pro Account</string>
+    <string name="pro_account_month_text">Kasalukuyan kang may buwanang account sa Lantern PRO. Ang iyong account ay awtomatikong sisingilin para sa isa pang buwan sa Lantern Pro sa katapusan ng billing cycle. </string>
+    <string name="pro_account_year_text">Kasalukuyan kang may taunang account sa Lantern PRO. Ang iyong account ay awtomatikong sisingilin para sa isa pang taon sa Lantern Pro sa katapusan ng billing cycle. </string>
+    <string name="cancel_pro_account">Kanselahin ang Pro Account</string>
+    <string name="account_verification">Beripikasyon ng Account</string>
+    <string name="enter_verification_code">Ilagay ang Verification Code</string>
+    <string name="referral_code">Referral Code</string>
+    <string name="get_lantern_pro">Kumuha ng Lantern Pro</string>
+    <string name="upgrade_to_lantern_pro">Mag-upgrade sa Lantern Pro</string>
+    <string name="pro_available_for">Para sa Windows, Android, Mac at Ubuntu. Parating na sa iOS</string>
+    <string name="data_remaining">%1$s%% na natitira mula sa iyong libreng buwanang mabilis na data</string>
+    <string name="upgrade">Upgrade</string>
+    <string name="upgrade_pro">Mag-upgrade sa Pro</string>
+    <string name="upgrade_now">Mag-upgrade Ngayon</string>
+    <string name="next">Kasunod</string>
+    <string name="become_reseller">Kumita! Maging tagabenta ng Lantern Pro. Pindutin Dito</string>
+    <string name="faster_stronger">Mas mabilis. Mas malakas. Walang limitasyon. Ligtas</string>
+    <string name="reseller_email_subject">Sabihin mo sa akin ang tungkol sa Lantern Pro Reseller Program!</string>
+    <string name="reseller_email_message">Kapag ikaw ay naging Lantern Reseller magkakaroon ka ng oportunidad na magkaroon ng hanggang 25% sa bawat benta ng suskripsyon sa Lantern Pro. Sabihin mo samin kahit konti, kung bakit nais mong maging reseller sa ibaba.</string>
+    <string name="no_email_client">Walang email client na naka-install.</string>
+    <string name="no_wall_at_all">Walang kahit na anong wall.</string>
+    <string name="buy_pro_now">Bumili ng Pro Ngayon</string>
+    <string name="update_billing_info">I-update ang Impormasyon sa Billing</string>
+    <string name="pro_credits_text">Imbitahan ang mga kaibigan, magkaroon ng mas maraming Pro</string>
+    <string name="could_not_complete_purchase">Hindi makumpleto ang pagbili ng Pro sa ngayon. Pakisubukang muli mamaya!</string>
+    <string name="invalid_verification_code">Hindi wastong verification code</string>
+    <string name="invalid_payment_method">Hindi wastong Pamamaraan sa pagbayad</string>
+    <string name="unable_to_cancel_account">Hindi makansela ang Pro Account! Mangyaring makipag-ugnayan sa team@getlantern.org</string>
+    <string name="earn_free_month">Kumita ng libreng buwan sa bawat kaibigan na magsa-sign up</string>
+    <string name="credits_applied">Ang iyong credit ay lalabas sa kasunod na billing cycle ng iyong account.</string>
+    <string name="pro_invitation_subject">Imbitasyon upang Sumali sa Lantern Pro</string>
+    <string name="receive_free_month">Para sa libreng buwan sa Lantern Pro, gamitin ang referral code na ito: %1$s; Maaari mo itong ma-download dito: https://lantern.io/download</string>
+    <string name="share_feed_item">Binabasa ko ang tungkol sa \"%1$s\" sa %2$s gamit ang Lantern. Gamitin ang Lantern upang makapasok sa mga naka-block na site at serbisyo. Maaari mo itong i-download para sa Android dito: https://bit.ly/lanternapk</string>
+    <string name="cancel_pro_confirmation">Sigurado ka ba? Ang aksyong ito ay hindi na mababawi! Maaari kang mag-sign up muli sa Pro anumang oras.</string>
+    <string name="unauthorize_confirmation">Sigurado ka bang nais mong tanggalin ang device na ito sa pagkaka-link mula sa iyong Pro account?</string>
+    <string name="yes">Oo</string>
+    <string name="no">Hindi</string>
+    <string name="item_image_contentDescription">Watawat ng bansa</string>
+    <string name="item_preview_country">Estados Unidos</string>
+    <string name="item_preview_dialCode">+1</string>
+    <string name="refresh">Refresh</string>
+    <string name="find">Humanap</string>
+    <string name="share_via">Ibahagi gamit ang</string>
+    <string name="copy_link">Kopyahin ang Link</string>
+    <string name="open_with">Buksan sa</string>
+    <string name="copied_to_clipboard">Nakopya na sa clipboard</string>
+    <string name="welcome_to_new">Maligayang pagdating sa bago at pinagandang Lantern!</string>
+    <string name="now_using">Ginagamit mo ngayon ang pinakamabilis at pinakamatatag na Lantern sa kasalukuyan.</string>
+    <string name="get_unlimited_data">Upang magkaroon ng walang limitasyong data, mabilis, at mas malakas na blocking resistance \nMAG-UPGRADE sa Pro!</string>
+    <string name="start_using">Magsimula ng Gumamit ng Lantern</string>
+    <string name="device_already_registered">Ang email address na ito ay mayroon ng suskripsyon sa Pro. Mangyaring bigyan ng awtorisasyon ang device na ito dito.</string>
+    <string name="email_in_use">Ang email na ito ay kasalukuyang ginagamit ng ibang user.</string>
+    <string name="congratulations">Binabati ka nami!</string>
+    <string name="referral_code_used">Isang kaibigan na iyong ini-refer ang bumili ng Lantern Pro. %d buwang libreng Pro ang inilagay sa iyong account. </string>
+    <string name="enter_email">Ilagay ang Email Address</string>
+    <string name="confirm_email">Kumpirmahin ang Email Address</string>
+    <string name="confirm_email_address">Kumpirmahin ang Email Addres</string>
+    <string name="register_pro_account">Magrehistro ng Pro Account</string>
+    <string name="renew_now">Mag-renew ngayon at magkaroon ng \nlibreng 3 buwan</string>
+    <string name="renew_ends_tomorrow">Ang diskwento sa pag-renew ay matatapos na bukas!</string>
+    <string name="renew_ends_today">Huling pagkakataon para sa libreng 3 buwan!</string>
+    <string name="renew_after">Mag-renew para sa ekstrang 45 araw na libre!</string>
+    <string name="renew_sub">TANDAAN: Ang iyong bagong biling plan na oras \nay idadagdag sa iyong kasalukuyang \nplan na oras.</string>
+    <string name="offer_ends_tomorrow">Ang alok ay matatapos bukas.</string>
+    <string name="offer_ends_today">Ang alok ay matatapos ngayon.</string>
+    <string name="limited_time_offer">Limitadong oras na alok.</string>
+    <string name="months_free">buwang LIBRE</string>
+    <string name="month_free">buwang LIBRE</string>
+    <string name="days_free">araw na LIBRE</string>
+    <string name="enter_pro_activation_code">Pakilagay ang iyong 25 character Lantern Pro activation code sa itaas. Kung hindi mo natanggap ang code, mangyaring makipag-ugnayan sa reseller na iyong binilhan.</string>
+    <string name="no_title">Walang Pamagat</string>
+    <string name="current_location_desc">Gumagamit ang Lantern ng matalinong pagpili ng server upang ikonekta ka sa aming pinakamagandang data center. Mag-upgrade sa Lantern Pro para sa mabilis at pinagandang pagpili ng server mula sa aming eksklusibong mga Lantern Pro data center.</string>
+    <string name="ad_blocking_desc">Bina-block ng Lantern ang mga nakakainis na ad upang pabilisin ang pag-load ng web page, makatipid sa bandwidth, at bigyan ka ng mas magandang karanasan sa pag-browse.</string>
+    <string name="https_upgrade_desc">Awtomatikong ina-upgrade ng Lantern ang hindi ligtas na HTTP connection sa encrypted na HTTPS connection kapag posible upang mapanatiling pribado ang iyong impormasyon habang nagsu-surf sa web.</string>
+    <string name="account_left_desc">Mayroon kang %1$d buwang natitira sa iyong Lantern Pro account</string>
+    <string name="optimized_location">Pinagandang lokasyon ng server</string>
+    <string name="current_location">Kasalukuyang Lokasyon:</string>
+    <string name="disconnected">Nadiskonekta</string>
+    <string name="https_upgrades">Mga Upgrade sa HTTPS</string>
+    <string name="data_usage">Paggamit ng Data</string>
+    <string name="pro_account">Pro Account</string>
+    <string name="blocked_ads">Naka-block na Ads</string>
+    <string name="upgrade_now_data">Mag-upgrade ngayon para sa walang limitasyong mabilis na serbisyo!</string>
+    <string name="renew_your_account">I-renew ang iyong account upang magdagdag ng mas maraming oras</string>
+    <string name="turn_on_lantern">Buksan ang Lantern para sa mas mabilis at ligtas na pagpasok sa mga naka-block na site at serbisyo.</string>
+    <string name="lantern_on_text">Ikaw ay nakakonekta sa pinakamabilis na Lantern server, Magsimula ng Mag-browse!</string>
+    <string name="lantern_notification">Abiso Mula sa Lantern</string>
+    <string name="apply_referral_code">Maglagay ng Referral Code</string>
+    <string name="terms_of_service">Mga Tuntunin ng Serbisyo</string>
 </resources>

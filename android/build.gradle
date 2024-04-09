@@ -59,12 +59,7 @@ allprojects {
         afterEvaluate { project ->
             if (project.hasProperty('android')) {
                 project.android {
-                    // Replace com.cleveradssolutions.ads.flutter package name with "com.cleveradssolutions.ads"
-                    // This resolves an issue where an incorrect package name appears in the source AndroidManifest.xml
-                    def match = (project.group =~ /com.cleveradssolutions.ads.flutter/)
-                    if (match.size() == 1) {
-                        namespace "com.cleveradssolutions.ads"
-                    } else if (namespace == null) {
+                  if (namespace == null) {
                         namespace project.group
                     }
                 }

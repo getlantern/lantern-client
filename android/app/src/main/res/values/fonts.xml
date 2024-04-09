@@ -1,7 +1,3 @@
 <resources>
-    <string name="sans_serif" untranslateable="true">sans-serif</string>
     <string name="sans_serif_medium" untranslateable="true">sans-serif-medium</string>
-    <string name="sans_serif_thin" untranslateable="true">sans-serif-thin</string>
-    <string name="sans_serif_black" untranslateable="true">sans-serif-black</string>
-    <string name="sans_serif_light" untranslateable="true">sans-serif-light</string>
 </resources>

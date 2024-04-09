@@ -17,7 +17,7 @@ class LanternProxySelector(private val session: LanternSessionManager) : ProxySe
     override fun select(uri: URI): MutableList<Proxy> {
         val proxyAddress: SocketAddress = addrFromString(
             session.settings.httpProxyHost + ":" +
-                session.settings.httpProxyPort,
+                    session.settings.httpProxyPort,
         )
         val proxiesList: MutableList<Proxy> = mutableListOf()
         proxiesList.add(Proxy(Proxy.Type.HTTP, proxyAddress))

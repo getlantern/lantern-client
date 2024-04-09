@@ -1,9 +1,9 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/replica/common.dart';
+
 import 'common.dart';
 import 'common_desktop.dart';
-import 'package:intl/intl.dart';
 
 final sessionModel = SessionModel();
 
@@ -93,9 +93,11 @@ class SessionModel extends Model {
         websocket.messageStream.listen(
           (json) {
             final userStatus = wsMessageProp(json, "userStatus");
-            if (userStatus != null && userStatus.toString() == "active") setValue(true);
+            if (userStatus != null && userStatus.toString() == "active")
+              setValue(true);
           },
-          onError: (error) => appLogger.i("websocket error: ${error.description}"),
+          onError: (error) =>
+              appLogger.i("websocket error: ${error.description}"),
         );
       },
       ffiProUser,
@@ -195,7 +197,8 @@ class SessionModel extends Model {
             final language = wsMessageProp(json, "language");
             if (language != null && language != "") setValue(language);
           },
-          onError: (error) => appLogger.i("websocket error: ${error.description}"),
+          onError: (error) =>
+              appLogger.i("websocket error: ${error.description}"),
         );
       },
       ffiLang,
@@ -331,16 +334,22 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<String> approveDevice(String code) {
-    return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
-      'code': code,
-    }).then((value) => value as String);
+  Future<String> approveDevice(String code) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
+        'code': code,
+      }).then((value) => value as String);
+    }
+    return await compute(ffiApproveDevice, code);
   }
 
-  Future<void> removeDevice(String deviceId) {
-    return methodChannel.invokeMethod('removeDevice', <String, dynamic>{
-      'deviceId': deviceId,
-    });
+  Future<void> removeDevice(String deviceId) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('removeDevice', <String, dynamic>{
+        'deviceId': deviceId,
+      });
+    }
+    return await compute(ffiRemoveDevice, deviceId);
   }
 
   Future<void> resendRecoveryCode() {
@@ -357,13 +366,6 @@ class SessionModel extends Model {
   Widget shouldShowGoogleAds(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>(
       'shouldShowGoogleAds',
-      builder: builder,
-    );
-  }
-
-  Widget shouldShowCASAds(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
-      'shouldShowCASAds',
       builder: builder,
     );
   }
@@ -469,6 +471,11 @@ class SessionModel extends Model {
       await ffiCheckUpdates();
     }
     return;
+  }
+
+  // Plans and payment methods
+  Future<void> updatePaymentPlans() async {
+    return methodChannel.invokeMethod('updatePaymentPlans');
   }
 
   Plan planFromJson(Map<String, dynamic> item) {
@@ -749,7 +756,7 @@ class SessionModel extends Model {
         'emailAddress': email,
       }).then((value) => value as String);
     }
-    await ffiEmailExists(email.toNativeUtf8());
+    await compute(ffiEmailExists, email);
   }
 
   Future<void> openWebview(String url) {

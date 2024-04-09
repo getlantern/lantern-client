@@ -51,12 +51,10 @@ const (
 	pathLang                   = "lang"
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
-	pathCASAdsEnabled          = "casAsEnabled"
 	pathStoreVersion           = "storeVersion"
 	pathSelectedTab            = "/selectedTab"
 	pathServerInfo             = "/server_info"
 	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
-	pathShouldShowCasAds       = "shouldShowCASAds"
 	pathShouldShowGoogleAds    = "shouldShowGoogleAds"
 	currentTermsVersion        = 1
 )
@@ -531,13 +529,6 @@ func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
 	}))
 }
 
-func (m *SessionModel) SetCASShowInterstitialAdsEnabled(casEnable bool) {
-	log.Debugf("SetCASShowInterstitialAdsEnabled %v", casEnable)
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathCASAdsEnabled, casEnable, "")
-	}))
-}
-
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 	// Return static for now
 	// Todo implement this method
@@ -690,13 +681,12 @@ func checkAdsEnabled(session *SessionModel) error {
 	if err != nil {
 		return err
 	}
+	// If the user doesn't have all permissions, disable Google ads:
 	if !hasAllPermisson {
 		log.Debugf("User has not given all permission")
+
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.PutAll(tx, map[string]interface{}{
-				pathShouldShowGoogleAds: false,
-				pathShouldShowCasAds:    false,
-			})
+			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
 		})
 	}
 	log.Debugf("User has given all permission")
@@ -704,36 +694,15 @@ func checkAdsEnabled(session *SessionModel) error {
 	if err != nil {
 		return err
 	}
-	log.Debugf("Is user pro %v", isPro)
 	if isPro {
-		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			err = pathdb.Put(tx, pathShouldShowCasAds, false, "")
-			if err != nil {
-				return err
-			}
-			return pathdb.Put(tx, pathShouldShowCasAds, false, "")
+		log.Debugf("Is user pro %v", isPro)
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
 		})
-		if err != nil {
-			return err
-		}
-		return nil
 	}
-	isGoogleAdsEnable, err := pathdb.Get[bool](session.db, pathAdsEnabled)
-	if err != nil {
-		log.Debugf("Error while getting google ads value %v", err)
-		return err
-	}
-
-	isCasAdsEnable, err := pathdb.Get[bool](session.db, pathCASAdsEnabled)
-	if err != nil {
-		log.Debugf("Error while getting cas ads value %v", err)
-		return err
-	}
-
+	// If the user has all permissions but is not a pro user, enable ads:
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.PutAll(tx, map[string]interface{}{
-			pathAdsEnabled:    isGoogleAdsEnable,
-			pathCASAdsEnabled: isCasAdsEnable,
-		})
+		return pathdb.Put(tx, pathShouldShowGoogleAds, true, "")
 	})
+
 }

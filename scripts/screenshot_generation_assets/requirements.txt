@@ -11,7 +11,7 @@ Markdown2PDF==0.1.4
 MarkupSafe==2.0.1
 numpy==1.22.0
 pdflatex==0.1.3
-Pillow==10.2.0
+Pillow==10.3.0
 pycparser==2.21
 pydyf==0.1.2
 pyphen==0.12.0

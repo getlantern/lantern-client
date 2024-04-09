@@ -1,10 +1,12 @@
 import 'dart:ui' as ui;
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
+import 'package:lantern/replica/ui/utils.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'catcher_setup.dart';
@@ -47,7 +49,10 @@ Future<void> main() async {
       await windowManager.focus();
     });
   } else {
-    //await _initGoogleMobileAds();
+    await _initGoogleMobileAds();
+    // Due to replica we are using lot of cache
+    // clear if goes to above limit
+    CustomCacheManager().clearCacheIfExceeded();
   }
 
   //await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

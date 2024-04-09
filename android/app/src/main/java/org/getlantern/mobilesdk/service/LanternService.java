@@ -3,11 +3,11 @@ package org.getlantern.mobilesdk.service;
 import android.app.IntentService;
 import android.content.Intent;
 
-import org.getlantern.mobilesdk.Settings;
 import org.getlantern.mobilesdk.LanternNotRunningException;
 import org.getlantern.mobilesdk.LanternServiceManager;
-import org.getlantern.mobilesdk.StartResult;
 import org.getlantern.mobilesdk.Logger;
+import org.getlantern.mobilesdk.Settings;
+import org.getlantern.mobilesdk.StartResult;
 import org.getlantern.mobilesdk.embedded.EmbeddedLantern;
 
 
