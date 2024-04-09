@@ -42,7 +42,8 @@ import UIKit
   }
 
   private func setupLanternService() throws {
-    try self.lanternService = LanternService(sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
+    try self.lanternService = LanternService(
+      sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
     // Run Lantern service on a background queue
     DispatchQueue.global(qos: .background).async {
       self.lanternService.start()

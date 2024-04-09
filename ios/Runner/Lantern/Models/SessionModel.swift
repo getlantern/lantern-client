@@ -88,24 +88,24 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     //    }
   }
 
-//  public func configDirFor(suffix: String) -> String {
-//    let filesDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-//      .first!
-//
-//    let fileURL = filesDirectory.appendingPathComponent(".lantern" + suffix)
-//
-//    if !FileManager.default.fileExists(atPath: fileURL.path) {
-//      do {
-//        try FileManager.default.createDirectory(
-//          at: fileURL, withIntermediateDirectories: true, attributes: nil)
-//      } catch {
-//
-//        print(error.localizedDescription)
-//        SentryUtils.caputure(error: error as NSError)
-//      }
-//    }
-//    return fileURL.path
-//  }
+  //  public func configDirFor(suffix: String) -> String {
+  //    let filesDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+  //      .first!
+  //
+  //    let fileURL = filesDirectory.appendingPathComponent(".lantern" + suffix)
+  //
+  //    if !FileManager.default.fileExists(atPath: fileURL.path) {
+  //      do {
+  //        try FileManager.default.createDirectory(
+  //          at: fileURL, withIntermediateDirectories: true, attributes: nil)
+  //      } catch {
+  //
+  //        print(error.localizedDescription)
+  //        SentryUtils.caputure(error: error as NSError)
+  //      }
+  //    }
+  //    return fileURL.path
+  //  }
 }
 
 class Settings: NSObject, InternalsdkSettingsProtocol {

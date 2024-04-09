@@ -215,7 +215,7 @@ class VPNManager: VPNBase {
     config.providerBundleIdentifier = Constants.netExBundleId
     config.serverAddress = "0.0.0.0"
 
-    var conf = [String:AnyObject]()
+    var conf = [String: AnyObject]()
 
     let httpPort = InternalsdkHTTPProxyPort()
 

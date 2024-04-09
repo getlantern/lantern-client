@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 )
 
@@ -17,10 +16,27 @@ const (
 )
 
 var (
-	log        = golog.LoggerFor("lantern-internalsdk-http")
+	log = golog.LoggerFor("lantern-internalsdk-http")
+	// dialer = &net.Dialer{
+	// 	Resolver: &net.Resolver{
+	// 		PreferGo: true,
+	// 		Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+	// 			d := net.Dialer{
+	// 				Timeout: time.Duration(5000) * time.Millisecond,
+	// 			}
+	// 			return d.DialContext(ctx, "udp", "8.8.8.8:53")
+	// 		},
+	// 	},
+	// }
+	// customTransport = &http.Transport{
+	// 	DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+	// 		return dialer.DialContext(ctx, network, addr)
+	// 	},
+	// }
 	httpClient = &http.Client{
-		Transport: proxied.ParallelForIdempotent(),
-		Timeout:   30 * time.Second,
+		// Transport: customTransport,
+		// Transport: proxied.ParallelForIdempotent(),
+		Timeout: 30 * time.Second,
 	}
 )
 

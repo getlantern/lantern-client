@@ -279,7 +279,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
-        updateUserData()
         updatePaymentMethods()
     }
 
@@ -301,39 +300,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     fun bandwidthUpdated(bandwidth: Bandwidth) {
         Logger.debug("bandwidth updated", bandwidth.toString())
         vpnModel.updateBandwidth(bandwidth)
-    }
-
-    private fun updateUserData() {
-        lanternClient.userData(
-            object : ProUserCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch user data: $error", throwable)
-                }
-
-                override fun onSuccess(
-                    response: Response,
-                    user: ProUser,
-                ) {
-                    val devices = user.devices
-                    val deviceID = LanternApp.getSession().deviceID()
-                    // if the payment test mode is enabled
-                    // then do nothing To avoid restarting app while debugging
-                    // we are setting static user for payment mode
-                    if (user.isProUser == false || LanternApp.getSession().isPaymentTestMode) return
-
-                    // Switch to free account if device it not linked
-                    devices.filter { it.id == deviceID }.run {
-                        if (isEmpty()) {
-                            LanternApp.getSession().logout()
-                            restartApp()
-                        }
-                    }
-                }
-            },
-        )
     }
 
     private fun updatePaymentMethods() {

@@ -34,12 +34,12 @@ class _VPNSwitchState extends State<VPNSwitch> {
     //if ads is not ready then wait for at least 5 seconds and then show ads
     //if ads is ready then show ads immediately
 
-    if (vpnStatus != 'connected' && userHasPermission) {
-      //if (!await adHelper.isAdsReadyToShow()) {
-        await vpnModel.connectingDelay(newValue);
-        await Future.delayed(const Duration(seconds: 5));
-      //}
-    }
+    // if (vpnStatus != 'connected' && userHasPermission) {
+    //   if (!await adHelper.isAdsReadyToShow()) {
+    //     await vpnModel.connectingDelay(newValue);
+    //     await Future.delayed(const Duration(seconds: 5));
+    //   }
+    // }
 
     await vpnModel.switchVPN(newValue);
 
