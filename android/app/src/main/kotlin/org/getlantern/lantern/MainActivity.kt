@@ -30,9 +30,12 @@ import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
+import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
+import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
@@ -42,6 +45,7 @@ import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PermissionUtil
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -276,7 +280,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
-        sessionModel.updatePaymentMethods(null)
+        updatePaymentMethods()
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
