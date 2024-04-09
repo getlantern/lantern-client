@@ -29,12 +29,9 @@ import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
-import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
@@ -44,7 +41,6 @@ import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PermissionUtil
-import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -273,7 +269,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
-        updatePaymentMethods()
+        sessionModel.updatePaymentMethods(null)
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -329,40 +325,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         )
     }
 
-    private fun updatePaymentMethods() {
-        lanternClient.plansV3(
-            object : PlansV3Callback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
-                }
-
-                override fun onSuccess(
-                    proPlans: Map<String, ProPlan>,
-                    paymentMethods: List<PaymentMethods>,
-
-                ) {
-                    Logger.debug(TAG, "Successfully fetched payment methods")
-                    processPaymentMethods(proPlans, paymentMethods)
-                }
-            }
-        )
-    }
-
-
-    fun processPaymentMethods(
-        proPlans: Map<String, ProPlan>,
-        paymentMethods: List<PaymentMethods>,
-
-    ) {
-        for (planId in proPlans.keys) {
-            proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
-        }
-        LanternApp.getSession().setUserPlans(proPlans)
-        LanternApp.getSession().setPaymentMethods(paymentMethods)
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {

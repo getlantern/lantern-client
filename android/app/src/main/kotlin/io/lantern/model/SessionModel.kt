@@ -2,7 +2,6 @@ package io.lantern.model
 
 import android.app.Activity
 import android.content.Intent
-import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
 import internalsdk.Internalsdk
@@ -12,7 +11,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.lantern.apps.AppsDataProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.FormBody
 import okhttp3.RequestBody
@@ -25,16 +23,18 @@ import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.ProCallback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.restartApp
-import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.util.showErrorDialog
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.IssueReporter
@@ -88,8 +88,7 @@ class SessionModel(
                 tx.get(PATH_USER_LEVEL) ?: "",
             )
             tx.put(
-                PATH_SPLIT_TUNNELING,
-                castToBoolean(tx.get(PATH_SPLIT_TUNNELING), false)
+                PATH_SPLIT_TUNNELING, castToBoolean(tx.get(PATH_SPLIT_TUNNELING), false)
             )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
@@ -114,8 +113,7 @@ class SessionModel(
         Logger.debug(TAG, "checkAdsAvailability called")
         val googleAds = shouldShowAdsBasedRegion { LanternApp.getSession().shouldShowAdsEnabled() }
         Logger.debug(
-            TAG,
-            "checkAdsAvailability with googleAds values $googleAds enable ${
+            TAG, "checkAdsAvailability with googleAds values $googleAds enable ${
                 LanternApp.getSession().shouldShowAdsEnabled()
             }"
         )
@@ -145,8 +143,7 @@ class SessionModel(
 
             "applyRefCode" -> paymentsUtil.applyRefCode(call.argument("refCode")!!, result)
             "redeemResellerCode" -> paymentsUtil.redeemResellerCode(
-                call.argument("email")!!,
-                call.argument("resellerCode")!!, result
+                call.argument("email")!!, call.argument("resellerCode")!!, result
             )
 
             "refreshAppsList" -> {
@@ -177,6 +174,7 @@ class SessionModel(
             )
 
             "userStatus" -> userStatus(result)
+            "updatePaymentPlans" -> updatePaymentMethods(result)
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -195,9 +193,7 @@ class SessionModel(
             "trackUserAction" -> {
                 val props: Map<String, String> = mapOf("title" to call.argument("title")!!)
                 Plausible.event(
-                    call.argument("name")!!,
-                    url = call.argument("url")!!,
-                    props = props
+                    call.argument("name")!!, url = call.argument("url")!!, props = props
                 )
             }
 
@@ -270,9 +266,7 @@ class SessionModel(
         // all other configurations are coming from backend
         val session = LanternApp.getSession()
         val hasAllNetworkPermissions = PermissionUtil.missingPermissions(activity).isEmpty()
-        return shouldShow()
-                && hasAllNetworkPermissions
-                && session.hasFirstSessionCompleted()
+        return shouldShow() && hasAllNetworkPermissions && session.hasFirstSessionCompleted()
     }
 
     fun splitTunnelingEnabled(): Boolean {
@@ -285,6 +279,73 @@ class SessionModel(
         }
     }
 
+    fun updatePaymentMethods(result: MethodChannel.Result?) {
+        val userId = LanternApp.getSession().userId()
+        //Check if not found then call createUserAndFetchPaymentMethods
+        if (userId == 0L) {
+            createUserAndFetchPaymentMethods(result)
+        } else {
+            fetchPaymentMethods(result)
+        }
+    }
+
+    private fun createUserAndFetchPaymentMethods(result: MethodChannel.Result?) {
+        lanternClient.createUser(object : ProUserCallback {
+            override fun onFailure(t: Throwable?, error: ProError?) {
+                handleFailure(result, "payment_method_fail", error?.id, t)
+            }
+
+            override fun onSuccess(response: Response, userData: ProUser) {
+                LanternApp.getSession().setUserIdAndToken(userData.userId, userData.token)
+                fetchPaymentMethods(result)
+            }
+        })
+    }
+
+    private fun fetchPaymentMethods(result: MethodChannel.Result?) {
+        lanternClient.plansV3(object : LanternHttpClient.PlansV3Callback {
+            override fun onSuccess(
+                proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>
+            ) {
+                processPaymentMethods(proPlans, paymentMethods)
+                result?.success("Payment method successfully updated")
+            }
+
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                handleFailure(result, "payment_method_fail", error?.id, throwable)
+            }
+        })
+    }
+
+    private fun handleFailure(
+        result: MethodChannel.Result?,
+        errorId: String,
+        errorCode: String?,
+        throwable: Throwable?
+    ) {
+        result?.let {
+            activity.runOnUiThread {
+                it.error(errorId, errorCode, null)
+            }
+        }
+        Logger.error(
+            TAG, "Unable to update payment methods: $errorId (code: $errorCode)", throwable
+        )
+    }
+
+
+    fun processPaymentMethods(
+        proPlans: Map<String, ProPlan>,
+        paymentMethods: List<PaymentMethods>,
+
+        ) {
+        for (planId in proPlans.keys) {
+            proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
+        }
+        LanternApp.getSession().setUserPlans(proPlans)
+        LanternApp.getSession().setPaymentMethods(paymentMethods)
+    }
+
     // updateAppData looks up the app data for the given package name and updates whether or
     // not the app is allowed access to the VPN connection in the database
     private fun updateAppData(packageName: String, allowedAccess: Boolean) {
@@ -292,8 +353,8 @@ class SessionModel(
             var appData = tx.get<Vpn.AppData>(PATH_APPS_DATA + packageName)
             appData?.let {
                 tx.put(
-                    PATH_APPS_DATA + packageName, Vpn.AppData.newBuilder()
-                        .setPackageName(it.packageName).setIcon(it.icon)
+                    PATH_APPS_DATA + packageName,
+                    Vpn.AppData.newBuilder().setPackageName(it.packageName).setIcon(it.icon)
                         .setName(it.name).setAllowedAccess(allowedAccess).build()
                 )
             }
@@ -314,33 +375,13 @@ class SessionModel(
                         // App not already in list, add it
                         tx.put(
                             path,
-                            Vpn.AppData.newBuilder()
-                                .setPackageName(it.packageName).setName(it.name)
-                                .setIcon(ByteString.copyFrom(it.icon))
-                                .build()
+                            Vpn.AppData.newBuilder().setPackageName(it.packageName).setName(it.name)
+                                .setIcon(ByteString.copyFrom(it.icon)).build()
                         )
                     }
                 }
             }
 
-//            // Then add icons
-//            db.mutate { tx ->
-//                appsList.forEach {
-//                    val path = PATH_APPS_DATA + it.packageName
-//                    tx.get<Vpn.AppData>(path)?.let { existing ->
-//                        if (existing.icon.isEmpty) {
-//                            it.icon.let { icon ->
-//                                tx.put(
-//                                    path,
-//                                    existing.toBuilder()
-//                                        .setIcon(ByteString.copyFrom(icon))
-//                                        .build(),
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 
@@ -355,9 +396,8 @@ class SessionModel(
     }
 
     private fun requestLinkCode(methodCallResult: MethodChannel.Result) {
-        val formBody = FormBody.Builder()
-            .add("deviceName", LanternApp.getSession().deviceName())
-            .build()
+        val formBody =
+            FormBody.Builder().add("deviceName", LanternApp.getSession().deviceName()).build()
         lanternClient.post(
             LanternHttpClient.createProUrl("/link-code-request"),
             formBody,
@@ -389,10 +429,8 @@ class SessionModel(
     }
 
     private fun redeemLinkCode(methodCallResult: MethodChannel.Result) {
-        val formBody = FormBody.Builder()
-            .add("code", LanternApp.getSession().deviceCode()!!)
-            .add("deviceName", LanternApp.getSession().deviceName())
-            .build()
+        val formBody = FormBody.Builder().add("code", LanternApp.getSession().deviceCode()!!)
+            .add("deviceName", LanternApp.getSession().deviceName()).build()
         Logger.info(TAG, "Redeeming link code")
         lanternClient.post(
             LanternHttpClient.createProUrl("/link-code-redeem"),
@@ -438,9 +476,7 @@ class SessionModel(
                         override fun onFailure(t: Throwable?, error: ProError?) {
                             Logger.error(TAG, "Unable to fetch user data: $t.message")
                             methodCallResult.error(
-                                "errorUpdatingUserData",
-                                t?.message,
-                                error?.message
+                                "errorUpdatingUserData", t?.message, error?.message
                             )
                         }
                     })
@@ -473,11 +509,9 @@ class SessionModel(
     private fun requestRecoveryEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
         val session = LanternApp.getSession()
         session.setEmail(emailAddress)
-        val formBody = FormBody.Builder()
-            .add("email", emailAddress)
-            .add("deviceName", session.deviceName())
-            .add("locale", session.locale())
-            .build()
+        val formBody =
+            FormBody.Builder().add("email", emailAddress).add("deviceName", session.deviceName())
+                .add("locale", session.locale()).build()
 
         lanternClient.post(
             LanternHttpClient.createProUrl("/user-link-request"),
@@ -518,9 +552,7 @@ class SessionModel(
     }
 
     private fun validateRecoveryCode(code: String, methodCallResult: MethodChannel.Result) {
-        val formBody: RequestBody = FormBody.Builder()
-            .add("code", code)
-            .build()
+        val formBody: RequestBody = FormBody.Builder().add("code", code).build()
         Logger.debug(TAG, "Validating link request; code:$code")
         lanternClient.post(
             LanternHttpClient.createProUrl("/user-link-validate"),
@@ -530,9 +562,7 @@ class SessionModel(
                     Logger.error(TAG, "Unable to validate link code", t)
                     activity.runOnUiThread {
                         methodCallResult.error(
-                            "unableToVerifyRecoveryCode",
-                            t?.message,
-                            error?.message
+                            "unableToVerifyRecoveryCode", t?.message, error?.message
                         )
                     }
                     if (error == null) {
@@ -568,9 +598,7 @@ class SessionModel(
     }
 
     private fun approveDevice(code: String, methodCallResult: MethodChannel.Result) {
-        val formBody: RequestBody = FormBody.Builder()
-            .add("code", code)
-            .build()
+        val formBody: RequestBody = FormBody.Builder().add("code", code).build()
 
         lanternClient.post(
             LanternHttpClient.createProUrl("/link-code-approve"),
@@ -599,9 +627,7 @@ class SessionModel(
                         override fun onFailure(t: Throwable?, error: ProError?) {
                             Logger.error(TAG, "Unable to fetch user data: $t.message")
                             methodCallResult.error(
-                                "errorUpdatingUserData",
-                                t?.message,
-                                error?.message
+                                "errorUpdatingUserData", t?.message, error?.message
                             )
                         }
                     })
@@ -611,16 +637,11 @@ class SessionModel(
     }
 
     private fun reportIssue(
-        email: String,
-        issue: String,
-        description: String,
-        methodCallResult: MethodChannel.Result
+        email: String, issue: String, description: String, methodCallResult: MethodChannel.Result
     ) {
         if (!Utils.isNetworkAvailable(activity)) {
             methodCallResult.error(
-                "errorReportingIssue",
-                activity.getString(R.string.no_internet_connection),
-                null
+                "errorReportingIssue", activity.getString(R.string.no_internet_connection), null
             )
             return
         }
@@ -637,9 +658,7 @@ class SessionModel(
 
     private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {
         Logger.debug(TAG, "Removing device $deviceId")
-        val formBody: RequestBody = FormBody.Builder()
-            .add("deviceID", deviceId)
-            .build()
+        val formBody: RequestBody = FormBody.Builder().add("deviceID", deviceId).build()
 
         lanternClient.post(
             LanternHttpClient.createProUrl("/user-link-remove"),
@@ -680,9 +699,7 @@ class SessionModel(
                         override fun onFailure(t: Throwable?, error: ProError?) {
                             Logger.error(TAG, "Unable to fetch user data: $t.message")
                             methodCallResult.error(
-                                "errorUpdatingUserData",
-                                t?.message,
-                                error?.message
+                                "errorUpdatingUserData", t?.message, error?.message
                             )
                         }
                     })
@@ -704,9 +721,7 @@ class SessionModel(
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Unable to fetch user data: $t.message")
                     result.error(
-                        "cachingUserDataError",
-                        "Unable to cache user status",
-                        error?.message
+                        "cachingUserDataError", "Unable to cache user status", error?.message
                     ) // This will be localized Flutter-side
                     return
                 }
@@ -714,9 +729,7 @@ class SessionModel(
         } catch (t: Throwable) {
             Logger.error(TAG, "Error caching user status", t)
             result.error(
-                "unknownError",
-                "Unable to cache user status",
-                null
+                "unknownError", "Unable to cache user status", null
             ) // This will be localized Flutter-side
         }
     }
