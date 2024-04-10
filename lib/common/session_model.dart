@@ -710,13 +710,8 @@ class SessionModel extends Model {
     String provider,
     String deviceName,
   ) async {
-    final resp = ffiPaymentRedirect(
-        planID.toNativeUtf8(),
-        currency.toNativeUtf8(),
-        provider.toNativeUtf8(),
-        email.toNativeUtf8(),
-        deviceName.toNativeUtf8());
-    return resp;
+    return await compute(
+        ffiPaymentRedirect, [planID, currency, provider, email, deviceName]);
   }
 
   Future<void> submitStripePayment(
