@@ -1,6 +1,6 @@
 module github.com/getlantern/lantern-client
 
-go 1.21.4
+go 1.22.0
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
 
@@ -33,11 +33,11 @@ require (
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/diagnostics v0.0.0-20230503185158-c2fc28ed22fe
 	github.com/getlantern/dnsgrab v0.0.0-20240124035712-497ccf435858
-	github.com/getlantern/errors v1.0.4
+	github.com/getlantern/errors v1.0.5-0.20240410211607-f268a297d5d1
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.72-0.20240408213339-52821ac5bc62
+	github.com/getlantern/flashlight/v7 v7.6.72-0.20240410212013-7fa504fecf8d
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db

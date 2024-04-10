@@ -34,6 +34,16 @@ func onUserData(cb func(current *protos.User, new *protos.User)) {
 	userData.Unlock()
 }
 
+// onProStatusChange allows registering an event handler to learn when the
+// user's pro status or "yinbi enabled" status has changed.
+func onProStatusChange(cb func(isPro bool)) {
+	onUserData(func(current *protos.User, new *protos.User) {
+		if current == nil || isActive(current.UserStatus) != isActive(new.UserStatus) {
+			cb(isActive(new.UserStatus))
+		}
+	})
+}
+
 func (m *userMap) save(ctx context.Context, userID int64, u *protos.User) {
 	m.Lock()
 	v := m.data[userID]

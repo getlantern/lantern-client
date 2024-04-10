@@ -30,7 +30,6 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/otel"
-	"github.com/getlantern/flashlight/v7/pro"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
@@ -136,7 +135,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
-	pro.OnProStatusChange(func(isPro bool, _ bool) {
+	onProStatusChange(func(isPro bool) {
 		app.statsTracker.SetIsPro(isPro)
 	})
 
@@ -261,7 +260,7 @@ func (app *App) Run(isMain bool) {
 		app.beforeStart(listenAddr)
 
 		chProStatusChanged := make(chan bool, 1)
-		pro.OnProStatusChange(func(isPro bool, _ bool) {
+		onProStatusChange(func(isPro bool) {
 			chProStatusChanged <- isPro
 		})
 		chUserChanged := make(chan bool, 1)
