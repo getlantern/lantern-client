@@ -70,7 +70,7 @@ void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
   );
 }
 
-enum Providers { stripe, btcpay, freekassa }
+enum Providers { stripe, btcpay, freekassa, fropay }
 
 extension ProviderExtension on String {
   Providers toPaymentEnum() {
@@ -78,6 +78,9 @@ extension ProviderExtension on String {
       return Providers.stripe;
     }
     if (this == "freekassa") {
+      return Providers.freekassa;
+    }
+    if (this == "fropay") {
       return Providers.freekassa;
     }
 

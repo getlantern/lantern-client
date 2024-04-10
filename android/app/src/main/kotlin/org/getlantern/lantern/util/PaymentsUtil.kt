@@ -106,40 +106,38 @@ class PaymentsUtil(private val activity: Activity) {
         try {
             val provider = PaymentProvider.BTCPay.toString().lowercase()
             val params =
-                mutableMapOf<String, String>(
+                mutableMapOf(
                     "email" to email,
                     "plan" to planID,
                     "provider" to provider,
                     "deviceName" to session.deviceName(),
                 )
-            lanternClient.get(
-                LanternHttpClient.createProUrl("/payment-redirect", params),
-                object : ProCallback {
-                    override fun onFailure(
-                        throwable: Throwable?,
-                        error: ProError?,
-                    ) {
-                        Logger.error(TAG, "BTCPay is unavailable", throwable)
-                        methodCallResult.error(
-                            "unknownError",
-                            "BTCPay is unavailable", // This error message is localized Flutter-side
-                            null,
-                        )
-                        return
-                    }
 
-                    override fun onSuccess(
-                        response: Response?,
-                        result: JsonObject?,
-                    ) {
-                        Logger.debug(
-                            TAG,
-                            "Email successfully validated $email",
-                        )
-                        methodCallResult.success(result.toString())
-                    }
-                },
-            )
+            sendPaymentRedirectRequest(params, object : ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "BTCPay is unavailable", throwable)
+                    methodCallResult.error(
+                        "unknownError",
+                        "BTCPay is unavailable", // This error message is localized Flutter-side
+                        null,
+                    )
+                    return
+                }
+
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    Logger.debug(
+                        TAG,
+                        "Email successfully validated $email",
+                    )
+                    methodCallResult.success(result.toString())
+                }
+            })
         } catch (t: Throwable) {
             methodCallResult.error(
                 "unknownError",
@@ -147,6 +145,79 @@ class PaymentsUtil(private val activity: Activity) {
                 null,
             )
         }
+    }
+
+    fun submitFropayPayment(
+        planID: String,
+        email: String,
+        refCode: String,
+        methodCallResult: MethodChannel.Result,
+    ) {
+        try {
+            val provider = PaymentProvider.Fropay.toString().lowercase()
+            val params =
+                mutableMapOf(
+                    "email" to email,
+                    "plan" to planID,
+                    "provider" to provider,
+                    "deviceName" to session.deviceName(),
+                )
+
+            sendPaymentRedirectRequest(params, object : ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "Fropay is unavailable", throwable)
+                    methodCallResult.error(
+                        "unknownError",
+                        "Fropay is unavailable", // This error message is localized Flutter-side
+                        null,
+                    )
+                    return
+                }
+
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    Logger.debug(
+                        TAG,
+                        "Email successfully validated $email",
+                    )
+                    methodCallResult.success(result.toString())
+                }
+            })
+        } catch (t: Throwable) {
+            methodCallResult.error(
+                "unknownError",
+                "Fropay is unavailable", // This error message is localized Flutter-side
+                null,
+            )
+        }
+    }
+
+    private fun sendPaymentRedirectRequest(params: Map<String, String>, proCallback: ProCallback) {
+        lanternClient.get(
+            LanternHttpClient.createProUrl("/payment-redirect", params),
+            object : ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    proCallback.onFailure(throwable, error)
+                    return
+                }
+
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    proCallback.onSuccess(response, result)
+
+                }
+            },
+        )
     }
 
     // getPlanYear splits the given plan ID by hyphen and returns the year the given startas with

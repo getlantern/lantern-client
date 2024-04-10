@@ -351,6 +351,8 @@ class _CheckoutState extends State<Checkout>
       case Providers.freekassa:
         _proceedWithFreekassa();
         break;
+      case Providers.fropay:
+        _proceedWithFroPay();
     }
   }
 
@@ -374,6 +376,21 @@ class _CheckoutState extends State<Checkout>
     try {
       context.loaderOverlay.show();
       final value = await sessionModel.submitBitcoinPayment(
+          widget.plan.id, emailController.text, refCodeController.text);
+
+      context.loaderOverlay.hide();
+      final btcPayURL = value;
+      await sessionModel.openWebview(btcPayURL);
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
+  }
+
+  void _proceedWithFroPay() async {
+    try {
+      context.loaderOverlay.show();
+      final value = await sessionModel.submitFroPayPayment(
           widget.plan.id, emailController.text, refCodeController.text);
 
       context.loaderOverlay.hide();

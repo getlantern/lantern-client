@@ -684,6 +684,18 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<String> submitFroPayPayment(
+      String planID,
+      String email,
+      String refCode,
+      ) async {
+    return methodChannel.invokeMethod('submitFroPayPayment', <String, dynamic>{
+      'planID': planID,
+      'email': email,
+      'refCode': refCode,
+    }).then((value) => value as String);
+  }
+
   Future<void> submitPlayPayment(
     String planID,
     String email,

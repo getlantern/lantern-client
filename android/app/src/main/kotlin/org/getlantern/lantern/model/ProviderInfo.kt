@@ -12,7 +12,9 @@ enum class PaymentProvider(val provider: String) {
 	@SerializedName("btcpay")
 	BTCPay("btcpay"),
 	@SerializedName("reseller-code")
-	ResellerCode("reseller-code")
+	ResellerCode("reseller-code"),
+	@SerializedName("fropay")
+	Fropay("fropay")
 }
 
 data class ProviderInfo(

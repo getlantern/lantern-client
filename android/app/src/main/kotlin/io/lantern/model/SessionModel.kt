@@ -175,6 +175,12 @@ class SessionModel(
                 call.argument("cvc")!!,
                 result,
             )
+            "submitFroPayPayment" -> paymentsUtil.submitFropayPayment(
+                call.argument("planID")!!,
+                call.argument("email")!!,
+                call.argument("refCode")!!,
+                result,
+            )
 
             "userStatus" -> userStatus(result)
             else -> super.doOnMethodCall(call, result)
