@@ -95,7 +95,7 @@ class _CTextFieldState extends State<CTextField> {
 
   @override
   void dispose() {
-    widget.controller.focusNode.dispose();
+    widget.controller.dispose();
     super.dispose();
   }
 

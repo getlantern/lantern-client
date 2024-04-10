@@ -52,7 +52,10 @@ class GoTun2SocksProvider(
                         Logger.debug(TAG, "Excluding " + installedApp.packageName + " from VPN")
                         builder.addDisallowedApplication(installedApp.packageName)
                     } catch (e: PackageManager.NameNotFoundException) {
-                        throw RuntimeException("Unable to exclude " + installedApp.packageName + " from VPN", e)
+                        throw RuntimeException(
+                            "Unable to exclude " + installedApp.packageName + " from VPN",
+                            e
+                        )
                     }
                 }
             }

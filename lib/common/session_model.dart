@@ -1,9 +1,9 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/replica/common.dart';
+
 import 'common.dart';
 import 'common_desktop.dart';
-import 'package:intl/intl.dart';
 
 final sessionModel = SessionModel();
 
@@ -93,9 +93,11 @@ class SessionModel extends Model {
         websocket.messageStream.listen(
           (json) {
             final userStatus = wsMessageProp(json, "userStatus");
-            if (userStatus != null && userStatus.toString() == "active") setValue(true);
+            if (userStatus != null && userStatus.toString() == "active")
+              setValue(true);
           },
-          onError: (error) => appLogger.i("websocket error: ${error.description}"),
+          onError: (error) =>
+              appLogger.i("websocket error: ${error.description}"),
         );
       },
       ffiProUser,
@@ -195,7 +197,8 @@ class SessionModel extends Model {
             final language = wsMessageProp(json, "language");
             if (language != null && language != "") setValue(language);
           },
-          onError: (error) => appLogger.i("websocket error: ${error.description}"),
+          onError: (error) =>
+              appLogger.i("websocket error: ${error.description}"),
         );
       },
       ffiLang,
@@ -468,6 +471,11 @@ class SessionModel extends Model {
       await ffiCheckUpdates();
     }
     return;
+  }
+
+  // Plans and payment methods
+  Future<void> updatePaymentPlans() async {
+    return methodChannel.invokeMethod('updatePaymentPlans');
   }
 
   Plan planFromJson(Map<String, dynamic> item) {

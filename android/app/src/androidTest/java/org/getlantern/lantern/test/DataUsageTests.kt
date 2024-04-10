@@ -28,7 +28,8 @@ class DataUsageTests {
 
     private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-    private val notificationManager = LanternApp.getAppContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+    private val notificationManager =
+        LanternApp.getAppContext().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
     @Before
     fun setUp() {
@@ -82,14 +83,20 @@ class DataUsageTests {
     @Test
     fun WhenDataUsageIsOther_AppShouldNOTShowNotification() {
         // given the app is running
-        val notExpectedTitle = LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
+        val notExpectedTitle =
+            LanternApp.getAppContext().resources.getString(R.string.lantern_notification)
 
         // open the notification bar
         device.openNotification()
 
         // send data usage update
         val bandwidth = Bandwidth(25, 750, 1000, 3600)
-        LanternApp.getSession().bandwidthUpdate(bandwidth.percent, bandwidth.remaining, bandwidth.allowed, bandwidth.ttlSeconds)
+        LanternApp.getSession().bandwidthUpdate(
+            bandwidth.percent,
+            bandwidth.remaining,
+            bandwidth.allowed,
+            bandwidth.ttlSeconds
+        )
 
         // then the user should NOT see a push notification
         device.wait(Until.hasObject(By.text(notExpectedTitle)), TIMEOUT)
@@ -99,14 +106,23 @@ class DataUsageTests {
         assertNull(titleObj)
     }
 
-    private fun testDataUsageNotification(bandwidth: Bandwidth, expectedTitle: String, expectedContent: String) {
+    private fun testDataUsageNotification(
+        bandwidth: Bandwidth,
+        expectedTitle: String,
+        expectedContent: String
+    ) {
         // given the app is running
 
         // open the notification bar
         device.openNotification()
 
         // send data usage update
-        LanternApp.getSession().bandwidthUpdate(bandwidth.percent, bandwidth.remaining, bandwidth.allowed, bandwidth.ttlSeconds)
+        LanternApp.getSession().bandwidthUpdate(
+            bandwidth.percent,
+            bandwidth.remaining,
+            bandwidth.allowed,
+            bandwidth.ttlSeconds
+        )
 
         // then the user should see a push notification
         device.wait(Until.hasObject(By.text(expectedTitle)), TIMEOUT)

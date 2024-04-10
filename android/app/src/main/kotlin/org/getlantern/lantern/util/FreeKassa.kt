@@ -3,7 +3,7 @@ package org.getlantern.lantern.util
 import android.net.Uri
 import java.math.BigInteger
 import java.security.MessageDigest
-import java.util.*
+import java.util.Locale
 
 class FreeKassa {
     companion object {

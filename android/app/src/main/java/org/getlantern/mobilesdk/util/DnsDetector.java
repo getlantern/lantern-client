@@ -1,5 +1,7 @@
 package org.getlantern.mobilesdk.util;
 
+import static android.content.Context.CONNECTIVITY_SERVICE;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.LinkProperties;
@@ -22,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static android.content.Context.CONNECTIVITY_SERVICE;
 
 /**
  * Provides a facility for detecting the current DNS server.
@@ -91,8 +91,7 @@ public class DnsDetector {
             String ip = address.getHostAddress();
             if (!fakeDnsIP.equals(ip)) {
                 try {
-                    if (address instanceof Inet6Address) {
-                        Inet6Address ipv6Address = (Inet6Address) address;
+                    if (address instanceof Inet6Address ipv6Address) {
                         if (ipv6Address.isLinkLocalAddress()) {
                             // For IPv6, the DNS server address can be a link-local address.
                             // For Go to know how to route this, it needs to know the zone

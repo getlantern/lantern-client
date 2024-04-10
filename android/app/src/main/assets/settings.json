@@ -1,6 +1,6 @@
 {
- "httpProxyHost": "127.0.0.1",
- "httpProxyPort": 49125,
- "stickyConfig": false,
- "startTimeoutMillis": 60000
+  "httpProxyHost": "127.0.0.1",
+  "httpProxyPort": 49125,
+  "stickyConfig": false,
+  "startTimeoutMillis": 60000
 }

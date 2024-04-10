@@ -1,37 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="year_array">
-        <item>@string/year</item>
-        <item>2017</item>
-        <item>2018</item>
-        <item>2019</item>
-        <item>2020</item>
-        <item>2021</item>
-        <item>2022</item>
-        <item>2023</item>
-        <item>2024</item>
-    </string-array>
-
-    <string-array name="latest_year_array">
-        <item>@string/year</item>
-        <item>2017</item>
-    </string-array>
-
-    <string-array name="month_array">
-        <item>@string/month</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-        <item>11</item>
-        <item>12</item>
-    </string-array>
 
     <string-array translatable="false" name="special_locale_codes">
         <item>ar_EG</item>

@@ -18,6 +18,8 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.service.LanternService
+import org.getlantern.lantern.util.Json
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.util.HttpClient
 import java.io.IOException
@@ -54,6 +56,30 @@ open class LanternHttpClient : HttpClient() {
         return Gson().fromJson(row, object : TypeToken<T>() {}.type)
     }
 
+    fun createUser(cb: ProUserCallback) {
+        val formBody =
+            FormBody.Builder()
+                .add("locale", LanternApp.getSession().language)
+                .build()
+
+        val url = createProUrl("/user-create")
+        post(url, formBody, object : ProCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                cb.onFailure(throwable, error)
+            }
+
+            override fun onSuccess(response: Response?, result: JsonObject?) {
+                val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
+                if (user == null) {
+                    Logger.error(TAG, "Unable to parse user from JSON")
+                    return
+                }
+                cb.onSuccess(response!!, user)
+            }
+
+        })
+    }
+
     fun userData(cb: ProUserCallback) {
         val params = mapOf<String, String>("locale" to LanternApp.getSession().language)
         val url = createProUrl("/user-data", params)
@@ -75,7 +101,6 @@ open class LanternHttpClient : HttpClient() {
                     result?.let {
                         val user = parseData<ProUser>(result.toString())
                         Logger.debug(TAG, "User ID is ${user.userId}")
-                        LanternApp.getSession().storeUserData(user)
                         cb.onSuccess(response!!, user)
                     }
                 }
@@ -189,7 +214,9 @@ open class LanternHttpClient : HttpClient() {
                 .headers(headers.toHeaders())
                 .url(url)
         if (method == "POST") {
-            var requestBody = if (body != null) body else RequestBody.create(null, ByteArray(0))
+            var requestBody = if (body != null) body else ByteArray(0).toRequestBody(
+                null
+            )
             builder = builder.post(requestBody)
         }
 
