@@ -30,9 +30,7 @@ jobs:
         go mod tidy
         go test -failfast -coverprofile=profile.cov ./...
     - name: Install goveralls
-      env:
-        GO111MODULE: off
-      run: go get github.com/mattn/goveralls
+      run: go install github.com/mattn/goveralls
     - name: Send coverage
       env:
         COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}

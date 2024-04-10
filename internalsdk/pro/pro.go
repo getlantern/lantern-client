@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/common"
@@ -76,6 +77,12 @@ func setUserHeaders(settings *settings.Settings) func(client *resty.Client, req 
 		uc := userConfig(settings)
 
 		req.Header.Set("Referer", "http://localhost:37457/")
+		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
+			common.DeviceIdHeader,
+			common.ProTokenHeader,
+			common.UserIdHeader,
+		}, ", "))
+		req.Header.Set(common.LocaleHeader, uc.GetLanguage())
 
 		if req.Header.Get(common.DeviceIdHeader) == "" {
 			if deviceID := uc.GetDeviceID(); deviceID != "" {
@@ -93,6 +100,7 @@ func setUserHeaders(settings *settings.Settings) func(client *resty.Client, req 
 				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
 			}
 		}
+
 		return nil
 	}
 }
