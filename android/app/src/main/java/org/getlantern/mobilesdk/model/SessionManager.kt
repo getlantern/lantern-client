@@ -582,7 +582,6 @@ abstract class SessionManager(application: Application) : Session {
             db.mutate { tx ->
                 tx.listPaths("/plans/%").forEach { tx.delete(it) }
             }
-            Logger.debug(TAG, "Deleted plans")
             prefsAdapter = db.asSharedPreferences(
                 context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE),
             )
