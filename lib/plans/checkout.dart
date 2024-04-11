@@ -12,7 +12,7 @@ class Checkout extends StatefulWidget {
   final Plan plan;
   final bool isPro;
 
-  Checkout({
+  const Checkout({
     required this.plan,
     required this.isPro,
     Key? key,
@@ -29,7 +29,7 @@ class _CheckoutState extends State<Checkout>
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
-    validator: (value) => EmailValidator.validate(value ?? '')
+    validator: (value) => value!.isEmpty?null: EmailValidator.validate(value ?? '')
         ? null
         : 'please_enter_a_valid_email_address'.i18n,
   );
@@ -69,8 +69,6 @@ class _CheckoutState extends State<Checkout>
 
   @override
   void dispose() {
-    emailController.dispose();
-    refCodeController.dispose();
     animationController.dispose();
     super.dispose();
   }
@@ -244,8 +242,7 @@ class _CheckoutState extends State<Checkout>
   }
 
   bool enableContinueButton() {
-    final isEmailValid = !emailController.value.text.isEmpty &&
-        emailFieldKey.currentState!.validate();
+    final isEmailValid = EmailValidator.validate(emailController.value.text);
     if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
       return isEmailValid;
     }
@@ -409,7 +406,7 @@ class _CheckoutState extends State<Checkout>
                           text: 'continue'.i18n,
                           // for Pro users renewing their accounts, we always have an e-mail address
                           // so it's unnecessary to disable the continue button
-                          disabled: !widget.isPro ? !showContinueButton : false,
+                          disabled: !enableContinueButton(),
                           onPressed: onContinueTapped,
                         ),
                       ),
