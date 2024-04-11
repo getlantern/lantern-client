@@ -88,7 +88,7 @@ class ApkInstaller(
     private fun createIntentSender(sessionId: Int): IntentSender {
         val broadcastIntent = Intent(PACKAGE_INSTALLED_ACTION)
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_MUTABLE
+            PendingIntent.FLAG_IMMUTABLE
         } else {
             0
         }
