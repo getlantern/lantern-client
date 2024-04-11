@@ -38,12 +38,11 @@ message Plan {
   bool bestValue = 3;
   int64 usdPrice = 4;
   map<string, int64> price = 5;
-  map<string, int64> expectedMonthlyPrice = 6;
-  string totalCostBilledOneTime = 7;
-  string oneMonthCost = 8;
-  string totalCost = 9;
-  string formattedBonus = 10;
-  string renewalText = 11;
+  string totalCostBilledOneTime = 6;
+  string oneMonthCost = 7;
+  string totalCost = 8;
+  string formattedBonus = 9;
+  string renewalText = 10;
 }
 
 message PaymentProviders {
