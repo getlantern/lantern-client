@@ -486,10 +486,6 @@ class SessionModel extends Model {
         : "usd";
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
-    if (plan.expectedMonthlyPrice[currency] != null) {
-      var monthlyPrice = plan.expectedMonthlyPrice[currency]!.toInt();
-      plan.oneMonthCost = formatCurrency.format(monthlyPrice / 100).toString();
-    }
     if (plan.price[currency] != null) {
       final price = plan.price[currency] as Int64;
       plan.totalCost = formatCurrency.format(price.toInt() / 100).toString();

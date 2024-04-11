@@ -98,14 +98,13 @@ const Plan$json = {
     {'1': 'bestValue', '3': 3, '4': 1, '5': 8, '10': 'bestValue'},
     {'1': 'usdPrice', '3': 4, '4': 1, '5': 3, '10': 'usdPrice'},
     {'1': 'price', '3': 5, '4': 3, '5': 11, '6': '.Plan.PriceEntry', '10': 'price'},
-    {'1': 'expectedMonthlyPrice', '3': 6, '4': 3, '5': 11, '6': '.Plan.ExpectedMonthlyPriceEntry', '10': 'expectedMonthlyPrice'},
-    {'1': 'totalCostBilledOneTime', '3': 7, '4': 1, '5': 9, '10': 'totalCostBilledOneTime'},
-    {'1': 'oneMonthCost', '3': 8, '4': 1, '5': 9, '10': 'oneMonthCost'},
-    {'1': 'totalCost', '3': 9, '4': 1, '5': 9, '10': 'totalCost'},
-    {'1': 'formattedBonus', '3': 10, '4': 1, '5': 9, '10': 'formattedBonus'},
-    {'1': 'renewalText', '3': 11, '4': 1, '5': 9, '10': 'renewalText'},
+    {'1': 'totalCostBilledOneTime', '3': 6, '4': 1, '5': 9, '10': 'totalCostBilledOneTime'},
+    {'1': 'oneMonthCost', '3': 7, '4': 1, '5': 9, '10': 'oneMonthCost'},
+    {'1': 'totalCost', '3': 8, '4': 1, '5': 9, '10': 'totalCost'},
+    {'1': 'formattedBonus', '3': 9, '4': 1, '5': 9, '10': 'formattedBonus'},
+    {'1': 'renewalText', '3': 10, '4': 1, '5': 9, '10': 'renewalText'},
   ],
-  '3': [Plan_PriceEntry$json, Plan_ExpectedMonthlyPriceEntry$json],
+  '3': [Plan_PriceEntry$json],
 };
 
 @$core.Deprecated('Use planDescriptor instead')
@@ -118,29 +117,16 @@ const Plan_PriceEntry$json = {
   '7': {'7': true},
 };
 
-@$core.Deprecated('Use planDescriptor instead')
-const Plan_ExpectedMonthlyPriceEntry$json = {
-  '1': 'ExpectedMonthlyPriceEntry',
-  '2': [
-    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 3, '10': 'value'},
-  ],
-  '7': {'7': true},
-};
-
 /// Descriptor for `Plan`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List planDescriptor = $convert.base64Decode(
     'CgRQbGFuEg4KAmlkGAEgASgJUgJpZBIgCgtkZXNjcmlwdGlvbhgCIAEoCVILZGVzY3JpcHRpb2'
     '4SHAoJYmVzdFZhbHVlGAMgASgIUgliZXN0VmFsdWUSGgoIdXNkUHJpY2UYBCABKANSCHVzZFBy'
-    'aWNlEiYKBXByaWNlGAUgAygLMhAuUGxhbi5QcmljZUVudHJ5UgVwcmljZRJTChRleHBlY3RlZE'
-    '1vbnRobHlQcmljZRgGIAMoCzIfLlBsYW4uRXhwZWN0ZWRNb250aGx5UHJpY2VFbnRyeVIUZXhw'
-    'ZWN0ZWRNb250aGx5UHJpY2USNgoWdG90YWxDb3N0QmlsbGVkT25lVGltZRgHIAEoCVIWdG90YW'
-    'xDb3N0QmlsbGVkT25lVGltZRIiCgxvbmVNb250aENvc3QYCCABKAlSDG9uZU1vbnRoQ29zdBIc'
-    'Cgl0b3RhbENvc3QYCSABKAlSCXRvdGFsQ29zdBImCg5mb3JtYXR0ZWRCb251cxgKIAEoCVIOZm'
-    '9ybWF0dGVkQm9udXMSIAoLcmVuZXdhbFRleHQYCyABKAlSC3JlbmV3YWxUZXh0GjgKClByaWNl'
-    'RW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKANSBXZhbHVlOgI4ARpHChlFeH'
-    'BlY3RlZE1vbnRobHlQcmljZUVudHJ5EhAKA2tleRgBIAEoCVIDa2V5EhQKBXZhbHVlGAIgASgD'
-    'UgV2YWx1ZToCOAE=');
+    'aWNlEiYKBXByaWNlGAUgAygLMhAuUGxhbi5QcmljZUVudHJ5UgVwcmljZRI2ChZ0b3RhbENvc3'
+    'RCaWxsZWRPbmVUaW1lGAYgASgJUhZ0b3RhbENvc3RCaWxsZWRPbmVUaW1lEiIKDG9uZU1vbnRo'
+    'Q29zdBgHIAEoCVIMb25lTW9udGhDb3N0EhwKCXRvdGFsQ29zdBgIIAEoCVIJdG90YWxDb3N0Ei'
+    'YKDmZvcm1hdHRlZEJvbnVzGAkgASgJUg5mb3JtYXR0ZWRCb251cxIgCgtyZW5ld2FsVGV4dBgK'
+    'IAEoCVILcmVuZXdhbFRleHQaOAoKUHJpY2VFbnRyeRIQCgNrZXkYASABKAlSA2tleRIUCgV2YW'
+    'x1ZRgCIAEoA1IFdmFsdWU6AjgB');
 
 @$core.Deprecated('Use paymentProvidersDescriptor instead')
 const PaymentProviders$json = {
