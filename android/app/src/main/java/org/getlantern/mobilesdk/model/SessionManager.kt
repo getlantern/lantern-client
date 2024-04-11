@@ -571,9 +571,22 @@ abstract class SessionManager(application: Application) : Session {
         db.registerType(2007, Vpn.ServerInfo::class.java)
 
         Logger.debug(TAG, "register types finished at ${System.currentTimeMillis() - start}")
-        val prefsAdapter = db.asSharedPreferences(
-            context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE),
-        )
+        var prefsAdapter:SharedPreferences
+        try {
+            prefsAdapter = db.asSharedPreferences(
+                context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE),
+            )
+        } catch (e:java.lang.reflect.InvocationTargetException) {
+            // Handles InvocationTargetException exception that occurs because the Plans protobuf message changed
+            // and can be fixed by clearing pre-existing plans
+            db.mutate { tx ->
+                tx.listPaths("/plans/%").forEach { tx.delete(it) }
+            }
+            Logger.debug(TAG, "Deleted plans")
+            prefsAdapter = db.asSharedPreferences(
+                context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE),
+            )
+        }
         prefs = prefsAdapter
         prefs.edit().putBoolean(DEVELOPMENT_MODE, BuildConfig.DEVELOPMENT_MODE)
             .putBoolean(PAYMENT_TEST_MODE, prefs.getBoolean(PAYMENT_TEST_MODE, false))
