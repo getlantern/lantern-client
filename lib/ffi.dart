@@ -110,7 +110,8 @@ Pointer<Utf8> ffiCheckUpdates() => _bindings.checkUpdates().cast<Utf8>();
 
 Pointer<Utf8> ffiPlans() => _bindings.plans().cast<Utf8>();
 
-Pointer<Utf8> ffiPaymentMethods() => _bindings.paymentMethods().cast<Utf8>();
+Pointer<Utf8> ffiPaymentMethods() => _bindings.paymentMethodsV3().cast<Utf8>();
+Pointer<Utf8> ffiPaymentMethodsV4() => _bindings.paymentMethodsV4().cast<Utf8>();
 
 Pointer<Utf8> ffiDeviceLinkingCode() =>
     _bindings.deviceLinkingCode().cast<Utf8>();

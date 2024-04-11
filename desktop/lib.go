@@ -167,13 +167,23 @@ func plans() *C.char {
 	return C.CString(string(b))
 }
 
-//export paymentMethods
-func paymentMethods() *C.char {
-	resp, err := proClient.PaymentMethods(userConfig())
+//export paymentMethodsV3
+func paymentMethodsV3() *C.char {
+	resp, err := proClient.PaymentMethodsV3(userConfig())
 	if err != nil {
 		return sendError(err)
 	}
 	b, _ := json.Marshal(resp.Providers)
+	return C.CString(string(b))
+}
+
+//export paymentMethodsV4
+func paymentMethodsV4() *C.char {
+	resp, err := proClient.PaymentMethodsV4(userConfig())
+	if err != nil {
+		return sendError(err)
+	}
+	b, _ := json.Marshal(resp.PaymentMethodsResponse)
 	return C.CString(string(b))
 }
 

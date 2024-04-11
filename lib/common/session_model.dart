@@ -479,6 +479,7 @@ class SessionModel extends Model {
   }
 
   Plan planFromJson(Map<String, dynamic> item) {
+    print("called plans $item");
     final locale = Localization.locale;
     final formatCurrency = NumberFormat.simpleCurrency(locale: locale);
     final currency = formatCurrency.currencyName != null
@@ -501,22 +502,33 @@ class SessionModel extends Model {
     return plan;
   }
 
-  PaymentMethod paymentMethodFromJson(Map<String, dynamic> item) {
-    final formatCurrency = new NumberFormat.simpleCurrency();
-    final List<PaymentMethod> methods = [];
-    for (var m in item["desktop"]) {
-      var paymentMethod = PaymentMethod();
-      paymentMethod.method = m["method"];
-      var providers = <PaymentProviders>[];
-      for (var n in m["providers"]) {
-        var provider = PaymentProviders();
-        provider.name = n["name"];
-        providers.add(provider);
-      }
+  Iterable<PathAndValue<PaymentMethod>> paymentMethodFromJson(item) {
+    print("called paymentMethodFromJson $item");
+    // final List<PaymentMethod> methods = [];
+    Iterable<PathAndValue<PaymentMethod>> methods = Iterable.empty();
+    final Map<String, dynamic> icons = item['icons'];
+    final desktopProviders = item['providers']["desktop"] as List;
+    for (var method in desktopProviders) {
+      final paymentMethod = PaymentMethod();
+      paymentMethod.method = method["method"];
+      final List<PaymentProviders> providers =
+          method["providers"].map<PaymentProviders>((provider) {
+        final List<dynamic> logos = icons[provider["name"]];
+        final List<String> stringLogos =
+            logos.map((logo) => logo.toString()).toList();
+        return PaymentProviders.create()
+          ..logoUrls.addAll(stringLogos)
+          ..name = provider["name"];
+      }).toList();
+
       paymentMethod.providers.addAll(providers);
-      return paymentMethod;
+      // methods.add(paymentMethod);
+      final providerMe =
+          PathAndValue<PaymentMethod>(paymentMethod.method, paymentMethod);
+      methods = methods.followedBy([providerMe]);
+
     }
-    return PaymentMethod();
+    return methods;
   }
 
   Widget plans({
@@ -554,12 +566,20 @@ class SessionModel extends Model {
         },
       );
     }
-    return ffiListBuilder<PaymentMethod>(
-      '/paymentMethods/',
-      ffiPaymentMethods,
-      paymentMethodFromJson,
+
+    return ffiValueBuilder<Iterable<PathAndValue<PaymentMethod>>>(
+      "/paymentMethods/",
+      ffiPaymentMethodsV4,
+      fromJsonModel: paymentMethodFromJson,
       builder: builder,
     );
+    // return ffiListBuilder<PaymentMethod>(
+    // '/paymentMethods/',
+    // ffiPaymentMethodsV4,
+    // paymentMethodFromJson,
+    // builder:
+    // builder,
+    // );
   }
 
   Future<void> applyRefCode(
@@ -693,10 +713,10 @@ class SessionModel extends Model {
   }
 
   Future<String> submitFroPayPayment(
-      String planID,
-      String email,
-      String refCode,
-      ) async {
+    String planID,
+    String email,
+    String refCode,
+  ) async {
     return methodChannel.invokeMethod('submitFroPayPayment', <String, dynamic>{
       'planID': planID,
       'email': email,

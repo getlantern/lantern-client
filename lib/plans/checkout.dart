@@ -190,11 +190,8 @@ class _CheckoutState extends State<Checkout>
                           const EdgeInsetsDirectional.only(top: 16, bottom: 16),
                       width: MediaQuery.of(context).size.width,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: Platform.isAndroid
-                            ? paymentOptions(paymentMethods)
-                            : desktopPaymentOptions(),
-                      ),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: paymentOptions(paymentMethods)),
                     ),
                     // * Price summary, unused pro time disclaimer, Continue button
                     Center(
