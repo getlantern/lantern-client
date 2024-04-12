@@ -29,9 +29,11 @@ class _CheckoutState extends State<Checkout>
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
-    validator: (value) => value!.isEmpty?null: EmailValidator.validate(value ?? '')
+    validator: (value) => value!.isEmpty
         ? null
-        : 'please_enter_a_valid_email_address'.i18n,
+        : EmailValidator.validate(value ?? '')
+            ? null
+            : 'please_enter_a_valid_email_address'.i18n,
   );
 
   final refCodeFieldKey = GlobalKey<FormState>();
@@ -239,23 +241,6 @@ class _CheckoutState extends State<Checkout>
         ),
       );
 
-  List<Widget> desktopPaymentOptions() {
-    var widgets = <Widget>[];
-    widgets.add(
-      PaymentProvider(
-        logoPaths: const [
-          ImagePaths.visa,
-          ImagePaths.mastercard,
-          ImagePaths.unionpay
-        ],
-        onChanged: () => selectPaymentProvider(Providers.stripe),
-        selectedPaymentProvider: selectedPaymentProvider!,
-        paymentType: Providers.stripe,
-      ),
-    );
-    return widgets;
-  }
-
   List<Widget> paymentOptions(
     Iterable<PathAndValue<PaymentMethod>> paymentMethods,
   ) {
@@ -348,6 +333,9 @@ class _CheckoutState extends State<Checkout>
         break;
       case Providers.fropay:
         _proceedWithFroPay();
+      case Providers.paymentwall:
+        _proceedWithPaymentWall();
+        break;
     }
   }
 
@@ -389,12 +377,28 @@ class _CheckoutState extends State<Checkout>
           widget.plan.id, emailController.text, refCodeController.text);
 
       context.loaderOverlay.hide();
-      final btcPayURL = value;
-      await sessionModel.openWebview(btcPayURL);
+      final froPayURL = value;
+      await sessionModel.openWebview(froPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
     }
+  }
+
+  void _proceedWithPaymentWall() async {
+    //Todo need to implement
+    // try {
+    //   context.loaderOverlay.show();
+    //   final value = await sessionModel.submitFroPayPayment(
+    //       widget.plan.id, emailController.text, refCodeController.text);
+    //
+    //   context.loaderOverlay.hide();
+    //   final btcPayURL = value;
+    //   await sessionModel.openWebview(btcPayURL);
+    // } catch (error, stackTrace) {
+    //   context.loaderOverlay.hide();
+    //   showError(context, error: error, stackTrace: stackTrace);
+    // }
   }
 
   // It starts native activity to proceed with Freekassa
@@ -432,10 +436,10 @@ class _CheckoutState extends State<Checkout>
   }
 
   Future<void> onContinueTapped() async {
-    final emailFound = await checkIfEmailExits();
-    if (emailFound) {
-      return;
-    }
+    // final emailFound = await checkIfEmailExits();
+    // if (emailFound) {
+    //   return;
+    // }
     // Check for referral code
     var refCode = refCodeController.value;
     try {

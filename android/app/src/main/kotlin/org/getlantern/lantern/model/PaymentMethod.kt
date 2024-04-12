@@ -23,7 +23,10 @@ enum class PaymentMethod(val method: String) {
     Freekassa("freekassa"),
 
     @SerializedName("paymentwall")
-    PaymentWall("paymentwall")
+    PaymentWall("paymentwall"),
+
+    @SerializedName("fropay")
+    FroPay("fropay")
 }
 
 data class PaymentMethods(

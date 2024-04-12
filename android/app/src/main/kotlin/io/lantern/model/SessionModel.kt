@@ -309,10 +309,11 @@ class SessionModel(
     }
 
     private fun fetchPaymentMethods(result: MethodChannel.Result?) {
-        lanternClient.plansV3(object : LanternHttpClient.PlansV3Callback {
+        lanternClient.plansV4(object : LanternHttpClient.PlansV3Callback {
             override fun onSuccess(
                 proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>
             ) {
+                Logger.debug(TAG,"Successfully payment proplan $proPlans and methods $paymentMethods" )
                 processPaymentMethods(proPlans, paymentMethods)
                 result?.success("Payment method successfully updated")
             }
