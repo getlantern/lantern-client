@@ -405,7 +405,6 @@ class Plan extends $pb.GeneratedMessage {
     $core.bool? bestValue,
     $fixnum.Int64? usdPrice,
     $core.Map<$core.String, $fixnum.Int64>? price,
-    $core.Map<$core.String, $fixnum.Int64>? expectedMonthlyPrice,
     $core.String? totalCostBilledOneTime,
     $core.String? oneMonthCost,
     $core.String? totalCost,
@@ -427,9 +426,6 @@ class Plan extends $pb.GeneratedMessage {
     }
     if (price != null) {
       $result.price.addAll(price);
-    }
-    if (expectedMonthlyPrice != null) {
-      $result.expectedMonthlyPrice.addAll(expectedMonthlyPrice);
     }
     if (totalCostBilledOneTime != null) {
       $result.totalCostBilledOneTime = totalCostBilledOneTime;
@@ -458,12 +454,11 @@ class Plan extends $pb.GeneratedMessage {
     ..aOB(3, _omitFieldNames ? '' : 'bestValue', protoName: 'bestValue')
     ..aInt64(4, _omitFieldNames ? '' : 'usdPrice', protoName: 'usdPrice')
     ..m<$core.String, $fixnum.Int64>(5, _omitFieldNames ? '' : 'price', entryClassName: 'Plan.PriceEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.O6)
-    ..m<$core.String, $fixnum.Int64>(6, _omitFieldNames ? '' : 'expectedMonthlyPrice', protoName: 'expectedMonthlyPrice', entryClassName: 'Plan.ExpectedMonthlyPriceEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.O6)
-    ..aOS(7, _omitFieldNames ? '' : 'totalCostBilledOneTime', protoName: 'totalCostBilledOneTime')
-    ..aOS(8, _omitFieldNames ? '' : 'oneMonthCost', protoName: 'oneMonthCost')
-    ..aOS(9, _omitFieldNames ? '' : 'totalCost', protoName: 'totalCost')
-    ..aOS(10, _omitFieldNames ? '' : 'formattedBonus', protoName: 'formattedBonus')
-    ..aOS(11, _omitFieldNames ? '' : 'renewalText', protoName: 'renewalText')
+    ..aOS(6, _omitFieldNames ? '' : 'totalCostBilledOneTime', protoName: 'totalCostBilledOneTime')
+    ..aOS(7, _omitFieldNames ? '' : 'oneMonthCost', protoName: 'oneMonthCost')
+    ..aOS(8, _omitFieldNames ? '' : 'totalCost', protoName: 'totalCost')
+    ..aOS(9, _omitFieldNames ? '' : 'formattedBonus', protoName: 'formattedBonus')
+    ..aOS(10, _omitFieldNames ? '' : 'renewalText', protoName: 'renewalText')
     ..hasRequiredFields = false
   ;
 
@@ -528,52 +523,49 @@ class Plan extends $pb.GeneratedMessage {
   $core.Map<$core.String, $fixnum.Int64> get price => $_getMap(4);
 
   @$pb.TagNumber(6)
-  $core.Map<$core.String, $fixnum.Int64> get expectedMonthlyPrice => $_getMap(5);
+  $core.String get totalCostBilledOneTime => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set totalCostBilledOneTime($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasTotalCostBilledOneTime() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearTotalCostBilledOneTime() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get totalCostBilledOneTime => $_getSZ(6);
+  $core.String get oneMonthCost => $_getSZ(6);
   @$pb.TagNumber(7)
-  set totalCostBilledOneTime($core.String v) { $_setString(6, v); }
+  set oneMonthCost($core.String v) { $_setString(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasTotalCostBilledOneTime() => $_has(6);
+  $core.bool hasOneMonthCost() => $_has(6);
   @$pb.TagNumber(7)
-  void clearTotalCostBilledOneTime() => clearField(7);
+  void clearOneMonthCost() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get oneMonthCost => $_getSZ(7);
+  $core.String get totalCost => $_getSZ(7);
   @$pb.TagNumber(8)
-  set oneMonthCost($core.String v) { $_setString(7, v); }
+  set totalCost($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasOneMonthCost() => $_has(7);
+  $core.bool hasTotalCost() => $_has(7);
   @$pb.TagNumber(8)
-  void clearOneMonthCost() => clearField(8);
+  void clearTotalCost() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get totalCost => $_getSZ(8);
+  $core.String get formattedBonus => $_getSZ(8);
   @$pb.TagNumber(9)
-  set totalCost($core.String v) { $_setString(8, v); }
+  set formattedBonus($core.String v) { $_setString(8, v); }
   @$pb.TagNumber(9)
-  $core.bool hasTotalCost() => $_has(8);
+  $core.bool hasFormattedBonus() => $_has(8);
   @$pb.TagNumber(9)
-  void clearTotalCost() => clearField(9);
+  void clearFormattedBonus() => clearField(9);
 
   @$pb.TagNumber(10)
-  $core.String get formattedBonus => $_getSZ(9);
+  $core.String get renewalText => $_getSZ(9);
   @$pb.TagNumber(10)
-  set formattedBonus($core.String v) { $_setString(9, v); }
+  set renewalText($core.String v) { $_setString(9, v); }
   @$pb.TagNumber(10)
-  $core.bool hasFormattedBonus() => $_has(9);
+  $core.bool hasRenewalText() => $_has(9);
   @$pb.TagNumber(10)
-  void clearFormattedBonus() => clearField(10);
-
-  @$pb.TagNumber(11)
-  $core.String get renewalText => $_getSZ(10);
-  @$pb.TagNumber(11)
-  set renewalText($core.String v) { $_setString(10, v); }
-  @$pb.TagNumber(11)
-  $core.bool hasRenewalText() => $_has(10);
-  @$pb.TagNumber(11)
-  void clearRenewalText() => clearField(11);
+  void clearRenewalText() => clearField(10);
 }
 
 class PaymentProviders extends $pb.GeneratedMessage {
