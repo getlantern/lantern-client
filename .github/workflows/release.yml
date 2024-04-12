@@ -208,13 +208,18 @@ jobs:
           path: |
             lantern-installer.aab
 
-      - name: Setup S3cmd cli tool
-        uses: s3-actions/s3cmd@v1.4.0
+      - uses: actions/setup-python@v5
         with:
-          provider: aws
-          region: ${{ secrets.AWS_REGION }}
-          access_key: ${{ secrets.AWS_ACCESS_KEY }}
-          secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          python-version: '3.12'
+
+      - name: Install s3cmd
+        run: pip install s3cmd
+
+      - name: Set s3cmd permissions
+        run: |
+          echo "[default]" > "$HOME/.s3cfg"
+          echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
+          echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
 
       - name: Push binaries to s3
         env:

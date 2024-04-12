@@ -16,7 +16,10 @@ enum class PaymentProvider(val provider: String) {
     BTCPay("btcpay"),
 
     @SerializedName("reseller-code")
-    ResellerCode("reseller-code")
+    ResellerCode("reseller-code"),
+
+    @SerializedName("paymentwall")
+    PaymentWall("paymentwall")
 }
 
 data class ProviderInfo(
