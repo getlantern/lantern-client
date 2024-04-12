@@ -961,6 +961,98 @@ class APIResponse extends $pb.GeneratedMessage {
   void clearErrorId() => clearField(3);
 }
 
+class PaymentRedirectResponse extends $pb.GeneratedMessage {
+  factory PaymentRedirectResponse({
+    $core.String? status,
+    $core.String? error,
+    $core.String? errorId,
+    $core.String? redirect,
+  }) {
+    final $result = create();
+    if (status != null) {
+      $result.status = status;
+    }
+    if (error != null) {
+      $result.error = error;
+    }
+    if (errorId != null) {
+      $result.errorId = errorId;
+    }
+    if (redirect != null) {
+      $result.redirect = redirect;
+    }
+    return $result;
+  }
+  PaymentRedirectResponse._() : super();
+  factory PaymentRedirectResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PaymentRedirectResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'PaymentRedirectResponse', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'status')
+    ..aOS(2, _omitFieldNames ? '' : 'error')
+    ..aOS(3, _omitFieldNames ? '' : 'errorId', protoName: 'errorId')
+    ..aOS(4, _omitFieldNames ? '' : 'redirect')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  PaymentRedirectResponse clone() => PaymentRedirectResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  PaymentRedirectResponse copyWith(void Function(PaymentRedirectResponse) updates) => super.copyWith((message) => updates(message as PaymentRedirectResponse)) as PaymentRedirectResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static PaymentRedirectResponse create() => PaymentRedirectResponse._();
+  PaymentRedirectResponse createEmptyInstance() => create();
+  static $pb.PbList<PaymentRedirectResponse> createRepeated() => $pb.PbList<PaymentRedirectResponse>();
+  @$core.pragma('dart2js:noInline')
+  static PaymentRedirectResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PaymentRedirectResponse>(create);
+  static PaymentRedirectResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get status => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set status($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStatus() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get error => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set error($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasError() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearError() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get errorId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set errorId($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasErrorId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearErrorId() => clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get redirect => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set redirect($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasRedirect() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearRedirect() => clearField(4);
+}
+
 class LinkResponse extends $pb.GeneratedMessage {
   factory LinkResponse({
     $fixnum.Int64? userID,

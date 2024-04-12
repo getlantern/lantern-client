@@ -200,6 +200,23 @@ final $typed_data.Uint8List aPIResponseDescriptor = $convert.base64Decode(
     'CgtBUElSZXNwb25zZRIWCgZzdGF0dXMYASABKAlSBnN0YXR1cxIUCgVlcnJvchgCIAEoCVIFZX'
     'Jyb3ISGAoHZXJyb3JJZBgDIAEoCVIHZXJyb3JJZA==');
 
+@$core.Deprecated('Use paymentRedirectResponseDescriptor instead')
+const PaymentRedirectResponse$json = {
+  '1': 'PaymentRedirectResponse',
+  '2': [
+    {'1': 'status', '3': 1, '4': 1, '5': 9, '10': 'status'},
+    {'1': 'error', '3': 2, '4': 1, '5': 9, '10': 'error'},
+    {'1': 'errorId', '3': 3, '4': 1, '5': 9, '10': 'errorId'},
+    {'1': 'redirect', '3': 4, '4': 1, '5': 9, '10': 'redirect'},
+  ],
+};
+
+/// Descriptor for `PaymentRedirectResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List paymentRedirectResponseDescriptor = $convert.base64Decode(
+    'ChdQYXltZW50UmVkaXJlY3RSZXNwb25zZRIWCgZzdGF0dXMYASABKAlSBnN0YXR1cxIUCgVlcn'
+    'JvchgCIAEoCVIFZXJyb3ISGAoHZXJyb3JJZBgDIAEoCVIHZXJyb3JJZBIaCghyZWRpcmVjdBgE'
+    'IAEoCVIIcmVkaXJlY3Q=');
+
 @$core.Deprecated('Use linkResponseDescriptor instead')
 const LinkResponse$json = {
   '1': 'LinkResponse',

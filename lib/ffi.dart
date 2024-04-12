@@ -54,7 +54,10 @@ void checkAPIError(result, errorMessage) {
 }
 
 Future<String> ffiApproveDevice(String code) async {
-  final json = await _bindings.approveDevice(code.toPointerChar()).cast<Utf8>().toDartString();
+  final json = await _bindings
+      .approveDevice(code.toPointerChar())
+      .cast<Utf8>()
+      .toDartString();
   final result = APIResponse.create()..mergeFromProto3Json(jsonDecode(json));
   checkAPIError(result, 'wrong_device_linking_code'.i18n);
   // refresh user data after successfully linking device
@@ -63,7 +66,10 @@ Future<String> ffiApproveDevice(String code) async {
 }
 
 Future<void> ffiRemoveDevice(String deviceId) async {
-  final json = await _bindings.removeDevice(deviceId.toPointerChar()).cast<Utf8>().toDartString();
+  final json = await _bindings
+      .removeDevice(deviceId.toPointerChar())
+      .cast<Utf8>()
+      .toDartString();
   final result = LinkResponse.create()..mergeFromProto3Json(jsonDecode(json));
   checkAPIError(result, 'cannot_remove_device'.i18n);
   // refresh user data after removing a device
@@ -80,8 +86,10 @@ Pointer<Utf8> ffiAcceptedTermsVersion() =>
 
 Pointer<Utf8> ffiEmailAddress() => _bindings.emailAddress().cast<Utf8>();
 
-Pointer<Utf8> ffiEmailExists(String email) =>
-    _bindings.emailExists(email.toPointerChar()).cast<Utf8>();
+Future<String> ffiEmailExists(String email) async => await _bindings
+    .emailExists(email.toPointerChar())
+    .cast<Utf8>()
+    .toDartString();
 
 Pointer<Utf8> ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
   final result =
@@ -130,7 +138,8 @@ Future<void> ffiReportIssue(List<String> list) {
   final email = list[0].toNativeUtf8();
   final issueType = list[1].toNativeUtf8();
   final description = list[2].toNativeUtf8();
-  final result = _bindings.reportIssue(email as Pointer<Char>, issueType as Pointer<Char>, description as Pointer<Char>);
+  final result = _bindings.reportIssue(email as Pointer<Char>,
+      issueType as Pointer<Char>, description as Pointer<Char>);
   if (result.r1 != nullptr) {
     // Got error throw error to show error ui state
     final errorCode = result.r1.cast<Utf8>().toDartString();
@@ -140,18 +149,20 @@ Future<void> ffiReportIssue(List<String> list) {
   return Future.value();
 }
 
-
-String ffiPaymentRedirect(planID, currency, provider, email, deviceName) {
-  final result =
-      _bindings.paymentRedirect(planID, currency, provider, email, deviceName);
-  if (result.r1 != nullptr) {
-    // Got error throw error to show error ui state
-    final errorCode = result.r1.cast<Utf8>().toDartString();
-    throw PlatformException(
-        code: errorCode,
-        message: 'we_are_experiencing_technical_difficulties'.i18n);
-  }
-  return result.r0.cast<Utf8>().toDartString();
+Future<String> ffiPaymentRedirect(List<String> list) {
+  final planID = list[0].toPointerChar();
+  final currency = list[1].toPointerChar();
+  final provider = list[2].toPointerChar();
+  final email = list[3].toPointerChar();
+  final deviceName = list[4].toPointerChar();
+  final json = _bindings
+      .paymentRedirect(planID, currency, provider, email, deviceName)
+      .cast<Utf8>()
+      .toDartString();
+  final result = PaymentRedirectResponse.create()
+    ..mergeFromProto3Json(jsonDecode(json));
+  checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
+  return Future.value(result.redirect);
 }
 
 const String _libName = 'liblantern';
