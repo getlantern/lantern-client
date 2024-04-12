@@ -1,5 +1,6 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/plans/utils.dart';
 import 'package:lantern/replica/common.dart';
 
 import 'common.dart';
@@ -485,14 +486,18 @@ class SessionModel extends Model {
     final currency = formatCurrency.currencyName != null
         ? formatCurrency.currencyName!.toLowerCase()
         : "usd";
+    final monthlyPrice = item['expectedMonthlyPrice'][currency];
     //Remove expectedMonthlyPrice due to protobuf update
     item.remove('expectedMonthlyPrice');
+
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
     if (plan.price[currency] != null) {
       final price = plan.price[currency] as Int64;
-      plan.totalCost = formatCurrency.format(price.toInt() / 100).toString();
-      plan.totalCostBilledOneTime = '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
+      plan.totalCost = formatCurrency.format(price.toInt() / 100.0).toString();
+      plan.totalCostBilledOneTime =
+          '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
+      plan.oneMonthCost = formatCurrency.format(plan.monthlyCost()).toString();
     }
     return plan;
   }
@@ -516,35 +521,6 @@ class SessionModel extends Model {
       return PathAndValue<PaymentMethod>(paymentMethod.method, paymentMethod);
     });
   }
-
-  // Iterable<PathAndValue<PaymentMethod>> paymentMethodFromJson(item) {
-  //   print("called paymentMethodFromJson $item");
-  //   // final List<PaymentMethod> methods = [];
-  //   Iterable<PathAndValue<PaymentMethod>> methods = const Iterable.empty();
-  //   final Map<String, dynamic> icons = item['icons'];
-  //   final desktopProviders = item['providers']["desktop"] as List;
-  //   for (var method in desktopProviders) {
-  //     final paymentMethod = PaymentMethod();
-  //     paymentMethod.method = method["method"];
-  //     final List<PaymentProviders> providers =
-  //         method["providers"].map<PaymentProviders>((provider) {
-  //       final List<dynamic> logos = icons[provider["name"]];
-  //       final List<String> stringLogos =
-  //           logos.map((logo) => logo.toString()).toList();
-  //       return PaymentProviders.create()
-  //         ..logoUrls.addAll(stringLogos)
-  //         ..name = provider["name"];
-  //     }).toList();
-  //
-  //     paymentMethod.providers.addAll(providers);
-  //     // methods.add(paymentMethod);
-  //     final providerMe =
-  //         PathAndValue<PaymentMethod>(paymentMethod.method, paymentMethod);
-  //     methods = methods.followedBy([providerMe]);
-  //
-  //   }
-  //   return methods;
-  // }
 
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
@@ -588,13 +564,6 @@ class SessionModel extends Model {
       fromJsonModel: paymentMethodFromJson,
       builder: builder,
     );
-    // return ffiListBuilder<PaymentMethod>(
-    // '/paymentMethods/',
-    // ffiPaymentMethodsV4,
-    // paymentMethodFromJson,
-    // builder:
-    // builder,
-    // );
   }
 
   Future<void> applyRefCode(

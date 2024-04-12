@@ -87,3 +87,14 @@ extension ProviderExtension on String {
     return Providers.btcpay;
   }
 }
+
+extension PlansExtension on Plan {
+  double monthlyCost() {
+    final cost = totalCost.replaceAll('\$', '');
+    if (id.startsWith('1y')) {
+      return double.tryParse(cost)! / 12;
+    }
+
+    return double.tryParse(cost)! / 24;
+  }
+}
