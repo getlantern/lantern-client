@@ -91,7 +91,7 @@ class SessionModel extends Model {
       onChanges: (setValue) {
         if (websocket == null) return;
         websocket.messageStream.listen(
-              (json) {
+          (json) {
             final userStatus = wsMessageProp(json, "userStatus");
             if (userStatus != null && userStatus.toString() == "active")
               setValue(true);
@@ -193,7 +193,7 @@ class SessionModel extends Model {
       onChanges: (setValue) {
         if (websocket == null) return;
         websocket.messageStream.listen(
-              (json) {
+          (json) {
             final language = wsMessageProp(json, "language");
             if (language != null && language != "") setValue(language);
           },
@@ -268,15 +268,13 @@ class SessionModel extends Model {
     for (final element in item) {
       if (element is! Map) continue;
       try {
-        devices.add(Device.create()
-          ..mergeFromProto3Json(element));
+        devices.add(Device.create()..mergeFromProto3Json(element));
       } on Exception catch (e) {
         // Handle parsing errors as needed
         appLogger.i("Error parsing device data: $e");
       }
     }
-    return Devices.create()
-      ..devices.addAll(devices);
+    return Devices.create()..devices.addAll(devices);
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {
@@ -487,21 +485,19 @@ class SessionModel extends Model {
     final currency = formatCurrency.currencyName != null
         ? formatCurrency.currencyName!.toLowerCase()
         : "usd";
+    //Remove expectedMonthlyPrice due to protobuf update
+    item.remove('expectedMonthlyPrice');
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
     if (plan.price[currency] != null) {
       final price = plan.price[currency] as Int64;
       plan.totalCost = formatCurrency.format(price.toInt() / 100).toString();
-      plan.totalCostBilledOneTime =
-          formatCurrency.format(price.toInt() / 100).toString() +
-              ' ' +
-              'billed_one_time'.i18n;
+      plan.totalCostBilledOneTime = '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
     }
     return plan;
   }
 
   Iterable<PathAndValue<PaymentMethod>> paymentMethodFromJson(item) {
-    print("called paymentMethodFromJson $item");
     final Map<String, dynamic> icons = item['icons'];
     final desktopProviders = item['providers']["desktop"] as List;
 
@@ -510,7 +506,7 @@ class SessionModel extends Model {
       final providers = method["providers"].map<PaymentProviders>((provider) {
         final List<dynamic> logos = icons[provider["name"]];
         final List<String> stringLogos =
-        logos.map((logo) => logo.toString()).toList();
+            logos.map((logo) => logo.toString()).toList();
         return PaymentProviders.create()
           ..logoUrls.addAll(stringLogos)
           ..name = provider["name"];
@@ -601,14 +597,16 @@ class SessionModel extends Model {
     // );
   }
 
-  Future<void> applyRefCode(String refCode,) async {
+  Future<void> applyRefCode(
+    String refCode,
+  ) async {
     return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
       'refCode': refCode,
     }).then((value) => value as String);
   }
 
-  Future<void> reportIssue(String email, String issue,
-      String description) async {
+  Future<void> reportIssue(
+      String email, String issue, String description) async {
     if (isDesktop()) {
       return await compute(ffiReportIssue, [email, issue, description]);
     }
@@ -651,8 +649,7 @@ class SessionModel extends Model {
       builder: builder,
       fromJsonModel: (dynamic json) {
         final res = jsonEncode(json);
-        return ServerInfo.create()
-          ..mergeFromProto3Json(jsonDecode(res));
+        return ServerInfo.create()..mergeFromProto3Json(jsonDecode(res));
       },
       deserialize: (Uint8List serialized) {
         return ServerInfo.fromBuffer(serialized);
@@ -660,9 +657,11 @@ class SessionModel extends Model {
     );
   }
 
-  Future<void> trackUserAction(String name,
-      String url,
-      String title,) async {
+  Future<void> trackUserAction(
+    String name,
+    String url,
+    String title,
+  ) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
         'name': name,
@@ -698,10 +697,12 @@ class SessionModel extends Model {
     );
   }
 
-  Future<void> redeemResellerCode(String email,
-      String currency,
-      String deviceName,
-      String resellerCode,) async {
+  Future<void> redeemResellerCode(
+    String email,
+    String currency,
+    String deviceName,
+    String resellerCode,
+  ) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
         'email': email,
@@ -714,9 +715,11 @@ class SessionModel extends Model {
         deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
   }
 
-  Future<String> submitBitcoinPayment(String planID,
-      String email,
-      String refCode,) async {
+  Future<String> submitBitcoinPayment(
+    String planID,
+    String email,
+    String refCode,
+  ) async {
     return methodChannel.invokeMethod('submitBitcoinPayment', <String, dynamic>{
       'planID': planID,
       'email': email,
@@ -724,9 +727,11 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<String> submitFroPayPayment(String planID,
-      String email,
-      String refCode,) async {
+  Future<String> submitFroPayPayment(
+    String planID,
+    String email,
+    String refCode,
+  ) async {
     return methodChannel.invokeMethod('submitFroPayPayment', <String, dynamic>{
       'planID': planID,
       'email': email,
@@ -734,8 +739,10 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> submitPlayPayment(String planID,
-      String email,) async {
+  Future<void> submitPlayPayment(
+    String planID,
+    String email,
+  ) async {
     return methodChannel
         .invokeMethod('submitGooglePlayPayment', <String, dynamic>{
       'email': email,
@@ -743,11 +750,13 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<String> paymentRedirect(String planID,
-      String currency,
-      String email,
-      String provider,
-      String deviceName,) async {
+  Future<String> paymentRedirect(
+    String planID,
+    String currency,
+    String email,
+    String provider,
+    String deviceName,
+  ) async {
     final resp = ffiPaymentRedirect(
         planID.toNativeUtf8(),
         currency.toNativeUtf8(),
@@ -757,11 +766,13 @@ class SessionModel extends Model {
     return resp;
   }
 
-  Future<void> submitStripePayment(String planID,
-      String email,
-      String cardNumber,
-      String expDate,
-      String cvc,) async {
+  Future<void> submitStripePayment(
+    String planID,
+    String email,
+    String cardNumber,
+    String expDate,
+    String cvc,
+  ) async {
     return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
       'planID': planID,
       'email': email,
@@ -771,9 +782,11 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<void> submitFreekassa(String email,
-      String planID,
-      String currencyPrice,) async {
+  Future<void> submitFreekassa(
+    String email,
+    String planID,
+    String currencyPrice,
+  ) async {
     return await methodChannel
         .invokeMethod('submitFreekassa', <String, dynamic>{
       'email': email,
@@ -782,7 +795,9 @@ class SessionModel extends Model {
     });
   }
 
-  Future<void> checkEmailExists(String email,) async {
+  Future<void> checkEmailExists(
+    String email,
+  ) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('checkEmailExists', <String, dynamic>{
         'emailAddress': email,

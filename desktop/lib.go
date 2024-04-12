@@ -33,6 +33,7 @@ import (
 
 	"github.com/shirou/gopsutil/v3/host"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 import "C"
@@ -76,6 +77,13 @@ func start() {
 
 	go func() {
 		err := fetchOrCreate()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	go func() {
+		err := fetchPayentMethodV4()
 		if err != nil {
 			log.Error(err)
 		}
@@ -126,6 +134,29 @@ func fetchOrCreate() error {
 	}
 	return nil
 }
+func fetchPayentMethodV4() error {
+	settings := a.Settings()
+	resp, err := proClient.PaymentMethodsV4(userConfig())
+	if err != nil {
+		return errors.New("Could not get payment methods: %v", err)
+	}
+	log.Debugf("DEBUG: Payment methods response: %v in string %v", resp, resp.PaymentMethodsResponse.String())
+	bytes, err := proto.Marshal(resp.PaymentMethodsResponse)
+	if err != nil {
+		return errors.New("Could not marshal payment methods: %v", err)
+	}
+	settings.SetPaymentMethodPlans(bytes)
+
+	// userID := settings.GetUserID()
+	// if userID == 0 {
+	// 	user, err := pro.NewUser(settings)
+	// 	if err != nil {
+	// 		return errors.New("Could not create new Pro user: %v", err)
+	// 	}
+	// 	settings.SetUserIDAndToken(user.Auth.ID, user.Auth.Token)
+	// }
+	return nil
+}
 
 //export sysProxyOn
 func sysProxyOn() {
@@ -159,11 +190,18 @@ func setSelectTab(ttab *C.char) {
 
 //export plans
 func plans() *C.char {
-	resp, err := proClient.Plans(userConfig())
+	settings := a.Settings()
+	plans := settings.GetPaymentMethods()
+	if plans == nil {
+		return sendError(errors.New("plans not found"))
+	}
+	paymentMethodsResponse := &client.PaymentMethodsResponse{}
+	err := proto.Unmarshal(plans, paymentMethodsResponse)
 	if err != nil {
 		return sendError(err)
 	}
-	b, _ := json.Marshal(resp.Plans)
+	log.Debugf("DEBUG: cache plans: %v", paymentMethodsResponse)
+	b, _ := json.Marshal(paymentMethodsResponse.Plans)
 	return C.CString(string(b))
 }
 
@@ -179,11 +217,18 @@ func paymentMethodsV3() *C.char {
 
 //export paymentMethodsV4
 func paymentMethodsV4() *C.char {
-	resp, err := proClient.PaymentMethodsV4(userConfig())
+	settings := a.Settings()
+	plans := settings.GetPaymentMethods()
+	if plans == nil {
+		return sendError(errors.New("Payment methods not found"))
+	}
+	paymentMethodsResponse := &client.PaymentMethodsResponse{}
+	err := proto.Unmarshal(plans, paymentMethodsResponse)
 	if err != nil {
 		return sendError(err)
 	}
-	b, _ := json.Marshal(resp.PaymentMethodsResponse)
+	log.Debugf("DEBUG: cache payment methods: %v", paymentMethodsResponse)
+	b, _ := json.Marshal(paymentMethodsResponse)
 	return C.CString(string(b))
 }
 
