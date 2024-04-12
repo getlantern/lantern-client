@@ -449,7 +449,7 @@ func deviceLinkingCode() *C.char {
 }
 
 //export paymentRedirect
-func paymentRedirect(planID, currency, provider, email, deviceName *C.char) (*C.char, *C.char) {
+func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
 	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
@@ -460,9 +460,9 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) (*C.
 		CountryCode: country,
 	})
 	if err != nil {
-		return nil, sendError(err)
+		return sendError(err)
 	}
-	return C.CString(resp.Redirect), nil
+	return sendJson(resp)
 }
 
 //export developmentMode

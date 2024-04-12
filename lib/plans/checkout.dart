@@ -29,7 +29,7 @@ class _CheckoutState extends State<Checkout>
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
     formKey: emailFieldKey,
-    validator: (value) => EmailValidator.validate(value ?? '')
+    validator: (value) => value!.isEmpty?null: EmailValidator.validate(value ?? '')
         ? null
         : 'please_enter_a_valid_email_address'.i18n,
   );
@@ -69,10 +69,184 @@ class _CheckoutState extends State<Checkout>
 
   @override
   void dispose() {
-    emailController.dispose();
-    refCodeController.dispose();
     animationController.dispose();
     super.dispose();
+  }
+
+  Widget options() => CInkWell(
+        onTap: () {
+          setState(() {
+            showMoreOptions = !showMoreOptions;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsetsDirectional.only(bottom: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CText(
+                showMoreOptions ? 'fewer_options'.i18n : 'more_options'.i18n,
+                style: tsBody1,
+              ),
+              const Padding(
+                padding: EdgeInsetsDirectional.only(start: 8),
+                child: CAssetImage(
+                  path: ImagePaths.down_arrow,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  void selectPaymentProvider(Providers provider) {
+    setState(
+      () => selectedPaymentProvider = provider,
+    );
+  }
+
+  List<Widget> desktopPaymentOptions() {
+    var widgets = <Widget>[];
+    widgets.add(
+      PaymentProvider(
+        logoPaths: [
+          ImagePaths.visa,
+          ImagePaths.mastercard,
+          ImagePaths.unionpay
+        ],
+        onChanged: () => selectPaymentProvider(Providers.stripe),
+        selectedPaymentProvider: selectedPaymentProvider!,
+        paymentType: Providers.stripe,
+      ),
+    );
+    return widgets;
+  }
+
+  List<Widget> paymentOptions(
+    Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+  ) {
+    var widgets = <Widget>[];
+    for (final paymentMethod in paymentMethods) {
+      if (widgets.length == 2) {
+        widgets.add(options());
+        if (!showMoreOptions) break;
+      }
+      for (final provider in paymentMethod.value.providers) {
+        widgets.add(
+          PaymentProvider(
+            logoPaths: provider.logoUrls,
+            onChanged: () => selectPaymentProvider(Providers.stripe),
+            selectedPaymentProvider: selectedPaymentProvider!,
+            paymentType: provider.name.toPaymentEnum(),
+            useNetwork: true,
+          ),
+        );
+      }
+    }
+    return widgets;
+  }
+
+  Future<void> checkProUser() async {
+    final res = await ffiProUser();
+    if (!widget.isPro && res.toDartString() == "true") {
+      // show success dialog if user becomes Pro during browser session
+      showSuccessDialog(context, widget.isPro);
+    }
+  }
+
+  Future<void> openDesktopWebview() async {
+    try {
+      String os = Platform.operatingSystem;
+      Locale locale = Localizations.localeOf(context);
+      final format = NumberFormat.simpleCurrency(locale: locale.toString());
+      final currencyName = format.currencyName ?? "USD";
+      final redirectUrl = await sessionModel.paymentRedirect(
+        widget.plan.id,
+        currencyName,
+        emailController.text,
+        "stripe",
+        os,
+      );
+      switch (Platform.operatingSystem) {
+        case 'windows':
+          await AppBrowser.openWindowsWebview(redirectUrl);
+          break;
+        case 'macos':
+          final browser = AppBrowser(onClose: checkProUser);
+          await browser.openMacWebview(redirectUrl);
+          break;
+        default:
+          await context.pushRoute(AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
+      }
+    } catch (e) {
+      showError(context, error: e);
+    }
+  }
+
+  Future<void> resolvePaymentRoute() async {
+    switch (selectedPaymentProvider!) {
+      case Providers.stripe:
+        // * Stripe selected
+        if (isDesktop()) {
+          await openDesktopWebview();
+          return;
+        }
+        await context.pushRoute(
+          StripeCheckout(
+            email: emailController.text,
+            refCode: refCodeController.text,
+            plan: widget.plan,
+            isPro: widget.isPro,
+          ),
+        );
+        break;
+      case Providers.btcpay:
+        // * BTC payment selected
+        context.loaderOverlay.show();
+        await sessionModel
+            .submitBitcoinPayment(
+              widget.plan.id,
+              emailController.text,
+              refCodeController.text,
+            )
+            .timeout(
+              defaultTimeoutDuration,
+              onTimeout: () => onAPIcallTimeout(
+                code: 'submitBitcoinTimeout',
+                message: 'bitcoin_timeout'.i18n,
+              ),
+            )
+            .then((value) async {
+          context.loaderOverlay.hide();
+          final btcPayURL = value as String;
+          await sessionModel.openWebview(btcPayURL);
+        }).onError((error, stackTrace) {
+          context.loaderOverlay.hide();
+          showError(context, error: error, stackTrace: stackTrace);
+        });
+        break;
+      case Providers.freekassa:
+        var strs = widget.plan.id.split('-');
+        if (strs.length < 2) break;
+        var currency = strs[1];
+        var currencyCost = widget.plan.price[currency];
+        if (currencyCost == null) break;
+        await sessionModel.submitFreekassa(
+          emailController.text,
+          widget.plan.id,
+          currencyCost.toString(),
+        );
+        break;
+    }
+  }
+
+  bool enableContinueButton() {
+    final isEmailValid = EmailValidator.validate(emailController.value.text);
+    if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
+      return isEmailValid;
+    }
+    return isEmailValid && refCodeFieldKey.currentState!.validate();
   }
 
   @override
@@ -201,7 +375,7 @@ class _CheckoutState extends State<Checkout>
                           text: 'continue'.i18n,
                           // for Pro users renewing their accounts, we always have an e-mail address
                           // so it's unnecessary to disable the continue button
-                          disabled: !widget.isPro ? !showContinueButton : false,
+                          disabled: !enableContinueButton(),
                           onPressed: onContinueTapped,
                         ),
                       ),

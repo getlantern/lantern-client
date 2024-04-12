@@ -77,6 +77,13 @@ message APIResponse {
   string errorId = 3;
 }
 
+message PaymentRedirectResponse {
+  string status = 1;
+  string error = 2;
+  string errorId = 3;
+  string redirect = 4;
+}
+
 message LinkResponse {
   int64 userID = 1;
   string token = 2;
