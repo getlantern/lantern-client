@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
