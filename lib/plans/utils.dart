@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/ui/app_webview.dart';
 
 const defaultTimeoutDuration = Duration(seconds: 10);
 
@@ -91,12 +92,29 @@ extension ProviderExtension on String {
 }
 
 extension PlansExtension on Plan {
-  double monthlyCost() {
-    final cost = totalCost.replaceAll('\$', '');
+  double monthlyCost(double totalPrice) {
     if (id.startsWith('1y')) {
-      return double.tryParse(cost)! / 12;
+      return totalPrice / 12;
     }
 
-    return double.tryParse(cost)! / 24;
+    return totalPrice / 24;
+  }
+}
+
+Future<void> openDesktopWebview(
+    {required BuildContext context,
+    required String redirectUrl,
+    required VoidCallback onClose}) async {
+  switch (Platform.operatingSystem) {
+    case 'windows':
+      await AppBrowser.openWindowsWebview(redirectUrl);
+      break;
+    case 'macos':
+      final browser = AppBrowser(onClose: () async=> onClose,);
+      await browser.openMacWebview(redirectUrl);
+      break;
+    default:
+      await context.pushRoute(
+          AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
   }
 }

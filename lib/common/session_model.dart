@@ -497,7 +497,9 @@ class SessionModel extends Model {
       plan.totalCost = formatCurrency.format(price.toInt() / 100.0).toString();
       plan.totalCostBilledOneTime =
           '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
-      plan.oneMonthCost = formatCurrency.format(plan.monthlyCost()).toString();
+      plan.oneMonthCost = formatCurrency
+          .format(plan.monthlyCost((price.toDouble() / 100.0)))
+          .toString();
     }
     return plan;
   }
@@ -694,7 +696,6 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-
   Future<String> generatePaymentRedirectUrl({
     required String planID,
     required String email,
@@ -719,15 +720,18 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<String> paymentRedirect(
+  Future<String> paymentRedirectForDesktop(
+    BuildContext context,
     String planID,
-    String currency,
     String email,
-    String provider,
-    String deviceName,
+    String provider
   ) async {
+    String os = Platform.operatingSystem;
+    Locale locale = Localizations.localeOf(context);
+    final format = NumberFormat.simpleCurrency(locale: locale.toString());
+    final currencyName = format.currencyName ?? "USD";
     return await compute(
-        ffiPaymentRedirect, [planID, currency, provider, email, deviceName]);
+        ffiPaymentRedirect, [planID, currencyName, provider, email, os]);
   }
 
   Future<void> submitStripePayment(

@@ -1,8 +1,6 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
-import 'package:lantern/common/ui/app_webview.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
@@ -282,69 +280,80 @@ class _CheckoutState extends State<Checkout>
     );
   }
 
-  Future<void> checkProUser() async {
-    final res = await ffiProUser();
+  void checkProUser() async {
+    final res = ffiProUser();
     if (!widget.isPro && res.toDartString() == "true") {
       // show success dialog if user becomes Pro during browser session
       showSuccessDialog(context, widget.isPro);
     }
   }
 
-  Future<void> openDesktopWebview() async {
-    try {
-      String os = Platform.operatingSystem;
-      Locale locale = Localizations.localeOf(context);
-      final format = NumberFormat.simpleCurrency(locale: locale.toString());
-      final currencyName = format.currencyName ?? "USD";
-      final redirectUrl = await sessionModel.paymentRedirect(
-        widget.plan.id,
-        currencyName,
-        emailController.text,
-        "stripe",
-        os,
-      );
-      switch (Platform.operatingSystem) {
-        case 'windows':
-          await AppBrowser.openWindowsWebview(redirectUrl);
-          break;
-        case 'macos':
-          final browser = AppBrowser(onClose: checkProUser);
-          await browser.openMacWebview(redirectUrl);
-          break;
-        default:
-          await context.pushRoute(
-              AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
-      }
-    } catch (e) {
-      showError(context, error: e);
-    }
-  }
+  // Future<void> openDesktopWebview() async {
+  //   try {
+  //     String os = Platform.operatingSystem;
+  //     Locale locale = Localizations.localeOf(context);
+  //     final format = NumberFormat.simpleCurrency(locale: locale.toString());
+  //     final currencyName = format.currencyName ?? "USD";
+  //     final redirectUrl = await sessionModel.paymentRedirectForDesktop(
+  //       widget.plan.id,
+  //       currencyName,
+  //       emailController.text,
+  //       "stripe",
+  //       os,
+  //     );
+  //     switch (Platform.operatingSystem) {
+  //       case 'windows':
+  //         await AppBrowser.openWindowsWebview(redirectUrl);
+  //         break;
+  //       case 'macos':
+  //         final browser = AppBrowser(onClose: checkProUser);
+  //         await browser.openMacWebview(redirectUrl);
+  //         break;
+  //       default:
+  //         await context.pushRoute(
+  //             AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
+  //     }
+  //   } catch (e) {
+  //     showError(context, error: e);
+  //   }
+  // }
 
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
+        if (isDesktop()) {
+           _proceedWithPaymentRedirect(Providers.stripe.name);
+          return;
+        }
         _proceedWithStripe();
         break;
       case Providers.btcpay:
+        if (isDesktop()) {
+          _proceedWithPaymentRedirect(Providers.btcpay.name);
+          return;
+        }
         _proceedWithBTCPay();
         break;
       case Providers.freekassa:
         _proceedWithFreekassa();
         break;
       case Providers.fropay:
+        if (isDesktop()) {
+          _proceedWithPaymentRedirect(Providers.fropay.name);
+          return;
+        }
         _proceedWithFroPay();
       case Providers.paymentwall:
+        if (isDesktop()) {
+          _proceedWithPaymentRedirect(Providers.paymentwall.name);
+          return;
+        }
         _proceedWithPaymentWall();
         break;
     }
   }
 
   Future<void> _proceedWithStripe() async {
-    // * Stripe selected
-    if (isDesktop()) {
-      await openDesktopWebview();
-      return;
-    }
     await context.pushRoute(
       StripeCheckout(
         email: emailController.text,
@@ -375,6 +384,7 @@ class _CheckoutState extends State<Checkout>
   void _proceedWithFroPay() async {
     try {
       context.loaderOverlay.show();
+
       final value = await sessionModel.generatePaymentRedirectUrl(
           planID: widget.plan.id,
           email: emailController.text,
@@ -383,6 +393,25 @@ class _CheckoutState extends State<Checkout>
       context.loaderOverlay.hide();
       final froPayURL = value;
       await sessionModel.openWebview(froPayURL);
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
+  }
+
+  void _proceedWithPaymentRedirect(String provider) async {
+    try {
+      context.loaderOverlay.show();
+      final froPayURL = await sessionModel.paymentRedirectForDesktop(
+        context,
+        widget.plan.id,
+        emailController.text,
+        provider,
+      );
+
+      context.loaderOverlay.hide();
+      openDesktopWebview(
+          context: context, redirectUrl: froPayURL, onClose: checkProUser);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
