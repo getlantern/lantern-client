@@ -146,15 +146,6 @@ func fetchPayentMethodV4() error {
 		return errors.New("Could not marshal payment methods: %v", err)
 	}
 	settings.SetPaymentMethodPlans(bytes)
-
-	// userID := settings.GetUserID()
-	// if userID == 0 {
-	// 	user, err := pro.NewUser(settings)
-	// 	if err != nil {
-	// 		return errors.New("Could not create new Pro user: %v", err)
-	// 	}
-	// 	settings.SetUserIDAndToken(user.Auth.ID, user.Auth.Token)
-	// }
 	return nil
 }
 
@@ -200,7 +191,7 @@ func plans() *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-	log.Debugf("DEBUG: cache plans: %v", paymentMethodsResponse)
+	log.Debugf("DEBUG: return cache plans: %v", paymentMethodsResponse)
 	b, _ := json.Marshal(paymentMethodsResponse.Plans)
 	return C.CString(string(b))
 }
