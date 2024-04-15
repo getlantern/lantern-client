@@ -507,7 +507,6 @@ class SessionModel extends Model {
   Iterable<PathAndValue<PaymentMethod>> paymentMethodFromJson(item) {
     final Map<String, dynamic> icons = item['icons'];
     final desktopProviders = item['providers']["desktop"] as List;
-
     return desktopProviders.map((method) {
       final paymentMethod = PaymentMethod()..method = method["method"];
       final providers = method["providers"].map<PaymentProviders>((provider) {
@@ -720,12 +719,8 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<String> paymentRedirectForDesktop(
-    BuildContext context,
-    String planID,
-    String email,
-    String provider
-  ) async {
+  Future<String> paymentRedirectForDesktop(BuildContext context, String planID,
+      String email, String provider) async {
     String os = Platform.operatingSystem;
     Locale locale = Localizations.localeOf(context);
     final format = NumberFormat.simpleCurrency(locale: locale.toString());
