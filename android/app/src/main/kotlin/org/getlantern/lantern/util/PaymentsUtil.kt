@@ -181,11 +181,13 @@ class PaymentsUtil(private val activity: Activity) {
                     response: Response?,
                     result: JsonObject?,
                 ) {
+                    val froPayUrl =result!!.get("redirect").asString
                     Logger.debug(
                         TAG,
-                        "Email successfully validated $email",
+                        "Fropay url is  $froPayUrl",
                     )
-                    methodCallResult.success(result.toString())
+
+                    methodCallResult.success(froPayUrl)
                 }
             })
         } catch (t: Throwable) {

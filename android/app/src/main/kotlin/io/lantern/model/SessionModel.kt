@@ -191,7 +191,7 @@ class SessionModel(
                 val url = call.argument("url") ?: ""
                 url.isNotEmpty().let {
                     val intent = Intent(activity, WebViewActivity_::class.java)
-                    intent.putExtra("url", url)
+                    intent.putExtra("url", url.trim())
                     activity.startActivity(intent)
                 }
             }
