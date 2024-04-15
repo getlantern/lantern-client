@@ -38,12 +38,11 @@ message Plan {
   bool bestValue = 3;
   int64 usdPrice = 4;
   map<string, int64> price = 5;
-  map<string, int64> expectedMonthlyPrice = 6;
-  string totalCostBilledOneTime = 7;
-  string oneMonthCost = 8;
-  string totalCost = 9;
-  string formattedBonus = 10;
-  string renewalText = 11;
+  string totalCostBilledOneTime = 6;
+  string oneMonthCost = 7;
+  string totalCost = 8;
+  string formattedBonus = 9;
+  string renewalText = 10;
 }
 
 message PaymentProviders {
@@ -89,10 +88,6 @@ message PaymentRedirectRequest {
     string locale = 7;
 }
 
-message PaymentRedirectResponse {
-    string redirect = 1;
-}
-
 message RedeemResellerCodeRequest {
   string email = 1;
   string resellerCode = 2;
@@ -100,6 +95,13 @@ message RedeemResellerCodeRequest {
   string currency = 4;
   string idempotencyKey = 5;
   string provider = 6;
+}
+
+message PaymentRedirectResponse {
+  string status = 1;
+  string error = 2;
+  string errorId = 3;
+  string redirect = 4;
 }
 
 message LinkResponse {

@@ -484,22 +484,13 @@ class SessionModel extends Model {
     var currency = formatCurrency.currencyName != null ? formatCurrency.currencyName!.toLowerCase() : "usd";
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
-    if (plan.price[currency] == null) {
-      final splitted = plan.id.split('-');
-      if (splitted.length == 3) {
-        currency = splitted[1];
-      }
-    }
-
-    if (plan.price[currency] == null) {
-      return plan;
-    }
-    final price = plan.price[currency] as Int64;
-    if (plan.expectedMonthlyPrice[currency] != null) {
-      var monthlyPrice = plan.expectedMonthlyPrice[currency]!.toInt();
-      plan.oneMonthCost = formatCurrency
-        .format(monthlyPrice / 100)
-        .toString();
+    if (plan.price[currency] != null) {
+      final price = plan.price[currency] as Int64;
+      plan.totalCost = formatCurrency.format(price.toInt() / 100).toString();
+      plan.totalCostBilledOneTime =
+          formatCurrency.format(price.toInt() / 100).toString() +
+              ' ' +
+              'billed_one_time'.i18n;
     }
     plan.totalCost = formatCurrency.format(price.toInt() / 100).toString();
     plan.totalCostBilledOneTime =
@@ -718,13 +709,8 @@ class SessionModel extends Model {
     String provider,
     String deviceName,
   ) async {
-    final resp = ffiPaymentRedirect(
-        planID.toNativeUtf8(),
-        currency.toNativeUtf8(),
-        provider.toNativeUtf8(),
-        email.toNativeUtf8(),
-        deviceName.toNativeUtf8());
-    return resp;
+    return await compute(
+        ffiPaymentRedirect, [planID, currency, provider, email, deviceName]);
   }
 
   Future<void> submitStripePayment(
