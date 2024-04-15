@@ -151,12 +151,7 @@ class SessionModel(
                 result.success(null)
             }
 
-            "submitBitcoinPayment" -> paymentsUtil.submitBitcoinPayment(
-                call.argument("planID")!!,
-                call.argument("email")!!,
-                call.argument("refCode")!!,
-                result,
-            )
+
 
             "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
                 call.argument("email")!!,
@@ -172,10 +167,11 @@ class SessionModel(
                 call.argument("cvc")!!,
                 result,
             )
-            "submitFroPayPayment" -> paymentsUtil.submitFropayPayment(
+
+            "generatePaymentRedirectUrl" -> paymentsUtil.generatePaymentRedirectUrl(
                 call.argument("planID")!!,
                 call.argument("email")!!,
-                call.argument("refCode")!!,
+                call.argument("provider")!!,
                 result,
             )
 

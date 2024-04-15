@@ -687,24 +687,24 @@ class SessionModel extends Model {
   Future<String> submitBitcoinPayment(
     String planID,
     String email,
-    String refCode,
   ) async {
     return methodChannel.invokeMethod('submitBitcoinPayment', <String, dynamic>{
       'planID': planID,
-      'email': email,
-      'refCode': refCode,
+      'email': email
     }).then((value) => value as String);
   }
 
-  Future<String> submitFroPayPayment(
-    String planID,
-    String email,
-    String refCode,
-  ) async {
-    return methodChannel.invokeMethod('submitFroPayPayment', <String, dynamic>{
+
+  Future<String> generatePaymentRedirectUrl({
+    required String planID,
+    required String email,
+    required Providers paymentProvider,
+  }) {
+    return methodChannel.invokeMethod(
+        'generatePaymentRedirectUrl', <String, dynamic>{
       'planID': planID,
       'email': email,
-      'refCode': refCode,
+      'provider': paymentProvider.name
     }).then((value) => value as String);
   }
 

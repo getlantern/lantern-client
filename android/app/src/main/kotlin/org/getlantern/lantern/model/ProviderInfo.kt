@@ -31,3 +31,16 @@ data class ProviderInfo(
     var logoUrl: List<String>
 )
 
+fun String.toPaymentProvider(): PaymentProvider? {
+    return when (this) {
+        "stripe" -> PaymentProvider.Stripe
+        "freekassa" -> PaymentProvider.Freekassa
+        "googleplay" -> PaymentProvider.GooglePlay
+        "btcpay" -> PaymentProvider.BTCPay
+        "reseller-code" -> PaymentProvider.ResellerCode
+        "paymentwall" -> PaymentProvider.PaymentWall
+        "fropay" -> PaymentProvider.Fropay
+        else -> null
+    }
+}
+

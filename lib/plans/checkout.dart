@@ -358,8 +358,10 @@ class _CheckoutState extends State<Checkout>
   void _proceedWithBTCPay() async {
     try {
       context.loaderOverlay.show();
-      final value = await sessionModel.submitBitcoinPayment(
-          widget.plan.id, emailController.text, refCodeController.text);
+      final value = await sessionModel.generatePaymentRedirectUrl(
+          planID: widget.plan.id,
+          email: emailController.text,
+          paymentProvider: Providers.btcpay);
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
@@ -373,8 +375,10 @@ class _CheckoutState extends State<Checkout>
   void _proceedWithFroPay() async {
     try {
       context.loaderOverlay.show();
-      final value = await sessionModel.submitFroPayPayment(
-          widget.plan.id, emailController.text, refCodeController.text);
+      final value = await sessionModel.generatePaymentRedirectUrl(
+          planID: widget.plan.id,
+          email: emailController.text,
+          paymentProvider: Providers.fropay);
 
       context.loaderOverlay.hide();
       final froPayURL = value;
@@ -386,19 +390,20 @@ class _CheckoutState extends State<Checkout>
   }
 
   void _proceedWithPaymentWall() async {
-    //Todo need to implement
-    // try {
-    //   context.loaderOverlay.show();
-    //   final value = await sessionModel.submitFroPayPayment(
-    //       widget.plan.id, emailController.text, refCodeController.text);
-    //
-    //   context.loaderOverlay.hide();
-    //   final btcPayURL = value;
-    //   await sessionModel.openWebview(btcPayURL);
-    // } catch (error, stackTrace) {
-    //   context.loaderOverlay.hide();
-    //   showError(context, error: error, stackTrace: stackTrace);
-    // }
+    try {
+      context.loaderOverlay.show();
+      final value = await sessionModel.generatePaymentRedirectUrl(
+          planID: widget.plan.id,
+          email: emailController.text,
+          paymentProvider: Providers.paymentwall);
+
+      context.loaderOverlay.hide();
+      final btcPayURL = value;
+      await sessionModel.openWebview(btcPayURL);
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
   }
 
   // It starts native activity to proceed with Freekassa

@@ -21,6 +21,7 @@ import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.model.PaymentProvider
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.model.toPaymentProvider
 import org.getlantern.mobilesdk.Logger
 
 class PaymentsUtil(private val activity: Activity) {
@@ -97,14 +98,23 @@ class PaymentsUtil(private val activity: Activity) {
         }
     }
 
-    fun submitBitcoinPayment(
+
+    fun generatePaymentRedirectUrl(
         planID: String,
         email: String,
-        refCode: String,
+        provider: String,
         methodCallResult: MethodChannel.Result,
     ) {
         try {
-            val provider = PaymentProvider.BTCPay.toString().lowercase()
+            val provider = provider.toPaymentProvider().toString().lowercase()
+            if (provider == null) {
+                methodCallResult.error(
+                    "unknownError",
+                    "$provider is unavailable", // This error message is localized Flutter-side
+                    null,
+                )
+                return
+            }
             val params =
                 mutableMapOf(
                     "email" to email,
@@ -118,10 +128,10 @@ class PaymentsUtil(private val activity: Activity) {
                     throwable: Throwable?,
                     error: ProError?,
                 ) {
-                    Logger.error(TAG, "BTCPay is unavailable", throwable)
+                    Logger.error(TAG, "$provider is unavailable ", throwable)
                     methodCallResult.error(
                         "unknownError",
-                        "BTCPay is unavailable", // This error message is localized Flutter-side
+                        "$provider is unavailable", // This error message is localized Flutter-side
                         null,
                     )
                     return
@@ -131,69 +141,19 @@ class PaymentsUtil(private val activity: Activity) {
                     response: Response?,
                     result: JsonObject?,
                 ) {
+                    val providerUrl = result!!.get("redirect").asString
                     Logger.debug(
                         TAG,
-                        "Email successfully validated $email",
+                        "$provider url is  $providerUrl",
                     )
-                    methodCallResult.success(result.toString())
+
+                    methodCallResult.success(providerUrl)
                 }
             })
         } catch (t: Throwable) {
             methodCallResult.error(
                 "unknownError",
-                "BTCPay is unavailable", // This error message is localized Flutter-side
-                null,
-            )
-        }
-    }
-
-    fun submitFropayPayment(
-        planID: String,
-        email: String,
-        refCode: String,
-        methodCallResult: MethodChannel.Result,
-    ) {
-        try {
-            val provider = PaymentProvider.Fropay.toString().lowercase()
-            val params =
-                mutableMapOf(
-                    "email" to email,
-                    "plan" to planID,
-                    "provider" to provider,
-                    "deviceName" to session.deviceName(),
-                )
-
-            sendPaymentRedirectRequest(params, object : ProCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Fropay is unavailable", throwable)
-                    methodCallResult.error(
-                        "unknownError",
-                        "Fropay is unavailable", // This error message is localized Flutter-side
-                        null,
-                    )
-                    return
-                }
-
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    val froPayUrl =result!!.get("redirect").asString
-                    Logger.debug(
-                        TAG,
-                        "Fropay url is  $froPayUrl",
-                    )
-
-                    methodCallResult.success(froPayUrl)
-                }
-            })
-        } catch (t: Throwable) {
-            methodCallResult.error(
-                "unknownError",
-                "Fropay is unavailable", // This error message is localized Flutter-side
+                "$provider is unavailable", // This error message is localized Flutter-side
                 null,
             )
         }
