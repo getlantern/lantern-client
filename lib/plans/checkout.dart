@@ -342,9 +342,7 @@ class _CheckoutState extends State<Checkout>
           _proceedWithPaymentRedirect(Providers.fropay.name);
           return;
         }
-        _proceedWithFreekassa();
-
-        // _proceedWithFroPay();
+        _proceedWithFroPay();
       case Providers.paymentwall:
         if (isDesktop()) {
           _proceedWithPaymentRedirect(Providers.paymentwall.name);

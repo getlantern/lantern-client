@@ -96,7 +96,7 @@
 
         <receiver
             android:name="org.getlantern.lantern.notification.NotificationReceiver"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="org.getlantern.lantern.intent.VPN_DISCONNECTED" />
             </intent-filter>
