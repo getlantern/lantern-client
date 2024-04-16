@@ -288,35 +288,6 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-  // Future<void> openDesktopWebview() async {
-  //   try {
-  //     String os = Platform.operatingSystem;
-  //     Locale locale = Localizations.localeOf(context);
-  //     final format = NumberFormat.simpleCurrency(locale: locale.toString());
-  //     final currencyName = format.currencyName ?? "USD";
-  //     final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-  //       widget.plan.id,
-  //       currencyName,
-  //       emailController.text,
-  //       "stripe",
-  //       os,
-  //     );
-  //     switch (Platform.operatingSystem) {
-  //       case 'windows':
-  //         await AppBrowser.openWindowsWebview(redirectUrl);
-  //         break;
-  //       case 'macos':
-  //         final browser = AppBrowser(onClose: checkProUser);
-  //         await browser.openMacWebview(redirectUrl);
-  //         break;
-  //       default:
-  //         await context.pushRoute(
-  //             AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
-  //     }
-  //   } catch (e) {
-  //     showError(context, error: e);
-  //   }
-  // }
 
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
