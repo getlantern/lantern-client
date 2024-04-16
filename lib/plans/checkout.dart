@@ -192,16 +192,13 @@ class _CheckoutState extends State<Checkout>
                           children: paymentOptions(paymentMethods)),
                     ),
                     // * Price summary, unused pro time disclaimer, Continue button
-                    Center(
-                      child: Tooltip(
-                        message: AppKeys.continueCheckout,
-                        child: Button(
-                          text: 'continue'.i18n,
-                          // for Pro users renewing their accounts, we always have an e-mail address
-                          // so it's unnecessary to disable the continue button
-                          disabled: !enableContinueButton(),
-                          onPressed: onContinueTapped,
-                        ),
+
+                    Tooltip(
+                      message: AppKeys.continueCheckout,
+                      child: Button(
+                        text: 'continue'.i18n,
+                        disabled: !enableContinueButton(),
+                        onPressed: onContinueTapped,
                       ),
                     ),
                   ],
@@ -265,7 +262,10 @@ class _CheckoutState extends State<Checkout>
   }
 
   bool enableContinueButton() {
-    final isEmailValid = !emailController.value.text.isEmpty &&
+    if (emailFieldKey.currentState == null) {
+      return false;
+    }
+    final isEmailValid = emailController.value.text.isNotEmpty &&
         emailFieldKey.currentState!.validate();
     if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
       return isEmailValid;
@@ -322,7 +322,7 @@ class _CheckoutState extends State<Checkout>
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
         if (isDesktop()) {
-           _proceedWithPaymentRedirect(Providers.stripe.name);
+          _proceedWithPaymentRedirect(Providers.stripe.name);
           return;
         }
         _proceedWithStripe();
@@ -342,7 +342,9 @@ class _CheckoutState extends State<Checkout>
           _proceedWithPaymentRedirect(Providers.fropay.name);
           return;
         }
-        _proceedWithFroPay();
+        _proceedWithFreekassa();
+
+        // _proceedWithFroPay();
       case Providers.paymentwall:
         if (isDesktop()) {
           _proceedWithPaymentRedirect(Providers.paymentwall.name);
@@ -470,11 +472,6 @@ class _CheckoutState extends State<Checkout>
   }
 
   Future<void> onContinueTapped() async {
-    // final emailFound = await checkIfEmailExits();
-    // if (emailFound) {
-    //   return;
-    // }
-    // Check for referral code
     var refCode = refCodeController.value;
     try {
       if (refCode.text.isNotEmpty) {
