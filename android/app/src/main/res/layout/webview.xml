@@ -12,8 +12,8 @@
         android:layout_alignParentTop="true"
         android:layout_height="wrap_content"
         android:layout_gravity="right|top"
-        android:paddingTop="7dp"
-        android:paddingRight="7dp"
+        android:padding="7dp"
+        android:layout_marginEnd="8dp"
         android:onClick="closeWebView"
         android:src="@drawable/close_on" />
 

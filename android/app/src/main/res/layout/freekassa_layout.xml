@@ -2,14 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <fragment xmlns:lantern="http://schemas.android.com/apk/res-auto"
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        class="org.getlantern.lantern.fragment.TitleBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        lantern:titleText="@string/lantern_pro_checkout" />
+        app:title="@string/lantern_pro_checkout"
+        >
+        
+        <ImageView
+            android:id="@+id/closeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/black"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="end"
+            />
+        
+    </androidx.appcompat.widget.Toolbar>
 
     <RelativeLayout
         android:layout_width="match_parent"

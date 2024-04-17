@@ -192,16 +192,13 @@ class _CheckoutState extends State<Checkout>
                           children: paymentOptions(paymentMethods)),
                     ),
                     // * Price summary, unused pro time disclaimer, Continue button
-                    Center(
-                      child: Tooltip(
-                        message: AppKeys.continueCheckout,
-                        child: Button(
-                          text: 'continue'.i18n,
-                          // for Pro users renewing their accounts, we always have an e-mail address
-                          // so it's unnecessary to disable the continue button
-                          disabled: !enableContinueButton(),
-                          onPressed: onContinueTapped,
-                        ),
+
+                    Tooltip(
+                      message: AppKeys.continueCheckout,
+                      child: Button(
+                        text: 'continue'.i18n,
+                        disabled: !enableContinueButton(),
+                        onPressed: onContinueTapped,
                       ),
                     ),
                   ],
@@ -265,7 +262,10 @@ class _CheckoutState extends State<Checkout>
   }
 
   bool enableContinueButton() {
-    final isEmailValid = !emailController.value.text.isEmpty &&
+    if (emailFieldKey.currentState == null) {
+      return false;
+    }
+    final isEmailValid = emailController.value.text.isNotEmpty &&
         emailFieldKey.currentState!.validate();
     if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
       return isEmailValid;
@@ -288,41 +288,12 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-  // Future<void> openDesktopWebview() async {
-  //   try {
-  //     String os = Platform.operatingSystem;
-  //     Locale locale = Localizations.localeOf(context);
-  //     final format = NumberFormat.simpleCurrency(locale: locale.toString());
-  //     final currencyName = format.currencyName ?? "USD";
-  //     final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-  //       widget.plan.id,
-  //       currencyName,
-  //       emailController.text,
-  //       "stripe",
-  //       os,
-  //     );
-  //     switch (Platform.operatingSystem) {
-  //       case 'windows':
-  //         await AppBrowser.openWindowsWebview(redirectUrl);
-  //         break;
-  //       case 'macos':
-  //         final browser = AppBrowser(onClose: checkProUser);
-  //         await browser.openMacWebview(redirectUrl);
-  //         break;
-  //       default:
-  //         await context.pushRoute(
-  //             AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
-  //     }
-  //   } catch (e) {
-  //     showError(context, error: e);
-  //   }
-  // }
 
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
         if (isDesktop()) {
-           _proceedWithPaymentRedirect(Providers.stripe.name);
+          _proceedWithPaymentRedirect(Providers.stripe.name);
           return;
         }
         _proceedWithStripe();
@@ -470,11 +441,6 @@ class _CheckoutState extends State<Checkout>
   }
 
   Future<void> onContinueTapped() async {
-    // final emailFound = await checkIfEmailExits();
-    // if (emailFound) {
-    //   return;
-    // }
-    // Check for referral code
     var refCode = refCodeController.value;
     try {
       if (refCode.text.isNotEmpty) {

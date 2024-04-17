@@ -131,11 +131,17 @@ func fetchOrCreate() error {
 			return errors.New("Could not create new Pro user: %v", err)
 		}
 		settings.SetUserIDAndToken(user.Auth.ID, user.Auth.Token)
+		// if the user is new mean we need to fetch the payment methods
+		fetchPayentMethodV4()
 	}
 	return nil
 }
 func fetchPayentMethodV4() error {
 	settings := a.Settings()
+	userID := settings.GetUserID()
+	if userID == 0 {
+		return errors.New("User ID is not set")
+	}
 	resp, err := proClient.PaymentMethodsV4(userConfig())
 	if err != nil {
 		return errors.New("Could not get payment methods: %v", err)
@@ -147,14 +153,6 @@ func fetchPayentMethodV4() error {
 	}
 	settings.SetPaymentMethodPlans(bytes)
 
-	// userID := settings.GetUserID()
-	// if userID == 0 {
-	// 	user, err := pro.NewUser(settings)
-	// 	if err != nil {
-	// 		return errors.New("Could not create new Pro user: %v", err)
-	// 	}
-	// 	settings.SetUserIDAndToken(user.Auth.ID, user.Auth.Token)
-	// }
 	return nil
 }
 
