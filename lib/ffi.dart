@@ -16,6 +16,8 @@ void sysProxyOn() => _bindings.sysProxyOn();
 
 void sysProxyOff() => _bindings.sysProxyOff();
 
+void setForceCountry(country) => _bindings.setForceCountry(country);
+
 void setSelectTab(tab) => _bindings.setSelectTab(tab);
 
 void setLang(lang) => _bindings.setSelectLang(lang);
@@ -81,6 +83,8 @@ Pointer<Utf8> ffiDevices() => _bindings.devices().cast<Utf8>();
 
 Pointer<Utf8> ffiDevelopmentMode() => _bindings.developmentMode().cast<Utf8>();
 
+Pointer<Utf8> ffiPaymentTestMode() => _bindings.paymentTestMode().cast<Utf8>();
+
 Pointer<Utf8> ffiAcceptedTermsVersion() =>
     _bindings.acceptedTermsVersion().cast<Utf8>();
 
@@ -110,7 +114,15 @@ Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
 
 Pointer<Utf8> ffiReplicaAddr() => _bindings.replicaAddr().cast<Utf8>();
 
+Pointer<Utf8> ffiReplicaBadge() => _bindings.replicaBadge().cast<Utf8>();
+
+Pointer<Utf8> ffiSearchTab() => _bindings.searchTab().cast<Utf8>();
+
+Pointer<Utf8> ffiSearchTerm() => _bindings.searchTerm().cast<Utf8>();
+
 Pointer<Utf8> ffiChatEnabled() => _bindings.chatEnabled().cast<Utf8>();
+
+Pointer<Utf8> ffiForceCountry() => _bindings.forceCountry().cast<Utf8>();
 
 Pointer<Utf8> ffiSdkVersion() => _bindings.sdkVersion().cast<Utf8>();
 

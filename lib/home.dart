@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                   body: buildBody(tab, isOnboarded),
                   bottomNavigationBar: CustomBottomBar(
                     selectedTab: tab,
-                    isDevelop: developmentMode,
+                    isDevelop: true,
                     isTesting: isTesting,
                   ),
                 );

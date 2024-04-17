@@ -186,6 +186,16 @@ func setSelectTab(ttab *C.char) {
 	a.SetSelectedTab(tab)
 }
 
+//export forceCountry
+func forceCountry() *C.char {
+	return C.CString(a.ForceCountry())
+}
+
+//export setForceCountry
+func setForceCountry(country *C.char) {
+	a.SetForceCountry(C.GoString(country))
+}
+
 //export plans
 func plans() *C.char {
 	settings := a.Settings()
@@ -448,7 +458,10 @@ func deviceLinkingCode() *C.char {
 
 //export paymentRedirect
 func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
-	country := a.Settings().GetCountry()
+	country := a.ForceCountry()
+	if country == "" {
+		country = a.Settings().GetCountry()
+	}
 	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
 		Provider:    C.GoString(provider),
@@ -465,6 +478,11 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 
 //export developmentMode
 func developmentMode() *C.char {
+	return C.CString("true")
+}
+
+//export paymentTestMode
+func paymentTestMode() *C.char {
 	return C.CString("false")
 }
 
@@ -480,6 +498,21 @@ func chatMe() *C.char {
 
 //export replicaAddr
 func replicaAddr() *C.char {
+	return C.CString("127.0.0.1:8080")
+}
+
+//export replicaBadge
+func replicaBadge() *C.char {
+	return C.CString("false")
+}
+
+//export searchTab
+func searchTab() *C.char {
+	return C.CString("")
+}
+
+//export searchTerm
+func searchTerm() *C.char {
 	return C.CString("")
 }
 

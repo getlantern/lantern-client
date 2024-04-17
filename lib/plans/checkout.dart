@@ -308,13 +308,13 @@ class _CheckoutState extends State<Checkout>
       case Providers.freekassa:
         _proceedWithFreekassa();
         break;
-      case Providers.fropay:
+      case Providers.paymentwall:
         if (isDesktop()) {
           _proceedWithPaymentRedirect(Providers.fropay.name);
           return;
         }
         _proceedWithFroPay();
-      case Providers.paymentwall:
+      case Providers.fropay:
         if (isDesktop()) {
           _proceedWithPaymentRedirect(Providers.paymentwall.name);
           return;

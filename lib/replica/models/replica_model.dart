@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/replica/common.dart';
 
 final replicaModel = ReplicaModel();
@@ -51,24 +52,48 @@ class ReplicaModel extends Model {
   }
 
   Widget getShowNewBadgeWidget(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<bool>(
+        '/showNewBadge',
+        defaultValue: true,
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
       '/showNewBadge',
-      defaultValue: true,
+      ffiReplicaBadge,
+      defaultValue: false,
       builder: builder,
     );
   }
 
   Widget getSearchTermWidget(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<String>(
+        '/searchTerm',
+        defaultValue: '',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       '/searchTerm',
+      ffiSearchTerm,
       defaultValue: '',
       builder: builder,
     );
   }
 
   Widget getSearchTabWidget(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<String>(
+        '/searchTab',
+        defaultValue: '',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       '/searchTab',
+      ffiSearchTab,
       defaultValue: '',
       builder: builder,
     );

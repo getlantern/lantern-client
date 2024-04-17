@@ -518,7 +518,6 @@ func (s *Settings) SetUserIDAndToken(id int64, token string) {
 // SetPaymentMethods sets plans as string
 func (s *Settings) SetPaymentMethodPlans(paymentMethods []byte) {
 	s.setVal(SNPaymentMethods, paymentMethods)
-
 }
 
 // () returns the payment methods

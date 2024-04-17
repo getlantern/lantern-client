@@ -103,6 +103,7 @@ type App struct {
 	issueReporter *issueReporter
 	proClient     *client.Client
 	referralCode  string
+	forceCountry  string
 	selectedTab   Tab
 	stats         *stats.Stats
 
@@ -167,6 +168,16 @@ func (app *App) SetSelectedTab(selectedTab Tab) {
 	app.mu.Lock()
 	defer app.mu.Unlock()
 	app.selectedTab = selectedTab
+}
+
+func (app *App) ForceCountry() string {
+	return "RU"
+}
+
+func (app *App) SetForceCountry(forceCountry string) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.forceCountry = forceCountry
 }
 
 // Run starts the app.

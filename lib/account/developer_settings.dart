@@ -1,5 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/replica/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 
 class DeveloperSettingsTab extends StatelessWidget {
   DeveloperSettingsTab({Key? key}) : super(key: key);
@@ -78,8 +79,12 @@ class DeveloperSettingsTab extends StatelessWidget {
                       color: Colors.deepPurpleAccent,
                     ),
                     onChanged: (String? newValue) {
-                      sessionModel
+                      if (isMobile()) {
+                        sessionModel
                           .setForceCountry(newValue == '' ? null : newValue);
+                      } else {
+                        setForceCountry(newValue);
+                      }
                     },
                     items: <String>['', 'CN', 'IR', 'US', 'RU']
                         .map<DropdownMenuItem<String>>((String value) {

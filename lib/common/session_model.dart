@@ -122,8 +122,16 @@ class SessionModel extends Model {
   }
 
   Widget paymentTestMode(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<bool>(
+        'paymentTestMode',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
       'paymentTestMode',
+      defaultValue: false,
+      ffiPaymentTestMode,
       builder: builder,
     );
   }
@@ -154,10 +162,18 @@ class SessionModel extends Model {
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<String>(
+        'forceCountry',
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<String>(
       'forceCountry',
+      ffiForceCountry,
+      defaultValue: '',
       builder: builder,
-    );
+    ); 
   }
 
   Future<void> setForceCountry(String? countryCode) {
@@ -174,7 +190,15 @@ class SessionModel extends Model {
   }
 
   Widget playVersion(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
+    }
+    return ffiValueBuilder<bool>(
+      'playVersion',
+      defaultValue: false,
+      ffiPlayVersion,
+      builder: builder,
+    );
   }
 
   Future<void> setPlayVersion(bool on) {
