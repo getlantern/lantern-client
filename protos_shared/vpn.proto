@@ -62,14 +62,15 @@ message User {
   string email = 2;
   string telephone = 3;
   string userStatus = 4;
-  string locale = 5;
-  int64 expiration = 6;
-  repeated Device devices = 7;
-  string code = 8;
-  int64 expireAt = 9;
-  string referral = 10;
-  string token = 11;
-  bool yinbiEnabled = 12;
+  string userLevel = 5;
+  string locale = 6;
+  int64 expiration = 7;
+  repeated Device devices = 8;
+  string code = 9;
+  int64 expireAt = 10;
+  string referral = 11;
+  string token = 12;
+  bool yinbiEnabled = 13;
 }
 
 // API

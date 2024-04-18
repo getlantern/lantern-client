@@ -192,14 +192,15 @@ const User$json = {
     {'1': 'email', '3': 2, '4': 1, '5': 9, '10': 'email'},
     {'1': 'telephone', '3': 3, '4': 1, '5': 9, '10': 'telephone'},
     {'1': 'userStatus', '3': 4, '4': 1, '5': 9, '10': 'userStatus'},
-    {'1': 'locale', '3': 5, '4': 1, '5': 9, '10': 'locale'},
-    {'1': 'expiration', '3': 6, '4': 1, '5': 3, '10': 'expiration'},
-    {'1': 'devices', '3': 7, '4': 3, '5': 11, '6': '.Device', '10': 'devices'},
-    {'1': 'code', '3': 8, '4': 1, '5': 9, '10': 'code'},
-    {'1': 'expireAt', '3': 9, '4': 1, '5': 3, '10': 'expireAt'},
-    {'1': 'referral', '3': 10, '4': 1, '5': 9, '10': 'referral'},
-    {'1': 'token', '3': 11, '4': 1, '5': 9, '10': 'token'},
-    {'1': 'yinbiEnabled', '3': 12, '4': 1, '5': 8, '10': 'yinbiEnabled'},
+    {'1': 'userLevel', '3': 5, '4': 1, '5': 9, '10': 'userLevel'},
+    {'1': 'locale', '3': 6, '4': 1, '5': 9, '10': 'locale'},
+    {'1': 'expiration', '3': 7, '4': 1, '5': 3, '10': 'expiration'},
+    {'1': 'devices', '3': 8, '4': 3, '5': 11, '6': '.Device', '10': 'devices'},
+    {'1': 'code', '3': 9, '4': 1, '5': 9, '10': 'code'},
+    {'1': 'expireAt', '3': 10, '4': 1, '5': 3, '10': 'expireAt'},
+    {'1': 'referral', '3': 11, '4': 1, '5': 9, '10': 'referral'},
+    {'1': 'token', '3': 12, '4': 1, '5': 9, '10': 'token'},
+    {'1': 'yinbiEnabled', '3': 13, '4': 1, '5': 8, '10': 'yinbiEnabled'},
   ],
 };
 
@@ -207,11 +208,11 @@ const User$json = {
 final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
     'CgRVc2VyEhYKBnVzZXJJZBgBIAEoA1IGdXNlcklkEhQKBWVtYWlsGAIgASgJUgVlbWFpbBIcCg'
     'l0ZWxlcGhvbmUYAyABKAlSCXRlbGVwaG9uZRIeCgp1c2VyU3RhdHVzGAQgASgJUgp1c2VyU3Rh'
-    'dHVzEhYKBmxvY2FsZRgFIAEoCVIGbG9jYWxlEh4KCmV4cGlyYXRpb24YBiABKANSCmV4cGlyYX'
-    'Rpb24SIQoHZGV2aWNlcxgHIAMoCzIHLkRldmljZVIHZGV2aWNlcxISCgRjb2RlGAggASgJUgRj'
-    'b2RlEhoKCGV4cGlyZUF0GAkgASgDUghleHBpcmVBdBIaCghyZWZlcnJhbBgKIAEoCVIIcmVmZX'
-    'JyYWwSFAoFdG9rZW4YCyABKAlSBXRva2VuEiIKDHlpbmJpRW5hYmxlZBgMIAEoCFIMeWluYmlF'
-    'bmFibGVk');
+    'dHVzEhwKCXVzZXJMZXZlbBgFIAEoCVIJdXNlckxldmVsEhYKBmxvY2FsZRgGIAEoCVIGbG9jYW'
+    'xlEh4KCmV4cGlyYXRpb24YByABKANSCmV4cGlyYXRpb24SIQoHZGV2aWNlcxgIIAMoCzIHLkRl'
+    'dmljZVIHZGV2aWNlcxISCgRjb2RlGAkgASgJUgRjb2RlEhoKCGV4cGlyZUF0GAogASgDUghleH'
+    'BpcmVBdBIaCghyZWZlcnJhbBgLIAEoCVIIcmVmZXJyYWwSFAoFdG9rZW4YDCABKAlSBXRva2Vu'
+    'EiIKDHlpbmJpRW5hYmxlZBgNIAEoCFIMeWluYmlFbmFibGVk');
 
 @$core.Deprecated('Use baseResponseDescriptor instead')
 const BaseResponse$json = {

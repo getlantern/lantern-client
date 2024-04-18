@@ -706,6 +706,7 @@ class User extends $pb.GeneratedMessage {
     $core.String? email,
     $core.String? telephone,
     $core.String? userStatus,
+    $core.String? userLevel,
     $core.String? locale,
     $fixnum.Int64? expiration,
     $core.Iterable<Device>? devices,
@@ -727,6 +728,9 @@ class User extends $pb.GeneratedMessage {
     }
     if (userStatus != null) {
       $result.userStatus = userStatus;
+    }
+    if (userLevel != null) {
+      $result.userLevel = userLevel;
     }
     if (locale != null) {
       $result.locale = locale;
@@ -763,14 +767,15 @@ class User extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'email')
     ..aOS(3, _omitFieldNames ? '' : 'telephone')
     ..aOS(4, _omitFieldNames ? '' : 'userStatus', protoName: 'userStatus')
-    ..aOS(5, _omitFieldNames ? '' : 'locale')
-    ..aInt64(6, _omitFieldNames ? '' : 'expiration')
-    ..pc<Device>(7, _omitFieldNames ? '' : 'devices', $pb.PbFieldType.PM, subBuilder: Device.create)
-    ..aOS(8, _omitFieldNames ? '' : 'code')
-    ..aInt64(9, _omitFieldNames ? '' : 'expireAt', protoName: 'expireAt')
-    ..aOS(10, _omitFieldNames ? '' : 'referral')
-    ..aOS(11, _omitFieldNames ? '' : 'token')
-    ..aOB(12, _omitFieldNames ? '' : 'yinbiEnabled', protoName: 'yinbiEnabled')
+    ..aOS(5, _omitFieldNames ? '' : 'userLevel', protoName: 'userLevel')
+    ..aOS(6, _omitFieldNames ? '' : 'locale')
+    ..aInt64(7, _omitFieldNames ? '' : 'expiration')
+    ..pc<Device>(8, _omitFieldNames ? '' : 'devices', $pb.PbFieldType.PM, subBuilder: Device.create)
+    ..aOS(9, _omitFieldNames ? '' : 'code')
+    ..aInt64(10, _omitFieldNames ? '' : 'expireAt', protoName: 'expireAt')
+    ..aOS(11, _omitFieldNames ? '' : 'referral')
+    ..aOS(12, _omitFieldNames ? '' : 'token')
+    ..aOB(13, _omitFieldNames ? '' : 'yinbiEnabled', protoName: 'yinbiEnabled')
     ..hasRequiredFields = false
   ;
 
@@ -832,70 +837,79 @@ class User extends $pb.GeneratedMessage {
   void clearUserStatus() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get locale => $_getSZ(4);
+  $core.String get userLevel => $_getSZ(4);
   @$pb.TagNumber(5)
-  set locale($core.String v) { $_setString(4, v); }
+  set userLevel($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasLocale() => $_has(4);
+  $core.bool hasUserLevel() => $_has(4);
   @$pb.TagNumber(5)
-  void clearLocale() => clearField(5);
+  void clearUserLevel() => clearField(5);
 
   @$pb.TagNumber(6)
-  $fixnum.Int64 get expiration => $_getI64(5);
+  $core.String get locale => $_getSZ(5);
   @$pb.TagNumber(6)
-  set expiration($fixnum.Int64 v) { $_setInt64(5, v); }
+  set locale($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasExpiration() => $_has(5);
+  $core.bool hasLocale() => $_has(5);
   @$pb.TagNumber(6)
-  void clearExpiration() => clearField(6);
+  void clearLocale() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.List<Device> get devices => $_getList(6);
+  $fixnum.Int64 get expiration => $_getI64(6);
+  @$pb.TagNumber(7)
+  set expiration($fixnum.Int64 v) { $_setInt64(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasExpiration() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearExpiration() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get code => $_getSZ(7);
-  @$pb.TagNumber(8)
-  set code($core.String v) { $_setString(7, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasCode() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearCode() => clearField(8);
+  $core.List<Device> get devices => $_getList(7);
 
   @$pb.TagNumber(9)
-  $fixnum.Int64 get expireAt => $_getI64(8);
+  $core.String get code => $_getSZ(8);
   @$pb.TagNumber(9)
-  set expireAt($fixnum.Int64 v) { $_setInt64(8, v); }
+  set code($core.String v) { $_setString(8, v); }
   @$pb.TagNumber(9)
-  $core.bool hasExpireAt() => $_has(8);
+  $core.bool hasCode() => $_has(8);
   @$pb.TagNumber(9)
-  void clearExpireAt() => clearField(9);
+  void clearCode() => clearField(9);
 
   @$pb.TagNumber(10)
-  $core.String get referral => $_getSZ(9);
+  $fixnum.Int64 get expireAt => $_getI64(9);
   @$pb.TagNumber(10)
-  set referral($core.String v) { $_setString(9, v); }
+  set expireAt($fixnum.Int64 v) { $_setInt64(9, v); }
   @$pb.TagNumber(10)
-  $core.bool hasReferral() => $_has(9);
+  $core.bool hasExpireAt() => $_has(9);
   @$pb.TagNumber(10)
-  void clearReferral() => clearField(10);
+  void clearExpireAt() => clearField(10);
 
   @$pb.TagNumber(11)
-  $core.String get token => $_getSZ(10);
+  $core.String get referral => $_getSZ(10);
   @$pb.TagNumber(11)
-  set token($core.String v) { $_setString(10, v); }
+  set referral($core.String v) { $_setString(10, v); }
   @$pb.TagNumber(11)
-  $core.bool hasToken() => $_has(10);
+  $core.bool hasReferral() => $_has(10);
   @$pb.TagNumber(11)
-  void clearToken() => clearField(11);
+  void clearReferral() => clearField(11);
 
   @$pb.TagNumber(12)
-  $core.bool get yinbiEnabled => $_getBF(11);
+  $core.String get token => $_getSZ(11);
   @$pb.TagNumber(12)
-  set yinbiEnabled($core.bool v) { $_setBool(11, v); }
+  set token($core.String v) { $_setString(11, v); }
   @$pb.TagNumber(12)
-  $core.bool hasYinbiEnabled() => $_has(11);
+  $core.bool hasToken() => $_has(11);
   @$pb.TagNumber(12)
-  void clearYinbiEnabled() => clearField(12);
+  void clearToken() => clearField(12);
+
+  @$pb.TagNumber(13)
+  $core.bool get yinbiEnabled => $_getBF(12);
+  @$pb.TagNumber(13)
+  set yinbiEnabled($core.bool v) { $_setBool(12, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasYinbiEnabled() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearYinbiEnabled() => clearField(13);
 }
 
 /// API
