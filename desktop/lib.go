@@ -404,9 +404,14 @@ func proUser() *C.char {
 	return C.CString("false")
 }
 
+func deviceName() string {
+	deviceName, _ := osversion.GetHumanReadable()
+	return deviceName
+}
+
 //export deviceLinkingCode
 func deviceLinkingCode() *C.char {
-	resp, err := proClient.LinkCodeRequest(context.Background())
+	resp, err := proClient.LinkCodeRequest(context.Background(), deviceName())
 	if err != nil {
 		return sendError(err)
 	}

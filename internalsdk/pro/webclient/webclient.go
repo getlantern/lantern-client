@@ -14,13 +14,13 @@ var (
 
 type RESTClient interface {
 	// Gets a JSON document from the given path with the given querystring parameters, reading the result into target.
-	GetJSON(ctx context.Context, path string, params any, target interface{}) error
+	GetJSON(ctx context.Context, path string, params, target any) error
 
 	// Post the given parameters as form data and reads the result JSON into target.
-	PostFormReadingJSON(ctx context.Context, path string, params any, target interface{}) error
+	PostFormReadingJSON(ctx context.Context, path string, params, target any) error
 
-	// Post the given body as JSON and reads the result JSON into target.
-	PostJSONReadingJSON(ctx context.Context, path string, body, target interface{}) error
+	// Post the given body as JSON with the given querystring parameters and reads the result JSON into target.
+	PostJSONReadingJSON(ctx context.Context, path string, params, body, target any) error
 }
 
 // A function that can send RESTful requests and receive response bodies.
@@ -40,7 +40,7 @@ func NewRESTClient(send SendRequest) RESTClient {
 	}
 }
 
-func (c *restClient) GetJSON(ctx context.Context, path string, params any, target interface{}) error {
+func (c *restClient) GetJSON(ctx context.Context, path string, params, target any) error {
 	b, err := c.send(ctx, http.MethodGet, path, params, nil)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func (c *restClient) GetJSON(ctx context.Context, path string, params any, targe
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) PostFormReadingJSON(ctx context.Context, path string, params any, target interface{}) error {
+func (c *restClient) PostFormReadingJSON(ctx context.Context, path string, params, target any) error {
 	b, err := c.send(ctx, http.MethodPost, path, params, nil)
 	if err != nil {
 		return err
@@ -56,19 +56,19 @@ func (c *restClient) PostFormReadingJSON(ctx context.Context, path string, param
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) PostJSONReadingJSON(ctx context.Context, path string, body, target interface{}) error {
+func (c *restClient) PostJSONReadingJSON(ctx context.Context, path string, params, body, target any) error {
 	bodyBytes, err := json.Marshal(body)
 	if err != nil {
 		return err
 	}
-	b, err := c.send(ctx, http.MethodPost, path, nil, bodyBytes)
+	b, err := c.send(ctx, http.MethodPost, path, params, bodyBytes)
 	if err != nil {
 		return err
 	}
 	return unmarshalJSON(path, b, target)
 }
 
-func unmarshalJSON(path string, b []byte, target interface{}) error {
+func unmarshalJSON(path string, b []byte, target any) error {
 	err := json.Unmarshal(b, target)
 	if err != nil {
 		log.Errorf("Error unmarshalling JSON from %v: %v\n\n", path, err, string(b))

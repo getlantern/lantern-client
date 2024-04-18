@@ -16,13 +16,13 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/leekchan/accounting"
-	"github.com/shirou/gopsutil/host"
 	"github.com/shopspring/decimal"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
 var (
-	log = golog.LoggerFor("webclient")
+	log                  = golog.LoggerFor("webclient")
+	errMissingDeviceName = errors.New("Missing device name")
 )
 
 type proClient struct {
@@ -41,7 +41,7 @@ type ProClient interface {
 	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
-	LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error)
+	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
 	Plans(ctx context.Context) (*PlansResponse, error)
@@ -205,7 +205,7 @@ func (c *proClient) DeviceRemove(ctx context.Context, deviceId string) (*LinkRes
 	var resp LinkResponse
 	params := c.defaultParams()
 	params["deviceID"] = deviceId
-	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-remove", params, &resp)
+	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-remove", params, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +217,7 @@ func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.B
 	var resp protos.BaseResponse
 	params := c.defaultParams()
 	params["code"] = code
-	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-approve", params, &resp)
+	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-approve", params, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -225,17 +225,20 @@ func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.B
 }
 
 // LinkCodeRequest returns a code that can be used to link a device to an existing Pro account
-func (c *proClient) LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error) {
-	var resp LinkCodeResponse
-	info, _ := host.Info()
-	uc := c.userConfig()
-	params := map[string]interface{}{
-		"deviceName": info.Hostname,
-		"locale":     uc.GetLanguage(),
+func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error) {
+	if deviceName == "" {
+		return nil, errMissingDeviceName
 	}
-	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-request", params, &resp)
+	var resp LinkCodeResponse
+	uc := c.userConfig()
+	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-request", map[string]interface{}{
+		"deviceName": deviceName,
+		"locale":     uc.GetLanguage(),
+	}, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
+	b, _ := json.Marshal(resp)
+	log.Debugf("LinkCodeResponse is %s", string(b))
 	return &resp, nil
 }
