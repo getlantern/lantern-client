@@ -14,9 +14,12 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/leekchan/accounting"
 	"github.com/shirou/gopsutil/host"
+	"github.com/shopspring/decimal"
 )
 
 var (
@@ -113,6 +116,8 @@ func (c *proClient) defaultParams() map[string]interface{} {
 	return params
 }
 
+// EmailExists is used to check if an email address belongs to an existing Pro account
+// XXX Deprecated: See https://github.com/getlantern/lantern-internal/issues/4377
 func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error) {
 	var resp protos.BaseResponse
 	err := c.webclient.GetJSON(ctx, "/email-exists", map[string]interface{}{
@@ -124,17 +129,22 @@ func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.Base
 	return &resp, nil
 }
 
+// PaymentRedirect returns a checkout/redirect URL to be used to complete a Lantern Pro purchase with a payment provider
 func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error) {
 	var resp PaymentRedirectResponse
 	uc := userConfig(c.settings)
 	req.Locale = uc.GetLanguage()
-	err := c.webclient.GetJSON(ctx, "/payment-redirect", req, &resp)
+	b, _ := protojson.Marshal(req)
+	params := make(map[string]interface{})
+	json.Unmarshal(b, &params)
+	err := c.webclient.GetJSON(ctx, "/payment-redirect", params, &resp)
 	if err != nil {
 		return nil, err
 	}
 	return &resp, nil
 }
 
+// PaymentMethods returns a list of plans along with payment providers and available payment methods
 func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error) {
 	var resp PaymentMethodsResponse
 	err := c.webclient.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
@@ -142,19 +152,34 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 		return nil, err
 	}
 	b, _ := json.Marshal(resp)
-	log.Debugf("Response is %v", string(b))
 	return &resp, nil
 }
 
+// Plans is used to hit the legacy /plans endpoint. Deprecated.
 func (c *proClient) Plans(ctx context.Context) (*PlansResponse, error) {
 	var resp PlansResponse
 	err := c.webclient.GetJSON(ctx, "/plans", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
 	}
+	for i, plan := range resp.Plans {
+		parts := strings.Split(plan.Id, "-")
+		if len(parts) != 3 {
+			continue
+		}
+		cur := parts[1]
+		if currency, ok := accounting.LocaleInfo[strings.ToUpper(cur)]; ok {
+			if oneMonthCost, ok2 := plan.ExpectedMonthlyPrice[strings.ToLower(cur)]; ok2 {
+				ac := accounting.Accounting{Symbol: currency.ComSymbol, Precision: 2}
+				amount := decimal.NewFromInt(oneMonthCost).Div(decimal.NewFromInt(100))
+				resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
+			}
+		}
+	}
 	return &resp, nil
 }
 
+// UserCreate creates a new user
 func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
 	err := c.webclient.PostFormReadingJSON(ctx, "/user-create", nil, &resp)
@@ -164,6 +189,7 @@ func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 	return &resp, nil
 }
 
+// UserData returns data associated with a user
 func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
 	err := c.webclient.GetJSON(ctx, "/user-data", nil, &resp)
@@ -196,6 +222,7 @@ func (c *proClient) DeviceRemove(ctx context.Context, deviceId string) (*LinkRes
 	return &resp, nil
 }
 
+// LinkCodeApprove is used to approve a code to link a device to an existing Pro account
 func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error) {
 	var resp protos.BaseResponse
 	params := c.defaultParams()
@@ -207,6 +234,7 @@ func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.B
 	return &resp, nil
 }
 
+// LinkCodeRequest returns a code that can be used to link a device to an existing Pro account
 func (c *proClient) LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error) {
 	var resp LinkCodeResponse
 	info, _ := host.Info()
