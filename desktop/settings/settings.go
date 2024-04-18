@@ -1,4 +1,4 @@
-package app
+package settings
 
 import (
 	"encoding/json"
@@ -152,8 +152,8 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	return sett
 }
 
-// emptySettings returns a new settings instance without loading any file from disk.
-func emptySettings() *Settings {
+// EmptySettings returns a new settings instance without loading any file from disk.
+func EmptySettings() *Settings {
 	return LoadSettingsFrom("version", "revisionDate", "buildDate", "")
 }
 
@@ -420,6 +420,16 @@ func (s *Settings) SetProxyAll(proxyAll bool) {
 	s.setVal(SNProxyAll, proxyAll)
 }
 
+// GetDisconnected returns whether or not we're disconnected
+func (s *Settings) GetDisconnected() bool {
+	return s.getBool(SNDisconnected)
+}
+
+// SetDisconnected sets whether or not we're disconnected
+func (s *Settings) SetDisconnected(disconnected bool) {
+	s.setBool(SNDisconnected, disconnected)
+}
+
 // GetGoogleAds returns whether or not to proxy all traffic.
 func (s *Settings) GetGoogleAds() bool {
 	return s.getBool(SNGoogleAds)
@@ -477,6 +487,16 @@ func (s *Settings) GetLocalHTTPToken() string {
 	return s.getString(SNLocalHTTPToken)
 }
 
+// GetPastAnnouncements returns past campaign announcements
+func (s *Settings) GetPastAnnouncements() []string {
+	return s.getStringArray(SNPastAnnouncements)
+}
+
+// SetPastAnnouncements sets past campaigns announcements
+func (s *Settings) SetPastAnnouncements(announcements []string) {
+	s.setStringArray(SNPastAnnouncements, announcements)
+}
+
 // SetUIAddr sets the last known UI address.
 func (s *Settings) SetUIAddr(uiaddr string) {
 	s.setVal(SNUIAddr, uiaddr)
@@ -485,6 +505,21 @@ func (s *Settings) SetUIAddr(uiaddr string) {
 // GetAddr gets the HTTP proxy address.
 func (s *Settings) GetAddr() string {
 	return s.getString(SNAddr)
+}
+
+// SetAddr sets the HTTP proxy address.
+func (s *Settings) SetAddr(addr string) {
+	s.setString(SNAddr, addr)
+}
+
+// GetSOCKSAddr returns the SOCKS proxy address.
+func (s *Settings) GetSOCKSAddr() string {
+	return s.getString(SNSOCKSAddr)
+}
+
+// SetSOCKSAddr sets the SOCKS proxy address.
+func (s *Settings) SetSOCKSAddr(addr string) {
+	s.setString(SNSOCKSAddr, addr)
 }
 
 // GetEmailAddress gets the email address of pro users.

@@ -1,14 +1,18 @@
 package internalsdk
 
 import (
+	"context"
 	"fmt"
+	"net/http"
 	"path/filepath"
 	"strconv"
+	"time"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/logging"
-	"github.com/getlantern/lantern-client/internalsdk/apimodels"
+	"github.com/getlantern/flashlight/v7/proxied"
+	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
@@ -18,6 +22,7 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
+	proClient pro.ProClient
 }
 
 // List of we are using for Session Model
@@ -87,8 +92,30 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(2000, &protos.Devices{})
 	}
 	m := &SessionModel{baseModel: base}
+
+	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		},
+		UserConfig: func() common.UserConfig {
+			deviceID, _ := m.GetDeviceID()
+			userID, _ := m.GetUserID()
+			token, _ := m.GetToken()
+			lang, _ := m.Locale()
+			return common.NewUserConfig(
+				common.DefaultAppName,
+				deviceID,
+				userID,
+				token,
+				nil,
+				lang,
+			)
+		},
+	})
+
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
-	return m, m.initSessionModel(opts)
+	return m, m.initSessionModel(context.Background(), opts)
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -162,7 +189,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "createUser":
-		err := userCreate(m.baseModel, arguments.Scalar().String())
+		err := m.userCreate(context.Background(), arguments.Scalar().String())
 		if err != nil {
 			return nil, err
 		}
@@ -194,7 +221,7 @@ func (m *SessionModel) StartService(configDir string,
 }
 
 // InvokeMethod handles method invocations on the SessionModel.
-func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
+func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelOpts) error {
 	// Check if email if empty
 	email, err := pathdb.Get[string](m.db, pathEmailAddress)
 	if err != nil {
@@ -258,14 +285,14 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 			return err
 		}
 		// Create user
-		err = userCreate(m.baseModel, local)
+		err = m.userCreate(ctx, local)
 		if err != nil {
 			return err
 		}
 	}
 
 	// Get all user details
-	err = userDetail(m)
+	err = m.userDetail(ctx)
 	if err != nil {
 		return err
 	}
@@ -400,19 +427,9 @@ func setLanguage(m *baseModel, lang string) error {
 	})
 }
 
-func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
-	var protoDevices []*protos.Device
-	for _, device := range devices {
-		protoDevice := &protos.Device{
-			Id:      device.ID,
-			Name:    device.Name,
-			Created: device.Created,
-		}
-		protoDevices = append(protoDevices, protoDevice)
-	}
-
+func setDevices(m *baseModel, devices []*protos.Device) error {
 	pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		pathdb.Put(tx, pathDevices, protoDevices, "")
+		pathdb.Put(tx, pathDevices, devices, "")
 		return nil
 	})
 	return nil
@@ -577,80 +594,61 @@ func setUserIdAndToken(m *baseModel, userId int, token string) error {
 	})
 }
 
-// Create user
-// Todo-: Create Sprate http client to manag and reuse client
-func userCreate(m *baseModel, local string) error {
-	deviceID, err := pathdb.Get[string](m.db, pathDeviceID)
-	if err != nil {
-		return err
-	}
-
-	userResponse, err := apimodels.UserCreate(deviceID, local)
+// userCreate creates a new user and stores it in pathdb
+func (session *SessionModel) userCreate(ctx context.Context, local string) error {
+	resp, err := session.proClient.UserCreate(ctx)
 	if err != nil {
 		log.Errorf("Error sending request: %v", err)
 		return err
 	}
-
+	user := resp.User
 	//Save user id and token
-	err = setUserIdAndToken(m, int(userResponse.UserID), userResponse.Token)
+	err = setUserIdAndToken(session.baseModel, int(user.UserId), user.Token)
 	if err != nil {
 		return err
 	}
-	log.Debugf("Created new Lantern user: %+v", userResponse)
+	log.Debugf("Created new Lantern user: %+v", user)
 	return nil
 }
 
-func userDetail(session *SessionModel) error {
-	deviecId, err := session.GetDeviceID()
-	if err != nil {
-		return err
-	}
-	userId, err := session.GetUserID()
-	if err != nil {
-		return err
-	}
-	token, err := session.GetToken()
-	if err != nil {
-		return err
-	}
-	userIdStr := fmt.Sprintf("%d", userId)
-	userDetail, err := apimodels.FechUserDetail(deviecId, userIdStr, token)
+func (session *SessionModel) userDetail(ctx context.Context) error {
+	resp, err := session.proClient.UserData(ctx)
 	if err != nil {
 		return nil
 	}
-	log.Debugf("User detail: %+v", userDetail)
-	err = cacheUserDetail(session.baseModel, userDetail)
+	log.Debugf("User detail: %+v", resp.User)
+	err = cacheUserDetail(session.baseModel, resp.User)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) error {
+func cacheUserDetail(m *baseModel, user *protos.User) error {
 	//Save user refferal code
-	if userDetail.Referral != "" {
-		err := setReferalCode(m, userDetail.Referral)
+	if user.Referral != "" {
+		err := setReferalCode(m, user.Referral)
 		if err != nil {
 			return err
 		}
 	}
-	if userDetail.UserStatus != "" && userDetail.UserStatus == "active" && userDetail.UserLevel == "pro" {
+	if user.UserStatus != "" && user.UserStatus == "active" && user.UserLevel == "pro" {
 		setProUser(m, true)
 	} else {
 		setProUser(m, false)
 	}
-	err := setUserLevel(m, userDetail.UserLevel)
+	err := setUserLevel(m, user.UserLevel)
 	if err != nil {
 		return err
 	}
 
 	//Store all device
-	err = setDevices(m, userDetail.Devices)
+	err = setDevices(m, user.Devices)
 	if err != nil {
 		return err
 	}
-	log.Debugf("User caching successful: %+v", userDetail)
-	return setUserIdAndToken(m, int(userDetail.UserID), userDetail.Token)
+	log.Debugf("User caching successful: %+v", user)
+	return setUserIdAndToken(m, int(user.UserId), user.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {

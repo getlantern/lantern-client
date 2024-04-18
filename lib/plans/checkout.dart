@@ -168,7 +168,7 @@ class _CheckoutState extends State<Checkout>
         "stripe",
         os,
       );
-      switch (Platform.operatingSystem) {
+      switch (os) {
         case 'windows':
           await AppBrowser.openWindowsWebview(redirectUrl);
           break;

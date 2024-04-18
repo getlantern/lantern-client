@@ -30,8 +30,6 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/otel"
-	"github.com/getlantern/flashlight/v7/pro"
-	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
@@ -45,7 +43,9 @@ import (
 	uicommon "github.com/getlantern/lantern-client/desktop/common"
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
+	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 )
 
 var (
@@ -71,7 +71,7 @@ type App struct {
 	configDir        string
 	exited           eventual.Value
 	analyticsSession analytics.Session
-	settings         *Settings
+	settings         *settings.Settings
 	statsTracker     *statsTracker
 
 	muExitFuncs sync.RWMutex
@@ -101,7 +101,7 @@ type App struct {
 	proxiesLock sync.RWMutex
 
 	issueReporter *issueReporter
-	proClient     *client.Client
+	proClient     proclient.ProClient
 	referralCode  string
 	selectedTab   Tab
 	stats         *stats.Stats
@@ -117,7 +117,7 @@ type App struct {
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, settings *Settings) *App {
+func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, settings *settings.Settings) *App {
 	analyticsSession := newAnalyticsSession(settings)
 	app := &App{
 		configDir:                 configDir,
@@ -135,19 +135,19 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
-	pro.OnProStatusChange(func(isPro bool, _ bool) {
+	onProStatusChange(func(isPro bool) {
 		app.statsTracker.SetIsPro(isPro)
 	})
 
 	log.Debugf("Using configdir: %v", configDir)
 
-	app.issueReporter = newIssueReporter(app.settings, app.getCapturedPackets, app.getProxies)
+	app.issueReporter = newIssueReporter(app)
 	app.translations.Set(os.DirFS("locale/translation"))
 
 	return app
 }
 
-func newAnalyticsSession(settings *Settings) analytics.Session {
+func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 	if settings.IsAutoReport() {
 		session := analytics.Start(settings.GetDeviceID(), ApplicationVersion)
 		go func() {
@@ -194,7 +194,7 @@ func (app *App) Run(isMain bool) {
 
 		listenAddr := app.Flags.Addr
 		if listenAddr == "" {
-			listenAddr = app.settings.getString(SNAddr)
+			listenAddr = app.settings.GetAddr()
 		}
 		if listenAddr == "" {
 			listenAddr = defaultHTTPProxyAddress
@@ -202,7 +202,7 @@ func (app *App) Run(isMain bool) {
 
 		socksAddr := app.Flags.SocksAddr
 		if socksAddr == "" {
-			socksAddr = app.settings.getString(SNSOCKSAddr)
+			socksAddr = app.settings.GetSOCKSAddr()
 		}
 		if socksAddr == "" {
 			socksAddr = defaultSOCKSProxyAddress
@@ -239,7 +239,7 @@ func (app *App) Run(isMain bool) {
 			RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.settings.getBool(SNDisconnected) }, // check whether we're disconnected
+			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
 			app.settings.GetProxyAll,
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
@@ -260,11 +260,11 @@ func (app *App) Run(isMain bool) {
 		app.beforeStart(listenAddr)
 
 		chProStatusChanged := make(chan bool, 1)
-		pro.OnProStatusChange(func(isPro bool, _ bool) {
+		onProStatusChange(func(isPro bool) {
 			chProStatusChanged <- isPro
 		})
 		chUserChanged := make(chan bool, 1)
-		app.settings.OnChange(SNUserID, func(v interface{}) {
+		app.settings.OnChange(settings.SNUserID, func(v interface{}) {
 			chUserChanged <- true
 		})
 		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
@@ -364,9 +364,10 @@ func (app *App) beforeStart(listenAddr string) {
 		app.Exit(nil)
 		os.Exit(0)
 	}
-	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, app.IsProUser, func() string {
-		return app.AddToken("/img/lantern_logo.png")
-	}))
+	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour,
+		func() (bool, bool) { return app.IsProUser(context.Background()) }, func() string {
+			return app.AddToken("/img/lantern_logo.png")
+		}))
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
@@ -379,14 +380,14 @@ func (app *App) isFeatureEnabled(features map[string]bool, feature string) bool 
 func (app *App) Connect() {
 	app.analyticsSession.Event("systray-menu", "connect")
 	ops.Begin("connect").End()
-	app.settings.setBool(SNDisconnected, false)
+	app.settings.SetDisconnected(false)
 }
 
 // Disconnect turns off proxying
 func (app *App) Disconnect() {
 	app.analyticsSession.Event("systray-menu", "disconnect")
 	ops.Begin("disconnect").End()
-	app.settings.setBool(SNDisconnected, true)
+	app.settings.SetDisconnected(true)
 }
 
 // GetLanguage returns the user language
@@ -407,7 +408,7 @@ func (app *App) SetLanguage(lang string) {
 
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
-func (app *App) OnSettingChange(attr SettingName, cb func(interface{})) {
+func (app *App) OnSettingChange(attr settings.SettingName, cb func(interface{})) {
 	app.settings.OnChange(attr, cb)
 }
 
@@ -417,7 +418,7 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
-	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
+	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
 		if enable {
 			app.SysproxyOn()
@@ -431,12 +432,12 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	})
 	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
 	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
-		app.settings.setString(SNAddr, addr)
+		app.settings.SetAddr(addr.(string))
 	} else {
 		log.Errorf("Couldn't retrieve HTTP proxy addr in time")
 	}
 	if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
-		app.settings.setString(SNSOCKSAddr, socksAddr)
+		app.settings.SetSOCKSAddr(socksAddr.(string))
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
@@ -601,7 +602,7 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.isProUserFast()
+	isPro, _ := app.isProUserFast(context.Background())
 	return isPro
 }
 
@@ -609,12 +610,13 @@ func (app *App) IsPro() bool {
 func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
 	referralCode := app.referralCode
 	if referralCode == "" {
-		resp, err := app.proClient.UserData(uc)
+		resp, err := app.proClient.UserData(context.Background())
 		if err != nil {
-			return "", err
+			return "", errors.New("error fetching user data: %v", err)
 		}
-		app.SetReferralCode(resp.Code)
-		return resp.Code, nil
+
+		app.SetReferralCode(resp.User.Code)
+		return resp.User.Code, nil
 	}
 	return referralCode, nil
 }
@@ -678,7 +680,7 @@ func (app *App) AddToken(path string) string {
 	return path
 }
 
-func (app *App) Settings() *Settings {
+func (app *App) Settings() *settings.Settings {
 	return app.settings
 }
 
