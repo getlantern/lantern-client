@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/getlantern/golog"
-	"github.com/getlantern/lantern-client/desktop/settings"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,12 +17,21 @@ func TestClient(t *testing.T) {
 		// This means it does not actually touch the proxying code, but that should
 		// be tested separately.
 		HttpClient: &http.Client{},
-		Settings:   settings.EmptySettings(),
+		UserConfig: func() common.UserConfig {
+			return common.NewUserConfig(
+				"Lantern",
+				"device123", // deviceID
+				123,         // userID
+				"token",     // token
+				nil,
+				"en", // language
+			)
+		},
 	})
 	res, e := client.Plans(context.Background())
 	if !assert.NoError(t, e) {
 		return
 	}
-	log.Debugf("Got responsde: %v", res)
+	log.Debugf("Got response: %v", res)
 	assert.NotNil(t, res)
 }
