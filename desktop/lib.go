@@ -295,9 +295,8 @@ func emailExists(email *C.char) *C.char {
 // If an error occurs during redemption, the first string is nil, and the second string contains the error message.
 //
 //export redeemResellerCode
-func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) (*C.char, *C.char) {
-
-	_, err := proClient.RedeemResellerCode(context.Background(), &protos.RedeemResellerCodeRequest{
+func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.char {
+	response, err := proClient.RedeemResellerCode(context.Background(), &protos.RedeemResellerCodeRequest{
 		Currency:       C.GoString(currency),
 		DeviceName:     C.GoString(deviceName),
 		Email:          C.GoString(email),
@@ -305,13 +304,17 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) (*C.c
 		ResellerCode:   C.GoString(resellerCode),
 		Provider:       "reseller-code",
 	})
+	log.Debugf("DEBUG: redeeming reseller code response: %v", response)
+	if response.Error != "" {
+		log.Debugf("DEBUG: error while redeeming reseller code reponse is: %v", response.Error)
+		return sendError(errors.New("Error while redeeming reseller code: %v", response.Error))
+	}
 	if err != nil {
 		log.Debugf("DEBUG: error while redeeming reseller code: %v", err)
-		return nil, C.CString(err.Error())
-		// return sendError(err)
+		return sendError(err)
 	}
-	log.Debugf("DEBUG: redeeming reseller code success: %v", err)
-	return C.CString("true"), nil
+	log.Debug("DEBUG: redeeming reseller code success")
+	return C.CString("true")
 }
 
 //export referral
