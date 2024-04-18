@@ -318,7 +318,6 @@ class SessionModel extends Model {
     // Desktop users
     Localization.locale = lang;
     final newLang = lang.toNativeUtf8();
-    Localization.locale = lang;
     setLang(newLang);
     return Future(() => null);
   }
