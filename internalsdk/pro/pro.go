@@ -152,6 +152,7 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 		return nil, err
 	}
 	b, _ := json.Marshal(resp)
+	log.Debugf("PaymentMethods response is %v", string(b))
 	return &resp, nil
 }
 
