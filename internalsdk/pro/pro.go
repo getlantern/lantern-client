@@ -14,12 +14,12 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/go-resty/resty/v2"
 	"github.com/leekchan/accounting"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shopspring/decimal"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 var (
