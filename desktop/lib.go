@@ -19,7 +19,6 @@ import (
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
@@ -30,6 +29,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/settings"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
@@ -77,7 +77,9 @@ func start() {
 			Transport: proxied.ParallelForIdempotent(),
 			Timeout:   30 * time.Second,
 		},
-		Settings: settings,
+		UserConfig: func() common.UserConfig {
+			return userConfig(settings)
+		},
 	})
 
 	a = app.NewApp(flags, cdir, proClient, settings)
@@ -445,9 +447,9 @@ func replicaAddr() *C.char {
 	return C.CString("")
 }
 
-func userConfig(settings *settings.Settings) *common.UserConfigData {
+func userConfig(settings *settings.Settings) common.UserConfig {
 	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	return common.NewUserConfigData(
+	return common.NewUserConfig(
 		common.DefaultAppName,
 		deviceID,
 		userID,

@@ -8,9 +8,8 @@ import (
 	"strings"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/lantern-client/desktop/settings"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -27,15 +26,15 @@ var (
 )
 
 type proClient struct {
-	settings  *settings.Settings
-	webclient webclient.RESTClient
+	userConfig func() common.UserConfig
+	webclient  webclient.RESTClient
 }
 
 type Opts struct {
 	// HttpClient represents an http.Client that should be used by the resty client
 	HttpClient *http.Client
-	// Settings are the user settings that the pro client is configured with
-	Settings *settings.Settings
+	// UserConfig is a function that returns the user config associated with the Lantern user
+	UserConfig func() common.UserConfig
 }
 
 type ProClient interface {
@@ -57,27 +56,17 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 	if httpClient == nil {
 		httpClient = &http.Client{}
 	}
-
-	client := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, setUserHeaders(opts.Settings), nil))
-	return &proClient{opts.Settings, client}
+	client := &proClient{
+		userConfig: opts.UserConfig,
+	}
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, client.setUserHeaders(), nil))
+	return client
 }
 
-func userConfig(settings *settings.Settings) *common.UserConfigData {
-	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	return common.NewUserConfigData(
-		common.DefaultAppName,
-		deviceID,
-		userID,
-		token,
-		nil,
-		settings.GetLanguage(),
-	)
-}
-
-func setUserHeaders(settings *settings.Settings) func(client *resty.Client, req *resty.Request) error {
+func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Request) error {
 	return func(client *resty.Client, req *resty.Request) error {
 
-		uc := userConfig(settings)
+		uc := c.userConfig()
 
 		req.Header.Set("Referer", "http://localhost:37457/")
 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
@@ -109,7 +98,7 @@ func setUserHeaders(settings *settings.Settings) func(client *resty.Client, req 
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {
-	uc := userConfig(c.settings)
+	uc := c.userConfig()
 	params := map[string]interface{}{
 		"locale": uc.GetLanguage(),
 	}
@@ -132,7 +121,7 @@ func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.Base
 // PaymentRedirect returns a checkout/redirect URL to be used to complete a Lantern Pro purchase with a payment provider
 func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error) {
 	var resp PaymentRedirectResponse
-	uc := userConfig(c.settings)
+	uc := c.userConfig()
 	req.Locale = uc.GetLanguage()
 	b, _ := protojson.Marshal(req)
 	params := make(map[string]interface{})
@@ -239,7 +228,7 @@ func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.B
 func (c *proClient) LinkCodeRequest(ctx context.Context) (*LinkCodeResponse, error) {
 	var resp LinkCodeResponse
 	info, _ := host.Info()
-	uc := userConfig(c.settings)
+	uc := c.userConfig()
 	params := map[string]interface{}{
 		"deviceName": info.Hostname,
 		"locale":     uc.GetLanguage(),
