@@ -46,7 +46,7 @@ var (
 // AddCommonNonUserHeaders adds all common headers that are not
 // user or device specific.
 func AddCommonNonUserHeaders(uc UserConfig, req *http.Request) {
-	req.Header.Set(AppVersionHeader, CompileTimeApplicationVersion)
+	req.Header.Set(AppVersionHeader, ApplicationVersion)
 	req.Header.Set(LibraryVersionHeader, LibraryVersion)
 	for k, v := range uc.GetInternalHeaders() {
 		if v != "" {

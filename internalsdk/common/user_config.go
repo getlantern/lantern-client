@@ -6,11 +6,16 @@ import (
   "github.com/getlantern/timezone"
 )
 
-type UserConfig interface {
+// AuthConfig retrieves any custom info for interacting with internal services.
+type AuthConfig interface {
   GetAppName() string
   GetDeviceID() string
   GetUserID() int64
   GetToken() string
+}
+
+type UserConfig interface {
+  AuthConfig
   GetLanguage() string
   GetTimeZone() (string, error)
   GetInternalHeaders() map[string]string

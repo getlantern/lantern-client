@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/getlantern/flashlight/v7/issue"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 )
 
 var issueMap = map[string]string{
@@ -39,7 +40,7 @@ func SendIssueReport(
 		description,
 		subscriptionLevel,
 		userEmail,
-		ApplicationVersion,
+		common.ApplicationVersion,
 		device,
 		model,
 		osVersion,
