@@ -8,11 +8,14 @@ import (
 )
 
 var (
-	// CompileTimeApplicationVersion is set at compile-time by application production builds
-	CompileTimeApplicationVersion string = ""
+	// ApplicationVersion is set at compile-time by application production builds
+	ApplicationVersion string = "9999.99.99"
 
 	// LibraryVersion is determined at runtime based on the version of the lantern library that's been included.
 	LibraryVersion = ""
+
+	// This gets set at build time
+	RevisionDate = ""
 )
 
 func init() {
@@ -23,7 +26,7 @@ func init() {
 
 versionLoop:
 	for _, dep := range buildInfo.Deps {
-		if strings.HasPrefix(dep.Path, "github.com/getlantern/lantern-client") && strings.HasPrefix(dep.Version, "v") {
+		if strings.HasPrefix(dep.Path, "github.com/getlantern/flashlight") && strings.HasPrefix(dep.Version, "v") {
 			version := dep.Version[1:]
 			log.Debugf("Flashlight version is %v", version)
 			_, parseErr := semver.Parse(version)

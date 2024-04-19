@@ -20,13 +20,13 @@ import (
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/analytics"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/mtime"
 
 	// import gomobile just to make sure it stays in go.mod
@@ -424,7 +424,7 @@ func Start(configDir string,
 }
 
 func newAnalyticsSession(session panickingSession) analytics.Session {
-	analyticsSession := analytics.Start(session.GetDeviceID(), ApplicationVersion)
+	analyticsSession := analytics.Start(session.GetDeviceID(), common.ApplicationVersion)
 	go func() {
 		ipAddress := geolookup.GetIP(forever)
 		analyticsSession.SetIP(ipAddress)
@@ -441,7 +441,7 @@ func run(configDir, locale string,
 	// 	log.Debugf("Unable to track memory stats: %v", err)
 	// })
 	appdir.SetHomeDir(configDir)
-	session.SetStaging(common.Staging)
+	session.SetStaging(false)
 
 	log.Debugf("Starting lantern: configDir %s locale %s sticky config %t",
 		configDir, locale, settings.StickyConfig())
@@ -449,7 +449,7 @@ func run(configDir, locale string,
 	flags := map[string]interface{}{
 		"borda-report-interval":   5 * time.Minute,
 		"borda-sample-percentage": float64(0.01),
-		"staging":                 common.Staging,
+		"staging":                 false,
 	}
 
 	err := os.MkdirAll(configDir, 0755)
@@ -505,8 +505,8 @@ func run(configDir, locale string,
 	var runner *flashlight.Flashlight
 	runner, err = flashlight.New(
 		common.DefaultAppName,
-		ApplicationVersion,
-		RevisionDate,
+		common.ApplicationVersion,
+		common.RevisionDate,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
@@ -578,13 +578,13 @@ func run(configDir, locale string,
 	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
 	checkFeatures := func() {
 		replicaServer.CheckEnabled()
-		chatEnabled := runner.FeatureEnabled("chat", ApplicationVersion)
+		chatEnabled := runner.FeatureEnabled("chat", common.ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
-			showAdsEnabled := runner.FeatureEnabled("interstitialads", ApplicationVersion)
+			showAdsEnabled := runner.FeatureEnabled("interstitialads", common.ApplicationVersion)
 			log.Debugf("Show ads enabled? %v", showAdsEnabled)
 			session.SetShowInterstitialAdsEnabled(showAdsEnabled)
 
