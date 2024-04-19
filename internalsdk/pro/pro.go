@@ -157,8 +157,21 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
 		return nil, errors.New("error received from server: %v", resp.BaseResponse.Error)
 	}
-	b, _ := json.Marshal(resp)
-	log.Debugf("PaymentMethods-V4 response is %v", string(b))
+	log.Debugf("PaymentMethods-V4 plans is %v", resp.Plans)
+	for i, plan := range resp.Plans {
+		parts := strings.Split(plan.Id, "-")
+		if len(parts) != 3 {
+			continue
+		}
+		cur := parts[1]
+		if currency, ok := accounting.LocaleInfo[strings.ToUpper(cur)]; ok {
+			if oneMonthCost, ok2 := plan.ExpectedMonthlyPrice[strings.ToLower(cur)]; ok2 {
+				ac := accounting.Accounting{Symbol: currency.ComSymbol, Precision: 2}
+				amount := decimal.NewFromInt(oneMonthCost).Div(decimal.NewFromInt(100))
+				resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
+			}
+		}
+	}
 	return &resp, nil
 }
 

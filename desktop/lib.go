@@ -35,7 +35,6 @@ import (
 	"github.com/getlantern/osversion"
 
 	"google.golang.org/protobuf/encoding/protojson"
-	"google.golang.org/protobuf/proto"
 )
 
 import "C"
@@ -160,8 +159,8 @@ func fetchPayentMethodV4() error {
 	if err != nil {
 		return errors.New("Could not get payment methods: %v", err)
 	}
-	log.Debugf("DEBUG: Payment methods logos: %v providers %v  and plans in string %v", resp, resp.Logo, resp.Providers, resp.Plans)
-	bytes, err := proto.Marshal(resp)
+	// log.Debugf("DEBUG: Payment methods logos: %v providers %v  and plans in string %v", resp.Logo, resp.Providers, resp.Plans)
+	bytes, err := json.Marshal(resp)
 	if err != nil {
 		return errors.New("Could not marshal payment methods: %v", err)
 	}
@@ -202,16 +201,19 @@ func setSelectTab(ttab *C.char) {
 
 //export plans
 func plans() *C.char {
-	//Todo need to make changes here
 	settings := a.Settings()
 	plans := settings.GetPaymentMethods()
 	if plans == nil {
 		return sendError(errors.New("plans not found"))
 	}
-	log.Debugf("DEBUG: cache payment methods found : %v", plans)
 	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
-	b, _ := json.Marshal(paymentMethodsResponse.Plans)
-	return C.CString(string(b))
+	err := json.Unmarshal(plans, paymentMethodsResponse)
+	log.Debugf("DEBUG: cache payment methods found : %v", paymentMethodsResponse.Plans)
+	plansByte, err := json.Marshal(paymentMethodsResponse.Plans)
+	if err != nil {
+		return sendError(errors.New("error fetching payment methods: %v", err))
+	}
+	return C.CString(string(plansByte))
 }
 
 //export paymentMethodsV3
@@ -232,11 +234,11 @@ func paymentMethodsV4() *C.char {
 		return sendError(errors.New("Payment methods not found"))
 	}
 	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
-	err := proto.Unmarshal(plans, paymentMethodsResponse)
+	err := json.Unmarshal(plans, paymentMethodsResponse)
 	if err != nil {
 		return sendError(err)
 	}
-	log.Debugf("DEBUG: cache payment methods: %v", paymentMethodsResponse)
+	log.Debugf("DEBUG: cache payment methods: %v", paymentMethodsResponse.Providers)
 	b, _ := json.Marshal(paymentMethodsResponse)
 	return C.CString(string(b))
 }
