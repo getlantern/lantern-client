@@ -70,6 +70,9 @@ jobs:
         project: android
 
     - name: Build liblantern.dylib
+      env:
+        SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+        VERSION: "${{ env.version }}"
       run: make darwin
 
     - uses: actions/upload-artifact@v4
