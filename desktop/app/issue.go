@@ -1,15 +1,17 @@
 package app
 
 import (
+	"context"
 	"io"
 	"math"
 	"strconv"
 
+	"github.com/getlantern/lantern-client/desktop/settings"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
+
 	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/issue"
-	"github.com/getlantern/flashlight/v7/pro"
-
 	"github.com/getlantern/flashlight/v7/util"
 	"github.com/getlantern/osversion"
 )
@@ -23,9 +25,10 @@ var (
 )
 
 type issueReporter struct {
-	settings           *Settings
+	settings           *settings.Settings
 	getCapturedPackets func(io.Writer) error
 	getProxies         func() []bandit.Dialer
+	proClient          pro.ProClient
 }
 
 type issueMessage struct {
@@ -44,12 +47,12 @@ type issueMessage struct {
 
 // newIssueReporter creates a new issue reporter that can be used to send issue reports
 // to the Lantern team.
-func newIssueReporter(settings *Settings, getCapturedPackets func(io.Writer) error,
-	getProxies func() []bandit.Dialer) *issueReporter {
+func newIssueReporter(app *App) *issueReporter {
 	return &issueReporter{
-		settings:           settings,
-		getCapturedPackets: getCapturedPackets,
-		getProxies:         getProxies,
+		getCapturedPackets: app.getCapturedPackets,
+		getProxies:         app.getProxies,
+		proClient:          app.proClient,
+		settings:           app.settings,
 	}
 }
 
@@ -80,7 +83,8 @@ func (reporter *issueReporter) sendIssueReport(msg *issueMessage) error {
 		return err
 	}
 	subscriptionLevel := "free"
-	if isPro, _ := pro.IsProUser(settings); isPro {
+	ctx := context.Background()
+	if isPro, _ := IsProUser(ctx, reporter.proClient, settings.GetUserID()); isPro {
 		subscriptionLevel = "pro"
 	}
 	var osVersion string

@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/getlantern/autoupdate"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/proxied"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 )
 
 var (
@@ -76,7 +76,7 @@ func InstallFinished(deviceInfo DeviceInfo, success bool) {
 
 func buildUpdateCfg() *autoupdate.Config {
 	return &autoupdate.Config{
-		CurrentVersion: ApplicationVersion,
+		CurrentVersion: common.ApplicationVersion,
 		URL:            fmt.Sprintf("https://update.getlantern.org/update/%s", strings.ToLower(common.DefaultAppName)),
 		HTTPClient:     updateClient,
 		PublicKey:      []byte(autoupdate.PackagePublicKey),

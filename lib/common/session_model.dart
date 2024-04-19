@@ -492,6 +492,17 @@ class SessionModel extends Model {
 
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
+    if (plan.price[currency] == null) {
+      final splitted = plan.id.split('-');
+      if (splitted.length == 3) {
+        currency = splitted[1];
+      }
+    }
+
+    if (plan.price[currency] == null) {
+      return plan;
+    }
+    final price = plan.price[currency] as Int64;
     if (plan.price[currency] != null) {
       final price = plan.price[currency] as Int64;
       plan.totalCost = formatCurrency.format(price.toInt() / 100.0).toString();
@@ -501,6 +512,11 @@ class SessionModel extends Model {
           .format(plan.monthlyCost((price.toDouble() / 100.0)))
           .toString();
     }
+    plan.totalCost = formatCurrency.format(price.toInt() / 100).toString();
+    plan.totalCostBilledOneTime =
+        formatCurrency.format(price.toInt() / 100).toString() +
+            ' ' +
+            'billed_one_time'.i18n;
     return plan;
   }
 

@@ -38,16 +38,18 @@ message Plan {
   bool bestValue = 3;
   int64 usdPrice = 4;
   map<string, int64> price = 5;
-  string totalCostBilledOneTime = 6;
-  string oneMonthCost = 7;
-  string totalCost = 8;
-  string formattedBonus = 9;
-  string renewalText = 10;
+  map<string, int64> expectedMonthlyPrice = 6;
+  string totalCostBilledOneTime = 7;
+  string oneMonthCost = 8;
+  string totalCost = 9;
+  string formattedBonus = 10;
+  string renewalText = 11;
 }
 
 message PaymentProviders {
   string name = 1;
-  repeated string logoUrls = 2;
+  map<string, string> data = 2;
+  repeated string logoUrls = 3;
 }
 
 message PaymentMethod {
@@ -60,21 +62,41 @@ message User {
   string email = 2;
   string telephone = 3;
   string userStatus = 4;
-  string locale = 5;
-  int64 expiration = 6;
-  repeated Device devices = 7;
-  string code = 8;
-  int64 expireAt = 9;
-  string referral = 10;
-  string token = 11;
-  bool yinbiEnabled = 12;
+  string userLevel = 5;
+  string locale = 6;
+  int64 expiration = 7;
+  repeated Device devices = 8;
+  string code = 9;
+  int64 expireAt = 10;
+  string referral = 11;
+  string token = 12;
+  bool yinbiEnabled = 13;
 }
 
 // API
-message APIResponse {
+message BaseResponse {
   string status = 1;
   string error = 2;
   string errorId = 3;
+}
+
+message PaymentRedirectRequest {
+    string plan = 1;
+    string provider = 2;
+    string currency = 3;
+    string email = 4;
+    string deviceName = 5;
+    string countryCode = 6;
+    string locale = 7;
+}
+
+message RedeemResellerCodeRequest {
+  string email = 1;
+  string resellerCode = 2;
+  string deviceName = 3;
+  string currency = 4;
+  string idempotencyKey = 5;
+  string provider = 6;
 }
 
 message PaymentRedirectResponse {
