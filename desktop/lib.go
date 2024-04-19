@@ -412,7 +412,13 @@ func lang() *C.char {
 //export setSelectLang
 func setSelectLang(lang *C.char) {
 	a.SetLanguage(C.GoString(lang))
-
+	// update the payment methods if the language is changed
+	go func() {
+		err := fetchPayentMethodV4()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 }
 
 //export country
