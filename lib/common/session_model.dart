@@ -486,8 +486,6 @@ class SessionModel extends Model {
     String currency = formatCurrency.currencyName != null
         ? formatCurrency.currencyName!.toLowerCase()
         : "usd";
-    final monthlyPrice = item['expectedMonthlyPrice'][currency];
-    //Remove expectedMonthlyPrice due to protobuf update
     item.remove('expectedMonthlyPrice');
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
@@ -506,9 +504,6 @@ class SessionModel extends Model {
       plan.totalCost = formatCurrency.format(price.toInt() / 100.0).toString();
       plan.totalCostBilledOneTime =
           '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
-      plan.oneMonthCost = formatCurrency
-          .format(plan.monthlyCost((price.toDouble() / 100.0)))
-          .toString();
     }
     return plan;
   }
