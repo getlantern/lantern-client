@@ -176,6 +176,10 @@ class SessionModel(
 
             "userStatus" -> userStatus(result)
             "updatePaymentPlans" -> updatePaymentMethods(result)
+            "setLanguage" -> {
+                LanternApp.getSession().setLanguage(call.argument("lang"))
+                fetchPaymentMethods(result)
+            }
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -203,10 +207,6 @@ class SessionModel(
 
             "acceptTerms" -> {
                 LanternApp.getSession().acceptTerms()
-            }
-
-            "setLanguage" -> {
-                LanternApp.getSession().setLanguage(call.argument("lang"))
             }
 
             "setPaymentTestMode" -> {
