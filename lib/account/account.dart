@@ -62,15 +62,14 @@ class AccountMenu extends StatelessWidget {
                 )
               : const SizedBox(),
         ),
-      if (Platform.isAndroid)
-        ListItemFactory.settingsItem(
-          key: AppKeys.upgrade_lantern_pro,
-          icon: ImagePaths.pro_icon_black,
-          content: 'Upgrade to Lantern Pro'.i18n,
-          onTap: () {
-            upgradeToLanternPro(context);
-          },
-        ),
+      ListItemFactory.settingsItem(
+        key: AppKeys.upgrade_lantern_pro,
+        icon: ImagePaths.pro_icon_black,
+        content: 'Upgrade to Lantern Pro'.i18n,
+        onTap: () {
+          upgradeToLanternPro(context);
+        },
+      ),
       ListItemFactory.settingsItem(
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,

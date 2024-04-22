@@ -507,23 +507,27 @@ class SessionModel extends Model {
     print("called plans $item");
     final locale = Localization.locale;
     final formatCurrency = NumberFormat.simpleCurrency(locale: locale);
-    final currency = formatCurrency.currencyName != null
+    String currency = formatCurrency.currencyName != null
         ? formatCurrency.currencyName!.toLowerCase()
         : "usd";
-    final monthlyPrice = item['expectedMonthlyPrice'][currency];
-    //Remove expectedMonthlyPrice due to protobuf update
     item.remove('expectedMonthlyPrice');
-
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
+    if (plan.price[currency] == null) {
+      final splitted = plan.id.split('-');
+      if (splitted.length == 3) {
+        currency = splitted[1];
+      }
+    }
+
+    if (plan.price[currency] == null) {
+      return plan;
+    }
     if (plan.price[currency] != null) {
       final price = plan.price[currency] as Int64;
       plan.totalCost = formatCurrency.format(price.toInt() / 100.0).toString();
       plan.totalCostBilledOneTime =
           '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
-      plan.oneMonthCost = formatCurrency
-          .format(plan.monthlyCost((price.toDouble() / 100.0)))
-          .toString();
     }
     return plan;
   }

@@ -80,6 +80,9 @@ jobs:
 
       - name: Build liblantern.dll
         if: ${{inputs.update-suffix == 'x64'}}
+        env:
+          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+          VERSION: "${{ env.version }}"
         run: |
           make windows64
 

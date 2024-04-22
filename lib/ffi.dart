@@ -1,5 +1,4 @@
 import 'dart:ffi'; // For FFI
-import 'dart:io';
 
 import 'package:ffi/src/utf8.dart';
 import 'package:lantern/common/common.dart';
@@ -50,6 +49,10 @@ Future<User> ffiUserData() async {
 
 // checkAPIError throws a PlatformException if the API response contains an error
 void checkAPIError(result, errorMessage) {
+  if(result is String){
+    final  errorMessageMap = jsonDecode(result);
+    throw PlatformException(code:errorMessageMap.toString(), message: errorMessage);
+  }
   if (result.error != "") {
     throw PlatformException(code: result.error, message: errorMessage);
   }
@@ -60,7 +63,7 @@ Future<String> ffiApproveDevice(String code) async {
       .approveDevice(code.toPointerChar())
       .cast<Utf8>()
       .toDartString();
-  final result = APIResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
   checkAPIError(result, 'wrong_device_linking_code'.i18n);
   // refresh user data after successfully linking device
   await ffiUserData();
@@ -95,19 +98,14 @@ Future<String> ffiEmailExists(String email) async => await _bindings
     .cast<Utf8>()
     .toDartString();
 
-Pointer<Utf8> ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
-  final result =
-      _bindings.redeemResellerCode(email, currency, deviceName, resellerCode);
-  // Check for error
-  // it means you need to check r1
-  if (result.r1 != nullptr) {
-    // Got error throw error to show error ui state
-    final errorCode = result.r1.cast<Utf8>().toDartString();
-    throw PlatformException(code: errorCode, message: 'wrong_seller_code'.i18n);
-  }
+void ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
+  final result = _bindings
+      .redeemResellerCode(email, currency, deviceName, resellerCode)
+      .cast<Utf8>()
+      .toDartString();
+  checkAPIError(result, 'wrong_seller_code'.i18n);
   // if successful redeeming a reseller code, immediately refresh Pro user data
   ffiProUser();
-  return result.r0.cast<Utf8>();
 }
 
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();

@@ -12,7 +12,6 @@ import (
 
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/client"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/proxied"
@@ -21,6 +20,7 @@ import (
 	replicaService "github.com/getlantern/replica/service"
 
 	"github.com/getlantern/lantern-client/internalsdk/analytics"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/doh"
 
 	"github.com/gorilla/mux"
@@ -43,7 +43,7 @@ type ReplicaServer struct {
 // If enabled, the server is started lazily and the server's random address is reported to Session.SetReplicaAddr.
 // If disabled after having been enabled, the server keeps running and ReplicaAddr remains set to its old value.
 func (s *ReplicaServer) CheckEnabled() {
-	if !s.Session.ForceReplica() && !s.Flashlight.FeatureEnabled(config.FeatureReplica, ApplicationVersion) {
+	if !s.Session.ForceReplica() && !s.Flashlight.FeatureEnabled(config.FeatureReplica, common.ApplicationVersion) {
 		// Replica is not enabled
 		log.Debug("Replica not enabled")
 		return

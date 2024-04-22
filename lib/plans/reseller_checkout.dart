@@ -75,8 +75,6 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
 
   @override
   void dispose() {
-    emailController.dispose();
-    resellerCodeController.dispose();
     super.dispose();
   }
 

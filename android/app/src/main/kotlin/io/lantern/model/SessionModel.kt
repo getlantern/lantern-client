@@ -152,7 +152,6 @@ class SessionModel(
             }
 
 
-
             "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
                 call.argument("email")!!,
                 call.argument("planID")!!,
@@ -177,6 +176,10 @@ class SessionModel(
 
             "userStatus" -> userStatus(result)
             "updatePaymentPlans" -> updatePaymentMethods(result)
+            "setLanguage" -> {
+                LanternApp.getSession().setLanguage(call.argument("lang"))
+                fetchPaymentMethods(result)
+            }
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -185,11 +188,14 @@ class SessionModel(
         return when (call.method) {
             "openWebview" -> {
                 val url = call.argument("url") ?: ""
-                url.isNotEmpty().let {
+                if (url.isNotEmpty()) {
                     val intent = Intent(activity, WebViewActivity_::class.java)
                     intent.putExtra("url", url.trim())
                     activity.startActivity(intent)
+                } else {
+                    throw IllegalArgumentException("No URL provided for webview")
                 }
+
             }
 
             "trackUserAction" -> {
@@ -201,10 +207,6 @@ class SessionModel(
 
             "acceptTerms" -> {
                 LanternApp.getSession().acceptTerms()
-            }
-
-            "setLanguage" -> {
-                LanternApp.getSession().setLanguage(call.argument("lang"))
             }
 
             "setPaymentTestMode" -> {
@@ -309,7 +311,10 @@ class SessionModel(
             override fun onSuccess(
                 proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>
             ) {
-                Logger.debug(TAG,"Successfully payment proplan $proPlans and methods $paymentMethods" )
+                Logger.debug(
+                    TAG,
+                    "Successfully payment proplan $proPlans and methods $paymentMethods"
+                )
                 processPaymentMethods(proPlans, paymentMethods)
                 result?.success("Payment method successfully updated")
             }
