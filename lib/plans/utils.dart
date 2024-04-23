@@ -110,7 +110,7 @@ Future<void> openDesktopWebview(
       await AppBrowser.openWindowsWebview(redirectUrl);
       break;
     case 'macos':
-      final browser = AppBrowser(onClose: () async=> onClose,);
+      final browser = AppBrowser(onClose: () async=> onClose(),);
       await browser.openMacWebview(redirectUrl);
       break;
     default:
