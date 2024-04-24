@@ -1,4 +1,6 @@
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/ui/app_webview.dart';
 
 const defaultTimeoutDuration = Duration(seconds: 10);
 
@@ -70,7 +72,7 @@ void showSuccessDialog(BuildContext context, bool isPro, [bool? isReseller]) {
   );
 }
 
-enum Providers { stripe, btcpay, freekassa }
+enum Providers { stripe, btcpay, freekassa, fropay, paymentwall }
 
 extension ProviderExtension on String {
   Providers toPaymentEnum() {
@@ -80,7 +82,40 @@ extension ProviderExtension on String {
     if (this == "freekassa") {
       return Providers.freekassa;
     }
-
+    if (this == "fropay") {
+      return Providers.fropay;
+    }
+    if (this == "paymentwall") {
+      return Providers.paymentwall;
+    }
     return Providers.btcpay;
+  }
+}
+
+extension PlansExtension on Plan {
+  double monthlyCost(double totalPrice) {
+    if (id.startsWith('1y')) {
+      return totalPrice / 12;
+    }
+
+    return totalPrice / 24;
+  }
+}
+
+Future<void> openDesktopWebview(
+    {required BuildContext context,
+    required String redirectUrl,
+    required VoidCallback onClose}) async {
+  switch (Platform.operatingSystem) {
+    case 'windows':
+      await AppBrowser.openWindowsWebview(redirectUrl);
+      break;
+    case 'macos':
+      //Open with system browser browser on mac due to not able to by pass humans verification.
+      await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
+      break;
+    default:
+      await context.pushRoute(
+          AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
   }
 }

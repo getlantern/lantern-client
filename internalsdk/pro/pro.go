@@ -43,6 +43,7 @@ type ProClient interface {
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
+	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
 	Plans(ctx context.Context) (*PlansResponse, error)
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
@@ -134,6 +135,7 @@ func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedi
 }
 
 // PaymentMethods returns a list of plans along with payment providers and available payment methods
+// This methods has been deparacted in flavor of PaymentMethodsV4
 func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error) {
 	var resp PaymentMethodsResponse
 	err := c.webclient.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
@@ -142,6 +144,34 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 	}
 	b, _ := json.Marshal(resp)
 	log.Debugf("PaymentMethods response is %v", string(b))
+	return &resp, nil
+}
+
+// PaymentMethods returns a list of plans, payment providers and logo available payment methods
+func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error) {
+	var resp PaymentMethodsResponse
+	err := c.webclient.GetJSON(ctx, "/plans-v4", c.defaultParams(), &resp)
+	if err != nil {
+		return nil, err
+	}
+	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
+		return nil, errors.New("error received from server: %v", resp.BaseResponse.Error)
+	}
+	log.Debugf("PaymentMethods-V4 plans is %v", resp.Plans)
+	for i, plan := range resp.Plans {
+		parts := strings.Split(plan.Id, "-")
+		if len(parts) != 3 {
+			continue
+		}
+		cur := parts[1]
+		if currency, ok := accounting.LocaleInfo[strings.ToUpper(cur)]; ok {
+			if oneMonthCost, ok2 := plan.ExpectedMonthlyPrice[strings.ToLower(cur)]; ok2 {
+				ac := accounting.Accounting{Symbol: currency.ComSymbol, Precision: 2}
+				amount := decimal.NewFromInt(oneMonthCost).Div(decimal.NewFromInt(100))
+				resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
+			}
+		}
+	}
 	return &resp, nil
 }
 
@@ -176,6 +206,7 @@ func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
 	}
+	log.Debugf("UserCreate response is %v", resp)
 	return &resp, nil
 }
 

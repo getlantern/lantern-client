@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageView
 import android.widget.ProgressBar
 import com.google.gson.JsonObject
 import okhttp3.FormBody
@@ -47,6 +48,11 @@ open class FreeKassaActivity : BaseFragmentActivity() {
 
     @ViewById
     @JvmField
+    protected var closeButton: ImageView? = null
+
+
+    @ViewById
+    @JvmField
     protected var progressBar: ProgressBar? = null
 
     @Extra
@@ -64,6 +70,9 @@ open class FreeKassaActivity : BaseFragmentActivity() {
     @AfterViews
     fun afterViews() {
         assertIntentExtras()
+        closeButton?.setOnClickListener(View.OnClickListener {
+            finish()
+        })
         makeRequestToPrepayHandler(
             { transactionID: String -> displayWebView(transactionID) },
             { error: String -> showErrorDialog(error) }

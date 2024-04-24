@@ -1,5 +1,6 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/plans/utils.dart';
 import 'package:lantern/replica/common.dart';
 
 import 'common.dart';
@@ -479,8 +480,12 @@ class SessionModel extends Model {
   }
 
   Plan planFromJson(Map<String, dynamic> item) {
-    final formatCurrency = NumberFormat.simpleCurrency();
-    var currency = formatCurrency.currencyName != null ? formatCurrency.currencyName!.toLowerCase() : "usd";
+    print("called plans $item");
+    final locale = Localization.locale;
+    final formatCurrency = NumberFormat.simpleCurrency(locale: locale);
+    String currency = formatCurrency.currencyName != null
+        ? formatCurrency.currencyName!.toLowerCase()
+        : "usd";
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
     if (plan.price[currency] == null) {
@@ -493,39 +498,32 @@ class SessionModel extends Model {
     if (plan.price[currency] == null) {
       return plan;
     }
-    final price = plan.price[currency] as Int64;
     if (plan.price[currency] != null) {
       final price = plan.price[currency] as Int64;
-      plan.totalCost = formatCurrency.format(price.toInt() / 100).toString();
+      plan.totalCost = formatCurrency.format(price.toInt() / 100.0).toString();
       plan.totalCostBilledOneTime =
-          formatCurrency.format(price.toInt() / 100).toString() +
-              ' ' +
-              'billed_one_time'.i18n;
+          '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
     }
-    plan.totalCost = formatCurrency.format(price.toInt() / 100).toString();
-    plan.totalCostBilledOneTime =
-        formatCurrency.format(price.toInt() / 100).toString() +
-            ' ' +
-            'billed_one_time'.i18n;
     return plan;
   }
 
-  PaymentMethod paymentMethodFromJson(Map<String, dynamic> item) {
-    final formatCurrency = new NumberFormat.simpleCurrency();
-    final List<PaymentMethod> methods = [];
-    for (var m in item["desktop"]) {
-      var paymentMethod = PaymentMethod();
-      paymentMethod.method = m["method"];
-      var providers = <PaymentProviders>[];
-      for (var n in m["providers"]) {
-        var provider = PaymentProviders();
-        provider.name = n["name"];
-        providers.add(provider);
-      }
+  Iterable<PathAndValue<PaymentMethod>> paymentMethodFromJson(item) {
+    final Map<String, dynamic> icons = item['icons'];
+    final desktopProviders = item['providers']["desktop"] as List;
+    return desktopProviders.map((method) {
+      final paymentMethod = PaymentMethod()..method = method["method"];
+      final providers = method["providers"].map<PaymentProviders>((provider) {
+        final List<dynamic> logos = icons[provider["name"]];
+        final List<String> stringLogos =
+            logos.map((logo) => logo.toString()).toList();
+        return PaymentProviders.create()
+          ..logoUrls.addAll(stringLogos)
+          ..name = provider["name"];
+      }).toList();
+
       paymentMethod.providers.addAll(providers);
-      return paymentMethod;
-    }
-    return PaymentMethod();
+      return PathAndValue<PaymentMethod>(paymentMethod.method, paymentMethod);
+    });
   }
 
   Widget plans({
@@ -563,10 +561,11 @@ class SessionModel extends Model {
         },
       );
     }
-    return ffiListBuilder<PaymentMethod>(
-      '/paymentMethods/',
-      ffiPaymentMethods,
-      paymentMethodFromJson,
+
+    return ffiValueBuilder<Iterable<PathAndValue<PaymentMethod>>>(
+      "/paymentMethods/",
+      ffiPaymentMethodsV4,
+      fromJsonModel: paymentMethodFromJson,
       builder: builder,
     );
   }
@@ -689,15 +688,26 @@ class SessionModel extends Model {
         deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
   }
 
-  Future<void> submitBitcoinPayment(
+  Future<String> submitBitcoinPayment(
     String planID,
     String email,
-    String refCode,
   ) async {
     return methodChannel.invokeMethod('submitBitcoinPayment', <String, dynamic>{
       'planID': planID,
+      'email': email
+    }).then((value) => value as String);
+  }
+
+  Future<String> generatePaymentRedirectUrl({
+    required String planID,
+    required String email,
+    required Providers paymentProvider,
+  }) {
+    return methodChannel.invokeMethod(
+        'generatePaymentRedirectUrl', <String, dynamic>{
+      'planID': planID,
       'email': email,
-      'refCode': refCode,
+      'provider': paymentProvider.name
     }).then((value) => value as String);
   }
 
@@ -712,15 +722,14 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-  Future<String> paymentRedirect(
-    String planID,
-    String currency,
-    String email,
-    String provider,
-    String deviceName,
-  ) async {
+  Future<String> paymentRedirectForDesktop(BuildContext context, String planID,
+      String email, String provider) async {
+    String os = Platform.operatingSystem;
+    Locale locale = Localizations.localeOf(context);
+    final format = NumberFormat.simpleCurrency(locale: locale.toString());
+    final currencyName = format.currencyName ?? "USD";
     return await compute(
-        ffiPaymentRedirect, [planID, currency, provider, email, deviceName]);
+        ffiPaymentRedirect, [planID, currencyName, provider, email, os]);
   }
 
   Future<void> submitStripePayment(

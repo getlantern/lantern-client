@@ -151,12 +151,6 @@ class SessionModel(
                 result.success(null)
             }
 
-            "submitBitcoinPayment" -> paymentsUtil.submitBitcoinPayment(
-                call.argument("planID")!!,
-                call.argument("email")!!,
-                call.argument("refCode")!!,
-                result,
-            )
 
             "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
                 call.argument("email")!!,
@@ -173,8 +167,19 @@ class SessionModel(
                 result,
             )
 
+            "generatePaymentRedirectUrl" -> paymentsUtil.generatePaymentRedirectUrl(
+                call.argument("planID")!!,
+                call.argument("email")!!,
+                call.argument("provider")!!,
+                result,
+            )
+
             "userStatus" -> userStatus(result)
             "updatePaymentPlans" -> updatePaymentMethods(result)
+            "setLanguage" -> {
+                LanternApp.getSession().setLanguage(call.argument("lang"))
+                fetchPaymentMethods(result)
+            }
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -183,11 +188,14 @@ class SessionModel(
         return when (call.method) {
             "openWebview" -> {
                 val url = call.argument("url") ?: ""
-                url.isNotEmpty().let {
+                if (url.isNotEmpty()) {
                     val intent = Intent(activity, WebViewActivity_::class.java)
-                    intent.putExtra("url", url)
+                    intent.putExtra("url", url.trim())
                     activity.startActivity(intent)
+                } else {
+                    throw IllegalArgumentException("No URL provided for webview")
                 }
+
             }
 
             "trackUserAction" -> {
@@ -199,10 +207,6 @@ class SessionModel(
 
             "acceptTerms" -> {
                 LanternApp.getSession().acceptTerms()
-            }
-
-            "setLanguage" -> {
-                LanternApp.getSession().setLanguage(call.argument("lang"))
             }
 
             "setPaymentTestMode" -> {
@@ -303,10 +307,14 @@ class SessionModel(
     }
 
     private fun fetchPaymentMethods(result: MethodChannel.Result?) {
-        lanternClient.plansV3(object : LanternHttpClient.PlansV3Callback {
+        lanternClient.plansV4(object : LanternHttpClient.PlansV3Callback {
             override fun onSuccess(
                 proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>
             ) {
+                Logger.debug(
+                    TAG,
+                    "Successfully payment proplan $proPlans and methods $paymentMethods"
+                )
                 processPaymentMethods(proPlans, paymentMethods)
                 result?.success("Payment method successfully updated")
             }

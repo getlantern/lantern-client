@@ -7,6 +7,8 @@ import (
 type PaymentMethodsResponse struct {
 	*protos.BaseResponse `json:",inline"`
 	Providers            map[string][]protos.PaymentMethod `json:"providers"`
+	Plans                []protos.Plan                     `json:"plans"`
+	Logo                 map[string]interface{}            `json:"icons"`
 }
 
 type PaymentRedirectResponse struct {

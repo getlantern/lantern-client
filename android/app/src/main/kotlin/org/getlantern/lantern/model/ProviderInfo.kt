@@ -19,7 +19,10 @@ enum class PaymentProvider(val provider: String) {
     ResellerCode("reseller-code"),
 
     @SerializedName("paymentwall")
-    PaymentWall("paymentwall")
+    PaymentWall("paymentwall"),
+
+    @SerializedName("fropay")
+	Fropay("fropay")
 }
 
 data class ProviderInfo(
@@ -27,4 +30,17 @@ data class ProviderInfo(
     @SerializedName("data") var data: Map<String, Any>,
     var logoUrl: List<String>
 )
+
+fun String.toPaymentProvider(): PaymentProvider? {
+    return when (this) {
+        "stripe" -> PaymentProvider.Stripe
+        "freekassa" -> PaymentProvider.Freekassa
+        "googleplay" -> PaymentProvider.GooglePlay
+        "btcpay" -> PaymentProvider.BTCPay
+        "reseller-code" -> PaymentProvider.ResellerCode
+        "paymentwall" -> PaymentProvider.PaymentWall
+        "fropay" -> PaymentProvider.Fropay
+        else -> null
+    }
+}
 

@@ -91,6 +91,13 @@ func start() {
 		}
 	}()
 
+	go func() {
+		err := fetchPayentMethodV4()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
 	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 
 	go func() {
@@ -128,12 +135,37 @@ func fetchOrCreate() error {
 	settings := a.Settings()
 	userID := settings.GetUserID()
 	if userID == 0 {
-		resp, err := proClient.UserCreate(context.Background())
+		user, err := proClient.UserCreate(context.Background())
 		if err != nil {
 			return errors.New("Could not create new Pro user: %v", err)
 		}
-		settings.SetUserIDAndToken(resp.User.UserId, resp.User.Token)
+		log.Debugf("DEBUG: User created: %v", user)
+		if user.BaseResponse != nil && user.BaseResponse.Error != "" {
+			return errors.New("Could not create new Pro user: %v", err)
+		}
+		settings.SetUserIDAndToken(user.UserId, user.Token)
+		// if the user is new mean we need to fetch the payment methods
+		fetchPayentMethodV4()
 	}
+	return nil
+}
+func fetchPayentMethodV4() error {
+	settings := a.Settings()
+	userID := settings.GetUserID()
+	if userID == 0 {
+		return errors.New("User ID is not set")
+	}
+	resp, err := proClient.PaymentMethodsV4(context.Background())
+	if err != nil {
+		return errors.New("Could not get payment methods: %v", err)
+	}
+	// log.Debugf("DEBUG: Payment methods logos: %v providers %v  and plans in string %v", resp.Logo, resp.Providers, resp.Plans)
+	bytes, err := json.Marshal(resp)
+	if err != nil {
+		return errors.New("Could not marshal payment methods: %v", err)
+	}
+	settings.SetPaymentMethodPlans(bytes)
+
 	return nil
 }
 
@@ -169,21 +201,45 @@ func setSelectTab(ttab *C.char) {
 
 //export plans
 func plans() *C.char {
-	resp, err := proClient.Plans(context.Background())
-	if err != nil {
-		return sendError(errors.New("error fetching plans: %v", err))
+	settings := a.Settings()
+	plans := settings.GetPaymentMethods()
+	if plans == nil {
+		return sendError(errors.New("plans not found"))
 	}
-	b, _ := json.Marshal(resp.Plans)
-	return C.CString(string(b))
+	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
+	err := json.Unmarshal(plans, paymentMethodsResponse)
+	log.Debugf("DEBUG: cache payment methods found : %v", paymentMethodsResponse.Plans)
+	plansByte, err := json.Marshal(paymentMethodsResponse.Plans)
+	if err != nil {
+		return sendError(errors.New("error fetching payment methods: %v", err))
+	}
+	return C.CString(string(plansByte))
 }
 
-//export paymentMethods
-func paymentMethods() *C.char {
+//export paymentMethodsV3
+func paymentMethodsV3() *C.char {
 	resp, err := proClient.PaymentMethods(context.Background())
 	if err != nil {
 		return sendError(errors.New("error fetching payment methods: %v", err))
 	}
 	b, _ := json.Marshal(resp.Providers)
+	return C.CString(string(b))
+}
+
+//export paymentMethodsV4
+func paymentMethodsV4() *C.char {
+	settings := a.Settings()
+	plans := settings.GetPaymentMethods()
+	if plans == nil {
+		return sendError(errors.New("Payment methods not found"))
+	}
+	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
+	err := json.Unmarshal(plans, paymentMethodsResponse)
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("DEBUG: cache payment methods: %v", paymentMethodsResponse.Providers)
+	b, _ := json.Marshal(paymentMethodsResponse)
 	return C.CString(string(b))
 }
 
@@ -356,6 +412,13 @@ func lang() *C.char {
 //export setSelectLang
 func setSelectLang(lang *C.char) {
 	a.SetLanguage(C.GoString(lang))
+	// update the payment methods if the language is changed
+	go func() {
+		err := fetchPayentMethodV4()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 }
 
 //export country
