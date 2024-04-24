@@ -46,7 +46,7 @@ class _AppWebViewState extends State<AppWebView> {
 }
 
 class AppBrowser extends InAppBrowser {
-  final Future<void> Function()? onClose;
+  final VoidCallback? onClose;
   final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
       browserSettings: InAppBrowserSettings(hideUrlBar: true),
       webViewSettings: InAppWebViewSettings(

@@ -105,14 +105,20 @@ extension PlansExtension on Plan {
 Future<void> openDesktopWebview(
     {required BuildContext context,
     required String redirectUrl,
+    required String provider,
     required VoidCallback onClose}) async {
   switch (Platform.operatingSystem) {
     case 'windows':
       await AppBrowser.openWindowsWebview(redirectUrl);
       break;
     case 'macos':
-      //Open with system browser browser on mac due to not able to by pass humans verification.
-      await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
+      if (provider == Providers.fropay.name) {
+        // Open with system browser browser on mac due to not able to by pass humans verification.
+        await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
+      } else {
+        final browser = AppBrowser(onClose: onClose);
+        await browser.openMacWebview(redirectUrl);
+      }
       break;
     default:
       await context.pushRoute(
