@@ -1,3 +1,4 @@
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_webview.dart';
 
@@ -110,8 +111,8 @@ Future<void> openDesktopWebview(
       await AppBrowser.openWindowsWebview(redirectUrl);
       break;
     case 'macos':
-      final browser = AppBrowser(onClose: () async=> onClose(),);
-      await browser.openMacWebview(redirectUrl);
+      //Open with system browser browser on mac due to not able to by pass humans verification.
+      await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
       break;
     default:
       await context.pushRoute(
