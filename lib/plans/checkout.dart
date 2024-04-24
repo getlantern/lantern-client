@@ -373,7 +373,7 @@ class _CheckoutState extends State<Checkout>
   void _proceedWithPaymentRedirect(String provider) async {
     try {
       context.loaderOverlay.show();
-      final froPayURL = await sessionModel.paymentRedirectForDesktop(
+      final redirectUrl = await sessionModel.paymentRedirectForDesktop(
         context,
         widget.plan.id,
         emailController.text,
@@ -382,7 +382,7 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       openDesktopWebview(
-          context: context, redirectUrl: froPayURL, onClose: checkProUser);
+          context: context, redirectUrl: redirectUrl, onClose: checkProUser);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
