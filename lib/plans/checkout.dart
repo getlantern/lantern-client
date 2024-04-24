@@ -288,7 +288,6 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
@@ -382,7 +381,10 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       openDesktopWebview(
-          context: context, redirectUrl: redirectUrl, onClose: checkProUser);
+          context: context,
+          provider: provider,
+          redirectUrl: redirectUrl,
+          onClose: checkProUser);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
