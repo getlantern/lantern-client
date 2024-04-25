@@ -113,7 +113,7 @@ Future<void> openDesktopWebview(
       break;
     case 'macos':
       if (provider == Providers.fropay.name) {
-        // Open with system browser browser on mac due to not able to by pass humans verification.
+        // Open with system browser browser on mac due to not able to by pass human verification.
         await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
       } else {
         final browser = AppBrowser(onClose: onClose);

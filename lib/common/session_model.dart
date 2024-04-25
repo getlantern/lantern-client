@@ -479,6 +479,11 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('updatePaymentPlans');
   }
 
+  Future<bool> hasUpdatePlansOrBuy() async {
+    return compute(ffiHasPlanUpdateOrBuy,'');
+  }
+
+
   Plan planFromJson(Map<String, dynamic> item) {
     print("called plans $item");
     final locale = Localization.locale;

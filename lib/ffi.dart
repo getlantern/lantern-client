@@ -80,6 +80,15 @@ Future<void> ffiRemoveDevice(String deviceId) async {
   return;
 }
 
+FutureOr<bool> ffiHasPlanUpdateOrBuy(dynamic context)  {
+  final json = _bindings
+      .hasPlanUpdatedOrBuy()
+      .cast<Utf8>()
+      .toDartString();
+  print('Result of hasPlanUpdatedOrBuy: $json');
+  return json=='true';
+}
+
 Pointer<Utf8> ffiDevices() => _bindings.devices().cast<Utf8>();
 
 Pointer<Utf8> ffiDevelopmentMode() => _bindings.developmentMode().cast<Utf8>();
