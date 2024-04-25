@@ -2,14 +2,12 @@ package app
 
 import (
 	"context"
-	"io"
 	"math"
 	"strconv"
 
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 
-	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/util"
@@ -25,10 +23,8 @@ var (
 )
 
 type issueReporter struct {
-	settings           *settings.Settings
-	getCapturedPackets func(io.Writer) error
-	getProxies         func() []bandit.Dialer
-	proClient          pro.ProClient
+	settings  *settings.Settings
+	proClient pro.ProClient
 }
 
 type issueMessage struct {
@@ -49,25 +45,14 @@ type issueMessage struct {
 // to the Lantern team.
 func newIssueReporter(app *App) *issueReporter {
 	return &issueReporter{
-		getCapturedPackets: app.getCapturedPackets,
-		getProxies:         app.getProxies,
-		proClient:          app.proClient,
-		settings:           app.settings,
+		proClient: app.proClient,
+		settings:  app.settings,
 	}
 }
 
 // sendIssueReport creates an issue report from the given UI message and submits it to
 // lantern-cloud/issue service, which is then forwarded to the ticket system via API
 func (reporter *issueReporter) sendIssueReport(msg *issueMessage) error {
-
-	if msg.RunDiagnostics {
-		var err error
-		msg.DiagnosticsYAML, msg.ProxyCapture, err = reporter.runDiagnostics()
-		if err != nil {
-			log.Errorf("error running diagnostics: %v", err)
-		}
-	}
-
 	settings := reporter.settings
 	uc := common.NewUserConfigData(
 		common.DefaultAppName,

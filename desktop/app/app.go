@@ -3,9 +3,8 @@ package app
 import (
 	"context"
 	"fmt"
+	"io"
 	"io/fs"
-	"io/ioutil"
-	"math/rand"
 	"net"
 	"net/http"
 	"os"
@@ -36,7 +35,6 @@ import (
 	"github.com/getlantern/memhelper"
 	notify "github.com/getlantern/notifier"
 	"github.com/getlantern/profiling"
-	"github.com/getlantern/trafficlog-flashlight/tlproc"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
@@ -57,8 +55,6 @@ var (
 func init() {
 	autoupdate.Version = ApplicationVersion
 	autoupdate.PublicKey = []byte(packagePublicKey)
-
-	rand.Seed(time.Now().UnixNano())
 }
 
 // App is the core of the Lantern desktop application, in the form of a library.
@@ -82,23 +78,6 @@ type App struct {
 	translations eventual.Value
 
 	flashlight *flashlight.Flashlight
-
-	// If both the trafficLogLock and proxiesLock are needed, the trafficLogLock should be obtained
-	// first. Keeping the order consistent avoids deadlocking.
-
-	// Log of network traffic to and from the proxies. Used to attach packet capture files to
-	// reported issues. Nil if traffic logging is not enabled.
-	trafficLog     *tlproc.TrafficLogProcess
-	trafficLogLock sync.RWMutex
-
-	// Also protected by trafficLogLock.
-	captureSaveDuration time.Duration
-
-	// proxies are tracked by the application solely for data collection purposes. This value should
-	// not be changed, except by Flashlight.onProxiesUpdate. State-changing methods on the dialers
-	// should not be called. In short, this slice and its elements should be treated as read-only.
-	proxies     []bandit.Dialer
-	proxiesLock sync.RWMutex
 
 	issueReporter *issueReporter
 	proClient     proclient.ProClient
@@ -280,7 +259,7 @@ func (app *App) Run(isMain bool) {
 						Title:      i18n.T("BACKEND_CONFIG_SAVE_ERROR_TITLE"),
 						Message:    i18n.T("BACKEND_CONFIG_SAVE_ERROR_MESSAGE", i18n.T(translationAppName)),
 						ClickLabel: i18n.T("BACKEND_CLICK_LABEL_GOT_IT"),
-						IconURL:    app.AddToken("/img/lantern_logo.png"),
+						IconURL:    "/img/lantern_logo.png",
 					}
 					_ = notifier.ShowNotification(note, "alert-prompt")
 				})
@@ -319,8 +298,6 @@ func (app *App) checkEnabledFeatures() {
 
 	log.Debugf("Starting enabled features: %v", enabledFeatures)
 	//go app.startReplicaIfNecessary(enabledFeatures)
-	enableTrafficLog := app.isFeatureEnabled(enabledFeatures, config.FeatureTrafficLog)
-	go app.toggleTrafficLog(enableTrafficLog)
 }
 
 // startFeaturesService starts a new features service that dispatches features to any relevant listeners.
@@ -366,14 +343,9 @@ func (app *App) beforeStart(listenAddr string) {
 	}
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour,
 		func() (bool, bool) { return app.IsProUser(context.Background()) }, func() string {
-			return app.AddToken("/img/lantern_logo.png")
+			return "/img/lantern_logo.png"
 		}))
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
-}
-
-func (app *App) isFeatureEnabled(features map[string]bool, feature string) bool {
-	val, ok := features[feature]
-	return ok && val
 }
 
 // Connect turns on proxying
@@ -471,30 +443,6 @@ func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
 	}
-	app.trafficLogLock.Lock()
-	app.proxiesLock.Lock()
-	app.proxies = proxies
-	if app.trafficLog != nil {
-		proxyAddresses := []string{}
-		for _, p := range proxies {
-			proxyAddresses = append(proxyAddresses, p.Addr())
-		}
-		if err := app.trafficLog.UpdateAddresses(proxyAddresses); err != nil {
-			log.Errorf("failed to update traffic log addresses: %v", err)
-		}
-	}
-	app.proxiesLock.Unlock()
-	app.trafficLogLock.Unlock()
-}
-
-// getProxies returns the currently configured proxies. State-changing methods on these dialers
-// should not be called. In short, the elements of this slice should be treated as read-only.
-func (app *App) getProxies() []bandit.Dialer {
-	app.proxiesLock.RLock()
-	copied := make([]bandit.Dialer, len(app.proxies))
-	copy(copied, app.proxies)
-	app.proxiesLock.RUnlock()
-	return copied
 }
 
 // AddExitFunc adds a function to be called before the application exits.
@@ -655,35 +603,6 @@ func ShouldReportToSentry() bool {
 	return !uicommon.IsDevEnvironment()
 }
 
-// OnTrayShow indicates the user has selected to show lantern from the tray.
-func (app *App) OnTrayShow() {
-	app.analyticsSession.Event("systray-menu", "show")
-}
-
-// OnTrayUpgrade indicates the user has selected to upgrade lantern from the tray.
-func (app *App) OnTrayUpgrade() {
-	app.analyticsSession.Event("systray-menu", "upgrade")
-}
-
-// PlansURL returns the URL for accessing the checkout/plans page directly.
-func (app *App) PlansURL() string {
-	return "#/plans"
-}
-
-// AdTrackURL returns the URL for adding tracking on injected ads.
-func (app *App) AdTrackURL() string {
-	return "/ad_track"
-}
-
-// AddToken adds our secure token to a given request path.
-func (app *App) AddToken(path string) string {
-	return path
-}
-
-func (app *App) Settings() *settings.Settings {
-	return app.settings
-}
-
 // GetTranslations accesses translations with the given filename
 func (app *App) GetTranslations(filename string) ([]byte, error) {
 	log.Tracef("Accessing translations %v", filename)
@@ -695,5 +614,9 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not get traslation for file name: %v, %w", filename, err)
 	}
-	return ioutil.ReadAll(f)
+	return io.ReadAll(f)
+}
+
+func (app *App) Settings() *settings.Settings {
+	return app.settings
 }
