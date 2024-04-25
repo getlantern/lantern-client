@@ -102,12 +102,11 @@ extension PlansExtension on Plan {
   }
 }
 
-Future<void> openDesktopWebview({
-  required BuildContext context,
-  required String redirectUrl,
-  required String provider,
-  required VoidCallback onClose,
-}) async {
+Future<void> openDesktopWebview(
+    {required BuildContext context,
+    required String redirectUrl,
+    required String provider,
+    required VoidCallback onClose}) async {
   switch (Platform.operatingSystem) {
     case 'windows':
       await AppBrowser.openWindowsWebview(redirectUrl);
