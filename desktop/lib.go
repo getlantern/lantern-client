@@ -260,13 +260,11 @@ func hasPlanUpdatedOrBuy() *C.char {
 	//Get the cached user data
 	uc := userConfig(a.Settings())
 	cahcheUserData, isOldFound := app.GetUserDataFast(context.Background(), uc.GetUserID())
-	log.Debugf("DEBUG: cached user data: Expiration %v UserLevel %v", cahcheUserData.Expiration, cahcheUserData.UserLevel)
 	//Get latest user data
 	resp, err := proClient.UserData(context.Background())
 	if err != nil {
 		return sendError(err)
 	}
-	log.Debugf("DEBUG: latest user data: Expiration %v UserLevel %v", resp.User.Expiration, resp.User.UserLevel)
 	if isOldFound {
 		if cahcheUserData.Expiration < resp.User.Expiration {
 			// New data has a later expiration
