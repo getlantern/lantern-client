@@ -510,7 +510,6 @@ class SessionModel extends Model {
     String currency = formatCurrency.currencyName != null
         ? formatCurrency.currencyName!.toLowerCase()
         : "usd";
-    item.remove('expectedMonthlyPrice');
     final res = jsonEncode(item);
     final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
     if (plan.price[currency] == null) {

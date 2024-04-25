@@ -288,7 +288,6 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-
   Future<void> resolvePaymentRoute() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
@@ -308,13 +307,13 @@ class _CheckoutState extends State<Checkout>
       case Providers.freekassa:
         _proceedWithFreekassa();
         break;
-      case Providers.paymentwall:
+      case Providers.fropay:
         if (isDesktop()) {
           _proceedWithPaymentRedirect(Providers.fropay.name);
           return;
         }
         _proceedWithFroPay();
-      case Providers.fropay:
+      case Providers.paymentwall:
         if (isDesktop()) {
           _proceedWithPaymentRedirect(Providers.paymentwall.name);
           return;
@@ -373,7 +372,7 @@ class _CheckoutState extends State<Checkout>
   void _proceedWithPaymentRedirect(String provider) async {
     try {
       context.loaderOverlay.show();
-      final froPayURL = await sessionModel.paymentRedirectForDesktop(
+      final redirectUrl = await sessionModel.paymentRedirectForDesktop(
         context,
         widget.plan.id,
         emailController.text,
@@ -382,7 +381,10 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       openDesktopWebview(
-          context: context, redirectUrl: froPayURL, onClose: checkProUser);
+          context: context,
+          provider: provider,
+          redirectUrl: redirectUrl,
+          onClose: checkProUser);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);

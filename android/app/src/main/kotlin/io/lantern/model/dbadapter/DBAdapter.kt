@@ -9,7 +9,7 @@ import net.sqlcipher.database.SQLiteDatabase
 import java.util.UUID
 
 open class DBAdapter(protected val db: SQLiteDatabase) : DB {
-    override fun exec(sql: String?, args: Values?) = db.execSQL(sql, args?.toBindArgs())
+    override fun exec(sql: String, args: Values?) = db.execSQL(sql, args!!.toBindArgs())
 
     override fun query(sql: String?, args: Values?) =
         RowsAdapter(db.rawQuery(sql, args?.toBindArgs()))
@@ -54,7 +54,7 @@ class RowsAdapter(private val cursor: Cursor) : Rows {
     override fun close() = cursor.close()
 }
 
-fun Values.toBindArgs(): Array<Any> = Array<Any>(len().toInt()) {
+fun Values.toBindArgs(): Array<Any?> = Array<Any?>(len().toInt()) {
     val arg = get(it.toLong())
     when (arg.type) {
         0L -> arg.bytes()

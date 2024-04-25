@@ -1,3 +1,4 @@
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_webview.dart';
 
@@ -104,6 +105,7 @@ extension PlansExtension on Plan {
 Future<void> openDesktopWebview(
     {required BuildContext context,
     required String redirectUrl,
+    required String provider,
     required VoidCallback onClose}) async {
   switch (Platform.operatingSystem) {
     case 'windows':
@@ -112,6 +114,13 @@ Future<void> openDesktopWebview(
     case 'macos':
       final browser = AppBrowser(onClose: () async=> onClose,);
       await browser.openMacWebview(redirectUrl);
+      if (provider == Providers.fropay.name) {
+        // Open with system browser browser on mac due to not able to by pass humans verification.
+        await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
+      } else {
+        final browser = AppBrowser(onClose: onClose);
+        await browser.openMacWebview(redirectUrl);
+      }
       break;
     default:
       await context.pushRoute(
