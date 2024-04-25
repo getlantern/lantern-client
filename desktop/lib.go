@@ -459,7 +459,7 @@ func acceptedTermsVersion() *C.char {
 func proUser() *C.char {
 	ctx := context.Background()
 	// refresh user data when home page is loaded on desktop
-	go proClient.UserData(ctx)
+	go getUserData()
 	uc := a.Settings()
 	if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
 		return C.CString("true")

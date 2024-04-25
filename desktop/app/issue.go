@@ -84,7 +84,7 @@ func (reporter *issueReporter) sendIssueReport(msg *issueMessage) error {
 	}
 	subscriptionLevel := "free"
 	ctx := context.Background()
-	if isPro, _ := IsProUser(ctx, reporter.proClient, settings.GetUserID()); isPro {
+	if isPro, _ := IsProUser(ctx, reporter.proClient, settings); isPro {
 		subscriptionLevel = "pro"
 	}
 	var osVersion string
