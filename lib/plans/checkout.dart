@@ -477,18 +477,24 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-
+  ///This methods is responsible for polling for user data
+  ///so if user has done payment or renew plans and show
   void hasPlansUpdateOrBuy() {
+    appLogger.i("calling hasPlansUpdateOrBuy to update plans or buy");
     try {
-      retry(() async {
-        /// Polling for userData that user has updates plans or buy
-        final plansUpdated = await sessionModel.hasUpdatePlansOrBuy();
-        if (plansUpdated) {
-          if (mounted) {
-            showSuccessDialog(context, widget.isPro);
+      retry(
+        () async {
+          /// Polling for userData that user has updates plans or buy
+          final plansUpdated = await sessionModel.hasUpdatePlansOrBuy();
+          if (plansUpdated) {
+            if (mounted) {
+              showSuccessDialog(context, widget.isPro);
+            }
           }
-        }
-      });
+        },
+        delayFactor: const Duration(seconds: 2),
+        retryIf: (e) => e is NoPlansUpdate,
+      );
     } catch (e) {
       appLogger.e('Error while polling for plans update or buy', error: e);
     }

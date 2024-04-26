@@ -258,6 +258,7 @@ func getUserData() (*protos.User, error) {
 //export hasPlanUpdatedOrBuy
 func hasPlanUpdatedOrBuy() *C.char {
 	//Get the cached user data
+	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	uc := userConfig(a.Settings())
 	cahcheUserData, isOldFound := app.GetUserDataFast(context.Background(), uc.GetUserID())
 	//Get latest user data
