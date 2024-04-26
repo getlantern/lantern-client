@@ -208,7 +208,6 @@ func plans() *C.char {
 	}
 	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
 	err := json.Unmarshal(plans, paymentMethodsResponse)
-	log.Debugf("DEBUG: cache payment methods found : %v", paymentMethodsResponse.Plans)
 	plansByte, err := json.Marshal(paymentMethodsResponse.Plans)
 	if err != nil {
 		return sendError(errors.New("error fetching payment methods: %v", err))
@@ -238,7 +237,6 @@ func paymentMethodsV4() *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-	log.Debugf("DEBUG: cache payment methods: %v", paymentMethodsResponse.Providers)
 	b, _ := json.Marshal(paymentMethodsResponse)
 	return C.CString(string(b))
 }
@@ -253,6 +251,28 @@ func getUserData() (*protos.User, error) {
 		a.Settings().SetEmailAddress(user.Email)
 	}
 	return user, nil
+}
+
+// this method is reposible for checking if the user has updated plan or bought plans
+//
+//export hasPlanUpdatedOrBuy
+func hasPlanUpdatedOrBuy() *C.char {
+	//Get the cached user data
+	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
+	uc := userConfig(a.Settings())
+	cahcheUserData, isOldFound := app.GetUserDataFast(context.Background(), uc.GetUserID())
+	//Get latest user data
+	resp, err := proClient.UserData(context.Background())
+	if err != nil {
+		return sendError(err)
+	}
+	if isOldFound {
+		if cahcheUserData.Expiration < resp.User.Expiration {
+			// New data has a later expiration
+			return C.CString(string("true"))
+		}
+	}
+	return C.CString(string("false"))
 }
 
 //export devices
@@ -459,7 +479,7 @@ func acceptedTermsVersion() *C.char {
 func proUser() *C.char {
 	ctx := context.Background()
 	// refresh user data when home page is loaded on desktop
-	go proClient.UserData(ctx)
+	go getUserData()
 	uc := a.Settings()
 	if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
 		return C.CString("true")
