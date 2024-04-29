@@ -115,11 +115,12 @@ func start() {
 	}()
 
 	golog.SetPrepender(logging.Timestamped)
+	handleSignals(a)
 
 	go func() {
 		defer logging.Close()
 		i18nInit(a)
-		runApp(a)
+		a.Run(true)
 
 		err := a.WaitForExit()
 		if err != nil {
@@ -171,12 +172,12 @@ func fetchPayentMethodV4() error {
 
 //export sysProxyOn
 func sysProxyOn() {
-	a.SysproxyOn()
+	go a.SysproxyOn()
 }
 
 //export sysProxyOff
 func sysProxyOff() {
-	a.SysProxyOff()
+	go a.SysProxyOff()
 }
 
 //export selectedTab
@@ -241,6 +242,11 @@ func paymentMethodsV4() *C.char {
 	return C.CString(string(b))
 }
 
+func cachedUserData() (*protos.User, bool) {
+	uc := userConfig(a.Settings())
+	return app.GetUserDataFast(context.Background(), uc.GetUserID())
+}
+
 func getUserData() (*protos.User, error) {
 	resp, err := proClient.UserData(context.Background())
 	if err != nil {
@@ -253,21 +259,29 @@ func getUserData() (*protos.User, error) {
 	return user, nil
 }
 
+// tryCacheUserData retrieves the latest user data for the given user.
+// It first checks the cache and if present returns the user data stored there
+func tryCacheUserData() (*protos.User, error) {
+	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
+		return cacheUserData, nil
+	}
+	return getUserData()
+}
+
 // this method is reposible for checking if the user has updated plan or bought plans
 //
 //export hasPlanUpdatedOrBuy
 func hasPlanUpdatedOrBuy() *C.char {
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
-	uc := userConfig(a.Settings())
-	cahcheUserData, isOldFound := app.GetUserDataFast(context.Background(), uc.GetUserID())
+	cacheUserData, isOldFound := cachedUserData()
 	//Get latest user data
 	resp, err := proClient.UserData(context.Background())
 	if err != nil {
 		return sendError(err)
 	}
 	if isOldFound {
-		if cahcheUserData.Expiration < resp.User.Expiration {
+		if cacheUserData.Expiration < resp.User.Expiration {
 			// New data has a later expiration
 			return C.CString(string("true"))
 		}
@@ -277,7 +291,7 @@ func hasPlanUpdatedOrBuy() *C.char {
 
 //export devices
 func devices() *C.char {
-	user, err := getUserData()
+	user, err := tryCacheUserData()
 	if err != nil {
 		return sendError(err)
 	}
@@ -320,7 +334,7 @@ func removeDevice(deviceId *C.char) *C.char {
 
 //export expiryDate
 func expiryDate() *C.char {
-	user, err := getUserData()
+	user, err := tryCacheUserData()
 	if err != nil {
 		return sendError(err)
 	}
@@ -639,12 +653,6 @@ func configDir(flags *flashlight.Flags) string {
 		}
 	}
 	return cdir
-}
-
-func runApp(a *app.App) {
-	// Schedule cleanup actions
-	handleSignals(a)
-	a.Run(true)
 }
 
 // useOSLocale detect OS locale for current user and let i18n to use it

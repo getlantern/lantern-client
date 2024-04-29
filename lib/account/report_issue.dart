@@ -133,6 +133,12 @@ class _ReportIssueState extends State<ReportIssue> {
                             issueController.text = newValue!;
                           });
                         },
+                        padding: isDesktop()
+                            ? const EdgeInsetsDirectional.only(
+                                top: 8,
+                                bottom: 8,
+                              )
+                            : const EdgeInsetsDirectional.all(0),
                         items: <String>[
                           'cannot_access_blocked_sites'.i18n,
                           'cannot_complete_purchase'.i18n,
@@ -156,7 +162,9 @@ class _ReportIssueState extends State<ReportIssue> {
                 child: CTextField(
                   tooltipMessage: 'report_description'.i18n,
                   controller: descController,
-                  contentPadding: isDesktop() ? const EdgeInsetsDirectional.all(16.0) : const EdgeInsetsDirectional.all(8.0),
+                  contentPadding: isDesktop()
+                      ? const EdgeInsetsDirectional.all(16.0)
+                      : const EdgeInsetsDirectional.all(8.0),
                   hintText: 'issue_description'.i18n,
                   autovalidateMode: AutovalidateMode.disabled,
                   maxLines: 8,
