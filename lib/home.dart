@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   void onTrayMenuItemClick(MenuItem menuItem) async {
     switch (menuItem.key) {
       case 'show':
-        windowManager.show();
+        windowManager.focus();
       case 'exit':
         SystemChannels.platform.invokeMethod('SystemNavigator.pop');
       case 'status':
@@ -164,6 +164,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
   }
 
+  @override
+  void onWindowEvent(String eventName) {
+    print('[WindowManager] onWindowEvent: $eventName');
+  }
+
   Future<dynamic> _handleNativeNavigationRequest(MethodCall methodCall) async {
     switch (methodCall.method) {
       case 'openConversation':
@@ -173,6 +178,12 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       default:
         return;
     }
+  }
+
+  @override
+  void onWindowFocus() {
+    print('[WindowManager] onWindowFocus');
+    setState(() {});
   }
 
   @override
