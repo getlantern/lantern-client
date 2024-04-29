@@ -156,7 +156,7 @@ class _ReportIssueState extends State<ReportIssue> {
                 child: CTextField(
                   tooltipMessage: 'report_description'.i18n,
                   controller: descController,
-                  contentPadding: const EdgeInsetsDirectional.all(8.0),
+                  contentPadding: isDesktop() ? const EdgeInsetsDirectional.all(16.0) : const EdgeInsetsDirectional.all(8.0),
                   hintText: 'issue_description'.i18n,
                   autovalidateMode: AutovalidateMode.disabled,
                   maxLines: 8,
