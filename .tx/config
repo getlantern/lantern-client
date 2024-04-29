@@ -16,5 +16,5 @@ source_file  = assets/locales/en.po
 source_lang  = en_US
 type         = PO
 minimum_perc = 80
-lang_map     = hi_IN: hi, zh-Hans: zh-cn, zh-Hant: zh-hk, ru_RU: ru, fa_IR: fa
+lang_map     = hi_IN: hi, zh-Hans: zh-cn, zh-Hant: zh-hk, ru_RU: ru, fa_IR: fa, es_CU: es
 
