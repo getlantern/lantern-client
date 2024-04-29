@@ -21,6 +21,7 @@ import (
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
+	"github.com/getlantern/flashlight/v7/client"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
@@ -51,6 +52,10 @@ var (
 	startTime          = time.Now()
 	translationAppName = strings.ToUpper(common.DefaultAppName)
 )
+
+type startUpCallback struct {
+	client.ClientCallbacks
+}
 
 func init() {
 	autoupdate.Version = ApplicationVersion
@@ -219,12 +224,9 @@ func (app *App) Run(isMain bool) {
 			app.configDir,
 			app.Flags.VPN,
 			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
-			app.settings.GetProxyAll,
-			func() bool { return false }, // on desktop, we do not allow private hosts
+			func() bool { return false },                          // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
 			app.Flags.AsMap(),
-			app.onConfigUpdate,
-			app.onProxiesUpdate,
 			app.settings,
 			app.statsTracker,
 			app.IsPro,
@@ -249,9 +251,10 @@ func (app *App) Run(isMain bool) {
 		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
 
 		notifyConfigSaveErrorOnce := new(sync.Once)
-		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
+
+		app.flashlight.Client().SetErrorHandler(func(t flashlightClient.HandledErrorType, err error) {
 			switch t {
-			case flashlight.ErrorTypeProxySaveFailure, flashlight.ErrorTypeConfigSaveFailure:
+			case flashlightClient.ErrorTypeProxySaveFailure, flashlightClient.ErrorTypeConfigSaveFailure:
 				log.Errorf("failed to save config (%v): %v", t, err)
 
 				notifyConfigSaveErrorOnce.Do(func() {
@@ -292,7 +295,7 @@ func (app *App) setFeatures(enabledFeatures map[string]bool, values map[features
 // (based on the env vars at build time or the user's settings/geolocation)
 // and starts appropriate services
 func (app *App) checkEnabledFeatures() {
-	enabledFeatures := app.flashlight.EnabledFeatures()
+	enabledFeatures := app.flashlight.Client().EnabledFeatures()
 
 	app.setFeatures(enabledFeatures, features.EnabledFeatures)
 

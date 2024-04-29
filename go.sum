@@ -12,8 +12,6 @@ git.torproject.org/pluggable-transports/goptlib.git v1.2.0/go.mod h1:4PBMl1dg7/3
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/Jigsaw-Code/outline-sdk v0.0.12 h1:6s4OK26M0M70KHGGm++eapP/fNauJRQ8KNFbS+MuMTA=
 github.com/Jigsaw-Code/outline-sdk v0.0.12/go.mod h1:9cEaF6sWWMzY8orcUI9pV5D0oFp2FZArTSyJiYtMQQs=
-github.com/KyleBanks/depth v1.2.1 h1:5h8fQADFrWtarTdtDudMmGsC7GPbOAu6RVB3ffsVFHc=
-github.com/KyleBanks/depth v1.2.1/go.mod h1:jzSb9d0L43HxTQfT+oSA1EEp2q+ne2uh6XgeJcm8brE=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/OperatorFoundation/Replicant-go/Replicant/v3 v3.0.23 h1:g0kC1BDonLwNse78HRsudElKEDfXHusLQ9Nfekl/l0o=
 github.com/OperatorFoundation/Replicant-go/Replicant/v3 v3.0.23/go.mod h1:QVlygHzbNc/fX+OHurCRC0AFwISJAUQbPaqdEfAkUio=
@@ -282,8 +280,6 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight/v7 v7.6.73 h1:KC//uhGpLmxp+vMBf0I3/eaCzlPNdcNI9cqF4cWs/gk=
-github.com/getlantern/flashlight/v7 v7.6.73/go.mod h1:n5EO3xn22j9uzRxyalP0G9TticdfWD26r6JEkfkSShE=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8 h1:r/Z/SPPIfLXDI3QA7/tE6nOfPncrqeUPDjiFjnNGP50=
@@ -438,10 +434,6 @@ github.com/getlantern/tlsresumption v0.0.0-20211216020551-6a3f901d86b9/go.mod h1
 github.com/getlantern/tlsutil v0.2.0/go.mod h1:Vxsyr9DVnYwsqHaEzMYkg9fT8aBrnO2eI+gdICMQbQU=
 github.com/getlantern/tlsutil v0.5.3 h1:g1FjuG4/OTZe8kkbEmpSxvT9rXzYOG9jO4jHiDeQIxM=
 github.com/getlantern/tlsutil v0.5.3/go.mod h1:lVgvr4nxuQ1ocOho90UB6LnHFlpP16TXAGpHR8Z0QnI=
-github.com/getlantern/trafficlog v1.0.1 h1:eh8XzV4x2z+r7RHKFXJQrhrLtvnidlm83MAPRgrz+/I=
-github.com/getlantern/trafficlog v1.0.1/go.mod h1:tGZtzBjGPecw/t+z+K9CQsCrFfHBh4aOCt70crGL6AI=
-github.com/getlantern/trafficlog-flashlight v1.0.4 h1:3qTJhpi4OoSq9Hsx35bikZjdAwy51FKt5/R2fxRxyiw=
-github.com/getlantern/trafficlog-flashlight v1.0.4/go.mod h1:DRAWJE17ViFLQ3RSKmtAo+ga3xZnHJV0N49hPyJpzN8=
 github.com/getlantern/uuid v1.1.2-0.20190507182000-5c9436b8c718/go.mod h1:uX10hOzZUUDR+oYNSIks+RcozOEiwTNC/K2rw9SUi1k=
 github.com/getlantern/uuid v1.2.0 h1:pGrGaCV7XEaG6lvjWkwf8Y92BjB/9yFmkKsNFpRQ7rc=
 github.com/getlantern/uuid v1.2.0/go.mod h1:uX10hOzZUUDR+oYNSIks+RcozOEiwTNC/K2rw9SUi1k=
@@ -1034,10 +1026,8 @@ golang.org/x/lint v0.0.0-20190227174305-5b3e6a55c961/go.mod h1:wehouNa3lNwaWXcvx
 golang.org/x/lint v0.0.0-20190301231843-5614ed5bae6f/go.mod h1:UVdnD1Gm6xHRNCYTkRU2/jEulfH38KcIWyp/GAMgvoE=
 golang.org/x/lint v0.0.0-20190313153728-d0100b6bd8b3/go.mod h1:6SW0HCj/g11FgYtHlgUYUwCkIfeOF89ocIRzGO/8vkc=
 golang.org/x/lint v0.0.0-20190930215403-16217165b5de/go.mod h1:6SW0HCj/g11FgYtHlgUYUwCkIfeOF89ocIRzGO/8vkc=
-golang.org/x/lint v0.0.0-20200302205851-738671d3881b/go.mod h1:3xt1FjdF8hUf6vQPIChWIBhFzV8gjjsPE/fR3IyQdNY=
 golang.org/x/mobile v0.0.0-20240404231514-09dbf07665ed h1:vZhAhVr5zF1IJaVKTawyTq78WSspLnK53iuMJ1fJgLc=
 golang.org/x/mobile v0.0.0-20240404231514-09dbf07665ed/go.mod h1:z041I2NhLjANgIfD0XbB2AmUZ8sLUcSgyLaSNGEP50M=
-golang.org/x/mod v0.1.1-0.20191105210325-c90efee705ee/go.mod h1:QqPTAvyqsEbceGzBzNggFXnrqF1CaUcvgkdR5Ot7KZg=
 golang.org/x/mod v0.3.0/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/mod v0.4.2/go.mod h1:s0Qsj1ACt9ePp/hMypM3fl4fZqREWJwdYDEqhRiZZUA=
 golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4/go.mod h1:jJ57K6gSWd91VN4djpZkiMVwK6gcyfeH4XE8wZrZaV4=
@@ -1194,7 +1184,6 @@ golang.org/x/tools v0.0.0-20190311212946-11955173bddd/go.mod h1:LCzVGOaR6xXOjkQ3
 golang.org/x/tools v0.0.0-20190312170243-e65039ee4138/go.mod h1:LCzVGOaR6xXOjkQ3onu1FJEFr0SW1gC7cKk1uF8kGRs=
 golang.org/x/tools v0.0.0-20190524140312-2c0ae7006135/go.mod h1:RgjU9mgBXZiqYHBnxXauZ1Gv1EHHAz9KjViQ78xBX0Q=
 golang.org/x/tools v0.0.0-20191119224855-298f0cb1881e/go.mod h1:b+2E5dAYhXwXZwtnZ6UAqBI28+e2cm9otk0dWdXHAEo=
-golang.org/x/tools v0.0.0-20200130002326-2f3ba24bd6e7/go.mod h1:TB2adYChydJhpapKDTa4BR/hXlZSLoq2Wpct/0txZ28=
 golang.org/x/tools v0.0.0-20201224043029-2b0845dc783e/go.mod h1:emZCQorbCU4vsT4fOWvOPXz4eW1wZW4PmDk9uLelYpA=
 golang.org/x/tools v0.1.5/go.mod h1:o0xws9oXOQQZyjljx8fwUC0k7L1pTE6eaCbjGeHmOkk=
 golang.org/x/tools v0.1.12/go.mod h1:hNGJHUnrk76NpqgfD5Aqm5Crs+Hm0VOH/i9J2+nxYbc=

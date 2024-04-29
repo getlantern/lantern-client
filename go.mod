@@ -2,7 +2,7 @@ module github.com/getlantern/lantern-client
 
 go 1.22.0
 
-// replace github.com/getlantern/flashlight/v7 => ../flashlight
+replace github.com/getlantern/flashlight/v7 => ../flashlight
 
 // replace github.com/getlantern/fronted => ../fronted
 
@@ -55,8 +55,6 @@ require (
 	github.com/getlantern/replica v0.14.3
 	github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
-	github.com/getlantern/trafficlog v1.0.1
-	github.com/getlantern/trafficlog-flashlight v1.0.4
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426
 	github.com/getsentry/sentry-go v0.27.0
 	github.com/go-ping/ping v1.1.0
@@ -213,7 +211,6 @@ require (
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
-	github.com/google/gopacket v1.1.19 // indirect
 	github.com/google/pprof v0.0.0-20240207164012-fb44976bdcd5 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.19.1 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
@@ -238,6 +235,7 @@ require (
 	github.com/mitchellh/go-ps v1.0.0 // indirect
 	github.com/mitchellh/go-server-timing v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/montanaflynn/stats v0.6.3 // indirect
 	github.com/mschoch/smat v0.2.0 // indirect
 	github.com/nwaples/rardecode v1.1.2 // indirect
 	github.com/onsi/ginkgo/v2 v2.15.0 // indirect
