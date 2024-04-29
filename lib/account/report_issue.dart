@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
@@ -88,10 +87,6 @@ class _ReportIssueState extends State<ReportIssue> {
                     initialValue: emailAddress,
                     controller: emailController,
                     autovalidateMode: AutovalidateMode.disabled,
-                    contentPadding: const EdgeInsetsDirectional.only(
-                      top: 8.0,
-                      bottom: 8.0,
-                    ),
                     label: 'email'.i18n,
                     onChanged: (value) {
                       setState(() {});

@@ -154,7 +154,15 @@ class _CTextFieldState extends State<CTextField> {
                     widget.textCapitalization ?? TextCapitalization.none,
                 decoration: InputDecoration(
                   contentPadding: widget.contentPadding ??
-                      const EdgeInsetsDirectional.all(0),
+                      (isDesktop()
+                          ? const EdgeInsetsDirectional.only(
+                              top: 16,
+                              bottom: 16,
+                            )
+                          : const EdgeInsetsDirectional.only(
+                              top: 8,
+                              bottom: 8,
+                            )),
                   isDense: true,
                   floatingLabelBehavior: FloatingLabelBehavior.never,
                   // we handle floating labels using our custom method below

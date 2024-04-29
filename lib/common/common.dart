@@ -92,6 +92,7 @@ export 'ui/text_highlighter.dart';
 export 'ui/text_styles.dart';
 export 'ui/transitions.dart';
 export 'app_secret.dart';
+
 final appLogger = Logger(
   printer: PrettyPrinter(
     methodCount: 0,
