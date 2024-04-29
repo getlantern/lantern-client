@@ -217,8 +217,8 @@ class _CTextFieldState extends State<CTextField> {
               ? Container(
                   margin: const EdgeInsetsDirectional.only(start: 11),
                   padding: EdgeInsetsDirectional.only(
-                    start: hasFocus ? 20 : 0,
-                    end: hasFocus ? 20 : 0,
+                    start: hasFocus ? 2 : 0,
+                    end: hasFocus ? 2 : 0,
                   ),
                   color: white,
                   child: !hasFocus && widget.controller.value.text.isEmpty
