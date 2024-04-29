@@ -121,8 +121,8 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
         windowManager.focus();
       case 'exit':
         ffiExit();
-      case 'status':
-        final status = await ffiVpnStatus().toDartString();
+        case 'status':
+        final status = ffiVpnStatus().toDartString();
         bool isConnected = status == "connected";
         if (isConnected) {
           sysProxyOff();
