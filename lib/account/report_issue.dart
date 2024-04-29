@@ -157,7 +157,6 @@ class _ReportIssueState extends State<ReportIssue> {
                   tooltipMessage: 'report_description'.i18n,
                   controller: descController,
                   contentPadding: const EdgeInsetsDirectional.all(8.0),
-                  label: '',
                   hintText: 'issue_description'.i18n,
                   autovalidateMode: AutovalidateMode.disabled,
                   maxLines: 8,

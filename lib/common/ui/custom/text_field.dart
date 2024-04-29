@@ -7,7 +7,7 @@ import 'package:lantern/common/common.dart';
 class CTextField extends StatefulWidget {
   late final CustomTextEditingController controller;
   late final String? initialValue;
-  late final dynamic label;
+  late final dynamic? label;
   late final String? helperText;
   late final String? hintText;
   late final Widget? prefixIcon;
@@ -36,7 +36,7 @@ class CTextField extends StatefulWidget {
   CTextField({
     required this.controller,
     this.initialValue,
-    required this.label,
+    this.label,
     this.helperText,
     this.hintText,
     this.prefixIcon,
@@ -156,8 +156,8 @@ class _CTextFieldState extends State<CTextField> {
                   contentPadding: widget.contentPadding ??
                       (isDesktop()
                           ? const EdgeInsetsDirectional.only(
-                              top: 16,
-                              bottom: 16,
+                              top: 24,
+                              bottom: 24,
                             )
                           : const EdgeInsetsDirectional.only(
                               top: 8,
@@ -212,29 +212,30 @@ class _CTextFieldState extends State<CTextField> {
           ),
         ),
         // * Label
-        (widget.label is String)
-            ? Container(
-                margin: const EdgeInsetsDirectional.only(start: 11),
-                padding: EdgeInsetsDirectional.only(
-                  start: hasFocus ? 2 : 0,
-                  end: hasFocus ? 2 : 0,
-                ),
-                color: white,
-                child: !hasFocus && widget.controller.value.text.isEmpty
-                    ? Container()
-                    : CText(
-                        widget.label,
-                        style: CTextStyle(
-                          fontSize: 12,
-                          lineHeight: 12,
-                          color: fieldKey.currentState?.mounted == true &&
-                                  fieldKey.currentState?.hasError == true
-                              ? indicatorRed
-                              : blue4,
+        if (widget.label != null)
+          (widget.label is String)
+              ? Container(
+                  margin: const EdgeInsetsDirectional.only(start: 11),
+                  padding: EdgeInsetsDirectional.only(
+                    start: hasFocus ? 20 : 0,
+                    end: hasFocus ? 20 : 0,
+                  ),
+                  color: white,
+                  child: !hasFocus && widget.controller.value.text.isEmpty
+                      ? Container()
+                      : CText(
+                          widget.label,
+                          style: CTextStyle(
+                            fontSize: 12,
+                            lineHeight: 12,
+                            color: fieldKey.currentState?.mounted == true &&
+                                    fieldKey.currentState?.hasError == true
+                                ? indicatorRed
+                                : blue4,
+                          ),
                         ),
-                      ),
-              )
-            : widget.label,
+                )
+              : widget.label,
       ],
     );
   }
