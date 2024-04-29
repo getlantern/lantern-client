@@ -31,58 +31,65 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   MethodChannel? navigationChannel;
   Function()? _cancelEventSubscription;
 
-  _HomePageState();
-
   @override
   void initState() {
-    if (isDesktop()) {
+    _startupSequence();
+    super.initState();
+  }
+
+  void _startupSequence() {
+    if (isMobile()) {
+      // This is a mobile device
+      channelListener();
+    } else {
+      // This is a desktop device
       setupTrayManager();
       windowManager.addListener(this);
       _init();
     }
-    super.initState();
-    if (isMobile()) {
-      mainMethodChannel = const MethodChannel('lantern_method_channel');
-      navigationChannel = const MethodChannel('navigation');
-      sessionModel.getChatEnabled().then((chatEnabled) {
-        if (chatEnabled) {
-          messagingModel
-              .shouldShowTryLanternChatModal()
-              .then((shouldShowModal) async {
-            if (shouldShowModal) {
-              // open VPN tab
-              await sessionModel.setSelectedTab(TAB_VPN);
-              // show Try Lantern Chat dialog
-              await context.router
-                  .push(FullScreenDialogPage(widget: TryLanternChat()));
-            }
-          });
-        }
-      });
+  }
 
-      navigationChannel?.setMethodCallHandler(_handleNativeNavigationRequest);
-      // Let back-end know that we're ready to handle navigation
-      navigationChannel?.invokeListMethod('ready');
-      _cancelEventSubscription =
-          sessionModel.eventManager.subscribe(Event.All, (event, params) {
-        switch (event) {
-          case Event.SurveyAvailable:
-            // show survey snackbar
-            showSuerySnackbar(
-                context: context,
-                buttonText: params['buttonText'] as String,
-                message: params['message'] as String,
-                onPressed: () {
-                  mainMethodChannel?.invokeMethod('showLastSurvey');
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                });
+  void channelListener() {
+    mainMethodChannel = const MethodChannel('lantern_method_channel');
+    navigationChannel = const MethodChannel('navigation');
+    sessionModel.getChatEnabled().then((chatEnabled) {
+      if (chatEnabled) {
+        messagingModel
+            .shouldShowTryLanternChatModal()
+            .then((shouldShowModal) async {
+          if (shouldShowModal) {
+            // open VPN tab
+            await sessionModel.setSelectedTab(TAB_VPN);
+            // show Try Lantern Chat dialog
+            await context.router
+                .push(FullScreenDialogPage(widget: TryLanternChat()));
+          }
+        });
+      }
+    });
 
-            break;
-          default:
-            break;
-        }
-      });
-    }
+    navigationChannel?.setMethodCallHandler(_handleNativeNavigationRequest);
+    // Let back-end know that we're ready to handle navigation
+    navigationChannel?.invokeListMethod('ready');
+    _cancelEventSubscription =
+        sessionModel.eventManager.subscribe(Event.All, (event, params) {
+      switch (event) {
+        case Event.SurveyAvailable:
+          // show survey snackbar
+          showSuerySnackbar(
+              context: context,
+              buttonText: params['buttonText'] as String,
+              message: params['message'] as String,
+              onPressed: () {
+                mainMethodChannel?.invokeMethod('showLastSurvey');
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              });
+
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   void _init() async {
@@ -111,11 +118,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   void onTrayMenuItemClick(MenuItem menuItem) async {
     switch (menuItem.key) {
       case 'show':
-        windowManager.show();
+        windowManager.focus();
       case 'exit':
-        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      case 'status':
-        final status = await ffiVpnStatus().toDartString();
+        ffiExit();
+        case 'status':
+        final status = ffiVpnStatus().toDartString();
         bool isConnected = status == "connected";
         if (isConnected) {
           sysProxyOff();
@@ -157,6 +164,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
   }
 
+  @override
+  void onWindowEvent(String eventName) {
+    print('[WindowManager] onWindowEvent: $eventName');
+  }
+
   Future<dynamic> _handleNativeNavigationRequest(MethodCall methodCall) async {
     switch (methodCall.method) {
       case 'openConversation':
@@ -166,6 +178,12 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       default:
         return;
     }
+  }
+
+  @override
+  void onWindowFocus() {
+    print('[WindowManager] onWindowFocus');
+    setState(() {});
   }
 
   @override

@@ -21,6 +21,11 @@ void setLang(lang) => _bindings.setSelectLang(lang);
 
 String websocketAddr() => _bindings.websocketAddr().cast<Utf8>().toDartString();
 
+void ffiExit() {
+  _bindings.exitApp();
+  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+}
+
 Pointer<Utf8> ffiVpnStatus() => _bindings.vpnStatus().cast<Utf8>();
 
 Pointer<Utf8> ffiSelectedTab() => _bindings.selectedTab().cast<Utf8>();

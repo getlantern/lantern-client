@@ -124,10 +124,6 @@ class _CheckoutState extends State<Checkout>
                           autovalidateMode: widget.isPro
                               ? AutovalidateMode.always
                               : AutovalidateMode.disabled,
-                          contentPadding: const EdgeInsetsDirectional.only(
-                            top: 8.0,
-                            bottom: 8.0,
-                          ),
                           label: 'email'.i18n,
                           keyboardType: TextInputType.emailAddress,
                           prefixIcon: const CAssetImage(path: ImagePaths.email),
@@ -140,10 +136,6 @@ class _CheckoutState extends State<Checkout>
                         child: CTextField(
                           controller: refCodeController,
                           autovalidateMode: AutovalidateMode.disabled,
-                          contentPadding: const EdgeInsetsDirectional.only(
-                            top: 8.0,
-                            bottom: 8.0,
-                          ),
                           onChanged: (text) {
                             setState(() {
                               showContinueButton = enableContinueButton();
