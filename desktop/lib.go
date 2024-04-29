@@ -532,6 +532,11 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 	return sendJson(resp)
 }
 
+//export exitApp
+func exitApp() {
+	a.Exit(nil)
+}
+
 //export developmentMode
 func developmentMode() *C.char {
 	return C.CString("false")
@@ -698,6 +703,7 @@ func handleSignals(a *app.App) {
 	go func() {
 		s := <-c
 		log.Debugf("Got signal \"%s\", exiting...", s)
+		a.Exit(nil)
 	}()
 }
 
