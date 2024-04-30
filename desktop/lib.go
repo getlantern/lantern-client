@@ -463,7 +463,8 @@ func country() *C.char {
 
 //export sdkVersion
 func sdkVersion() *C.char {
-	return C.CString("1.0.0")
+	version := common.LibraryVersion
+	return C.CString(version)
 }
 
 //export vpnStatus
