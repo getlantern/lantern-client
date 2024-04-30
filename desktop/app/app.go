@@ -21,7 +21,7 @@ import (
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
-	flashlightClient "github.com/getlantern/flashlight/v7/client"
+	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
@@ -80,10 +80,12 @@ type App struct {
 	flashlight *flashlight.Flashlight
 
 	issueReporter *issueReporter
-	proClient     proclient.ProClient
-	referralCode  string
-	selectedTab   Tab
-	stats         *stats.Stats
+
+	proClient proclient.ProClient
+
+	referralCode string
+	selectedTab  Tab
+	stats        *stats.Stats
 
 	connectionStatusCallbacks []func(isConnected bool)
 	_sysproxyOff              func() error
@@ -219,18 +221,18 @@ func (app *App) Run(isMain bool) {
 			app.configDir,
 			app.Flags.VPN,
 			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
-			app.settings.GetProxyAll,
-			func() bool { return false }, // on desktop, we do not allow private hosts
+			func() bool { return false },                          // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
 			app.Flags.AsMap(),
-			app.onConfigUpdate,
-			app.onProxiesUpdate,
 			app.settings,
 			app.statsTracker,
 			app.IsPro,
 			app.settings.GetLanguage,
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
 			app.analyticsSession.EventWithLabel,
+			client.WithOnConfig(app.onConfigUpdate),
+			client.WithProxies(app.onProxiesUpdate),
+			client.WithIsPro(app.IsPro),
 		)
 		if err != nil {
 			app.Exit(err)
@@ -249,9 +251,9 @@ func (app *App) Run(isMain bool) {
 		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
 
 		notifyConfigSaveErrorOnce := new(sync.Once)
-		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
+		app.flashlight.Client().SetErrorHandler(func(t client.HandledErrorType, err error) {
 			switch t {
-			case flashlight.ErrorTypeProxySaveFailure, flashlight.ErrorTypeConfigSaveFailure:
+			case client.ErrorTypeProxySaveFailure, client.ErrorTypeConfigSaveFailure:
 				log.Errorf("failed to save config (%v): %v", t, err)
 
 				notifyConfigSaveErrorOnce.Do(func() {
@@ -292,7 +294,7 @@ func (app *App) setFeatures(enabledFeatures map[string]bool, values map[features
 // (based on the env vars at build time or the user's settings/geolocation)
 // and starts appropriate services
 func (app *App) checkEnabledFeatures() {
-	enabledFeatures := app.flashlight.EnabledFeatures()
+	enabledFeatures := app.flashlight.Client().EnabledFeatures()
 
 	app.setFeatures(enabledFeatures, features.EnabledFeatures)
 
@@ -389,8 +391,8 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 	app.statsTracker.AddListener(fn)
 }
 
-func (app *App) afterStart(cl *flashlightClient.Client) {
-	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
+func (app *App) afterStart(cl *client.Client) {
+	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
 		if enable {
 			app.SysproxyOn()
@@ -422,6 +424,7 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
+	log.Debug("Received new config update..")
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
 	}
