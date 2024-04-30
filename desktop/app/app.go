@@ -392,7 +392,7 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *client.Client) {
-	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
+	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
 		if enable {
 			app.SysproxyOn()
@@ -405,12 +405,12 @@ func (app *App) afterStart(cl *client.Client) {
 		app.SysProxyOff()
 	})
 	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
-	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
+	if addr, ok := client.Addr(6 * time.Second); ok {
 		app.settings.SetAddr(addr.(string))
 	} else {
 		log.Errorf("Couldn't retrieve HTTP proxy addr in time")
 	}
-	if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
+	if socksAddr, ok := client.Socks5Addr(6 * time.Second); ok {
 		app.settings.SetSOCKSAddr(socksAddr.(string))
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
