@@ -65,6 +65,7 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
+
     }
   }
 

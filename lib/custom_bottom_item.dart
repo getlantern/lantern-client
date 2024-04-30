@@ -60,6 +60,7 @@ class CustomBottomBarItem extends StatelessWidget {
                 } else {
                   sessionModel.setSelectedTab(name);
                 }
+                /// notifiy the bottom listener to update UI
                 final tabModel = Provider.of<BottomBarChangeNotifier>(context,
                     listen: false);
 
