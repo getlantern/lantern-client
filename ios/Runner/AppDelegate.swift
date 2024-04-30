@@ -4,20 +4,17 @@ import SQLite
 import Toast_Swift
 import UIKit
 
-//know Issue
-//  CFPrefsPlistSource<0x28281e580> (Domain: group.getlantern.lantern, User: kCFPreferencesAnyUser, ByHost: Yes, Container: (null), Contents Need Refresh: Yes): Using kCFPreferencesAnyUser with a container is only allowed for System Containers,
-
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
   // Flutter Properties
   var flutterViewController: FlutterViewController!
   var flutterbinaryMessenger: FlutterBinaryMessenger!
   //  Model Properties
-  var sessionModel: SessionModel!
-  var lanternModel: LanternModel!
-  //  var navigationModel: NavigationModel!
-  var vpnModel: VpnModel!
-  var messagingModel: MessagingModel!
+  private var sessionModel: SessionModel!
+  private var lanternModel: LanternModel!
+  private var vpnModel: VpnModel!
+  private var messagingModel: MessagingModel!
+  private var lanternService: LanternService!
   // IOS
   var loadingManager: LoadingIndicatorManager?
 
@@ -29,6 +26,7 @@ import UIKit
     initializeFlutterComponents()
     do {
       try setupAppComponents()
+      try setupLanternService()
     } catch {
       logger.error("Unexpected error setting up app components: \(error)")
       exit(1)
@@ -43,22 +41,22 @@ import UIKit
     flutterbinaryMessenger = flutterViewController.binaryMessenger
   }
 
+  private func setupLanternService() throws {
+    try self.lanternService = LanternService(
+      sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
+    // Run Lantern service on a background queue
+    DispatchQueue.global(qos: .background).async {
+      self.lanternService.start()
+    }
+  }
+
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
-    DispatchQueue.global(qos: .userInitiated).async {
-      do {
-        try self.setupModels()
-        DispatchQueue.main.async {
-          self.startUpSequency()
-          self.setupLoadingBar()
-        }
-      } catch {
-        DispatchQueue.main.async {
-          logger.error("Unexpected error setting up models: \(error)")
-        }
-      }
+    try self.setupModels()
+    DispatchQueue.main.async {
+      self.startUpSequency()
+      self.setupLoadingBar()
     }
-
   }
 
   // Init all the models
