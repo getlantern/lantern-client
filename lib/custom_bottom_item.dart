@@ -1,5 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
+import 'package:lantern/custom_bottom_bar.dart';
 
 class CustomBottomBarItem extends StatelessWidget {
   const CustomBottomBarItem({
@@ -24,7 +25,9 @@ class CustomBottomBarItem extends StatelessWidget {
   final Widget Function(Widget) addBadge;
 
   int get totalTabs => tabToIndex.length;
+
   int get tabIndex => tabToIndex[name]!;
+
   bool get active => currentTabIndex == tabIndex;
 
   static Widget defaultAddBadge(Widget child) => child;
@@ -57,6 +60,10 @@ class CustomBottomBarItem extends StatelessWidget {
                 } else {
                   sessionModel.setSelectedTab(name);
                 }
+                final tabModel = Provider.of<BottomBarChangeNotifier>(context,
+                    listen: false);
+
+                tabModel.setCurrentIndex(name);
               }),
               child: Container(
                 decoration: ShapeDecoration(

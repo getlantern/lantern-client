@@ -35,7 +35,7 @@ void setSelectedTab(BuildContext context, String name) {
   setSelectTab(tab);
   // when the user clicks on the active tab again, do nothing
   if (currentTab == name) return;
-  context.pushRoute(Home());
+  // context.pushRoute(Home());
 }
 
 Future<void> setupMenu(bool isConnected) async {

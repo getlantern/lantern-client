@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
         windowManager.focus();
       case 'exit':
         ffiExit();
-        case 'status':
+      case 'status':
         final status = ffiVpnStatus().toDartString();
         bool isConnected = status == "connected";
         if (isConnected) {
@@ -201,6 +201,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   Widget build(BuildContext context) {
     _context = context;
+    final tabModel = context.watch<BottomBarChangeNotifier>();
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(
@@ -219,26 +220,46 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               // not already been accepted
               return const PrivacyDisclosure();
             }
-            return sessionModel.selectedTab(
-              (context, selectTab, child) =>
-                  messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-                final isTesting = const String.fromEnvironment(
-                      'driver',
-                      defaultValue: 'false',
-                    ).toLowerCase() ==
-                    'true';
-                final tab =
-                    isMobile() ? selectTab : ffiSelectedTab().toDartString();
-                return Scaffold(
-                  body: buildBody(tab, isOnboarded),
-                  bottomNavigationBar: CustomBottomBar(
-                    selectedTab: tab,
-                    isDevelop: developmentMode,
-                    isTesting: isTesting,
-                  ),
-                );
-              }),
-            );
+            return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
+              final isTesting = const String.fromEnvironment(
+                    'driver',
+                    defaultValue: 'false',
+                  ).toLowerCase() ==
+                  'true';
+
+              // final tab = isMobile() ? selectTab : ffiSelectedTab().toDartString();
+              final tab = tabModel.currentIndex;
+              return Scaffold(
+                body: buildBody(tab, isOnboarded),
+                bottomNavigationBar: CustomBottomBar(
+                  selectedTab: tab,
+                  isDevelop: developmentMode,
+                  isTesting: isTesting,
+                ),
+              );
+            });
+
+            // return sessionModel.selectedTab(
+            //   (context, selectTab, child) =>
+            //       messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
+            //     final isTesting = const String.fromEnvironment(
+            //           'driver',
+            //           defaultValue: 'false',
+            //         ).toLowerCase() ==
+            //         'true';
+            //
+            //     final tab =
+            //         isMobile() ? selectTab : ffiSelectedTab().toDartString();
+            //     return Scaffold(
+            //       body: buildBody(tab, isOnboarded),
+            //       bottomNavigationBar: CustomBottomBar(
+            //         selectedTab: tab,
+            //         isDevelop: developmentMode,
+            //         isTesting: isTesting,
+            //       ),
+            //     );
+            //   }),
+            // );
           },
         );
       },
