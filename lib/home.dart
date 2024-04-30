@@ -26,9 +26,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
-  BuildContext? _context;
-  MethodChannel? mainMethodChannel;
-  MethodChannel? navigationChannel;
+  // BuildContext? _context;
+
   Function()? _cancelEventSubscription;
 
   @override
@@ -44,14 +43,13 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     } else {
       // This is a desktop device
       setupTrayManager();
-      windowManager.addListener(this);
-      _init();
+      _initWindowManager();
     }
   }
 
   void channelListener() {
-    mainMethodChannel = const MethodChannel('lantern_method_channel');
-    navigationChannel = const MethodChannel('navigation');
+    const mainMethodChannel = MethodChannel('lantern_method_channel');
+    const navigationChannel =  MethodChannel('navigation');
     sessionModel.getChatEnabled().then((chatEnabled) {
       if (chatEnabled) {
         messagingModel
@@ -68,9 +66,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       }
     });
 
-    navigationChannel?.setMethodCallHandler(_handleNativeNavigationRequest);
+    navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
     // Let back-end know that we're ready to handle navigation
-    navigationChannel?.invokeListMethod('ready');
+    navigationChannel.invokeListMethod('ready');
     _cancelEventSubscription =
         sessionModel.eventManager.subscribe(Event.All, (event, params) {
       switch (event) {
@@ -81,7 +79,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               buttonText: params['buttonText'] as String,
               message: params['message'] as String,
               onPressed: () {
-                mainMethodChannel?.invokeMethod('showLastSurvey');
+                mainMethodChannel.invokeMethod('showLastSurvey');
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
               });
 
@@ -92,7 +90,8 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     });
   }
 
-  void _init() async {
+  void _initWindowManager() async {
+    windowManager.addListener(this);
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
     setState(() {});
@@ -173,17 +172,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     switch (methodCall.method) {
       case 'openConversation':
         final contact = Contact.fromBuffer(methodCall.arguments as Uint8List);
-        await _context!.router.push(Conversation(contactId: contact.contactId));
+        await context.router.push(Conversation(contactId: contact.contactId));
         break;
       default:
         return;
     }
-  }
-
-  @override
-  void onWindowFocus() {
-    print('[WindowManager] onWindowFocus');
-    setState(() {});
   }
 
   @override
@@ -200,7 +193,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
+
     final tabModel = context.watch<BottomBarChangeNotifier>();
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
