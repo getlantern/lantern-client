@@ -14,7 +14,6 @@
 		0308A1312AAEF3B00086157A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12F2AAEF3AA0086157A /* Event.swift */; };
 		0308A1342AAEF5130086157A /* VPNBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB152AA88BF200FB41B2 /* VPNBase.swift */; };
 		0308A1392AAEF8DE0086157A /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
-		0308A13D2AAF39F80086157A /* FlashlightManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */; };
 		0308A13E2AAF43A10086157A /* UserNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */; };
 		0321C3F72AA9D84700D462C1 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F62AA9D84700D462C1 /* Process.swift */; };
 		0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
@@ -44,6 +43,7 @@
 		03FAF1B42AA1E9F40063580C /* VpnModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FAF1B32AA1E9F40063580C /* VpnModel.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		5F2AC9582BE1A3B40080721C /* LanternService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2AC9562BE1A3B40080721C /* LanternService.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -94,7 +94,6 @@
 		0308A12B2AAEEE2C0086157A /* UserNotificationsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNotificationsManager.swift; sourceTree = "<group>"; };
 		0308A12D2AAEEF410086157A /* Events.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		0308A12F2AAEF3AA0086157A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
-		0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManagerExtension.swift; sourceTree = "<group>"; };
 		0315F55C2AC1C1A500D49F7B /* DatabaseFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DatabaseFramework.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/DatabaseFramework-csnjouuwjwleiddbptbupimqigld/Build/Products/Debug-iphoneos/DatabaseFramework.framework"; sourceTree = "<group>"; };
 		0321C3F62AA9D84700D462C1 /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManager.swift; sourceTree = "<group>"; };
@@ -137,6 +136,7 @@
 		40CA215A5360960236859E29 /* Pods-Runner.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-prod.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-prod.xcconfig"; sourceTree = "<group>"; };
 		41DDE2A6029CFDB93A269403 /* Pods-LanternTests.debug-runner-appium-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.debug-runner-appium-test.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.debug-runner-appium-test.xcconfig"; sourceTree = "<group>"; };
 		4C199F107C36A050FA0BD82A /* Pods-Runner.debug-appium-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-appium-test.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-appium-test.xcconfig"; sourceTree = "<group>"; };
+		5F2AC9562BE1A3B40080721C /* LanternService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternService.swift; sourceTree = "<group>"; };
 		607A0530FA4F0B857B847CC5 /* Pods-Runner.profile-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-prod.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-prod.xcconfig"; sourceTree = "<group>"; };
 		639C2FD1FB8C2B8BA0BC8FA2 /* Pods-LanternTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.profile.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.profile.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -231,7 +231,6 @@
 		03A1AB122AA88BB400FB41B2 /* Vpn */ = {
 			isa = PBXGroup;
 			children = (
-				0308A13C2AAF39F80086157A /* FlashlightManagerExtension.swift */,
 				0308A1272AAEED7E0086157A /* VpnHelper.swift */,
 				0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */,
 				03A1AB152AA88BF200FB41B2 /* VPNBase.swift */,
@@ -272,6 +271,7 @@
 		03D789A42A616D25000D36F9 /* Lantern */ = {
 			isa = PBXGroup;
 			children = (
+				5F2AC9572BE1A3B40080721C /* Services */,
 				03A1AB112AA88B8C00FB41B2 /* Core */,
 				03F2FE322A6949C60082B34C /* Utils */,
 				03EE344A2A652B3D00E37100 /* Models */,
@@ -308,6 +308,14 @@
 				0324CC2F2AE279CF00490B46 /* SentryUtils.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		5F2AC9572BE1A3B40080721C /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5F2AC9562BE1A3B40080721C /* LanternService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
@@ -464,7 +472,6 @@
 				97C146EC1CF9000F007C117D /* Resources */,
 				03A1AB3F2AA890AB00FB41B2 /* Embed Foundation Extensions */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
-				3F72706DAEB45E756D135F84 /* [CP] Embed Pods Frameworks */,
 				8CFC94838D10599DD335E9EC /* [CP] Copy Pods Resources */,
 				03ACAAB62AC5B7ED00D74DD4 /* ShellScript */,
 			);
@@ -506,7 +513,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					03A1AB2F2AA890AB00FB41B2 = {
@@ -690,6 +697,7 @@
 				0308A12E2AAEEF410086157A /* Events.swift in Sources */,
 				0333203B2AC698FA00333DA9 /* MockVPNManager.swift in Sources */,
 				0308A12C2AAEEE2C0086157A /* UserNotificationsManager.swift in Sources */,
+				5F2AC9582BE1A3B40080721C /* LanternService.swift in Sources */,
 				03FAF1B42AA1E9F40063580C /* VpnModel.swift in Sources */,
 				03F4CD822A77E43C00F7BDD8 /* BaseModel.swift in Sources */,
 				0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */,
@@ -700,7 +708,6 @@
 				0308A1302AAEF3AA0086157A /* Event.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				03A1AB142AA88BDA00FB41B2 /* VPNManager.swift in Sources */,
-				0308A13D2AAF39F80086157A /* FlashlightManagerExtension.swift in Sources */,
 				03567DC02AA9F47200A233EA /* FileUtils.swift in Sources */,
 				03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */,
 				03A1AB422AA8930A00FB41B2 /* Result.swift in Sources */,

@@ -2,20 +2,17 @@ package ios
 
 import (
 	"io"
+	"net"
 	"path/filepath"
 	"sync"
 	"time"
 
 	tun2socks "github.com/eycorsican/go-tun2socks/core"
 
-	"github.com/getlantern/common/config"
 	"github.com/getlantern/dnsgrab"
 	"github.com/getlantern/dnsgrab/persistentcache"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/bandit"
-	"github.com/getlantern/flashlight/v7/buffers"
-	"github.com/getlantern/flashlight/v7/chained"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/ipproxy"
 )
 
@@ -120,17 +117,7 @@ func (c *cw) Write(b []byte) (int, error) {
 }
 
 func (c *cw) Reconfigure() {
-	dialers, err := c.client.loadDialers()
-	if err != nil {
-		// this causes the NetworkExtension process to die. Since the VPN is configured as "on-demand",
-		// the OS will automatically restart the service, at which point we'll read the new config anyway.
-		panic(log.Errorf("Unable to load dialers on reconfigure: %v", err))
-	}
 
-	c.dialer, err = bandit.New(dialers)
-	if err != nil {
-		log.Errorf("Unable to create dialer on reconfigure: %v", err)
-	}
 }
 
 func (c *cw) Close() error {
@@ -150,7 +137,6 @@ type iosClient struct {
 	mtu             int
 	capturedDNSHost string
 	realDNSHost     string
-	uc              *UserConfig
 	tcpHandler      *proxiedTCPHandler
 	udpHandler      *directUDPHandler
 
@@ -190,16 +176,6 @@ func (c *iosClient) start() (ClientWriter, error) {
 	// }
 
 	log.Debugf("Running client at config path '%v'", c.configDir)
-	log.Debugf("Max buffer bytes: %d", buffers.MaxBufferBytes())
-
-	dialers, err := c.loadDialers()
-	if err != nil {
-		return nil, err
-	}
-	dialer, err := bandit.New(dialers)
-	if err != nil {
-		return nil, err
-	}
 	// We use a persistent cache for dnsgrab because some clients seem to hang on to our fake IP addresses for a while, even though we set a TTL of 1 second.
 	// That can be a problem when the network extension is automatically restarted. Caching the dns cache on disk allows us to successfully reverse look up
 	// those IP addresses even after a restart.
@@ -216,7 +192,7 @@ func (c *iosClient) start() (ClientWriter, error) {
 	if err != nil {
 		return nil, errors.New("Unable to start dnsgrab: %v", err)
 	}
-
+	var dialer net.Dialer
 	c.tcpHandler = newProxiedTCPHandler(c, dialer, grabber)
 	c.udpHandler = newDirectUDPHandler(c, c.udpDialer, grabber, c.capturedDNSHost)
 
@@ -230,42 +206,8 @@ func (c *iosClient) start() (ClientWriter, error) {
 	c.clientWriter = &cw{
 		ipStack:       ipStack,
 		client:        c,
-		dialer:        dialer,
 		quotaTextPath: filepath.Join(c.configDir, "quota.txt"),
 	}
 
 	return c.clientWriter, nil
-}
-
-func (c *iosClient) loadDialers() ([]bandit.Dialer, error) {
-	cf := &configurer{configFolderPath: c.configDir}
-	chained.PersistSessionStates(c.configDir)
-
-	proxies := make(map[string]*config.ProxyConfig)
-	_, _, err := cf.openConfig(proxiesYaml, proxies, []byte{})
-	if err != nil {
-		return nil, err
-	}
-
-	dialers := chained.CreateDialers(c.configDir, proxies, c.uc)
-	chained.TrackStatsFor(dialers, c.configDir)
-	return dialers, nil
-}
-
-func partialUserConfigFor(deviceID string) *UserConfig {
-	return userConfigFor(0, "", deviceID)
-}
-
-func userConfigFor(userID int, proToken, deviceID string) *UserConfig {
-	// TODO: plug in implementation of fetching timezone for iOS to work around https://github.com/golang/go/issues/20455
-	return &UserConfig{
-		UserConfigData: *common.NewUserConfigData(
-			"Lantern",
-			deviceID,
-			int64(userID),
-			proToken,
-			nil, // Headers currently unused
-			"",  // Language currently unused
-		),
-	}
 }
