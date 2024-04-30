@@ -31,10 +31,6 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
                 controller: emailController,
                 autovalidateMode: AutovalidateMode.disabled,
                 //TODO: this throws an error when we set it to AutovalidateMode.onUserInteraction
-                contentPadding: const EdgeInsetsDirectional.only(
-                  top: 8.0,
-                  bottom: 8.0,
-                ),
                 label: 'Email'.i18n,
                 helperText: 'auth_email_helper_text'.i18n,
                 keyboardType: TextInputType.emailAddress,

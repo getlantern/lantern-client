@@ -148,6 +148,61 @@ open class LanternHttpClient : HttpClient() {
     }
 
 
+    fun plansV4(
+        cb: PlansV3Callback,
+    ) {
+        val params =
+            mapOf(
+                "locale" to LanternApp.getSession().language,
+                "countrycode" to LanternApp.getSession().getCountryCode(),
+            )
+        get(
+            createProUrl("/plans-v4", params),
+            object : ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "Unable to fetch plans", throwable)
+                    cb.onFailure(throwable, error)
+                }
+
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    Logger.d(TAG, "Plans v3 Response body $result")
+                    val methods =
+                        parseData<Map<String, List<PaymentMethods>>>(
+                            result?.get("providers").toString(),
+                        )
+                    val icons = parseData<Icons>(result?.get("icons").toString())
+                    Logger.d(TAG, "Plans v3 Icons Response body $icons")
+                    val providers = methods.get("android")
+                    // Due to API limitations
+                    // We need loop all the provider and info since we can multiple provider with multiple methods
+                    providers?.let {
+                        providers.forEach { it ->
+                            it.providers.forEach { provider ->
+                                val icons = result?.get("icons")?.asJsonObject
+                                val logoJson = icons?.get(
+                                    provider.name.toString().lowercase()
+                                )!!.asJsonArray
+                                val logoUrlsList: List<String> =
+                                    logoJson?.map { it.asString } ?: emptyList()
+                                provider.logoUrl = logoUrlsList
+                            }
+                        }
+                    }
+                    val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
+                    val plans = plansMap(fetched)
+                    if (providers != null) cb.onSuccess(plans, providers)
+                }
+            },
+        )
+    }
+
+    @Deprecated("plansV3 has been deprecated  Use plansV4 instead")
     fun plansV3(
         cb: PlansV3Callback,
     ) {

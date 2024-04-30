@@ -12,7 +12,7 @@ INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 codegen: protos routes
 
 # You can install the dart protoc support by running 'dart pub global activate protoc_plugin'
-protos: lib/vpn/protos_shared/vpn.pb.dart
+protos: lib/vpn/protos_shared/vpn.pb.dart internalsdk/protos/vpn.pb.go
 
 lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging.proto
 	@protoc --dart_out=./lib/messaging --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_flutteronly/messaging.proto
@@ -20,11 +20,11 @@ lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging
 lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
 	@protoc --dart_out=./lib/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
 
-#internalsdk/protos/%.pb.go: protos_shared/%.proto
-#	@echo "Generating Go protobuf for $<"
-#	@protoc --plugin=protoc-gen-go=build/protoc-gen-go \
-#             --go_out=internalsdk \
-#             $<
+internalsdk/protos/%.pb.go: protos_shared/%.proto
+	@echo "Generating Go protobuf for $<"
+	@protoc --plugin=protoc-gen-go=build/protoc-gen-go \
+             --go_out=internalsdk \
+             $<
 
 internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
 	@protoc --go_out=internalsdk protos_shared/vpn.proto
@@ -94,7 +94,7 @@ STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= 9999.99.99
 # Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
-LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/lantern-client/internalsdk.ApplicationVersion=$(VERSION) -X github.com/getlantern/flashlight/v7/common.StagingMode=$(STAGING)
+LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/lantern-client/internalsdk/common.ApplicationVersion=$(VERSION)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table

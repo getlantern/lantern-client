@@ -5,5 +5,7 @@
         <domain includeSubdomains="true">telegram.me</domain>
         <domain includeSubdomains="true">t.me</domain>
         <domain includeSubdomains="true">127.0.0.1</domain>
+        <domain includeSubdomains="true">sci.fropay.pro</domain>
+        <domain includeSubdomains="true">sci.fropay.art</domain>
     </domain-config>
 </network-security-config>

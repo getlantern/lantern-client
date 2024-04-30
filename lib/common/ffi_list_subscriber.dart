@@ -21,7 +21,7 @@ class FfiListNotifier<T> extends SubscribedNotifier<ChangeTrackingList<T>> {
     var result = jsonDecode(ffiFunction().toDartString());
     if (result is List<dynamic>) {
       for (var item in result) {
-        var id = item['id'];
+        var id = item['id'] ?? item['name'];
         value.map[id] = fromJsonModel(item) as T;
       }
     } else if (result is Map<String, dynamic>) {

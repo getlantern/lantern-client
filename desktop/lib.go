@@ -4,6 +4,8 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -17,21 +19,21 @@ import (
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
-	"github.com/getlantern/flashlight/v7/pro"
-	"github.com/getlantern/flashlight/v7/pro/client"
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	"github.com/getlantern/lantern-client/desktop/settings"
+	"github.com/getlantern/lantern-client/internalsdk/common"
+	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
 
-	"github.com/shirou/gopsutil/v3/host"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -44,7 +46,7 @@ const (
 var (
 	log       = golog.LoggerFor("lantern-desktop.main")
 	a         *app.App
-	proClient *client.Client
+	proClient proclient.ProClient
 )
 
 var issueMap = map[string]string{
@@ -70,12 +72,27 @@ func start() {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = pro.NewClient()
+	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &proclient.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		},
+		UserConfig: func() common.UserConfig {
+			return userConfig(settings)
+		},
+	})
 
 	a = app.NewApp(flags, cdir, proClient, settings)
 
 	go func() {
 		err := fetchOrCreate()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
+
+	go func() {
+		err := fetchPayentMethodV4()
 		if err != nil {
 			log.Error(err)
 		}
@@ -98,11 +115,12 @@ func start() {
 	}()
 
 	golog.SetPrepender(logging.Timestamped)
+	handleSignals(a)
 
 	go func() {
 		defer logging.Close()
 		i18nInit(a)
-		runApp(a)
+		a.Run(true)
 
 		err := a.WaitForExit()
 		if err != nil {
@@ -118,23 +136,48 @@ func fetchOrCreate() error {
 	settings := a.Settings()
 	userID := settings.GetUserID()
 	if userID == 0 {
-		user, err := pro.NewUser(settings)
+		user, err := proClient.UserCreate(context.Background())
 		if err != nil {
 			return errors.New("Could not create new Pro user: %v", err)
 		}
-		settings.SetUserIDAndToken(user.Auth.ID, user.Auth.Token)
+		log.Debugf("DEBUG: User created: %v", user)
+		if user.BaseResponse != nil && user.BaseResponse.Error != "" {
+			return errors.New("Could not create new Pro user: %v", err)
+		}
+		settings.SetUserIDAndToken(user.UserId, user.Token)
+		// if the user is new mean we need to fetch the payment methods
+		fetchPayentMethodV4()
 	}
+	return nil
+}
+func fetchPayentMethodV4() error {
+	settings := a.Settings()
+	userID := settings.GetUserID()
+	if userID == 0 {
+		return errors.New("User ID is not set")
+	}
+	resp, err := proClient.PaymentMethodsV4(context.Background())
+	if err != nil {
+		return errors.New("Could not get payment methods: %v", err)
+	}
+	// log.Debugf("DEBUG: Payment methods logos: %v providers %v  and plans in string %v", resp.Logo, resp.Providers, resp.Plans)
+	bytes, err := json.Marshal(resp)
+	if err != nil {
+		return errors.New("Could not marshal payment methods: %v", err)
+	}
+	settings.SetPaymentMethodPlans(bytes)
+
 	return nil
 }
 
 //export sysProxyOn
 func sysProxyOn() {
-	a.SysproxyOn()
+	go a.SysproxyOn()
 }
 
 //export sysProxyOff
 func sysProxyOff() {
-	a.SysProxyOff()
+	go a.SysProxyOff()
 }
 
 //export selectedTab
@@ -159,26 +202,53 @@ func setSelectTab(ttab *C.char) {
 
 //export plans
 func plans() *C.char {
-	resp, err := proClient.Plans(userConfig())
-	if err != nil {
-		return sendError(err)
+	settings := a.Settings()
+	plans := settings.GetPaymentMethods()
+	if plans == nil {
+		return sendError(errors.New("plans not found"))
 	}
-	b, _ := json.Marshal(resp.Plans)
-	return C.CString(string(b))
+	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
+	err := json.Unmarshal(plans, paymentMethodsResponse)
+	plansByte, err := json.Marshal(paymentMethodsResponse.Plans)
+	if err != nil {
+		return sendError(errors.New("error fetching payment methods: %v", err))
+	}
+	return C.CString(string(plansByte))
 }
 
-//export paymentMethods
-func paymentMethods() *C.char {
-	resp, err := proClient.PaymentMethods(userConfig())
+//export paymentMethodsV3
+func paymentMethodsV3() *C.char {
+	resp, err := proClient.PaymentMethods(context.Background())
 	if err != nil {
-		return sendError(err)
+		return sendError(errors.New("error fetching payment methods: %v", err))
 	}
 	b, _ := json.Marshal(resp.Providers)
 	return C.CString(string(b))
 }
 
-func getUserData() (*client.User, error) {
-	resp, err := proClient.UserData(userConfig())
+//export paymentMethodsV4
+func paymentMethodsV4() *C.char {
+	settings := a.Settings()
+	plans := settings.GetPaymentMethods()
+	if plans == nil {
+		return sendError(errors.New("Payment methods not found"))
+	}
+	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
+	err := json.Unmarshal(plans, paymentMethodsResponse)
+	if err != nil {
+		return sendError(err)
+	}
+	b, _ := json.Marshal(paymentMethodsResponse)
+	return C.CString(string(b))
+}
+
+func cachedUserData() (*protos.User, bool) {
+	uc := userConfig(a.Settings())
+	return app.GetUserDataFast(context.Background(), uc.GetUserID())
+}
+
+func getUserData() (*protos.User, error) {
+	resp, err := proClient.UserData(context.Background())
 	if err != nil {
 		return nil, err
 	}
@@ -186,12 +256,42 @@ func getUserData() (*client.User, error) {
 	if user.Email != "" {
 		a.Settings().SetEmailAddress(user.Email)
 	}
-	return &user, nil
+	return user, nil
+}
+
+// tryCacheUserData retrieves the latest user data for the given user.
+// It first checks the cache and if present returns the user data stored there
+func tryCacheUserData() (*protos.User, error) {
+	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
+		return cacheUserData, nil
+	}
+	return getUserData()
+}
+
+// this method is reposible for checking if the user has updated plan or bought plans
+//
+//export hasPlanUpdatedOrBuy
+func hasPlanUpdatedOrBuy() *C.char {
+	//Get the cached user data
+	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
+	cacheUserData, isOldFound := cachedUserData()
+	//Get latest user data
+	resp, err := proClient.UserData(context.Background())
+	if err != nil {
+		return sendError(err)
+	}
+	if isOldFound {
+		if cacheUserData.Expiration < resp.User.Expiration {
+			// New data has a later expiration
+			return C.CString(string("true"))
+		}
+	}
+	return C.CString(string("false"))
 }
 
 //export devices
 func devices() *C.char {
-	user, err := getUserData()
+	user, err := tryCacheUserData()
 	if err != nil {
 		return sendError(err)
 	}
@@ -215,7 +315,7 @@ func sendError(err error) *C.char {
 
 //export approveDevice
 func approveDevice(code *C.char) *C.char {
-	resp, err := proClient.LinkCodeApprove(userConfig(), C.GoString(code))
+	resp, err := proClient.LinkCodeApprove(context.Background(), C.GoString(code))
 	if err != nil {
 		return sendError(err)
 	}
@@ -224,7 +324,7 @@ func approveDevice(code *C.char) *C.char {
 
 //export removeDevice
 func removeDevice(deviceId *C.char) *C.char {
-	resp, err := proClient.DeviceRemove(userConfig(), C.GoString(deviceId))
+	resp, err := proClient.DeviceRemove(context.Background(), C.GoString(deviceId))
 	if err != nil {
 		log.Error(err)
 		return sendError(err)
@@ -234,7 +334,7 @@ func removeDevice(deviceId *C.char) *C.char {
 
 //export expiryDate
 func expiryDate() *C.char {
-	user, err := getUserData()
+	user, err := tryCacheUserData()
 	if err != nil {
 		return sendError(err)
 	}
@@ -275,9 +375,8 @@ func emailAddress() *C.char {
 
 //export emailExists
 func emailExists(email *C.char) *C.char {
-	err := proClient.EmailExists(userConfig(), C.GoString(email))
+	_, err := proClient.EmailExists(context.Background(), C.GoString(email))
 	if err != nil {
-		log.Error(err)
 		return sendError(err)
 	}
 	return C.CString("false")
@@ -288,21 +387,31 @@ func emailExists(email *C.char) *C.char {
 // If an error occurs during redemption, the first string is nil, and the second string contains the error message.
 //
 //export redeemResellerCode
-func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) (*C.char, *C.char) {
-	_, err := proClient.RedeemResellerCode(userConfig(), C.GoString(email), C.GoString(resellerCode),
-		C.GoString(deviceName), C.GoString(currency))
+func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.char {
+	response, err := proClient.RedeemResellerCode(context.Background(), &protos.RedeemResellerCodeRequest{
+		Currency:       C.GoString(currency),
+		DeviceName:     C.GoString(deviceName),
+		Email:          C.GoString(email),
+		IdempotencyKey: strconv.FormatInt(time.Now().UnixMilli(), 10),
+		ResellerCode:   C.GoString(resellerCode),
+		Provider:       "reseller-code",
+	})
+	log.Debugf("DEBUG: redeeming reseller code response: %v", response)
+	if response.Error != "" {
+		log.Debugf("DEBUG: error while redeeming reseller code reponse is: %v", response.Error)
+		return sendError(errors.New("Error while redeeming reseller code: %v", response.Error))
+	}
 	if err != nil {
 		log.Debugf("DEBUG: error while redeeming reseller code: %v", err)
-		return nil, C.CString(err.Error())
-		// return sendError(err)
+		return sendError(err)
 	}
-	log.Debugf("DEBUG: redeeming reseller code success: %v", err)
-	return C.CString("true"), nil
+	log.Debug("DEBUG: redeeming reseller code success")
+	return C.CString("true")
 }
 
 //export referral
 func referral() *C.char {
-	referralCode, err := a.ReferralCode(userConfig())
+	referralCode, err := a.ReferralCode(userConfig(a.Settings()))
 	if err != nil {
 		return sendError(err)
 	}
@@ -337,6 +446,13 @@ func lang() *C.char {
 //export setSelectLang
 func setSelectLang(lang *C.char) {
 	a.SetLanguage(C.GoString(lang))
+	// update the payment methods if the language is changed
+	go func() {
+		err := fetchPayentMethodV4()
+		if err != nil {
+			log.Error(err)
+		}
+	}()
 }
 
 //export country
@@ -375,18 +491,24 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
+	ctx := context.Background()
 	// refresh user data when home page is loaded on desktop
-	go pro.FetchUserData(a.Settings())
-	if isProUser, ok := a.IsProUser(); isProUser && ok {
+	go getUserData()
+	uc := a.Settings()
+	if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
 		return C.CString("true")
 	}
 	return C.CString("false")
 }
 
+func deviceName() string {
+	deviceName, _ := osversion.GetHumanReadable()
+	return deviceName
+}
+
 //export deviceLinkingCode
 func deviceLinkingCode() *C.char {
-	info, _ := host.Info()
-	resp, err := proClient.RequestDeviceLinkingCode(userConfig(), info.Hostname)
+	resp, err := proClient.LinkCodeRequest(context.Background(), deviceName())
 	if err != nil {
 		return sendError(err)
 	}
@@ -396,7 +518,7 @@ func deviceLinkingCode() *C.char {
 //export paymentRedirect
 func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
-	resp, err := proClient.PaymentRedirect(userConfig(), &client.PaymentRedirectRequest{
+	resp, err := proClient.PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
 		Provider:    C.GoString(provider),
 		Currency:    strings.ToUpper(C.GoString(currency)),
@@ -408,6 +530,11 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 		return sendError(err)
 	}
 	return sendJson(resp)
+}
+
+//export exitApp
+func exitApp() {
+	a.Exit(nil)
 }
 
 //export developmentMode
@@ -430,10 +557,9 @@ func replicaAddr() *C.char {
 	return C.CString("")
 }
 
-func userConfig() *common.UserConfigData {
-	settings := a.Settings()
+func userConfig(settings *settings.Settings) common.UserConfig {
 	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	return common.NewUserConfigData(
+	return common.NewUserConfig(
 		common.DefaultAppName,
 		deviceID,
 		userID,
@@ -451,10 +577,11 @@ func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 	if err != nil {
 		return nil, sendError(err)
 	}
-	uc := userConfig()
+	ctx := context.Background()
+	uc := userConfig(a.Settings())
 
 	subscriptionLevel := "free"
-	if isProUser, ok := a.IsProUser(); ok && isProUser {
+	if isProUser, ok := app.IsProUserFast(ctx, uc); ok && isProUser {
 		subscriptionLevel = "pro"
 	}
 
@@ -503,30 +630,13 @@ func checkUpdates() *C.char {
 	return C.CString(updateURL)
 }
 
-//export purchase
-func purchase(planID, email, cardNumber, expDate, cvc string) *C.char {
-	/*resp, err := proClient.Purchase(&proclient.PurchaseRequest{
-		Provider: proclient.Provider_STRIPE,
-		Email: email,
-		Plan: planID,
-		CardNumber: cardNumber,
-		ExpDate: expDate,
-		Cvc: cvc,
-	})
-	if err != nil {
-		return sendError(err)
-	}
-	b, _ := json.Marshal(resp)*/
-	return C.CString("")
-}
-
 // loadSettings loads the initial settings at startup, either from disk or using defaults.
-func loadSettings(configDir string) *app.Settings {
+func loadSettings(configDir string) *settings.Settings {
 	path := filepath.Join(configDir, "settings.yaml")
 	if common.Staging {
 		path = filepath.Join(configDir, "settings-staging.yaml")
 	}
-	settings := app.LoadSettingsFrom(app.ApplicationVersion, app.RevisionDate, app.BuildDate, path)
+	settings := settings.LoadSettingsFrom(app.ApplicationVersion, app.RevisionDate, app.BuildDate, path)
 	if common.Staging {
 		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
 	}
@@ -548,12 +658,6 @@ func configDir(flags *flashlight.Flags) string {
 		}
 	}
 	return cdir
-}
-
-func runApp(a *app.App) {
-	// Schedule cleanup actions
-	handleSignals(a)
-	a.Run(true)
 }
 
 // useOSLocale detect OS locale for current user and let i18n to use it
@@ -599,6 +703,7 @@ func handleSignals(a *app.App) {
 	go func() {
 		s := <-c
 		log.Debugf("Got signal \"%s\", exiting...", s)
+		a.Exit(nil)
 	}()
 }
 

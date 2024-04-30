@@ -1,5 +1,4 @@
 import 'dart:ffi'; // For FFI
-import 'dart:io';
 
 import 'package:ffi/src/utf8.dart';
 import 'package:lantern/common/common.dart';
@@ -21,6 +20,11 @@ void setSelectTab(tab) => _bindings.setSelectTab(tab);
 void setLang(lang) => _bindings.setSelectLang(lang);
 
 String websocketAddr() => _bindings.websocketAddr().cast<Utf8>().toDartString();
+
+void ffiExit() {
+  _bindings.exitApp();
+  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+}
 
 Pointer<Utf8> ffiVpnStatus() => _bindings.vpnStatus().cast<Utf8>();
 
@@ -48,6 +52,11 @@ Future<User> ffiUserData() async {
 
 // checkAPIError throws a PlatformException if the API response contains an error
 void checkAPIError(result, errorMessage) {
+  if (result is String) {
+    final errorMessageMap = jsonDecode(result);
+    throw PlatformException(
+        code: errorMessageMap.toString(), message: errorMessage);
+  }
   if (result.error != "") {
     throw PlatformException(code: result.error, message: errorMessage);
   }
@@ -58,7 +67,7 @@ Future<String> ffiApproveDevice(String code) async {
       .approveDevice(code.toPointerChar())
       .cast<Utf8>()
       .toDartString();
-  final result = APIResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
   checkAPIError(result, 'wrong_device_linking_code'.i18n);
   // refresh user data after successfully linking device
   await ffiUserData();
@@ -77,6 +86,12 @@ Future<void> ffiRemoveDevice(String deviceId) async {
   return;
 }
 
+FutureOr<bool> ffiHasPlanUpdateOrBuy(dynamic context) {
+  final json = _bindings.hasPlanUpdatedOrBuy().cast<Utf8>().toDartString();
+  print('Result of hasPlanUpdatedOrBuy: $json');
+  return json == 'true' ? true : throw NoPlansUpdate("No Plans update");
+}
+
 Pointer<Utf8> ffiDevices() => _bindings.devices().cast<Utf8>();
 
 Pointer<Utf8> ffiDevelopmentMode() => _bindings.developmentMode().cast<Utf8>();
@@ -91,19 +106,14 @@ Future<String> ffiEmailExists(String email) async => await _bindings
     .cast<Utf8>()
     .toDartString();
 
-Pointer<Utf8> ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
-  final result =
-      _bindings.redeemResellerCode(email, currency, deviceName, resellerCode);
-  // Check for error
-  // it means you need to check r1
-  if (result.r1 != nullptr) {
-    // Got error throw error to show error ui state
-    final errorCode = result.r1.cast<Utf8>().toDartString();
-    throw PlatformException(code: errorCode, message: 'wrong_seller_code'.i18n);
-  }
+void ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
+  final result = _bindings
+      .redeemResellerCode(email, currency, deviceName, resellerCode)
+      .cast<Utf8>()
+      .toDartString();
+  checkAPIError(result, 'wrong_seller_code'.i18n);
   // if successful redeeming a reseller code, immediately refresh Pro user data
   ffiProUser();
-  return result.r0.cast<Utf8>();
 }
 
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
@@ -118,7 +128,10 @@ Pointer<Utf8> ffiCheckUpdates() => _bindings.checkUpdates().cast<Utf8>();
 
 Pointer<Utf8> ffiPlans() => _bindings.plans().cast<Utf8>();
 
-Pointer<Utf8> ffiPaymentMethods() => _bindings.paymentMethods().cast<Utf8>();
+Pointer<Utf8> ffiPaymentMethods() => _bindings.paymentMethodsV3().cast<Utf8>();
+
+Pointer<Utf8> ffiPaymentMethodsV4() =>
+    _bindings.paymentMethodsV4().cast<Utf8>();
 
 Pointer<Utf8> ffiDeviceLinkingCode() =>
     _bindings.deviceLinkingCode().cast<Utf8>();
@@ -186,4 +199,12 @@ final NativeLibrary _bindings = NativeLibrary(_dylib);
 
 void loadLibrary() {
   _bindings.start();
+}
+
+//Custom exception for handling error
+
+class NoPlansUpdate implements Exception {
+  String message;
+
+  NoPlansUpdate(this.message);
 }

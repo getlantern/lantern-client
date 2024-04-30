@@ -1,4 +1,4 @@
-package app
+package settings
 
 import (
 	"encoding/json"
@@ -54,6 +54,8 @@ const (
 	SNBuildDate          SettingName = "buildDate"
 	SNRevisionDate       SettingName = "revisionDate"
 	SNEnabledExperiments SettingName = "enabledExperiments"
+
+	SNPaymentMethods SettingName = "paymentMethods"
 )
 
 type settingType byte
@@ -152,8 +154,8 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	return sett
 }
 
-// emptySettings returns a new settings instance without loading any file from disk.
-func emptySettings() *Settings {
+// EmptySettings returns a new settings instance without loading any file from disk.
+func EmptySettings() *Settings {
 	return LoadSettingsFrom("version", "revisionDate", "buildDate", "")
 }
 
@@ -420,6 +422,16 @@ func (s *Settings) SetProxyAll(proxyAll bool) {
 	s.setVal(SNProxyAll, proxyAll)
 }
 
+// GetDisconnected returns whether or not we're disconnected
+func (s *Settings) GetDisconnected() bool {
+	return s.getBool(SNDisconnected)
+}
+
+// SetDisconnected sets whether or not we're disconnected
+func (s *Settings) SetDisconnected(disconnected bool) {
+	s.setBool(SNDisconnected, disconnected)
+}
+
 // GetGoogleAds returns whether or not to proxy all traffic.
 func (s *Settings) GetGoogleAds() bool {
 	return s.getBool(SNGoogleAds)
@@ -477,6 +489,16 @@ func (s *Settings) GetLocalHTTPToken() string {
 	return s.getString(SNLocalHTTPToken)
 }
 
+// GetPastAnnouncements returns past campaign announcements
+func (s *Settings) GetPastAnnouncements() []string {
+	return s.getStringArray(SNPastAnnouncements)
+}
+
+// SetPastAnnouncements sets past campaigns announcements
+func (s *Settings) SetPastAnnouncements(announcements []string) {
+	s.setStringArray(SNPastAnnouncements, announcements)
+}
+
 // SetUIAddr sets the last known UI address.
 func (s *Settings) SetUIAddr(uiaddr string) {
 	s.setVal(SNUIAddr, uiaddr)
@@ -485,6 +507,21 @@ func (s *Settings) SetUIAddr(uiaddr string) {
 // GetAddr gets the HTTP proxy address.
 func (s *Settings) GetAddr() string {
 	return s.getString(SNAddr)
+}
+
+// SetAddr sets the HTTP proxy address.
+func (s *Settings) SetAddr(addr string) {
+	s.setString(SNAddr, addr)
+}
+
+// GetSOCKSAddr returns the SOCKS proxy address.
+func (s *Settings) GetSOCKSAddr() string {
+	return s.getString(SNSOCKSAddr)
+}
+
+// SetSOCKSAddr sets the SOCKS proxy address.
+func (s *Settings) SetSOCKSAddr(addr string) {
+	s.setString(SNSOCKSAddr, addr)
 }
 
 // GetEmailAddress gets the email address of pro users.
@@ -511,6 +548,17 @@ func (s *Settings) GetDeviceID() string {
 // SetUserIDAndToken sets the user ID and token atomically
 func (s *Settings) SetUserIDAndToken(id int64, token string) {
 	s.setVals(map[SettingName]interface{}{SNUserID: id, SNUserToken: token})
+}
+
+// SetPaymentMethods sets plans as string
+func (s *Settings) SetPaymentMethodPlans(paymentMethods []byte) {
+	s.setVal(SNPaymentMethods, paymentMethods)
+
+}
+
+// () returns the payment methods
+func (s *Settings) GetPaymentMethods() []byte {
+	return s.getbytes(SNPaymentMethods)
 }
 
 // GetUserID returns the user ID
@@ -578,6 +626,14 @@ func (s *Settings) getString(name SettingName) string {
 	return ""
 }
 
+func (s *Settings) getbytes(name SettingName) []byte {
+	if val, err := s.getVal(name); err == nil {
+		if v, ok := val.([]byte); ok {
+			return v
+		}
+	}
+	return []byte{}
+}
 func (s *Settings) getInt64(name SettingName) int64 {
 	if val, err := s.getVal(name); err == nil {
 		if v, ok := val.(int64); ok {

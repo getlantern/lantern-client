@@ -325,7 +325,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     }
 
     private fun updatePaymentMethods() {
-        lanternClient.plansV3(
+        lanternClient.plansV4(
             object : PlansV3Callback {
                 override fun onFailure(
                     throwable: Throwable?,
@@ -339,7 +339,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     paymentMethods: List<PaymentMethods>,
 
                     ) {
-                    Logger.debug(TAG, "Successfully fetched payment methods")
+                    Logger.debug(TAG, "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans")
                     processPaymentMethods(proPlans, paymentMethods)
                 }
             }

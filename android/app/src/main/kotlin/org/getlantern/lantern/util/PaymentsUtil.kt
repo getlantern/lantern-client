@@ -21,6 +21,7 @@ import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.model.PaymentProvider
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.model.toPaymentProvider
 import org.getlantern.mobilesdk.Logger
 
 class PaymentsUtil(private val activity: Activity) {
@@ -97,56 +98,88 @@ class PaymentsUtil(private val activity: Activity) {
         }
     }
 
-    fun submitBitcoinPayment(
+
+    fun generatePaymentRedirectUrl(
         planID: String,
         email: String,
-        refCode: String,
+        provider: String,
         methodCallResult: MethodChannel.Result,
     ) {
         try {
-            val provider = PaymentProvider.BTCPay.toString().lowercase()
+            val provider = provider.toPaymentProvider().toString().lowercase()
+            if (provider == null) {
+                methodCallResult.error(
+                    "unknownError",
+                    "$provider is unavailable", // This error message is localized Flutter-side
+                    null,
+                )
+                return
+            }
             val params =
-                mutableMapOf<String, String>(
+                mutableMapOf(
                     "email" to email,
                     "plan" to planID,
                     "provider" to provider,
                     "deviceName" to session.deviceName(),
                 )
-            lanternClient.get(
-                LanternHttpClient.createProUrl("/payment-redirect", params),
-                object : ProCallback {
-                    override fun onFailure(
-                        throwable: Throwable?,
-                        error: ProError?,
-                    ) {
-                        Logger.error(TAG, "BTCPay is unavailable", throwable)
-                        methodCallResult.error(
-                            "unknownError",
-                            "BTCPay is unavailable", // This error message is localized Flutter-side
-                            null,
-                        )
-                        return
-                    }
 
-                    override fun onSuccess(
-                        response: Response?,
-                        result: JsonObject?,
-                    ) {
-                        Logger.debug(
-                            TAG,
-                            "Email successfully validated $email",
-                        )
-                        methodCallResult.success(result.toString())
-                    }
-                },
-            )
+            sendPaymentRedirectRequest(params, object : ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "$provider is unavailable ", throwable)
+                    methodCallResult.error(
+                        "unknownError",
+                        "$provider is unavailable", // This error message is localized Flutter-side
+                        null,
+                    )
+                    return
+                }
+
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    val providerUrl = result!!.get("redirect").asString
+                    Logger.debug(
+                        TAG,
+                        "$provider url is  $providerUrl",
+                    )
+
+                    methodCallResult.success(providerUrl)
+                }
+            })
         } catch (t: Throwable) {
             methodCallResult.error(
                 "unknownError",
-                "BTCPay is unavailable", // This error message is localized Flutter-side
+                "$provider is unavailable", // This error message is localized Flutter-side
                 null,
             )
         }
+    }
+
+    private fun sendPaymentRedirectRequest(params: Map<String, String>, proCallback: ProCallback) {
+        lanternClient.get(
+            LanternHttpClient.createProUrl("/payment-redirect", params),
+            object : ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    proCallback.onFailure(throwable, error)
+                    return
+                }
+
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    proCallback.onSuccess(response, result)
+
+                }
+            },
+        )
     }
 
     // getPlanYear splits the given plan ID by hyphen and returns the year the given startas with
