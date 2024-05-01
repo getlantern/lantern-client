@@ -2,6 +2,7 @@ package io.lantern.model
 
 import android.app.Activity
 import android.content.Intent
+import android.view.WindowManager
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
 import internalsdk.Internalsdk
@@ -126,6 +127,21 @@ class SessionModel(
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
+            "enableScreenshot" -> {
+                activity.runOnUiThread {
+                    activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                }
+                Logger.debug("Screenshot enabled", "Screenshot enabled")
+
+            }
+
+            "disableScreenshot" -> {
+                activity.runOnUiThread {
+                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
+                Logger.debug("Screenshot disable", "Screenshot disabled")
+            }
+
             "authorizeViaEmail" -> requestRecoveryEmail(call.argument("emailAddress")!!, result)
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "requestLinkCode" -> requestLinkCode(result)
@@ -180,6 +196,7 @@ class SessionModel(
                 LanternApp.getSession().setLanguage(call.argument("lang"))
                 fetchPaymentMethods(result)
             }
+
             else -> super.doOnMethodCall(call, result)
         }
     }

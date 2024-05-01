@@ -66,6 +66,10 @@ class SessionModel extends Model {
         false,
       );
     }
+    ///By default when user starts the app we need to make sure that screenshot is disabled
+    /// if user goes to chat then screenshot will be disabled
+    enableScreenShot();
+
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
@@ -833,4 +837,13 @@ class SessionModel extends Model {
       'packageName': packageName,
     });
   }
+
+  Future<void> enableScreenShot() {
+    return methodChannel.invokeMethod('enableScreenshot', <String, dynamic>{});
+  }
+
+  Future<void> disableScreenShot() {
+    return methodChannel.invokeMethod('disableScreenshot', <String, dynamic>{});
+  }
+
 }
