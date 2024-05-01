@@ -68,10 +68,12 @@ class SessionModel extends Model {
       );
 
     }
-    ///By default when user starts the app we need to make sure that screenshot is disabled
-    /// if user goes to chat then screenshot will be disabled
-    enableScreenShot();
 
+    if (Platform.isAndroid) {
+      // By default when user starts the app we need to make sure that screenshot is disabled
+      // if user goes to chat then screenshot will be disabled
+      enableScreenShot();
+    }
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
