@@ -58,7 +58,6 @@ class SessionModel(
     companion object {
         private const val TAG = "SessionModel"
         const val PATH_PRO_USER = "prouser"
-        const val PATH_SELECTED_TAB = "/selectedTab"
         const val PATH_PLAY_VERSION = "playVersion"
         const val PATH_SERVER_INFO = "/server_info"
 
@@ -222,12 +221,6 @@ class SessionModel(
             "setForceCountry" -> {
                 LanternApp.getSession().setForceCountry(call.argument("countryCode") ?: "")
                 activity.restartApp()
-            }
-
-            "setSelectedTab" -> {
-                db.mutate { tx ->
-                    tx.put(PATH_SELECTED_TAB, call.argument<String>("tab")!!)
-                }
             }
 
             "submitFreekassa" -> {
