@@ -23,10 +23,10 @@ func NewService(sessionModel *SessionModel) *LanternService {
 
 func (s *LanternService) Start(configDir string, locale string, settings Settings) {
 	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
-	session := &panickingSessionImpl{s.sessionModel}
+	/*session := &panickingSessionImpl{s.sessionModel}
 	startOnce.Do(func() {
 		go run(configDir, locale, settings, session)
-	})
+	})*/
 }
 
 func HTTPProxyPort() int {

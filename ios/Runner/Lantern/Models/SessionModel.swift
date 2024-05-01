@@ -20,7 +20,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current
     let deviceId = device.identifierForVendor!.uuidString
-    let model = device.model
+    let deviceModel = device.model
     let systemName = device.systemName
     let systemVersion = device.systemVersion
     opts.deviceID = deviceId
@@ -30,12 +30,12 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.playVersion = (isRunningFromAppStore() || isRunningInTestFlightEnvironment())
     opts.timeZone = TimeZone.current.identifier
     opts.device = systemName  // IOS does not provide Device name directly
-    opts.model = systemName
+    opts.model = deviceModel
     opts.osVersion = systemVersion
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
     opts.platform = "ios"
-
     var error: NSError?
+    //var model:InternalsdkSessionModel?
     guard
       let model = InternalsdkNewSessionModel(
         try BaseModel<InternalsdkModelProtocol>.getDB(), opts, &error)
@@ -43,9 +43,6 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
-//    DispatchQueue.global(qos: .userInitiated).async {
-//      self.startService()
-//    }
   }
 
   func startService() {

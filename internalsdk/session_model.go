@@ -3,6 +3,7 @@ package internalsdk
 import (
 	"context"
 	"fmt"
+	"net"
 	"net/http"
 	"path/filepath"
 	"strconv"
@@ -10,7 +11,8 @@ import (
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/logging"
-	"github.com/getlantern/flashlight/v7/proxied"
+
+	//"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -95,8 +97,8 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
 		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   30 * time.Second,
+			//Transport: proxied.ParallelForIdempotent(),
+			Timeout: 30 * time.Second,
 		},
 		UserConfig: func() common.UserConfig {
 			deviceID, _ := m.GetDeviceID()
@@ -115,7 +117,8 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	})
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
-	return m, m.initSessionModel(context.Background(), opts)
+	go m.initSessionModel(context.Background(), opts)
+	return m, nil
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -191,7 +194,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "createUser":
 		err := m.userCreate(context.Background(), arguments.Scalar().String())
 		if err != nil {
-			return nil, err
+			log.Error(err)
 		}
 		return true, nil
 	case "hasAllNetworkPermssion":
@@ -222,6 +225,23 @@ func (m *SessionModel) StartService(configDir string,
 
 // InvokeMethod handles method invocations on the SessionModel.
 func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelOpts) error {
+
+	dialer := &net.Dialer{
+		Resolver: &net.Resolver{
+			PreferGo: true,
+			Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+				d := net.Dialer{
+					Timeout: time.Duration(5000) * time.Millisecond,
+				}
+				return d.DialContext(ctx, "udp", "8.8.8.8:53")
+			},
+		},
+	}
+
+	http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
+		return dialer.DialContext(ctx, network, addr)
+	}
+
 	// Check if email if empty
 	email, err := pathdb.Get[string](m.db, pathEmailAddress)
 	if err != nil {
@@ -282,19 +302,20 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	if userId == 0 {
 		local, err := m.Locale()
 		if err != nil {
-			return err
-		}
-		// Create user
-		err = m.userCreate(ctx, local)
-		if err != nil {
-			return err
+			log.Error(err)
+		} else {
+			// Create user
+			err = m.userCreate(ctx, local)
+			if err != nil {
+				log.Error(err)
+			}
 		}
 	}
 
 	// Get all user details
 	err = m.userDetail(ctx)
 	if err != nil {
-		return err
+		log.Error(err)
 	}
 	return checkAdsEnabled(m)
 }

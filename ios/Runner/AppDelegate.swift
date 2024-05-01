@@ -14,7 +14,7 @@ import UIKit
   private var lanternModel: LanternModel!
   private var vpnModel: VpnModel!
   private var messagingModel: MessagingModel!
-  private var lanternService: LanternService!
+  // private var lanternService: LanternService!
   // IOS
   var loadingManager: LoadingIndicatorManager?
 
@@ -22,11 +22,10 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    //    SentryUtils.startSentry();
+
     initializeFlutterComponents()
     do {
       try setupAppComponents()
-      try setupLanternService()
     } catch {
       logger.error("Unexpected error setting up app components: \(error)")
       exit(1)
@@ -42,21 +41,20 @@ import UIKit
   }
 
   private func setupLanternService() throws {
-    try self.lanternService = LanternService(
-      sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
     // Run Lantern service on a background queue
-    DispatchQueue.global(qos: .background).async {
-      self.lanternService.start()
-    }
+    // Task.detached {
+      let lanternService = LanternService(
+        sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
+      lanternService.start()
+    // }
   }
 
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
-    try self.setupModels()
-    DispatchQueue.main.async {
-      self.startUpSequency()
-      self.setupLoadingBar()
-    }
+    try setupModels()
+    //try setupLanternService()
+    self.startUpSequency()
+    self.setupLoadingBar()
   }
 
   // Init all the models
