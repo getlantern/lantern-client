@@ -21,7 +21,6 @@ import (
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
-	"github.com/getlantern/flashlight/v7/client"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
@@ -52,10 +51,6 @@ var (
 	startTime          = time.Now()
 	translationAppName = strings.ToUpper(common.DefaultAppName)
 )
-
-type startUpCallback struct {
-	client.ClientCallbacks
-}
 
 func init() {
 	autoupdate.Version = ApplicationVersion
@@ -233,6 +228,9 @@ func (app *App) Run(isMain bool) {
 			app.settings.GetLanguage,
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
 			app.analyticsSession.EventWithLabel,
+			flashlightClient.WithOnConfig(app.onConfigUpdate),
+			flashlightClient.WithProxies(app.onProxiesUpdate),
+			flashlightClient.WithIsPro(app.IsPro),
 		)
 		if err != nil {
 			app.Exit(err)
@@ -425,6 +423,7 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
+	log.Debugf("[Startup Desktop] Got config update from %v", src)
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
 	}
@@ -443,6 +442,7 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
+	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
 	}
