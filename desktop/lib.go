@@ -180,24 +180,9 @@ func sysProxyOff() {
 	go a.SysProxyOff()
 }
 
-//export selectedTab
-func selectedTab() *C.char {
-	return C.CString(string(a.SelectedTab()))
-}
-
 //export websocketAddr
 func websocketAddr() *C.char {
 	return C.CString(a.WebsocketAddr())
-}
-
-//export setSelectTab
-func setSelectTab(ttab *C.char) {
-	tab, err := app.ParseTab(C.GoString(ttab))
-	if err != nil {
-		log.Error(err)
-		return
-	}
-	a.SetSelectedTab(tab)
 }
 
 //export plans

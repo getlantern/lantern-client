@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   void channelListener() {
     const mainMethodChannel = MethodChannel('lantern_method_channel');
-    const navigationChannel =  MethodChannel('navigation');
+    const navigationChannel = MethodChannel('navigation');
     sessionModel.getChatEnabled().then((chatEnabled) {
       if (chatEnabled) {
         messagingModel
@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             .then((shouldShowModal) async {
           if (shouldShowModal) {
             // open VPN tab
-            await sessionModel.setSelectedTab(TAB_VPN);
+             sessionModel.setSelectedTab(context,TAB_VPN);
             // show Try Lantern Chat dialog
             await context.router
                 .push(FullScreenDialogPage(widget: TryLanternChat()));
@@ -193,14 +193,13 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   Widget build(BuildContext context) {
-
     final tabModel = context.watch<BottomBarChangeNotifier>();
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
             if (developmentMode) {
-              Logger.level = Level.verbose;
+              Logger.level = Level.trace;
             } else {
               Logger.level = Level.error;
             }
@@ -220,7 +219,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                   ).toLowerCase() ==
                   'true';
 
-              // final tab = isMobile() ? selectTab : ffiSelectedTab().toDartString();
               final tab = tabModel.currentIndex;
               return Scaffold(
                 body: buildBody(tab, isOnboarded),
@@ -231,28 +229,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                 ),
               );
             });
-
-            // return sessionModel.selectedTab(
-            //   (context, selectTab, child) =>
-            //       messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-            //     final isTesting = const String.fromEnvironment(
-            //           'driver',
-            //           defaultValue: 'false',
-            //         ).toLowerCase() ==
-            //         'true';
-            //
-            //     final tab =
-            //         isMobile() ? selectTab : ffiSelectedTab().toDartString();
-            //     return Scaffold(
-            //       body: buildBody(tab, isOnboarded),
-            //       bottomNavigationBar: CustomBottomBar(
-            //         selectedTab: tab,
-            //         isDevelop: developmentMode,
-            //         isTesting: isTesting,
-            //       ),
-            //     );
-            //   }),
-            // );
           },
         );
       },

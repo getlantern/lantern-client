@@ -1,6 +1,4 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/common_desktop.dart';
-import 'package:lantern/custom_bottom_bar.dart';
 
 class CustomBottomBarItem extends StatelessWidget {
   const CustomBottomBarItem({
@@ -54,17 +52,9 @@ class CustomBottomBarItem extends StatelessWidget {
                   ),
                 ),
               ),
-              onTap: (() async {
-                if (isDesktop()) {
-                  setSelectedTab(context, name);
-                } else {
-                  sessionModel.setSelectedTab(name);
-                }
+              onTap: (()  {
                 /// notifiy the bottom listener to update UI
-                final tabModel = Provider.of<BottomBarChangeNotifier>(context,
-                    listen: false);
-
-                tabModel.setCurrentIndex(name);
+                sessionModel.setSelectedTab(context, name);
               }),
               child: Container(
                 decoration: ShapeDecoration(
