@@ -15,8 +15,6 @@ void sysProxyOn() => _bindings.sysProxyOn();
 
 void sysProxyOff() => _bindings.sysProxyOff();
 
-void setSelectTab(tab) => _bindings.setSelectTab(tab);
-
 void setLang(lang) => _bindings.setSelectLang(lang);
 
 String websocketAddr() => _bindings.websocketAddr().cast<Utf8>().toDartString();
@@ -27,8 +25,6 @@ void ffiExit() {
 }
 
 Pointer<Utf8> ffiVpnStatus() => _bindings.vpnStatus().cast<Utf8>();
-
-Pointer<Utf8> ffiSelectedTab() => _bindings.selectedTab().cast<Utf8>();
 
 Pointer<Utf8> ffiLang() => _bindings.lang().cast<Utf8>();
 

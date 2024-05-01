@@ -138,16 +138,6 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 	}
 }
 
-func (app *App) SelectedTab() Tab {
-	return app.selectedTab
-}
-
-func (app *App) SetSelectedTab(selectedTab Tab) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.selectedTab = selectedTab
-}
-
 // Run starts the app.
 func (app *App) Run(isMain bool) {
 	golog.OnFatal(app.exitOnFatal)
