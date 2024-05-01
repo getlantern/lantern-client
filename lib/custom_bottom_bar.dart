@@ -286,3 +286,16 @@ class CustomBottomBar extends StatelessWidget {
     return items;
   }
 }
+
+///Change notifier used the bottom bar
+///update tap when user click on the bottom bar
+class BottomBarChangeNotifier extends ChangeNotifier {
+  String _currentIndex = TAB_VPN;
+
+  String get currentIndex => _currentIndex;
+
+  void setCurrentIndex(String tabName) {
+    _currentIndex = tabName;
+    notifyListeners();
+  }
+}

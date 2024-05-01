@@ -1,5 +1,6 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/plans/utils.dart';
 import 'package:lantern/replica/common.dart';
 
@@ -65,6 +66,7 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
+
     }
     ///By default when user starts the app we need to make sure that screenshot is disabled
     /// if user goes to chat then screenshot will be disabled
@@ -362,10 +364,9 @@ class SessionModel extends Model {
         .invokeMethod('resendRecoveryCode', <String, dynamic>{});
   }
 
-  Future<void> setSelectedTab<T>(String tab) async {
-    return methodChannel.invokeMethod('setSelectedTab', <String, dynamic>{
-      'tab': tab,
-    });
+  void setSelectedTab(BuildContext context,String tab)  {
+    Provider.of<BottomBarChangeNotifier>(context, listen: false).setCurrentIndex(tab);
+
   }
 
   Widget shouldShowGoogleAds(ValueWidgetBuilder<bool> builder) {
@@ -375,21 +376,6 @@ class SessionModel extends Model {
     );
   }
 
-  Widget selectedTab(ValueWidgetBuilder<String> builder) {
-    if (isMobile()) {
-      return subscribedSingleValueBuilder<String>(
-        '/selectedTab',
-        defaultValue: TAB_VPN,
-        builder: builder,
-      );
-    }
-    return ffiValueBuilder<String>(
-      'selectedTab',
-      ffiSelectedTab,
-      defaultValue: TAB_VPN,
-      builder: builder,
-    );
-  }
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
