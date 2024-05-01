@@ -79,10 +79,6 @@ class SessionModel(
                 castToBoolean(tx.get(PATH_PRO_USER), false),
             )
             tx.put(
-                PATH_SELECTED_TAB,
-                tx.get(PATH_SELECTED_TAB) ?: "vpn",
-            )
-            tx.put(
                 PATH_USER_LEVEL,
                 tx.get(PATH_USER_LEVEL) ?: "",
             )

@@ -26,7 +26,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
-  // BuildContext? _context;
 
   Function()? _cancelEventSubscription;
 
