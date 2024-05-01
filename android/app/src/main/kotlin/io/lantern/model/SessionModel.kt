@@ -129,10 +129,9 @@ class SessionModel(
         when (call.method) {
             "enableScreenshot" -> {
                 activity.runOnUiThread {
-                    activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                    activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
                 }
                 Logger.debug("Screenshot enabled", "Screenshot enabled")
-
             }
 
             "disableScreenshot" -> {
