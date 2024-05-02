@@ -191,7 +191,7 @@ msgid "other"
 msgstr "Other"
 
 msgid "issue_description"
-msgstr "Issue Description"
+msgstr "Describe your issue"
 
 msgid "check_for_updates"
 msgstr "Check for Updates"
