@@ -305,12 +305,16 @@ class SessionModel extends Model {
     );
   }
 
-  Future<void> setProxyAll<T>(bool on) async {
-    unawaited(
-      methodChannel.invokeMethod('setProxyAll', <String, dynamic>{
-        'on': on,
-      }),
-    );
+  Future<void> setProxyAll<T>(bool isOn) async {
+    if (isMobile()) {
+      unawaited(
+        methodChannel.invokeMethod('setProxyAll', <String, dynamic>{
+          'on': isOn,
+        }),
+      );
+      return;
+    }
+    return await compute(ffiSetProxyAll, isOn ? 'on' : 'off');
   }
 
   Future<String> getCountryCode() async {
@@ -789,6 +793,15 @@ class SessionModel extends Model {
     return ffiValueBuilder<bool>(
       'splitTunneling',
       ffiSplitTunneling,
+      defaultValue: false,
+      builder: builder,
+    );
+  }
+
+  Widget proxyAll(ValueWidgetBuilder<bool> builder) {
+    return ffiValueBuilder<bool>(
+      'proxyAll',
+      ffiProxyAll,
       defaultValue: false,
       builder: builder,
     );
