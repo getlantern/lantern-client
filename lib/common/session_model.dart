@@ -66,7 +66,6 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
-
     }
 
     if (Platform.isAndroid) {
@@ -84,14 +83,14 @@ class SessionModel extends Model {
 
   // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
   // the onMessage callback is triggered with the given property value
-  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType, property, void Function(T?) onMessage) {
+  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
+      property, void Function(T?) onMessage) {
     if (websocket == null) return;
     websocket.messageStream.listen(
       (json) {
         if (json["type"] == messageType) onMessage(json["message"][property]);
       },
-      onError: (error) =>
-          appLogger.i("websocket error: ${error.description}"),
+      onError: (error) => appLogger.i("websocket error: ${error.description}"),
     );
   }
 
@@ -103,7 +102,8 @@ class SessionModel extends Model {
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
-      onChanges: (setValue) => listenWebsocket(websocket, "pro", "userStatus", (value) {
+      onChanges: (setValue) =>
+          listenWebsocket(websocket, "pro", "userStatus", (value) {
         if (value != null && value.toString() == "active") setValue(true);
       }),
       ffiProUser,
@@ -196,9 +196,10 @@ class SessionModel extends Model {
     return ffiValueBuilder<String>(
       'lang',
       defaultValue: 'en',
-      onChanges: (setValue) => listenWebsocket(websocket, "pro", "language", (value) {
-          if (value != null && value.toString() != "") setValue(value.toString());
-        }),
+      onChanges: (setValue) =>
+          listenWebsocket(websocket, "pro", "language", (value) {
+        if (value != null && value.toString() != "") setValue(value.toString());
+      }),
       ffiLang,
       builder: builder,
     );
@@ -295,15 +296,10 @@ class SessionModel extends Model {
   }
 
   Future<void> setProxyAll<T>(bool isOn) async {
-    if (isMobile()) {
-      unawaited(
-        methodChannel.invokeMethod('setProxyAll', <String, dynamic>{
-          'on': isOn,
-        }),
-      );
-      return;
+    if (isDesktop()) {
+      return await compute(ffiSetProxyAll, isOn ? 'true' : 'false');
     }
-    return await compute(ffiSetProxyAll, isOn ? 'true' : 'false');
+    throw Exception("Not supported on mobile");
   }
 
   Future<String> getCountryCode() async {
@@ -359,9 +355,9 @@ class SessionModel extends Model {
         .invokeMethod('resendRecoveryCode', <String, dynamic>{});
   }
 
-  void setSelectedTab(BuildContext context,String tab)  {
-    Provider.of<BottomBarChangeNotifier>(context, listen: false).setCurrentIndex(tab);
-
+  void setSelectedTab(BuildContext context, String tab) {
+    Provider.of<BottomBarChangeNotifier>(context, listen: false)
+        .setCurrentIndex(tab);
   }
 
   Widget shouldShowGoogleAds(ValueWidgetBuilder<bool> builder) {
@@ -370,7 +366,6 @@ class SessionModel extends Model {
       builder: builder,
     );
   }
-
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
@@ -465,9 +460,8 @@ class SessionModel extends Model {
   }
 
   Future<bool> hasUpdatePlansOrBuy() async {
-    return compute(ffiHasPlanUpdateOrBuy,'');
+    return compute(ffiHasPlanUpdateOrBuy, '');
   }
-
 
   Plan planFromJson(Map<String, dynamic> item) {
     print("called plans $item");
@@ -792,7 +786,8 @@ class SessionModel extends Model {
     return ffiValueBuilder<bool>(
       'proxyAll',
       defaultValue: false,
-      onChanges: (setValue) => listenWebsocket(websocket, "settings", "proxyAll", (value) {
+      onChanges: (setValue) =>
+          listenWebsocket(websocket, "settings", "proxyAll", (value) {
         if (value != null) setValue(value as bool);
       }),
       ffiProxyAll,
@@ -839,5 +834,4 @@ class SessionModel extends Model {
   Future<void> disableScreenShot() {
     return methodChannel.invokeMethod('disableScreenshot', <String, dynamic>{});
   }
-
 }
