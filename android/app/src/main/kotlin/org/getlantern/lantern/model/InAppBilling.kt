@@ -19,6 +19,7 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentHashMap
 
@@ -35,6 +36,7 @@ class InAppBilling(
     init {
         initConnection()
     }
+
 
     @get:Synchronized
     @set:Synchronized
@@ -194,16 +196,21 @@ class InAppBilling(
                         // Todo no originalPriceAmountMicros found in latest lib
                         val priceWithoutTax =
                             it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
-                        plans[id] = ProPlan(
+                        val proModel = ProPlan(
                             id,
                             hashMapOf(currency to price.toLong()),
                             hashMapOf(currency to priceWithoutTax.toLong()),
                             "2" == years,
                             hashMapOf("years" to years.toInt()),
                         )
+                        proModel.description= it.description
+
+                        plans[id] = proModel
                         skus[id] = it
                     }
+//                LanternApp.getSession().setUserPlans(context,plans)
                 }
+
             }
         }
 

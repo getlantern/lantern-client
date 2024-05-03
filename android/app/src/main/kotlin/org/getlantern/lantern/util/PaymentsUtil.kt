@@ -244,12 +244,19 @@ class PaymentsUtil(private val activity: Activity) {
                         return
                     }
 
+                    /*Important:
+                    * Important: Google Play payment ignores the app-selected locale and currency
+                    * It always uses the device's locale and currency for consistency and compatibility.
+                    * We need to pass device local it does not mismatch to server while acknolgment*/
+                    val defaultLocale = LanternApp.getSession().deviceCurrencyCode()
                     sendPurchaseRequest(
                         "$plan-$currency",
                         email,
                         tokens[0],
                         PaymentProvider.GooglePlay,
                         methodCallResult,
+                        defaultLocale
+
                     )
                 }
             },
@@ -330,11 +337,13 @@ class PaymentsUtil(private val activity: Activity) {
         token: String,
         provider: PaymentProvider,
         methodCallResult: MethodChannel.Result,
+        deviceLocal: String = "",
     ) {
-        val currency =
+        val currency = deviceLocal.ifEmpty {
             LanternApp.getSession().planByID(planID)?.let {
                 it.currency
             } ?: "usd"
+        }
         Logger.d(
             TAG,
             "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency"

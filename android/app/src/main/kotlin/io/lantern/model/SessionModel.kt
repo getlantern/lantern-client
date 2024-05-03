@@ -33,7 +33,6 @@ import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
-import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showErrorDialog
@@ -288,7 +287,7 @@ class SessionModel(
         }
     }
 
-    fun updatePaymentMethods(result: MethodChannel.Result?) {
+    private fun updatePaymentMethods(result: MethodChannel.Result?) {
         val userId = LanternApp.getSession().userId()
         //Check if not found then call createUserAndFetchPaymentMethods
         if (userId == 0L) {
@@ -352,10 +351,8 @@ class SessionModel(
         paymentMethods: List<PaymentMethods>,
 
         ) {
-        for (planId in proPlans.keys) {
-            proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
-        }
-        LanternApp.getSession().setUserPlans(proPlans)
+
+        LanternApp.getSession().setUserPlans(activity, proPlans)
         LanternApp.getSession().setPaymentMethods(paymentMethods)
     }
 

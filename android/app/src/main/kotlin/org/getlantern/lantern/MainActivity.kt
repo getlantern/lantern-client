@@ -276,6 +276,8 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
         updatePaymentMethods()
+
+
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -334,25 +336,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                     paymentMethods: List<PaymentMethods>,
 
                     ) {
-                    Logger.debug(TAG, "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans")
-                    processPaymentMethods(proPlans, paymentMethods)
+                    Logger.debug(
+                        TAG,
+                        "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans"
+                    )
+                    sessionModel.processPaymentMethods(proPlans, paymentMethods)
                 }
             }
         )
     }
 
-
-    fun processPaymentMethods(
-        proPlans: Map<String, ProPlan>,
-        paymentMethods: List<PaymentMethods>,
-
-        ) {
-        for (planId in proPlans.keys) {
-            proPlans[planId]?.let { PlansUtil.updatePrice(activity, it) }
-        }
-        LanternApp.getSession().setUserPlans(proPlans)
-        LanternApp.getSession().setPaymentMethods(paymentMethods)
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
