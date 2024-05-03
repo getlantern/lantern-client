@@ -21,6 +21,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     private var referral: String? = null
     private var verifyCode: String? = null
+    private val supportedCurrencyCodes = arrayOf(
+        "rub", "sar", "inr", "sgd", "jpy", "aud", "try", "mop", "cad", "vnd",
+        "thb", "hkd", "bhd", "eur", "php", "cny", "irr", "krw", "myr", "gbp",
+        "twd", "idr", "usd", "aed", "ils"
+    )
 
     override fun isProUser(): Boolean {
         return prefs.getBoolean(PRO_USER, false)
@@ -57,14 +62,18 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return getCurrency().currencyCode ?: "usd"
     }
 
-     fun deviceCurrencyCode(): String {
-         val defaultLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-             Resources.getSystem().configuration.locales[0]
-         } else {
-             Resources.getSystem().configuration.locale
-         }
-
-         return Currency.getInstance(defaultLocale).currencyCode.lowercase()
+    fun deviceCurrencyCode(): String {
+        val defaultLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Resources.getSystem().configuration.locales[0]
+        } else {
+            Resources.getSystem().configuration.locale
+        }
+        val deviceLocal = Currency.getInstance(defaultLocale).currencyCode.lowercase()
+        return if (supportedCurrencyCodes.contains(deviceLocal)) {
+            deviceLocal
+        } else {
+            "usd"
+        }
     }
 
     fun setRemoteConfigPaymentProvider(provider: String?) {
