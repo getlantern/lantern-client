@@ -82,11 +82,17 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
-  // wsMessageProp parses the given json, checks if it represents a pro user message and
-  // returns the value (if any) in the map for the given property.
-  String? wsMessageProp(Map<String, dynamic> json, String field) {
-    if (json["type"] != "pro") return null;
-    return json["message"][field];
+  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type
+  // the onMessage callback is triggered with the given property value
+  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType, property, void Function(T?) onMessage) {
+    if (websocket == null) return;
+    websocket.messageStream.listen(
+      (json) {
+        if (json["type"] == messageType) onMessage(json["message"][property]);
+      },
+      onError: (error) =>
+          appLogger.i("websocket error: ${error.description}"),
+    );
   }
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
@@ -97,18 +103,9 @@ class SessionModel extends Model {
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
-      onChanges: (setValue) {
-        if (websocket == null) return;
-        websocket.messageStream.listen(
-          (json) {
-            final userStatus = wsMessageProp(json, "userStatus");
-            if (userStatus != null && userStatus.toString() == "active")
-              setValue(true);
-          },
-          onError: (error) =>
-              appLogger.i("websocket error: ${error.description}"),
-        );
-      },
+      onChanges: (setValue) => listenWebsocket(websocket, "pro", "userStatus", (value) {
+        if (value != null && value.toString() == "active") setValue(true);
+      }),
       ffiProUser,
       builder: builder,
     );
@@ -199,17 +196,9 @@ class SessionModel extends Model {
     return ffiValueBuilder<String>(
       'lang',
       defaultValue: 'en',
-      onChanges: (setValue) {
-        if (websocket == null) return;
-        websocket.messageStream.listen(
-          (json) {
-            final language = wsMessageProp(json, "language");
-            if (language != null && language != "") setValue(language);
-          },
-          onError: (error) =>
-              appLogger.i("websocket error: ${error.description}"),
-        );
-      },
+      onChanges: (setValue) => listenWebsocket(websocket, "pro", "language", (value) {
+          if (value != null && value.toString() != "") setValue(value.toString());
+        }),
       ffiLang,
       builder: builder,
     );
@@ -314,7 +303,7 @@ class SessionModel extends Model {
       );
       return;
     }
-    return await compute(ffiSetProxyAll, isOn ? 'on' : 'off');
+    return await compute(ffiSetProxyAll, isOn ? 'true' : 'false');
   }
 
   Future<String> getCountryCode() async {
@@ -799,10 +788,14 @@ class SessionModel extends Model {
   }
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<bool>(
       'proxyAll',
-      ffiProxyAll,
       defaultValue: false,
+      onChanges: (setValue) => listenWebsocket(websocket, "settings", "proxyAll", (value) {
+        if (value != null) setValue(value as bool);
+      }),
+      ffiProxyAll,
       builder: builder,
     );
   }
