@@ -48,13 +48,7 @@ class _ReportIssueState extends State<ReportIssue> {
         return null;
       });
 
-  @override
-  void dispose() {
-    emailController.dispose();
-    issueController.dispose();
-    descController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
