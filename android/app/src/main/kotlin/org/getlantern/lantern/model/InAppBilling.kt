@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.UiThread
-import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
@@ -19,6 +18,8 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.gson.JsonObject
+import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentHashMap
@@ -31,6 +32,8 @@ class InAppBilling(
 ) : PurchasesUpdatedListener, InAppBillingInterface {
     companion object {
         private val TAG = InAppBilling::class.java.simpleName
+        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
+
     }
 
     init {
@@ -203,12 +206,11 @@ class InAppBilling(
                             "2" == years,
                             hashMapOf("years" to years.toInt()),
                         )
-                        proModel.description= it.description
+                        proModel.description = it.description
 
                         plans[id] = proModel
                         skus[id] = it
                     }
-//                LanternApp.getSession().setUserPlans(context,plans)
                 }
 
             }
@@ -261,22 +263,24 @@ class InAppBilling(
 
     private fun handleAcknowledgedPurchases(purchases: List<Purchase>) {
         for (purchase in purchases) {
+
+            Logger.debug(TAG, "Purchase: $purchase")
             ensureConnected {
-                /// if not acknowledged form server, acknowledge it
                 if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
                     if (!purchase.isAcknowledged) {
-                        val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-                            .setPurchaseToken(purchase.purchaseToken)
-                        acknowledgePurchase(acknowledgePurchaseParams.build()) { billingResult ->
-                            if (!billingResult.responseCodeOK()) {
-                                isRetriable(billingResult).then { handlePurchases() }
-                                return@acknowledgePurchase
-                            }
-                            Logger.d(
-                                TAG,
-                                "Acknowledged purchase ${purchase.purchaseToken}"
-                            )
-                        }
+                        /*
+                        * Important: acknowledgement need to happen only on server
+                        * if the purchase are not acknowledged from server
+                        * then make purchase request it mark purchase as isAcknowledged
+                        */
+                        val currency = LanternApp.getSession().deviceCurrencyCode()
+                        val planID = "${purchase.products[0]}-$currency"
+
+                        addAcknowledgePurchase(
+                            planID = planID,
+                            currency = currency,
+                            token = purchase.purchaseToken
+                        )
                     }
                 }
 
@@ -324,5 +328,37 @@ class InAppBilling(
                 false
             }
         }
+    }
+
+    private fun addAcknowledgePurchase(planID: String, currency: String, token: String) {
+        val session = LanternApp.getSession()
+        val json = JsonObject()
+        json.addProperty("idempotencyKey", System.currentTimeMillis().toString())
+        json.addProperty("provider", PaymentProvider.GooglePlay.toString().lowercase())
+        json.addProperty("email", session.email())
+        json.addProperty("plan", planID)
+        json.addProperty("currency", currency.lowercase())
+        json.addProperty("deviceName", session.deviceName())
+        json.addProperty("token", token)
+
+        lanternClient.post(
+            LanternHttpClient.createProUrl("/purchase"),
+            LanternHttpClient.createJsonBody(json),
+            object : LanternHttpClient.ProCallback {
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    Logger.debug(TAG, "Making server acknowledgement response: $response")
+                }
+
+                override fun onFailure(
+                    t: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "Error while making server acknowledgement: $error")
+                }
+            },
+        )
     }
 }
