@@ -132,6 +132,8 @@ class InAppBilling(
             activity,
             BillingFlowParams.newBuilder()
                 .setProductDetailsParamsList(productDetailsParamsList)
+                .setObfuscatedAccountId(LanternApp.getSession().getDeviceID())// add device-od
+                .setObfuscatedProfileId(LanternApp.getSession().userID.toString())
                 .build(),
         )
     }
