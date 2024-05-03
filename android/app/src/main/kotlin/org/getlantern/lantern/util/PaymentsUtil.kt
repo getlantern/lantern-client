@@ -199,12 +199,7 @@ class PaymentsUtil(private val activity: Activity) {
         planID: String,
         methodCallResult: MethodChannel.Result,
     ) {
-
-        val inAppBilling = LanternApp.getInAppBilling()
-        val currency =
-            LanternApp.getSession().planByID(planID)?.let {
-                it.currency
-            } ?: "usd"
+    val inAppBilling = LanternApp.getInAppBilling()
         val plan = getPlanYear(planID)
         Logger.debug(TAG, "Starting in-app purchase for plan with ID $plan")
         inAppBilling.startPurchase(
@@ -246,11 +241,11 @@ class PaymentsUtil(private val activity: Activity) {
 
                     /*Important:
                     * Important: Google Play payment ignores the app-selected locale and currency
-                    * It always uses the device's locale and currency for consistency and compatibility.
+                    * It always uses the device's locale so
                     * We need to pass device local it does not mismatch to server while acknolgment*/
                     val defaultLocale = LanternApp.getSession().deviceCurrencyCode()
                     sendPurchaseRequest(
-                        "$plan-$currency",
+                        "$plan-$defaultLocale",
                         email,
                         tokens[0],
                         PaymentProvider.GooglePlay,
@@ -395,16 +390,13 @@ class PaymentsUtil(private val activity: Activity) {
                             Logger.e(TAG, "User detail : $userData")
                             session.setIsProUser(true)
                             activity.runOnUiThread {
-
                                 methodCallResult.success("purchaseSuccessful")
                             }
-
                         }
 
                         override fun onFailure(throwable: Throwable?, error: ProError?) {
                             Logger.error(TAG, "Unable to fetch user data: $throwable.message")
                             activity.runOnUiThread {
-
                                 methodCallResult.success("purchaseSuccessful")
                             }
 
