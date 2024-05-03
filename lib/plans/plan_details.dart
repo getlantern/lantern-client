@@ -142,6 +142,16 @@ class PlanCard extends StatelessWidget {
           isPro: isPro,
         ),
       );
+    } else if (isDesktop()) {
+      sessionModel.paymentMethods(
+          builder: (
+            context,
+            Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+            Widget? child,
+          ) {
+
+
+      })
     } else {
       // * Proceed to our own Checkout
       await context.pushRoute(

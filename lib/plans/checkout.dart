@@ -91,6 +91,9 @@ class _CheckoutState extends State<Checkout>
               String emailAddress,
               Widget? child,
             ) {
+              if (onlyStripePaymentProvider(paymentMethods)) {
+                _proceedWithStripe();
+              }
               return Container(
                 padding: const EdgeInsetsDirectional.only(
                   start: 16,
@@ -238,8 +241,25 @@ class _CheckoutState extends State<Checkout>
         widgets.add(options());
         if (!showMoreOptions) break;
       }
+      widgets.addAll(paymentProviders(paymentMethods));
+    }
+    return widgets;
+  }
+
+  // onlyStripePaymentProvider returns true if Stripe is the only enabled payment provider
+  // in this case the user bypasses the last checkout screen and is immediately sent to the
+  // payment redirect page
+  bool onlyStripePaymentProvider(Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+    final providers = paymentProviders(paymentMethods);
+    //return providers.length == 1 && providers[0].paymentType == Providers.stripe;
+    return true;
+  }
+
+  List<PaymentProvider> paymentProviders(Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+    var providers = <PaymentProvider>[];
+    for (final paymentMethod in paymentMethods) {
       for (final provider in paymentMethod.value.providers) {
-        widgets.add(
+        providers.add(
           PaymentProvider(
             logoPaths: provider.logoUrls,
             onChanged: () =>
@@ -251,7 +271,7 @@ class _CheckoutState extends State<Checkout>
         );
       }
     }
-    return widgets;
+    return providers;
   }
 
   bool enableContinueButton() {
