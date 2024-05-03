@@ -82,7 +82,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
-  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type
+  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
   // the onMessage callback is triggered with the given property value
   void listenWebsocket<T>(WebsocketImpl? websocket, String messageType, property, void Function(T?) onMessage) {
     if (websocket == null) return;
