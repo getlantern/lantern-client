@@ -1,4 +1,6 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/plans/payment_provider.dart';
+import 'package:lantern/plans/utils.dart';
 
 class PlanCard extends StatelessWidget {
   final Plan plan;
@@ -131,6 +133,18 @@ class PlanCard extends StatelessWidget {
     }
   }
 
+  // onlyPaymentProvider returns true if the given payment provider is the only enabled payment provider
+  // in the list of payment methods. It is used to bypass the last checkout screen 
+  bool onlyPaymentProvider(Iterable<PathAndValue<PaymentMethod>> paymentMethods, Providers provider) {
+    var providers = <Providers>[];
+    for (final paymentMethod in paymentMethods) {
+      for (final provider in paymentMethod.value.providers) {
+        providers.add(provider.name.toPaymentEnum());
+      }
+    }
+    return providers.length == 1 && providers[0] == provider;
+  }
+
   Future<void> _checkOut(BuildContext context) async {
     final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
@@ -148,10 +162,21 @@ class PlanCard extends StatelessWidget {
             context,
             Iterable<PathAndValue<PaymentMethod>> paymentMethods,
             Widget? child,
-          ) {
-
-
-      })
+          ) async {
+          if (onlyPaymentProvider(paymentMethods, Providers.stripe)) {
+              final redirectUrl = await sessionModel.paymentRedirectForDesktop(
+                context,
+                plan.id,
+                "",
+                Providers.stripe,
+              );
+              openDesktopWebview(
+                context: context,
+                provider: Providers.stripe,
+                redirectUrl: redirectUrl);
+          }
+          return SizedBox();
+      });
     } else {
       // * Proceed to our own Checkout
       await context.pushRoute(

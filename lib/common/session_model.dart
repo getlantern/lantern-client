@@ -85,6 +85,7 @@ class SessionModel extends Model {
   // wsMessageProp parses the given json, checks if it represents a pro user message and
   // returns the value (if any) in the map for the given property.
   String? wsMessageProp(Map<String, dynamic> json, String field) {
+    print("ws message is $json");
     if (json["type"] != "pro") return null;
     return json["message"][field];
   }
@@ -724,13 +725,13 @@ class SessionModel extends Model {
   }
 
   Future<String> paymentRedirectForDesktop(BuildContext context, String planID,
-      String email, String provider) async {
+      String email, Providers provider) async {
     String os = Platform.operatingSystem;
     Locale locale = Localizations.localeOf(context);
     final format = NumberFormat.simpleCurrency(locale: locale.toString());
     final currencyName = format.currencyName ?? "USD";
     return await compute(
-        ffiPaymentRedirect, [planID, currencyName, provider, email, os]);
+        ffiPaymentRedirect, [planID, currencyName, provider.toString(), email, os]);
   }
 
   Future<void> submitStripePayment(
