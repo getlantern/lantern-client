@@ -238,10 +238,25 @@ func getUserData() (*protos.User, error) {
 		return nil, err
 	}
 	user := resp.User
-	if user.Email != "" {
+	if user != nil && user.Email != "" {
 		a.Settings().SetEmailAddress(user.Email)
 	}
 	return user, nil
+}
+
+//export proxyAll
+func proxyAll() *C.char {
+	proxyAll := a.Settings().GetProxyAll()
+	if proxyAll {
+		return C.CString("true")
+	}
+	return C.CString("false")
+}
+
+//export setProxyAll
+func setProxyAll(value *C.char) {
+	proxyAll, _ := strconv.ParseBool(C.GoString(value))
+	go a.Settings().SetProxyAll(proxyAll)
 }
 
 // tryCacheUserData retrieves the latest user data for the given user.

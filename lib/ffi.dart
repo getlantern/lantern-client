@@ -17,6 +17,8 @@ void sysProxyOff() => _bindings.sysProxyOff();
 
 void setLang(lang) => _bindings.setSelectLang(lang);
 
+void ffiSetProxyAll(String isOn) => _bindings.setProxyAll(isOn.toPointerChar());
+
 String websocketAddr() => _bindings.websocketAddr().cast<Utf8>().toDartString();
 
 void ffiExit() {
@@ -29,6 +31,8 @@ Pointer<Utf8> ffiVpnStatus() => _bindings.vpnStatus().cast<Utf8>();
 Pointer<Utf8> ffiLang() => _bindings.lang().cast<Utf8>();
 
 Pointer<Utf8> ffiPlayVersion() => _bindings.playVersion().cast<Utf8>();
+
+Pointer<Utf8> ffiProxyAll() => _bindings.proxyAll().cast<Utf8>();
 
 Pointer<Utf8> ffiStoreVersion() => _bindings.storeVersion().cast<Utf8>();
 
