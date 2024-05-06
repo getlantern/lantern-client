@@ -15,19 +15,24 @@ void sysProxyOn() => _bindings.sysProxyOn();
 
 void sysProxyOff() => _bindings.sysProxyOff();
 
-void setSelectTab(tab) => _bindings.setSelectTab(tab);
-
 void setLang(lang) => _bindings.setSelectLang(lang);
+
+void ffiSetProxyAll(String isOn) => _bindings.setProxyAll(isOn.toPointerChar());
 
 String websocketAddr() => _bindings.websocketAddr().cast<Utf8>().toDartString();
 
-Pointer<Utf8> ffiVpnStatus() => _bindings.vpnStatus().cast<Utf8>();
+void ffiExit() {
+  _bindings.exitApp();
+  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+}
 
-Pointer<Utf8> ffiSelectedTab() => _bindings.selectedTab().cast<Utf8>();
+Pointer<Utf8> ffiVpnStatus() => _bindings.vpnStatus().cast<Utf8>();
 
 Pointer<Utf8> ffiLang() => _bindings.lang().cast<Utf8>();
 
 Pointer<Utf8> ffiPlayVersion() => _bindings.playVersion().cast<Utf8>();
+
+Pointer<Utf8> ffiProxyAll() => _bindings.proxyAll().cast<Utf8>();
 
 Pointer<Utf8> ffiStoreVersion() => _bindings.storeVersion().cast<Utf8>();
 
@@ -47,9 +52,10 @@ Future<User> ffiUserData() async {
 
 // checkAPIError throws a PlatformException if the API response contains an error
 void checkAPIError(result, errorMessage) {
-  if(result is String){
-    final  errorMessageMap = jsonDecode(result);
-    throw PlatformException(code:errorMessageMap.toString(), message: errorMessage);
+  if (result is String) {
+    final errorMessageMap = jsonDecode(result);
+    throw PlatformException(
+        code: errorMessageMap.toString(), message: errorMessage);
   }
   if (result.error != "") {
     throw PlatformException(code: result.error, message: errorMessage);
@@ -78,6 +84,12 @@ Future<void> ffiRemoveDevice(String deviceId) async {
   // refresh user data after removing a device
   await ffiUserData();
   return;
+}
+
+FutureOr<bool> ffiHasPlanUpdateOrBuy(dynamic context) {
+  final json = _bindings.hasPlanUpdatedOrBuy().cast<Utf8>().toDartString();
+  print('Result of hasPlanUpdatedOrBuy: $json');
+  return json == 'true' ? true : throw NoPlansUpdate("No Plans update");
 }
 
 Pointer<Utf8> ffiDevices() => _bindings.devices().cast<Utf8>();
@@ -117,7 +129,9 @@ Pointer<Utf8> ffiCheckUpdates() => _bindings.checkUpdates().cast<Utf8>();
 Pointer<Utf8> ffiPlans() => _bindings.plans().cast<Utf8>();
 
 Pointer<Utf8> ffiPaymentMethods() => _bindings.paymentMethodsV3().cast<Utf8>();
-Pointer<Utf8> ffiPaymentMethodsV4() => _bindings.paymentMethodsV4().cast<Utf8>();
+
+Pointer<Utf8> ffiPaymentMethodsV4() =>
+    _bindings.paymentMethodsV4().cast<Utf8>();
 
 Pointer<Utf8> ffiDeviceLinkingCode() =>
     _bindings.deviceLinkingCode().cast<Utf8>();
@@ -185,4 +199,12 @@ final NativeLibrary _bindings = NativeLibrary(_dylib);
 
 void loadLibrary() {
   _bindings.start();
+}
+
+//Custom exception for handling error
+
+class NoPlansUpdate implements Exception {
+  String message;
+
+  NoPlansUpdate(this.message);
 }

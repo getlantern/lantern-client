@@ -115,11 +115,12 @@ func start() {
 	}()
 
 	golog.SetPrepender(logging.Timestamped)
+	handleSignals(a)
 
 	go func() {
 		defer logging.Close()
 		i18nInit(a)
-		runApp(a)
+		a.Run(true)
 
 		err := a.WaitForExit()
 		if err != nil {
@@ -171,32 +172,17 @@ func fetchPayentMethodV4() error {
 
 //export sysProxyOn
 func sysProxyOn() {
-	a.SysproxyOn()
+	go a.SysproxyOn()
 }
 
 //export sysProxyOff
 func sysProxyOff() {
-	a.SysProxyOff()
-}
-
-//export selectedTab
-func selectedTab() *C.char {
-	return C.CString(string(a.SelectedTab()))
+	go a.SysProxyOff()
 }
 
 //export websocketAddr
 func websocketAddr() *C.char {
 	return C.CString(a.WebsocketAddr())
-}
-
-//export setSelectTab
-func setSelectTab(ttab *C.char) {
-	tab, err := app.ParseTab(C.GoString(ttab))
-	if err != nil {
-		log.Error(err)
-		return
-	}
-	a.SetSelectedTab(tab)
 }
 
 //export plans
@@ -208,7 +194,6 @@ func plans() *C.char {
 	}
 	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
 	err := json.Unmarshal(plans, paymentMethodsResponse)
-	log.Debugf("DEBUG: cache payment methods found : %v", paymentMethodsResponse.Plans)
 	plansByte, err := json.Marshal(paymentMethodsResponse.Plans)
 	if err != nil {
 		return sendError(errors.New("error fetching payment methods: %v", err))
@@ -238,9 +223,13 @@ func paymentMethodsV4() *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-	log.Debugf("DEBUG: cache payment methods: %v", paymentMethodsResponse.Providers)
 	b, _ := json.Marshal(paymentMethodsResponse)
 	return C.CString(string(b))
+}
+
+func cachedUserData() (*protos.User, bool) {
+	uc := userConfig(a.Settings())
+	return app.GetUserDataFast(context.Background(), uc.GetUserID())
 }
 
 func getUserData() (*protos.User, error) {
@@ -249,15 +238,60 @@ func getUserData() (*protos.User, error) {
 		return nil, err
 	}
 	user := resp.User
-	if user.Email != "" {
+	if user != nil && user.Email != "" {
 		a.Settings().SetEmailAddress(user.Email)
 	}
 	return user, nil
 }
 
+//export proxyAll
+func proxyAll() *C.char {
+	proxyAll := a.Settings().GetProxyAll()
+	if proxyAll {
+		return C.CString("true")
+	}
+	return C.CString("false")
+}
+
+//export setProxyAll
+func setProxyAll(value *C.char) {
+	proxyAll, _ := strconv.ParseBool(C.GoString(value))
+	go a.Settings().SetProxyAll(proxyAll)
+}
+
+// tryCacheUserData retrieves the latest user data for the given user.
+// It first checks the cache and if present returns the user data stored there
+func tryCacheUserData() (*protos.User, error) {
+	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
+		return cacheUserData, nil
+	}
+	return getUserData()
+}
+
+// this method is reposible for checking if the user has updated plan or bought plans
+//
+//export hasPlanUpdatedOrBuy
+func hasPlanUpdatedOrBuy() *C.char {
+	//Get the cached user data
+	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
+	cacheUserData, isOldFound := cachedUserData()
+	//Get latest user data
+	resp, err := proClient.UserData(context.Background())
+	if err != nil {
+		return sendError(err)
+	}
+	if isOldFound {
+		if cacheUserData.Expiration < resp.User.Expiration {
+			// New data has a later expiration
+			return C.CString(string("true"))
+		}
+	}
+	return C.CString(string("false"))
+}
+
 //export devices
 func devices() *C.char {
-	user, err := getUserData()
+	user, err := tryCacheUserData()
 	if err != nil {
 		return sendError(err)
 	}
@@ -300,7 +334,7 @@ func removeDevice(deviceId *C.char) *C.char {
 
 //export expiryDate
 func expiryDate() *C.char {
-	user, err := getUserData()
+	user, err := tryCacheUserData()
 	if err != nil {
 		return sendError(err)
 	}
@@ -429,7 +463,8 @@ func country() *C.char {
 
 //export sdkVersion
 func sdkVersion() *C.char {
-	return C.CString("1.0.0")
+	version := common.LibraryVersion
+	return C.CString(version)
 }
 
 //export vpnStatus
@@ -459,7 +494,7 @@ func acceptedTermsVersion() *C.char {
 func proUser() *C.char {
 	ctx := context.Background()
 	// refresh user data when home page is loaded on desktop
-	go proClient.UserData(ctx)
+	go getUserData()
 	uc := a.Settings()
 	if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
 		return C.CString("true")
@@ -496,6 +531,11 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 		return sendError(err)
 	}
 	return sendJson(resp)
+}
+
+//export exitApp
+func exitApp() {
+	a.Exit(nil)
 }
 
 //export developmentMode
@@ -621,12 +661,6 @@ func configDir(flags *flashlight.Flags) string {
 	return cdir
 }
 
-func runApp(a *app.App) {
-	// Schedule cleanup actions
-	handleSignals(a)
-	a.Run(true)
-}
-
 // useOSLocale detect OS locale for current user and let i18n to use it
 func useOSLocale() (string, error) {
 	userLocale, err := jibber_jabber.DetectIETF()
@@ -670,6 +704,7 @@ func handleSignals(a *app.App) {
 	go func() {
 		s := <-c
 		log.Debugf("Got signal \"%s\", exiting...", s)
+		a.Exit(nil)
 	}()
 }
 

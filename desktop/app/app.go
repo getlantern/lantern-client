@@ -138,16 +138,6 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 	}
 }
 
-func (app *App) SelectedTab() Tab {
-	return app.selectedTab
-}
-
-func (app *App) SetSelectedTab(selectedTab Tab) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.selectedTab = selectedTab
-}
-
 // Run starts the app.
 func (app *App) Run(isMain bool) {
 	golog.OnFatal(app.exitOnFatal)
@@ -342,6 +332,12 @@ func (app *App) beforeStart(listenAddr string) {
 		app.Exit(nil)
 		os.Exit(0)
 	}
+
+	if e := app.settings.StartService(app.ws); e != nil {
+		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
+		return
+	}
+
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour,
 		func() (bool, bool) { return app.IsProUser(context.Background()) }, func() string {
 			return "/img/lantern_logo.png"

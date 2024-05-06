@@ -7,7 +7,7 @@ import 'package:lantern/common/common.dart';
 class CTextField extends StatefulWidget {
   late final CustomTextEditingController controller;
   late final String? initialValue;
-  late final dynamic label;
+  late final dynamic? label;
   late final String? helperText;
   late final String? hintText;
   late final Widget? prefixIcon;
@@ -21,6 +21,7 @@ class CTextField extends StatefulWidget {
   late final TextInputAction? textInputAction;
   late final void Function(String value)? onFieldSubmitted;
   late final String? actionIconPath;
+  late final FloatingLabelBehavior? floatingLabelBehavior;
   late final int? maxLength;
   late final InputCounterWidgetBuilder? buildCounter;
   late final TextCapitalization? textCapitalization;
@@ -36,7 +37,7 @@ class CTextField extends StatefulWidget {
   CTextField({
     required this.controller,
     this.initialValue,
-    required this.label,
+    this.label,
     this.helperText,
     this.hintText,
     this.prefixIcon,
@@ -50,6 +51,7 @@ class CTextField extends StatefulWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.actionIconPath,
+    this.floatingLabelBehavior,
     this.maxLength,
     this.buildCounter,
     this.textCapitalization,
@@ -118,7 +120,7 @@ class _CTextFieldState extends State<CTextField> {
             // thumbVisibility: true,
             trackVisibility: true,
             child: Tooltip(
-              message: widget.tooltipMessage ?? '',
+              message: isDesktop() ? '' : (widget.tooltipMessage ?? ''),
               child: TextFormField(
                 key: fieldKey,
                 autofocus: widget.autofocus!,
@@ -154,9 +156,17 @@ class _CTextFieldState extends State<CTextField> {
                     widget.textCapitalization ?? TextCapitalization.none,
                 decoration: InputDecoration(
                   contentPadding: widget.contentPadding ??
-                      const EdgeInsetsDirectional.all(0),
+                      (isDesktop()
+                          ? const EdgeInsetsDirectional.only(
+                              top: 24,
+                              bottom: 24,
+                            )
+                          : const EdgeInsetsDirectional.only(
+                              top: 8,
+                              bottom: 8,
+                            )),
                   isDense: true,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  floatingLabelBehavior: widget.floatingLabelBehavior ?? FloatingLabelBehavior.never,
                   // we handle floating labels using our custom method below
                   labelText: (widget.label is String) ? widget.label : '',
                   helperText: widget.helperText,
@@ -204,29 +214,30 @@ class _CTextFieldState extends State<CTextField> {
           ),
         ),
         // * Label
-        (widget.label is String)
-            ? Container(
-                margin: const EdgeInsetsDirectional.only(start: 11),
-                padding: EdgeInsetsDirectional.only(
-                  start: hasFocus ? 2 : 0,
-                  end: hasFocus ? 2 : 0,
-                ),
-                color: white,
-                child: !hasFocus && widget.controller.value.text.isEmpty
-                    ? Container()
-                    : CText(
-                        widget.label,
-                        style: CTextStyle(
-                          fontSize: 12,
-                          lineHeight: 12,
-                          color: fieldKey.currentState?.mounted == true &&
-                                  fieldKey.currentState?.hasError == true
-                              ? indicatorRed
-                              : blue4,
+        if (widget.label != null)
+          (widget.label is String)
+              ? Container(
+                  margin: const EdgeInsetsDirectional.only(start: 11),
+                  padding: EdgeInsetsDirectional.only(
+                    start: hasFocus ? 2 : 0,
+                    end: hasFocus ? 2 : 0,
+                  ),
+                  color: white,
+                  child: !hasFocus && widget.controller.value.text.isEmpty
+                      ? Container()
+                      : CText(
+                          widget.label,
+                          style: CTextStyle(
+                            fontSize: 12,
+                            lineHeight: 12,
+                            color: fieldKey.currentState?.mounted == true &&
+                                    fieldKey.currentState?.hasError == true
+                                ? indicatorRed
+                                : blue4,
+                          ),
                         ),
-                      ),
-              )
-            : widget.label,
+                )
+              : widget.label,
       ],
     );
   }

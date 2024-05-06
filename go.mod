@@ -38,7 +38,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.73
+	github.com/getlantern/flashlight/v7 v7.6.75
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
@@ -162,7 +162,7 @@ require (
 	github.com/getlantern/hellosplitter v0.1.1 // indirect
 	github.com/getlantern/hex v0.0.0-20220104173244-ad7e4b9194dc // indirect
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770 // indirect
-	github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240328104604-a38ea762477d // indirect
+	github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240425212327-7a15939111d8 // indirect
 	github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca // indirect
 	github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 // indirect
 	github.com/getlantern/kcp-go/v5 v5.0.0-20220503142114-f0c1cd6e1b54 // indirect
@@ -170,7 +170,7 @@ require (
 	github.com/getlantern/keepcurrent v0.0.0-20221014183517-fcee77376b89 // indirect
 	github.com/getlantern/keyman v0.0.0-20230503155501-4e864ca2175b // indirect
 	github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a // indirect
-	github.com/getlantern/lantern-algeneva v0.0.0-20240402195540-eb1bbf6d7366 // indirect
+	github.com/getlantern/lantern-algeneva v0.0.0-20240418193310-610690afddbc // indirect
 	github.com/getlantern/measured v0.0.0-20230919230611-3d9e3776a6cd // indirect
 	github.com/getlantern/meta-scrubber v0.0.1 // indirect
 	github.com/getlantern/multipath v0.0.0-20230510135141-717ed305ef50 // indirect
@@ -300,7 +300,7 @@ require (
 	gitlab.com/yawning/edwards25519-extra.git v0.0.0-20211229043746-2f91fcc9fbdb // indirect
 	gitlab.com/yawning/obfs4.git v0.0.0-20220204003609-77af0cba934d // indirect
 	go.etcd.io/bbolt v1.3.7 // indirect
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.42.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.44.0 // indirect
 	go.opentelemetry.io/otel v1.22.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric v0.42.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp v0.42.0 // indirect

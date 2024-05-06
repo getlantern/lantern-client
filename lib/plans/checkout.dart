@@ -4,6 +4,7 @@ import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
+import 'package:retry/retry.dart';
 
 @RoutePage(name: 'Checkout')
 class Checkout extends StatefulWidget {
@@ -123,10 +124,6 @@ class _CheckoutState extends State<Checkout>
                           autovalidateMode: widget.isPro
                               ? AutovalidateMode.always
                               : AutovalidateMode.disabled,
-                          contentPadding: const EdgeInsetsDirectional.only(
-                            top: 8.0,
-                            bottom: 8.0,
-                          ),
                           label: 'email'.i18n,
                           keyboardType: TextInputType.emailAddress,
                           prefixIcon: const CAssetImage(path: ImagePaths.email),
@@ -139,10 +136,6 @@ class _CheckoutState extends State<Checkout>
                         child: CTextField(
                           controller: refCodeController,
                           autovalidateMode: AutovalidateMode.disabled,
-                          contentPadding: const EdgeInsetsDirectional.only(
-                            top: 8.0,
-                            bottom: 8.0,
-                          ),
                           onChanged: (text) {
                             setState(() {
                               showContinueButton = enableContinueButton();
@@ -385,6 +378,8 @@ class _CheckoutState extends State<Checkout>
           provider: provider,
           redirectUrl: redirectUrl,
           onClose: checkProUser);
+      //as soon user click we should start polling userData
+      Future.delayed(const Duration(seconds: 2), hasPlansUpdateOrBuy);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -471,6 +466,29 @@ class _CheckoutState extends State<Checkout>
         stackTrace: stackTrace,
       );
       return false;
+    }
+  }
+
+  ///This methods is responsible for polling for user data
+  ///so if user has done payment or renew plans and show
+  void hasPlansUpdateOrBuy() {
+    appLogger.i("calling hasPlansUpdateOrBuy to update plans or buy");
+    try {
+      retry(
+        () async {
+          /// Polling for userData that user has updates plans or buy
+          final plansUpdated = await sessionModel.hasUpdatePlansOrBuy();
+          if (plansUpdated) {
+            if (mounted) {
+              showSuccessDialog(context, widget.isPro);
+            }
+          }
+        },
+        delayFactor: const Duration(seconds: 2),
+        retryIf: (e) => e is NoPlansUpdate,
+      );
+    } catch (e) {
+      appLogger.e('Error while polling for plans update or buy', error: e);
     }
   }
 }

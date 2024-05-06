@@ -2,6 +2,7 @@ package io.lantern.model
 
 import android.app.Activity
 import android.content.Intent
+import android.view.WindowManager
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
 import internalsdk.Internalsdk
@@ -58,7 +59,6 @@ class SessionModel(
     companion object {
         private const val TAG = "SessionModel"
         const val PATH_PRO_USER = "prouser"
-        const val PATH_SELECTED_TAB = "/selectedTab"
         const val PATH_PLAY_VERSION = "playVersion"
         const val PATH_SERVER_INFO = "/server_info"
 
@@ -78,10 +78,6 @@ class SessionModel(
             tx.put(
                 PATH_PRO_USER,
                 castToBoolean(tx.get(PATH_PRO_USER), false),
-            )
-            tx.put(
-                PATH_SELECTED_TAB,
-                tx.get(PATH_SELECTED_TAB) ?: "vpn",
             )
             tx.put(
                 PATH_USER_LEVEL,
@@ -126,6 +122,20 @@ class SessionModel(
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
+            "enableScreenshot" -> {
+                activity.runOnUiThread {
+                    activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
+                Logger.debug("Screenshot enabled", "Screenshot enabled")
+            }
+
+            "disableScreenshot" -> {
+                activity.runOnUiThread {
+                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
+                Logger.debug("Screenshot disable", "Screenshot disabled")
+            }
+
             "authorizeViaEmail" -> requestRecoveryEmail(call.argument("emailAddress")!!, result)
             "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
             "requestLinkCode" -> requestLinkCode(result)
@@ -180,6 +190,7 @@ class SessionModel(
                 LanternApp.getSession().setLanguage(call.argument("lang"))
                 fetchPaymentMethods(result)
             }
+
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -222,12 +233,6 @@ class SessionModel(
             "setForceCountry" -> {
                 LanternApp.getSession().setForceCountry(call.argument("countryCode") ?: "")
                 activity.restartApp()
-            }
-
-            "setSelectedTab" -> {
-                db.mutate { tx ->
-                    tx.put(PATH_SELECTED_TAB, call.argument<String>("tab")!!)
-                }
             }
 
             "submitFreekassa" -> {

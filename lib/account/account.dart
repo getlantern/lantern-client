@@ -31,7 +31,7 @@ class AccountMenu extends StatelessWidget {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16), topRight: Radius.circular(16))),
       builder: (context) {
-        return FollowUs();
+        return const FollowUs();
       },
     );
   }

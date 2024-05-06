@@ -161,7 +161,7 @@ class TryLanternChat extends StatelessWidget {
                             TextButton(
                               onPressed: () async {
                                 // Switch to Chats tab
-                                await sessionModel.setSelectedTab(TAB_CHATS);
+                                sessionModel.setSelectedTab(context, TAB_CHATS);
                                 // Start onboarding
                                 await messagingModel.start();
                                 await context.router

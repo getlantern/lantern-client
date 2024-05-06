@@ -86,23 +86,41 @@ func (app *App) IsProUser(ctx context.Context) (isPro bool, ok bool) {
 	if err != nil {
 		return false, false
 	}
-	return IsProUser(ctx, app.proClient, app.settings.GetUserID())
+	return IsProUser(ctx, app.proClient, app.settings)
 }
 
-func IsProUser(ctx context.Context, proClient pro.ProClient, userId int64) (isPro bool, ok bool) {
+func IsProUser(ctx context.Context, proClient pro.ProClient, uc common.UserConfig) (isPro bool, ok bool) {
 	isActive := func(user *protos.User) bool {
 		return user != nil && user.UserStatus == "active"
 	}
-	user, found := GetUserDataFast(ctx, userId)
+	user, found := GetUserDataFast(ctx, uc.GetUserID())
 	if !found {
 		ctx := context.Background()
-		resp, err := proClient.UserData(ctx)
+		resp, err := fetchUserDataWithClient(ctx, proClient, uc)
 		if err != nil {
 			return false, false
 		}
 		user = resp.User
 	}
 	return isActive(user), true
+}
+
+func fetchUserDataWithClient(ctx context.Context, proClient pro.ProClient, uc common.UserConfig) (*pro.UserDataResponse, error) {
+	userID := uc.GetUserID()
+	log.Debugf("Fetching user status with device ID '%v', user ID '%v' and proToken %v",
+		uc.GetDeviceID(), userID, uc.GetToken())
+	resp, err := proClient.UserData(ctx)
+	if err != nil {
+		return nil, err
+	}
+	setUserData(ctx, userID, resp.User)
+	log.Debugf("User %d is '%v'", userID, resp.User.UserStatus)
+	return resp, nil
+}
+
+func setUserData(ctx context.Context, userID int64, user *protos.User) {
+	log.Debugf("Storing user data for user %v", userID)
+	userData.save(ctx, userID, user)
 }
 
 // isActive determines whether the given status is an active status
