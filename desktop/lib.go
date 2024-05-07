@@ -83,7 +83,6 @@ func start() {
 	})
 
 	a = app.NewApp(flags, cdir, proClient, settings)
-
 	go func() {
 		err := fetchOrCreate()
 		if err != nil {
@@ -130,6 +129,31 @@ func start() {
 		log.Debug("Lantern stopped")
 		os.Exit(0)
 	}()
+}
+
+//export hasProxyFected
+func hasProxyFected() *C.char {
+
+	if a.GetHasProxyFetched() {
+		return C.CString(string("true"))
+	}
+	return C.CString(string("false"))
+}
+
+//export hasConfigFected
+func hasConfigFected() *C.char {
+	if a.GetHasConfigFetched() {
+		return C.CString(string("true"))
+	}
+	return C.CString(string("false"))
+}
+
+//export onSuccess
+func onSuccess() *C.char {
+	if a.GetOnSuccess() {
+		return C.CString(string("true"))
+	}
+	return C.CString(string("false"))
 }
 
 func fetchOrCreate() error {

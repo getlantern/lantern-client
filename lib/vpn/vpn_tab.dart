@@ -1,4 +1,5 @@
 import 'package:lantern/account/split_tunneling.dart';
+import 'package:lantern/ffi.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
 import 'vpn_bandwidth.dart';
@@ -12,6 +13,7 @@ class VPNTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    checkUICallbacks();
     return sessionModel.proUser(
         (BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(

@@ -50,6 +50,14 @@ Future<User> ffiUserData() async {
   return User.create()..mergeFromProto3Json(jsonDecode(res));
 }
 
+void checkUICallbacks() {
+  final proxy = _bindings.hasProxyFected().cast<Utf8>().toDartString();
+  final config = _bindings.hasConfigFected().cast<Utf8>().toDartString();
+  final success = _bindings.onSuccess().cast<Utf8>().toDartString();
+
+  print("proxy $proxy config $config success $success");
+}
+
 // checkAPIError throws a PlatformException if the API response contains an error
 void checkAPIError(result, errorMessage) {
   if (result is String) {

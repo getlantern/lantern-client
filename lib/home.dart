@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void initState() {
     _startupSequence();
+
     super.initState();
   }
 

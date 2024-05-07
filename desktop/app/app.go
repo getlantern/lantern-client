@@ -50,11 +50,13 @@ var (
 	log                = golog.LoggerFor("lantern-desktop.app")
 	startTime          = time.Now()
 	translationAppName = strings.ToUpper(common.DefaultAppName)
+	UICallback         = InitCallback{}
 )
 
 func init() {
 	autoupdate.Version = ApplicationVersion
 	autoupdate.PublicKey = []byte(packagePublicKey)
+
 }
 
 // App is the core of the Lantern desktop application, in the form of a library.
@@ -93,6 +95,13 @@ type App struct {
 	ws              ws.UIChannel
 
 	mu sync.Mutex
+}
+
+// Callback that updates ui
+type InitCallback struct {
+	hasConfigFected bool
+	hasProxyFected  bool
+	onSuccess       bool
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
@@ -221,6 +230,7 @@ func (app *App) Run(isMain bool) {
 			flashlightClient.WithOnConfig(app.onConfigUpdate),
 			flashlightClient.WithProxies(app.onProxiesUpdate),
 			flashlightClient.WithIsPro(app.IsPro),
+			flashlightClient.WithSucceedingProxy(app.onSucceedingProxy),
 		)
 		if err != nil {
 			app.Exit(err)
@@ -346,18 +356,18 @@ func (app *App) beforeStart(listenAddr string) {
 }
 
 // Connect turns on proxying
-func (app *App) Connect() {
-	app.analyticsSession.Event("systray-menu", "connect")
-	ops.Begin("connect").End()
-	app.settings.SetDisconnected(false)
-}
+// func (app *App) Connect() {
+// 	app.analyticsSession.Event("systray-menu", "connect")
+// 	ops.Begin("connect").End()
+// 	app.settings.SetDisconnected(false)
+// }
 
-// Disconnect turns off proxying
-func (app *App) Disconnect() {
-	app.analyticsSession.Event("systray-menu", "disconnect")
-	ops.Begin("disconnect").End()
-	app.settings.SetDisconnected(true)
-}
+// // Disconnect turns off proxying
+// func (app *App) Disconnect() {
+// 	app.analyticsSession.Event("systray-menu", "disconnect")
+// 	ops.Begin("disconnect").End()
+// 	app.settings.SetDisconnected(true)
+// }
 
 // GetLanguage returns the user language
 func (app *App) GetLanguage() string {
@@ -419,6 +429,7 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
+	UICallback.hasConfigFected = true
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
@@ -438,10 +449,28 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
+	UICallback.hasProxyFected = true
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
 	}
+}
+
+func (app *App) onSucceedingProxy(succeeding bool) {
+	UICallback.onSuccess = succeeding
+	log.Debugf("[Startup Desktop] onSucceedingProxy  %v", succeeding)
+}
+
+func (app *App) GetHasConfigFetched() bool {
+	return UICallback.hasConfigFected
+}
+
+func (app *App) GetHasProxyFetched() bool {
+	return UICallback.hasProxyFected
+}
+
+func (app *App) GetOnSuccess() bool {
+	return UICallback.onSuccess
 }
 
 // AddExitFunc adds a function to be called before the application exits.
