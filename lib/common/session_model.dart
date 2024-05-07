@@ -533,6 +533,11 @@ class SessionModel extends Model {
     );
   }
 
+  Future<Iterable<PathAndValue<PaymentMethod>>> paymentMethodsv4() async {
+    final res = await ffiPaymentMethodsV4();
+    return paymentMethodFromJson(jsonDecode(res.toDartString()));
+  }
+
   Widget paymentMethods({
     required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
   }) {
@@ -713,7 +718,7 @@ class SessionModel extends Model {
     final format = NumberFormat.simpleCurrency(locale: locale.toString());
     final currencyName = format.currencyName ?? "USD";
     return await compute(
-        ffiPaymentRedirect, [planID, currencyName, provider.toString(), email, os]);
+        ffiPaymentRedirect, [planID, currencyName, provider.name, email, os]);
   }
 
   Future<void> submitStripePayment(

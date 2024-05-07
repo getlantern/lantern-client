@@ -133,16 +133,15 @@ class PlanCard extends StatelessWidget {
     }
   }
 
-  // onlyPaymentProvider returns true if the given payment provider is the only enabled payment provider
-  // in the list of payment methods. It is used to bypass the last checkout screen 
-  bool onlyPaymentProvider(Iterable<PathAndValue<PaymentMethod>> paymentMethods, Providers provider) {
-    var providers = <Providers>[];
+  // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
+  List<PaymentProviders> paymentProvidersFromMethods(Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+    var providers = <PaymentProviders>[];
     for (final paymentMethod in paymentMethods) {
       for (final provider in paymentMethod.value.providers) {
-        providers.add(provider.name.toPaymentEnum());
+        providers.add(provider);
       }
     }
-    return providers.length == 1 && providers[0] == provider;
+    return providers;
   }
 
   Future<void> _checkOut(BuildContext context) async {
@@ -157,35 +156,31 @@ class PlanCard extends StatelessWidget {
         ),
       );
     } else if (isDesktop()) {
-      sessionModel.paymentMethods(
-          builder: (
-            context,
-            Iterable<PathAndValue<PaymentMethod>> paymentMethods,
-            Widget? child,
-          ) async {
-          if (onlyPaymentProvider(paymentMethods, Providers.stripe)) {
-              final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-                context,
-                plan.id,
-                "",
-                Providers.stripe,
-              );
-              openDesktopWebview(
-                context: context,
-                provider: Providers.stripe,
-                redirectUrl: redirectUrl);
-          }
-          return SizedBox();
-      });
-    } else {
-      // * Proceed to our own Checkout
-      await context.pushRoute(
-        Checkout(
-          plan: plan,
-          isPro: isPro,
-        ),
-      );
+      final paymentMethods = await sessionModel.paymentMethodsv4();
+      final providers = providersFromPaymentMethods(paymentMethods);
+      // if only one payment provider is returned, bypass the last checkout screen
+      if (providers.length == 1) {
+        final provider = providers[0];
+        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
+          context,
+          plan.id,
+          "",
+          provider.name.toPaymentEnum(),
+        );
+        await openDesktopWebview(
+          context: context,
+          provider: Providers.stripe,
+          redirectUrl: redirectUrl);
+      }
+      return;
     }
+    // * Proceed to our own Checkout
+    await context.pushRoute(
+      Checkout(
+        plan: plan,
+        isPro: isPro,
+      ),
+    );
   }
 }
 

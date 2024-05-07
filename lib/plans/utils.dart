@@ -77,19 +77,18 @@ enum Providers { stripe, btcpay, freekassa, fropay, paymentwall }
 
 extension ProviderExtension on String {
   Providers toPaymentEnum() {
-    if (this == "stripe") {
-      return Providers.stripe;
+    switch (this) {
+      case "btcpay":
+        return Providers.btcpay;
+      case "freekassa":
+        return Providers.freekassa;
+      case "fropay":
+        return Providers.fropay;
+      case "paymentwall":
+        return Providers.paymentwall;
+      default:
+        return Providers.stripe;
     }
-    if (this == "freekassa") {
-      return Providers.freekassa;
-    }
-    if (this == "fropay") {
-      return Providers.fropay;
-    }
-    if (this == "paymentwall") {
-      return Providers.paymentwall;
-    }
-    return Providers.btcpay;
   }
 }
 
