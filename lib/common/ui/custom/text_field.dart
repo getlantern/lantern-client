@@ -21,6 +21,7 @@ class CTextField extends StatefulWidget {
   late final TextInputAction? textInputAction;
   late final void Function(String value)? onFieldSubmitted;
   late final String? actionIconPath;
+  late final FloatingLabelBehavior? floatingLabelBehavior;
   late final int? maxLength;
   late final InputCounterWidgetBuilder? buildCounter;
   late final TextCapitalization? textCapitalization;
@@ -50,6 +51,7 @@ class CTextField extends StatefulWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.actionIconPath,
+    this.floatingLabelBehavior,
     this.maxLength,
     this.buildCounter,
     this.textCapitalization,
@@ -118,7 +120,7 @@ class _CTextFieldState extends State<CTextField> {
             // thumbVisibility: true,
             trackVisibility: true,
             child: Tooltip(
-              message: widget.tooltipMessage ?? '',
+              message: isDesktop() ? '' : (widget.tooltipMessage ?? ''),
               child: TextFormField(
                 key: fieldKey,
                 autofocus: widget.autofocus!,
@@ -164,7 +166,7 @@ class _CTextFieldState extends State<CTextField> {
                               bottom: 8,
                             )),
                   isDense: true,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  floatingLabelBehavior: widget.floatingLabelBehavior ?? FloatingLabelBehavior.never,
                   // we handle floating labels using our custom method below
                   labelText: (widget.label is String) ? widget.label : '',
                   helperText: widget.helperText,

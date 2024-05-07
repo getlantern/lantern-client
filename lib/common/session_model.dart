@@ -66,12 +66,13 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
-
     }
-    ///By default when user starts the app we need to make sure that screenshot is disabled
-    /// if user goes to chat then screenshot will be disabled
-    enableScreenShot();
 
+    if (Platform.isAndroid) {
+      // By default when user starts the app we need to make sure that screenshot is disabled
+      // if user goes to chat then screenshot will be disabled
+      enableScreenShot();
+    }
   }
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
@@ -80,11 +81,17 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
-  // wsMessageProp parses the given json, checks if it represents a pro user message and
-  // returns the value (if any) in the map for the given property.
-  String? wsMessageProp(Map<String, dynamic> json, String field) {
-    if (json["type"] != "pro") return null;
-    return json["message"][field];
+  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
+  // the onMessage callback is triggered with the given property value
+  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
+      property, void Function(T?) onMessage) {
+    if (websocket == null) return;
+    websocket.messageStream.listen(
+      (json) {
+        if (json["type"] == messageType) onMessage(json["message"][property]);
+      },
+      onError: (error) => appLogger.i("websocket error: ${error.description}"),
+    );
   }
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
@@ -95,18 +102,10 @@ class SessionModel extends Model {
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
-      onChanges: (setValue) {
-        if (websocket == null) return;
-        websocket.messageStream.listen(
-          (json) {
-            final userStatus = wsMessageProp(json, "userStatus");
-            if (userStatus != null && userStatus.toString() == "active")
-              setValue(true);
-          },
-          onError: (error) =>
-              appLogger.i("websocket error: ${error.description}"),
-        );
-      },
+      onChanges: (setValue) =>
+          listenWebsocket(websocket, "pro", "userStatus", (value) {
+        if (value != null && value.toString() == "active") setValue(true);
+      }),
       ffiProUser,
       builder: builder,
     );
@@ -197,17 +196,10 @@ class SessionModel extends Model {
     return ffiValueBuilder<String>(
       'lang',
       defaultValue: 'en',
-      onChanges: (setValue) {
-        if (websocket == null) return;
-        websocket.messageStream.listen(
-          (json) {
-            final language = wsMessageProp(json, "language");
-            if (language != null && language != "") setValue(language);
-          },
-          onError: (error) =>
-              appLogger.i("websocket error: ${error.description}"),
-        );
-      },
+      onChanges: (setValue) =>
+          listenWebsocket(websocket, "pro", "language", (value) {
+        if (value != null && value.toString() != "") setValue(value.toString());
+      }),
       ffiLang,
       builder: builder,
     );
@@ -303,12 +295,11 @@ class SessionModel extends Model {
     );
   }
 
-  Future<void> setProxyAll<T>(bool on) async {
-    unawaited(
-      methodChannel.invokeMethod('setProxyAll', <String, dynamic>{
-        'on': on,
-      }),
-    );
+  Future<void> setProxyAll<T>(bool isOn) async {
+    if (isDesktop()) {
+      return await compute(ffiSetProxyAll, isOn ? 'true' : 'false');
+    }
+    throw Exception("Not supported on mobile");
   }
 
   Future<String> getCountryCode() async {
@@ -364,9 +355,9 @@ class SessionModel extends Model {
         .invokeMethod('resendRecoveryCode', <String, dynamic>{});
   }
 
-  void setSelectedTab(BuildContext context,String tab)  {
-    Provider.of<BottomBarChangeNotifier>(context, listen: false).setCurrentIndex(tab);
-
+  void setSelectedTab(BuildContext context, String tab) {
+    Provider.of<BottomBarChangeNotifier>(context, listen: false)
+        .setCurrentIndex(tab);
   }
 
   Widget shouldShowGoogleAds(ValueWidgetBuilder<bool> builder) {
@@ -375,7 +366,6 @@ class SessionModel extends Model {
       builder: builder,
     );
   }
-
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
@@ -470,9 +460,8 @@ class SessionModel extends Model {
   }
 
   Future<bool> hasUpdatePlansOrBuy() async {
-    return compute(ffiHasPlanUpdateOrBuy,'');
+    return compute(ffiHasPlanUpdateOrBuy, '');
   }
-
 
   Plan planFromJson(Map<String, dynamic> item) {
     print("called plans $item");
@@ -792,6 +781,20 @@ class SessionModel extends Model {
     );
   }
 
+  Widget proxyAll(ValueWidgetBuilder<bool> builder) {
+    final websocket = WebsocketImpl.instance();
+    return ffiValueBuilder<bool>(
+      'proxyAll',
+      defaultValue: false,
+      onChanges: (setValue) =>
+          listenWebsocket(websocket, "settings", "proxyAll", (value) {
+        if (value != null) setValue(value as bool);
+      }),
+      ffiProxyAll,
+      builder: builder,
+    );
+  }
+
   Future<void> setSplitTunneling<T>(bool on) async {
     unawaited(
       methodChannel.invokeMethod('setSplitTunneling', <String, dynamic>{
@@ -831,5 +834,4 @@ class SessionModel extends Model {
   Future<void> disableScreenShot() {
     return methodChannel.invokeMethod('disableScreenshot', <String, dynamic>{});
   }
-
 }
