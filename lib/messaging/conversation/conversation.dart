@@ -63,11 +63,7 @@ class ConversationState extends State<Conversation>
 
   // default the below to reasonable value, it will get updated when the
   // keyboard displays
-  double get defaultKeyboardHeight =>
-      MediaQuery
-          .of(context)
-          .size
-          .height * 0.4;
+  double get defaultKeyboardHeight => MediaQuery.of(context).size.height * 0.4;
   static var latestKeyboardHeight = 0.0;
 
   Timer? currentConversationTimer;
@@ -95,18 +91,10 @@ class ConversationState extends State<Conversation>
     }
 
     var currentKeyboardHeight = max(
-      EdgeInsets
-          .fromViewPadding(
-          View
-              .of(context)
-              .padding, View
-          .of(context)
-          .devicePixelRatio)
+      EdgeInsets.fromViewPadding(
+              View.of(context).padding, View.of(context).devicePixelRatio)
           .bottom,
-      MediaQuery
-          .of(context)
-          .viewInsets
-          .bottom,
+      MediaQuery.of(context).viewInsets.bottom,
     );
     if (currentKeyboardHeight > 0) {
       setState(() {
@@ -118,21 +106,21 @@ class ConversationState extends State<Conversation>
   void subscribeToKeyboardChanges() {
     keyboardSubscription =
         keyboardVisibilityController.onChange.listen((bool visible) {
-          updateKeyboardHeight();
-          if (visible) {
-            if (keyboardMode == KeyboardMode.emojiReaction) {
-              dismissNativeKeyboard();
-            } else {
-              setState(() {
-                keyboardMode = KeyboardMode.native;
-              });
-            }
-          } else if (keyboardMode == KeyboardMode.native) {
-            setState(() {
-              keyboardMode = KeyboardMode.none;
-            });
-          }
+      updateKeyboardHeight();
+      if (visible) {
+        if (keyboardMode == KeyboardMode.emojiReaction) {
+          dismissNativeKeyboard();
+        } else {
+          setState(() {
+            keyboardMode = KeyboardMode.native;
+          });
+        }
+      } else if (keyboardMode == KeyboardMode.native) {
+        setState(() {
+          keyboardMode = KeyboardMode.none;
         });
+      }
+    });
   }
 
   void dismissAllKeyboards() {
@@ -178,7 +166,7 @@ class ConversationState extends State<Conversation>
         // fresh
         currentConversationTimer = Timer.periodic(
           const Duration(seconds: 1),
-              (_) =>
+          (_) =>
               messagingModel.setCurrentConversationContact(widget.contactId.id),
         );
         break;
@@ -257,13 +245,29 @@ class ConversationState extends State<Conversation>
         // user didn't pick any files, don't share anything
         return;
       }
+
+      // check file for size limit
+      int totalSizeBytes =
+          result.files.fold(0, (prev, file) => prev + file.size);
+      double totalSizeMB =
+          totalSizeBytes / (1024 * 1024); // Convert bytes to megabytes
+
+      if (totalSizeMB > 100) {
+        CDialog.showInfo(
+          context,
+          title: 'file_size_limit_title'.i18n,
+          description: 'file_size_limit_description'.i18n,
+        );
+        return;
+      }
+
       context.loaderOverlay.show(widget: spinner);
       for (var i = 0; i < result.files.length; i++) {
         final el = result.files[i];
         final title = el.path.toString().split('file_picker/')[1].split('.')[
-        0]; // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
+            0]; // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
         final fileExtension =
-        el.path.toString().split('file_picker/')[1].split('.')[1];
+            el.path.toString().split('file_picker/')[1].split('.')[1];
         final metadata = {
           'title': title,
           'fileExtension': fileExtension,
@@ -306,7 +310,8 @@ class ConversationState extends State<Conversation>
   }
 
   // handles backend send message logic
-  Future<void> sendMessage(String text, {
+  Future<void> sendMessage(
+    String text, {
     List<Uint8List>? attachments,
     String? replyToSenderId,
     String? replyToId,
@@ -349,15 +354,13 @@ class ConversationState extends State<Conversation>
 
   // handles client send message logic
   void send() async {
-    if (newMessage.value.text
-        .trim()
-        .isEmpty && recording == null) {
+    if (newMessage.value.text.trim().isEmpty && recording == null) {
       return;
     }
     await sendMessage(
       newMessage.value.text,
       attachments:
-      recording != null && recording!.isNotEmpty ? [recording!] : [],
+          recording != null && recording!.isNotEmpty ? [recording!] : [],
       replyToSenderId: quotedMessage?.senderId,
       replyToId: quotedMessage?.id,
     );
@@ -377,210 +380,202 @@ class ConversationState extends State<Conversation>
     updateKeyboardHeight();
 
     final keyboardHeight =
-    latestKeyboardHeight > 0 ? latestKeyboardHeight : defaultKeyboardHeight;
+        latestKeyboardHeight > 0 ? latestKeyboardHeight : defaultKeyboardHeight;
 
     (context.router.currentChild!.name == router_gr.Conversation.name)
         ? unawaited(
-      messagingModel.setCurrentConversationContact(widget.contactId.id),
-    )
+            messagingModel.setCurrentConversationContact(widget.contactId.id),
+          )
         : unawaited(messagingModel.clearCurrentConversationContact());
     return messagingModel.singleContactById(widget.contactId,
-            (context, contact, child) {
-          // * we came here after adding a contact via chat number, show contact name dialog
-          if (showContactEditingDialog == true && contact.displayName.isEmpty) {
-            showContactEditingDialog = false;
-            messagingModel
-                .getDirectContact(widget.contactId.id)
-                .then((contact) async {
-              // We use Future.delayed instead of addPostFrameCallback because
-              // addPostFrameCallback doesn't work all the time (for some unknown
-              // reason).
-              await Future.delayed(const Duration(milliseconds: 250));
-              await showDialog(
-                context: context,
-                builder: (childContext) =>
-                    ContactNameDialog(
-                      context: context,
-                      contact: contact,
-                    ),
-              );
-            });
-          }
+        (context, contact, child) {
+      // * we came here after adding a contact via chat number, show contact name dialog
+      if (showContactEditingDialog == true && contact.displayName.isEmpty) {
+        showContactEditingDialog = false;
+        messagingModel
+            .getDirectContact(widget.contactId.id)
+            .then((contact) async {
+          // We use Future.delayed instead of addPostFrameCallback because
+          // addPostFrameCallback doesn't work all the time (for some unknown
+          // reason).
+          await Future.delayed(const Duration(milliseconds: 250));
+          await showDialog(
+            context: context,
+            builder: (childContext) => ContactNameDialog(
+              context: context,
+              contact: contact,
+            ),
+          );
+        });
+      }
 
-          // determine if we will show the verification warning badge
-          var verificationReminderLastDismissed = contact
+      // determine if we will show the verification warning badge
+      var verificationReminderLastDismissed = contact
               .applicationData['verificationReminderLastDismissed']?.int_3
               .toInt() ??
-              0;
-          return BaseScreen(
-            resizeToAvoidBottomInset: false,
-            centerTitle: false,
-            padHorizontal: false,
-            // * Conversation Title
-            title: dismissKeyboardsOnTap(
-              CInkWell(
-                onTap: () async =>
+          0;
+      return BaseScreen(
+        resizeToAvoidBottomInset: false,
+        centerTitle: false,
+        padHorizontal: false,
+        // * Conversation Title
+        title: dismissKeyboardsOnTap(
+          CInkWell(
+            onTap: () async =>
                 await context.pushRoute(ContactInfo(contact: contact)),
-                child: ContactInfoTopBar(
-                  contact: contact,
-                  verifiedColor: verifiedColor,
-                ),
-              ),
+            child: ContactInfoTopBar(
+              contact: contact,
+              verifiedColor: verifiedColor,
             ),
-            // * Conversation Actions e.g. Verification alert, Call, Menu
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // * show Verification alert badge, resurface every 2 weeks
-                  NowBuilder(
-                    calculate: (now) =>
+          ),
+        ),
+        // * Conversation Actions e.g. Verification alert, Call, Menu
+        actions: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // * show Verification alert badge, resurface every 2 weeks
+              NowBuilder(
+                calculate: (now) =>
                     now.millisecondsSinceEpoch -
                         verificationReminderLastDismissed >=
-                        twoWeeksInMillis,
-                    builder: (BuildContext context, bool value) {
-                      if (!contact.isMe && contact.isUnverified() && value) {
-                        return IconButton(
-                          key: const ValueKey('verification_badge'),
-                          visualDensity: VisualDensity.compact,
-                          onPressed: () async {
-                            showVerificationOptions(
-                              contact: contact,
-                              bottomModalContext: context,
-                              showDismissNotification: shouldShowVerificationAlert,
-                              topBarAnimationCallback: () async {
-                                setState(() => verifiedColor = indicatorGreen);
-                                await Future.delayed(
-                                  longAnimationDuration,
-                                      () =>
-                                      setState(() => verifiedColor = black),
-                                );
-                              },
-                            );
-                          },
-                          icon: const CAssetImage(
-                            path: ImagePaths.verification_alert,
-                          ),
-                        );
-                      }
-                      return Container();
-                    },
-                  ),
-                  if (!contact.isMe) CallAction(contact),
-                  IconButton(
-                    key: const ValueKey('conversation_topbar_more_menu'),
-                    visualDensity: VisualDensity.compact,
-                    icon: const CAssetImage(path: ImagePaths.more_vert),
-                    onPressed: () =>
-                        showConversationOptions(
-                          parentContext: context,
+                    twoWeeksInMillis,
+                builder: (BuildContext context, bool value) {
+                  if (!contact.isMe && contact.isUnverified() && value) {
+                    return IconButton(
+                      key: const ValueKey('verification_badge'),
+                      visualDensity: VisualDensity.compact,
+                      onPressed: () async {
+                        showVerificationOptions(
                           contact: contact,
+                          bottomModalContext: context,
+                          showDismissNotification: shouldShowVerificationAlert,
                           topBarAnimationCallback: () async {
                             setState(() => verifiedColor = indicatorGreen);
                             await Future.delayed(
                               longAnimationDuration,
-                                  () => setState(() => verifiedColor = black),
+                              () => setState(() => verifiedColor = black),
                             );
                           },
-                        ),
-                  )
-                ],
+                        );
+                      },
+                      icon: const CAssetImage(
+                        path: ImagePaths.verification_alert,
+                      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
+              if (!contact.isMe) CallAction(contact),
+              IconButton(
+                key: const ValueKey('conversation_topbar_more_menu'),
+                visualDensity: VisualDensity.compact,
+                icon: const CAssetImage(path: ImagePaths.more_vert),
+                onPressed: () => showConversationOptions(
+                  parentContext: context,
+                  contact: contact,
+                  topBarAnimationCallback: () async {
+                    setState(() => verifiedColor = indicatorGreen);
+                    await Future.delayed(
+                      longAnimationDuration,
+                      () => setState(() => verifiedColor = black),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+        ],
+        // * Conversation body
+        body: Padding(
+          padding: EdgeInsetsDirectional.only(
+            bottom: keyboardMode == KeyboardMode.native ? keyboardHeight : 0.0,
+          ),
+          child: Column(
+            children: [
+              if (contact.isUnaccepted())
+                UnacceptedContactSticker(
+                  messageCount: messageCount,
+                  contact: contact,
+                ),
+              Flexible(
+                child: dismissKeyboardsOnTap(
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.only(start: 16, end: 16),
+                    child: buildList(contact),
+                  ),
+                ),
+              ),
+              // * Reply container
+              if (quotedMessage != null)
+                Reply(
+                  contact: contact,
+                  message: quotedMessage!,
+                  onCancelReply: () => setState(() => quotedMessage = null),
+                ),
+              Divider(height: 1.0, color: grey3),
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minHeight: messageBarHeight,
+                ),
+                child: Container(
+                  color: isRecording ? grey2 : white,
+                  width: MediaQuery.of(context).size.width,
+                  child: buildMessageBar(),
+                ),
+              ),
+              // * Emoji keyboard
+              Offstage(
+                offstage: keyboardMode != KeyboardMode.emoji &&
+                    keyboardMode != KeyboardMode.emojiReaction,
+                child: MessagingEmojiPicker(
+                  height: keyboardHeight,
+                  emptySuggestions: 'no_recents'.i18n,
+                  onBackspacePressed: () {
+                    newMessage
+                      ..text = newMessage.text.characters.skipLast(1).toString()
+                      ..selection = TextSelection.fromPosition(
+                        TextPosition(offset: newMessage.text.length),
+                      );
+                  },
+                  onEmojiSelected: (category, emoji) async {
+                    if (mounted && reactingWithEmoji && storedMessage != null) {
+                      await messagingModel.react(
+                        storedMessage!.value,
+                        emoji.emoji,
+                      );
+                      reactingWithEmoji = false;
+                      storedMessage = null;
+                      dismissAllKeyboards();
+                    } else {
+                      setState(() => isSendIconVisible = true);
+                      newMessage
+                        ..text += emoji.emoji
+                        ..selection = TextSelection.fromPosition(
+                          TextPosition(offset: newMessage.text.length),
+                        );
+                    }
+                  },
+                ),
               ),
             ],
-            // * Conversation body
-            body: Padding(
-              padding: EdgeInsetsDirectional.only(
-                bottom: keyboardMode == KeyboardMode.native
-                    ? keyboardHeight
-                    : 0.0,
-              ),
-              child: Column(
-                children: [
-                  if (contact.isUnaccepted())
-                    UnacceptedContactSticker(
-                      messageCount: messageCount,
-                      contact: contact,
-                    ),
-                  Flexible(
-                    child: dismissKeyboardsOnTap(
-                      Padding(
-                        padding:
-                        const EdgeInsetsDirectional.only(start: 16, end: 16),
-                        child: buildList(contact),
-                      ),
-                    ),
-                  ),
-                  // * Reply container
-                  if (quotedMessage != null)
-                    Reply(
-                      contact: contact,
-                      message: quotedMessage!,
-                      onCancelReply: () => setState(() => quotedMessage = null),
-                    ),
-                  Divider(height: 1.0, color: grey3),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      minHeight: messageBarHeight,
-                    ),
-                    child: Container(
-                      color: isRecording ? grey2 : white,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-                      child: buildMessageBar(),
-                    ),
-                  ),
-                  // * Emoji keyboard
-                  Offstage(
-                    offstage: keyboardMode != KeyboardMode.emoji &&
-                        keyboardMode != KeyboardMode.emojiReaction,
-                    child: MessagingEmojiPicker(
-                      height: keyboardHeight,
-                      emptySuggestions: 'no_recents'.i18n,
-                      onBackspacePressed: () {
-                        newMessage
-                          ..text = newMessage.text.characters.skipLast(1)
-                              .toString()
-                          ..selection = TextSelection.fromPosition(
-                            TextPosition(offset: newMessage.text.length),
-                          );
-                      },
-                      onEmojiSelected: (category, emoji) async {
-                        if (mounted && reactingWithEmoji &&
-                            storedMessage != null) {
-                          await messagingModel.react(
-                            storedMessage!.value,
-                            emoji.emoji,
-                          );
-                          reactingWithEmoji = false;
-                          storedMessage = null;
-                          dismissAllKeyboards();
-                        } else {
-                          setState(() => isSendIconVisible = true);
-                          newMessage
-                            ..text += emoji.emoji
-                            ..selection = TextSelection.fromPosition(
-                              TextPosition(offset: newMessage.text.length),
-                            );
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
+          ),
+        ),
+      );
+    });
   }
 
   Widget buildList(Contact contact) {
     return messagingModel.contactMessages(
       contact,
-      builder: (context,
-          Iterable<PathAndValue<StoredMessage>> originalMessageRecords,
-          Widget? child,) {
+      builder: (
+        context,
+        Iterable<PathAndValue<StoredMessage>> originalMessageRecords,
+        Widget? child,
+      ) {
         // Build list that includes original message records as well as date
         // separators.
         var listItems = <Object>[];
@@ -642,48 +637,50 @@ class ConversationState extends State<Conversation>
     );
   }
 
-  Widget buildMessageBubble(BuildContext context,
-      Contact contact,
-      List<Object> listItems,
-      PathAndValue<StoredMessage> messageAndPath,
-      int index,) {
+  Widget buildMessageBubble(
+    BuildContext context,
+    Contact contact,
+    List<Object> listItems,
+    PathAndValue<StoredMessage> messageAndPath,
+    int index,
+  ) {
     return messagingModel.message(context, messageAndPath,
-            (BuildContext context, StoredMessage message, Widget? child) {
-          return MessageBubble(
-            message: message,
-            priorMessage: priorMessage(listItems, index)?.value,
-            nextMessage: nextMessage(listItems, index)?.value,
-            contact: contact,
-            onOpenMenu: dismissAllKeyboards,
-            onEmojiTap: () {
-              setState(() {
-                reactingWithEmoji = true;
-                storedMessage = messageAndPath;
-              });
-              showEmojiKeyboard(true);
-            },
-            onReply: () {
-              setState(() {
-                quotedMessage = message;
-                showNativeKeyboard();
-              });
-            },
-            onTapReply: () {
-              final scrollToIndex = listItems.toList().indexWhere(
-                    (element) =>
-                element is PathAndValue<StoredMessage> &&
+        (BuildContext context, StoredMessage message, Widget? child) {
+      return MessageBubble(
+        message: message,
+        priorMessage: priorMessage(listItems, index)?.value,
+        nextMessage: nextMessage(listItems, index)?.value,
+        contact: contact,
+        onOpenMenu: dismissAllKeyboards,
+        onEmojiTap: () {
+          setState(() {
+            reactingWithEmoji = true;
+            storedMessage = messageAndPath;
+          });
+          showEmojiKeyboard(true);
+        },
+        onReply: () {
+          setState(() {
+            quotedMessage = message;
+            showNativeKeyboard();
+          });
+        },
+        onTapReply: () {
+          final scrollToIndex = listItems.toList().indexWhere(
+                (element) =>
+                    element is PathAndValue<StoredMessage> &&
                     element.value.id == message.replyToId,
               );
-              if (scrollToIndex != -1 && scrollController.isAttached) {
-                scrollController.scrollTo(
-                  index: scrollToIndex,
-                  duration: const Duration(seconds: 1),
-                  curve: defaultCurves,
-                );
-              }
-            },
-          );
-        });
+          if (scrollToIndex != -1 && scrollController.isAttached) {
+            scrollController.scrollTo(
+              index: scrollToIndex,
+              duration: const Duration(seconds: 1),
+              curve: defaultCurves,
+            );
+          }
+        },
+      );
+    });
   }
 
   PathAndValue<StoredMessage>? priorMessage(List<Object> listItems, int index) {
@@ -709,10 +706,7 @@ class ConversationState extends State<Conversation>
   //* Entry point to audio waveform widget (MessageBarPreviewRecording)
   Widget buildMessageBar() {
     return SizedBox(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       child: IndexedStack(
         index: finishedRecording ? 1 : 0,
         children: [
@@ -720,22 +714,22 @@ class ConversationState extends State<Conversation>
           audioPreviewController == null
               ? const SizedBox()
               : MessageBarPreviewRecording(
-            audioController: audioPreviewController!,
-            onCancelRecording: () async {
-              unawaited(HapticFeedback.lightImpact());
-              setState(() {
-                isRecording = false;
-                finishedRecording = false;
-                recording = null;
-                audioPreviewController = null;
-              });
-            },
-            onSend: () {
-              unawaited(HapticFeedback.lightImpact());
-              audio.stop();
-              send();
-            },
-          ),
+                  audioController: audioPreviewController!,
+                  onCancelRecording: () async {
+                    unawaited(HapticFeedback.lightImpact());
+                    setState(() {
+                      isRecording = false;
+                      finishedRecording = false;
+                      recording = null;
+                      audioPreviewController = null;
+                    });
+                  },
+                  onSend: () {
+                    unawaited(HapticFeedback.lightImpact());
+                    audio.stop();
+                    send();
+                  },
+                ),
         ],
       ),
     );
@@ -746,52 +740,50 @@ class ConversationState extends State<Conversation>
   Widget buildMessageBarRecording(BuildContext context) {
     final leading = isRecording
         ? Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Flexible(
-          child: Padding(
-            padding: const EdgeInsetsDirectional.only(start: 16),
-            child: PulsatingIndicator(),
-          ),
-        ),
-        Flexible(
-          child: Padding(
-            padding: const EdgeInsetsDirectional.only(start: 16),
-            child: StopwatchTimer(
-              stopWatchTimer: stopWatchTimer,
-              style: tsSubtitle1
-                  .copiedWith(color: indicatorRed)
-                  .short,
-            ),
-          ),
-        ),
-      ],
-    )
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16),
+                  child: PulsatingIndicator(),
+                ),
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 16),
+                  child: StopwatchTimer(
+                    stopWatchTimer: stopWatchTimer,
+                    style: tsSubtitle1.copiedWith(color: indicatorRed).short,
+                  ),
+                ),
+              ),
+            ],
+          )
         : IconButton(
-      onPressed: () {
-        {
-          if (keyboardMode == KeyboardMode.emoji ||
-              keyboardMode == KeyboardMode.emojiReaction) {
-            keyboardMode = KeyboardMode.native;
-            showNativeKeyboard();
-          } else {
-            showEmojiKeyboard(false);
-          }
-        }
-      },
-      icon: keyboardMode == KeyboardMode.emoji ||
-          keyboardMode == KeyboardMode.emojiReaction
-          ? const CAssetImage(path: ImagePaths.keyboard)
-          : const CAssetImage(path: ImagePaths.insert_emoticon),
-    );
+            onPressed: () {
+              {
+                if (keyboardMode == KeyboardMode.emoji ||
+                    keyboardMode == KeyboardMode.emojiReaction) {
+                  keyboardMode = KeyboardMode.native;
+                  showNativeKeyboard();
+                } else {
+                  showEmojiKeyboard(false);
+                }
+              }
+            },
+            icon: keyboardMode == KeyboardMode.emoji ||
+                    keyboardMode == KeyboardMode.emojiReaction
+                ? const CAssetImage(path: ImagePaths.keyboard)
+                : const CAssetImage(path: ImagePaths.insert_emoticon),
+          );
 
     final content = Stack(
       alignment: Alignment.center,
       children: [
         if (!isRecording)
-        // using a SingleChildScrollView to reconcile emoji and native keyboard scrolling to latest character which is only possible with maxLines = null
+          // using a SingleChildScrollView to reconcile emoji and native keyboard scrolling to latest character which is only possible with maxLines = null
           SingleChildScrollView(
             scrollDirection: Axis.vertical,
             reverse: true,
@@ -812,8 +804,7 @@ class ConversationState extends State<Conversation>
               },
               focusNode: focusNode,
               textCapitalization: TextCapitalization.sentences,
-              onFieldSubmitted: (value) async =>
-              value.isEmpty
+              onFieldSubmitted: (value) async => value.isEmpty
                   ? null
                   : await handleMessageBarSubmit(newMessage),
               decoration: InputDecoration(
@@ -843,36 +834,36 @@ class ConversationState extends State<Conversation>
     );
     final trailing = isSendIconVisible && !isRecording
         ? Row(
-      children: [
-        Padding(
-          padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
-          child: VerticalDivider(thickness: 1, width: 1, color: grey3),
-        ),
-        IconButton(
-          key: const ValueKey('send_message'),
-          icon: mirrorLTR(
-            context: context,
-            child:
-            CAssetImage(path: ImagePaths.send_rounded, color: pink4),
-          ),
-          onPressed: send,
-        ),
-      ],
-    )
+            children: [
+              Padding(
+                padding: const EdgeInsetsDirectional.only(top: 8, bottom: 8),
+                child: VerticalDivider(thickness: 1, width: 1, color: grey3),
+              ),
+              IconButton(
+                key: const ValueKey('send_message'),
+                icon: mirrorLTR(
+                  context: context,
+                  child:
+                      CAssetImage(path: ImagePaths.send_rounded, color: pink4),
+                ),
+                onPressed: send,
+              ),
+            ],
+          )
         : Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        isRecording
-            ? const SizedBox()
-            : IconButton(
-          key: const ValueKey('filepicker_icon'),
-          onPressed: () async => await selectFilesToShare(),
-          icon: const CAssetImage(path: ImagePaths.add_circle),
-        ),
-      ],
-    );
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              isRecording
+                  ? const SizedBox()
+                  : IconButton(
+                      key: const ValueKey('filepicker_icon'),
+                      onPressed: () async => await selectFilesToShare(),
+                      icon: const CAssetImage(path: ImagePaths.add_circle),
+                    ),
+            ],
+          );
     // * Stack overlay of [leading, content, trailing] Row and voice recorder
     return Stack(
       alignment: isLTR(context) ? Alignment.bottomRight : Alignment.bottomLeft,
@@ -889,7 +880,7 @@ class ConversationState extends State<Conversation>
                 fit: FlexFit.tight,
                 child: Container(
                   constraints:
-                  const BoxConstraints(maxHeight: messageBarHeight * 2),
+                      const BoxConstraints(maxHeight: messageBarHeight * 2),
                   child: content,
                 ),
               ),
@@ -909,7 +900,7 @@ class ConversationState extends State<Conversation>
             isRecording: isRecording,
             onRecording: () async => await startRecording(),
             onStopRecording: () async =>
-            hasPermission ? await finishRecording() : null,
+                hasPermission ? await finishRecording() : null,
             onTapUpListener: () async => await finishRecording(),
           ),
       ],
