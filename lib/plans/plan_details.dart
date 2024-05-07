@@ -158,7 +158,7 @@ class PlanCard extends StatelessWidget {
       );
     } else if (isDesktop()) {
       final paymentMethods = await sessionModel.paymentMethodsv4();
-      final providers = providersFromPaymentMethods(paymentMethods);
+      final providers = paymentProvidersFromMethods(paymentMethods);
       // if only one payment provider is returned, bypass the last checkout screen
       if (providers.length == 1) {
         final provider = providers[0];
@@ -170,7 +170,7 @@ class PlanCard extends StatelessWidget {
         );
         await openDesktopWebview(
             context: context,
-            provider: Providers.stripe,
+            provider: provider,
             redirectUrl: redirectUrl);
         return;
       }
