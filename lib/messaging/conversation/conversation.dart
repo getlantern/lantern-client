@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lantern/core/router/router.gr.dart' as router_gr;
 import 'package:lantern/messaging/conversation/unaccepted_contact_sticker.dart';
@@ -264,21 +265,41 @@ class ConversationState extends State<Conversation>
       context.loaderOverlay.show(widget: spinner);
       for (var i = 0; i < result.files.length; i++) {
         final el = result.files[i];
-        final title = el.path.toString().split('file_picker/')[1].split('.')[
-            0]; // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
         final fileExtension =
             el.path.toString().split('file_picker/')[1].split('.')[1];
+        final title = el.path.toString().split('file_picker/')[1].split('.')[
+            0]; // example path: /data/user/0/org.getlantern.lantern/cache/file_picker/alpha_png.png
+        Uint8List? attachmentBytes;
+
         final metadata = {
           'title': title,
           'fileExtension': fileExtension,
         };
-        final attachment = await messagingModel.filePickerLoadAttachment(
-          el.path.toString(),
-          metadata,
-        );
+        if (fileExtension.isCompressSupported()) {
+          final targetPath =
+              '${el.path.toString().split('file_picker/')[0]}file_picker/${title}_compressed.$fileExtension';
+
+          //Removing Metadata from attachments
+          final stripedImage = await FlutterImageCompress.compressAndGetFile(
+            el.path!,
+            targetPath,
+            format: fileExtension.getFormat(),
+            keepExif: false, //this removes metadata from image
+          );
+
+          attachmentBytes = await messagingModel.filePickerLoadAttachment(
+            stripedImage!.path.toString(),
+            metadata,
+          );
+        } else {
+          attachmentBytes = await messagingModel.filePickerLoadAttachment(
+            el.path!.toString(),
+            metadata,
+          );
+        }
         await sendMessage(
           newMessage.value.text,
-          attachments: [attachment],
+          attachments: [attachmentBytes],
           replyToSenderId: quotedMessage?.senderId,
           replyToId: quotedMessage?.id,
         );
@@ -909,3 +930,31 @@ class ConversationState extends State<Conversation>
 }
 
 enum KeyboardMode { none, native, emoji, emojiReaction }
+
+extension FileExtension on String {
+  CompressFormat getFormat() {
+    if (toLowerCase() == 'png') {
+      return CompressFormat.png;
+    }
+    if (toLowerCase() == 'jpeg') {
+      return CompressFormat.jpeg;
+    }
+    if (toLowerCase() == 'heic') {
+      return CompressFormat.heic;
+    }
+    if (toLowerCase() == 'webp') {
+      return CompressFormat.webp;
+    }
+    return CompressFormat.png;
+  }
+
+  bool isCompressSupported() {
+    if (toLowerCase() == 'png' ||
+        toLowerCase() == 'jpeg' ||
+        toLowerCase() == 'heic' ||
+        toLowerCase() == 'webp') {
+      return true;
+    }
+    return false;
+  }
+}
