@@ -134,7 +134,8 @@ class PlanCard extends StatelessWidget {
   }
 
   // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
-  List<PaymentProviders> paymentProvidersFromMethods(Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+  List<PaymentProviders> paymentProvidersFromMethods(
+      Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
     var providers = <PaymentProviders>[];
     for (final paymentMethod in paymentMethods) {
       for (final provider in paymentMethod.value.providers) {
@@ -168,11 +169,11 @@ class PlanCard extends StatelessWidget {
           provider.name.toPaymentEnum(),
         );
         await openDesktopWebview(
-          context: context,
-          provider: Providers.stripe,
-          redirectUrl: redirectUrl);
+            context: context,
+            provider: Providers.stripe,
+            redirectUrl: redirectUrl);
+        return;
       }
-      return;
     }
     // * Proceed to our own Checkout
     await context.pushRoute(
