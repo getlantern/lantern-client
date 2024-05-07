@@ -265,7 +265,6 @@ class InAppBilling(
 
     private fun handleAcknowledgedPurchases(purchases: List<Purchase>) {
         for (purchase in purchases) {
-
             Logger.debug(TAG, "Purchase: $purchase")
             ensureConnected {
                 if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {

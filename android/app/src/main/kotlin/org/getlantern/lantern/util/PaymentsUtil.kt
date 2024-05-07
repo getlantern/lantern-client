@@ -199,7 +199,7 @@ class PaymentsUtil(private val activity: Activity) {
         planID: String,
         methodCallResult: MethodChannel.Result,
     ) {
-    val inAppBilling = LanternApp.getInAppBilling()
+        val inAppBilling = LanternApp.getInAppBilling()
         val plan = getPlanYear(planID)
         Logger.debug(TAG, "Starting in-app purchase for plan with ID $plan")
         inAppBilling.startPurchase(
@@ -211,7 +211,6 @@ class PaymentsUtil(private val activity: Activity) {
                     purchases: MutableList<Purchase>?,
                 ) {
                     if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-
                         methodCallResult.error(
                             "unknownError",
                             activity.resources.getString(R.string.error_making_purchase),
@@ -239,7 +238,34 @@ class PaymentsUtil(private val activity: Activity) {
                         return
                     }
 
-                    /*Important:
+
+                    if (purchases[0].purchaseState != Purchase.PurchaseState.PURCHASED) {
+                        /*
+                        * if the purchase state is not purchased then do not call api
+                        * make user pro temporary next user open app it will check the purchase state and call api accordingly
+                        * */
+                        session.linkDevice()
+                        lanternClient.userData(object : LanternHttpClient.ProUserCallback {
+                            override fun onSuccess(response: Response, userData: ProUser) {
+                                Logger.e(TAG, "User detail : $userData")
+                                session.setIsProUser(true)
+                                activity.runOnUiThread {
+                                    methodCallResult.success("purchaseSuccessful")
+                                }
+                            }
+
+                            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                                Logger.error(TAG, "Unable to fetch user data: $throwable.message")
+                                activity.runOnUiThread {
+                                    methodCallResult.success("purchaseSuccessful")
+                                }
+
+                            }
+                        })
+                        return
+                    }
+
+                    /*
                     * Important: Google Play payment ignores the app-selected locale and currency
                     * It always uses the device's locale so
                     * We need to pass device local it does not mismatch to server while acknolgment*/
