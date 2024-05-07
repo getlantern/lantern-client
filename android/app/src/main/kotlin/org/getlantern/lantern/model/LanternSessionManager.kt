@@ -63,16 +63,24 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun deviceCurrencyCode(): String {
-        val defaultLocale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Resources.getSystem().configuration.locales[0]
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val localList = Resources.getSystem().configuration.locales
+            for (i in 0 until localList.size()) {
+                val locale = localList.get(i)
+                val tempLocal = Currency.getInstance(locale).currencyCode.lowercase()
+                if (supportedCurrencyCodes.contains(tempLocal)) {
+                    return tempLocal
+                }
+            }
+            "usd" // Default to "usd" if no supported currency found
         } else {
-            Resources.getSystem().configuration.locale
-        }
-        val deviceLocal = Currency.getInstance(defaultLocale).currencyCode.lowercase()
-        return if (supportedCurrencyCodes.contains(deviceLocal)) {
-            deviceLocal
-        } else {
-            "usd"
+            val local = Resources.getSystem().configuration.locale
+            val deviceLocal = Currency.getInstance(local).currencyCode.lowercase()
+            if (supportedCurrencyCodes.contains(deviceLocal)) {
+                deviceLocal
+            } else {
+                "usd" // Default to "usd" if no supported currency found
+            }
         }
     }
 
