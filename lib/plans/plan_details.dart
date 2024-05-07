@@ -162,16 +162,15 @@ class PlanCard extends StatelessWidget {
       // if only one payment provider is returned, bypass the last checkout screen
       if (providers.length == 1) {
         final provider = providers[0];
+        final providerName = provider.name.toPaymentEnum();
         final redirectUrl = await sessionModel.paymentRedirectForDesktop(
           context,
           plan.id,
           "",
-          provider.name.toPaymentEnum(),
+          providerName,
         );
         await openDesktopWebview(
-            context: context,
-            provider: provider,
-            redirectUrl: redirectUrl);
+            context: context, provider: providerName, redirectUrl: redirectUrl);
         return;
       }
     }
