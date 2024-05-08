@@ -60,9 +60,7 @@ Future<User> ffiUserData() async {
   final success = _bindings.onSuccess().cast<Utf8>().toDartString();
 
   print("startup status proxy $proxy config $config success $success");
-
-  // return (proxy.toBool(), config.toBool(), success.toBool());
-  return (false,false,false);
+  return (proxy.toBool(), config.toBool(), success.toBool());
 }
 
 // checkAPIError throws a PlatformException if the API response contains an error

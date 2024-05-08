@@ -144,16 +144,18 @@ class VPNChangeNotifier extends ChangeNotifier {
     if (timer != null) {
       return;
     }
-    timer = Timer.periodic(const Duration(milliseconds: 800), (_) {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
       final result = checkUICallbacks();
       if (result.$1 && result.$2 && result.$3) {
         // everything is initialized
         isFlashlightInitialized = true;
+        print("flashlight initialized");
         notifyListeners();
         timer?.cancel();
       } else if (timer!.tick >= 6) {
         // Timer has reached 6 seconds
         // Stop the timer and set isFlashlightInitialized to true
+        print("flashlight fail initialized");
         timer?.cancel();
         isFlashlightInitialized = true;
         notifyListeners();
