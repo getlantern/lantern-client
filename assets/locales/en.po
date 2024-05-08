@@ -1526,3 +1526,24 @@ msgstr "Sorry, we are unable to load that page at the moment, please tap ‘Refr
 
 msgid "refresh"
 msgstr "Refresh"
+
+msgid "check_your_internet_connection"
+msgstr "Check your internet connection"
+
+msgid "please_try"
+msgstr "Please try"
+
+msgid "turning_off_airplane_mode"
+msgstr "Turning off airplane mode"
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr "Turning on mobile data or wifi"
+
+msgid "check_the_signal_in_your_area"
+msgstr "Check the signal in your area"
+
+msgid "got_it"
+msgstr "Got it"
+
+
+

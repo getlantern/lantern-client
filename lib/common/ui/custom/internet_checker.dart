@@ -7,35 +7,40 @@ class InternetChecker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: ShapeDecoration(
-        color: const Color(0xFFFFF9DB),
-        shape: RoundedRectangleBorder(
-          side:  BorderSide(width: 1, color: yellow4),
-          borderRadius: BorderRadius.circular(8),
+    return GestureDetector(
+      onTap: () {
+        CDialog.showInternetUnavailableDialog(context);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: ShapeDecoration(
+          color: const Color(0xFFFFF9DB),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(width: 1, color: yellow4),
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SvgPicture.asset(ImagePaths.cloudOff),
-          const SizedBox(width: 10),
-          CText(
-            "No internet connection detected",
-            style: tsBody1.copiedWith(color: yellow5),
-          )
-        ],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SvgPicture.asset(ImagePaths.cloudOff),
+            const SizedBox(width: 10),
+            CText(
+              "No internet connection detected",
+              style: tsBody1.copiedWith(color: yellow5),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
-
 class InternetStatusProvider extends ChangeNotifier {
   bool _isConnected = true;
   late StreamSubscription<InternetStatus> _connectionSubscription;
   bool _isDisconnected = false;
+
   /// Using debounce to avoid flickering when the connection is unstable
   final _debounceDuration = const Duration(seconds: 2);
   Timer? _debounceTimer;
@@ -44,12 +49,12 @@ class InternetStatusProvider extends ChangeNotifier {
     // Listen for connection status changes
     _connectionSubscription =
         InternetConnection().onStatusChange.listen((status) {
-          if (status == InternetStatus.connected) {
-            _handleConnected();
-          } else {
-            _handleDisconnected();
-          }
-        });
+      if (status == InternetStatus.connected) {
+        _handleConnected();
+      } else {
+        _handleDisconnected();
+      }
+    });
   }
 
   bool get isConnected => _isConnected;
@@ -95,4 +100,3 @@ class InternetStatusProvider extends ChangeNotifier {
     super.dispose();
   }
 }
-

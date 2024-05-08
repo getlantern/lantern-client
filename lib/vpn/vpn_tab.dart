@@ -144,7 +144,7 @@ class VPNChangeNotifier extends ChangeNotifier {
     if (timer != null) {
       return;
     }
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+    timer = Timer.periodic(const Duration(milliseconds: 800), (_) {
       final result = checkUICallbacks();
       if (result.$1 && result.$2 && result.$3) {
         // everything is initialized

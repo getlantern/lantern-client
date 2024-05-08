@@ -3,6 +3,8 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
 
+import '../common/ui/custom/internet_checker.dart';
+
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
 
@@ -56,6 +58,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   @override
   Widget build(BuildContext context) {
+final internetStatusProvider = context.watch<InternetStatusProvider>();
     if (isMobile()) {
       return sessionModel
           .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
@@ -65,6 +68,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
             child: vpnModel.vpnStatus(
                 (BuildContext context, String vpnStatus, Widget? child) {
               return FlutterSwitch(
+                disabled: (!internetStatusProvider.isConnected),
                 value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
                 activeColor: onSwitchColor,
                 inactiveColor: offSwitchColor,
@@ -81,9 +85,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
             .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
           this.vpnStatus = vpnStatus;
           return FlutterSwitch(
+            disabled: (!internetStatusProvider.isConnected),
             value: this.vpnStatus == 'connected' ||
                 this.vpnStatus == 'disconnecting',
-            //value: true,
             activeColor: onSwitchColor,
             inactiveColor: offSwitchColor,
             onToggle: (bool newValue) {
