@@ -239,7 +239,7 @@ class ConversationState extends State<Conversation>
   }
 
   Future<void> selectFilesToShare() async {
-    try {
+   try {
       var result = await FilePicker.platform
           .pickFiles(type: FileType.any, allowMultiple: true);
       if (result == null || result.files.isEmpty) {
@@ -254,6 +254,9 @@ class ConversationState extends State<Conversation>
           totalSizeBytes / (1024 * 1024); // Convert bytes to megabytes
 
       if (totalSizeMB > 100) {
+        if(!mounted){
+          return;
+        }
         CDialog.showInfo(
           context,
           title: 'file_size_limit_title'.i18n,
