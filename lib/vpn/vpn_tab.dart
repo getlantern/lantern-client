@@ -4,6 +4,8 @@ import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../common/ui/custom/internet_checker.dart';
+import '../home.dart';
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
@@ -30,13 +32,23 @@ class VPNTab extends StatelessWidget {
         body: !vpnModel.isFlashlightInitialized
             ? const VPNTapSkeleton()
             : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   if (!proUser && !Platform.isIOS)
-                    ProBanner()
+                    const ProBanner()
                   else
-                    const SizedBox(),
+                    const SizedBox(height: 50),
+                  const SizedBox(height: 100),
                   const VPNSwitch(),
+                  const SizedBox(height: 50),
+                  Consumer<InternetStatusProvider>(
+                    builder: (context, provider, _) {
+                      return provider.isConnected
+                          ? const SizedBox()
+                          : const InternetChecker();
+                    },
+                  ),
+                  const Spacer(),
                   Container(
                     padding: const EdgeInsetsDirectional.all(16),
                     decoration: BoxDecoration(

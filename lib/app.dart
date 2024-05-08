@@ -3,8 +3,11 @@ import 'package:app_links/app_links.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/custom_bottom_bar.dart';
+
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
+
+import 'common/ui/custom/internet_checker.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 final globalRouter = AppRouter();
@@ -117,7 +120,8 @@ class _LanternAppState extends State<LanternApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BottomBarChangeNotifier()),
-        ChangeNotifierProvider(create: (context) => VPNChangeNotifier())
+        ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
+        ChangeNotifierProvider(create: (context) => InternetStatusProvider())
       ],
       child: ChangeNotifierProvider(
         create: (context) => BottomBarChangeNotifier(),

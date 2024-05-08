@@ -66,6 +66,7 @@ dependencies:
   # Networking
   cached_network_image: ^3.3.1
   dio: ^5.3.2
+  internet_connection_checker_plus: ^2.2.0
 
   # caching
   flutter_cache_manager: ^3.3.1

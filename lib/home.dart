@@ -1,3 +1,4 @@
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/account/privacy_disclosure.dart';
@@ -26,7 +27,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
-
   Function()? _cancelEventSubscription;
 
   @override
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             .then((shouldShowModal) async {
           if (shouldShowModal) {
             // open VPN tab
-             sessionModel.setSelectedTab(context,TAB_VPN);
+            sessionModel.setSelectedTab(context, TAB_VPN);
             // show Try Lantern Chat dialog
             await context.router
                 .push(FullScreenDialogPage(widget: TryLanternChat()));
@@ -88,6 +88,8 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       }
     });
   }
+
+
 
   void _initWindowManager() async {
     windowManager.addListener(this);
