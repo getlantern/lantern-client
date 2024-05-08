@@ -132,6 +132,7 @@ dependencies:
   app_links: ^3.5.1
   #Loading
   animated_loading_border: ^0.0.2
+  shimmer: ^3.0.0
 
 
 # wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0

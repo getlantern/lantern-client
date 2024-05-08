@@ -9,6 +9,10 @@ extension StringEx on String {
   Pointer<Char> toPointerChar() {
     return this.toNativeUtf8().cast<Char>();
   }
+
+  bool toBool() {
+    return this == 'true';
+  }
 }
 
 void sysProxyOn() => _bindings.sysProxyOn();
@@ -50,12 +54,15 @@ Future<User> ffiUserData() async {
   return User.create()..mergeFromProto3Json(jsonDecode(res));
 }
 
-void checkUICallbacks() {
+(bool, bool, bool) checkUICallbacks() {
   final proxy = _bindings.hasProxyFected().cast<Utf8>().toDartString();
   final config = _bindings.hasConfigFected().cast<Utf8>().toDartString();
   final success = _bindings.onSuccess().cast<Utf8>().toDartString();
 
   print("proxy $proxy config $config success $success");
+
+  // return (proxy.toBool(), config.toBool(), success.toBool());
+  return (false,false,false);
 }
 
 // checkAPIError throws a PlatformException if the API response contains an error
