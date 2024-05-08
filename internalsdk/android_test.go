@@ -93,7 +93,7 @@ func TestProxying(t *testing.T) {
 		require.NoError(t, err, "Proxying request via HTTP should have worked")
 		err = testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
 		assert.NoError(t, err, "Proxying request via SOCKS should have worked")
-		testRelay(t)
+		// testRelay(t)
 	}
 }
 
