@@ -72,6 +72,7 @@ class VpnModel extends Model {
           setValue(bandwidth);
         }
       }),
+      null,
       builder: builder,
     );
   }
