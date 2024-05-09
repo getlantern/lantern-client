@@ -22,7 +22,6 @@ import (
 	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/geolookup"
@@ -38,11 +37,11 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
-	uicommon "github.com/getlantern/lantern-client/desktop/common"
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 )
 
@@ -53,7 +52,7 @@ var (
 )
 
 func init() {
-	autoupdate.Version = ApplicationVersion
+	autoupdate.Version = common.ApplicationVersion
 	autoupdate.PublicKey = []byte(packagePublicKey)
 }
 
@@ -128,7 +127,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 
 func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 	if settings.IsAutoReport() {
-		session := analytics.Start(settings.GetDeviceID(), ApplicationVersion)
+		session := analytics.Start(settings.GetDeviceID(), common.ApplicationVersion)
 		go func() {
 			session.SetIP(geolookup.GetIP(eventual.Forever))
 		}()
@@ -204,8 +203,8 @@ func (app *App) Run(isMain bool) {
 
 		app.flashlight, err = flashlight.New(
 			common.DefaultAppName,
-			ApplicationVersion,
-			RevisionDate,
+			common.ApplicationVersion,
+			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
 			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
@@ -596,7 +595,7 @@ func recordStopped() {
 
 // ShouldReportToSentry determines if we should report errors/panics to Sentry
 func ShouldReportToSentry() bool {
-	return !uicommon.IsDevEnvironment()
+	return !common.IsDevEnvironment()
 }
 
 // GetTranslations accesses translations with the given filename

@@ -40,22 +40,11 @@ var (
 	// GlobalStagingURL is the URL for fetching the global config in a staging environment.
 	GlobalStagingURL = "https://globalconfig.flashlightproxy.com/global.yaml.gz"
 
-	// StagingMode if true, run Lantern against our staging infrastructure.
-	// This is set by the linker using -ldflags
-	StagingMode = "false"
-
-	Staging = false
-
 	ProAPIHost = "api.getiantem.org"
 
 	log = golog.LoggerFor("flashlight.common")
 
 	forceAds bool
-
-	// Set by the linker using -ldflags in the project's Makefile.
-	// Defaults to 'production' so as not to mistakingly push development work
-	// to a production environment
-	Environment = "production"
 )
 
 func init() {
@@ -64,19 +53,14 @@ func init() {
 
 // ForceStaging forces staging mode.
 func ForceStaging() {
-	StagingMode = "true"
+	env = Staging
 	initInternal()
 }
 
 func initInternal() {
-	var err error
-	log.Debugf("****************************** stagingMode: %v", StagingMode)
-	Staging, err = strconv.ParseBool(StagingMode)
-	if err != nil {
-		log.Errorf("Error parsing boolean flag: %v", err)
-		return
-	}
-	if Staging {
+	isStaging := IsStagingEnvironment()
+	log.Debugf("****************************** stagingMode: %v", isStaging)
+	if isStaging {
 		ProAPIHost = "api-staging.getiantem.org"
 	}
 	forceAds, _ = strconv.ParseBool(os.Getenv("FORCEADS"))
