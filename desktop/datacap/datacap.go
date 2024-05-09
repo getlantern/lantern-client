@@ -61,14 +61,6 @@ func ServeDataCap(channel ws.UIChannel, iconURL func() string, clickURL func() s
 	}
 	dc := &dataCap{iconURL: iconURL, clickURL: clickURL, isPro: isPro}
 	go func() {
-		time.Sleep(5 * time.Second)
-		dc.processQuota(bservice.Out, &bandwidth.Quota{
-			MiBAllowed: 500,
-			MiBUsed:    392,
-		})
-	}()
-
-	go func() {
 		for quota := range bandwidth.Updates {
 			dc.processQuota(bservice.Out, quota)
 		}
