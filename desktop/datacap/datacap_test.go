@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/getlantern/flashlight/v7/bandwidth"
-	"github.com/getlantern/lantern-desktop/ws"
+	"github.com/getlantern/lantern-client/desktop/ws"
 )
 
 func TestServeCap(t *testing.T) {
