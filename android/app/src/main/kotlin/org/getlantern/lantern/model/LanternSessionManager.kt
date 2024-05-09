@@ -21,11 +21,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     private var referral: String? = null
     private var verifyCode: String? = null
-    private val supportedCurrencyCodes = arrayOf(
-        "rub", "sar", "inr", "sgd", "jpy", "aud", "try", "mop", "cad", "vnd",
-        "thb", "hkd", "bhd", "eur", "php", "cny", "irr", "krw", "myr", "gbp",
-        "twd", "idr", "usd", "aed", "ils"
-    )
 
     override fun isProUser(): Boolean {
         return prefs.getBoolean(PRO_USER, false)
@@ -68,19 +63,13 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
             for (i in 0 until localList.size()) {
                 val locale = localList.get(i)
                 val tempLocal = Currency.getInstance(locale).currencyCode.lowercase()
-                if (supportedCurrencyCodes.contains(tempLocal)) {
-                    return tempLocal
-                }
+                return tempLocal
             }
             "usd" // Default to "usd" if no supported currency found
         } else {
             val local = Resources.getSystem().configuration.locale
             val deviceLocal = Currency.getInstance(local).currencyCode.lowercase()
-            if (supportedCurrencyCodes.contains(deviceLocal)) {
-                deviceLocal
-            } else {
-                "usd" // Default to "usd" if no supported currency found
-            }
+            deviceLocal
         }
     }
 
