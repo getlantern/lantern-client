@@ -64,12 +64,11 @@ class VpnModel extends Model {
           sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
         if (value != null) {
           final Map res = jsonDecode(jsonEncode(value));
-          final bandwidth = Bandwidth.create()
+          setValue(Bandwidth.create()
             ..mergeFromProto3Json({
               'allowed': res['mibAllowed'],
               'remaining': res['mibUsed'],
-            });
-          setValue(bandwidth);
+            }));
         }
       }),
       null,
