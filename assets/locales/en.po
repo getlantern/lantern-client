@@ -1545,5 +1545,12 @@ msgstr "Check the signal in your area"
 msgid "got_it"
 msgstr "Got it"
 
+msgid "fetching_configuration"
+msgstr "Fetching Configuration.."
+
+msgid "establish_connection_to_server"
+msgstr "Establish connection to server..."
+
+
 
 

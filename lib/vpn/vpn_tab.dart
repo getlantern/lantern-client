@@ -1,11 +1,10 @@
 import 'package:lantern/account/split_tunneling.dart';
-import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/vpn/vpn_notifier.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../common/ui/custom/internet_checker.dart';
-import '../home.dart';
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
@@ -40,7 +39,23 @@ class VPNTab extends StatelessWidget {
                     const SizedBox(height: 50),
                   const SizedBox(height: 100),
                   const VPNSwitch(),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 40),
+                  if (vpnModel.isFlashlightInitializedFailed)
+                    Row(
+                       mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                         CText(vpnModel.flashlightState,style: tsSubtitle2),
+                        const SizedBox(width: 10),
+                        SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: grey5,
+                          ),
+                        )
+                      ],
+                    ),
+                  const SizedBox(height: 40),
                   Consumer<InternetStatusProvider>(
                     builder: (context, provider, _) {
                       return provider.isConnected
@@ -129,37 +144,5 @@ class VPNTapSkeleton extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
     );
-  }
-}
-
-class VPNChangeNotifier extends ChangeNotifier {
-  Timer? timer;
-  bool isFlashlightInitialized = false;
-
-  VPNChangeNotifier() {
-    initCallbacks();
-  }
-
-  void initCallbacks() {
-    if (timer != null) {
-      return;
-    }
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      final result = checkUICallbacks();
-      if (result.$1 && result.$2 && result.$3) {
-        // everything is initialized
-        isFlashlightInitialized = true;
-        print("flashlight initialized");
-        notifyListeners();
-        timer?.cancel();
-      } else if (timer!.tick >= 6) {
-        // Timer has reached 6 seconds
-        // Stop the timer and set isFlashlightInitialized to true
-        print("flashlight fail initialized");
-        timer?.cancel();
-        isFlashlightInitialized = true;
-        notifyListeners();
-      }
-    });
   }
 }
