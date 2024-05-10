@@ -94,7 +94,9 @@ STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= 9999.99.99
 # Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
-LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/lantern-client/internalsdk/common.ApplicationVersion=$(VERSION)
+LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDate=$(REVISION_DATE) \
+-X github.com/getlantern/lantern-client/internalsdk/common.ApplicationVersion=$(VERSION) \
+-X github.com/getlantern/lantern-client/internalsdk/common.BuildDate=$(BUILD_DATE)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table

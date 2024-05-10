@@ -14,11 +14,17 @@ class _ChatsState extends State<Chats> {
 
   @override
   void initState() {
+    if (Platform.isAndroid) {
+      sessionModel.disableScreenShot();
+    }
     super.initState();
   }
 
   @override
   void dispose() {
+    if (Platform.isAndroid) {
+      sessionModel.enableScreenShot();
+    }
     super.dispose();
   }
 

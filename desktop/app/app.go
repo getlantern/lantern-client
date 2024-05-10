@@ -38,11 +38,12 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
-	uicommon "github.com/getlantern/lantern-client/desktop/common"
+	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 )
 
@@ -53,7 +54,7 @@ var (
 )
 
 func init() {
-	autoupdate.Version = ApplicationVersion
+	autoupdate.Version = common.ApplicationVersion
 	autoupdate.PublicKey = []byte(packagePublicKey)
 }
 
@@ -130,7 +131,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 
 func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 	if settings.IsAutoReport() {
-		session := analytics.Start(settings.GetDeviceID(), ApplicationVersion)
+		session := analytics.Start(settings.GetDeviceID(), common.ApplicationVersion)
 		go func() {
 			session.SetIP(geolookup.GetIP(eventual.Forever))
 		}()
@@ -138,16 +139,6 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 	} else {
 		return analytics.NullSession{}
 	}
-}
-
-func (app *App) SelectedTab() Tab {
-	return app.selectedTab
-}
-
-func (app *App) SetSelectedTab(selectedTab Tab) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.selectedTab = selectedTab
 }
 
 // Run starts the app.
@@ -216,8 +207,8 @@ func (app *App) Run(isMain bool) {
 
 		app.flashlight, err = flashlight.New(
 			common.DefaultAppName,
-			ApplicationVersion,
-			RevisionDate,
+			common.ApplicationVersion,
+			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
 			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
@@ -343,10 +334,25 @@ func (app *App) beforeStart(listenAddr string) {
 		app.Exit(nil)
 		os.Exit(0)
 	}
-	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour,
-		func() (bool, bool) { return app.IsProUser(context.Background()) }, func() string {
-			return "/img/lantern_logo.png"
-		}))
+
+	if e := app.settings.StartService(app.ws); e != nil {
+		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
+		return
+	}
+
+	isProUser := func() (bool, bool) {
+		return app.IsProUser(context.Background())
+	}
+
+	if err := datacap.ServeDataCap(app.ws, func() string {
+		return "/img/lantern_logo.png"
+	}, func() string { return "" }, isProUser); err != nil {
+		log.Errorf("Unable to serve bandwidth to UI: %v", err)
+	}
+
+	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
+		return "/img/lantern_logo.png"
+	}))
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
@@ -603,7 +609,7 @@ func recordStopped() {
 
 // ShouldReportToSentry determines if we should report errors/panics to Sentry
 func ShouldReportToSentry() bool {
-	return !uicommon.IsDevEnvironment()
+	return !common.IsDevEnvironment()
 }
 
 // GetTranslations accesses translations with the given filename

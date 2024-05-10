@@ -48,13 +48,7 @@ class _ReportIssueState extends State<ReportIssue> {
         return null;
       });
 
-  @override
-  void dispose() {
-    emailController.dispose();
-    issueController.dispose();
-    descController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -166,6 +160,7 @@ class _ReportIssueState extends State<ReportIssue> {
                       ? const EdgeInsetsDirectional.all(16.0)
                       : const EdgeInsetsDirectional.all(8.0),
                   hintText: 'issue_description'.i18n,
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
                   autovalidateMode: AutovalidateMode.disabled,
                   maxLines: 8,
                   keyboardType: TextInputType.multiline,
@@ -176,7 +171,7 @@ class _ReportIssueState extends State<ReportIssue> {
               ),
               const Spacer(),
               Tooltip(
-                  message: AppKeys.sendReport,
+                  message: isDesktop() ? '' : AppKeys.sendReport,
                   child: Button(
                     width: 200,
                     disabled: isButtonDisabled(),
@@ -200,9 +195,6 @@ class _ReportIssueState extends State<ReportIssue> {
       }
     }
     if (issueController.text.isEmpty) {
-      return true;
-    }
-    if (descController.text.isEmpty) {
       return true;
     }
     return false;
