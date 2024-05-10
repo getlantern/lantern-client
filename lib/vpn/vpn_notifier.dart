@@ -8,7 +8,11 @@ class VPNChangeNotifier extends ChangeNotifier {
   String flashlightState = 'Fetching Configuration..'.i18n;
 
   VPNChangeNotifier() {
-    initCallbacks();
+    if (isMobile()) {
+      initCallbackForMobile();
+    } else {
+      initCallbacks();
+    }
   }
 
   void initCallbacks() {
@@ -40,5 +44,56 @@ class VPNChangeNotifier extends ChangeNotifier {
         notifyListeners();
       }
     });
+  }
+
+  void initCallbackForMobile() {
+    final configNotifier =
+        sessionModel.pathValueNotifier('hasConfigFetched', false);
+    final proxyNotifier =
+        sessionModel.pathValueNotifier('hasProxyFetched', false);
+    final successNotifier =
+        sessionModel.pathValueNotifier('hasOnSuccess', false);
+
+    updateStatus(bool proxy, bool config, bool success) {
+      if (proxy || config) {
+        flashlightState = 'fetching_configuration'.i18n;
+      }
+      if (proxy && config && !success) {
+        flashlightState = 'establish_connection_to_server'.i18n;
+      }
+      notifyListeners();
+
+      if (proxy && proxy && success) {
+        // everything is initialized
+        isFlashlightInitialized = true;
+        isFlashlightInitializedFailed = false;
+        print("flashlight initialized");
+        notifyListeners();
+      }
+    }
+
+    configNotifier.addListener(() {
+      updateStatus(
+          proxyNotifier.value!, configNotifier.value!, successNotifier.value!);
+    });
+    proxyNotifier.addListener(() {
+      updateStatus(
+          proxyNotifier.value!, configNotifier.value!, successNotifier.value!);
+    });
+    successNotifier.addListener(() {
+      print("successNotifier Notfier ${successNotifier.value}");
+      updateStatus(
+          proxyNotifier.value!, configNotifier.value!, successNotifier.value!);
+    });
+  }
+
+  @override
+  void dispose() {
+    if (timer?.isActive ?? false) {
+      timer?.cancel();
+    }
+    isFlashlightInitialized = false;
+    isFlashlightInitializedFailed = false;
+    super.dispose();
   }
 }

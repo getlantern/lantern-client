@@ -61,7 +61,6 @@ Future<User> ffiUserData() async {
 
   print("startup status proxy $proxy config $config success $success");
   return (proxy.toBool(), config.toBool(), success.toBool());
-  // return (false,false,false);
 }
 
 // checkAPIError throws a PlatformException if the API response contains an error

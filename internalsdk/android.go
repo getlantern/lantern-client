@@ -18,6 +18,7 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
@@ -89,10 +90,20 @@ type Session interface {
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
 	SetShowInterstitialAdsEnabled(bool)
+	SetHasConfigFetched(bool)
+	SetHasProxyFetched(bool)
+	SetOnSuccess(bool)
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() (string, error)
+}
+
+// Callback that updates ui
+type InitCallback struct {
+	hasConfigFected bool
+	hasProxyFected  bool
+	onSuccess       bool
 }
 
 // panickingSession wraps the Session interface but panics instead of returning errors
@@ -123,6 +134,9 @@ type panickingSession interface {
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() string
+	SetHasConfigFetched(bool)
+	SetHasProxyFetched(bool)
+	SetOnSuccess(bool)
 
 	Wrapped() Session
 }
@@ -272,6 +286,18 @@ func (s *panickingSessionImpl) SerializedInternalHeaders() string {
 	result, err := s.wrapped.SerializedInternalHeaders()
 	panicIfNecessary(err)
 	return result
+}
+
+func (s *panickingSessionImpl) SetHasConfigFetched(fetached bool) {
+	s.wrapped.SetHasConfigFetched(fetached)
+}
+
+func (s *panickingSessionImpl) SetHasProxyFetched(fetached bool) {
+	s.wrapped.SetHasProxyFetched(fetached)
+}
+
+func (s *panickingSessionImpl) SetOnSuccess(fetached bool) {
+	s.wrapped.SetOnSuccess(fetached)
 }
 
 type userConfig struct {
@@ -540,6 +566,15 @@ func run(configDir, locale string,
 			return fmt.Sprintf("%v:%v", updatedHost, port), nil
 		},
 		func(category, action, label string) {},
+		client.WithOnConfig(func(g *config.Global, s config.Source) {
+			session.SetHasConfigFetched(true)
+		}),
+		client.WithProxies(func(d []bandit.Dialer, s config.Source) {
+			session.SetHasProxyFetched(true)
+		}),
+		client.WithSucceedingProxy(func(isConnected bool) {
+			session.SetOnSuccess(isConnected)
+		}),
 	)
 	if err != nil {
 		log.Fatalf("failed to start flashlight: %v", err)
