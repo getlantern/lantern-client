@@ -22,7 +22,6 @@ import (
 	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
 	"github.com/getlantern/flashlight/v7/client"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/geolookup"
