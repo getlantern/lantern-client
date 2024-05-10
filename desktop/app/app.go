@@ -37,6 +37,7 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/settings"
@@ -336,10 +337,19 @@ func (app *App) beforeStart(listenAddr string) {
 		return
 	}
 
-	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour,
-		func() (bool, bool) { return app.IsProUser(context.Background()) }, func() string {
-			return "/img/lantern_logo.png"
-		}))
+	isProUser := func() (bool, bool) {
+		return app.IsProUser(context.Background())
+	}
+
+	if err := datacap.ServeDataCap(app.ws, func() string {
+		return "/img/lantern_logo.png"
+	}, func() string { return "" }, isProUser); err != nil {
+		log.Errorf("Unable to serve bandwidth to UI: %v", err)
+	}
+
+	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
+		return "/img/lantern_logo.png"
+	}))
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 

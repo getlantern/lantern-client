@@ -84,11 +84,17 @@ class SessionModel extends Model {
   // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
   // the onMessage callback is triggered with the given property value
   void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
-      property, void Function(T?) onMessage) {
+      String? property, void Function(T?) onMessage) {
     if (websocket == null) return;
     websocket.messageStream.listen(
       (json) {
-        if (json["type"] == messageType) onMessage(json["message"][property]);
+        if (json["type"] == messageType) {
+          if (property != null) {
+            onMessage(json["message"][property]);
+          } else {
+            onMessage(json["message"]);
+          }
+        }
       },
       onError: (error) => appLogger.i("websocket error: ${error.description}"),
     );

@@ -20,13 +20,6 @@ class VpnModel extends Model {
     });
   }
 
-  Future<void> handleWebSocketMessage(Map<String, dynamic> data, Function setValue) async {
-    if (data["type"] != "vpnstatus") return;
-    final updated = data["message"]["connected"];
-    final isConnected = updated != null && updated.toString() == "true";
-    setValue(isConnected ? "connected" : "disconnected");
-  }
-
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
@@ -38,31 +31,48 @@ class VpnModel extends Model {
     return ffiValueBuilder<String>(
       'vpnStatus',
       defaultValue: '',
-      onChanges: (setValue) {
-        if (websocket == null) return;
-        /// Listen for all incoming data
-        websocket.messageStream.listen(
-          (json) => handleWebSocketMessage(json, setValue),
-          onError: (error) => print(error),
-        );
-      },
+      onChanges: (setValue) => sessionModel
+          .listenWebsocket(websocket, "vpnstatus", "connected", (value) {
+        final isConnected = value != null && value.toString() == "true";
+        setValue(isConnected ? "connected" : "disconnected");
+      }),
       ffiVpnStatus,
       builder: builder,
     );
   }
- 
+
   Future<bool> isVpnConnected() async {
     final vpnStatus = await methodChannel.invokeMethod('getVpnStatus');
     return vpnStatus == 'connected';
   }
 
   Widget bandwidth(ValueWidgetBuilder<Bandwidth> builder) {
-    return subscribedSingleValueBuilder<Bandwidth>(
-      '/bandwidth',
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<Bandwidth>(
+        '/bandwidth',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Bandwidth.fromBuffer(serialized);
+        },
+      );
+    }
+    final websocket = WebsocketImpl.instance();
+    return ffiValueBuilder<Bandwidth>(
+      'bandwidth',
+      defaultValue: null,
+      onChanges: (setValue) =>
+          sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
+        if (value != null) {
+          final Map res = jsonDecode(jsonEncode(value));
+          setValue(Bandwidth.create()
+            ..mergeFromProto3Json({
+              'allowed': res['mibAllowed'],
+              'remaining': res['mibUsed'],
+            }));
+        }
+      }),
+      null,
       builder: builder,
-      deserialize: (Uint8List serialized) {
-        return Bandwidth.fromBuffer(serialized);
-      },
     );
   }
 }

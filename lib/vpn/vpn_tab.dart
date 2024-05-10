@@ -12,8 +12,8 @@ class VPNTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return sessionModel.proUser(
-        (BuildContext context, bool proUser, Widget? child) {
+    return sessionModel
+        .proUser((BuildContext context, bool proUser, Widget? child) {
       return BaseScreen(
         title: SvgPicture.asset(
           proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
@@ -48,8 +48,8 @@ class VPNTab extends StatelessWidget {
                   if (Platform.isAndroid) ...{
                     const CDivider(height: 32.0),
                     SplitTunnelingWidget(),
-                    if (!proUser) const VPNBandwidth(),
-                  }
+                  },
+                  if (!proUser) const VPNBandwidth(),
                 ],
               ),
             ),
