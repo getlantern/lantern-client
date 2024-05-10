@@ -477,7 +477,11 @@ func vpnStatus() *C.char {
 
 //export hasSucceedingProxy
 func hasSucceedingProxy() *C.char {
-	return C.CString("true")
+	hasSucceedingProxy := a.HasSucceedingProxy()
+	if hasSucceedingProxy {
+		return C.CString("true")
+	}
+	return C.CString("false")
 }
 
 //export onBoardingStatus

@@ -62,6 +62,7 @@ type App struct {
 	hasExited            int64
 	fetchedGlobalConfig  int32
 	fetchedProxiesConfig int32
+	hasSucceedingProxy   int32
 
 	Flags            flashlight.Flags
 	configDir        string
@@ -188,14 +189,9 @@ func (app *App) Run(isMain bool) {
 			}()
 		}
 
-		if app.Flags.Initialize {
-			app.statsTracker.AddListener(func(newStats stats.Stats) {
-				if newStats.HasSucceedingProxy {
-					log.Debug("Finished initialization")
-					app.Exit(nil)
-				}
-			})
-		}
+		app.statsTracker.AddListener(func(newStats stats.Stats) {
+			app.onSucceedingProxy(newStats.HasSucceedingProxy)
+		})
 
 		cacheDir, err := os.UserCacheDir()
 		if err != nil {
@@ -451,6 +447,19 @@ func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
 	}
+}
+
+func (app *App) onSucceedingProxy(succeeding bool) {
+	hasSucceedingProxy := int32(0)
+	if succeeding {
+		hasSucceedingProxy = 1
+	}
+	atomic.StoreInt32(&app.hasSucceedingProxy, hasSucceedingProxy)
+}
+
+// HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
+func (app *App) HasSucceedingProxy() bool {
+	return atomic.LoadInt32(&app.hasSucceedingProxy) == 1
 }
 
 // AddExitFunc adds a function to be called before the application exits.
