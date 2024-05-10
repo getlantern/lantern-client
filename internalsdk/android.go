@@ -512,23 +512,7 @@ func run(configDir, locale string,
 		func() bool { return false }, // always connected
 		func() bool { return true },
 		func() bool { return false }, // do not proxy private hosts on Android
-		// TODO: allow configuring whether or not to enable reporting (just like we
-		// already have in desktop)
-		func() bool { return true }, // auto report
 		flags,
-		func(cfg *config.Global, src config.Source) {
-			session.UpdateAdSettings(&adSettings{cfg.AdSettings})
-			if session.IsStoreVersion() {
-				runner.EnableNamedDomainRules("google_play") // for google play build we want to make sure that Google Play domains are not being proxied
-			}
-			select {
-			case globalConfigChanged <- nil:
-				// okay
-			default:
-				// don't block
-			}
-		}, // onConfigUpdate
-		nil, // onProxiesUpdate
 		userConfig,
 		NewStatsTracker(session),
 		session.IsProUser,
@@ -578,13 +562,13 @@ func run(configDir, locale string,
 	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
 	checkFeatures := func() {
 		replicaServer.CheckEnabled()
-		chatEnabled := runner.FeatureEnabled("chat", common.ApplicationVersion)
+		chatEnabled := runner.Client().FeatureEnabled("chat", common.ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
-			showAdsEnabled := runner.FeatureEnabled("interstitialads", common.ApplicationVersion)
+			showAdsEnabled := runner.Client().FeatureEnabled("interstitialads", common.ApplicationVersion)
 			log.Debugf("Show ads enabled? %v", showAdsEnabled)
 			session.SetShowInterstitialAdsEnabled(showAdsEnabled)
 

@@ -43,7 +43,7 @@ type ReplicaServer struct {
 // If enabled, the server is started lazily and the server's random address is reported to Session.SetReplicaAddr.
 // If disabled after having been enabled, the server keeps running and ReplicaAddr remains set to its old value.
 func (s *ReplicaServer) CheckEnabled() {
-	if !s.Session.ForceReplica() && !s.Flashlight.FeatureEnabled(config.FeatureReplica, common.ApplicationVersion) {
+	if !s.Session.ForceReplica() && !s.Flashlight.Client().FeatureEnabled(config.FeatureReplica, common.ApplicationVersion) {
 		// Replica is not enabled
 		log.Debug("Replica not enabled")
 		return
@@ -123,7 +123,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 	log.Debugf("Starting replica with configDir [%v] and userConfig [%+v]\n", s.ConfigDir, s.UserConfig)
 	optsFunc := replicaConfig.NewReplicaOptionsGetter(
 		func(options replicaConfig.FeatureOptions) error {
-			return s.Flashlight.FeatureOptions(config.FeatureReplica, options)
+			return s.Flashlight.Client().FeatureOptions(config.FeatureReplica, options)
 		},
 		s.Session.GetCountryCode,
 		geolookup.Refresh)
