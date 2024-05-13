@@ -238,26 +238,23 @@ class _CheckoutState extends State<Checkout>
         widgets.add(options());
         if (!showMoreOptions) break;
       }
-      widgets.addAll(paymentProviders(paymentMethods));
+      widgets.addAll(paymentProviders(paymentMethod.value));
     }
     return widgets;
   }
 
-  List<PaymentProvider> paymentProviders(Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+  List<PaymentProvider> paymentProviders(PaymentMethod paymentMethods) {
     var providers = <PaymentProvider>[];
-    for (final paymentMethod in paymentMethods) {
-      for (final provider in paymentMethod.value.providers) {
-        providers.add(
-          PaymentProvider(
-            logoPaths: provider.logoUrls,
-            onChanged: () =>
-                selectPaymentProvider(provider.name.toPaymentEnum()),
-            selectedPaymentProvider: selectedPaymentProvider!,
-            paymentType: provider.name.toPaymentEnum(),
-            useNetwork: true,
-          ),
-        );
-      }
+    for (final provider in paymentMethods.providers) {
+      providers.add(
+        PaymentProvider(
+          logoPaths: provider.logoUrls,
+          onChanged: () => selectPaymentProvider(provider.name.toPaymentEnum()),
+          selectedPaymentProvider: selectedPaymentProvider!,
+          paymentType: provider.name.toPaymentEnum(),
+          useNetwork: true,
+        ),
+      );
     }
     return providers;
   }
