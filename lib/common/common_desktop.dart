@@ -29,14 +29,14 @@ String systemTrayIcon(bool connected) {
       : 'assets/images/lantern_disconnected_32.png';
 }
 
-void setSelectedTab(BuildContext context, String name) {
-  final tab = name.toNativeUtf8();
-  final currentTab = ffiSelectedTab().toDartString();
-  setSelectTab(tab);
-  // when the user clicks on the active tab again, do nothing
-  if (currentTab == name) return;
-  context.pushRoute(Home());
-}
+// void setSelectedTab(BuildContext context, String name) {
+//   final tab = name.toNativeUtf8();
+//   final currentTab = ffiSelectedTab().toDartString();
+//   setSelectTab(tab);
+//   // when the user clicks on the active tab again, do nothing
+//   if (currentTab == name) return;
+//   // context.pushRoute(Home());
+// }
 
 Future<void> setupMenu(bool isConnected) async {
   Menu menu = Menu(

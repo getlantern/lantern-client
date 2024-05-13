@@ -62,7 +62,6 @@ const (
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
 	pathStoreVersion           = "storeVersion"
-	pathSelectedTab            = "/selectedTab"
 	pathServerInfo             = "/server_info"
 	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
 	pathShouldShowGoogleAds    = "shouldShowGoogleAds"
@@ -172,12 +171,6 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "setStoreVersion":
 		err := setStoreVersion(m.baseModel, arguments.Scalar().Bool())
-		if err != nil {
-			return nil, err
-		}
-		return true, nil
-	case "setSelectedTab":
-		err := setSelectedTab(m.baseModel, arguments.Get("tab").String())
 		if err != nil {
 			return nil, err
 		}
@@ -597,12 +590,6 @@ func acceptTerms(m *baseModel) error {
 func setStoreVersion(m *baseModel, isStoreVersion bool) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathStoreVersion, isStoreVersion, "")
-	})
-}
-
-func setSelectedTab(m *baseModel, tap string) error {
-	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathSelectedTab, tap, "")
 	})
 }
 
