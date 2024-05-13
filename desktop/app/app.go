@@ -219,6 +219,7 @@ func (app *App) Run(isMain bool) {
 			client.WithOnConfig(app.onConfigUpdate),
 			client.WithProxies(app.onProxiesUpdate),
 			client.WithIsPro(app.IsPro),
+			client.WithInit(app.onInit),
 		)
 		if err != nil {
 			app.Exit(err)
@@ -422,6 +423,10 @@ func (app *App) afterStart(cl *client.Client) {
 	if err := app.serveConnectionStatus(app.ws); err != nil {
 		log.Errorf("Unable to serve connection status: %v", err)
 	}
+}
+
+func (app *App) onInit() {
+	log.Debug("onInit called...")
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
