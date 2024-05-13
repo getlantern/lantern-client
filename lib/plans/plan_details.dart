@@ -160,21 +160,18 @@ class PlanCard extends StatelessWidget {
       final paymentMethods = await sessionModel.paymentMethodsv4();
       final providers = paymentProvidersFromMethods(paymentMethods);
       // if only one payment provider is returned, bypass the last checkout screen
-      if (providers.length == 1) {
-        final provider = providers[0];
-        final providerName = provider.name.toPaymentEnum();
-        // Note: as of now, Stripe is the only payment provider that collects email
-        if (providerName == Providers.stripe) {
-          final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-            context,
-            plan.id,
-            "",
-            providerName,
-          );
-          await openDesktopWebview(
-              context: context, provider: providerName, redirectUrl: redirectUrl);
-          return;
-        }
+      // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
+      if (providers.length == 1 && providers[0].name.toPaymentEnum() == Providers.stripe) {
+        final providerName = providers[0].name.toPaymentEnum();
+        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
+          context,
+          plan.id,
+          "",
+          providerName,
+        );
+        await openDesktopWebview(
+            context: context, provider: providerName, redirectUrl: redirectUrl);
+        return;
       }
     }
     // * Proceed to our own Checkout
