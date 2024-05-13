@@ -20,7 +20,7 @@ class VPNChangeNotifier extends ChangeNotifier {
       return;
     }
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      final result = checkUICallbacks();
+      final result = startUpInitCallBacks();
       if (!result.$1 || !result.$2) {
         flashlightState = 'fetching_configuration'.i18n;
       }

@@ -54,7 +54,7 @@ Future<User> ffiUserData() async {
   return User.create()..mergeFromProto3Json(jsonDecode(res));
 }
 
-(bool, bool, bool) checkUICallbacks() {
+(bool, bool, bool) startUpInitCallBacks() {
   final proxy = _bindings.hasProxyFected().cast<Utf8>().toDartString();
   final config = _bindings.hasConfigFected().cast<Utf8>().toDartString();
   final success = _bindings.onSuccess().cast<Utf8>().toDartString();
