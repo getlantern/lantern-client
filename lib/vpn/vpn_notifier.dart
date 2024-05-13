@@ -47,12 +47,22 @@ class VPNChangeNotifier extends ChangeNotifier {
   }
 
   void initCallbackForMobile() {
-    final configNotifier =
-        sessionModel.pathValueNotifier('hasConfigFetched', false);
-    final proxyNotifier =
-        sessionModel.pathValueNotifier('hasProxyFetched', false);
-    final successNotifier =
-        sessionModel.pathValueNotifier('hasOnSuccess', false);
+    if (timer != null) {
+      return;
+    }
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (timer!.tick >= 6) {
+        // Timer has reached 6 seconds
+        // Stop the timer and set isFlashlightInitialized to true
+        print("flashlight fail initialized");
+        isFlashlightInitialized = true;
+        isFlashlightInitializedFailed = true;
+        notifyListeners();
+      }
+    });
+    final configNotifier = sessionModel.pathValueNotifier('hasConfigFetched', false);
+    final proxyNotifier = sessionModel.pathValueNotifier('hasProxyFetched', false);
+    final successNotifier = sessionModel.pathValueNotifier('hasOnSuccess', false);
 
     updateStatus(bool proxy, bool config, bool success) {
       if (proxy || config) {
@@ -67,6 +77,7 @@ class VPNChangeNotifier extends ChangeNotifier {
         // everything is initialized
         isFlashlightInitialized = true;
         isFlashlightInitializedFailed = false;
+        timer?.cancel();
         print("flashlight initialized");
         notifyListeners();
       }
