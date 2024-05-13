@@ -1,12 +1,11 @@
 import 'package:animated_loading_border/animated_loading_border.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/custom_bottom_bar.dart';
-
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn_notifier.dart';
-import 'package:lantern/vpn/vpn_tab.dart';
 
 import 'common/ui/custom/internet_checker.dart';
 
@@ -61,8 +60,6 @@ class _LanternAppState extends State<LanternApp> {
 
   void _animateNetworkWarning() {
     if (isMobile()) {
-      sessionModel.networkAvailable
-          .addListener(toggleConnectivityWarningIfNecessary);
       sessionModel.proxyAvailable
           .addListener(toggleConnectivityWarningIfNecessary);
       networkWarningAnimationController = AnimationController(
@@ -98,11 +95,17 @@ class _LanternAppState extends State<LanternApp> {
     networkWarningBarHeightRatio.value = networkWarningAnimation.value;
   }
 
-  void toggleConnectivityWarningIfNecessary() {
+  Future<void> toggleConnectivityWarningIfNecessary() async {
+    final hasConnection = await InternetConnection().hasInternetAccess;
+    //Check if the device has internet connection
+    //if not then proxy will not be available
+    //We already showing on internet connection error
+    if (!hasConnection) {
+      return;
+    }
     final shouldShowConnectivityWarning =
-        !sessionModel.networkAvailable.value ||
-            (sessionModel.proxyAvailable.value != null &&
-                sessionModel.proxyAvailable.value == false);
+        (sessionModel.proxyAvailable.value != null &&
+            sessionModel.proxyAvailable.value == false);
     if (shouldShowConnectivityWarning != showConnectivityWarning) {
       showConnectivityWarning = shouldShowConnectivityWarning;
       if (showConnectivityWarning) {
