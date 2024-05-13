@@ -245,10 +245,10 @@ class PaymentsUtil(private val activity: Activity) {
                         * make user pro temporary next user open app it will check the purchase state and call api accordingly
                         * */
                         session.linkDevice()
+                        session.setIsProUser(true)
                         lanternClient.userData(object : LanternHttpClient.ProUserCallback {
                             override fun onSuccess(response: Response, userData: ProUser) {
                                 Logger.e(TAG, "User detail : $userData")
-                                session.setIsProUser(true)
                                 activity.runOnUiThread {
                                     methodCallResult.success("purchaseSuccessful")
                                 }
@@ -256,6 +256,7 @@ class PaymentsUtil(private val activity: Activity) {
 
                             override fun onFailure(throwable: Throwable?, error: ProError?) {
                                 Logger.error(TAG, "Unable to fetch user data: $throwable.message")
+                                /* Regardless of failure send success coz purchase has been processed  */
                                 activity.runOnUiThread {
                                     methodCallResult.success("purchaseSuccessful")
                                 }
