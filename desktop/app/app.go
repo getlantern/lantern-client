@@ -50,7 +50,6 @@ var (
 	log                = golog.LoggerFor("lantern-desktop.app")
 	startTime          = time.Now()
 	translationAppName = strings.ToUpper(common.DefaultAppName)
-	UICallback         = InitCallback{}
 )
 
 func init() {
@@ -64,6 +63,7 @@ type App struct {
 	hasExited            int64
 	fetchedGlobalConfig  int32
 	fetchedProxiesConfig int32
+	hasSucceedingProxy   int32
 
 	Flags            flashlight.Flags
 	configDir        string
@@ -95,13 +95,6 @@ type App struct {
 	ws              ws.UIChannel
 
 	mu sync.Mutex
-}
-
-// Callback that updates ui
-type InitCallback struct {
-	hasConfigFected bool
-	hasProxyFected  bool
-	onSuccess       bool
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
@@ -195,14 +188,9 @@ func (app *App) Run(isMain bool) {
 			}()
 		}
 
-		if app.Flags.Initialize {
-			app.statsTracker.AddListener(func(newStats stats.Stats) {
-				if newStats.HasSucceedingProxy {
-					log.Debug("Finished initialization")
-					app.Exit(nil)
-				}
-			})
-		}
+		app.statsTracker.AddListener(func(newStats stats.Stats) {
+			app.onSucceedingProxy(newStats.HasSucceedingProxy)
+		})
 
 		cacheDir, err := os.UserCacheDir()
 		if err != nil {
@@ -429,11 +417,8 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
-	UICallback.hasConfigFected = true
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
-	if src == config.Fetched {
-		atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
-	}
+	atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
 	autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
 		return "/img/lantern_logo.png"
 	})
@@ -449,28 +434,36 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
-	UICallback.hasProxyFected = true
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
-	if src == config.Fetched {
-		atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
-	}
+	atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
 }
 
 func (app *App) onSucceedingProxy(succeeding bool) {
-	UICallback.onSuccess = succeeding
+	hasSucceedingProxy := int32(0)
+	if succeeding {
+		hasSucceedingProxy = 1
+	}
+	atomic.StoreInt32(&app.hasSucceedingProxy, hasSucceedingProxy)
 	log.Debugf("[Startup Desktop] onSucceedingProxy  %v", succeeding)
 }
 
+// HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
+func (app *App) HasSucceedingProxy() bool {
+	return atomic.LoadInt32(&app.hasSucceedingProxy) == 1
+}
+
 func (app *App) GetHasConfigFetched() bool {
-	return UICallback.hasConfigFected
+
+	log.Debugf("Global config fetched: %v, Proxies config fetched: %v")
+	return atomic.LoadInt32(&app.fetchedGlobalConfig) == 1
 }
 
 func (app *App) GetHasProxyFetched() bool {
-	return UICallback.hasProxyFected
+	return atomic.LoadInt32(&app.fetchedProxiesConfig) == 1
 }
 
 func (app *App) GetOnSuccess() bool {
-	return UICallback.onSuccess
+	return app.HasSucceedingProxy()
 }
 
 // AddExitFunc adds a function to be called before the application exits.

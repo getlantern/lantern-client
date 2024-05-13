@@ -58,7 +58,6 @@ Future<User> ffiUserData() async {
   final proxy = _bindings.hasProxyFected().cast<Utf8>().toDartString();
   final config = _bindings.hasConfigFected().cast<Utf8>().toDartString();
   final success = _bindings.onSuccess().cast<Utf8>().toDartString();
-
   print("startup status proxy $proxy config $config success $success");
   return (proxy.toBool(), config.toBool(), success.toBool());
 }
