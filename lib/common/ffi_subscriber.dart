@@ -13,7 +13,7 @@ extension BoolParsing on String {
 
 class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
   FfiValueNotifier(
-    Pointer<Utf8> Function() ffiFunction,
+    Pointer<Utf8> Function()? ffiFunction,
     String path,
     T? defaultValue,
     void Function() removeFromCache, {
@@ -28,6 +28,7 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
         value = newValue;
       });
     }
+    if (ffiFunction == null) return;
     if (defaultValue is int) {
         value = null;
         //value = int.parse(ffiFunction().toDartString()) as T?;
