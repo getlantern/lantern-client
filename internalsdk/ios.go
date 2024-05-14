@@ -2,31 +2,17 @@ package internalsdk
 
 import (
 	"net"
-	"path/filepath"
 	"strconv"
 	"time"
 
 	"github.com/getlantern/flashlight/v7/client"
-	"github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/flashlight/v7/logging"
 )
 
-type LanternService struct {
-	sessionModel *SessionModel
-}
-
-func NewService(sessionModel *SessionModel) *LanternService {
-	return &LanternService{
-		sessionModel,
-	}
-}
-
-func (s *LanternService) Start(configDir string, locale string, settings Settings) {
-	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
-	/*session := &panickingSessionImpl{s.sessionModel}
+func StartService(s *SessionModel, configDir string, locale string, settings Settings) {
+	session := &panickingSessionImpl{s}
 	startOnce.Do(func() {
 		go run(configDir, locale, settings, session)
-	})*/
+	})
 }
 
 func HTTPProxyPort() int {

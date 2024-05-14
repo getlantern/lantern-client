@@ -11,7 +11,7 @@ import Internalsdk
 import UIKit
 
 class LanternService {
-  private var service: InternalsdkLanternService!
+  private var service: IosLanternService!
   private var sessionModel: InternalsdkSessionModel
   private var settings: Settings = Settings()
   private var vpnModel: VpnModel
@@ -19,7 +19,7 @@ class LanternService {
   init(sessionModel: InternalsdkSessionModel, vpnModel: VpnModel) {
     self.sessionModel = sessionModel
     self.vpnModel = vpnModel
-    self.service = InternalsdkNewService(sessionModel)
+    self.service = IosNewService(sessionModel)
   }
 
   func start() {

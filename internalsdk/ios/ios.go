@@ -163,7 +163,7 @@ func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, confi
 		realDNSHost:     realDNSHost,
 		started:         time.Now(),
 	}
-	c.optimizeMemoryUsage()
+	optimizeMemoryUsage(&c.memoryAvailable)
 	go c.gcPeriodically()
 	go c.logMemory()
 

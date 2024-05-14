@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/dustin/go-humanize"
-
 	"github.com/getlantern/flashlight/v7/chained"
 	"github.com/getlantern/netx"
 )
@@ -53,7 +52,7 @@ type MemChecker interface {
 	BytesRemain() int
 }
 
-func (c *iosClient) optimizeMemoryUsage() {
+func optimizeMemoryUsage(memoryAvailable *int64) {
 	// MEMORY_OPTIMIZATION - limit the number of CPUs used to reduce the number of OS threads (and associated stack) to keep memory usage down
 	runtime.GOMAXPROCS(1)
 
@@ -71,7 +70,7 @@ func (c *iosClient) optimizeMemoryUsage() {
 			if ok {
 				// MEMORY_OPTIMIZATION - set small send and receive buffers for cases where we have lots of connections and a flaky network
 				// This can reduce throughput, especially on networks with high packet loss.
-				bytesRemain := int(atomic.LoadInt64(&c.memoryAvailable))
+				bytesRemain := int(atomic.LoadInt64(memoryAvailable))
 				bufferSize := bytesRemain / 25 // this factor gives us a buffer size of about 80KB when remaining memory is about 2MB.
 				if bufferSize < 4096 {
 					// never go smaller than 4096

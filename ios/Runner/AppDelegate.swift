@@ -22,8 +22,7 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-
-    initializeFlutterComponents()
+  initializeFlutterComponents()
     do {
       try setupAppComponents()
     } catch {
@@ -42,17 +41,17 @@ import UIKit
 
   private func setupLanternService() throws {
     // Run Lantern service on a background queue
-    // Task.detached {
+    //Task.detached {
       let lanternService = LanternService(
         sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
       lanternService.start()
-    // }
+    //}
   }
 
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
     try setupModels()
-    //try setupLanternService()
+    try setupLanternService()
     self.startUpSequency()
     self.setupLoadingBar()
   }
