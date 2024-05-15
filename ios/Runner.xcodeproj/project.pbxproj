@@ -44,6 +44,7 @@
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		5F2AC9582BE1A3B40080721C /* LanternService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2AC9562BE1A3B40080721C /* LanternService.swift */; };
+		5FC3C7152BF5590300DA47F1 /* FlashlightManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC3C7142BF5590300DA47F1 /* FlashlightManagerExtension.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -137,6 +138,7 @@
 		41DDE2A6029CFDB93A269403 /* Pods-LanternTests.debug-runner-appium-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.debug-runner-appium-test.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.debug-runner-appium-test.xcconfig"; sourceTree = "<group>"; };
 		4C199F107C36A050FA0BD82A /* Pods-Runner.debug-appium-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-appium-test.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-appium-test.xcconfig"; sourceTree = "<group>"; };
 		5F2AC9562BE1A3B40080721C /* LanternService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanternService.swift; sourceTree = "<group>"; };
+		5FC3C7142BF5590300DA47F1 /* FlashlightManagerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManagerExtension.swift; sourceTree = "<group>"; };
 		607A0530FA4F0B857B847CC5 /* Pods-Runner.profile-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-prod.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-prod.xcconfig"; sourceTree = "<group>"; };
 		639C2FD1FB8C2B8BA0BC8FA2 /* Pods-LanternTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.profile.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.profile.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 		03A1AB122AA88BB400FB41B2 /* Vpn */ = {
 			isa = PBXGroup;
 			children = (
+				5FC3C7142BF5590300DA47F1 /* FlashlightManagerExtension.swift */,
 				0308A1272AAEED7E0086157A /* VpnHelper.swift */,
 				0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */,
 				03A1AB152AA88BF200FB41B2 /* VPNBase.swift */,
@@ -711,6 +714,7 @@
 				03567DC02AA9F47200A233EA /* FileUtils.swift in Sources */,
 				03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */,
 				03A1AB422AA8930A00FB41B2 /* Result.swift in Sources */,
+				5FC3C7152BF5590300DA47F1 /* FlashlightManagerExtension.swift in Sources */,
 				0324CC302AE279CF00490B46 /* SentryUtils.swift in Sources */,
 				0308A1282AAEED7E0086157A /* VpnHelper.swift in Sources */,
 				03F00B5F2AB07C8000E991E2 /* LoadingIndicatorManager.swift in Sources */,

@@ -3,14 +3,13 @@ package internalsdk
 import (
 	"context"
 	"fmt"
-	"net"
-	"net/http"
 	"path/filepath"
 	"strconv"
 	"time"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/logging"
+	"github.com/getlantern/flashlight/v7/proxied"
 
 	//"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -88,17 +87,15 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
+	dialTimeout := 30 * time.Second
 	if opts.Platform == "ios" {
+		dialTimeout = 10 * time.Second
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 	}
 	m := &SessionModel{baseModel: base}
-
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
-		HttpClient: &http.Client{
-			//Transport: proxied.ParallelForIdempotent(),
-			Timeout: 30 * time.Second,
-		},
+		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
 		UserConfig: func() common.UserConfig {
 			deviceID, _ := m.GetDeviceID()
 			userID, _ := m.GetUserID()
@@ -218,23 +215,6 @@ func (m *SessionModel) StartService(configDir string,
 
 // InvokeMethod handles method invocations on the SessionModel.
 func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelOpts) error {
-
-	dialer := &net.Dialer{
-		Resolver: &net.Resolver{
-			PreferGo: true,
-			Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
-				d := net.Dialer{
-					Timeout: time.Duration(5000) * time.Millisecond,
-				}
-				return d.DialContext(ctx, "udp", "8.8.8.8:53")
-			},
-		},
-	}
-
-	http.DefaultTransport.(*http.Transport).DialContext = func(ctx context.Context, network, addr string) (net.Conn, error) {
-		return dialer.DialContext(ctx, network, addr)
-	}
-
 	// Check if email if empty
 	email, err := pathdb.Get[string](m.db, pathEmailAddress)
 	if err != nil {
