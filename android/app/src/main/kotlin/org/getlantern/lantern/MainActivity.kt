@@ -9,12 +9,12 @@ import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
-import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.gson.JsonObject
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -30,6 +30,7 @@ import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
+import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.LanternStatus
@@ -45,8 +46,6 @@ import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
 import org.getlantern.lantern.util.PermissionUtil
-import org.getlantern.lantern.util.PlansUtil
-import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
@@ -276,8 +275,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
         updatePaymentMethods()
-
-
+        updateCurrencyList();
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -344,6 +342,34 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 }
             }
         )
+    }
+
+    private fun updateCurrencyList() {
+        val url = LanternHttpClient.createProUrl("/supported-currencies")
+        lanternClient.get(url, object : LanternHttpClient.ProCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                Logger.error(TAG, "Unable to fetch currency list: $error", throwable)
+                /*
+                retry to fetch currency list again
+                fetch until we get the currency list
+                retry after 5 seconds
+                */
+                CoroutineScope(Dispatchers.IO).launch {
+                    delay(5000)
+                    updateCurrencyList()
+                }
+            }
+
+            override fun onSuccess(response: Response?, result: JsonObject?) {
+                val currencies = result?.getAsJsonArray("supported-currencies")
+                val currencyList = mutableListOf<String>()
+                currencies?.forEach {
+                    currencyList.add(it.asString.lowercase())
+                }
+                LanternApp.getSession().setCurrencyList(currencyList)
+            }
+
+        })
     }
 
 
