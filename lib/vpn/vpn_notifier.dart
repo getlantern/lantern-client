@@ -5,7 +5,7 @@ class VPNChangeNotifier extends ChangeNotifier {
   Timer? timer;
   bool isFlashlightInitialized = false;
   bool isFlashlightInitializedFailed = false;
-  String flashlightState = 'Fetching Configuration..'.i18n;
+  String flashlightState = 'fetching_configuration'.i18n;
 
   VPNChangeNotifier() {
     if (isMobile()) {

@@ -57,7 +57,7 @@ class VPNTab extends StatelessWidget {
                         )
                       ],
                     ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 50),
                   Consumer<InternetStatusProvider>(
                     builder: (context, provider, _) {
                       return provider.isConnected

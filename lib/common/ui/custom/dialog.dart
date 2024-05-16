@@ -55,7 +55,7 @@ class CDialog extends StatefulWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 16),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ class CDialog extends StatefulWidget {
                 child: Padding(
                   padding: EdgeInsetsDirectional.only(bottom: 16),
                   child: CAssetImage(
-                      path: ImagePaths.cloudOff, color: Colors.grey),
+                      path: ImagePaths.cloudOff, color: Colors.black),
                 ),
               ),
               Center(child: CText('check_your_internet_connection'.i18n, style: tsSubtitle1)),
@@ -118,7 +118,7 @@ class CDialog extends StatefulWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: CText('got_it'.i18n, style: tsButtonPink),
+                    child: CText('got_it'.i18n.toUpperCase(), style: tsButtonPink),
                   ),
                 ],
               ),
