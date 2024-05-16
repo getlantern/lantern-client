@@ -248,3 +248,21 @@ func (c *iosClient) loadDialers() ([]bandit.Dialer, error) {
 	chained.TrackStatsFor(dialers, c.configDir)
 	return dialers, nil
 }
+
+func partialUserConfigFor(deviceID string) *UserConfig {
+	return userConfigFor(0, "", deviceID)
+}
+
+func userConfigFor(userID int, proToken, deviceID string) *UserConfig {
+	// TODO: plug in implementation of fetching timezone for iOS to work around https://github.com/golang/go/issues/20455
+	return &UserConfig{
+		UserConfigData: *common.NewUserConfigData(
+			"Lantern",
+			deviceID,
+			int64(userID),
+			proToken,
+			nil, // Headers currently unused
+			"",  // Language currently unused
+		),
+	}
+}
