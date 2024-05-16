@@ -40,30 +40,17 @@ import UIKit
   }
 
   private func setupLanternService() throws {
-    // Run Lantern service on a background queue
-    //Task.detached {
-      let lanternService = LanternService(
-        sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
-      lanternService.start()
-    //}
+    let lanternService = LanternService(
+      sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
+    lanternService.start()
   }
 
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
-    //DispatchQueue.global(qos: .background).async {
-    //  do {
-        try self.setupModels()
-        try self.setupLanternService()
-        //DispatchQueue.main.async {
-          self.startUpSequency()
-          self.setupLoadingBar()
-        //}
-    //  } catch {
-    //    DispatchQueue.main.async {
-    //     logger.error("Unexpected error setting up models: \(error)")
-    //    }
-    //  }
-    //}
+    try self.setupModels()
+    try self.setupLanternService()
+    self.startUpSequency()
+    self.setupLoadingBar()
   }
 
   // Init all the models
