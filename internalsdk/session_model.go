@@ -89,7 +89,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 	dialTimeout := 30 * time.Second
 	if opts.Platform == "ios" {
-		dialTimeout = 10 * time.Second
+		dialTimeout = 20 * time.Second
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 	}
