@@ -20,6 +20,7 @@ class VpnHelper: NSObject {
   // MARK: State
   static let didUpdateStateNotification = Notification.Name("Lantern.didUpdateState")
   enum VPNState: Equatable {
+    case configuring
     case idle(Error?)
     case connecting
     case connected
@@ -29,6 +30,12 @@ class VpnHelper: NSObject {
       return false
     }
   }
+  var configuring: Bool {
+    didSet {
+      guard oldValue != configuring else { return }
+      notificationCenter.post(name: VpnHelper.didUpdateStateNotification, object: nil)
+    }
+  }
 
   private let stateLock = NSLock()
   private var _state: VPNState
@@ -36,6 +43,9 @@ class VpnHelper: NSObject {
     get {
       stateLock.lock()
       defer { stateLock.unlock() }
+      if configuring {
+        return .configuring
+      }
       return _state
     }
 
@@ -62,6 +72,9 @@ class VpnHelper: NSObject {
   let vpnManager: VPNBase
   var configFetchTimer: Timer!
   var hasConfiguredThisSession = false
+  var hasFetchedConfigOnce: Bool {
+    return (userDefaults.value(forKey: VpnHelper.hasFetchedConfigDefaultsKey) as? Bool) ?? false
+  }
 
   init(
     constants: Constants,
@@ -78,8 +91,12 @@ class VpnHelper: NSObject {
     self.notificationCenter = notificationCenter
     self.flashlightManager = flashlightManager
     self.vpnManager = vpnManager
+    configuring = true
     _state = .idle(nil)
     super.init()
+    if self.hasFetchedConfigOnce {
+      self.configuring = false
+    }
     performAppSetUp()
   }
 
@@ -100,9 +117,37 @@ class VpnHelper: NSObject {
     if let error = flashlightManager.configureGoLoggerReturningError() {
       logger.error("IosConfigureLogger FAILED: " + error.localizedDescription)
     }
+    // 5 Fetch config
+    fetchConfigIfNecessary()
   }
 
   private func createFilesForAppGoPackage() {
+    // where "~" is the shared app group container...
+    // create process-specific directory @ ~/app
+
+    do {
+        try fileManager.ensureDirectoryExists(at: Constants.lanternDirectory)
+    } catch {
+      logger.error("Failed to create directory @ \(Constants.lanternDirectory.path)")
+    }
+
+    do {
+      try fileManager.ensureDirectoryExists(at: constants.targetDirectoryURL)
+    } catch {
+      logger.error("Failed to create directory @ \(constants.targetDirectoryURL.path)")
+    }
+    // create process-shared directory @ ~/config
+    do {
+      try fileManager.ensureDirectoryExists(at: constants.configDirectoryURL)
+    } catch {
+      logger.error("Failed to create directory @ \(constants.configDirectoryURL.path)")
+    }
+
+    // create shared config files (eg- config.yaml, masquerade_cache, etc) @ ~/config/<_>
+    let configSuccess = fileManager.ensureFilesExist(at: constants.allConfigURLs)
+    if !configSuccess {
+      logger.error("Failed to create config files")
+    }
     // create process-specific log files @ ~/app/lantern.log.#
     var logURLs = fileManager.generateLogRotationURLs(
       count: Constants.defaultLogRotationFileCount, from: constants.goLogBaseURL)
@@ -121,7 +166,29 @@ class VpnHelper: NSObject {
     onSuccess: (() -> Void)? = nil
   ) {
     guard state.isIdle else { return }
-    initiateVPNStart(onError: onError, onSuccess: onSuccess)
+    if !hasFetchedConfigOnce {
+      initiateConfigFetching(onError: onError, onSuccess: onSuccess)
+    } else {
+      initiateVPNStart(onError: onError, onSuccess: onSuccess)
+    }
+  }
+
+  private func initiateConfigFetching(
+    onError: ((Error) -> Void)? = nil, onSuccess: (() -> Void)? = nil
+  ) {
+    configuring = true
+    fetchConfig { [weak self] result in
+      DispatchQueue.main.async {
+        self?.configuring = false
+        guard let state = self?.state, state.isIdle else { return }
+        if result.isSuccess {
+          self?.startVPN(onError: onError, onSuccess: onSuccess)
+        } else {
+          self?.state = .idle(.unableToFetchConfig)
+          onError?(.unableToFetchConfig)
+        }
+      }
+    }
   }
 
   private func initiateVPNStart(onError: ((Error) -> Void)? = nil, onSuccess: (() -> Void)? = nil) {
@@ -169,6 +236,72 @@ class VpnHelper: NSObject {
     }
   }
 
+  func fetchConfigIfNecessary() {
+    logger.debug("Checking if config fetch is needed")
+    guard !self.hasConfiguredThisSession else { return }
+    logger.debug("Will fetch config")
+    self.hasConfiguredThisSession = true
+    let hasFetchedConfigOnce = self.hasFetchedConfigOnce
+    fetchConfig { [weak self] result in
+      self?.setUpConfigFetchTimer()
+      DispatchQueue.main.async {
+        self?.configuring = false
+        if let state = self?.state {
+          guard state.isIdle else { return }
+        }
+        if !result.isSuccess && !hasFetchedConfigOnce {
+          self?.state = .idle(.unableToFetchConfig)
+        }
+      }
+    }
+  }
+
+  func fetchConfig(
+    refreshProxies: Bool = true, _ completion: @escaping (Result<Void, Swift.Error>) -> Void
+  ) {
+    flashlightManager.fetchConfig(
+      userID: self.userID, proToken: self.proToken, excludedIPsURL: constants.excludedIPsURL,
+      refreshProxies: refreshProxies
+    ) { [weak self] result in
+      switch result {
+      case .success(let vpnNeedsReconfiguring):
+        if vpnNeedsReconfiguring {
+          self?.messageNetExToUpdateExcludedIPs()
+        }
+        self?.userDefaults.set(refreshProxies, forKey: VpnHelper.hasFetchedConfigDefaultsKey)
+        logger.debug("Successfully fetched new config with \(result)")
+        completion(.success(()))
+      case .failure(let error):
+        // TODO: convert this error to a Lantern.Error
+        logger.error("Fetch config failed:" + error.localizedDescription)
+        completion(.failure(error))
+      }
+    }
+  }
+
+  func setUpConfigFetchTimer() {
+    // set up timer on Main queue's runloop
+    // FlashlightManager will automatically use its designated goQueue when fetching
+    DispatchQueue.main.async { [weak self] in
+      let time: Double = 60
+      self?.configFetchTimer = Timer.scheduledTimer(
+        withTimeInterval: time, repeats: true,
+        block: { [weak self] _ in
+          // Only auto-fetch new config when VPN is on
+          guard self?.state == .connected else { return }
+          logger.debug("Config Fetch timer fired after \(time), fetching...")
+          self?.fetchConfig { result in
+            switch result {
+            case .success:
+              logger.debug("Auto-config fetch success")
+            case .failure(let error):
+              logger.error("Auto-config fetch failed: \(error.localizedDescription)")
+            }
+          }
+        })
+    }
+  }
+
   private func messageNetExToUpdateExcludedIPs() {
     logger.debug("Notifying network extension of updated config")
     do {
@@ -191,6 +324,35 @@ extension VpnHelper {
   enum Error: Swift.Error {
     case unknown
     case userDisallowedVPNConfig
+    case unableToFetchConfig
     case invalidVPNState
+  }
+}
+
+extension VpnHelper {
+  // MARK: Pro
+  var userID: Int {
+    return self.userDefaults.integer(forKey: Constants.userID)
+  }
+
+  var proToken: String? {
+    return self.userDefaults.string(forKey: Constants.proToken)
+  }
+
+  var isPro: Bool {
+    if !self.userDefaults.bool(forKey: Constants.isPro) {
+      return false
+    }
+
+    if self.userID == 0 {
+      return false
+    }
+
+    let pt = self.proToken
+    if pt == nil || pt?.isEmpty == true {
+      return false
+    }
+
+    return true
   }
 }
