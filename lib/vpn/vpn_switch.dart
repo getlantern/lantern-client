@@ -59,7 +59,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     if (isMobile()) {
       return sessionModel
           .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
-        adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
+        //adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
         return Transform.scale(
             scale: 2,
             child: vpnModel.vpnStatus(

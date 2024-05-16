@@ -3,7 +3,6 @@
 //  Lantern
 //
 
-import Internalsdk
 import Network
 import NetworkExtension
 
@@ -98,7 +97,6 @@ class VPNManager: VPNBase {
       return
     }
 
-    logger.log("setup provider, starting tunnel")
     do {
       provider.isEnabled = true  // calling start when !isEnabled will crash
       let options = [Constants.netExStartReasonKey: NSString("User Initiated")]
@@ -180,7 +178,6 @@ class VPNManager: VPNBase {
       if error == nil {
         completion(.success(savedManagers?.first))  // may be nil, but thats ok
       } else {
-        logger.log("Error loading saved provider \(error)")
         completion(.failure(.loadingProviderFailed))
       }
     }
@@ -192,16 +189,13 @@ class VPNManager: VPNBase {
     _ completion: @escaping (Result<Void, VPNManagerError>) -> Void
   ) {
     provider.saveToPreferences { saveError in
-      if let saveError {
-        logger.log("failed to save then load provider \(saveError)")
+      if let _ = saveError {
         completion(.failure(.savingProviderFailed))
       } else {
         provider.loadFromPreferences { loadError in
-          if let loadError {
-            logger.log("failed to load provider \(loadError)")
+          if let _ = loadError {
             completion(.failure(.loadingProviderFailed))
           } else {
-            logger.log("successfully loaded provider")
             completion(.success(()))
           }
         }
@@ -213,22 +207,9 @@ class VPNManager: VPNBase {
     let provider = NETunnelProviderManager()
     let config = NETunnelProviderProtocol()
     config.providerBundleIdentifier = Constants.netExBundleId
-    config.serverAddress = "0.0.0.0"
-
-    var conf = [String: AnyObject]()
-
-    let httpPort = InternalsdkHTTPProxyPort()
-
-    logger.log("HTTP proxy port is \(httpPort)")
-
-    conf["proxyHost"] = "127.0.0.1" as AnyObject
-    conf["proxyPort"] = String(httpPort) as AnyObject
-
-    config.providerConfiguration = conf
-
+    config.serverAddress = "0.0.0.0"  // needs to be set but purely 8.8.8.8
     provider.protocolConfiguration = config
     provider.isEnabled = true  // calling start when disabled crashes
-
     // Set rules for onDemand...
     let alwaysConnectRule = NEOnDemandRuleConnect()
     provider.onDemandRules = [alwaysConnectRule]
