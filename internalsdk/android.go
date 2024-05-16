@@ -8,7 +8,6 @@ import (
 	"net"
 	"os"
 	"path/filepath"
-	"runtime"
 	"sync"
 	"time"
 
@@ -434,6 +433,57 @@ func newAnalyticsSession(session panickingSession) analytics.Session {
 	return analyticsSession
 }
 
+func initDnsGrab(configDir string, session panickingSession) (dnsgrab.Server, error) {
+	cache, err := persistentcache.New(filepath.Join(configDir, "dnsgrab.cache"), maxDNSGrabAge)
+	if err != nil {
+		log.Errorf("unable to open dnsgrab cache: %v", err)
+		return nil, err
+	}
+	grabber, err := dnsgrab.ListenWithCache(
+		"127.0.0.1:0",
+		session.GetDNSServer,
+		cache,
+	)
+	if err != nil {
+		log.Errorf("unable to start dnsgrab: %v", err)
+		return nil, err
+	}
+	dnsGrabEventual.Set(grabber)
+	dnsGrabAddrEventual.Set(grabber.LocalAddr().String())
+	go func() {
+		serveErr := grabber.Serve()
+		if serveErr != nil {
+			log.Errorf("error serving dns: %v", serveErr)
+		}
+	}()
+	return grabber, nil
+}
+
+func reverseDns(grabber dnsgrab.Server) func(string) (string, error) {
+	return func(addr string) (string, error) {
+		op := ops.Begin("reverse_dns")
+		defer op.End()
+
+		host, port, splitErr := net.SplitHostPort(addr)
+		if splitErr != nil {
+			host = addr
+		}
+		ip := net.ParseIP(host)
+		if ip == nil {
+			log.Debugf("Unable to parse IP %v, passing through address as is", host)
+			return addr, nil
+		}
+		updatedHost, ok := grabber.ReverseLookup(ip)
+		if !ok {
+			return "", op.FailIf(errors.New("unknown IP address %v", ip))
+		}
+		if splitErr != nil {
+			return updatedHost, nil
+		}
+		return fmt.Sprintf("%v:%v", updatedHost, port), nil
+	}
+}
+
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
 
@@ -462,29 +512,10 @@ func run(configDir, locale string,
 
 	log.Debugf("Writing log messages to %s/lantern.log", configDir)
 
-	cache, err := persistentcache.New(filepath.Join(configDir, "dnsgrab.cache"), maxDNSGrabAge)
+	grabber, err := initDnsGrab(configDir, session)
 	if err != nil {
-		log.Errorf("unable to open dnsgrab cache: %v", err)
 		return
 	}
-
-	grabber, err := dnsgrab.ListenWithCache(
-		"127.0.0.1:0",
-		session.GetDNSServer,
-		cache,
-	)
-	if err != nil {
-		log.Errorf("unable to start dnsgrab: %v", err)
-		return
-	}
-	dnsGrabEventual.Set(grabber)
-	dnsGrabAddrEventual.Set(grabber.LocalAddr().String())
-	go func() {
-		serveErr := grabber.Serve()
-		if serveErr != nil {
-			log.Errorf("error serving dns: %v", serveErr)
-		}
-	}()
 
 	httpProxyAddr := fmt.Sprintf("%s:%d",
 		settings.GetHttpProxyHost(),
@@ -530,43 +561,17 @@ func run(configDir, locale string,
 		NewStatsTracker(session),
 		session.IsProUser,
 		func() string { return "" }, // only used for desktop
-		func(addr string) (string, error) {
-			op := ops.Begin("reverse_dns")
-			defer op.End()
-
-			host, port, splitErr := net.SplitHostPort(addr)
-			if splitErr != nil {
-				host = addr
-			}
-			ip := net.ParseIP(host)
-			if ip == nil {
-				log.Debugf("Unable to parse IP %v, passing through address as is", host)
-				return addr, nil
-			}
-			updatedHost, ok := grabber.ReverseLookup(ip)
-			if !ok {
-				return "", op.FailIf(errors.New("unknown IP address %v", ip))
-			}
-			if splitErr != nil {
-				return updatedHost, nil
-			}
-			return fmt.Sprintf("%v:%v", updatedHost, port), nil
-		},
+		reverseDns(grabber),
 		func(category, action, label string) {},
 	)
 	if err != nil {
 		log.Fatalf("failed to start flashlight: %v", err)
 	}
 
-	var analyticsSession analytics.Session
-	if runtime.GOOS == "android" {
-		analyticsSession = newAnalyticsSession(session)
-	}
-
 	replicaServer := &ReplicaServer{
 		ConfigDir:        configDir,
 		Flashlight:       runner,
-		analyticsSession: analyticsSession,
+		analyticsSession: newAnalyticsSession(session),
 		Session:          session.Wrapped(),
 		UserConfig:       userConfig,
 	}
