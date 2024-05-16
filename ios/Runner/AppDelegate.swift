@@ -22,7 +22,7 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-  initializeFlutterComponents()
+    initializeFlutterComponents()
     do {
       try setupAppComponents()
     } catch {
@@ -50,10 +50,20 @@ import UIKit
 
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
-    try setupModels()
-    try setupLanternService()
-    self.startUpSequency()
-    self.setupLoadingBar()
+    //DispatchQueue.global(qos: .background).async {
+    //  do {
+        try self.setupModels()
+        try self.setupLanternService()
+        //DispatchQueue.main.async {
+          self.startUpSequency()
+          self.setupLoadingBar()
+        //}
+    //  } catch {
+    //    DispatchQueue.main.async {
+    //     logger.error("Unexpected error setting up models: \(error)")
+    //    }
+    //  }
+    //}
   }
 
   // Init all the models

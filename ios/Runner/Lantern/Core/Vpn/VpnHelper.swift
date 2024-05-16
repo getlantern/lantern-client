@@ -73,7 +73,7 @@ class VpnHelper: NSObject {
   var configFetchTimer: Timer!
   var hasConfiguredThisSession = false
   var hasFetchedConfigOnce: Bool {
-    return (userDefaults.value(forKey: VpnHelper.hasFetchedConfigDefaultsKey) as? Bool) ?? false
+    return (userDefaults.value(forKey: VpnHelper.hasFetchedConfigDefaultsKey) as? Bool) ?? true
   }
 
   init(
@@ -91,12 +91,9 @@ class VpnHelper: NSObject {
     self.notificationCenter = notificationCenter
     self.flashlightManager = flashlightManager
     self.vpnManager = vpnManager
-    configuring = true
+    configuring = false
     _state = .idle(nil)
     super.init()
-    if self.hasFetchedConfigOnce {
-      self.configuring = false
-    }
     performAppSetUp()
   }
 
@@ -118,7 +115,7 @@ class VpnHelper: NSObject {
       logger.error("IosConfigureLogger FAILED: " + error.localizedDescription)
     }
     // 5 Fetch config
-    fetchConfigIfNecessary()
+    // fetchConfigIfNecessary()
   }
 
   private func createFilesForAppGoPackage() {
@@ -166,11 +163,7 @@ class VpnHelper: NSObject {
     onSuccess: (() -> Void)? = nil
   ) {
     guard state.isIdle else { return }
-    if !hasFetchedConfigOnce {
-      initiateConfigFetching(onError: onError, onSuccess: onSuccess)
-    } else {
-      initiateVPNStart(onError: onError, onSuccess: onSuccess)
-    }
+    initiateVPNStart(onError: onError, onSuccess: onSuccess)
   }
 
   private func initiateConfigFetching(

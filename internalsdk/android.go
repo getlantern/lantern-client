@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sync"
 	"time"
 
@@ -436,10 +437,6 @@ func newAnalyticsSession(session panickingSession) analytics.Session {
 func run(configDir, locale string,
 	settings Settings, session panickingSession) {
 
-	// memhelper won't build for iOS right now
-	// memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
-	// 	log.Debugf("Unable to track memory stats: %v", err)
-	// })
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(false)
 
@@ -561,10 +558,15 @@ func run(configDir, locale string,
 		log.Fatalf("failed to start flashlight: %v", err)
 	}
 
+	var analyticsSession analytics.Session
+	if runtime.GOOS == "android" {
+		analyticsSession = newAnalyticsSession(session)
+	}
+
 	replicaServer := &ReplicaServer{
 		ConfigDir:        configDir,
 		Flashlight:       runner,
-		analyticsSession: newAnalyticsSession(session),
+		analyticsSession: analyticsSession,
 		Session:          session.Wrapped(),
 		UserConfig:       userConfig,
 	}
