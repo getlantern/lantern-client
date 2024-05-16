@@ -29,7 +29,9 @@ class VPNTab extends StatelessWidget {
         automaticallyImplyLeading: false,
         padVertical: true,
         body: !vpnModel.isFlashlightInitialized
-            ? const VPNTapSkeleton()
+            ? VPNTapSkeleton(
+                isProUser: proUser,
+              )
             : Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -42,9 +44,9 @@ class VPNTab extends StatelessWidget {
                   const SizedBox(height: 40),
                   if (vpnModel.isFlashlightInitializedFailed)
                     Row(
-                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                         CText(vpnModel.flashlightState,style: tsSubtitle2),
+                        CText(vpnModel.flashlightState, style: tsSubtitle2),
                         const SizedBox(width: 10),
                         SizedBox(
                           height: 20,
@@ -97,7 +99,12 @@ class VPNTab extends StatelessWidget {
 }
 
 class VPNTapSkeleton extends StatelessWidget {
-  const VPNTapSkeleton({super.key});
+  final bool isProUser;
+
+  const VPNTapSkeleton({
+    super.key,
+    required this.isProUser,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +115,7 @@ class VPNTapSkeleton extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          const ProBanner(),
+          if (!isProUser) const ProBanner() else const SizedBox(height: 50),
           const VPNSwitch(),
           Container(
             padding: const EdgeInsetsDirectional.all(16),
@@ -128,6 +135,10 @@ class VPNTapSkeleton extends StatelessWidget {
                 buildRow(),
                 const SizedBox(height: 20),
                 buildRow(),
+                if (Platform.isAndroid) ...{
+                  const SizedBox(height: 20),
+                  buildRow(),
+                }
               ],
             ),
           ),
