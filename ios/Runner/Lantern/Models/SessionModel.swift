@@ -45,13 +45,6 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     try super.init(flutterBinary, model)
   }
 
-  func startService() {
-    //    let configDir = configDirFor(suffix: "service")
-    (model as! InternalsdkSessionModel).startService(
-      Constants.lanternDirectory.path, locale: "en", settings: Settings())
-    logger.error("Service Started successfully")
-  }
-
   func hasAllPermssion() {
     do {
       let result = try invoke("hasAllNetworkPermssion")

@@ -235,7 +235,7 @@ func TestInternalHeaders(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		s := userConfig{&panickingSessionImpl{testSession{serializedInternalHeaders: test.input}}}
+		s := UserConfig{&panickingSessionImpl{testSession{serializedInternalHeaders: test.input}}}
 		got := s.GetInternalHeaders()
 		assert.Equal(t, test.expected, got, "Headers did not decode as expected")
 	}
