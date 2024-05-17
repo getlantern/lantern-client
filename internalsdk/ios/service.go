@@ -1,7 +1,6 @@
 package ios
 
 import (
-	"fmt"
 	"net"
 	"path/filepath"
 	"strconv"
@@ -46,24 +45,13 @@ func (s *LanternService) Start(configDir string, locale string, settings interna
 }
 
 func run(configDir, locale string, settings internalsdk.Settings, session internalsdk.PanickingSession) {
-
 	log.Debugf("Starting lantern: configDir %s locale %s sticky config %t",
 		configDir, locale, settings.StickyConfig())
 
 	// Set home directory prior to starting Lantern
 	appdir.SetHomeDir(configDir)
 
-	grabber, err := internalsdk.InitDnsGrab(configDir, session)
-	if err != nil {
-		log.Error(err)
-		return
-	}
-
-	httpProxyAddr := fmt.Sprintf("%s:%d",
-		settings.GetHttpProxyHost(),
-		settings.GetHttpProxyPort())
-	var runner *flashlight.Flashlight
-	runner, err = flashlight.New(
+	_, err := flashlight.New(
 		common.DefaultAppName,
 		common.ApplicationVersion,
 		common.RevisionDate,
@@ -72,9 +60,7 @@ func run(configDir, locale string, settings internalsdk.Settings, session intern
 		func() bool { return false }, // always connected
 		func() bool { return true },
 		func() bool { return false }, // do not proxy private hosts on iOS
-		// TODO: allow configuring whether or not to enable reporting (just like we
-		// already have in desktop)
-		func() bool { return true }, // auto report
+		func() bool { return true },  // auto report
 		map[string]interface{}{},
 		func(cfg *config.Global, src config.Source) {
 			b, err := yaml.Marshal(cfg)
@@ -82,36 +68,23 @@ func run(configDir, locale string, settings internalsdk.Settings, session intern
 				log.Errorf("Unable to marshal user config: %v", err)
 			} else {
 				log.Debugf("Got new global config %s", string(b))
-				//cf.saveConfig("global.yaml", b)
 			}
 		}, // onConfigUpdate
 		func(proxies []bandit.Dialer, src config.Source) {
-			/*if src == config.Fetched {
-				if b, err := yaml.Marshal(proxies); err != nil {
-					log.Debugf("Writing proxies to file %s", string(b))
-					saveConfig(configDir, "proxies.yaml", b)
-				}
-			}*/
+
 		}, // onProxiesUpdate
 		internalsdk.NewUserConfig(session),
 		internalsdk.NewStatsTracker(session),
 		session.IsProUser,
 		func() string { return "" }, // only used for desktop
-		internalsdk.ReverseDns(grabber),
+		func(addr string) (string, error) {
+			return "", nil
+		},
 		func(category, action, label string) {},
 	)
 	if err != nil {
-		log.Fatalf("failed to start flashlight: %v", err)
+		log.Fatalf("failed to create new instance of flashlight: %v", err)
 	}
-
-	runner.Run(
-		httpProxyAddr, // listen for HTTP on provided address
-		"127.0.0.1:0", // listen for SOCKS on random address
-		func(c *client.Client) {
-			clEventual.Set(c)
-		},
-		nil, // onError
-	)
 }
 
 func HTTPProxyPort() int {
