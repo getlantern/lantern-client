@@ -3,12 +3,10 @@ package internalsdk
 import (
 	"context"
 	"fmt"
-	"path/filepath"
 	"strconv"
 	"time"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/proxied"
 
 	//"github.com/getlantern/flashlight/v7/proxied"
@@ -199,18 +197,6 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	default:
 		return m.methodNotImplemented(method)
 	}
-}
-
-// Internal functions that manage method
-func (m *SessionModel) StartService(configDir string,
-	locale string,
-	settings Settings) {
-	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
-	session := &panickingSessionImpl{m}
-	startOnce.Do(func() {
-		go run(configDir, locale, settings, session)
-	})
-
 }
 
 // InvokeMethod handles method invocations on the SessionModel.
