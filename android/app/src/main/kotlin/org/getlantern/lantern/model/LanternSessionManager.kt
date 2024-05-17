@@ -1,7 +1,11 @@
 package org.getlantern.lantern.model
 
 import android.app.Application
+import android.content.Context
+import android.content.res.Resources
+import android.os.Build
 import io.lantern.model.Vpn
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.greenrobot.eventbus.EventBus
@@ -17,6 +21,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     private var referral: String? = null
     private var verifyCode: String? = null
+    private var supportedCurrencyList: List<String> = listOf()
 
     override fun isProUser(): Boolean {
         return prefs.getBoolean(PRO_USER, false)
@@ -34,7 +39,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(PRO_EXPIRED, false)
     }
 
-    fun getCurrency(): Currency? {
+    private fun getCurrency(): Currency {
         try {
             val lang = language
             val parts = lang.split("_".toRegex()).toTypedArray()
@@ -50,7 +55,40 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     override fun currency(): String {
-        return getCurrency()?.let { it.currencyCode } ?: "usd"
+        return getCurrency().currencyCode ?: "usd"
+    }
+
+    fun deviceCurrencyCode(): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val localList = Resources.getSystem().configuration.locales
+            for (i in 0 until localList.size()) {
+                val locale = localList.get(i)
+                val tempLocal = Currency.getInstance(locale).currencyCode.lowercase()
+                return if (supportedCurrencyList.contains(tempLocal)) {
+                    tempLocal
+                } else {
+                    "usd"
+                }
+            }
+            "usd" // Default to "usd" if no supported currency found
+        } else {
+            val local = Resources.getSystem().configuration.locale
+            val deviceLocal = Currency.getInstance(local).currencyCode.lowercase()
+
+            return if (supportedCurrencyList.contains(deviceLocal)) {
+                deviceLocal
+            } else {
+                "usd"
+            }
+        }
+    }
+
+    fun setCurrencyList(currencyList: List<String>) {
+        supportedCurrencyList = currencyList
+    }
+
+    fun getCurrencyList(): List<String> {
+        return supportedCurrencyList
     }
 
     fun setRemoteConfigPaymentProvider(provider: String?) {
@@ -294,23 +332,33 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return null
     }
 
-    fun setUserPlans(proPlans: Map<String, ProPlan>) {
+    fun setUserPlans(context: Context, proPlans: Map<String, ProPlan>) {
+        for (planId in proPlans.keys) {
+            proPlans[planId]?.let { PlansUtil.updatePrice(context, it) }
+        }
+
         plans.clear()
         plans.putAll(proPlans)
         db.mutate { tx ->
             proPlans.values.forEach {
-                val planID = it.id.substringBefore('-')
-                val path = PLANS + planID
-                tx.put(
-                    path,
-                    Vpn.Plan.newBuilder().setId(it.id)
+                try {
+                    val planID = it.id.substringBefore('-')
+                    val path = PLANS + planID
+
+                    val planItem = Vpn.Plan.newBuilder().setId(it.id)
                         .setDescription(it.description).setBestValue(it.bestValue)
-                        .setUsdPrice(it.usdEquivalentPrice)
                         .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime)
                         .setOneMonthCost(it.oneMonthCost)
                         .setTotalCost(it.totalCost).setFormattedBonus(it.formattedBonus)
-                        .setRenewalText(it.renewalText).build(),
-                )
+                        .setRenewalText(it.renewalText).build()
+
+                    tx.put(
+                        path,
+                        planItem,
+                    )
+                } catch (e: Exception) {
+                    Logger.error(TAG, e.message)
+                }
             }
         }
     }
