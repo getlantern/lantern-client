@@ -207,16 +207,22 @@ func (cf *configurer) openProxies() (map[string]*commonconfig.ProxyConfig, strin
 	return cfg, etag, updated, err
 }
 
+func (cf *configurer) updateFromHardcodedProxies() ([]byte, string, error) {
+	return []byte(cf.hardcodedProxies), "hardcoded", nil
+}
+
 func (cf *configurer) openConfig(name string, cfg interface{}, embedded []byte) (string, bool, error) {
 	var initialized bool
-	bytes, err := ioutil.ReadFile(cf.fullPathTo(name))
+	configFile := cf.fullPathTo(name)
+	log.Debugf("Opening config file at %s", configFile)
+	bytes, err := ioutil.ReadFile(configFile)
 	if err == nil && len(bytes) > 0 {
 		log.Debugf("Loaded %v from file", name)
 	} else {
 		log.Debugf("Initializing %v from embedded", name)
 		bytes = embedded
 		initialized = true
-		if writeErr := ioutil.WriteFile(cf.fullPathTo(name), bytes, 0644); writeErr != nil {
+		if writeErr := ioutil.WriteFile(configFile, bytes, 0644); writeErr != nil {
 			return "", false, errors.New("Unable to write embedded %v to disk: %v", name, writeErr)
 		}
 	}
@@ -229,24 +235,6 @@ func (cf *configurer) openConfig(name string, cfg interface{}, embedded []byte) 
 		etagBytes = []byte{}
 	}
 	return string(etagBytes), initialized, nil
-}
-
-func (cf *configurer) configureFronting(global *config.Global, timeout time.Duration) error {
-	log.Debug("Configuring fronting")
-	certs, err := global.TrustedCACerts()
-	if err != nil {
-		return errors.New("Unable to read trusted CAs from global config, can't configure domain fronting: %v", err)
-	}
-
-	fronted.Configure(certs, global.Client.FrontedProviders(), "cloudfront", cf.fullPathTo("masquerade_cache"))
-	rt, ok := fronted.NewDirect(timeout)
-	if !ok {
-		return errors.New("Timed out waiting for fronting to finish configuring")
-	}
-
-	cf.rt = rt
-	log.Debug("Configured fronting")
-	return nil
 }
 
 func (cf *configurer) updateGlobal(rt http.RoundTripper, cfg *config.Global, etag string, url string) (*config.Global, bool) {
@@ -277,7 +265,6 @@ func (cf *configurer) updateProxies(cfg map[string]*commonconfig.ProxyConfig, et
 	return cfg, didFetch
 }
 
-// TODO: DRY violation with ../config/fetcher.go
 func (cf *configurer) updateFromWeb(rt http.RoundTripper, name string, etag string, cfg interface{}, url string) (bool, error) {
 	var bytes []byte
 	var newETag string
@@ -385,8 +372,22 @@ func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name string, etag st
 	return bytes, newEtag, nil
 }
 
-func (cf *configurer) updateFromHardcodedProxies() ([]byte, string, error) {
-	return []byte(cf.hardcodedProxies), "hardcoded", nil
+func (cf *configurer) configureFronting(global *config.Global, timeout time.Duration) error {
+	log.Debug("Configuring fronting")
+	certs, err := global.TrustedCACerts()
+	if err != nil {
+		return errors.New("Unable to read trusted CAs from global config, can't configure domain fronting: %v", err)
+	}
+
+	fronted.Configure(certs, global.Client.FrontedProviders(), "cloudfront", cf.fullPathTo("masquerade_cache"))
+	rt, ok := fronted.NewDirect(timeout)
+	if !ok {
+		return errors.New("Timed out waiting for fronting to finish configuring")
+	}
+
+	cf.rt = rt
+	log.Debug("Configured fronting")
+	return nil
 }
 
 func (cf *configurer) openFile(filename string) (*os.File, error) {

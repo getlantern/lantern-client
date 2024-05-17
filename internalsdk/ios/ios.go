@@ -119,7 +119,17 @@ func (c *cw) Write(b []byte) (int, error) {
 }
 
 func (c *cw) Reconfigure() {
+	dialers, err := c.client.loadDialers()
+	if err != nil {
+		// this causes the NetworkExtension process to die. Since the VPN is configured as "on-demand",
+		// the OS will automatically restart the service, at which point we'll read the new config anyway.
+		panic(log.Errorf("Unable to load dialers on reconfigure: %v", err))
+	}
 
+	c.dialer, err = bandit.New(dialers)
+	if err != nil {
+		log.Errorf("Unable to create dialer on reconfigure: %v", err)
+	}
 }
 
 func (c *cw) Close() error {
@@ -149,7 +159,7 @@ type iosClient struct {
 }
 
 func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, configDir string, mtu int, capturedDNSHost, realDNSHost string) (ClientWriter, error) {
-	LogDebug("Creating new iOS client")
+	log.Debug("Creating new iOS client")
 	if mtu <= 0 {
 		log.Debug("Defaulting MTU to 1500")
 		mtu = 1500
@@ -177,7 +187,6 @@ func (c *iosClient) start() (ClientWriter, error) {
 	if err := c.loadUserConfig(); err != nil {
 		return nil, log.Errorf("error loading user config: %v", err)
 	}
-
 	log.Debugf("Running client at config path '%v'", c.configDir)
 	dialers, err := c.loadDialers()
 	if err != nil {
@@ -196,6 +205,7 @@ func (c *iosClient) start() (ClientWriter, error) {
 	if err != nil {
 		return nil, errors.New("Unable to initialize dnsgrab cache at %v: %v", cacheFile, err)
 	}
+
 	grabber, err := dnsgrab.ListenWithCache(
 		"127.0.0.1:0",
 		func() string { return c.realDNSHost },

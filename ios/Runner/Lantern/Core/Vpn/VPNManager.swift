@@ -212,7 +212,7 @@ class VPNManager: VPNBase {
 
     var conf = [String: AnyObject]()
 
-    let httpPort = InternalsdkHTTPProxyPort()
+    let httpPort = IosHTTPProxyPort()
 
     logger.log("HTTP proxy port is \(httpPort)")
 
