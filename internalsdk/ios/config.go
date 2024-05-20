@@ -53,10 +53,11 @@ type ConfigResult struct {
 func Configure(configFolderPath string, userID int, proToken, deviceID string, refreshProxies bool, hardcodedProxies string) (*ConfigResult, error) {
 	log.Debugf("Configuring client for device '%v' at config path '%v'", deviceID, configFolderPath)
 	defer log.Debug("Finished configuring client")
+	uc := userConfigFor(userID, proToken, deviceID)
 	cf := &configurer{
 		configFolderPath: configFolderPath,
 		hardcodedProxies: hardcodedProxies,
-		uc:               userConfigFor(userID, proToken, deviceID),
+		uc:               uc,
 	}
 	return cf.configure(userID, proToken, refreshProxies)
 }

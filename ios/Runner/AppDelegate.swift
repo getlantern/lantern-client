@@ -14,7 +14,6 @@ import UIKit
   private var lanternModel: LanternModel!
   private var vpnModel: VpnModel!
   private var messagingModel: MessagingModel!
-  // private var lanternService: LanternService!
   // IOS
   var loadingManager: LoadingIndicatorManager?
 
@@ -39,16 +38,9 @@ import UIKit
     flutterbinaryMessenger = flutterViewController.binaryMessenger
   }
 
-  private func setupLanternService() throws {
-    let lanternService = LanternService(
-      sessionModel: self.sessionModel.model, vpnModel: self.vpnModel)
-    lanternService.start()
-  }
-
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
     try self.setupModels()
-    try self.setupLanternService()
     self.startUpSequency()
     self.setupLoadingBar()
   }

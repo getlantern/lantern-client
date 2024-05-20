@@ -70,7 +70,6 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/jackpal/gateway v1.0.13
 	github.com/leekchan/accounting v1.0.0
-	github.com/shirou/gopsutil/v3 v3.22.9
 	github.com/shopspring/decimal v1.4.0
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/mobile v0.0.0-20240404231514-09dbf07665ed
@@ -230,7 +229,6 @@ require (
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/libp2p/go-buffer-pool v0.1.0 // indirect
-	github.com/lufia/plan9stats v0.0.0-20220913051719-115f729f3c8c // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mattn/go-sqlite3 v2.0.2+incompatible // indirect
 	github.com/mdlayher/netlink v1.1.0 // indirect
@@ -269,7 +267,6 @@ require (
 	github.com/pion/webrtc/v3 v3.2.26 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/power-devops/perfstat v0.0.0-20220216144756-c35f1ee13d7c // indirect
 	github.com/prometheus/client_golang v1.18.0 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.46.0 // indirect

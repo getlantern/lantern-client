@@ -29,7 +29,7 @@ type LanternService struct {
 	sessionModel    *internalsdk.SessionModel
 }
 
-func NewService(sessionModel *internalsdk.SessionModel) *LanternService {
+func newService(sessionModel *internalsdk.SessionModel) *LanternService {
 	return &LanternService{
 		sessionModel: sessionModel,
 	}

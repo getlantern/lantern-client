@@ -262,7 +262,7 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 5a6d005a6cb5b5e8f4c7b69ca05cdea79c181139
   google_mobile_ads: 5698dd1cd5a3cfc6688abec7db5428f237d6b1ac
   GoogleUserMessagingPlatform: f131fa7978d2ba88d7426702b057c2cc318e6595
-  integration_test: 13825b8a9334a850581300559b8839134b124670
+  integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
