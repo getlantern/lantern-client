@@ -19,7 +19,7 @@ export 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:flutter_svg/flutter_svg.dart';
 export 'package:flutter_switch/flutter_switch.dart';
-export 'package:i18n_extension/i18n_widget.dart';
+export 'package:i18n_extension/src/i18n_widget.dart';
 export 'package:lantern/core/router/router.gr.dart';
 export 'package:lantern/event_extension.dart';
 export 'package:lantern/event_manager.dart';
