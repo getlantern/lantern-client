@@ -36,7 +36,7 @@ All those dependencies must be in your PATH
   * NDK should be version 26.x, for example 26.0.10792818.
 * [Git LFS](https://git-lfs.github.com)
   - more information in [Usage](#usage)
-* [Flutter (3.13.5)](https://flutter.dev)
+* [Flutter (3.19.6)](https://flutter.dev)
 * [sentry-cli](https://docs.sentry.io/product/cli/installation/)
   - This is used for uploading native debug symbols to Sentry
 * [gomobile](https://github.com/golang/go/wiki/Mobile#tools)
