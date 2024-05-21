@@ -28,7 +28,7 @@ Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`
 
 All those dependencies must be in your PATH
 
-* Java 11 or greater
+* Java 17 or higher
 * [Android Studio](https://developer.android.com/studio)
 * [Xcode](https://developer.apple.com/xcode/resources/)
 * [Git](https://git-scm.com/downloads)
