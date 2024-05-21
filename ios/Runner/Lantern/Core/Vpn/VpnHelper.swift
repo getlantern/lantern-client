@@ -234,12 +234,12 @@ class VpnHelper: NSObject {
   }
 
   func fetchConfigIfNecessary() {
-      guard configFetchInProcess == false else {
-          logger.debug("Config fetch is already in progress.")
-          return
-      }
-      logger.debug("Checking if config fetch is needed for state: \(state)")
-      if !self.hasConfiguredThisSession {
+    guard configFetchInProcess == false else {
+      logger.debug("Config fetch is already in progress.")
+      return
+    }
+    logger.debug("Checking if config fetch is needed for state: \(state)")
+    if !self.hasConfiguredThisSession {
       logger.debug("Config fetch is needed for first time")
       self.fetchAndSetUpTimer()
       return
@@ -255,7 +255,7 @@ class VpnHelper: NSObject {
   }
 
   private func fetchAndSetUpTimer() {
-      configFetchInProcess = true
+    configFetchInProcess = true
     logger.debug("Starting config fetch...")
     fetchConfig { [weak self] result in
       DispatchQueue.main.async {
@@ -276,7 +276,7 @@ class VpnHelper: NSObject {
           }
         }
         //                 Start the timer to fetch config periodically if connected
-                        strongSelf.startConfigFetchTimer()
+        strongSelf.startConfigFetchTimer()
       }
     }
   }

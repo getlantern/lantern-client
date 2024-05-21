@@ -65,6 +65,10 @@ const (
 	currentTermsVersion        = 1
 )
 
+var (
+	instance *SessionModel
+)
+
 type SessionModelOpts struct {
 	DevelopmentMode bool
 	ProUser         bool
@@ -92,6 +96,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(2000, &protos.Devices{})
 	}
 	m := &SessionModel{baseModel: base}
+	instance = m
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
 		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
 		UserConfig: func() common.UserConfig {
@@ -113,6 +118,13 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
+}
+
+func GetSessionModel() (*SessionModel, error) {
+	if instance == nil {
+		return nil, errors.New("SessionModel not initialized")
+	}
+	return instance, nil
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
