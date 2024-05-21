@@ -134,6 +134,7 @@ jobs:
       - uses: subosito/flutter-action@v2.12.0
         with:
           channel: "stable"
+          flutter-version-file: pubspec.yaml
 
       - run: flutter --version
 
