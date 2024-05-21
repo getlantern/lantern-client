@@ -47,6 +47,8 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   void channelListener() {
+    if(Platform.isIOS) return;
+
     const mainMethodChannel = MethodChannel('lantern_method_channel');
     const navigationChannel = MethodChannel('navigation');
     if (Platform.isAndroid) {
