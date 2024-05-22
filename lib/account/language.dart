@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 @RoutePage<void>(name: 'Language')
 class Language extends StatelessWidget {
@@ -30,14 +31,20 @@ class Language extends StatelessWidget {
               ),
               value: lang,
               groupValue: countryCode,
-              onChanged: (String? value) async {
-                await sessionModel.setLanguage(lang);
-                Navigator.pop(context);
-              },
+              onChanged: (newLocal) => onLocalChange(newLocal!,context)
             );
           },
         );
       }),
     );
   }
+
+  Future<void> onLocalChange(String newLocal, BuildContext context) async {
+    await sessionModel.setLanguage(newLocal);
+    Navigator.pop(context);
+  }
+
+
+
+
 }
