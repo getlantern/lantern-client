@@ -150,15 +150,3 @@ jobs:
         retention-days: 2
         path: |
           lantern-installer.dmg
-
-    - name: Push binaries to s3
-      env:
-        VERSION: "${{ env.version }}"
-        DMG: "${{ env.prefix }}-${{ env.version }}.dmg"
-      run: |
-        mv lantern-installer.dmg "$DMG"
-        cp "$DMG" ${{ env.prefix }}.dmg
-        echo ${{ env.version }} > ${{ env.version_file }}
-        shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
-        cp "$DMG".sha256 ${{ env.prefix }}.dmg.sha256
-        s3cmd put --acl-public "$DMG" ${{ env.version_file }} "$DMG".sha256 ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
