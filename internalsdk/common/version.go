@@ -16,6 +16,9 @@ var (
 
 	// This gets set at build time
 	RevisionDate = ""
+
+	// This gets set at build time
+	BuildDate = ""
 )
 
 func init() {

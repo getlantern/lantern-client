@@ -235,6 +235,10 @@ public class ProPlan {
         return description;
     }
 
+    public void setDescription(String desc) {
+        description = desc;
+    }
+
     public String getCostStr() {
         return costStr;
     }

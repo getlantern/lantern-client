@@ -625,7 +625,7 @@ func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 		C.GoString(description),
 		subscriptionLevel,
 		C.GoString(email),
-		app.ApplicationVersion,
+		common.ApplicationVersion,
 		deviceID,
 		osVersion,
 		"",
@@ -647,7 +647,7 @@ func checkUpdates() *C.char {
 	op := ops.Begin("check_update").
 		Set("user_id", userID).
 		Set("device_id", deviceID).
-		Set("current_version", app.ApplicationVersion)
+		Set("current_version", common.ApplicationVersion)
 	defer op.End()
 	updateURL, err := autoupdate.CheckUpdates()
 	if err != nil {
@@ -661,11 +661,11 @@ func checkUpdates() *C.char {
 // loadSettings loads the initial settings at startup, either from disk or using defaults.
 func loadSettings(configDir string) *settings.Settings {
 	path := filepath.Join(configDir, "settings.yaml")
-	if common.Staging {
+	if common.IsStagingEnvironment() {
 		path = filepath.Join(configDir, "settings-staging.yaml")
 	}
-	settings := settings.LoadSettingsFrom(app.ApplicationVersion, app.RevisionDate, app.BuildDate, path)
-	if common.Staging {
+	settings := settings.LoadSettingsFrom(common.ApplicationVersion, common.RevisionDate, common.BuildDate, path)
+	if common.IsStagingEnvironment() {
 		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
 	}
 	return settings

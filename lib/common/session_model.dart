@@ -78,11 +78,17 @@ class SessionModel extends Model {
   // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
   // the onMessage callback is triggered with the given property value
   void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
-      property, void Function(T?) onMessage) {
+      String? property, void Function(T?) onMessage) {
     if (websocket == null) return;
     websocket.messageStream.listen(
       (json) {
-        if (json["type"] == messageType) onMessage(json["message"][property]);
+        if (json["type"] == messageType) {
+          if (property != null) {
+            onMessage(json["message"][property]);
+          } else {
+            onMessage(json["message"]);
+          }
+        }
       },
       onError: (error) => appLogger.i("websocket error: ${error.description}"),
     );
@@ -527,6 +533,11 @@ class SessionModel extends Model {
     );
   }
 
+  Future<Iterable<PathAndValue<PaymentMethod>>> paymentMethodsv4() async {
+    final res = await ffiPaymentMethodsV4();
+    return paymentMethodFromJson(jsonDecode(res.toDartString()));
+  }
+
   Widget paymentMethods({
     required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
   }) {
@@ -701,13 +712,13 @@ class SessionModel extends Model {
   }
 
   Future<String> paymentRedirectForDesktop(BuildContext context, String planID,
-      String email, String provider) async {
+      String email, Providers provider) async {
     String os = Platform.operatingSystem;
     Locale locale = Localizations.localeOf(context);
     final format = NumberFormat.simpleCurrency(locale: locale.toString());
     final currencyName = format.currencyName ?? "USD";
     return await compute(
-        ffiPaymentRedirect, [planID, currencyName, provider, email, os]);
+        ffiPaymentRedirect, [planID, currencyName, provider.name, email, os]);
   }
 
   Future<void> submitStripePayment(
