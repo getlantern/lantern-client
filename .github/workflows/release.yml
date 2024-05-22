@@ -282,6 +282,8 @@ jobs:
           run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
         - name: Clone binaries repo
           run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
+          env:
+            GIT_CLONE_PROTECTION_ACTIVE: false
         - name: Rename builds
           run: |
             diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
