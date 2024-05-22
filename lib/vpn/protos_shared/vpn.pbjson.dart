@@ -147,28 +147,14 @@ const PaymentProviders$json = {
   '1': 'PaymentProviders',
   '2': [
     {'1': 'name', '3': 1, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'data', '3': 2, '4': 3, '5': 11, '6': '.PaymentProviders.DataEntry', '10': 'data'},
     {'1': 'logoUrls', '3': 3, '4': 3, '5': 9, '10': 'logoUrls'},
   ],
-  '3': [PaymentProviders_DataEntry$json],
-};
-
-@$core.Deprecated('Use paymentProvidersDescriptor instead')
-const PaymentProviders_DataEntry$json = {
-  '1': 'DataEntry',
-  '2': [
-    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
-    {'1': 'value', '3': 2, '4': 1, '5': 9, '10': 'value'},
-  ],
-  '7': {'7': true},
 };
 
 /// Descriptor for `PaymentProviders`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List paymentProvidersDescriptor = $convert.base64Decode(
-    'ChBQYXltZW50UHJvdmlkZXJzEhIKBG5hbWUYASABKAlSBG5hbWUSLwoEZGF0YRgCIAMoCzIbLl'
-    'BheW1lbnRQcm92aWRlcnMuRGF0YUVudHJ5UgRkYXRhEhoKCGxvZ29VcmxzGAMgAygJUghsb2dv'
-    'VXJscxo3CglEYXRhRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKAlSBXZhbH'
-    'VlOgI4AQ==');
+    'ChBQYXltZW50UHJvdmlkZXJzEhIKBG5hbWUYASABKAlSBG5hbWUSGgoIbG9nb1VybHMYAyADKA'
+    'lSCGxvZ29Vcmxz');
 
 @$core.Deprecated('Use paymentMethodDescriptor instead')
 const PaymentMethod$json = {
