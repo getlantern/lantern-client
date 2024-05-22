@@ -268,6 +268,7 @@ jobs:
            packageName: org.getlantern.lantern
            releaseFiles: lantern-installer.aab
            track: beta
+           changesNotSentForReview: true
         - name: Upload Android App bundle to Play Store (production)
           if: needs.set-version.outputs.prefix == 'lantern-installer'
           uses: r0adkll/upload-google-play@v1
@@ -276,6 +277,7 @@ jobs:
            packageName: org.getlantern.lantern
            releaseFiles: lantern-installer.aab
            track: production
+           changesNotSentForReview: true
         - name: Grant private modules access
           run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
         - name: Clone binaries repo
