@@ -2,6 +2,8 @@ import 'package:lantern/ad_helper.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
+import 'package:tray_manager/tray_manager.dart';
+import 'package:window_manager/window_manager.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -10,7 +12,26 @@ class VPNSwitch extends StatefulWidget {
   State<VPNSwitch> createState() => _VPNSwitchState();
 }
 
-class _VPNSwitchState extends State<VPNSwitch> {
+class _VPNSwitchState extends State<VPNSwitch> with TrayListener, WindowListener {
+
+
+  TrayHandler trayHandler = TrayHandler();
+
+  @override
+  void initState() {
+    if (isDesktop()) {
+      trayManager.addListener(trayHandler);
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (isDesktop()) {
+      trayManager.removeListener(this);
+    }
+  }
+
   final adHelper = AdHelper();
   String vpnStatus = 'disconnected';
 
