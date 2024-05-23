@@ -75,6 +75,14 @@ type configurer struct {
 	rt               http.RoundTripper
 }
 
+// Important:
+// This method is responsible for potentially delaying the UI startup process.
+// Occasionally, the execution time of this method varies significantly, sometimes completing within 5 seconds, while other times taking more than 30 seconds.
+// For instance, examples from my running
+// config.go:167 Configured completed in 35.8970435s
+// config.go:167 Configured completed in 4.0234035s
+
+// TODO: Implement a timeout mechanism to handle prolonged execution times and potentially execute this method in the background to maintain smooth UI startup performance.
 func (cf *configurer) configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
 	result := &ConfigResult{}
 	start := time.Now()
