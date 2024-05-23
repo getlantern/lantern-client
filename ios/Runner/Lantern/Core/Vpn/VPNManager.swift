@@ -210,16 +210,16 @@ class VPNManager: VPNBase {
     config.providerBundleIdentifier = Constants.netExBundleId
     config.serverAddress = "0.0.0.0"  // needs to be set but purely 8.8.8.8
 
-//    var conf = [String: AnyObject]()
-//
-//    let httpPort = IosHTTPProxyPort()
-//
-//    logger.log("HTTP proxy port is \(httpPort)")
-//
-//    conf["proxyHost"] = "127.0.0.1" as AnyObject
-//    conf["proxyPort"] = String(httpPort) as AnyObject
+    //    var conf = [String: AnyObject]()
+    //
+    //    let httpPort = IosHTTPProxyPort()
+    //
+    //    logger.log("HTTP proxy port is \(httpPort)")
+    //
+    //    conf["proxyHost"] = "127.0.0.1" as AnyObject
+    //    conf["proxyPort"] = String(httpPort) as AnyObject
 
-//    config.providerConfiguration = conf
+    //    config.providerConfiguration = conf
 
     provider.protocolConfiguration = config
     provider.isEnabled = true  // calling start when disabled crashes
