@@ -97,8 +97,8 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   void setupTrayManager() async {
-    trayManager.addListener(this);
     await setupMenu(false);
+    trayManager.addListener(this);
   }
 
   @override
