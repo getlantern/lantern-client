@@ -41,8 +41,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       channelListener();
     } else {
       // This is a desktop device
-      setupTrayManager();
+      trayManager.addListener(this);
       _initWindowManager();
+      setupMenu(false);
     }
   }
 
@@ -94,11 +95,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
     setState(() {});
-  }
-
-  void setupTrayManager() async {
-    await setupMenu(false);
-    trayManager.addListener(this);
   }
 
   @override
