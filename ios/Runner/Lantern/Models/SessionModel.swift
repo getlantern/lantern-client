@@ -60,7 +60,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   func handleStatsChanges() {
     // Retrieve the JSON data from UserDefaults
     logger.debug("Stats status update")
-      if let jsonData = Constants.appGroupDefaults.data(forKey: Constants.statsData) {
+    if let jsonData = Constants.appGroupDefaults.data(forKey: Constants.statsData) {
       do {
         // Convert the JSON data back to a dictionary
         if let dataDict = try JSONSerialization.jsonObject(with: jsonData, options: [])

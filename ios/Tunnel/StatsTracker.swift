@@ -28,7 +28,7 @@ class StatsTracker: NSObject, IosStatsTrackerProtocol {
     do {
       // Convert the dictionary to JSON data
       let jsonData = try JSONSerialization.data(withJSONObject: dataDict, options: [])
-        Constants.appGroupDefaults.set(jsonData, forKey: Constants.statsData)
+      Constants.appGroupDefaults.set(jsonData, forKey: Constants.statsData)
       // Post a notification to notify other parts of the app about the data change
     } catch {
       logger.error("Failed to serialize stats data to JSON: \(error)")
