@@ -94,22 +94,3 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   }
 
 }
-
-class Settings: NSObject, InternalsdkSettingsProtocol {
-  func getHttpProxyHost() -> String {
-    return "127.0.0.1"
-  }
-
-  func getHttpProxyPort() -> Int {
-    return 49125
-  }
-
-  func stickyConfig() -> Bool {
-    return false
-  }
-
-  func timeoutMillis() -> Int {
-    return 60000
-  }
-
-}

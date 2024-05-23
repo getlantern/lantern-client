@@ -14,6 +14,7 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/chained"
+	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/ipproxy"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 )
@@ -198,21 +199,16 @@ func (c *iosClient) start() (ClientWriter, error) {
 	if err != nil {
 		return nil, err
 	}
-	// tracker := stats.NewTracker()
-	// dialer, err := bandit.NewWithStats(dialers, tracker)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// go func() {
-	// 	tracker.AddListener(func(st stats.Stats) {
-	// 		c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
-	// 	})
-	// }()
-
-	dialer, err := bandit.New(dialers)
+	tracker := stats.NewTracker()
+	dialer, err := bandit.NewWithStats(dialers, tracker)
 	if err != nil {
 		return nil, err
 	}
+	go func() {
+		tracker.AddListener(func(st stats.Stats) {
+			c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
+		})
+	}()
 
 	// We use a persistent cache for dnsgrab because some clients seem to hang on to our fake IP addresses for a while, even though we set a TTL of 1 second.
 	// That can be a problem when the network extension is automatically restarted. Caching the dns cache on disk allows us to successfully reverse look up

@@ -77,7 +77,7 @@ type configurer struct {
 
 func (cf *configurer) configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
 	result := &ConfigResult{}
-
+	start := time.Now()
 	if err := cf.writeUserConfig(); err != nil {
 		return nil, err
 	}
@@ -164,6 +164,8 @@ func (cf *configurer) configure(userID int, proToken string, refreshProxies bool
 			log.Debugf("Added %v", host)
 		}
 	}
+	seconds := time.Since(start).Seconds()
+	log.Debugf("Configured completed in %v seconds", seconds)
 
 	email.SetDefaultRecipient(global.ReportIssueEmail)
 
