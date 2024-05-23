@@ -15,6 +15,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   lazy var notificationsManager: UserNotificationsManager = {
     return UserNotificationsManager()
   }()
+  static var shared: SessionModel?
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
     let opts = InternalsdkSessionModelOpts()
@@ -43,6 +44,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
+    SessionModel.shared = self
   }
 
   func hasAllPermssion() {
@@ -52,6 +54,25 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     } catch {
       logger.log("Error while setting hasAllPermssion")
       SentryUtils.caputure(error: error as NSError)
+    }
+  }
+
+  func handleStatsChanges() {
+    // Retrieve the JSON data from UserDefaults
+    logger.debug("Stats status update")
+      if let jsonData = Constants.appGroupDefaults.data(forKey: Constants.statsData) {
+      do {
+        // Convert the JSON data back to a dictionary
+        if let dataDict = try JSONSerialization.jsonObject(with: jsonData, options: [])
+          as? [String: Any]
+        {
+          // Handle the new data
+          try invoke("updateStats", dataDict)
+          logger.debug("New data received: \(dataDict)")
+        }
+      } catch {
+        logger.debug("Failed to deserialize JSON data: \(error)")
+      }
     }
   }
 
@@ -71,8 +92,6 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       SentryUtils.caputure(error: error as NSError)
     }
   }
-
-
 
 }
 

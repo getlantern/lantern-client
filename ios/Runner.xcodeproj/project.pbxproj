@@ -19,6 +19,7 @@
 		0321C3F92AA9D8DF00D462C1 /* FlashlightManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */; };
 		0324CC302AE279CF00490B46 /* SentryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0324CC2F2AE279CF00490B46 /* SentryUtils.swift */; };
 		032A43582AA6F8AA00EF442B /* DnsDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 032A43572AA6F8AA00EF442B /* DnsDetector.swift */; };
+		0332DD612BFF809C0007240D /* StatsTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0332DD602BFF809C0007240D /* StatsTracker.swift */; };
 		0333203B2AC698FA00333DA9 /* MockVPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0333203A2AC698FA00333DA9 /* MockVPNManager.swift */; };
 		03567DBB2AA9F15100A233EA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB432AA8946400FB41B2 /* Constants.swift */; };
 		03567DBC2AA9F18D00A233EA /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0321C3F62AA9D84700D462C1 /* Process.swift */; };
@@ -99,6 +100,7 @@
 		0321C3F82AA9D8DF00D462C1 /* FlashlightManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManager.swift; sourceTree = "<group>"; };
 		0324CC2F2AE279CF00490B46 /* SentryUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryUtils.swift; sourceTree = "<group>"; };
 		032A43572AA6F8AA00EF442B /* DnsDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DnsDetector.swift; sourceTree = "<group>"; };
+		0332DD602BFF809C0007240D /* StatsTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsTracker.swift; sourceTree = "<group>"; };
 		0333203A2AC698FA00333DA9 /* MockVPNManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockVPNManager.swift; sourceTree = "<group>"; };
 		03567DBF2AA9F47200A233EA /* FileUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUtils.swift; sourceTree = "<group>"; };
 		03567DC22AA9F77000A233EA /* NEProviderStopReason.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NEProviderStopReason.swift; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 				03A1AB342AA890AB00FB41B2 /* PacketTunnelProvider.swift */,
 				03A1AB362AA890AB00FB41B2 /* Info.plist */,
 				03A1AB372AA890AB00FB41B2 /* Tunnel.entitlements */,
+				0332DD602BFF809C0007240D /* StatsTracker.swift */,
 			);
 			path = Tunnel;
 			sourceTree = "<group>";
@@ -667,6 +670,7 @@
 				03567DBE2AA9F31200A233EA /* Logger.swift in Sources */,
 				0308A13E2AAF43A10086157A /* UserNotificationsManager.swift in Sources */,
 				0308A1312AAEF3B00086157A /* Event.swift in Sources */,
+				0332DD612BFF809C0007240D /* StatsTracker.swift in Sources */,
 				03A1AB352AA890AB00FB41B2 /* PacketTunnelProvider.swift in Sources */,
 				03567DBB2AA9F15100A233EA /* Constants.swift in Sources */,
 				03567DC12AA9F47200A233EA /* FileUtils.swift in Sources */,
