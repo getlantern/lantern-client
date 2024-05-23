@@ -375,6 +375,7 @@ func (app *App) GetLanguage() string {
 // SetLanguage sets the user language
 func (app *App) SetLanguage(lang string) {
 	app.settings.SetLanguage(lang)
+	log.Debugf("Setting language to %v", lang)
 	if app.ws != nil {
 		app.ws.SendMessage("pro", map[string]interface{}{
 			"type":     "pro",

@@ -178,6 +178,8 @@ class _LanternAppState extends State<LanternApp> {
                       Locale('tr', 'TR'),
                       Locale('vi', 'VN'),
                       Locale('my', 'MM'),
+                      Locale('hi', 'IN'),
+                      Locale('bn', 'BD'),
                     ],
                   ),
                 ),
