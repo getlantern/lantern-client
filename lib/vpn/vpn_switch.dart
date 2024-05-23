@@ -14,7 +14,6 @@ class VPNSwitch extends StatefulWidget {
 
 class _VPNSwitchState extends State<VPNSwitch> with TrayListener, WindowListener {
 
-
   TrayHandler trayHandler = TrayHandler();
 
   @override
@@ -28,7 +27,7 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener, WindowListener
   @override
   void dispose() {
     if (isDesktop()) {
-      trayManager.removeListener(this);
+      trayManager.removeListener(trayHandler);
     }
   }
 
@@ -42,10 +41,10 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener, WindowListener
     bool isConnected = vpnStatus == 'connected';
     if (isConnected) {
       sysProxyOff();
-      await setupMenu(false);
+      await trayHandler.setupTray(false);
     } else {
       sysProxyOn();
-      await setupMenu(true);
+      await trayHandler.setupTray(true);
     }
   }
 
