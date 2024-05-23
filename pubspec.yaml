@@ -19,7 +19,7 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
-  flutter: '>=3.19.3'
+  flutter: 3.19.6
 
 dependencies:
   # SDKs
@@ -102,8 +102,8 @@ dependencies:
       ref: master
 
   # Desktop
-  window_manager: ^0.3.9
-  tray_manager: ^0.2.3
+  window_manager: ^0.3.8
+  tray_manager: ^0.2.2
 
   flutter_dotenv: ^5.1.0
 
