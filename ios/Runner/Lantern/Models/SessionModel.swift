@@ -44,14 +44,47 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     }
     try super.init(flutterBinary, model)
     observeStatsUpdates()
+    getUserId()
+    getProToken()
   }
 
   func hasAllPermssion() {
     do {
       let result = try invoke("hasAllNetworkPermssion")
       logger.log("Sucessfully given all permssion")
+
     } catch {
       logger.log("Error while setting hasAllPermssion")
+      SentryUtils.caputure(error: error as NSError)
+    }
+  }
+
+  private func getUserId() {
+    do {
+      var userID: Int64 = 0
+      let error = try model.getUserID(&userID)
+      if userID != nil {
+        Constants.appGroupDefaults.set(userID, forKey: Constants.userID)
+        logger.log("Sucessfully got user id \(userID)")
+      } else {
+        logger.log("failed to get userid")
+      }
+    } catch {
+      SentryUtils.caputure(error: error as NSError)
+    }
+  }
+
+  private func getProToken() {
+    do {
+      var error: NSError?
+      let proToken = model.getToken(&error)
+      if proToken != nil {
+        logger.log("Sucessfully got protoken \(proToken)")
+        Constants.appGroupDefaults.set(proToken, forKey: Constants.proToken)
+      } else if let error = error {
+        logger.log("failed to get protoken")
+      }
+    } catch {
       SentryUtils.caputure(error: error as NSError)
     }
   }
