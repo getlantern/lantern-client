@@ -32,5 +32,5 @@ class StatsTracker: NSObject, IosStatsTrackerProtocol {
     } catch {
       logger.error("Failed to serialize stats data to JSON: \(error)")
     }
-}
+  }
 }

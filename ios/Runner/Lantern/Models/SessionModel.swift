@@ -70,7 +70,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     logger.debug("observeValue call with key \(keyPath)")
     if keyPath == Constants.statsData {
       logger.debug("Message comming from tunnel")
-        if let statsData = change![.newKey] as? Data {
+      if let statsData = change![.newKey] as? Data {
         updateStats(stats: statsData)
       }
     }
