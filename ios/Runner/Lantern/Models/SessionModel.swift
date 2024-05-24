@@ -15,8 +15,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   lazy var notificationsManager: UserNotificationsManager = {
     return UserNotificationsManager()
   }()
-  //  static var shared: SessionModel?
-
+  
   init(flutterBinary: FlutterBinaryMessenger) throws {
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current

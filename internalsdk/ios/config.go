@@ -81,6 +81,7 @@ type configurer struct {
 // For instance, examples from my running
 // config.go:167 Configured completed in 35.8970435s
 // config.go:167 Configured completed in 4.0234035s
+// config.go:176 Configured completed in 3.700574125s
 
 // TODO: Implement a timeout mechanism to handle prolonged execution times and potentially execute this method in the background to maintain smooth UI startup performance.
 func (cf *configurer) configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
