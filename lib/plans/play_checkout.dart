@@ -29,11 +29,6 @@ class _PlayCheckoutState extends State<PlayCheckout>
         : 'please_enter_a_valid_email_address'.i18n,
   );
 
-  @override
-  void dispose() {
-    emailController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
