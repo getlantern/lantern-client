@@ -25,7 +25,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WindowListener {
+class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   Function()? _cancelEventSubscription;
 
@@ -40,6 +40,8 @@ class _HomePageState extends State<HomePage> with WindowListener {
       // This is a mobile device
       channelListener();
     } else {
+      // This is a desktop device
+      setupTrayManager();
       _initWindowManager();
     }
   }
@@ -94,6 +96,10 @@ class _HomePageState extends State<HomePage> with WindowListener {
     setState(() {});
   }
 
+  void setupTrayManager() async {
+    trayManager.addListener(TrayHandler.instance);
+  }
+
   @override
   void onWindowClose() async {
     bool _isPreventClose = await windowManager.isPreventClose();
@@ -143,6 +149,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
   @override
   void dispose() {
     if (isDesktop()) {
+      trayManager.removeListener(TrayHandler.instance);
       windowManager.removeListener(this);
     }
     if (_cancelEventSubscription != null) {

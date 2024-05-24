@@ -2,8 +2,6 @@ import 'package:lantern/ad_helper.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
-import 'package:tray_manager/tray_manager.dart';
-import 'package:window_manager/window_manager.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -12,25 +10,7 @@ class VPNSwitch extends StatefulWidget {
   State<VPNSwitch> createState() => _VPNSwitchState();
 }
 
-class _VPNSwitchState extends State<VPNSwitch> with TrayListener, WindowListener {
-
-  TrayHandler trayHandler = TrayHandler();
-
-  @override
-  void initState() {
-    if (isDesktop()) {
-      trayManager.addListener(trayHandler);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    if (isDesktop()) {
-      trayManager.removeListener(trayHandler);
-    }
-  }
-
+class _VPNSwitchState extends State<VPNSwitch> {
   final adHelper = AdHelper();
   String vpnStatus = 'disconnected';
 
@@ -41,10 +21,10 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener, WindowListener
     bool isConnected = vpnStatus == 'connected';
     if (isConnected) {
       sysProxyOff();
-      await trayHandler.setupTray(false);
+      await TrayHandler.instance.setupTray(false);
     } else {
       sysProxyOn();
-      await trayHandler.setupTray(true);
+      await TrayHandler.instance.setupTray(true);
     }
   }
 

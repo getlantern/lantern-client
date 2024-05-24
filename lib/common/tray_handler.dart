@@ -18,14 +18,24 @@ String systemTrayIcon(bool connected) {
 
 
 class TrayHandler with TrayListener {
-  TrayHandler() {
+  factory TrayHandler() => _getInstance();
+
+  static TrayHandler get instance => _getInstance();
+  static TrayHandler? _instance;
+
+  static TrayHandler _getInstance() {
+    _instance ??= TrayHandler._internal();
+    return _instance!;
+  }
+
+  TrayHandler._internal() {
     if (isDesktop()) {
       setupTray(false);
     }
   }
 
   Future<void> setupTray(bool isConnected) async {
-    await trayManager.setIcon(systemTrayIcon(isConnected));    
+    await trayManager.setIcon(systemTrayIcon(isConnected));
     Menu menu = Menu(
       items: [
         MenuItem(
@@ -56,7 +66,7 @@ class TrayHandler with TrayListener {
   void onTrayMenuItemClick(MenuItem menuItem) {
     switch (menuItem.key) {
       case 'show':
-        windowManager.show();
+        windowManager.focus();
         windowManager.setSkipTaskbar(false);
       case 'exit':
         windowManager.destroy();
