@@ -36,7 +36,6 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
     opts.platform = "ios"
     var error: NSError?
-    //var model:InternalsdkSessionModel?
     guard
       let model = InternalsdkNewSessionModel(
         try BaseModel<InternalsdkModelProtocol>.getDB(), opts, &error)

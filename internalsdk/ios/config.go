@@ -51,7 +51,7 @@ type ConfigResult struct {
 // uniquely identifies the current device. hardcodedProxies allows manually specifying
 // a proxies.yaml configuration that overrides whatever we fetch from the cloud.
 func Configure(configFolderPath string, userID int, proToken, deviceID string, refreshProxies bool, hardcodedProxies string) (*ConfigResult, error) {
-	log.Debugf("Configuring client for device '%v' at config path '%v'", deviceID, configFolderPath)
+	log.Debugf("Configuring client for device '%v' at config path '%v' userid '%v' token '%v'", deviceID, configFolderPath, userID, proToken)
 	defer log.Debug("Finished configuring client")
 	uc := userConfigFor(userID, proToken, deviceID)
 	cf := &configurer{
