@@ -44,7 +44,8 @@ All those dependencies must be in your PATH
   * Only necessary for testing Replica
 * CMake 3.22.1
   * You can get this from Android SDK Manager
-
+* [CocoaPods](https://cocoapods.org/)
+  * Possibly this is only needed on Apple platforms.
 
 ### 🚀 Setup Project:
 

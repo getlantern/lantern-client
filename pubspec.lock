@@ -1686,10 +1686,10 @@ packages:
     dependency: "direct main"
     description:
       name: tray_manager
-      sha256: e0ac9a88b2700f366b8629b97e8663b6ef450a2f169560a685dc167bfe9c9c29
+      sha256: c9a63fd88bd3546287a7eb8ccc978d707eef82c775397af17dda3a4f4c039e64
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.2"
+    version: "0.2.3"
   typed_data:
     dependency: transitive
     description:
@@ -1998,10 +1998,10 @@ packages:
     dependency: "direct main"
     description:
       name: window_manager
-      sha256: b3c895bdf936c77b83c5254bec2e6b3f066710c1f89c38b20b8acc382b525494
+      sha256: "8699323b30da4cdbe2aa2e7c9de567a6abd8a97d9a5c850a3c86dcd0b34bbfbf"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.8"
+    version: "0.3.9"
   xdg_directories:
     dependency: transitive
     description:
@@ -2044,4 +2044,4 @@ packages:
     version: "2.2.0"
 sdks:
   dart: ">=3.2.6 <4.0.0"
-  flutter: ">=3.16.6"
+  flutter: ">=3.19.6"

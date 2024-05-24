@@ -27,10 +27,10 @@ class _VPNSwitchState extends State<VPNSwitch> {
     bool isConnected = vpnStatus == 'connected';
     if (isConnected) {
       sysProxyOff();
-      await setupMenu(false);
+      await TrayHandler.instance.setupTray(false);
     } else {
       sysProxyOn();
-      await setupMenu(true);
+      await TrayHandler.instance.setupTray(true);
     }
   }
 
