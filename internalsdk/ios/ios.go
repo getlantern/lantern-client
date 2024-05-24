@@ -195,9 +195,14 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, log.Errorf("error loading user config: %v", err)
 	}
 	log.Debugf("Running client at config path '%v'", c.configDir)
+	start := time.Now()
+	log.Debugf("User config process start at %v", start)
 	dialers, err := c.loadDialers()
 	if err != nil {
 		return nil, err
+	}
+	if len(dialers) == 0 {
+		return nil, errors.New("No dialers found")
 	}
 	tracker := stats.NewTracker()
 	dialer, err := bandit.NewWithStats(dialers, tracker)
@@ -206,6 +211,8 @@ func (c *iosClient) start() (ClientWriter, error) {
 	}
 	go func() {
 		tracker.AddListener(func(st stats.Stats) {
+			start := time.Now()
+			log.Debugf("Stats update at %v", start)
 			c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
 		})
 	}()

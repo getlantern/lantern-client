@@ -15,7 +15,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   lazy var notificationsManager: UserNotificationsManager = {
     return UserNotificationsManager()
   }()
-  static var shared: SessionModel?
+//  static var shared: SessionModel?
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
     let opts = InternalsdkSessionModelOpts()
@@ -44,7 +44,9 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
-    SessionModel.shared = self
+    Constants.appGroupDefaults.addObserver(
+      self, forKeyPath: Constants.statsData, options: [.new], context: nil)
+
   }
 
   func hasAllPermssion() {
@@ -60,21 +62,63 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   func handleStatsChanges() {
     // Retrieve the JSON data from UserDefaults
     logger.debug("Stats status update")
-    if let jsonData = Constants.appGroupDefaults.data(forKey: Constants.statsData) {
-      do {
-        // Convert the JSON data back to a dictionary
-        if let dataDict = try JSONSerialization.jsonObject(with: jsonData, options: [])
-          as? [String: Any]
-        {
-          // Handle the new data
-          try invoke("updateStats", dataDict)
-          logger.debug("New data received: \(dataDict)")
+
+    //    Constants.appGroupDefaults.addObserver(
+    //      self, forKeyPath: Constants.statsData, options: [.new], context: nil)
+
+    //    if let jsonData = Constants.appGroupDefaults.data(forKey: Constants.statsData) {
+    //      do {
+    //        // Convert the JSON data back to a dictionary
+    //        if let dataDict = try JSONSerialization.jsonObject(with: jsonData, options: [])
+    //          as? [String: Any]
+    //        {
+    //          // Handle the new data
+    //            Constants.appGroupDefaults.addObserver(<#T##observer: NSObject##NSObject#>, forKeyPath: <#T##String#>, context: <#T##UnsafeMutableRawPointer?#>)
+    //          try invoke("updateStats", dataDict)
+    //          logger.debug("New data received: \(dataDict)")
+    //        }
+    //      } catch {
+    //        logger.debug("Failed to deserialize JSON data: \(error)")
+    //      }
+    //    }
+  }
+
+  override func observeValue(
+    forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?,
+    context: UnsafeMutableRawPointer?
+  ) {
+    logger.debug("observeValue call with key \(keyPath)")
+    if keyPath == Constants.statsData {
+      logger.debug("Message comming from tunnel")
+      if let newValue = change?[.newKey] as? Data {
+        logger.debug("Received message from VPN extension: \(newValue)")
+        do {
+          if let dataDict = try JSONSerialization.jsonObject(with: newValue, options: [])as? [String: Any]
+          {
+            try invoke("updateStats", dataDict)
+            logger.debug("New data received: \(dataDict)")
+          }
+        } catch {
+          logger.debug("Failed to deserialize JSON data: \(error)")
         }
-      } catch {
-        logger.debug("Failed to deserialize JSON data: \(error)")
+
       }
     }
   }
+
+  //    func updateStats(){
+  //        do {
+  //          // Convert the JSON data back to a dictionary
+  //          if let dataDict = try JSONSerialization.jsonObject(with: jsonData, options: [])
+  //            as? [String: Any]
+  //          {
+  //            try invoke("updateStats", dataDict)
+  //            logger.debug("New data received: \(dataDict)")
+  //          }
+  //        } catch {
+  //          logger.debug("Failed to deserialize JSON data: \(error)")
+  //        }
+  //    }
 
   func getBandwidth() {
     // TODO: we should do this reactively by subscribing
@@ -91,6 +135,11 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       logger.log("Error while getting bandwidth")
       SentryUtils.caputure(error: error as NSError)
     }
+  }
+
+  deinit {
+    // Remove observer when the observer is deallocated
+    Constants.appGroupDefaults.removeObserver(self, forKeyPath: Constants.statsData)
   }
 
 }

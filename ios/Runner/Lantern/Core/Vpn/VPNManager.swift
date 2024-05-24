@@ -156,16 +156,6 @@ class VPNManager: VPNBase {
       expectsSavedProvider = false
       providerManager = nil
     }
-
-    // Check if the VPN status is either connecting or connected, indicating an active VPN session.
-    // If so, we need to monitor for changes in statistics.
-    if connectionStatus == .connecting || connectionStatus == .connected {
-      // The PacketTunnel class is responsible for managing and updating the statistics configuration
-      // in the user defaults, ensuring accurate tracking of VPN session data.
-      if SessionModel.shared != nil {
-        SessionModel.shared!.handleStatsChanges()
-      }
-    }
   }
 
   // MARK: Messaging Net Ex
