@@ -101,39 +101,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   void setupTrayManager() async {
-    trayManager.addListener(this);
-    await setupMenu(false);
-  }
-
-  @override
-  void onTrayIconMouseDown() {
-    windowManager.show();
-    trayManager.popUpContextMenu();
-  }
-
-  @override
-  void onTrayIconRightMouseDown() {
-    trayManager.popUpContextMenu();
-  }
-
-  @override
-  void onTrayMenuItemClick(MenuItem menuItem) async {
-    switch (menuItem.key) {
-      case 'show':
-        windowManager.focus();
-      case 'exit':
-        ffiExit();
-      case 'status':
-        final status = ffiVpnStatus().toDartString();
-        bool isConnected = status == "connected";
-        if (isConnected) {
-          sysProxyOff();
-          await setupMenu(false);
-        } else {
-          sysProxyOn();
-          await setupMenu(true);
-        }
-    }
+    trayManager.addListener(TrayHandler.instance);
   }
 
   @override
@@ -185,7 +153,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void dispose() {
     if (isDesktop()) {
-      trayManager.removeListener(this);
+      trayManager.removeListener(TrayHandler.instance);
       windowManager.removeListener(this);
     }
     if (_cancelEventSubscription != null) {
