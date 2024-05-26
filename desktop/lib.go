@@ -24,7 +24,6 @@ import (
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/i18n"
 	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
@@ -119,7 +118,7 @@ func start() {
 
 	go func() {
 		defer logging.Close()
-		i18nInit(a)
+		// i18nInit(a)
 		a.Run(true)
 
 		err := a.WaitForExit()
@@ -435,7 +434,8 @@ func storeVersion() *C.char {
 
 //export lang
 func lang() *C.char {
-	lang := a.Settings().GetLanguage()
+	lang := a.GetLanguage()
+	log.Debugf("DEBUG: Language is %v", lang)
 	if lang == "" {
 		// Default language is English
 		lang = defaultLocale
@@ -673,25 +673,27 @@ func useOSLocale() (string, error) {
 	return userLocale, nil
 }
 
-func i18nInit(a *app.App) {
-	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
-		return a.GetTranslations(filename)
-	})
-	locale := a.GetLanguage()
-	log.Debugf("Using locale: %v", locale)
-	if _, err := i18n.SetLocale(locale); err != nil {
-		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
+//Do not need to call this function
+// Since localisation is happing on client side
+// func i18nInit(a *app.App) {
+// 	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
+// 		return a.GetTranslations(filename)
+// 	})
+// 	locale := a.GetLanguage()
+// 	log.Debugf("Using locale: %v", locale)
+// 	if _, err := i18n.SetLocale(locale); err != nil {
+// 		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
 
-		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
-		// populated.
-		if locale, err := useOSLocale(); err != nil {
-			log.Debugf("i18n.UseOSLocale: %q", err)
-			a.SetLanguage(defaultLocale)
-		} else {
-			a.SetLanguage(locale)
-		}
-	}
-}
+// 		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
+// 		// populated.
+// 		if locale, err := useOSLocale(); err != nil {
+// 			log.Debugf("i18n.UseOSLocale: %q", err)
+// 			a.SetLanguage(defaultLocale)
+// 		} else {
+// 			a.SetLanguage(locale)
+// 		}
+// 	}
+// }
 
 // Handle system signals for clean exit
 func handleSignals(a *app.App) {

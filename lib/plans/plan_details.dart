@@ -156,6 +156,7 @@ class PlanCard extends StatelessWidget {
           isPro: isPro,
         ),
       );
+      return;
     } else if (isDesktop()) {
       final paymentMethods = await sessionModel.paymentMethodsv4();
       final providers = paymentProvidersFromMethods(paymentMethods);
