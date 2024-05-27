@@ -1,6 +1,7 @@
 // import 'calls/signaling.dart';
-import 'messaging.dart';
 import 'package:lantern/common/common_desktop.dart';
+
+import 'messaging.dart';
 
 final messagingModel = MessagingModel();
 

@@ -1,7 +1,6 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_webview.dart';
-import 'package:lantern/plans/payment_provider.dart';
 
 const defaultTimeoutDuration = Duration(seconds: 10);
 

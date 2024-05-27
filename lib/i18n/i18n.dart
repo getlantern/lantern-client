@@ -1,5 +1,5 @@
-import 'package:i18n_extension_importer/src/io/import.dart';
 import 'package:i18n_extension/i18n_extension.dart';
+import 'package:i18n_extension_importer/src/io/import.dart';
 import 'package:lantern/common/common.dart';
 
 extension Localization on String {

@@ -1,15 +1,12 @@
-import 'package:catcher_2/core/catcher_2.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/app_methods.dart';
-import 'package:lantern/common/app_secret.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
