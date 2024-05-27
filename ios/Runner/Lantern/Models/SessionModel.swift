@@ -115,7 +115,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
         as? [String: Any]
       {
         try invoke("updateStats", dataDict)
-        logger.debug("New data received: \(dataDict)")
+        logger.debug("updateStats data received: \(dataDict)")
       }
     } catch {
       logger.debug("Failed to deserialize JSON data: \(error)")

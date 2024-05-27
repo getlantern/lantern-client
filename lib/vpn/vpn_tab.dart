@@ -8,7 +8,7 @@ import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
 class VPNTab extends StatelessWidget {
-  VPNTab({Key? key}) : super(key: key);
+  const VPNTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +44,12 @@ class VPNTab extends StatelessWidget {
                 children: [
                   VPNStatus(),
                   const CDivider(height: 32.0),
-                  ServerLocationWidget(),
+                  const ServerLocationWidget(),
                   if (Platform.isAndroid) ...{
                     const CDivider(height: 32.0),
                     SplitTunnelingWidget(),
                   },
-                  if (!proUser) const VPNBandwidth(),
+                  if (!proUser&& Platform.isAndroid) const VPNBandwidth(),
                 ],
               ),
             ),
