@@ -25,6 +25,7 @@ class VpnModel: BaseModel<InternalsdkVPNModel>, InternalsdkVPNManagerProtocol {
     self.sessionModel = sessionModel
     try super.init(flutterBinary, model)
     model.setManager(self)
+
   }
 
   private func saveVPNStatus(status: String) {

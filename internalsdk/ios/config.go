@@ -51,7 +51,7 @@ type ConfigResult struct {
 // uniquely identifies the current device. hardcodedProxies allows manually specifying
 // a proxies.yaml configuration that overrides whatever we fetch from the cloud.
 func Configure(configFolderPath string, userID int, proToken, deviceID string, refreshProxies bool, hardcodedProxies string) (*ConfigResult, error) {
-	log.Debugf("Configuring client for device '%v' at config path '%v'", deviceID, configFolderPath)
+	log.Debugf("Configuring client for device '%v' at config path '%v' userid '%v' token '%v'", deviceID, configFolderPath, userID, proToken)
 	defer log.Debug("Finished configuring client")
 	uc := userConfigFor(userID, proToken, deviceID)
 	cf := &configurer{
@@ -75,9 +75,18 @@ type configurer struct {
 	rt               http.RoundTripper
 }
 
+// Important:
+// This method is responsible for potentially delaying the UI startup process.
+// Occasionally, the execution time of this method varies significantly, sometimes completing within 5 seconds, while other times taking more than 30 seconds.
+// For instance, examples from my running
+// config.go:167 Configured completed in 35.8970435s
+// config.go:167 Configured completed in 4.0234035s
+// config.go:176 Configured completed in 3.700574125s
+
+// TODO: Implement a timeout mechanism to handle prolonged execution times and potentially execute this method in the background to maintain smooth UI startup performance.
 func (cf *configurer) configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
 	result := &ConfigResult{}
-
+	start := time.Now()
 	if err := cf.writeUserConfig(); err != nil {
 		return nil, err
 	}
@@ -164,6 +173,8 @@ func (cf *configurer) configure(userID int, proToken string, refreshProxies bool
 			log.Debugf("Added %v", host)
 		}
 	}
+	seconds := time.Since(start).Seconds()
+	log.Debugf("Configured completed in %v seconds", seconds)
 
 	email.SetDefaultRecipient(global.ReportIssueEmail)
 

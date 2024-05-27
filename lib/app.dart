@@ -123,7 +123,7 @@ class _LanternAppState extends State<LanternApp> {
           }
           return sessionModel.language(
             (context, lang, child) {
-              Localization.locale = lang;
+              Localization.locale = lang.startsWith('en')?'en_us':lang;
               return GlobalLoaderOverlay(
                 useDefaultLoading: false,
                 overlayColor: Colors.black.withOpacity(0.5),
