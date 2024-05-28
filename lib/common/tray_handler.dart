@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:tray_manager/tray_manager.dart';

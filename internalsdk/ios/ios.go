@@ -16,7 +16,6 @@ import (
 	"github.com/getlantern/flashlight/v7/chained"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/ipproxy"
-	"github.com/getlantern/lantern-client/internalsdk"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 )
 
@@ -104,6 +103,10 @@ type ClientWriter interface {
 	Close() error
 }
 
+type StatsTracker interface {
+	UpdateStats(string, string, string, int, int, bool)
+}
+
 type cw struct {
 	ipStack        io.WriteCloser
 	client         *iosClient
@@ -158,9 +161,10 @@ type iosClient struct {
 	clientWriter    *cw
 	memoryAvailable int64
 	started         time.Time
+	statsTracker    StatsTracker
 }
 
-func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, configDir string, mtu int, capturedDNSHost, realDNSHost string) (ClientWriter, error) {
+func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, configDir string, mtu int, capturedDNSHost, realDNSHost string, statsTracker StatsTracker) (ClientWriter, error) {
 	log.Debug("Creating new iOS client")
 	if mtu <= 0 {
 		log.Debug("Defaulting MTU to 1500")
@@ -177,6 +181,7 @@ func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, confi
 		capturedDNSHost: capturedDNSHost,
 		realDNSHost:     realDNSHost,
 		started:         time.Now(),
+		statsTracker:    statsTracker,
 	}
 	optimizeMemoryUsage(&c.memoryAvailable)
 	go c.gcPeriodically()
@@ -190,9 +195,14 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, log.Errorf("error loading user config: %v", err)
 	}
 	log.Debugf("Running client at config path '%v'", c.configDir)
+	start := time.Now()
+	log.Debugf("User config process start at %v", start)
 	dialers, err := c.loadDialers()
 	if err != nil {
 		return nil, err
+	}
+	if len(dialers) == 0 {
+		return nil, errors.New("No dialers found")
 	}
 	tracker := stats.NewTracker()
 	dialer, err := bandit.NewWithStats(dialers, tracker)
@@ -201,16 +211,10 @@ func (c *iosClient) start() (ClientWriter, error) {
 	}
 	go func() {
 		tracker.AddListener(func(st stats.Stats) {
-			log.Debugf("Received stats: %v", st)
-			sessionModel, err := internalsdk.GetSessionModel()
-			if err == nil {
-				sessionModel.UpdateStats(
-					st.City,
-					st.Country,
-					st.CountryCode,
-					st.HTTPSUpgrades,
-					st.AdsBlocked,
-					st.HasSucceedingProxy)
+			if st.City != "" && st.Country != "" && st.CountryCode != "" {
+				start := time.Now()
+				log.Debugf("Stats update at %v", start)
+				c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
 			}
 		})
 	}()

@@ -1,9 +1,15 @@
 disabled_rules:
 - trailing_whitespace
 - identifier_name
+- line_length
 opt_in_rules:
 - empty_count
 - empty_string
+- vertical_whitespace_closing_braces
+- redundant_optional_initialization
+- explicit_self
+- vertical_parameter_alignment
+- weak_delegate
 included: # paths to include during linting. `--path` is ignored if present.
   - Source
   - Runner

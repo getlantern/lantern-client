@@ -15,6 +15,8 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   lazy var notificationsManager: UserNotificationsManager = {
     return UserNotificationsManager()
   }()
+  let emptyCompletion: (MinisqlValue?, Error?) -> Void = { _, _ in }
+  private let sessionAsyncHandler = DispatchQueue.global(qos: .background)
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
     let opts = InternalsdkSessionModelOpts()
@@ -35,7 +37,6 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
     opts.platform = "ios"
     var error: NSError?
-    //var model:InternalsdkSessionModel?
     guard
       let model = InternalsdkNewSessionModel(
         try BaseModel<InternalsdkModelProtocol>.getDB(), opts, &error)
@@ -43,54 +44,101 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       throw error!
     }
     try super.init(flutterBinary, model)
+    observeStatsUpdates()
+    getUserId()
+    getProToken()
   }
 
   func hasAllPermssion() {
     do {
-      let result = try invoke("hasAllNetworkPermssion")
+      let result = try invoke("hasAllNetworkPermssion", completion: emptyCompletion)
       logger.log("Sucessfully given all permssion")
     } catch {
       logger.log("Error while setting hasAllPermssion")
       SentryUtils.caputure(error: error as NSError)
     }
   }
-
-  func getBandwidth() {
-    // TODO: we should do this reactively by subscribing
-    do {
-      let result = try invoke("getBandwidth")
-      let newValue = ValueUtil.convertFromMinisqlValue(from: result!)
-      let limit = newValue as! Int
-      if limit == 100 {
-        // if user has reached limit show the notificaiton
-        notificationsManager.scheduleDataCapLocalNotification(withDataLimit: limit)
+  private func getUserId() {
+    sessionAsyncHandler.async {
+      do {
+        var userID: Int64 = 0
+        try self.model.getUserID(&userID)
+        DispatchQueue.main.async {
+          if userID != 0 {
+            Constants.appGroupDefaults.set(userID, forKey: Constants.userID)
+            logger.log("Successfully got user id \(userID)")
+          } else {
+            logger.log("Failed to get user id")
+          }
+        }
+      } catch {
+        DispatchQueue.main.async {
+          SentryUtils.caputure(error: error as NSError)
+        }
       }
-      logger.log("Sucessfully getbandwidth \(newValue)")
-    } catch {
-      logger.log("Error while getting bandwidth")
-      SentryUtils.caputure(error: error as NSError)
     }
   }
 
+  private func getProToken() {
+    sessionAsyncHandler.async {
+      do {
+        var error: NSError?
+        let proToken = try self.model.getToken(&error)
+        DispatchQueue.main.async {
+          if proToken != nil && proToken != "" {
+            Constants.appGroupDefaults.set(proToken, forKey: Constants.proToken)
+            logger.log("Sucessfully got protoken \(proToken)")
+          } else {
+            logger.log("Failed to get user id")
+          }
+        }
+      } catch {
+        DispatchQueue.main.async {
+          SentryUtils.caputure(error: error as NSError)
+        }
+      }
+    }
 
-
-}
-
-class Settings: NSObject, InternalsdkSettingsProtocol {
-  func getHttpProxyHost() -> String {
-    return "127.0.0.1"
   }
 
-  func getHttpProxyPort() -> Int {
-    return 49125
+  func observeStatsUpdates() {
+    logger.debug("observesing stats udpates")
+    Constants.appGroupDefaults.addObserver(
+      self, forKeyPath: Constants.statsData, options: [.new], context: nil)
   }
 
-  func stickyConfig() -> Bool {
-    return false
+  // System method that observe value user default path
+  override func observeValue(
+    forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?,
+    context: UnsafeMutableRawPointer?
+  ) {
+    logger.debug("observeValue call with key \(keyPath)")
+    if keyPath == Constants.statsData {
+      logger.debug("Message comming from tunnel")
+      if let statsData = change![.newKey] as? Data {
+        updateStats(stats: statsData)
+      }
+    }
   }
 
-  func timeoutMillis() -> Int {
-    return 60000
+  func updateStats(stats: Data) {
+    do {
+      // Convert the JSON data back to a dictionary
+      if let dataDict = try JSONSerialization.jsonObject(with: stats, options: [])
+        as? [String: Any]
+      {
+        try invoke(
+          "updateStats", arguments: dataDict, completion: emptyCompletion)
+        logger.debug("updateStats data received: \(dataDict)")
+      }
+    } catch {
+      logger.debug("Failed to deserialize JSON data: \(error)")
+    }
+  }
+
+  deinit {
+    // Remove observer when the observer is deallocated
+    Constants.appGroupDefaults.removeObserver(self, forKeyPath: Constants.statsData)
   }
 
 }
