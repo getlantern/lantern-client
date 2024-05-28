@@ -16,6 +16,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     return UserNotificationsManager()
   }()
   let emptyCompletion: (MinisqlValue?, Error?) -> Void = { _, _ in }
+    private let sessionAsyncHandler = DispatchQueue.global(qos: .background)
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
     let opts = InternalsdkSessionModelOpts()
@@ -52,41 +53,52 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     do {
       let result = try invoke("hasAllNetworkPermssion", completion: emptyCompletion)
       logger.log("Sucessfully given all permssion")
-
     } catch {
       logger.log("Error while setting hasAllPermssion")
       SentryUtils.caputure(error: error as NSError)
     }
   }
-
   private func getUserId() {
-    do {
-      var userID: Int64 = 0
-      let error = try model.getUserID(&userID)
-      if userID != nil {
-        Constants.appGroupDefaults.set(userID, forKey: Constants.userID)
-        logger.log("Sucessfully got user id \(userID)")
-      } else {
-        logger.log("failed to get userid")
+    sessionAsyncHandler.async {
+      do {
+        var userID: Int64 = 0
+        try self.model.getUserID(&userID)
+        DispatchQueue.main.async {
+          if userID != 0 {
+            Constants.appGroupDefaults.set(userID, forKey: Constants.userID)
+            logger.log("Successfully got user id \(userID)")
+          } else {
+            logger.log("Failed to get user id")
+          }
+        }
+      } catch {
+        DispatchQueue.main.async {
+          SentryUtils.caputure(error: error as NSError)
+        }
       }
-    } catch {
-      SentryUtils.caputure(error: error as NSError)
     }
   }
 
   private func getProToken() {
-    do {
-      var error: NSError?
-      let proToken = model.getToken(&error)
-      if proToken != nil && proToken != "" {
-        logger.log("Sucessfully got protoken \(proToken)")
-        Constants.appGroupDefaults.set(proToken, forKey: Constants.proToken)
-      } else {
-        logger.log("failed to get protoken")
+    sessionAsyncHandler.async {
+      do {
+        var error: NSError?
+          let proToken = try self.model.getToken(&error)
+        DispatchQueue.main.async {
+          if proToken != nil && proToken != "" {
+            Constants.appGroupDefaults.set(proToken, forKey: Constants.proToken)
+            logger.log("Sucessfully got protoken \(proToken)")
+          } else {
+            logger.log("Failed to get user id")
+          }
+        }
+      } catch {
+        DispatchQueue.main.async {
+          SentryUtils.caputure(error: error as NSError)
+        }
       }
-    } catch {
-      SentryUtils.caputure(error: error as NSError)
     }
+
   }
 
   func observeStatsUpdates() {
