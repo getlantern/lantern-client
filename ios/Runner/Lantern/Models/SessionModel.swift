@@ -16,7 +16,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     return UserNotificationsManager()
   }()
   let emptyCompletion: (MinisqlValue?, Error?) -> Void = { _, _ in }
-    private let sessionAsyncHandler = DispatchQueue.global(qos: .background)
+  private let sessionAsyncHandler = DispatchQueue.global(qos: .background)
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
     let opts = InternalsdkSessionModelOpts()
@@ -83,7 +83,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     sessionAsyncHandler.async {
       do {
         var error: NSError?
-          let proToken = try self.model.getToken(&error)
+        let proToken = try self.model.getToken(&error)
         DispatchQueue.main.async {
           if proToken != nil && proToken != "" {
             Constants.appGroupDefaults.set(proToken, forKey: Constants.proToken)

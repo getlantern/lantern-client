@@ -211,9 +211,11 @@ func (c *iosClient) start() (ClientWriter, error) {
 	}
 	go func() {
 		tracker.AddListener(func(st stats.Stats) {
-			start := time.Now()
-			log.Debugf("Stats update at %v", start)
-			c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
+			if st.City != "" && st.Country != "" && st.CountryCode != "" {
+				start := time.Now()
+				log.Debugf("Stats update at %v", start)
+				c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
+			}
 		})
 	}()
 
