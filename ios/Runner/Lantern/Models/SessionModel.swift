@@ -15,7 +15,8 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   lazy var notificationsManager: UserNotificationsManager = {
     return UserNotificationsManager()
   }()
-  
+  let emptyCompletion: (MinisqlValue?, Error?) -> Void = { _, _ in }
+
   init(flutterBinary: FlutterBinaryMessenger) throws {
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current
@@ -49,7 +50,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
 
   func hasAllPermssion() {
     do {
-      let result = try invoke("hasAllNetworkPermssion")
+      let result = try invoke("hasAllNetworkPermssion", completion: emptyCompletion)
       logger.log("Sucessfully given all permssion")
 
     } catch {
@@ -77,10 +78,10 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     do {
       var error: NSError?
       let proToken = model.getToken(&error)
-      if proToken != nil {
+      if proToken != nil && proToken != "" {
         logger.log("Sucessfully got protoken \(proToken)")
         Constants.appGroupDefaults.set(proToken, forKey: Constants.proToken)
-      } else if let error = error {
+      } else {
         logger.log("failed to get protoken")
       }
     } catch {
@@ -114,28 +115,12 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       if let dataDict = try JSONSerialization.jsonObject(with: stats, options: [])
         as? [String: Any]
       {
-        try invoke("updateStats", dataDict)
+        try invoke(
+          "updateStats", arguments: dataDict, completion: emptyCompletion)
         logger.debug("updateStats data received: \(dataDict)")
       }
     } catch {
       logger.debug("Failed to deserialize JSON data: \(error)")
-    }
-  }
-
-  func getBandwidth() {
-    // TODO: we should do this reactively by subscribing
-    do {
-      let result = try invoke("getBandwidth")
-      let newValue = ValueUtil.convertFromMinisqlValue(from: result!)
-      let limit = newValue as! Int
-      if limit == 100 {
-        // if user has reached limit show the notificaiton
-        notificationsManager.scheduleDataCapLocalNotification(withDataLimit: limit)
-      }
-      logger.log("Sucessfully getbandwidth \(newValue)")
-    } catch {
-      logger.log("Error while getting bandwidth")
-      SentryUtils.caputure(error: error as NSError)
     }
   }
 
