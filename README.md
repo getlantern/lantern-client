@@ -26,7 +26,7 @@ Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`
 
 ### Dependencies
 
-All those dependencies must be in your PATH
+All these dependencies must be in your PATH. Some of this is Android specific, see below for other platforms.
 
 * Java 11 or greater
 * [Android Studio](https://developer.android.com/studio?_gl=1*1wowe6v*_up*MQ..&gclid=Cj0KCQjw6auyBhDzARIsALIo6v-bn0juONfkfmQAJtwssRCQWADJMgGfRBisMNTSXHt5CZnyZVSK2Y8aAgCmEALw_wcB&gclsrc=aw.ds) (Android Studio Jellyfish | 2023.3.1 Patch 1)
@@ -51,7 +51,8 @@ All those dependencies must be in your PATH
 
 * Install all prerequisites
 * Run `git submodule update --init --recursive`
-* Run `git lfs install && git pull`
+* Run `git lfs install && git pull`.
+* Put the [app.env](https://my.1password.com/vaults/all/allitems/adqasjh2hspgjgvgfllyekhcrq) file from 1Password in the repo root.
 * Go to the **SDK MANAGER**
 * Select **Android SDK**
 * Check the SDK from android 5.0(LOLLIPOP) up to the Latest Version at the moment.
@@ -77,7 +78,6 @@ All those dependencies must be in your PATH
 * `flutter pub get`
 * `flutter run --flavor prod`
 
-
 ### 🍏 Running the project on iOS
 
 * `make build-framework` (you need to generated Internalsdk.xcframework. containing the Go backend code in order for the project to compile.)
@@ -86,18 +86,25 @@ All those dependencies must be in your PATH
 
 **Note**: If you're using an M1 or M2 chip, navigate to the ios folder and run `arch -x86_64 pod install`
 
-
 ### 💻 Running the Project on Desktop
 
 **Note**: Make sure to run all the commands from the root of the project.
 
-* Macos run`make darwin` Windows run `make windows` Linux run `linux-amd64`
+#### macOS
+
+* `make darwin`
+* `make ffigen`
+* `flutter run -d macos`
+
+#### Other OS
+
+* Windows run `make windows` Linux run `linux-amd64`
 * `make ffigen`
 * `flutter pub get`
 * `flutter run --flavor prod` or if you are using android studio use desktop configuration
 
-
 ### Running on emulators
+
 You can easily run emulators directly from the command line with the following:
 
 * `flutter devices`
@@ -124,7 +131,6 @@ You'll need Ruby >= 2.3 installed and `colorize` gem (i.e., `gem install coloriz
 
 ### Building the InternalSdk (AKA Lantern Core) as a library
 
-
 The core Lantern functionality is written in Go and lives in `./internalsdk`.
 It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to appropriate formats for each platform.
 
@@ -137,7 +143,6 @@ It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to app
 * To generate XCodeFramework run `make build-framework`
 
 For compiled code lives in `./ios/internalsdk/` and is called `Internalsdk.xcframework`.
-
 
 #### Desktop
 The desktop app lives under `desktop` .. To build the Go shared library on macOS:
