@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                 ? Chats()
                 : Welcome();
       case TAB_VPN:
-        return VPNTab();
+        return const VPNTab();
       case TAB_REPLICA:
         return ReplicaTab();
       case TAB_ACCOUNT:
