@@ -22,7 +22,7 @@ class PlanCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
       child: CInkWell(
-        onTap: () => onPlanTap(context, plan),
+        onTap: () => onPlanTap(context),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -121,50 +121,10 @@ class PlanCard extends StatelessWidget {
     );
   }
 
-  Future<void> onPlanTap(BuildContext context, Plan plan) async {
-    if (Platform.isAndroid) {
-      _proceedToAndroidCheckout(context, plan.id.split('-')[0]);
-    } else {
-      /// If user is already pro user is trying to renew plans
-      /// if the user is not pro user then user is trying to purchase
-      if (isPro && sessionModel.hasUserSignedInNotifier.value == true) {
-        _proceedToCheckoutIOS(context);
-      } else {
-        context.pushRoute(CreateAccountEmail(plan: plan));
-      }
-    }
-  }
-
-  Future<void> _proceedToAndroidCheckout(
-      BuildContext context, String planName) async {
-    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
-    final inRussia = sessionModel.country.value == 'RU';
-    //If user is downloaded from Play store and !inRussia then
-    //Go with In App purchase
-
-    if (isPlayVersion && !inRussia) {
-      context.pushRoute(PlayCheckout(plan: plan, isPro: isPro));
-      // await sessionModel
-      //     .submitPlayPayment(,planName)
-      //     .onError((error, stackTrace) {
-      //   // on failure
-      //   CDialog.showError(
-      //     context,
-      //     error: e,
-      //     stackTrace: stackTrace,
-      //     description: (error as PlatformException).message ?? error.toString(),
-      //   );
-      // });
-    } else {
-      _proceedToCustomCheckout(context);
-    }
-  }
-
-  Future<void> _proceedToCustomCheckout(BuildContext context) async {
   void onPlanTap(BuildContext context) {
     switch (Platform.operatingSystem) {
       case 'ios':
-        throw Exception("Not support at the moment");
+        _proceedToCheckoutIOS(context);
         break;
       default:
         // proceed to the default checkout page on Android and desktop
@@ -202,7 +162,8 @@ class PlanCard extends StatelessWidget {
       final providers = paymentProvidersFromMethods(paymentMethods);
       // if only one payment provider is returned, bypass the last checkout screen
       // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
-      if (providers.length == 1 && providers[0].name.toPaymentEnum() == Providers.stripe) {
+      if (providers.length == 1 &&
+          providers[0].name.toPaymentEnum() == Providers.stripe) {
         final providerName = providers[0].name.toPaymentEnum();
         final redirectUrl = await sessionModel.paymentRedirectForDesktop(
           context,
@@ -215,6 +176,7 @@ class PlanCard extends StatelessWidget {
         return;
       }
     }
+
     // * Proceed to our own Checkout
     await context.pushRoute(
       Checkout(

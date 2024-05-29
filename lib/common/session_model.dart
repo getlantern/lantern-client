@@ -775,6 +775,11 @@ class SessionModel extends Model {
         .then((value) => value.toString());
   }
 
+  Future<void> redeemLinkCode() {
+    return methodChannel.invokeMethod('redeemLinkCode');
+  }
+
+
 
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {

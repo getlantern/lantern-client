@@ -110,13 +110,15 @@ class PlansPage extends StatelessWidget {
   ///f the user is not pro, ask for email
   void _onPromoCodeTap(BuildContext context, bool proUser) {
     if (proUser) {
-      context.pushRoute(ResellerCodeCheckout(
-          isPro: true, email: sessionModel.userEmail.value!),);
+      context.pushRoute(
+        ResellerCodeCheckout(isPro: true, email: sessionModel.userEmail.value!),
+      );
     } else {
       context
           .pushRoute(CreateAccountEmail(authFlow: AuthFlow.proCodeActivation));
     }
   }
+
   Widget _buildHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsetsDirectional.only(
@@ -159,9 +161,7 @@ class PlansPage extends StatelessWidget {
         color: grey1,
       ),
       child: GestureDetector(
-        onTap: () async => await context.pushRoute(
-          ResellerCodeCheckout(isPro: proUser),
-        ),
+        onTap: () => _onPromoCodeTap(context, proUser),
         child: Text(
           'Have a Lantern Pro activation code? Click here.',
           style: tsBody1.copiedWith(color: grey5),

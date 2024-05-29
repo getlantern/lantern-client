@@ -50,16 +50,6 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('sysProxyOff');
   late final _sysProxyOff = _sysProxyOffPtr.asFunction<void Function()>();
 
-  ffi.Pointer<ffi.Char> selectedTab() {
-    return _selectedTab();
-  }
-
-  late final _selectedTabPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'selectedTab');
-  late final _selectedTab =
-      _selectedTabPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> websocketAddr() {
     return _websocketAddr();
   }
@@ -70,20 +60,6 @@ class NativeLibrary {
   late final _websocketAddr =
       _websocketAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  void setSelectTab(
-    ffi.Pointer<ffi.Char> ttab,
-  ) {
-    return _setSelectTab(
-      ttab,
-    );
-  }
-
-  late final _setSelectTabPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>>(
-          'setSelectTab');
-  late final _setSelectTab =
-      _setSelectTabPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
-
   ffi.Pointer<ffi.Char> plans() {
     return _plans();
   }
@@ -92,15 +68,108 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('plans');
   late final _plans = _plansPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> paymentMethods() {
-    return _paymentMethods();
+  ffi.Pointer<ffi.Char> paymentMethodsV3() {
+    return _paymentMethodsV3();
   }
 
-  late final _paymentMethodsPtr =
+  late final _paymentMethodsV3Ptr =
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'paymentMethods');
-  late final _paymentMethods =
-      _paymentMethodsPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+          'paymentMethodsV3');
+  late final _paymentMethodsV3 =
+      _paymentMethodsV3Ptr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> paymentMethodsV4() {
+    return _paymentMethodsV4();
+  }
+
+  late final _paymentMethodsV4Ptr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'paymentMethodsV4');
+  late final _paymentMethodsV4 =
+      _paymentMethodsV4Ptr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> proxyAll() {
+    return _proxyAll();
+  }
+
+  late final _proxyAllPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('proxyAll');
+  late final _proxyAll =
+      _proxyAllPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  void setProxyAll(
+    ffi.Pointer<ffi.Char> value,
+  ) {
+    return _setProxyAll(
+      value,
+    );
+  }
+
+  late final _setProxyAllPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>>(
+          'setProxyAll');
+  late final _setProxyAll =
+      _setProxyAllPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
+
+  /// this method is reposible for checking if the user has updated plan or bought plans
+  ffi.Pointer<ffi.Char> hasPlanUpdatedOrBuy() {
+    return _hasPlanUpdatedOrBuy();
+  }
+
+  late final _hasPlanUpdatedOrBuyPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'hasPlanUpdatedOrBuy');
+  late final _hasPlanUpdatedOrBuy =
+      _hasPlanUpdatedOrBuyPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> devices() {
+    return _devices();
+  }
+
+  late final _devicesPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('devices');
+  late final _devices =
+      _devicesPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> approveDevice(
+    ffi.Pointer<ffi.Char> code,
+  ) {
+    return _approveDevice(
+      code,
+    );
+  }
+
+  late final _approveDevicePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('approveDevice');
+  late final _approveDevice = _approveDevicePtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
+
+  ffi.Pointer<ffi.Char> removeDevice(
+    ffi.Pointer<ffi.Char> deviceId,
+  ) {
+    return _removeDevice(
+      deviceId,
+    );
+  }
+
+  late final _removeDevicePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('removeDevice');
+  late final _removeDevice = _removeDevicePtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
+
+  ffi.Pointer<ffi.Char> expiryDate() {
+    return _expiryDate();
+  }
+
+  late final _expiryDatePtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'expiryDate');
+  late final _expiryDate =
+      _expiryDatePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> userData() {
     return _userData();
@@ -130,6 +199,52 @@ class NativeLibrary {
           'emailAddress');
   late final _emailAddress =
       _emailAddressPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> emailExists(
+    ffi.Pointer<ffi.Char> email,
+  ) {
+    return _emailExists(
+      email,
+    );
+  }
+
+  late final _emailExistsPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('emailExists');
+  late final _emailExists = _emailExistsPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
+
+  /// The function returns two C strings: the first represents success, and the second represents an error.
+  /// If the redemption is successful, the first string contains "true", and the second string is nil.
+  /// If an error occurs during redemption, the first string is nil, and the second string contains the error message.
+  ffi.Pointer<ffi.Char> redeemResellerCode(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> currency,
+    ffi.Pointer<ffi.Char> deviceName,
+    ffi.Pointer<ffi.Char> resellerCode,
+  ) {
+    return _redeemResellerCode(
+      email,
+      currency,
+      deviceName,
+      resellerCode,
+    );
+  }
+
+  late final _redeemResellerCodePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>>('redeemResellerCode');
+  late final _redeemResellerCode = _redeemResellerCodePtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>)>();
 
   ffi.Pointer<ffi.Char> referral() {
     return _referral();
@@ -272,12 +387,14 @@ class NativeLibrary {
 
   ffi.Pointer<ffi.Char> paymentRedirect(
     ffi.Pointer<ffi.Char> planID,
+    ffi.Pointer<ffi.Char> currency,
     ffi.Pointer<ffi.Char> provider,
     ffi.Pointer<ffi.Char> email,
     ffi.Pointer<ffi.Char> deviceName,
   ) {
     return _paymentRedirect(
       planID,
+      currency,
       provider,
       email,
       deviceName,
@@ -290,13 +407,23 @@ class NativeLibrary {
               ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>)>>('paymentRedirect');
   late final _paymentRedirect = _paymentRedirectPtr.asFunction<
       ffi.Pointer<ffi.Char> Function(
           ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>)>();
+
+  void exitApp() {
+    return _exitApp();
+  }
+
+  late final _exitAppPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('exitApp');
+  late final _exitApp = _exitAppPtr.asFunction<void Function()>();
 
   ffi.Pointer<ffi.Char> developmentMode() {
     return _developmentMode();
@@ -337,7 +464,7 @@ class NativeLibrary {
   late final _replicaAddr =
       _replicaAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> reportIssue(
+  reportIssue_return reportIssue(
     ffi.Pointer<ffi.Char> email,
     ffi.Pointer<ffi.Char> issueType,
     ffi.Pointer<ffi.Char> description,
@@ -351,11 +478,11 @@ class NativeLibrary {
 
   late final _reportIssuePtr = _lookup<
       ffi.NativeFunction<
-          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+          reportIssue_return Function(ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('reportIssue');
   late final _reportIssue = _reportIssuePtr.asFunction<
-      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
-          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+      reportIssue_return Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>)>();
 
   ffi.Pointer<ffi.Char> checkUpdates() {
     return _checkUpdates();
@@ -366,30 +493,6 @@ class NativeLibrary {
           'checkUpdates');
   late final _checkUpdates =
       _checkUpdatesPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> purchase(
-    GoString planID,
-    GoString email,
-    GoString cardNumber,
-    GoString expDate,
-    GoString cvc,
-  ) {
-    return _purchase(
-      planID,
-      email,
-      cardNumber,
-      expDate,
-      cvc,
-    );
-  }
-
-  late final _purchasePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<ffi.Char> Function(
-              GoString, GoString, GoString, GoString, GoString)>>('purchase');
-  late final _purchase = _purchasePtr.asFunction<
-      ffi.Pointer<ffi.Char> Function(
-          GoString, GoString, GoString, GoString, GoString)>();
 }
 
 /// mbstate_t is an opaque object to keep conversion state, during multibyte
@@ -519,7 +622,15 @@ final class GoSlice extends ffi.Struct {
 typedef GoInt = GoInt64;
 typedef GoInt64 = ffi.LongLong;
 typedef DartGoInt64 = int;
-typedef GoString = _GoString_;
+
+/// Return type for reportIssue
+final class reportIssue_return extends ffi.Struct {
+  external ffi.Pointer<ffi.Char> r0;
+
+  external ffi.Pointer<ffi.Char> r1;
+}
+
+const int __has_safe_buffers = 1;
 
 const int __DARWIN_ONLY_64_BIT_INO_T = 1;
 
