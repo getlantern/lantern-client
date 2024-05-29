@@ -25,6 +25,8 @@ type RESTClient interface {
 
 	// Post the given body as JSON with the given querystring parameters and reads the result JSON into target.
 	PostJSONReadingJSON(ctx context.Context, path string, params, body, target any) error
+
+	PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error
 }
 
 // A function that can send RESTful requests and receive response bodies.
@@ -85,6 +87,25 @@ func (c *restClient) PostJSONReadingJSON(ctx context.Context, path string, param
 		return err
 	}
 	return unmarshalJSON(path, b, target)
+}
+
+func (c *restClient) PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error {
+	bodyBytes, err := proto.Marshal(body)
+	if err != nil {
+		return err
+	}
+	header := make(map[string]string)
+	header["Content-Type"] = "application/x-protobuf"
+	bo, err := c.send(ctx, http.MethodPost, path, params, header, bodyBytes)
+	if err != nil {
+		return err
+	}
+	err1 := proto.Unmarshal(bo, target)
+	if err1 != nil {
+		return err1
+	}
+	return nil
+	// return unmarshalJSON(path, b, target)
 }
 
 func unmarshalJSON(path string, b []byte, target any) error {

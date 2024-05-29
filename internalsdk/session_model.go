@@ -231,7 +231,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "createUser":
-		err := m.userCreate(context.Background(), arguments.Scalar().String())
+		err := m.userCreate(context.Background())
 		if err != nil {
 			log.Error(err)
 		}
@@ -1143,21 +1143,21 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 		return err
 	}
 
-	deviecId, err := m.GetDeviceID()
-	if err != nil {
-		return err
-	}
-	userId, err := m.GetUserID()
-	if err != nil {
-		return err
-	}
-	userIdStr := fmt.Sprintf("%d", userId)
+	// deviecId, err := m.GetDeviceID()
+	// if err != nil {
+	// 	return err
+	// }
+	// userId, err := m.GetUserID()
+	// if err != nil {
+	// 	return err
+	// }
+	// userIdStr := fmt.Sprintf("%d", userId)
 
-	token, err := m.GetToken()
-	if err != nil {
-		return err
-	}
-	purchase, err := apimodels.PurchaseRequest(purchaseData, deviecId, userIdStr, token)
+	// token, err := m.GetToken()
+	// if err != nil {
+	// 	return err
+	// }
+	purchase, err := m.proClient.PurchaseRequest(context.Background(), purchaseData)
 	if err != nil {
 		return err
 	}
@@ -1174,21 +1174,21 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
 	}
-	deviecId, err := m.GetDeviceID()
-	if err != nil {
-		return err
-	}
-	userId, err := m.GetUserID()
-	if err != nil {
-		return err
-	}
-	userIdStr := fmt.Sprintf("%d", userId)
+	// deviecId, err := m.GetDeviceID()
+	// if err != nil {
+	// 	return err
+	// }
+	// userId, err := m.GetUserID()
+	// if err != nil {
+	// 	return err
+	// }
+	// userIdStr := fmt.Sprintf("%d", userId)
 
-	token, err := m.GetToken()
-	if err != nil {
-		return err
-	}
-	purchase, err := apimodels.PurchaseRequest(purchaseData, deviecId, userIdStr, token)
+	// token, err := m.GetToken()
+	// if err != nil {
+	// 	return err
+	// }
+	purchase, err := m.proClient.PurchaseRequest(context.Background(), purchaseData)
 	if err != nil {
 		return err
 	}
@@ -1229,15 +1229,15 @@ func signup(session *SessionModel, email string, password string) error {
 		SkipEmailConfirmation: true,
 	}
 
-	userId, err := session.GetUserID()
-	if err != nil {
-		return err
-	}
-	token, err := session.GetToken()
-	if err != nil {
-		return err
-	}
-	signupResponse, err := apimodels.Signup(signUpRequestBody, ToString(userId), token)
+	// userId, err := session.GetUserID()
+	// if err != nil {
+	// 	return err
+	// }
+	// token, err := session.GetToken()
+	// if err != nil {
+	// 	return err
+	// }
+	signupResponse, err := session.proClient.SignUp(context.Background(), signUpRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1259,7 +1259,7 @@ func signup(session *SessionModel, email string, password string) error {
 }
 
 func signupEmailResend(session *SessionModel, email string) error {
-	salt, err := getUserSalt(session.baseModel, email)
+	salt, err := getUserSalt(session, email)
 	if err != nil {
 		return err
 	}
@@ -1269,7 +1269,7 @@ func signupEmailResend(session *SessionModel, email string) error {
 		Salt:  salt,
 	}
 
-	signupEmailResendResponse, err := apimodels.SignupEmailResendCode(signUpEmailResendRequestBody)
+	signupEmailResendResponse, err := session.proClient.SignupEmailResendCode(context.Background(), signUpEmailResendRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1284,7 +1284,7 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 	}
 
 	log.Debugf("Signup verfication request body %v", signUpEmailResendRequestBody)
-	signupEmailResendResponse, err := apimodels.SignupEmailConfirmation(signUpEmailResendRequestBody)
+	signupEmailResendResponse, err := session.proClient.SignupEmailConfirmation(context.Background(), signUpEmailResendRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1299,7 +1299,7 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 func login(session *SessionModel, email string, password string) error {
 	start := time.Now()
 	// Get the salt
-	salt, err := getUserSalt(session.baseModel, email)
+	salt, err := getUserSalt(session, email)
 	if err != nil {
 		return err
 	}
@@ -1313,7 +1313,7 @@ func login(session *SessionModel, email string, password string) error {
 		Email: email,
 		A:     A.Bytes(),
 	}
-	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
+	srpB, err := session.proClient.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1356,7 +1356,7 @@ func login(session *SessionModel, email string, password string) error {
 	}
 	log.Debugf("Login request body %v", loginRequestBody)
 
-	login, err := apimodels.Login(loginRequestBody)
+	login, err := session.proClient.Login(context.Background(), loginRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1389,7 +1389,7 @@ func login(session *SessionModel, email string, password string) error {
 
 	//Store all the user details
 	userData := ConvertToUserDetailsResponse(login)
-	err = cacheUserDetail(session.baseModel, &userData)
+	err = cacheUserDetail(session.baseModel, userData)
 	if err != nil {
 		log.Errorf("Error while caching user details %v", err)
 		return err
@@ -1428,8 +1428,7 @@ func startRecoveryByEmail(session *SessionModel, email string) error {
 	prepareRequestBody := &protos.StartRecoveryByEmailRequest{
 		Email: email,
 	}
-
-	recovery, err := apimodels.StartRecoveryByEmail(prepareRequestBody)
+	recovery, err := session.proClient.StartRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1458,7 +1457,7 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 		NewVerifier: verifierKey.Bytes(),
 	}
 
-	recovery, err := apimodels.CompleteRecoveryByEmail(prepareRequestBody)
+	recovery, err := session.proClient.CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1475,7 +1474,7 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 		Email: email,
 		Code:  code,
 	}
-	recovery, err := apimodels.ValidateEmailRecovery(prepareRequestBody)
+	recovery, err := session.proClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1486,7 +1485,7 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 // Change Email flow
 
 func startChangeEmail(session SessionModel, email string, newEmail string, password string) error {
-	salt, err := getUserSalt(session.baseModel, email)
+	salt, err := getUserSalt(&session, email)
 	if err != nil {
 		return err
 	}
@@ -1502,7 +1501,7 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 		Email: email,
 		A:     A.Bytes(),
 	}
-	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
+	srpB, err := session.proClient.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1538,7 +1537,7 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 		Proof:    clientProof,
 	}
 
-	isEmailChanged, err := apimodels.ChangeEmail(changeEmailRequestBody)
+	isEmailChanged, err := session.proClient.ChangeEmail(context.Background(), changeEmailRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1568,7 +1567,7 @@ func completeChangeEmail(session SessionModel, email string, newEmail string, pa
 		Code:        code,
 	}
 
-	isEmailChanged, err := apimodels.CompleteChangeEmail(completeChangeEmail)
+	isEmailChanged, err := session.proClient.CompleteChangeEmail(context.Background(), completeChangeEmail)
 	if err != nil {
 		return err
 	}
@@ -1601,7 +1600,7 @@ func deleteAccount(session SessionModel, password string) error {
 		return errors.New("Email not found")
 	}
 
-	salt, err := getUserSalt(session.baseModel, email)
+	salt, err := getUserSalt(&session, email)
 	if err != nil {
 		return err
 	}
@@ -1618,7 +1617,7 @@ func deleteAccount(session SessionModel, password string) error {
 		A:     A.Bytes(),
 	}
 	log.Debugf("A Bytes %v", A.Bytes())
-	srpB, err := apimodels.LoginPrepare(prepareRequestBody)
+	srpB, err := session.proClient.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1657,7 +1656,7 @@ func deleteAccount(session SessionModel, password string) error {
 		DeviceId:  deviceId,
 	}
 
-	isAccountDeleted, err := apimodels.DeleteAccount(changeEmailRequestBody)
+	isAccountDeleted, err := session.proClient.DeleteAccount(context.Background(), changeEmailRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1679,12 +1678,12 @@ func deleteAccount(session SessionModel, password string) error {
 	if err != nil {
 		return err
 	}
-	// Create New user
-	local, err := session.Locale()
-	if err != nil {
-		return err
-	}
-	return userCreate(session.baseModel, local)
+	// // Create New user
+	// local, err := session.Locale()
+	// if err != nil {
+	// 	return err
+	// }
+	return session.userCreate(context.Background())
 }
 
 // Device Linking methods
@@ -1692,39 +1691,39 @@ func deleteAccount(session SessionModel, password string) error {
 // Request code for linking device for LINK WITH PIN method
 func linkCodeRequest(session *SessionModel) error {
 	log.Debugf("LinkCodeRequest")
-	local, err := session.Locale()
-	if err != nil {
-		log.Errorf("Error while getting local %v", err)
-		return err
-	}
+	// local, err := session.Locale()
+	// if err != nil {
+	// 	log.Errorf("Error while getting local %v", err)
+	// 	return err
+	// }
 	device, err := pathdb.Get[string](session.db, pathDevice)
 	if err != nil {
 		log.Errorf("Error while getting local %v", err)
 		return err
 	}
-	//Create body
-	linkCodeRequest := map[string]string{
-		"locale":     local,
-		"deviceName": device,
-	}
+	// //Create body
+	// linkCodeRequest := map[string]string{
+	// 	"locale":     local,
+	// 	"deviceName": device,
+	// }
 
-	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
-	if err != nil {
-		log.Errorf("Error while getting local %v", err)
-		return err
-	}
-	userId, err := session.GetUserID()
-	if err != nil {
-		log.Errorf("Error while getting local %v", err)
-		return err
-	}
+	// deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
+	// if err != nil {
+	// 	log.Errorf("Error while getting local %v", err)
+	// 	return err
+	// }
+	// userId, err := session.GetUserID()
+	// if err != nil {
+	// 	log.Errorf("Error while getting local %v", err)
+	// 	return err
+	// }
 
-	token, err := session.GetToken()
-	if err != nil {
-		log.Errorf("Error while getting local %v", err)
-		return err
-	}
-	linkResponse, err := apimodels.LinkCodeRequest(linkCodeRequest, deviceId, ToString(userId), token)
+	// token, err := session.GetToken()
+	// if err != nil {
+	// 	log.Errorf("Error while getting local %v", err)
+	// 	return err
+	// }
+	linkResponse, err := session.proClient.LinkCodeRequest(context.Background(), device)
 	if err != nil {
 		return err
 	}
@@ -1740,28 +1739,28 @@ func linkCodeRequest(session *SessionModel) error {
 
 // Approve code for linking device for LINK WITH PIN method
 func linkCodeApprove(session *SessionModel, code string) error {
-	locale, err := session.Locale()
-	if err != nil {
-		log.Errorf("Error while getting locale %v", err)
-		return err
-	}
-	userRecoveryBody := map[string]string{
-		"locale": locale,
-		"code":   code,
-	}
+	// locale, err := session.Locale()
+	// if err != nil {
+	// 	log.Errorf("Error while getting locale %v", err)
+	// 	return err
+	// }
+	// userRecoveryBody := map[string]string{
+	// 	"locale": locale,
+	// 	"code":   code,
+	// }
 
-	userId, err := session.GetUserID()
-	if err != nil {
-		log.Errorf("Error while getting userid %v", err)
-		return err
-	}
+	// userId, err := session.GetUserID()
+	// if err != nil {
+	// 	log.Errorf("Error while getting userid %v", err)
+	// 	return err
+	// }
 
-	token, err := session.GetToken()
-	if err != nil {
-		log.Errorf("Error while getting pro token %v", err)
-		return err
-	}
-	linkResponse, err := apimodels.LinkCodeApprove(userRecoveryBody, ToString(userId), token)
+	// token, err := session.GetToken()
+	// if err != nil {
+	// 	log.Errorf("Error while getting pro token %v", err)
+	// 	return err
+	// }
+	linkResponse, err := session.proClient.LinkCodeApprove(context.Background(), code)
 	if err != nil {
 		return err
 	}
@@ -1771,63 +1770,63 @@ func linkCodeApprove(session *SessionModel, code string) error {
 
 // Remove device for LINK WITH PIN method
 func userLinkRemove(session *SessionModel, deviceId string) error {
-	locale, err := session.Locale()
-	if err != nil {
-		log.Errorf("Error while getting locale %v", err)
-		return err
-	}
-	userLinkRemove := map[string]string{
-		"deviceID": deviceId,
-		"locale":   locale,
-	}
+	// locale, err := session.Locale()
+	// if err != nil {
+	// 	log.Errorf("Error while getting locale %v", err)
+	// 	return err
+	// }
+	// userLinkRemove := map[string]string{
+	// 	"deviceID": deviceId,
+	// 	"locale":   locale,
+	// }
 
-	userId, err := session.GetUserID()
-	if err != nil {
-		log.Errorf("Error while getting userid %v", err)
-		return err
-	}
+	// userId, err := session.GetUserID()
+	// if err != nil {
+	// 	log.Errorf("Error while getting userid %v", err)
+	// 	return err
+	// }
 
-	userDeviceId, err := session.GetDeviceID()
-	if err != nil {
-		log.Errorf("Error while getting pro token %v", err)
-		return err
-	}
-	proToken, err := session.GetToken()
-	if err != nil {
-		log.Errorf("Error while getting pro token %v", err)
-		return err
-	}
-	linkResponse, err := apimodels.DeviceUnlink(userLinkRemove, ToString(userId), userDeviceId, proToken)
+	// userDeviceId, err := session.GetDeviceID()
+	// if err != nil {
+	// 	log.Errorf("Error while getting pro token %v", err)
+	// 	return err
+	// }
+	// proToken, err := session.GetToken()
+	// if err != nil {
+	// 	log.Errorf("Error while getting pro token %v", err)
+	// 	return err
+	// }
+	linkResponse, err := session.proClient.DeviceRemove(context.Background(), deviceId)
 	if err != nil {
 		return err
 	}
 	log.Debugf("UserLink Remove response %v", linkResponse)
-	return userDetail(session)
+	return session.userDetail(context.Background())
 }
 
 // Add device for LINK WITH EMAIL method
 func requestRecoveryEmail(session *SessionModel, email string) error {
-	deviceName, err := pathdb.Get[string](session.db, pathModel)
-	if err != nil {
-		log.Errorf("Error while getting deviceId %v", err)
-		return err
-	}
+	// deviceName, err := pathdb.Get[string](session.db, pathModel)
+	// if err != nil {
+	// 	log.Errorf("Error while getting deviceId %v", err)
+	// 	return err
+	// }
 	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
 	if err != nil {
 		log.Errorf("Error while getting deviceId %v", err)
 		return err
 	}
-	locale, err := session.Locale()
-	if err != nil {
-		log.Errorf("Error while getting deviceId %v", err)
-		return err
-	}
-	userLinkRequestBody := map[string]string{
-		"email":      email,
-		"deviceName": deviceName,
-		"locale":     locale,
-	}
-	linkResponse, err := apimodels.UserLinkRequest(userLinkRequestBody, deviceId)
+	// locale, err := session.Locale()
+	// if err != nil {
+	// 	log.Errorf("Error while getting deviceId %v", err)
+	// 	return err
+	// }
+	// userLinkRequestBody := map[string]string{
+	// 	"email":      email,
+	// 	"deviceName": deviceName,
+	// 	"locale":     locale,
+	// }
+	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), deviceId)
 	if err != nil {
 		return err
 	}
@@ -1842,10 +1841,10 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 		log.Errorf("Error while getting deviceId %v", err)
 		return err
 	}
-	validateRequestBody := map[string]string{
-		"code": code,
-	}
-	linkResponse, err := apimodels.UserLinkValidate(validateRequestBody, deviceId)
+	// validateRequestBody := map[string]string{
+	// 	"code": code,
+	// }
+	linkResponse, err := session.proClient.UserLinkValidate(context.Background(), deviceId)
 	if err != nil {
 		return err
 	}
@@ -1858,5 +1857,5 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
 	})
 	// Update user detail to reflact on UI
-	return userDetail(session)
+	return session.userDetail(context.Background())
 }

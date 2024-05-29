@@ -74,6 +74,9 @@ message User {
   string referral = 11;
   string token = 12;
   bool yinbiEnabled = 13;
+  repeated string inviters = 14;
+  repeated string invitees = 15;
+  repeated string purchases = 16;
 }
 
 // API

@@ -38,10 +38,8 @@ type Opts struct {
 }
 
 type ProClient interface {
-	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
+	AuthClient
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
-	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
-	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
@@ -49,11 +47,28 @@ type ProClient interface {
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
-	AuthClient
+	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
+	//Device Linking
+	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
+	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
+	UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error)
+	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
+	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
 }
 
 type AuthClient interface {
 	GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error)
+	SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error)
+	SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error)
+	SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error)
+	LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error)
+	Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error)
+	StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error)
+	CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error)
+	ValidateEmailRecoveryCode(ctx context.Context, loginData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error)
+	ChangeEmail(ctx context.Context, loginData *protos.ChangeEmailRequest) (bool, error)
+	CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error)
+	DeleteAccount(ctc context.Context, loginData *protos.DeleteUserRequest) (bool, error)
 }
 
 // NewClient creates a new instance of ProClient
@@ -279,15 +294,158 @@ func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*Li
 	return &resp, nil
 }
 
+// UserLinkCodeRequest returns a code to email register pro account email that can be used to link device to an existing Pro account
+func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error) {
+	if deviceId == "" {
+		return false, errMissingDeviceName
+	}
+	var resp LinkCodeResponse
+	uc := c.userConfig()
+	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
+		"deviceName": deviceId,
+		"locale":     uc.GetLanguage(),
+	}, nil, &resp)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+// UserLinkCodeRequest returns a code to email register pro account email that can be used to link device to an existing Pro account
+func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error) {
+	var resp UserRecovery
+	uc := c.userConfig()
+	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-validate", map[string]interface{}{
+		"code":   code,
+		"locale": uc.GetLanguage(),
+	}, nil, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
+}
+
+// PurchaseRequest is used to request a purchase of a Pro plan is will be used for all most all the payment providers
+func (c *proClient) PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error) {
+	var resp PurchaseResponse
+	err := c.webclient.PostJSONReadingJSON(ctx, "/purchase", data, nil, &resp)
+	if err != nil {
+		return nil, err
+	}
+	log.Debugf("PurchaseRequest is %+v", &resp)
+	return &resp, nil
+}
+
 // Auth APIS
 
 func (c *proClient) GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error) {
 	var resp protos.GetSaltResponse
-	err := c.webclient.GetPROTOC(ctx, "users/salt", map[string]interface{}{
+	err := c.webclient.GetPROTOC(ctx, "/users/salt", map[string]interface{}{
 		"email": email,
 	}, &resp)
 	if err != nil {
 		return nil, err
 	}
 	return &resp, nil
+}
+
+func (c *proClient) SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error) {
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (c *proClient) SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error) {
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/users/signup/resend/email", nil, data, &resp)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (c *proClient) SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error) {
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/users/signup/complete/email", nil, data, &resp)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (c *proClient) LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error) {
+	var resp protos.PrepareResponse
+	err := c.webclient.PostPROTOC(ctx, "/prepare", nil, loginData, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
+func (c *proClient) Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
+	var resp protos.LoginResponse
+	err := c.webclient.PostPROTOC(ctx, "/login", nil, loginData, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *proClient) StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error) {
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/recovery/start/email", nil, loginData, &resp)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error) {
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/recovery/complete/email", nil, loginData, &resp)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, loginData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error) {
+	var resp protos.ValidateRecoveryCodeResponse
+	err := c.webclient.PostPROTOC(ctx, "/recovery/complete/email", nil, loginData, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *proClient) ChangeEmail(ctx context.Context, loginData *protos.ChangeEmailRequest) (bool, error) {
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/change_email", nil, loginData, &resp)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error) {
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/change_email/complete/email", nil, loginData, &resp)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (c *proClient) DeleteAccount(ctx context.Context, accountData *protos.DeleteUserRequest) (bool, error) {
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/change_email/complete/email", nil, accountData, &resp)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }

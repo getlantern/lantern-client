@@ -110,7 +110,7 @@ func formatRenewalBonusExpected(months int64, days int64, longForm bool) string 
 
 //Create Purchase Request
 
-func createPurchaseData(session *SessionModel, email string, paymentProvider string, resellerCode string, purchaseToken string, planId string) (error, map[string]string) {
+func createPurchaseData(session *SessionModel, email string, paymentProvider string, resellerCode string, purchaseToken string, planId string) (error, map[string]interface{}) {
 	if email == "" {
 		return errors.New("Email is empty"), nil
 	}
@@ -120,7 +120,7 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 		return err, nil
 	}
 
-	data := map[string]string{
+	data := map[string]interface{}{
 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
 		"provider":       paymentProvider,
 		"email":          email,
@@ -207,14 +207,14 @@ func StringToIntSlice(str string) ([]int, error) {
 	return slice, nil
 }
 
-func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) apimodels.UserDetailResponse {
+func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) *protos.User {
 	// Convert protobuf to usre details struct
 	log.Debugf("ConvertToUserDetailsResponse %+v", userResponse)
 
 	user := userResponse.LegacyUserData
 
-	userData := apimodels.UserDetailResponse{
-		UserID:       userResponse.LegacyUserData.UserId,
+	userData := protos.User{
+		UserId:       userResponse.LegacyUserData.UserId,
 		Code:         user.Code,
 		Token:        userResponse.LegacyToken,
 		Referral:     user.Code,
@@ -223,29 +223,24 @@ func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) apimodels.
 		Email:        user.Email,
 		UserStatus:   user.UserStatus,
 		Locale:       user.Locale,
-		Servers:      user.Servers,
 		YinbiEnabled: user.YinbiEnabled,
 		Inviters:     user.Inviters,
 		Invitees:     user.Invitees,
+		Purchases:    user.Purchases,
 	}
 	log.Debugf("ConvertToUserDetailsResponse %+v", userData)
 
-	// Convert Purchases if needed
-	for _, p := range user.Purchases {
-		// Assuming you want to map the string directly to the Plan field of Purchase
-		userData.Purchases = append(userData.Purchases, apimodels.Purchase{Plan: p})
-	}
-
 	for _, d := range user.Devices {
 		// Map the fields from LoginResponse_Device to UserDevice
-		userDevice := apimodels.UserDevice{
-			ID:      d.GetId(),
+		userDevice := &protos.Device{
+			Id:      d.Id,
 			Name:    d.GetName(),
 			Created: d.GetCreated(),
 		}
 		userData.Devices = append(userData.Devices, userDevice)
 	}
-	return userData
+
+	return &userData
 }
 
 // Takes password and email, salt and returns encrypted key

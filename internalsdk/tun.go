@@ -2,9 +2,9 @@ package internalsdk
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"net"
-	"os"
 	"runtime"
 	"strings"
 	"sync"
@@ -13,6 +13,7 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/idletiming"
 	"github.com/getlantern/ipproxy"
+	"github.com/getlantern/netx"
 
 	"golang.org/x/net/proxy"
 )
@@ -36,17 +37,16 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	go geoLookup(&panickingSessionImpl{wrappedSession})
 
 	log.Debugf("Starting tun2socks connecting to socks at %v", socksAddr)
-	dev := os.NewFile(uintptr(fd), "tun")
-	defer dev.Close()
-
 	socksDialer, err := proxy.SOCKS5("tcp", socksAddr, nil, nil)
 	if err != nil {
 		return errors.New("Unable to get SOCKS5 dialer: %v", err)
 	}
 
-	ipp, err := ipproxy.New(dev, &ipproxy.Opts{
+	ipp, err := ipproxy.New(&ipproxy.Opts{
+		DeviceName:          fmt.Sprintf("fd://%d", fd),
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
+		DisableIPv6:         true,
 		MTU:                 mtu,
 		OutboundBufferDepth: 10000,
 		TCPConnectBacklog:   100,
@@ -61,18 +61,10 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 			_, port, _ := net.SplitHostPort(addr)
 			isDNS := port == "53"
 			if isDNS {
-				// reroute DNS requests to dnsgrab
+				// intercept and reroute DNS traffic to dnsgrab
 				addr = dnsGrabAddr
-			} else if port == "853" {
-				// This is usually DNS over DTLS, we blackhole this to force DNS through dnsgrab.
-				return nil, errors.New("blackholing DNS over TLS traffic to %v", addr)
-			} else if port == "443" {
-				// This is likely QUIC traffic. This should really be proxied, but since we don't proxy UDP,
-				// we blackhole this traffic.
-				return nil, errors.New("blackholing QUIC UDP traffic to %v", addr)
 			}
-			var d net.Dialer
-			conn, err := d.DialContext(ctx, network, addr)
+			conn, err := netx.DialContext(ctx, network, addr)
 			if isDNS && err == nil {
 				// wrap our DNS requests in a connection that closes immediately to avoid piling up file descriptors for DNS requests
 				conn = idletiming.Conn(conn, 10*time.Second, nil)
@@ -85,11 +77,12 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 	}
 
 	currentDeviceMx.Lock()
-	currentDevice = dev
 	currentIPP = ipp
 	currentDeviceMx.Unlock()
 
-	err = ipp.Serve()
+	ctx := context.Background()
+
+	err = ipp.Serve(ctx)
 	if err != io.EOF {
 		return log.Errorf("unexpected error serving TUN traffic: %v", err)
 	}

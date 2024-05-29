@@ -43,3 +43,9 @@ type PurchaseResponse struct {
 	Plan          protos.Plan `json:"plan"`
 	Status        string      `json:"status"`
 }
+
+type UserRecovery struct {
+	Status string `json:"status"`
+	UserID int64  `json:"userID"`
+	Token  string `json:"token"`
+}
