@@ -37,3 +37,9 @@ type LinkCodeResponse struct {
 	Code                 string
 	ExpireAt             int64
 }
+
+type PurchaseResponse struct {
+	PaymentStatus string      `json:"paymentStatus"`
+	Plan          protos.Plan `json:"plan"`
+	Status        string      `json:"status"`
+}

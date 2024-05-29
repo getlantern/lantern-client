@@ -8,10 +8,11 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:io' as _i56;
+import 'dart:io' as _i57;
+import 'dart:ui' as _i55;
 
 import 'package:auto_route/auto_route.dart' as _i52;
-import 'package:flutter/cupertino.dart' as _i57;
+import 'package:flutter/cupertino.dart' as _i58;
 import 'package:lantern/account/account.dart' as _i2;
 import 'package:lantern/account/account_management.dart' as _i1;
 import 'package:lantern/account/auth/auth_landing.dart' as _i6;
@@ -61,7 +62,7 @@ import 'package:lantern/plans/plans.dart' as _i31;
 import 'package:lantern/plans/play_checkout.dart' as _i32;
 import 'package:lantern/plans/reseller_checkout.dart' as _i43;
 import 'package:lantern/plans/stripe_checkout.dart' as _i49;
-import 'package:lantern/replica/common.dart' as _i55;
+import 'package:lantern/replica/common.dart' as _i56;
 import 'package:lantern/replica/link_handler.dart' as _i36;
 import 'package:lantern/replica/ui/viewers/audio.dart' as _i34;
 import 'package:lantern/replica/ui/viewers/image.dart' as _i35;
@@ -90,23 +91,6 @@ abstract class $AppRouter extends _i52.RootStackRouter {
       return _i52.AutoRoutePage<void>(
         routeData: routeData,
         child: const _i2.AccountMenu(),
-      );
-    },
-    AddViaChatNumber.name: (routeData) {
-      return _i42.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i3.AddViaChatNumber(),
-      );
-    },
-    AppWebview.name: (routeData) {
-      final args = routeData.argsAs<AppWebviewArgs>();
-      return _i42.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i4.AppWebView(
-          key: args.key,
-          url: args.url,
-          title: args.title,
-        ),
       );
     },
     ApproveDevice.name: (routeData) {
@@ -270,6 +254,7 @@ abstract class $AppRouter extends _i52.RootStackRouter {
         routeData: routeData,
         child: _i22.FullScreenDialog(
           widget: args.widget,
+          bgColor: args.bgColor,
           key: args.key,
         ),
       );
@@ -303,11 +288,9 @@ abstract class $AppRouter extends _i52.RootStackRouter {
       );
     },
     Language.name: (routeData) {
-      final args =
-          routeData.argsAs<LanguageArgs>(orElse: () => const LanguageArgs());
       return _i52.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i27.Language(key: args.key),
+        child: const _i27.Language(),
       );
     },
     LanternDesktop.name: (routeData) {
@@ -604,65 +587,6 @@ class Account extends _i52.PageRouteInfo<void> {
 /// generated route for
 /// [_i3.AddDevice]
 class ApproveDevice extends _i52.PageRouteInfo<ApproveDeviceArgs> {
-/// [_i3.AddViaChatNumber]
-class AddViaChatNumber extends _i42.PageRouteInfo<void> {
-  const AddViaChatNumber({List<_i42.PageRouteInfo>? children})
-      : super(
-          AddViaChatNumber.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'AddViaChatNumber';
-
-  static const _i42.PageInfo<void> page = _i42.PageInfo<void>(name);
-}
-
-/// generated route for
-/// [_i4.AppWebView]
-class AppWebview extends _i42.PageRouteInfo<AppWebviewArgs> {
-  AppWebview({
-    _i44.Key? key,
-    required String url,
-    required String title,
-    List<_i42.PageRouteInfo>? children,
-  }) : super(
-          AppWebview.name,
-          args: AppWebviewArgs(
-            key: key,
-            url: url,
-            title: title,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'AppWebview';
-
-  static const _i42.PageInfo<AppWebviewArgs> page =
-      _i42.PageInfo<AppWebviewArgs>(name);
-}
-
-class AppWebviewArgs {
-  const AppWebviewArgs({
-    this.key,
-    required this.url,
-    required this.title,
-  });
-
-  final _i44.Key? key;
-
-  final String url;
-
-  final String title;
-
-  @override
-  String toString() {
-    return 'AppWebviewArgs{key: $key, url: $url, title: $title}';
-  }
-}
-
-/// generated route for
-/// [_i5.ApproveDevice]
-class ApproveDevice extends _i42.PageRouteInfo<ApproveDeviceArgs> {
   ApproveDevice({
     _i54.Key? key,
     List<_i52.PageRouteInfo>? children,
@@ -1188,12 +1112,14 @@ class FullScreenDialogPage
     extends _i52.PageRouteInfo<FullScreenDialogPageArgs> {
   FullScreenDialogPage({
     required _i54.Widget widget,
+    _i55.Color? bgColor,
     _i54.Key? key,
     List<_i52.PageRouteInfo>? children,
   }) : super(
           FullScreenDialogPage.name,
           args: FullScreenDialogPageArgs(
             widget: widget,
+            bgColor: bgColor,
             key: key,
           ),
           initialChildren: children,
@@ -1208,16 +1134,19 @@ class FullScreenDialogPage
 class FullScreenDialogPageArgs {
   const FullScreenDialogPageArgs({
     required this.widget,
+    this.bgColor,
     this.key,
   });
 
   final _i54.Widget widget;
 
+  final _i55.Color? bgColor;
+
   final _i54.Key? key;
 
   @override
   String toString() {
-    return 'FullScreenDialogPageArgs{widget: $widget, key: $key}';
+    return 'FullScreenDialogPageArgs{widget: $widget, bgColor: $bgColor, key: $key}';
   }
 }
 
@@ -1303,31 +1232,16 @@ class InviteFriends extends _i52.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i27.Language]
-class Language extends _i52.PageRouteInfo<LanguageArgs> {
-  Language({
-    _i54.Key? key,
-    List<_i52.PageRouteInfo>? children,
-  }) : super(
+class Language extends _i52.PageRouteInfo<void> {
+  const Language({List<_i52.PageRouteInfo>? children})
+      : super(
           Language.name,
-          args: LanguageArgs(key: key),
           initialChildren: children,
         );
 
   static const String name = 'Language';
 
-  static const _i52.PageInfo<LanguageArgs> page =
-      _i52.PageInfo<LanguageArgs>(name);
-}
-
-class LanguageArgs {
-  const LanguageArgs({this.key});
-
-  final _i54.Key? key;
-
-  @override
-  String toString() {
-    return 'LanguageArgs{key: $key}';
-  }
+  static const _i52.PageInfo<void> page = _i52.PageInfo<void>(name);
 }
 
 /// generated route for
@@ -1462,9 +1376,9 @@ class RecoveryKeyArgs {
 /// [_i34.ReplicaAudioViewer]
 class ReplicaAudioViewer extends _i52.PageRouteInfo<ReplicaAudioViewerArgs> {
   ReplicaAudioViewer({
-    required _i55.ReplicaApi replicaApi,
-    required _i55.ReplicaSearchItem item,
-    required _i55.SearchCategory category,
+    required _i56.ReplicaApi replicaApi,
+    required _i56.ReplicaSearchItem item,
+    required _i56.SearchCategory category,
     List<_i52.PageRouteInfo>? children,
   }) : super(
           ReplicaAudioViewer.name,
@@ -1489,11 +1403,11 @@ class ReplicaAudioViewerArgs {
     required this.category,
   });
 
-  final _i55.ReplicaApi replicaApi;
+  final _i56.ReplicaApi replicaApi;
 
-  final _i55.ReplicaSearchItem item;
+  final _i56.ReplicaSearchItem item;
 
-  final _i55.SearchCategory category;
+  final _i56.SearchCategory category;
 
   @override
   String toString() {
@@ -1505,9 +1419,9 @@ class ReplicaAudioViewerArgs {
 /// [_i35.ReplicaImageViewer]
 class ReplicaImageViewer extends _i52.PageRouteInfo<ReplicaImageViewerArgs> {
   ReplicaImageViewer({
-    required _i55.ReplicaApi replicaApi,
-    required _i55.ReplicaSearchItem item,
-    required _i55.SearchCategory category,
+    required _i56.ReplicaApi replicaApi,
+    required _i56.ReplicaSearchItem item,
+    required _i56.SearchCategory category,
     List<_i52.PageRouteInfo>? children,
   }) : super(
           ReplicaImageViewer.name,
@@ -1532,11 +1446,11 @@ class ReplicaImageViewerArgs {
     required this.category,
   });
 
-  final _i55.ReplicaApi replicaApi;
+  final _i56.ReplicaApi replicaApi;
 
-  final _i55.ReplicaSearchItem item;
+  final _i56.ReplicaSearchItem item;
 
-  final _i55.SearchCategory category;
+  final _i56.SearchCategory category;
 
   @override
   String toString() {
@@ -1549,8 +1463,8 @@ class ReplicaImageViewerArgs {
 class ReplicaLinkHandler extends _i52.PageRouteInfo<ReplicaLinkHandlerArgs> {
   ReplicaLinkHandler({
     _i54.Key? key,
-    required _i55.ReplicaApi replicaApi,
-    required _i55.ReplicaLink replicaLink,
+    required _i56.ReplicaApi replicaApi,
+    required _i56.ReplicaLink replicaLink,
     List<_i52.PageRouteInfo>? children,
   }) : super(
           ReplicaLinkHandler.name,
@@ -1577,9 +1491,9 @@ class ReplicaLinkHandlerArgs {
 
   final _i54.Key? key;
 
-  final _i55.ReplicaApi replicaApi;
+  final _i56.ReplicaApi replicaApi;
 
-  final _i55.ReplicaLink replicaLink;
+  final _i56.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -1591,9 +1505,9 @@ class ReplicaLinkHandlerArgs {
 /// [_i37.ReplicaMiscViewer]
 class ReplicaMiscViewer extends _i52.PageRouteInfo<ReplicaMiscViewerArgs> {
   ReplicaMiscViewer({
-    required _i55.ReplicaApi replicaApi,
-    required _i55.ReplicaSearchItem item,
-    required _i55.SearchCategory category,
+    required _i56.ReplicaApi replicaApi,
+    required _i56.ReplicaSearchItem item,
+    required _i56.SearchCategory category,
     List<_i52.PageRouteInfo>? children,
   }) : super(
           ReplicaMiscViewer.name,
@@ -1618,11 +1532,11 @@ class ReplicaMiscViewerArgs {
     required this.category,
   });
 
-  final _i55.ReplicaApi replicaApi;
+  final _i56.ReplicaApi replicaApi;
 
-  final _i55.ReplicaSearchItem item;
+  final _i56.ReplicaSearchItem item;
 
-  final _i55.SearchCategory category;
+  final _i56.SearchCategory category;
 
   @override
   String toString() {
@@ -1636,7 +1550,7 @@ class ReplicaUploadDescription
     extends _i52.PageRouteInfo<ReplicaUploadDescriptionArgs> {
   ReplicaUploadDescription({
     _i54.Key? key,
-    required _i56.File fileToUpload,
+    required _i57.File fileToUpload,
     required String fileTitle,
     String? fileDescription,
     List<_i52.PageRouteInfo>? children,
@@ -1667,7 +1581,7 @@ class ReplicaUploadDescriptionArgs {
 
   final _i54.Key? key;
 
-  final _i56.File fileToUpload;
+  final _i57.File fileToUpload;
 
   final String fileTitle;
 
@@ -1684,7 +1598,7 @@ class ReplicaUploadDescriptionArgs {
 class ReplicaUploadReview extends _i52.PageRouteInfo<ReplicaUploadReviewArgs> {
   ReplicaUploadReview({
     _i54.Key? key,
-    required _i56.File fileToUpload,
+    required _i57.File fileToUpload,
     required String fileTitle,
     String? fileDescription,
     List<_i52.PageRouteInfo>? children,
@@ -1715,7 +1629,7 @@ class ReplicaUploadReviewArgs {
 
   final _i54.Key? key;
 
-  final _i56.File fileToUpload;
+  final _i57.File fileToUpload;
 
   final String fileTitle;
 
@@ -1732,7 +1646,7 @@ class ReplicaUploadReviewArgs {
 class ReplicaUploadTitle extends _i52.PageRouteInfo<ReplicaUploadTitleArgs> {
   ReplicaUploadTitle({
     _i54.Key? key,
-    required _i56.File fileToUpload,
+    required _i57.File fileToUpload,
     String? fileTitle,
     String? fileDescription,
     List<_i52.PageRouteInfo>? children,
@@ -1763,7 +1677,7 @@ class ReplicaUploadTitleArgs {
 
   final _i54.Key? key;
 
-  final _i56.File fileToUpload;
+  final _i57.File fileToUpload;
 
   final String? fileTitle;
 
@@ -1779,9 +1693,9 @@ class ReplicaUploadTitleArgs {
 /// [_i41.ReplicaVideoViewer]
 class ReplicaVideoViewer extends _i52.PageRouteInfo<ReplicaVideoViewerArgs> {
   ReplicaVideoViewer({
-    required _i55.ReplicaApi replicaApi,
-    required _i55.ReplicaSearchItem item,
-    required _i55.SearchCategory category,
+    required _i56.ReplicaApi replicaApi,
+    required _i56.ReplicaSearchItem item,
+    required _i56.SearchCategory category,
     List<_i52.PageRouteInfo>? children,
   }) : super(
           ReplicaVideoViewer.name,
@@ -1806,11 +1720,11 @@ class ReplicaVideoViewerArgs {
     required this.category,
   });
 
-  final _i55.ReplicaApi replicaApi;
+  final _i56.ReplicaApi replicaApi;
 
-  final _i55.ReplicaSearchItem item;
+  final _i56.ReplicaSearchItem item;
 
-  final _i55.SearchCategory category;
+  final _i56.SearchCategory category;
 
   @override
   String toString() {
@@ -1909,7 +1823,7 @@ class ResellerCodeCheckoutArgs {
 /// [_i44.ResetPassword]
 class ResetPassword extends _i52.PageRouteInfo<ResetPasswordArgs> {
   ResetPassword({
-    _i57.Key? key,
+    _i58.Key? key,
     String? email,
     String? code,
     List<_i52.PageRouteInfo>? children,
@@ -1936,7 +1850,7 @@ class ResetPasswordArgs {
     this.code,
   });
 
-  final _i57.Key? key;
+  final _i58.Key? key;
 
   final String? email;
 

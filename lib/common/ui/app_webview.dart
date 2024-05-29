@@ -6,12 +6,11 @@ import 'package:lantern/common/common.dart';
 class AppWebView extends StatefulWidget {
   final String title;
   final String url;
-  final String title;
 
   const AppWebView({
     super.key,
     required this.url,
-    required this.title,
+     this.title= "",
   });
 
   @override

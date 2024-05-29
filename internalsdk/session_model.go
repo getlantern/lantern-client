@@ -4,10 +4,8 @@ import (
 	"context"
 	"fmt"
 	"math/big"
-	"path/filepath"
 	"strconv"
 	"strings"
-	"strconv"
 	"time"
 
 	"github.com/1Password/srp"
@@ -228,6 +226,10 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		email := arguments.Get("email").String()
 		password := arguments.Get("password").String()
 		err := signup(m, email, password)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	case "createUser":
 		err := m.userCreate(context.Background(), arguments.Scalar().String())
 		if err != nil {
@@ -448,12 +450,11 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	}
 	log.Debugf("UserId is %v", userId)
 	if userId == 0 {
-		local, err := m.Locale()
 		if err != nil {
 			log.Error(err)
 		} else {
 			// Create user
-			err = m.userCreate(ctx, local)
+			err = m.userCreate(ctx)
 			if err != nil {
 				log.Error(err)
 			}
@@ -466,25 +467,25 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		log.Error(err)
 	}
 
-	token, err := m.GetToken()
-	if err != nil {
-		return err
-	}
-	countryCode, err := m.GetCountryCode()
-	if err != nil {
-		return err
-	}
-	//Get all the Plans
-	userIdStr := fmt.Sprintf("%d", userId)
-	if userId == 0 {
-		tempUserId, err := m.GetUserID()
-		if err != nil {
-			return err
-		}
-		userIdStr = fmt.Sprintf("%d", tempUserId)
-	}
+	// token, err := m.GetToken()
+	// if err != nil {
+	// 	return err
+	// }
+	// countryCode, err := m.GetCountryCode()
+	// if err != nil {
+	// 	return err
+	// }
+	// //Get all the Plans
+	// userIdStr := fmt.Sprintf("%d", userId)
+	// if userId == 0 {
+	// 	tempUserId, err := m.GetUserID()
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	userIdStr = fmt.Sprintf("%d", tempUserId)
+	// }
 
-	err = getPlansV3(m.baseModel, opts.DeviceID, userIdStr, lang, token, countryCode)
+	err = m.paymentMethods()
 	if err != nil {
 		log.Debugf("Plans V3 error: %v", err)
 		return err
@@ -515,10 +516,8 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	return checkAdsEnabled(m)
 }
 
-func getPlansV3(m *baseModel, deviceId string, userId string, lang string, token string, countyCode string) error {
-	//
-	log.Debugf("Request data deviceID %v userId %v lang %v token %v countyCode %v", deviceId, userId, lang, token, countyCode)
-	plans, err := apimodels.PlansV3(deviceId, userId, lang, token, countyCode)
+func (session *SessionModel) paymentMethods() error {
+	plans, err := session.proClient.PaymentMethodsV4(context.Background())
 	if err != nil {
 		log.Debugf("Plans V3 error: %v", err)
 		return err
@@ -526,7 +525,7 @@ func getPlansV3(m *baseModel, deviceId string, userId string, lang string, token
 	log.Debugf("Plans V3 response: %+v", plans)
 
 	/// Process Plans and providers
-	err = storePlanDetail(m, *plans)
+	err = storePlanDetail(session.baseModel, plans)
 	if err != nil {
 		return err
 	}
@@ -677,12 +676,12 @@ func setLanguage(m *baseModel, lang string) error {
 	})
 }
 
-func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
+func setDevices(m *baseModel, devices []*protos.Device) error {
 	log.Debugf("Device list %v", devices)
 	var protoDevices []*protos.Device
 	for _, device := range devices {
 		protoDevice := &protos.Device{
-			Id:      device.ID,
+			Id:      device.Id,
 			Name:    device.Name,
 			Created: device.Created,
 		}
@@ -698,7 +697,7 @@ func setDevices(m *baseModel, devices []apimodels.UserDevice) error {
 	return nil
 }
 
-func storePlanDetail(m *baseModel, plan apimodels.PlansResponse) error {
+func storePlanDetail(m *baseModel, plan *pro.PaymentMethodsResponse) error {
 	log.Debugf("Storing Plan details ")
 	err := setPlans(m, plan.Plans)
 	if err != nil {
@@ -708,7 +707,7 @@ func storePlanDetail(m *baseModel, plan apimodels.PlansResponse) error {
 	return nil
 }
 
-func setPlans(m *baseModel, plans []apimodels.Plan) error {
+func setPlans(m *baseModel, plans []protos.Plan) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		//Get local from user
 		lang, err := pathdb.Get[string](tx, pathLang)
@@ -724,9 +723,9 @@ func setPlans(m *baseModel, plans []apimodels.Plan) error {
 				return err
 			}
 			log.Debugf("Plans Values %+v", plans)
-			pathPlanId := pathPlans + strings.Split(plans.ID, "-")[0]
+			pathPlanId := pathPlans + strings.Split(plans.Id, "-")[0]
 			protoPlan := &protos.Plan{
-				Id:                     plans.ID,
+				Id:                     plans.Id,
 				Description:            plans.Description,
 				BestValue:              plans.BestValue,
 				UsdPrice:               plans.UsdPrice,
@@ -897,11 +896,6 @@ func setStoreVersion(m *baseModel, isStoreVersion bool) error {
 	})
 }
 
-func setSelectedTab(m *baseModel, tap string) error {
-	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathSelectedTab, tap, "")
-	})
-}
 func checkFirstTimeVisit(m *baseModel) (bool, error) {
 	firsttime, err := pathdb.Get[bool](m.db, pathIsFirstTime)
 	if err != nil {
@@ -911,11 +905,6 @@ func checkFirstTimeVisit(m *baseModel) (bool, error) {
 	return firsttime, nil
 }
 func isShowFirstTimeUserVisit(m *baseModel) error {
-	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathIsFirstTime, true, "")
-	})
-}
-func setUserIdAndToken(m *baseModel, userId int, token string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathIsFirstTime, true, "")
 	})
@@ -942,7 +931,7 @@ func setResellerCode(m *baseModel, resellerCode string) error {
 	})
 }
 
-func getUserSalt(m *baseModel, email string) ([]byte, error) {
+func getUserSalt(m *SessionModel, email string) ([]byte, error) {
 	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
 	if err != nil {
 		return nil, err
@@ -951,7 +940,12 @@ func getUserSalt(m *baseModel, email string) ([]byte, error) {
 		log.Debugf("salt return from cache %v", userSalt)
 		return userSalt, nil
 	}
-	salt, err := apimodels.GetSalt(email)
+
+	email, err = pathdb.Get[string](m.db, pathEmailAddress)
+	if err != nil {
+		return nil, err
+	}
+	salt, err := m.proClient.GetSalt(context.Background(), email)
 	if err != nil {
 		return nil, err
 	}
@@ -959,15 +953,16 @@ func getUserSalt(m *baseModel, email string) ([]byte, error) {
 	return salt.Salt, nil
 }
 
-func userCreate(m *baseModel, local string) error {
-	deviceID, err := pathdb.Get[string](m.db, pathDeviceID)
-	if err != nil {
-		return err
-	}
+// func userCreate(m *baseModel, local string) error {
+// 	deviceID, err := pathdb.Get[string](m.db, pathDeviceID)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	userResponse, err := apimodels.UserCreate(deviceID, local)
+//	userResponse, err := apimodels.UserCreate(deviceID, local)
+//
 // userCreate creates a new user and stores it in pathdb
-func (session *SessionModel) userCreate(ctx context.Context, local string) error {
+func (session *SessionModel) userCreate(ctx context.Context) error {
 	resp, err := session.proClient.UserCreate(ctx)
 	if err != nil {
 		log.Errorf("Error sending request: %v", err)
@@ -975,7 +970,7 @@ func (session *SessionModel) userCreate(ctx context.Context, local string) error
 	}
 	user := resp.User
 	//Save user id and token
-	err = setUserIdAndToken(session.baseModel, int(user.UserId), user.Token)
+	err = setUserIdAndToken(session.baseModel, int64(user.UserId), user.Token)
 	if err != nil {
 		return err
 	}
@@ -988,14 +983,19 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	if err != nil {
 		return nil
 	}
-	log.Debugf("User detail: %+v", userDetail)
+	log.Debugf("User detail: %+v", resp.User)
 
-	//Check if devuce id is connect to same device if not create new usr
+	userDetail := resp.User
+	currentDevice, err := session.GetDeviceID()
+	if err != nil {
+		log.Debugf("Error while getting device id %v", err)
+	}
+	// Check if devuce id is connect to same device if not create new user
 	// THis is for the case when user removed device from other device
 	found := false
 	if userDetail.Devices != nil {
 		for _, device := range userDetail.Devices {
-			if device.ID == deviecId {
+			if device.Id == currentDevice {
 				found = true
 				break
 			}
@@ -1007,11 +1007,7 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 		// Switch to free user
 		signOut(*session)
 		log.Debugf("Device has not found in the list creating new user")
-		locale, err := session.Locale()
-		if err != nil {
-			return err
-		}
-		err = userCreate(session.baseModel, locale)
+		err = session.userCreate(context.Background())
 		if err != nil {
 			return err
 		}
@@ -1026,13 +1022,13 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	return nil
 }
 
-func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) error {
+func cacheUserDetail(m *baseModel, userDetail *protos.User) error {
 	if userDetail.Email != "" {
 		setEmail(m, userDetail.Email)
 	}
 	//Save user refferal code
-	if user.Referral != "" {
-		err := setReferalCode(m, user.Referral)
+	if userDetail.Referral != "" {
+		err := setReferalCode(m, userDetail.Referral)
 		if err != nil {
 			return err
 		}
@@ -1042,7 +1038,7 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 	} else {
 		setProUser(m, false)
 	}
-	err := setUserLevel(m, user.UserLevel)
+	err := setUserLevel(m, userDetail.UserLevel)
 	if err != nil {
 		return err
 	}
@@ -1053,12 +1049,12 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 	}
 
 	//Store all device
-	err = setDevices(m, user.Devices)
+	err = setDevices(m, userDetail.Devices)
 	if err != nil {
 		return err
 	}
 	log.Debugf("User caching successful: %+v", userDetail)
-	return setUserIdAndToken(m, int64(userDetail.UserID), userDetail.Token)
+	return setUserIdAndToken(m, int64(userDetail.UserId), userDetail.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {

@@ -87,7 +87,7 @@ dependencies:
   # Timer & Overlay
   stop_watch_timer: ^3.0.1
   loader_overlay: ^2.3.2
-  animated_loading_border: ^0.0.1
+  animated_loading_border: ^0.0.2
 
   # Keyboard & Color utilities
   flutter_keyboard_visibility: ^5.4.1
@@ -135,8 +135,7 @@ dependencies:
   ffi: ^2.1.0
   # Deeplink handling
   app_links: ^3.5.1
-  #Loading
-  animated_loading_border: ^0.0.2
+
 
   # Service Locator
   get_it: ^7.6.4

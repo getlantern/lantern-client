@@ -9,7 +9,7 @@ import app_links
 import audioplayers_darwin
 import device_info_plus
 import emoji_picker_flutter
-import flutter_inappwebview
+import flutter_inappwebview_macos
 import flutter_local_notifications
 import in_app_purchase_storekit
 import package_info_plus

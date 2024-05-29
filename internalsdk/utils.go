@@ -15,7 +15,6 @@ import (
 
 	"github.com/bojanz/currency"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/lantern-client/internalsdk/apimodels"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
 	"golang.org/x/crypto/pbkdf2"
@@ -29,10 +28,11 @@ func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 	return math.Float64frombits(bits), nil
 }
 
-func updatePrice(plan *apimodels.Plan, local string) error {
-	bonous := plan.RenewalBonusExpected
-	formattedBouns := formatRenewalBonusExpected(bonous.Months, bonous.Days, false)
-	log.Debugf("updateprice formattedBouns %v", formattedBouns)
+// Todo update this method
+func updatePrice(plan *protos.Plan, local string) error {
+	// bonous := plan.RenewalBonusExpected
+	// formattedBouns := formatRenewalBonusExpected(bonous.Months, bonous.Days, false)
+	// log.Debugf("updateprice formattedBouns %v", formattedBouns)
 	totalCost, err := formatPrice(plan.Price, local)
 	log.Debugf("updateprice Total cost %v", totalCost)
 	if err != nil {
@@ -44,16 +44,16 @@ func updatePrice(plan *apimodels.Plan, local string) error {
 		return err
 	}
 	log.Debugf("updateprice oneMonthCost %v", oneMonthCost)
-	var formattedDiscount string
-	if plan.Discount > 0 {
-		discountPercentage := math.Round(plan.Discount * 100)
-		formattedDiscount = fmt.Sprintf("Save: %v%%", discountPercentage)
-	}
+	// var formattedDiscount string
+	// if plan.Discount > 0 {
+	// 	discountPercentage := math.Round(plan.Discount * 100)
+	// 	formattedDiscount = fmt.Sprintf("Save: %v%%", discountPercentage)
+	// }
 
 	plan.TotalCostBilledOneTime = fmt.Sprintf("%v billed one time", totalCost)
 	plan.OneMonthCost = oneMonthCost
-	plan.FormattedBonus = formattedBouns
-	plan.FormattedDiscount = formattedDiscount
+	// plan.FormattedBonus = formattedBouns
+	// plan.FormattedDiscount = formattedDiscount
 	plan.TotalCost = totalCost
 	return nil
 }

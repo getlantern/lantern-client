@@ -88,7 +88,7 @@ class SessionModel extends Model {
       // if user goes to chat then screenshot will be disabled
       enableScreenShot();
     }
-  }
+
 
     /*Note
     * Make proxyAvailable default value to true on IOS it take some to get data from go side
@@ -425,16 +425,9 @@ class SessionModel extends Model {
   Future<void> setFirstTimeVisit() async {
     return methodChannel
         .invokeMethod<void>('setFirstTimeVisit', <String, dynamic>{});
+
   }
 
-  /// Auth API end
-
-  Future<void> setProxyAll<T>(bool on) async {
-    unawaited(
-      methodChannel.invokeMethod('setProxyAll', <String, dynamic>{
-        'on': on,
-      }),
-    );
   Future<void> setProxyAll<T>(bool isOn) async {
     if (isDesktop()) {
       return await compute(ffiSetProxyAll, isOn ? 'true' : 'false');
@@ -442,6 +435,8 @@ class SessionModel extends Model {
     throw Exception("Not supported on mobile");
   }
 
+
+  /// Auth API end
   Future<String> getCountryCode() async {
     return await methodChannel
         .invokeMethod('getCountryCode', <String, dynamic>{});

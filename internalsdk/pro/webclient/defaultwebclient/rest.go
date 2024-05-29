@@ -28,7 +28,7 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 	}
 	c.SetBaseURL(baseURL)
 
-	return func(ctx context.Context, method string, path string, reqParams any, body []byte) ([]byte, error) {
+	return func(ctx context.Context, method string, path string, reqParams any, header any, body []byte) ([]byte, error) {
 		req := c.R().SetContext(ctx)
 		if reqParams != nil {
 			switch reqParams.(type) {
@@ -48,6 +48,20 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 			}
 		} else if body != nil {
 			req.Body = body
+		}
+
+		if header != nil {
+			switch header.(type) {
+			case map[string]interface{}:
+				headers := header.(map[string]interface{})
+				stringHeaders := make(map[string]string, len(headers))
+				for key, value := range headers {
+					stringHeaders[key] = fmt.Sprint(value)
+				}
+				req.SetHeaders(stringHeaders)
+			default:
+				req.SetHeaders(header.(map[string]string))
+			}
 		}
 
 		resp, err := req.Execute(method, path)

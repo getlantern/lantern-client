@@ -49,6 +49,11 @@ type ProClient interface {
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
+	AuthClient
+}
+
+type AuthClient interface {
+	GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error)
 }
 
 // NewClient creates a new instance of ProClient
@@ -69,7 +74,7 @@ func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Reque
 
 		uc := c.userConfig()
 
-		req.Header.Set("Referer", "http://localhost:37457/")
+		//req.Header.Set("Referer", "http://localhost:37457/")
 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 			common.DeviceIdHeader,
 			common.ProTokenHeader,
@@ -271,5 +276,18 @@ func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*Li
 	}
 	b, _ := json.Marshal(resp)
 	log.Debugf("LinkCodeResponse is %s", string(b))
+	return &resp, nil
+}
+
+// Auth APIS
+
+func (c *proClient) GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error) {
+	var resp protos.GetSaltResponse
+	err := c.webclient.GetPROTOC(ctx, "users/salt", map[string]interface{}{
+		"email": email,
+	}, &resp)
+	if err != nil {
+		return nil, err
+	}
 	return &resp, nil
 }

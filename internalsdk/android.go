@@ -627,8 +627,6 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		},
 		nil, // onError
 	)
-	end := time.Now()
-	log.Debugf("[Performance logs] Flashlight took %v", end.Sub(start))
 }
 
 func bandwidthUpdates(session PanickingSession) {

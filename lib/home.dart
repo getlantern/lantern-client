@@ -164,8 +164,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
-    print("Home build called");
     final tabModel = context.watch<BottomBarChangeNotifier>();
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
