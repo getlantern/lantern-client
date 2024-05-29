@@ -5,15 +5,23 @@ import org.getlantern.lantern.R
 import java.text.Collator
 import java.util.Locale
 
-class LocaleInfo(var label: String, val language: String, var country: String) : Comparable<LocaleInfo> {
+class LocaleInfo(var label: String, val language: String, var country: String) :
+    Comparable<LocaleInfo> {
 
     val locale: Locale by lazy {
         Locale(language, country)
     }
 
-    constructor(context: Context, locale: Locale) : this(getDisplayName(context, locale), locale.language, locale.country)
+    constructor(context: Context, locale: Locale) : this(
+        getDisplayName(context, locale),
+        locale.language,
+        locale.country
+    )
 
-    constructor(context: Context, locale: String) : this(context, Locale(locale.substring(0, 2), locale.substring(3, 5)))
+    constructor(context: Context, locale: String) : this(
+        context,
+        Locale(locale.substring(0, 2), locale.substring(3, 5))
+    )
 
     override fun toString(): String {
         return label

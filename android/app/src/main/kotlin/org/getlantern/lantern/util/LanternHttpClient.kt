@@ -15,8 +15,11 @@ import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.service.LanternService
+import org.getlantern.lantern.util.Json
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.util.HttpClient
 import java.io.IOException
@@ -53,6 +56,30 @@ open class LanternHttpClient : HttpClient() {
         return Gson().fromJson(row, object : TypeToken<T>() {}.type)
     }
 
+    fun createUser(cb: ProUserCallback) {
+        val formBody =
+            FormBody.Builder()
+                .add("locale", LanternApp.getSession().language)
+                .build()
+
+        val url = createProUrl("/user-create")
+        post(url, formBody, object : ProCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                cb.onFailure(throwable, error)
+            }
+
+            override fun onSuccess(response: Response?, result: JsonObject?) {
+                val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
+                if (user == null) {
+                    Logger.error(TAG, "Unable to parse user from JSON")
+                    return
+                }
+                cb.onSuccess(response!!, user)
+            }
+
+        })
+    }
+
     fun userData(cb: ProUserCallback) {
         val params = mapOf<String, String>("locale" to LanternApp.getSession().language)
         val url = createProUrl("/user-data", params)
@@ -74,7 +101,6 @@ open class LanternHttpClient : HttpClient() {
                     result?.let {
                         val user = parseData<ProUser>(result.toString())
                         Logger.debug(TAG, "User ID is ${user.userId}")
-                        LanternApp.getSession().storeUserData(user)
                         cb.onSuccess(response!!, user)
                     }
                 }
@@ -122,6 +148,61 @@ open class LanternHttpClient : HttpClient() {
     }
 
 
+    fun plansV4(
+        cb: PlansV3Callback,
+    ) {
+        val params =
+            mapOf(
+                "locale" to LanternApp.getSession().language,
+                "countrycode" to LanternApp.getSession().getCountryCode(),
+            )
+        get(
+            createProUrl("/plans-v4", params),
+            object : ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "Unable to fetch plans", throwable)
+                    cb.onFailure(throwable, error)
+                }
+
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    Logger.d(TAG, "Plans v3 Response body $result")
+                    val methods =
+                        parseData<Map<String, List<PaymentMethods>>>(
+                            result?.get("providers").toString(),
+                        )
+                    val icons = parseData<Icons>(result?.get("icons").toString())
+                    Logger.d(TAG, "Plans v3 Icons Response body $icons")
+                    val providers = methods.get("android")
+                    // Due to API limitations
+                    // We need loop all the provider and info since we can multiple provider with multiple methods
+                    providers?.let {
+                        providers.forEach { it ->
+                            it.providers.forEach { provider ->
+                                val icons = result?.get("icons")?.asJsonObject
+                                val logoJson = icons?.get(
+                                    provider.name.toString().lowercase()
+                                )!!.asJsonArray
+                                val logoUrlsList: List<String> =
+                                    logoJson?.map { it.asString } ?: emptyList()
+                                provider.logoUrl = logoUrlsList
+                            }
+                        }
+                    }
+                    val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
+                    val plans = plansMap(fetched)
+                    if (providers != null) cb.onSuccess(plans, providers)
+                }
+            },
+        )
+    }
+
+    @Deprecated("plansV3 has been deprecated  Use plansV4 instead")
     fun plansV3(
         cb: PlansV3Callback,
     ) {
@@ -188,7 +269,9 @@ open class LanternHttpClient : HttpClient() {
                 .headers(headers.toHeaders())
                 .url(url)
         if (method == "POST") {
-            var requestBody = if (body != null) body else RequestBody.create(null, ByteArray(0))
+            var requestBody = if (body != null) body else ByteArray(0).toRequestBody(
+                null
+            )
             builder = builder.post(requestBody)
         }
 
@@ -238,7 +321,7 @@ open class LanternHttpClient : HttpClient() {
             error: ProError?,
         )
 
-        abstract fun onSuccess(
+        fun onSuccess(
             response: Response?,
             result: JsonObject?,
         )
@@ -300,7 +383,7 @@ open class LanternHttpClient : HttpClient() {
         }
 
         fun createJsonBody(json: JsonObject): RequestBody {
-            return RequestBody.create(JSON, json.toString())
+            return json.toString().toRequestBody(JSON)
         }
     }
 }

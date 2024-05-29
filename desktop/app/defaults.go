@@ -6,6 +6,8 @@ package app
 import (
 	"crypto/rand"
 	"encoding/hex"
+
+	"github.com/getlantern/lantern-client/desktop/settings"
 )
 
 const (
@@ -23,7 +25,7 @@ func randRead(size int) string {
 
 // localHTTPToken fetches the local HTTP token from disk if it's there, and
 // otherwise creates a new one and stores it.
-func localHTTPToken(set *Settings) string {
+func localHTTPToken(set *settings.Settings) string {
 	tok := set.GetLocalHTTPToken()
 	if tok == "" {
 		t := randRead(16)

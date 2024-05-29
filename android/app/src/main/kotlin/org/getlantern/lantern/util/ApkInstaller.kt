@@ -42,9 +42,11 @@ class ApkInstaller(
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
                 installWithPackageInstaller()
             }
+
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.N -> {
-                createInstallIntentContentUri()?.let(this::launchInstaller)
+                createInstallIntentContentUri().let(this::launchInstaller)
             }
+
             else -> {
                 createInstallIntentFileUri()?.let(this::launchInstaller)
             }
@@ -55,7 +57,7 @@ class ApkInstaller(
     private suspend fun installWithPackageInstaller() =
         withContext(Dispatchers.IO) {
             try {
-                val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
+                val params = SessionParams(SessionParams.MODE_FULL_INSTALL)
                 // create a new session using the given params, returning a unique ID that represents the session
                 val sessionId = packageInstaller.createSession(params)
                 // open an existing session to actively perform work
@@ -86,7 +88,7 @@ class ApkInstaller(
     private fun createIntentSender(sessionId: Int): IntentSender {
         val broadcastIntent = Intent(PACKAGE_INSTALLED_ACTION)
         val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.FLAG_MUTABLE
+            PendingIntent.FLAG_IMMUTABLE
         } else {
             0
         }
@@ -106,7 +108,7 @@ class ApkInstaller(
         Logger.error(TAG, "Failed to launch apk installer", e)
     }
 
-    private fun createInstallIntentContentUri(): Intent? {
+    private fun createInstallIntentContentUri(): Intent {
         val packageName = context.packageName
         val authority = "$packageName.fileProvider"
         val apkFileUri = FileProvider.getUriForFile(context, authority, apkFile)
@@ -140,7 +142,8 @@ class ApkInstaller(
         }
 
     // SessionCallback is used to observe events of a Session lifecycle
-    private class SessionCallback(private val activity: Activity) : PackageInstaller.SessionCallback() {
+    private class SessionCallback(private val activity: Activity) :
+        PackageInstaller.SessionCallback() {
         override fun onCreated(sessionId: Int) {
             Logger.debug(TAG, "onCreated: sessionId=$sessionId")
         }

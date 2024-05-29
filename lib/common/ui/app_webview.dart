@@ -1,15 +1,17 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:lantern/common/common.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
+  final String title;
   final String url;
   final String title;
 
   const AppWebView({
     super.key,
     required this.url,
-    this.title = "",
+    required this.title,
   });
 
   @override
@@ -17,7 +19,7 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
-  InAppWebViewSettings settings = InAppWebViewSettings(
+  final InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: false,
     javaScriptEnabled: true,
     mediaPlaybackRequiresUserGesture: false,
@@ -35,7 +37,62 @@ class _AppWebViewState extends State<AppWebView> {
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
         initialSettings: settings,
+        onProgressChanged: (controller, progress) {
+          appLogger.i("Progress: $progress");
+        },
       ),
     );
+  }
+}
+
+class AppBrowser extends InAppBrowser {
+  final VoidCallback? onClose;
+  final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
+      browserSettings: InAppBrowserSettings(hideUrlBar: true),
+      webViewSettings: InAppWebViewSettings(
+          javaScriptEnabled: true, isInspectable: kDebugMode));
+
+  AppBrowser({
+    required this.onClose,
+  });
+
+  @override
+  Future onBrowserCreated() async {
+    appLogger.i("Browser created");
+  }
+
+  @override
+  Future onLoadStart(url) async {
+    appLogger.i("Started displaying $url");
+  }
+
+  @override
+  Future onLoadStop(url) async {
+    appLogger.i("Stopped displaying $url");
+    onClose?.call();
+  }
+
+  @override
+  void onReceivedError(WebResourceRequest request, WebResourceError error) {
+    appLogger.i("Can't load ${request.url}.. Error: ${error.description}");
+  }
+
+  @override
+  void onProgressChanged(progress) {
+    appLogger.i("Progress: $progress");
+  }
+
+  @override
+  void onExit() {
+    appLogger.i("Browser closed");
+  }
+
+  Future<void> openMacWebview(String url) async {
+    await openUrlRequest(
+        urlRequest: URLRequest(url: WebUri(url)), settings: settings);
+  }
+
+  static Future<void> openWindowsWebview(String url) async {
+    FlutterWindowsWebview().launchWebview(url);
   }
 }

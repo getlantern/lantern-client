@@ -2,9 +2,6 @@ import 'package:lantern/ad_helper.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
-import 'package:tray_manager/tray_manager.dart';
-
-import '../ad_helper.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -13,40 +10,22 @@ class VPNSwitch extends StatefulWidget {
   State<VPNSwitch> createState() => _VPNSwitchState();
 }
 
-class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
+class _VPNSwitchState extends State<VPNSwitch> {
   final adHelper = AdHelper();
   String vpnStatus = 'disconnected';
-
-  @override
-  void initState() {
-    if (isDesktop()) {
-      trayManager.addListener(this);
-    }
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    if (isDesktop()) {
-      trayManager.removeListener(this);
-    }
-    super.dispose();
-  }
 
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
   Future<void> vpnProcessForDesktop() async {
     bool isConnected = vpnStatus == 'connected';
-    String path = systemTrayIcon(!isConnected);
     if (isConnected) {
       sysProxyOff();
-      await setupMenu(false);
+      await TrayHandler.instance.setupTray(false);
     } else {
       sysProxyOn();
-      await setupMenu(true);
+      await TrayHandler.instance.setupTray(true);
     }
-    await trayManager.setIcon(path);
   }
 
   Future<void> vpnProcessForMobile(
@@ -80,24 +59,19 @@ class _VPNSwitchState extends State<VPNSwitch> with TrayListener {
     if (isMobile()) {
       return sessionModel
           .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
-        return sessionModel.shouldShowCASAds((context, isCasAdsEnable, child) {
-          adHelper.loadAds(
-              shouldShowGoogleAds: isGoogleAdsEnable,
-              shouldShowCASAds: isCasAdsEnable);
-          return Transform.scale(
-              scale: 2,
-              child: vpnModel.vpnStatus(
-                  (BuildContext context, String vpnStatus, Widget? child) {
-                return FlutterSwitch(
-                  value:
-                      vpnStatus == 'connected' || vpnStatus == 'disconnecting',
-                  activeColor: onSwitchColor,
-                  inactiveColor: offSwitchColor,
-                  onToggle: (bool newValue) => vpnProcessForMobile(newValue,
-                      vpnStatus, (isGoogleAdsEnable || isCasAdsEnable)),
-                );
-              }));
-        });
+        adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
+        return Transform.scale(
+            scale: 2,
+            child: vpnModel.vpnStatus(
+                (BuildContext context, String vpnStatus, Widget? child) {
+              return FlutterSwitch(
+                value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+                activeColor: onSwitchColor,
+                inactiveColor: offSwitchColor,
+                onToggle: (bool newValue) =>
+                    vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
+              );
+            }));
       });
     } else {
       // This ui for desktop

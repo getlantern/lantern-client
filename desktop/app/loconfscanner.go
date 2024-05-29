@@ -14,6 +14,7 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/loconf"
 	"github.com/getlantern/lantern-client/desktop/notifier"
+	"github.com/getlantern/lantern-client/desktop/settings"
 )
 
 // LoconfScanner starts a goroutine to periodically check for new loconf files.
@@ -27,7 +28,7 @@ import (
 // show the announcement or not).
 //
 // Returns a function to stop the loop.
-func LoconfScanner(settings *Settings, configDir string, interval time.Duration, proChecker func() (bool, bool), iconURL func() string) (stop func()) {
+func LoconfScanner(settings *settings.Settings, configDir string, interval time.Duration, proChecker func() (bool, bool), iconURL func() string) (stop func()) {
 	loc := &loconfer{
 		log:       golog.LoggerFor("loconfer"),
 		configDir: configDir,
@@ -86,7 +87,7 @@ type loconfer struct {
 	configDir string
 	r         *rand.Rand
 	iconURL   func() string
-	settings  *Settings
+	settings  *settings.Settings
 }
 
 func (loc *loconfer) onLoconf(lc *loconf.LoConf, isPro bool) {
@@ -139,14 +140,14 @@ func (loc *loconfer) makeAnnouncements(lc *loconf.LoConf, isPro bool) {
 		}
 		return
 	}
-	past := loc.settings.getStringArray(SNPastAnnouncements)
+	past := loc.settings.GetPastAnnouncements()
 	if in(current.Campaign, past) {
 		loc.log.Debugf("Skip announcement %s", current.Campaign)
 		return
 	}
 	if loc.showAnnouncement(current) {
 		past = append(past, current.Campaign)
-		loc.settings.setStringArray(SNPastAnnouncements, past)
+		loc.settings.SetPastAnnouncements(past)
 	}
 }
 

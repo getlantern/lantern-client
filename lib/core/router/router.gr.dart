@@ -92,6 +92,23 @@ abstract class $AppRouter extends _i52.RootStackRouter {
         child: const _i2.AccountMenu(),
       );
     },
+    AddViaChatNumber.name: (routeData) {
+      return _i42.AutoRoutePage<void>(
+        routeData: routeData,
+        child: _i3.AddViaChatNumber(),
+      );
+    },
+    AppWebview.name: (routeData) {
+      final args = routeData.argsAs<AppWebviewArgs>();
+      return _i42.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i4.AppWebView(
+          key: args.key,
+          url: args.url,
+          title: args.title,
+        ),
+      );
+    },
     ApproveDevice.name: (routeData) {
       final args = routeData.argsAs<ApproveDeviceArgs>(
           orElse: () => const ApproveDeviceArgs());
@@ -587,6 +604,65 @@ class Account extends _i52.PageRouteInfo<void> {
 /// generated route for
 /// [_i3.AddDevice]
 class ApproveDevice extends _i52.PageRouteInfo<ApproveDeviceArgs> {
+/// [_i3.AddViaChatNumber]
+class AddViaChatNumber extends _i42.PageRouteInfo<void> {
+  const AddViaChatNumber({List<_i42.PageRouteInfo>? children})
+      : super(
+          AddViaChatNumber.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AddViaChatNumber';
+
+  static const _i42.PageInfo<void> page = _i42.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i4.AppWebView]
+class AppWebview extends _i42.PageRouteInfo<AppWebviewArgs> {
+  AppWebview({
+    _i44.Key? key,
+    required String url,
+    required String title,
+    List<_i42.PageRouteInfo>? children,
+  }) : super(
+          AppWebview.name,
+          args: AppWebviewArgs(
+            key: key,
+            url: url,
+            title: title,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'AppWebview';
+
+  static const _i42.PageInfo<AppWebviewArgs> page =
+      _i42.PageInfo<AppWebviewArgs>(name);
+}
+
+class AppWebviewArgs {
+  const AppWebviewArgs({
+    this.key,
+    required this.url,
+    required this.title,
+  });
+
+  final _i44.Key? key;
+
+  final String url;
+
+  final String title;
+
+  @override
+  String toString() {
+    return 'AppWebviewArgs{key: $key, url: $url, title: $title}';
+  }
+}
+
+/// generated route for
+/// [_i5.ApproveDevice]
+class ApproveDevice extends _i42.PageRouteInfo<ApproveDeviceArgs> {
   ApproveDevice({
     _i54.Key? key,
     List<_i52.PageRouteInfo>? children,

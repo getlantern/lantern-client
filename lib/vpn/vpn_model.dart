@@ -1,7 +1,5 @@
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/common/common_desktop.dart' as desktop;
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 final vpnModel = VpnModel();
 
@@ -29,56 +27,52 @@ class VpnModel extends Model {
         builder: builder,
       );
     }
-    final channel = WebSocketChannel.connect(
-      Uri.parse("ws://" + desktop.websocketAddr() + '/data'),
-    );
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<String>(
       'vpnStatus',
       defaultValue: '',
-      channel: channel,
-      onChanges: (setValue) {
-        /// Listen for all incoming data
-        channel.stream.listen(
-          (data) {
-            final parsedJson = json.decode(data);
-            if (parsedJson["type"] == "vpnstatus") {
-              final updated = parsedJson["message"]["connected"];
-              final isConnected = updated != null && updated.toString() == "true";
-              setValue(isConnected ? "connected" : "disconnected");
-            }
-          },
-          onError: (error) => print(error),
-        );
-      },
-      desktop.vpnStatus,
+      onChanges: (setValue) => sessionModel
+          .listenWebsocket(websocket, "vpnstatus", "connected", (value) {
+        final isConnected = value != null && value.toString() == "true";
+        setValue(isConnected ? "connected" : "disconnected");
+      }),
+      ffiVpnStatus,
       builder: builder,
     );
   }
- 
+
   Future<bool> isVpnConnected() async {
     final vpnStatus = await methodChannel.invokeMethod('getVpnStatus');
     return vpnStatus == 'connected';
   }
 
-  //This method has moved to Session model
-  // Due to go model changes
-  // Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
-  //   return subscribedSingleValueBuilder<ServerInfo>(
-  //     '/server_info',
-  //     builder: builder,
-  //     deserialize: (Uint8List serialized) {
-  //       return ServerInfo.fromBuffer(serialized);
-  //     },
-  //   );
-  // }
-
   Widget bandwidth(ValueWidgetBuilder<Bandwidth> builder) {
-    return subscribedSingleValueBuilder<Bandwidth>(
-      '/bandwidth',
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<Bandwidth>(
+        '/bandwidth',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Bandwidth.fromBuffer(serialized);
+        },
+      );
+    }
+    final websocket = WebsocketImpl.instance();
+    return ffiValueBuilder<Bandwidth>(
+      'bandwidth',
+      defaultValue: null,
+      onChanges: (setValue) =>
+          sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
+        if (value != null) {
+          final Map res = jsonDecode(jsonEncode(value));
+          setValue(Bandwidth.create()
+            ..mergeFromProto3Json({
+              'allowed': res['mibAllowed'],
+              'remaining': res['mibUsed'],
+            }));
+        }
+      }),
+      null,
       builder: builder,
-      deserialize: (Uint8List serialized) {
-        return Bandwidth.fromBuffer(serialized);
-      },
     );
   }
 }

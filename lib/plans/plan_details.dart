@@ -161,6 +161,61 @@ class PlanCard extends StatelessWidget {
   }
 
   Future<void> _proceedToCustomCheckout(BuildContext context) async {
+  void onPlanTap(BuildContext context) {
+    switch (Platform.operatingSystem) {
+      case 'ios':
+        throw Exception("Not support at the moment");
+        break;
+      default:
+        // proceed to the default checkout page on Android and desktop
+        _checkOut(context);
+        break;
+    }
+  }
+
+  // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
+  List<PaymentProviders> paymentProvidersFromMethods(
+      Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+    var providers = <PaymentProviders>[];
+    for (final paymentMethod in paymentMethods) {
+      for (final provider in paymentMethod.value.providers) {
+        providers.add(provider);
+      }
+    }
+    return providers;
+  }
+
+  Future<void> _checkOut(BuildContext context) async {
+    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+    final inRussia = sessionModel.country.value == 'RU';
+    // * Play version (Android only)
+    if (isPlayVersion && !inRussia) {
+      await context.pushRoute(
+        PlayCheckout(
+          plan: plan,
+          isPro: isPro,
+        ),
+      );
+      return;
+    } else if (isDesktop()) {
+      final paymentMethods = await sessionModel.paymentMethodsv4();
+      final providers = paymentProvidersFromMethods(paymentMethods);
+      // if only one payment provider is returned, bypass the last checkout screen
+      // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
+      if (providers.length == 1 && providers[0].name.toPaymentEnum() == Providers.stripe) {
+        final providerName = providers[0].name.toPaymentEnum();
+        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
+          context,
+          plan.id,
+          "",
+          providerName,
+        );
+        await openDesktopWebview(
+            context: context, provider: providerName, redirectUrl: redirectUrl);
+        return;
+      }
+    }
+    // * Proceed to our own Checkout
     await context.pushRoute(
       Checkout(
         plan: plan,

@@ -19,6 +19,8 @@ class BaseScreen extends StatelessWidget {
   final bool automaticallyImplyLeading;
   final List<Widget>? persistentFooterButtons;
 
+  final VoidCallback? onBackButtonPressed;
+
   BaseScreen({
     this.title,
     this.actions,
@@ -34,6 +36,7 @@ class BaseScreen extends StatelessWidget {
     this.showAppBar = true,
     this.automaticallyImplyLeading = true,
     this.persistentFooterButtons,
+    this.onBackButtonPressed,
     Key? key,
   }) : super(key: key) {
     this.foregroundColor = foregroundColor ?? black;
@@ -81,6 +84,18 @@ class BaseScreen extends StatelessWidget {
                       ),
                       AppBar(
                         automaticallyImplyLeading: automaticallyImplyLeading,
+                        leading: automaticallyImplyLeading
+                            ? IconButton(
+                                icon: const Icon(Icons.arrow_back,
+                                    color: Colors.black),
+                                onPressed: () {
+                                  if (onBackButtonPressed != null) {
+                                    onBackButtonPressed?.call();
+                                    return;
+                                  }
+                                  Navigator.of(context).pop();
+                                })
+                            : null,
                         title: title is String
                             ? CText(
                                 title,
@@ -89,7 +104,7 @@ class BaseScreen extends StatelessWidget {
                                     .short,
                               )
                             : title,
-                        elevation: .5,
+                        elevation: 1,
                         shadowColor: grey3,
                         foregroundColor: foregroundColor,
                         backgroundColor: backgroundColor,

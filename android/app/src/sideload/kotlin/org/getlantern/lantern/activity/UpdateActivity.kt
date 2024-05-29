@@ -167,7 +167,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
 
     private fun hasInstallPackagesPermission(): Boolean {
         return PackageManager.PERMISSION_GRANTED ==
-            packageManager.checkPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES, packageName)
+                packageManager.checkPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES, packageName)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

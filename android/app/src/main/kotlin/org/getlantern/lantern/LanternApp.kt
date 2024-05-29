@@ -1,17 +1,16 @@
 package org.getlantern.lantern
 
+//import org.getlantern.lantern.util.SentryUtil
 import android.app.Application
 import android.content.Context
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.multidex.MultiDex
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
-import org.getlantern.lantern.plausible.Plausible
-import org.getlantern.lantern.util.debugOnly
+import org.getlantern.lantern.model.MessagingHolder
 import org.getlantern.lantern.util.LanternProxySelector
-//import org.getlantern.lantern.util.SentryUtil
+import org.getlantern.lantern.util.debugOnly
 import org.getlantern.mobilesdk.util.HttpClient
 
 open class LanternApp : Application() {
@@ -40,32 +39,23 @@ open class LanternApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-//        SentryUtil.enableGoPanicEnrichment(this)
 
         // Necessary to locate a back arrow resource we use from the
         // support library. See http://stackoverflow.com/questions/37615470/support-library-vectordrawable-resourcesnotfoundexception
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         appContext = applicationContext
+        messaging.init(this)
         session = LanternSessionManager(this)
 
         LanternProxySelector(session)
-
-        inAppBilling = InAppBilling(this)
 
         lanternHttpClient = LanternHttpClient()
 
         // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
         // about proxies being unavailable.
         session.resetHasSucceedingProxy()
-    }
 
-    override fun attachBaseContext(base: Context) {
-        super.attachBaseContext(base)
-        // this is necessary running earlier versions of Android
-        // multidex support has to be added manually
-        // in addition to being enabled in the app build.gradle
-        // See http://stackoverflow.com/questions/36907916/java-lang-noclassdeffounderror-while-registering-eventbus-in-onstart-method-for
-        MultiDex.install(this)
+        inAppBilling = InAppBilling(this)
     }
 
     companion object {
@@ -74,6 +64,7 @@ open class LanternApp : Application() {
         private lateinit var inAppBilling: InAppBilling
         private lateinit var lanternHttpClient: LanternHttpClient
         private lateinit var session: LanternSessionManager
+        var messaging: MessagingHolder = MessagingHolder()
 
         @JvmStatic
         fun getAppContext(): Context {

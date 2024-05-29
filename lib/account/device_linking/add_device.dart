@@ -1,4 +1,5 @@
 import 'package:lantern/common/common.dart';
+import 'package:lantern/plans/utils.dart';
 
 import 'explanation_step.dart';
 
@@ -32,7 +33,7 @@ class AddDevice extends StatelessWidget {
               PinField(
                 length: 6,
                 controller: pinCodeController,
-                onDone: (code) => onDone(code, context),
+                onDone: (code) => _onDone(code, context),
               ),
               LabeledDivider(
                 padding: const EdgeInsetsDirectional.only(top: 10, bottom: 10),
@@ -52,35 +53,32 @@ class AddDevice extends StatelessWidget {
     });
   }
 
-  Future<void> onDone(String code, BuildContext context) async {
+  Future<void> _onDone(String code, BuildContext context) async {
+    context.loaderOverlay.show(widget: spinner);
     try {
-      context.loaderOverlay.show();
-      pinCodeController.clear();
       await sessionModel.approveDevice(code);
-      context.loaderOverlay.hide();
-      successDialog(context);
-    } catch (e) {
       pinCodeController.clear();
       context.loaderOverlay.hide();
-      CDialog.showError(context, description: e.localizedDescription);
-    }
-  }
+      CDialog.showInfo(
+        context,
+        title: "device_added".i18n,
+        description: "device_added_message".i18n,
+        agreeAction: () async {
+          Future.delayed(
+            const Duration(milliseconds: 400),
+            () {
+              context.router.maybePop();
+            },
+          );
 
-  void successDialog(BuildContext context) {
-    CDialog(
-      iconPath: ImagePaths.check_green_large,
-      title: "device_added".i18n,
-      description: "device_added_message".i18n,
-      barrierDismissible: false,
-      agreeText: "ok".i18n,
-      includeCancel: false,
-      agreeAction: () async {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          context.popRoute();
-          context.popRoute();
-        });
-        return true;
-      },
-    ).show(context);
+          return true;
+        },
+      );
+    } catch (e) {
+      appLogger.e("Error while approving device", error: e);
+      context.loaderOverlay.hide();
+      pinCodeController.clear();
+      showError(context, error: e);
+    }
   }
 }

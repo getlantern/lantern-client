@@ -9,7 +9,7 @@ import org.getlantern.mobilesdk.Logger
 class PermissionUtil {
     companion object {
         private val TAG = PermissionUtil::class.java.simpleName
-        private val PERMISSIONS_TAG = "${PermissionUtil.TAG}.permissions"
+        private val PERMISSIONS_TAG = "$TAG.permissions"
 
 
         /*Note - we do not include Manifest.permission.FOREGROUND_SERVICE because this is automatically
@@ -28,7 +28,7 @@ class PermissionUtil {
          * @param context the application context is necessary for checking permissions.
          * @return An array of strings, where each string represents a missing permission.
          */
-         fun missingPermissions(context: Context): Array<String> {
+        fun missingPermissions(context: Context): Array<String> {
             val missingPermissions: MutableList<String> = ArrayList()
             for (permission in allRequiredPermissions) {
                 if (!hasPermission(permission, context)) {
@@ -39,7 +39,7 @@ class PermissionUtil {
         }
 
 
-         fun hasPermission(permission: String, context: Context): Boolean {
+        fun hasPermission(permission: String, context: Context): Boolean {
             val result = ContextCompat.checkSelfPermission(
                 context,
                 permission,

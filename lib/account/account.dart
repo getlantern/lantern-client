@@ -1,3 +1,4 @@
+import 'package:lantern/account/follow_us.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
@@ -56,6 +57,18 @@ class AccountMenu extends StatelessWidget {
   void upgradeToLanternPro(BuildContext context) async =>
       await context.pushRoute(const PlansPage());
 
+  void showSocialBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+      builder: (context) {
+        return const FollowUs();
+      },
+    );
+  }
+
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
       if (Platform.isAndroid) messagingModel.getOnBoardingStatus(
@@ -85,6 +98,38 @@ class AccountMenu extends StatelessWidget {
         content: 'sign_in'.i18n,
         onTap: () => openSignIn(context),
       ),
+      ListItemFactory.settingsItem(
+        key: AppKeys.upgrade_lantern_pro,
+        icon: ImagePaths.pro_icon_black,
+        content: 'Upgrade to Lantern Pro'.i18n,
+        onTap: () {
+          upgradeToLanternPro(context);
+        },
+      ),
+      if (Platform.isAndroid)
+        messagingModel.getOnBoardingStatus(
+          (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
+              ? messagingModel.getCopiedRecoveryStatus(
+                  (
+                    BuildContext context,
+                    bool hasCopiedRecoveryKey,
+                    Widget? child,
+                  ) =>
+                      ListItemFactory.settingsItem(
+                    icon: ImagePaths.account,
+                    content: 'account_management'.i18n,
+                    onTap: () async => await context
+                        .pushRoute(AccountManagement(isPro: false)),
+                    trailingArray: [
+                      if (!hasCopiedRecoveryKey)
+                        const CAssetImage(
+                          path: ImagePaths.badge,
+                        ),
+                    ],
+                  ),
+                )
+              : const SizedBox(),
+        ),
       ListItemFactory.settingsItem(
         key: AppKeys.upgrade_lantern_pro,
         icon: ImagePaths.pro_icon_black,
@@ -146,11 +191,19 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> commonItems(BuildContext context) {
     return [
+      if (isMobile())
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.desktop,
+          content: 'desktop_version'.i18n,
+          onTap: () {
+            openDesktopVersion(context);
+          },
+        ),
       ListItemFactory.settingsItem(
-        icon: ImagePaths.desktop,
-        content: 'desktop_version'.i18n,
+        icon: ImagePaths.thumbUp,
+        content: 'follow_us'.i18n,
         onTap: () {
-          openDesktopVersion(context);
+          showSocialBottomSheet(context);
         },
       ),
       ListItemFactory.settingsItem(

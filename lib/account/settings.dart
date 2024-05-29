@@ -1,4 +1,4 @@
-import 'package:catcher_2/core/catcher_2.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/app_methods.dart';
 import 'package:lantern/common/common.dart';
@@ -7,15 +7,21 @@ import 'package:lantern/common/ui/app_loading_dialog.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
   Settings({Key? key}) : super(key: key);
 
-
   final packageInfo = PackageInfo.fromPlatform();
+
+  void openInfoProxyAll(BuildContext context) {
+    CDialog.showInfo(
+      context,
+      title: 'proxy_all'.i18n,
+      description: 'description_proxy_all_dialog'.i18n,
+      iconPath: ImagePaths.key,
+    );
+  }
 
   void changeLanguage(BuildContext context) async =>
       await context.pushRoute(Language());
@@ -26,13 +32,11 @@ class Settings extends StatelessWidget {
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
-  void openWebView(String url, BuildContext context) async {
+  void openWebView(String url, BuildContext context, String title) async {
     if (isDesktop()) {
       await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
-    } else if (Platform.isAndroid) {
-      await sessionModel.openWebview(url);
-    } else {
-      context.pushRoute(AppWebview(url: url));
+    } else if (isMobile()) {
+      context.pushRoute(AppWebview(url: url, title: title));
     }
   }
 
@@ -88,63 +92,117 @@ class Settings extends StatelessWidget {
             onTap: () => checkForUpdateTap(context),
           ),
           //* Blocked
-          if (!isDesktop()) messagingModel.getOnBoardingStatus(
-            (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
-                ? ListItemFactory.settingsItem(
-                    header: 'chat'.i18n,
-                    icon: ImagePaths.block,
-                    content: 'blocked_users'.i18n,
-                    trailingArray: [
-                      mirrorLTR(
-                        context: context,
-                        child: const ContinueArrow(),
-                      )
-                    ],
-                    onTap: () => context.pushRoute(BlockedUsers()),
-                  )
-                : const SizedBox(),
-          ),
+          if (!isDesktop())
+            messagingModel.getOnBoardingStatus(
+              (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
+                  ? ListItemFactory.settingsItem(
+                      header: 'chat'.i18n,
+                      icon: ImagePaths.block,
+                      content: 'blocked_users'.i18n,
+                      trailingArray: [
+                        mirrorLTR(
+                          context: context,
+                          child: const ContinueArrow(),
+                        )
+                      ],
+                      onTap: () => context.pushRoute(BlockedUsers()),
+                    )
+                  : const SizedBox(),
+            ),
           //* Split tunneling
-          if (!isDesktop()) sessionModel.splitTunneling(
-            (BuildContext context, bool value, Widget? child) =>
-                ListItemFactory.settingsItem(
-              header: 'VPN'.i18n,
-              icon: ImagePaths.split_tunneling,
-              onTap: () {
-                openSplitTunneling(context);
-              },
-              content: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: CText(
-                      'split_tunneling'.i18n,
-                      softWrap: false,
-                      style: tsSubtitle1.short,
+          if (!isDesktop())
+            sessionModel.splitTunneling(
+              (BuildContext context, bool value, Widget? child) =>
+                  ListItemFactory.settingsItem(
+                header: 'VPN'.i18n,
+                icon: ImagePaths.split_tunneling,
+                onTap: () {
+                  openSplitTunneling(context);
+                },
+                content: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: CText(
+                        'split_tunneling'.i18n,
+                        softWrap: false,
+                        style: tsSubtitle1.short,
+                      ),
                     ),
+                  ],
+                ),
+                trailingArray: [
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.only(start: 16, end: 16),
+                    child: CText(
+                      value ? 'ON'.i18n : 'OFF'.i18n,
+                      style: tsSubtitle2.copiedWith(color: pink4),
+                    ),
+                  ),
+                  mirrorLTR(
+                    context: context,
+                    child: const ContinueArrow(),
+                  )
+                ],
+              ),
+            ),
+          //* Proxy all
+          if (isDesktop())
+            sessionModel.proxyAll(
+              (BuildContext context, bool proxyAll, Widget? child) =>
+                  ListItemFactory.settingsItem(
+                header: 'VPN'.i18n,
+                icon: ImagePaths.key,
+                content: CInkWell(
+                  onTap: () => openInfoProxyAll(context),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: CText(
+                          'proxy_everything_is'
+                              .i18n
+                              .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                          softWrap: false,
+                          style: tsSubtitle1.short,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsetsDirectional.only(start: 4.0),
+                        child: CAssetImage(
+                          key: ValueKey('proxy_all_icon'),
+                          path: ImagePaths.info,
+                          size: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                trailingArray: [
+                  FlutterSwitch(
+                    width: 44.0,
+                    height: 24.0,
+                    valueFontSize: 12.0,
+                    padding: 2,
+                    toggleSize: 18.0,
+                    value: proxyAll,
+                    activeColor: indicatorGreen,
+                    inactiveColor: offSwitchColor,
+                    onToggle: (bool newValue) {
+                      sessionModel.setProxyAll(newValue);
+                    },
                   ),
                 ],
               ),
-              trailingArray: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
-                  child: CText(
-                    value ? 'ON'.i18n : 'OFF'.i18n,
-                    style: tsSubtitle2.copiedWith(color: pink4),
-                  ),
-                ),
-                mirrorLTR(
-                  context: context,
-                  child: const ContinueArrow(),
-                )
-              ],
             ),
-          ),
           ListItemFactory.settingsItem(
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,
-            onTap: () => openWebView(privacyPolicy, context),
+            onTap: () => openWebView(
+                AppSecret.privacyPolicyV2, context, "privacy_policy".i18n),
             trailingArray: [
               mirrorLTR(
                 context: context,
@@ -170,8 +228,8 @@ class Settings extends StatelessWidget {
                 ),
               )
             ],
-            onTap: () => openWebView(
-                termsOfService, context),
+            onTap: () =>
+                openWebView(AppSecret.tosV2, context, "terms_of_service".i18n),
           ),
           //* Build version
           FutureBuilder<PackageInfo>(

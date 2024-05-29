@@ -62,7 +62,7 @@ public class Logger {
     }
 
     private static Throwable throwableFor(Object... msgParams) {
-        for (int i=0; i<msgParams.length; i++) {
+        for (int i = 0; i < msgParams.length; i++) {
             Object param = msgParams[i];
             if (param instanceof Throwable) {
                 return (Throwable) param;

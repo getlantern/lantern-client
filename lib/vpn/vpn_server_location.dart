@@ -1,6 +1,8 @@
 import 'package:lantern/vpn/vpn.dart';
 
 class ServerLocationWidget extends StatelessWidget {
+  const ServerLocationWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return CInkWell(

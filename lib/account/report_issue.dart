@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
@@ -49,13 +48,7 @@ class _ReportIssueState extends State<ReportIssue> {
         return null;
       });
 
-  @override
-  void dispose() {
-    emailController.dispose();
-    issueController.dispose();
-    descController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +81,6 @@ class _ReportIssueState extends State<ReportIssue> {
                     initialValue: emailAddress,
                     controller: emailController,
                     autovalidateMode: AutovalidateMode.disabled,
-                    contentPadding: const EdgeInsetsDirectional.only(
-                      top: 8.0,
-                      bottom: 8.0,
-                    ),
                     label: 'email'.i18n,
                     onChanged: (value) {
                       setState(() {});
@@ -138,14 +127,21 @@ class _ReportIssueState extends State<ReportIssue> {
                             issueController.text = newValue!;
                           });
                         },
+                        padding: isDesktop()
+                            ? const EdgeInsetsDirectional.only(
+                                top: 8,
+                                bottom: 8,
+                              )
+                            : const EdgeInsetsDirectional.all(0),
                         items: <String>[
                           'cannot_access_blocked_sites'.i18n,
                           'cannot_complete_purchase'.i18n,
-                          'cannot_login'.i18n,
-                          'loading_spinner_spins_endlessly'.i18n,
+                          'cannot_sign_in'.i18n,
+                          'discover_not_working'.i18n,
+                          'spinner_loads_endlessly'.i18n,
                           'slow'.i18n,
                           'cannot_link_devices'.i18n,
-                          'lantern_crashes'.i18n,
+                          'application_crashes'.i18n,
                           'other'.i18n
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
@@ -158,11 +154,13 @@ class _ReportIssueState extends State<ReportIssue> {
               Form(
                 key: descFieldKey,
                 child: CTextField(
-                  tooltipMessage: AppKeys.reportDescription,
+                  tooltipMessage: 'report_description'.i18n,
                   controller: descController,
-                  contentPadding: const EdgeInsetsDirectional.all(8.0),
-                  label: '',
+                  contentPadding: isDesktop()
+                      ? const EdgeInsetsDirectional.all(16.0)
+                      : const EdgeInsetsDirectional.all(8.0),
                   hintText: 'issue_description'.i18n,
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
                   autovalidateMode: AutovalidateMode.disabled,
                   maxLines: 8,
                   keyboardType: TextInputType.multiline,
@@ -173,7 +171,7 @@ class _ReportIssueState extends State<ReportIssue> {
               ),
               const Spacer(),
               Tooltip(
-                  message: AppKeys.sendReport,
+                  message: isDesktop() ? '' : AppKeys.sendReport,
                   child: Button(
                     width: 200,
                     disabled: isButtonDisabled(),
@@ -199,22 +197,15 @@ class _ReportIssueState extends State<ReportIssue> {
     if (issueController.text.isEmpty) {
       return true;
     }
-    if (descController.text.isEmpty) {
-      return true;
-    }
     return false;
   }
 
   Future<void> onSendReportTap() async {
     try {
-      AppLoadingDialog.showLoadingDialog(
-        context,
-      );
+      AppLoadingDialog.showLoadingDialog(context);
       await sessionModel.reportIssue(emailController.value.text,
           issueController.value.text, descController.value.text);
-      if (Platform.isIOS) {
-        AppLoadingDialog.dismissLoadingDialog(context);
-      }
+      AppLoadingDialog.dismissLoadingDialog(context);
       CDialog.showInfo(
         context,
         title: 'report_sent'.i18n,
@@ -226,9 +217,7 @@ class _ReportIssueState extends State<ReportIssue> {
         },
       );
     } catch (error, stackTrace) {
-      if (Platform.isIOS) {
-        AppLoadingDialog.dismissLoadingDialog(context);
-      }
+      AppLoadingDialog.dismissLoadingDialog(context);
       CDialog.showError(
         context,
         error: error,

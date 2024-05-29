@@ -18,18 +18,19 @@ data class ProUser(
 ) {
     private fun isUserStatus(status: String) = userStatus == status
 
-    private fun expirationDate() = if (expiration == null) null else LocalDateTime(expiration * 1000)
+    private fun expirationDate() =
+        if (expiration == null) null else LocalDateTime(expiration * 1000)
 
     fun monthsLeft(): Int {
         val expDate = expirationDate()
         if (expDate == null) return 0
-        return Months.monthsBetween(LocalDateTime.now(), expDate).getMonths()
+        return Months.monthsBetween(LocalDateTime.now(), expDate).months
     }
 
     fun daysLeft(): Int {
         val expDate = expirationDate()
         if (expDate == null) return 0
-        return Days.daysBetween(LocalDateTime.now(), expDate).getDays()
+        return Days.daysBetween(LocalDateTime.now(), expDate).days
     }
 
     fun newUserDetails(): String {
@@ -37,10 +38,10 @@ data class ProUser(
     }
 
     val isProUser: Boolean
-        get() = isUserStatus("active")
+        get() = (isUserStatus("active") || userLevel == "pro")
 
     val isActive: Boolean
-        get() = isProUser
+        get() = isUserStatus("active")
 
     val isExpired: Boolean
         get() = isUserStatus("expired")

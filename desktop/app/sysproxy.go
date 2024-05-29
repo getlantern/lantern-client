@@ -76,7 +76,7 @@ func (app *App) notifyConnectionStatus(isConnected bool) {
 	}
 }
 
-func (app *App) SetSysProxy(_sysproxyOff  func() error) {
+func (app *App) SetSysProxy(_sysproxyOff func() error) {
 	app.mu.Lock()
 	defer app.mu.Unlock()
 	app._sysproxyOff = _sysproxyOff

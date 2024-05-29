@@ -22,6 +22,7 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
   var activeSubscribers: Set<String> = []
   private let mainHandler = DispatchQueue.main
   private let asyncHandler = DispatchQueue(label: "BaseModel-AsyncHandler")
+  private let invokeBackgroundQueue = DispatchQueue.global(qos: .background)
 
   init(_ flutterBinary: FlutterBinaryMessenger, _ model: M) throws {
     self.model = model
@@ -186,8 +187,23 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
     return FlutterError(code: code, message: message, details: details)
   }
 
-  internal func invoke(_ name: String, _ arguments: Any = "") throws -> MinisqlValue? {
-    return try model.invokeMethod(name, arguments: try Arguments(arguments))
+  internal func invoke(
+    _ name: String, arguments: Any = "",
+    completion: @escaping (MinisqlValue?, Error?) -> Void
+  ) {
+    // Dispatch the invoke call asynchronously on the custom queue
+    invokeBackgroundQueue.async {
+      do {
+        let result = try self.model.invokeMethod(name, arguments: try Arguments(arguments))
+        DispatchQueue.main.async {
+          completion(result, nil)
+        }
+      } catch {
+        DispatchQueue.main.async {
+          completion(nil, error)
+        }
+      }
+    }
   }
 }
 

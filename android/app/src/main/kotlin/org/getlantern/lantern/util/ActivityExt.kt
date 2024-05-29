@@ -12,8 +12,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.getlantern.lantern.R
 import org.getlantern.lantern.MainActivity
+import org.getlantern.lantern.R
 import org.getlantern.lantern.model.Utils
 import org.getlantern.mobilesdk.Logger
 
@@ -46,9 +46,10 @@ fun Activity.restartApp() {
         PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
     val mgr: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    mgr.set(AlarmManager.RTC, java.lang.System.currentTimeMillis() + 100, mPendingIntent)
+    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent)
     Process.killProcess(Process.myPid())
 }
+
 
 @JvmOverloads
 fun Activity.showAlertDialog(

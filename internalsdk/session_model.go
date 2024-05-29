@@ -1,18 +1,22 @@
 package internalsdk
 
 import (
+	"context"
 	"fmt"
 	"math/big"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"strconv"
 	"time"
 
 	"github.com/1Password/srp"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/flashlight/v7/logging"
-	"github.com/getlantern/lantern-client/internalsdk/apimodels"
+	"github.com/getlantern/flashlight/v7/proxied"
+
+	//"github.com/getlantern/flashlight/v7/proxied"
+	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 
 	"github.com/getlantern/pathdb"
@@ -23,6 +27,7 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
+	proClient pro.ProClient
 }
 
 // Expose payment providers
@@ -69,12 +74,9 @@ const (
 	pathLang                   = "lang"
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
-	pathCASAdsEnabled          = "casAsEnabled"
 	pathStoreVersion           = "storeVersion"
-	pathSelectedTab            = "/selectedTab"
 	pathServerInfo             = "/server_info"
 	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
-	pathShouldShowCasAds       = "shouldShowCASAds"
 	pathShouldShowGoogleAds    = "shouldShowGoogleAds"
 	currentTermsVersion        = 1
 	pathUserSalt               = "user_salt"
@@ -113,7 +115,9 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
+	dialTimeout := 30 * time.Second
 	if opts.Platform == "ios" {
+		dialTimeout = 20 * time.Second
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 		base.db.RegisterType(5000, &protos.Device{})
@@ -122,8 +126,27 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 
 	m := &SessionModel{baseModel: base}
+	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
+		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
+		UserConfig: func() common.UserConfig {
+			deviceID, _ := m.GetDeviceID()
+			userID, _ := m.GetUserID()
+			token, _ := m.GetToken()
+			lang, _ := m.Locale()
+			return common.NewUserConfig(
+				common.DefaultAppName,
+				deviceID,
+				userID,
+				token,
+				nil,
+				lang,
+			)
+		},
+	})
+
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
-	return m, m.initSessionModel(opts)
+	go m.initSessionModel(context.Background(), opts)
+	return m, nil
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -183,20 +206,6 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-	case "setSelectedTab":
-		err := setSelectedTab(m.baseModel, arguments.Get("tab").String())
-		if err != nil {
-			return nil, err
-		}
-		return true, nil
-	case "isUserFirstTimeVisit":
-		return checkFirstTimeVisit(m.baseModel)
-	case "setFirstTimeVisit":
-		err := isShowFirstTimeUserVisit(m.baseModel)
-		if err != nil {
-			return nil, err
-		}
-		return true, nil
 	case "reportIssue":
 		email := arguments.Get("email").String()
 		issue := arguments.Get("issue").String()
@@ -219,8 +228,10 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		email := arguments.Get("email").String()
 		password := arguments.Get("password").String()
 		err := signup(m, email, password)
+	case "createUser":
+		err := m.userCreate(context.Background(), arguments.Scalar().String())
 		if err != nil {
-			return nil, err
+			log.Error(err)
 		}
 		return true, nil
 	case "hasAllNetworkPermssion":
@@ -359,25 +370,25 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "updateStats":
+		city := arguments.Get("city").String()
+		country := arguments.Get("country").String()
+		serverCountryCode := arguments.Get("serverCountryCode").String()
+		httpsUpgrades := arguments.Get("httpsUpgrades").Int()
+		adsBlocked := arguments.Get("adsBlocked").Int()
+		hasSucceedingProxy := arguments.Get("hasSucceedingProxy").Bool()
+		err := m.UpdateStats(city, country, serverCountryCode, httpsUpgrades, adsBlocked, hasSucceedingProxy)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	default:
 		return m.methodNotImplemented(method)
 	}
 }
 
-// Internal functions that manage method
-func (m *SessionModel) StartService(configDir string,
-	locale string,
-	settings Settings) {
-	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
-	session := &panickingSessionImpl{m}
-	startOnce.Do(func() {
-		go run(configDir, locale, settings, session)
-	})
-
-}
-
 // InvokeMethod handles method invocations on the SessionModel.
-func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
+func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelOpts) error {
 	// Check if email if empty
 	email, err := pathdb.Get[string](m.db, pathEmailAddress)
 	if err != nil {
@@ -439,19 +450,20 @@ func (m *SessionModel) initSessionModel(opts *SessionModelOpts) error {
 	if userId == 0 {
 		local, err := m.Locale()
 		if err != nil {
-			return err
-		}
-		// Create user
-		err = userCreate(m.baseModel, local)
-		if err != nil {
-			return err
+			log.Error(err)
+		} else {
+			// Create user
+			err = m.userCreate(ctx, local)
+			if err != nil {
+				log.Error(err)
+			}
 		}
 	}
 
 	// Get all user details
-	err = userDetail(m)
+	err = m.userDetail(ctx)
 	if err != nil {
-		return err
+		log.Error(err)
 	}
 
 	token, err := m.GetToken()
@@ -861,13 +873,6 @@ func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
 	}))
 }
 
-func (m *SessionModel) SetCASShowInterstitialAdsEnabled(casEnable bool) {
-	log.Debugf("SetCASShowInterstitialAdsEnabled %v", casEnable)
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathCASAdsEnabled, casEnable, "")
-	}))
-}
-
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 	// Return static for now
 	// Todo implement this method
@@ -906,6 +911,11 @@ func checkFirstTimeVisit(m *baseModel) (bool, error) {
 	return firsttime, nil
 }
 func isShowFirstTimeUserVisit(m *baseModel) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathIsFirstTime, true, "")
+	})
+}
+func setUserIdAndToken(m *baseModel, userId int, token string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathIsFirstTime, true, "")
 	})
@@ -956,35 +966,25 @@ func userCreate(m *baseModel, local string) error {
 	}
 
 	userResponse, err := apimodels.UserCreate(deviceID, local)
+// userCreate creates a new user and stores it in pathdb
+func (session *SessionModel) userCreate(ctx context.Context, local string) error {
+	resp, err := session.proClient.UserCreate(ctx)
 	if err != nil {
 		log.Errorf("Error sending request: %v", err)
 		return err
 	}
-
+	user := resp.User
 	//Save user id and token
-	err = setUserIdAndToken(m, int64(userResponse.UserID), userResponse.Token)
+	err = setUserIdAndToken(session.baseModel, int(user.UserId), user.Token)
 	if err != nil {
 		return err
 	}
-	log.Debugf("Created new Lantern user: %+v", userResponse)
+	log.Debugf("Created new Lantern user: %+v", user)
 	return nil
 }
 
-func userDetail(session *SessionModel) error {
-	deviecId, err := session.GetDeviceID()
-	if err != nil {
-		return err
-	}
-	userId, err := session.GetUserID()
-	if err != nil {
-		return err
-	}
-	token, err := session.GetToken()
-	if err != nil {
-		return err
-	}
-	userIdStr := fmt.Sprintf("%d", userId)
-	userDetail, err := apimodels.FechUserDetail(deviecId, userIdStr, token)
+func (session *SessionModel) userDetail(ctx context.Context) error {
+	resp, err := session.proClient.UserData(ctx)
 	if err != nil {
 		return nil
 	}
@@ -1018,6 +1018,8 @@ func userDetail(session *SessionModel) error {
 	}
 
 	err = cacheUserDetail(session.baseModel, userDetail)
+	log.Debugf("User detail: %+v", resp.User)
+	err = cacheUserDetail(session.baseModel, resp.User)
 	if err != nil {
 		return err
 	}
@@ -1029,8 +1031,8 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 		setEmail(m, userDetail.Email)
 	}
 	//Save user refferal code
-	if userDetail.Referral != "" {
-		err := setReferalCode(m, userDetail.Referral)
+	if user.Referral != "" {
+		err := setReferalCode(m, user.Referral)
 		if err != nil {
 			return err
 		}
@@ -1040,7 +1042,7 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 	} else {
 		setProUser(m, false)
 	}
-	err := setUserLevel(m, userDetail.UserLevel)
+	err := setUserLevel(m, user.UserLevel)
 	if err != nil {
 		return err
 	}
@@ -1051,7 +1053,7 @@ func cacheUserDetail(m *baseModel, userDetail *apimodels.UserDetailResponse) err
 	}
 
 	//Store all device
-	err = setDevices(m, userDetail.Devices)
+	err = setDevices(m, user.Devices)
 	if err != nil {
 		return err
 	}
@@ -1102,13 +1104,12 @@ func checkAdsEnabled(session *SessionModel) error {
 	if err != nil {
 		return err
 	}
+	// If the user doesn't have all permissions, disable Google ads:
 	if !hasAllPermisson {
 		log.Debugf("User has not given all permission")
+
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.PutAll(tx, map[string]interface{}{
-				pathShouldShowGoogleAds: false,
-				pathShouldShowCasAds:    false,
-			})
+			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
 		})
 	}
 	log.Debugf("User has given all permission")
@@ -1116,38 +1117,17 @@ func checkAdsEnabled(session *SessionModel) error {
 	if err != nil {
 		return err
 	}
-	log.Debugf("Is user pro %v", isPro)
 	if isPro {
-		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			err = pathdb.Put(tx, pathShouldShowCasAds, false, "")
-			if err != nil {
-				return err
-			}
-			return pathdb.Put(tx, pathShouldShowCasAds, false, "")
+		log.Debugf("Is user pro %v", isPro)
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
 		})
-		if err != nil {
-			return err
-		}
-		return nil
 	}
-	isGoogleAdsEnable, err := pathdb.Get[bool](session.db, pathAdsEnabled)
-	if err != nil {
-		log.Debugf("Error while getting google ads value %v", err)
-		return err
-	}
-
-	isCasAdsEnable, err := pathdb.Get[bool](session.db, pathCASAdsEnabled)
-	if err != nil {
-		log.Debugf("Error while getting cas ads value %v", err)
-		return err
-	}
-
+	// If the user has all permissions but is not a pro user, enable ads:
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.PutAll(tx, map[string]interface{}{
-			pathAdsEnabled:    isGoogleAdsEnable,
-			pathCASAdsEnabled: isCasAdsEnable,
-		})
+		return pathdb.Put(tx, pathShouldShowGoogleAds, true, "")
 	})
+
 }
 func redeemResellerCode(m *SessionModel, email string, resellerCode string) error {
 	err := setEmail(m.baseModel, email)

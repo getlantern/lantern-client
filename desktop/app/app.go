@@ -3,9 +3,8 @@ package app
 import (
 	"context"
 	"fmt"
+	"io"
 	"io/fs"
-	"io/ioutil"
-	"math/rand"
 	"net"
 	"net/http"
 	"os"
@@ -23,29 +22,28 @@ import (
 	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/otel"
-	"github.com/getlantern/flashlight/v7/pro"
-	"github.com/getlantern/flashlight/v7/pro/client"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
 	"github.com/getlantern/memhelper"
 	notify "github.com/getlantern/notifier"
 	"github.com/getlantern/profiling"
-	"github.com/getlantern/trafficlog-flashlight/tlproc"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
-	uicommon "github.com/getlantern/lantern-client/desktop/common"
+	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
+	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	"github.com/getlantern/lantern-client/internalsdk/common"
+	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 )
 
 var (
@@ -55,10 +53,8 @@ var (
 )
 
 func init() {
-	autoupdate.Version = ApplicationVersion
+	autoupdate.Version = common.ApplicationVersion
 	autoupdate.PublicKey = []byte(packagePublicKey)
-
-	rand.Seed(time.Now().UnixNano())
 }
 
 // App is the core of the Lantern desktop application, in the form of a library.
@@ -71,7 +67,7 @@ type App struct {
 	configDir        string
 	exited           eventual.Value
 	analyticsSession analytics.Session
-	settings         *Settings
+	settings         *settings.Settings
 	statsTracker     *statsTracker
 
 	muExitFuncs sync.RWMutex
@@ -83,25 +79,8 @@ type App struct {
 
 	flashlight *flashlight.Flashlight
 
-	// If both the trafficLogLock and proxiesLock are needed, the trafficLogLock should be obtained
-	// first. Keeping the order consistent avoids deadlocking.
-
-	// Log of network traffic to and from the proxies. Used to attach packet capture files to
-	// reported issues. Nil if traffic logging is not enabled.
-	trafficLog     *tlproc.TrafficLogProcess
-	trafficLogLock sync.RWMutex
-
-	// Also protected by trafficLogLock.
-	captureSaveDuration time.Duration
-
-	// proxies are tracked by the application solely for data collection purposes. This value should
-	// not be changed, except by Flashlight.onProxiesUpdate. State-changing methods on the dialers
-	// should not be called. In short, this slice and its elements should be treated as read-only.
-	proxies     []bandit.Dialer
-	proxiesLock sync.RWMutex
-
 	issueReporter *issueReporter
-	proClient     *client.Client
+	proClient     proclient.ProClient
 	referralCode  string
 	selectedTab   Tab
 	stats         *stats.Stats
@@ -117,7 +96,7 @@ type App struct {
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, settings *Settings) *App {
+func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, settings *settings.Settings) *App {
 	analyticsSession := newAnalyticsSession(settings)
 	app := &App{
 		configDir:                 configDir,
@@ -135,21 +114,21 @@ func NewApp(flags flashlight.Flags, configDir string, proClient *client.Client, 
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
-	pro.OnProStatusChange(func(isPro bool, _ bool) {
+	onProStatusChange(func(isPro bool) {
 		app.statsTracker.SetIsPro(isPro)
 	})
 
 	log.Debugf("Using configdir: %v", configDir)
 
-	app.issueReporter = newIssueReporter(app.settings, app.getCapturedPackets, app.getProxies)
+	app.issueReporter = newIssueReporter(app)
 	app.translations.Set(os.DirFS("locale/translation"))
 
 	return app
 }
 
-func newAnalyticsSession(settings *Settings) analytics.Session {
+func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 	if settings.IsAutoReport() {
-		session := analytics.Start(settings.GetDeviceID(), ApplicationVersion)
+		session := analytics.Start(settings.GetDeviceID(), common.ApplicationVersion)
 		go func() {
 			session.SetIP(geolookup.GetIP(eventual.Forever))
 		}()
@@ -157,16 +136,6 @@ func newAnalyticsSession(settings *Settings) analytics.Session {
 	} else {
 		return analytics.NullSession{}
 	}
-}
-
-func (app *App) SelectedTab() Tab {
-	return app.selectedTab
-}
-
-func (app *App) SetSelectedTab(selectedTab Tab) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.selectedTab = selectedTab
 }
 
 // Run starts the app.
@@ -194,7 +163,7 @@ func (app *App) Run(isMain bool) {
 
 		listenAddr := app.Flags.Addr
 		if listenAddr == "" {
-			listenAddr = app.settings.getString(SNAddr)
+			listenAddr = app.settings.GetAddr()
 		}
 		if listenAddr == "" {
 			listenAddr = defaultHTTPProxyAddress
@@ -202,7 +171,7 @@ func (app *App) Run(isMain bool) {
 
 		socksAddr := app.Flags.SocksAddr
 		if socksAddr == "" {
-			socksAddr = app.settings.getString(SNSOCKSAddr)
+			socksAddr = app.settings.GetSOCKSAddr()
 		}
 		if socksAddr == "" {
 			socksAddr = defaultSOCKSProxyAddress
@@ -235,13 +204,12 @@ func (app *App) Run(isMain bool) {
 
 		app.flashlight, err = flashlight.New(
 			common.DefaultAppName,
-			ApplicationVersion,
-			RevisionDate,
+			common.ApplicationVersion,
+			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.settings.getBool(SNDisconnected) }, // check whether we're disconnected
+			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
 			app.settings.GetProxyAll,
-			app.settings.GetGoogleAds,
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
 			app.Flags.AsMap(),
@@ -251,16 +219,7 @@ func (app *App) Run(isMain bool) {
 			app.statsTracker,
 			app.IsPro,
 			app.settings.GetLanguage,
-			func() string {
-				isPro, statusKnown := app.isProUserFast()
-				if (isPro || !statusKnown) && !common.ForceAds() {
-					// pro user (or status unknown), don't ad swap
-					return ""
-				}
-				return app.PlansURL()
-			},
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-			app.AdTrackURL,
 			app.analyticsSession.EventWithLabel,
 		)
 		if err != nil {
@@ -270,11 +229,11 @@ func (app *App) Run(isMain bool) {
 		app.beforeStart(listenAddr)
 
 		chProStatusChanged := make(chan bool, 1)
-		pro.OnProStatusChange(func(isPro bool, _ bool) {
+		onProStatusChange(func(isPro bool) {
 			chProStatusChanged <- isPro
 		})
 		chUserChanged := make(chan bool, 1)
-		app.settings.OnChange(SNUserID, func(v interface{}) {
+		app.settings.OnChange(settings.SNUserID, func(v interface{}) {
 			chUserChanged <- true
 		})
 		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
@@ -290,7 +249,7 @@ func (app *App) Run(isMain bool) {
 						Title:      i18n.T("BACKEND_CONFIG_SAVE_ERROR_TITLE"),
 						Message:    i18n.T("BACKEND_CONFIG_SAVE_ERROR_MESSAGE", i18n.T(translationAppName)),
 						ClickLabel: i18n.T("BACKEND_CLICK_LABEL_GOT_IT"),
-						IconURL:    app.AddToken("/img/lantern_logo.png"),
+						IconURL:    "/img/lantern_logo.png",
 					}
 					_ = notifier.ShowNotification(note, "alert-prompt")
 				})
@@ -329,8 +288,6 @@ func (app *App) checkEnabledFeatures() {
 
 	log.Debugf("Starting enabled features: %v", enabledFeatures)
 	//go app.startReplicaIfNecessary(enabledFeatures)
-	enableTrafficLog := app.isFeatureEnabled(enabledFeatures, config.FeatureTrafficLog)
-	go app.toggleTrafficLog(enableTrafficLog)
 }
 
 // startFeaturesService starts a new features service that dispatches features to any relevant listeners.
@@ -374,29 +331,40 @@ func (app *App) beforeStart(listenAddr string) {
 		app.Exit(nil)
 		os.Exit(0)
 	}
-	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, app.IsProUser, func() string {
-		return app.AddToken("/img/lantern_logo.png")
+
+	if e := app.settings.StartService(app.ws); e != nil {
+		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
+		return
+	}
+
+	isProUser := func() (bool, bool) {
+		return app.IsProUser(context.Background())
+	}
+
+	if err := datacap.ServeDataCap(app.ws, func() string {
+		return "/img/lantern_logo.png"
+	}, func() string { return "" }, isProUser); err != nil {
+		log.Errorf("Unable to serve bandwidth to UI: %v", err)
+	}
+
+	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
+		return "/img/lantern_logo.png"
 	}))
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
-}
-
-func (app *App) isFeatureEnabled(features map[string]bool, feature string) bool {
-	val, ok := features[feature]
-	return ok && val
 }
 
 // Connect turns on proxying
 func (app *App) Connect() {
 	app.analyticsSession.Event("systray-menu", "connect")
 	ops.Begin("connect").End()
-	app.settings.setBool(SNDisconnected, false)
+	app.settings.SetDisconnected(false)
 }
 
 // Disconnect turns off proxying
 func (app *App) Disconnect() {
 	app.analyticsSession.Event("systray-menu", "disconnect")
 	ops.Begin("disconnect").End()
-	app.settings.setBool(SNDisconnected, true)
+	app.settings.SetDisconnected(true)
 }
 
 // GetLanguage returns the user language
@@ -407,11 +375,18 @@ func (app *App) GetLanguage() string {
 // SetLanguage sets the user language
 func (app *App) SetLanguage(lang string) {
 	app.settings.SetLanguage(lang)
+	log.Debugf("Setting language to %v", lang)
+	if app.ws != nil {
+		app.ws.SendMessage("pro", map[string]interface{}{
+			"type":     "pro",
+			"language": lang,
+		})
+	}
 }
 
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
-func (app *App) OnSettingChange(attr SettingName, cb func(interface{})) {
+func (app *App) OnSettingChange(attr settings.SettingName, cb func(interface{})) {
 	app.settings.OnChange(attr, cb)
 }
 
@@ -421,7 +396,7 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
-	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
+	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
 		if enable {
 			app.SysproxyOn()
@@ -435,12 +410,12 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	})
 	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
 	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
-		app.settings.setString(SNAddr, addr)
+		app.settings.SetAddr(addr.(string))
 	} else {
 		log.Errorf("Couldn't retrieve HTTP proxy addr in time")
 	}
 	if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
-		app.settings.setString(SNSOCKSAddr, socksAddr)
+		app.settings.SetSOCKSAddr(socksAddr.(string))
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
@@ -474,30 +449,6 @@ func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	if src == config.Fetched {
 		atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
 	}
-	app.trafficLogLock.Lock()
-	app.proxiesLock.Lock()
-	app.proxies = proxies
-	if app.trafficLog != nil {
-		proxyAddresses := []string{}
-		for _, p := range proxies {
-			proxyAddresses = append(proxyAddresses, p.Addr())
-		}
-		if err := app.trafficLog.UpdateAddresses(proxyAddresses); err != nil {
-			log.Errorf("failed to update traffic log addresses: %v", err)
-		}
-	}
-	app.proxiesLock.Unlock()
-	app.trafficLogLock.Unlock()
-}
-
-// getProxies returns the currently configured proxies. State-changing methods on these dialers
-// should not be called. In short, the elements of this slice should be treated as read-only.
-func (app *App) getProxies() []bandit.Dialer {
-	app.proxiesLock.RLock()
-	copied := make([]bandit.Dialer, len(app.proxies))
-	copy(copied, app.proxies)
-	app.proxiesLock.RUnlock()
-	return copied
 }
 
 // AddExitFunc adds a function to be called before the application exits.
@@ -605,7 +556,7 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.isProUserFast()
+	isPro, _ := app.isProUserFast(context.Background())
 	return isPro
 }
 
@@ -613,12 +564,13 @@ func (app *App) IsPro() bool {
 func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
 	referralCode := app.referralCode
 	if referralCode == "" {
-		resp, err := app.proClient.UserData(uc)
+		resp, err := app.proClient.UserData(context.Background())
 		if err != nil {
-			return "", err
+			return "", errors.New("error fetching user data: %v", err)
 		}
-		app.SetReferralCode(resp.Code)
-		return resp.Code, nil
+
+		app.SetReferralCode(resp.User.Code)
+		return resp.User.Code, nil
 	}
 	return referralCode, nil
 }
@@ -654,36 +606,7 @@ func recordStopped() {
 
 // ShouldReportToSentry determines if we should report errors/panics to Sentry
 func ShouldReportToSentry() bool {
-	return !uicommon.IsDevEnvironment()
-}
-
-// OnTrayShow indicates the user has selected to show lantern from the tray.
-func (app *App) OnTrayShow() {
-	app.analyticsSession.Event("systray-menu", "show")
-}
-
-// OnTrayUpgrade indicates the user has selected to upgrade lantern from the tray.
-func (app *App) OnTrayUpgrade() {
-	app.analyticsSession.Event("systray-menu", "upgrade")
-}
-
-// PlansURL returns the URL for accessing the checkout/plans page directly.
-func (app *App) PlansURL() string {
-	return "#/plans"
-}
-
-// AdTrackURL returns the URL for adding tracking on injected ads.
-func (app *App) AdTrackURL() string {
-	return "/ad_track"
-}
-
-// AddToken adds our secure token to a given request path.
-func (app *App) AddToken(path string) string {
-	return path
-}
-
-func (app *App) Settings() *Settings {
-	return app.settings
+	return !common.IsDevEnvironment()
 }
 
 // GetTranslations accesses translations with the given filename
@@ -697,5 +620,9 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not get traslation for file name: %v, %w", filename, err)
 	}
-	return ioutil.ReadAll(f)
+	return io.ReadAll(f)
+}
+
+func (app *App) Settings() *settings.Settings {
+	return app.settings
 }

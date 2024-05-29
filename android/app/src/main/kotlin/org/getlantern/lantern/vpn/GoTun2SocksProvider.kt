@@ -52,7 +52,10 @@ class GoTun2SocksProvider(
                         Logger.debug(TAG, "Excluding " + installedApp.packageName + " from VPN")
                         builder.addDisallowedApplication(installedApp.packageName)
                     } catch (e: PackageManager.NameNotFoundException) {
-                        throw RuntimeException("Unable to exclude " + installedApp.packageName + " from VPN", e)
+                        throw RuntimeException(
+                            "Unable to exclude " + installedApp.packageName + " from VPN",
+                            e
+                        )
                     }
                 }
             }
@@ -60,7 +63,7 @@ class GoTun2SocksProvider(
 
         // Never capture traffic originating from Lantern itself in the VPN.
         try {
-            val ourPackageName = vpnService.getPackageName()
+            val ourPackageName = vpnService.packageName
             builder.addDisallowedApplication(ourPackageName)
         } catch (e: PackageManager.NameNotFoundException) {
             throw RuntimeException("Unable to exclude Lantern from routes", e)
@@ -108,7 +111,7 @@ class GoTun2SocksProvider(
             Logger.debug(TAG, "Running tun2socks")
             if (intf != null) {
                 Internalsdk.tun2Socks(
-                    intf.getFd().toLong(),
+                    intf.fd.toLong(),
                     socksAddr,
                     dnsGrabAddr,
                     VPN_MTU.toLong(),

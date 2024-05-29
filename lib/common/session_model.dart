@@ -1,5 +1,7 @@
 import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
+import 'package:lantern/custom_bottom_bar.dart';
+import 'package:lantern/plans/utils.dart';
 import 'package:lantern/replica/common.dart';
 
 import 'common.dart';
@@ -76,18 +78,17 @@ class SessionModel extends Model {
         false,
       );
     }
-    isStoreVersion = singleValueNotifier(
-      'storeVersion',
-      false,
-    );
-    isPlayVersion = singleValueNotifier(
-      'playVersion',
-      false,
-    );
     userEmail = singleValueNotifier(
       'emailAddress',
       "",
     );
+
+    if (Platform.isAndroid) {
+      // By default when user starts the app we need to make sure that screenshot is disabled
+      // if user goes to chat then screenshot will be disabled
+      enableScreenShot();
+    }
+  }
 
     /*Note
     * Make proxyAvailable default value to true on IOS it take some to get data from go side
@@ -105,13 +106,37 @@ class SessionModel extends Model {
     deviceIdNotifier = singleValueNotifier('deviceid', "");
   }
 
+  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
+  // the onMessage callback is triggered with the given property value
+  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
+      String? property, void Function(T?) onMessage) {
+    if (websocket == null) return;
+    websocket.messageStream.listen(
+      (json) {
+        if (json["type"] == messageType) {
+          if (property != null) {
+            onMessage(json["message"][property]);
+          } else {
+            onMessage(json["message"]);
+          }
+        }
+      },
+      onError: (error) => appLogger.i("websocket error: ${error.description}"),
+    );
+  }
+
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
+      onChanges: (setValue) =>
+          listenWebsocket(websocket, "pro", "userStatus", (value) {
+        if (value != null && value.toString() == "active") setValue(true);
+      }),
       ffiProUser,
       builder: builder,
     );
@@ -198,9 +223,14 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<String>(
       'lang',
       defaultValue: 'en',
+      onChanges: (setValue) =>
+          listenWebsocket(websocket, "pro", "language", (value) {
+        if (value != null && value.toString() != "") setValue(value.toString());
+      }),
       ffiLang,
       builder: builder,
     );
@@ -229,8 +259,8 @@ class SessionModel extends Model {
       );
     }
     return ffiValueBuilder<String>(
-      'emailAddress',
-      ffiEmailAddress,
+      'expirydatestr',
+      ffiExpiryDate,
       defaultValue: '',
       builder: builder,
     );
@@ -256,20 +286,43 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
     }
     return ffiValueBuilder<String>(
-      'referral',
+      'deviceid',
       ffiReferral,
       defaultValue: '',
       builder: builder,
     );
   }
 
+  Devices devicesFromJson(dynamic item) {
+    final devices = <Device>[];
+    for (final element in item) {
+      if (element is! Map) continue;
+      try {
+        devices.add(Device.create()..mergeFromProto3Json(element));
+      } on Exception catch (e) {
+        // Handle parsing errors as needed
+        appLogger.i("Error parsing device data: $e");
+      }
+    }
+    return Devices.create()..devices.addAll(devices);
+  }
+
   Widget devices(ValueWidgetBuilder<Devices> builder) {
-    return subscribedSingleValueBuilder<Devices>(
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<Devices>(
+        'devices',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Devices.fromBuffer(serialized);
+        },
+      );
+    }
+    return ffiValueBuilder<Devices>(
       'devices',
+      ffiDevices,
+      fromJsonModel: devicesFromJson,
+      defaultValue: null,
       builder: builder,
-      deserialize: (Uint8List serialized) {
-        return Devices.fromBuffer(serialized);
-      },
     );
   }
 
@@ -382,6 +435,11 @@ class SessionModel extends Model {
         'on': on,
       }),
     );
+  Future<void> setProxyAll<T>(bool isOn) async {
+    if (isDesktop()) {
+      return await compute(ffiSetProxyAll, isOn ? 'true' : 'false');
+    }
+    throw Exception("Not supported on mobile");
   }
 
   Future<String> getCountryCode() async {
@@ -396,6 +454,7 @@ class SessionModel extends Model {
       });
     }
     // Desktop users
+    Localization.locale = lang;
     final newLang = lang.toNativeUtf8();
     setLang(newLang);
     return Future(() => null);
@@ -414,50 +473,37 @@ class SessionModel extends Model {
     }).then((value) => value.toString());
   }
 
-  Future<String> approveDevice(String code) {
-    return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
-      'code': code,
-    }).then((value) => value.toString() as String);
+  Future<String> approveDevice(String code) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
+        'code': code,
+      }).then((value) => value as String);
+    }
+    return await compute(ffiApproveDevice, code);
   }
 
-  Future<void> removeDevice(String deviceId) {
-    return methodChannel.invokeMethod('removeDevice', <String, dynamic>{
-      'deviceId': deviceId,
-    });
+  Future<void> removeDevice(String deviceId) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('removeDevice', <String, dynamic>{
+        'deviceId': deviceId,
+      });
+    }
+    return await compute(ffiRemoveDevice, deviceId);
   }
 
-  Future<void> setSelectedTab<T>(String tab) async {
-    return methodChannel.invokeMethod('setSelectedTab', <String, dynamic>{
-      'tab': tab,
-    });
+  Future<void> resendRecoveryCode() {
+    return methodChannel
+        .invokeMethod('resendRecoveryCode', <String, dynamic>{});
+  }
+
+  void setSelectedTab(BuildContext context, String tab) {
+    Provider.of<BottomBarChangeNotifier>(context, listen: false)
+        .setCurrentIndex(tab);
   }
 
   Widget shouldShowGoogleAds(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>(
       'shouldShowGoogleAds',
-      builder: builder,
-    );
-  }
-
-  Widget shouldShowCASAds(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
-      'shouldShowCASAds',
-      builder: builder,
-    );
-  }
-
-  Widget selectedTab(ValueWidgetBuilder<String> builder) {
-    if (isMobile()) {
-      return subscribedSingleValueBuilder<String>(
-        '/selectedTab',
-        defaultValue: TAB_VPN,
-        builder: builder,
-      );
-    }
-    return ffiValueBuilder<String>(
-      'selectedTab',
-      ffiSelectedTab,
-      defaultValue: TAB_VPN,
       builder: builder,
     );
   }
@@ -549,41 +595,60 @@ class SessionModel extends Model {
     return;
   }
 
+  // Plans and payment methods
+  Future<void> updatePaymentPlans() async {
+    return methodChannel.invokeMethod('updatePaymentPlans');
+  }
+
+  Future<bool> hasUpdatePlansOrBuy() async {
+    return compute(ffiHasPlanUpdateOrBuy, '');
+  }
+
   Plan planFromJson(Map<String, dynamic> item) {
-    final formatCurrency = new NumberFormat.simpleCurrency();
-    var id = item['id'];
-    var plan = Plan();
-    plan.id = id;
-    plan.description = item["description"];
-    plan.oneMonthCost = formatCurrency
-        .format(item["expectedMonthlyPrice"]["usd"] / 100)
-        .toString();
-    plan.totalCost = formatCurrency.format(item["usdPrice"] / 100).toString();
-    plan.totalCostBilledOneTime =
-        formatCurrency.format(item["usdPrice"] / 100).toString() +
-            ' ' +
-            'billed_one_time'.i18n;
-    plan.bestValue = item["bestValue"] ?? false;
-    plan.usdPrice = Int64(item["usdPrice"]);
+    print("called plans $item");
+    final locale = Localization.locale;
+    final formatCurrency = NumberFormat.simpleCurrency(locale: locale);
+    String currency = formatCurrency.currencyName != null
+        ? formatCurrency.currencyName!.toLowerCase()
+        : "usd";
+    final res = jsonEncode(item);
+    final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
+    if (plan.price[currency] == null) {
+      final splitted = plan.id.split('-');
+      if (splitted.length == 3) {
+        currency = splitted[1];
+      }
+    }
+
+    if (plan.price[currency] == null) {
+      return plan;
+    }
+    if (plan.price[currency] != null) {
+      final price = plan.price[currency] as Int64;
+      plan.totalCost = formatCurrency.format(price.toInt() / 100.0).toString();
+      plan.totalCostBilledOneTime =
+          '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
+    }
     return plan;
   }
 
-  PaymentMethod paymentMethodFromJson(Map<String, dynamic> item) {
-    final formatCurrency = new NumberFormat.simpleCurrency();
-    final List<PaymentMethod> methods = [];
-    for (var m in item["desktop"]) {
-      var paymentMethod = PaymentMethod();
-      paymentMethod.method = m["method"];
-      var providers = <PaymentProviders>[];
-      for (var n in m["providers"]) {
-        var provider = PaymentProviders();
-        provider.name = n["name"];
-        providers.add(provider);
-      }
+  Iterable<PathAndValue<PaymentMethod>> paymentMethodFromJson(item) {
+    final Map<String, dynamic> icons = item['icons'];
+    final desktopProviders = item['providers']["desktop"] as List;
+    return desktopProviders.map((method) {
+      final paymentMethod = PaymentMethod()..method = method["method"];
+      final providers = method["providers"].map<PaymentProviders>((provider) {
+        final List<dynamic> logos = icons[provider["name"]];
+        final List<String> stringLogos =
+            logos.map((logo) => logo.toString()).toList();
+        return PaymentProviders.create()
+          ..logoUrls.addAll(stringLogos)
+          ..name = provider["name"];
+      }).toList();
+
       paymentMethod.providers.addAll(providers);
-      return paymentMethod;
-    }
-    return PaymentMethod();
+      return PathAndValue<PaymentMethod>(paymentMethod.method, paymentMethod);
+    });
   }
 
   Widget plans({
@@ -609,6 +674,11 @@ class SessionModel extends Model {
     );
   }
 
+  Future<Iterable<PathAndValue<PaymentMethod>>> paymentMethodsv4() async {
+    final res = await ffiPaymentMethodsV4();
+    return paymentMethodFromJson(jsonDecode(res.toDartString()));
+  }
+
   Widget paymentMethods({
     required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
   }) {
@@ -621,10 +691,11 @@ class SessionModel extends Model {
         },
       );
     }
-    return ffiListBuilder<PaymentMethod>(
-      '/paymentMethods/',
-      ffiPaymentMethods,
-      paymentMethodFromJson,
+
+    return ffiValueBuilder<Iterable<PathAndValue<PaymentMethod>>>(
+      "/paymentMethods/",
+      ffiPaymentMethodsV4,
+      fromJsonModel: paymentMethodFromJson,
       builder: builder,
     );
   }
@@ -640,9 +711,7 @@ class SessionModel extends Model {
   Future<void> reportIssue(
       String email, String issue, String description) async {
     if (isDesktop()) {
-      await ffiReportIssue(email.toNativeUtf8(), issue.toNativeUtf8(),
-          description.toNativeUtf8());
-      return;
+      return await compute(ffiReportIssue, [email, issue, description]);
     }
     return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
       'email': email,
@@ -681,12 +750,9 @@ class SessionModel extends Model {
       'serverInfo',
       ffiServerInfo,
       builder: builder,
-      fromJsonModel: (Map<String, dynamic> json) {
-        var info = ServerInfo();
-        info.city = json['city'];
-        info.country = json['country'];
-        info.countryCode = json['countryCode'];
-        return info;
+      fromJsonModel: (dynamic json) {
+        final res = jsonEncode(json);
+        return ServerInfo.create()..mergeFromProto3Json(jsonDecode(res));
       },
       deserialize: (Uint8List serialized) {
         return ServerInfo.fromBuffer(serialized);
@@ -699,11 +765,13 @@ class SessionModel extends Model {
     String url,
     String title,
   ) async {
-    return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
-      'name': name,
-      'url': url,
-      'title': title,
-    });
+    if (isMobile()) {
+      return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
+        'name': name,
+        'url': url,
+        'title': title,
+      });
+    }
   }
 
   Future<String> requestLinkCode() {
@@ -732,26 +800,42 @@ class SessionModel extends Model {
 
   Future<void> redeemResellerCode(
     String email,
+    String currency,
+    String deviceName,
     String resellerCode,
   ) async {
-    return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
-      'email': email,
-      'resellerCode': resellerCode,
-    }).then((value) {
-      print('value $value');
-      print("value $value");
-    });
+    if (isMobile()) {
+      return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
+        'email': email,
+        'resellerCode': resellerCode,
+      }).then((value) {
+        print('value $value');
+      });
+    }
+    ffiRedeemResellerCode(email.toNativeUtf8(), currency.toNativeUtf8(),
+        deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
   }
 
-  Future<void> submitBitcoinPayment(
+  Future<String> submitBitcoinPayment(
     String planID,
     String email,
-    String refCode,
   ) async {
     return methodChannel.invokeMethod('submitBitcoinPayment', <String, dynamic>{
       'planID': planID,
+      'email': email
+    }).then((value) => value as String);
+  }
+
+  Future<String> generatePaymentRedirectUrl({
+    required String planID,
+    required String email,
+    required Providers paymentProvider,
+  }) {
+    return methodChannel.invokeMethod(
+        'generatePaymentRedirectUrl', <String, dynamic>{
+      'planID': planID,
       'email': email,
-      'refCode': refCode,
+      'provider': paymentProvider.name
     }).then((value) => value as String);
   }
 
@@ -766,18 +850,14 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
-   Future<String> paymentRedirect(
-    String planID,
-    String email,
-    String provider,
-    String deviceName,
-  ) async {
-    final resp = await ffiPaymentRedirect(
-        planID.toNativeUtf8(),
-        provider.toNativeUtf8(),
-        email.toNativeUtf8(),
-        deviceName.toNativeUtf8());
-    return resp.toDartString();
+  Future<String> paymentRedirectForDesktop(BuildContext context, String planID,
+      String email, Providers provider) async {
+    String os = Platform.operatingSystem;
+    Locale locale = Localizations.localeOf(context);
+    final format = NumberFormat.simpleCurrency(locale: locale.toString());
+    final currencyName = format.currencyName ?? "USD";
+    return await compute(
+        ffiPaymentRedirect, [planID, currencyName, provider.name, email, os]);
   }
   
   Future<void> submitApplePlay(String email,String planID, String purchaseToken) async {
@@ -796,18 +876,13 @@ class SessionModel extends Model {
     String expDate,
     String cvc,
   ) async {
-    if (isMobile()) {
-      return methodChannel
-          .invokeMethod('submitStripePayment', <String, dynamic>{
-        'planID': planID,
-        'email': email,
-        'cardNumber': cardNumber,
-        'expDate': expDate,
-        'cvc': cvc,
-      }).then((value) => value as String);
-    }
-    await ffiPurchase(planID.toNativeUtf8(), email.toNativeUtf8(),
-        cardNumber.toNativeUtf8(), expDate.toNativeUtf8(), cvc.toNativeUtf8());
+    return methodChannel.invokeMethod('submitStripePayment', <String, dynamic>{
+      'planID': planID,
+      'email': email,
+      'cardNumber': cardNumber,
+      'expDate': expDate,
+      'cvc': cvc,
+    }).then((value) => value as String);
   }
 
   Future<void> submitFreekassa(
@@ -826,9 +901,12 @@ class SessionModel extends Model {
   Future<void> checkEmailExists(
     String email,
   ) async {
-    return methodChannel.invokeMethod('checkEmailExists', <String, dynamic>{
-      'emailAddress': email,
-    }).then((value) => value as String);
+    if (isMobile()) {
+      return methodChannel.invokeMethod('checkEmailExists', <String, dynamic>{
+        'emailAddress': email,
+      }).then((value) => value as String);
+    }
+    await compute(ffiEmailExists, email);
   }
 
   Future<void> openWebview(String url) {
@@ -852,6 +930,20 @@ class SessionModel extends Model {
       'splitTunneling',
       ffiSplitTunneling,
       defaultValue: false,
+      builder: builder,
+    );
+  }
+
+  Widget proxyAll(ValueWidgetBuilder<bool> builder) {
+    final websocket = WebsocketImpl.instance();
+    return ffiValueBuilder<bool>(
+      'proxyAll',
+      defaultValue: false,
+      onChanges: (setValue) =>
+          listenWebsocket(websocket, "settings", "proxyAll", (value) {
+        if (value != null) setValue(value as bool);
+      }),
+      ffiProxyAll,
       builder: builder,
     );
   }
@@ -886,5 +978,13 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('denyAppAccess', <String, dynamic>{
       'packageName': packageName,
     });
+  }
+
+  Future<void> enableScreenShot() {
+    return methodChannel.invokeMethod('enableScreenshot', <String, dynamic>{});
+  }
+
+  Future<void> disableScreenShot() {
+    return methodChannel.invokeMethod('disableScreenshot', <String, dynamic>{});
   }
 }

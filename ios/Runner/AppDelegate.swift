@@ -15,11 +15,10 @@ import UIKit
   var flutterViewController: FlutterViewController!
   var flutterbinaryMessenger: FlutterBinaryMessenger!
   //  Model Properties
-  var sessionModel: SessionModel!
-  var lanternModel: LanternModel!
-  //  var navigationModel: NavigationModel!
-  var vpnModel: VpnModel!
-  var messagingModel: MessagingModel!
+  private var sessionModel: SessionModel!
+  private var lanternModel: LanternModel!
+  private var vpnModel: VpnModel!
+  private var messagingModel: MessagingModel!
   // IOS
   var loadingManager: LoadingIndicatorManager?
   let mainQueue = DispatchQueue.main
@@ -28,7 +27,6 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    //    SentryUtils.startSentry();
     initializeFlutterComponents()
     try! setupModels()
     try! setupAppComponents()
@@ -58,7 +56,6 @@ import UIKit
   private func setupModels() throws {
     logger.log("setupModels method called")
       
-    let dispatchGroup = DispatchGroup()
     // If flutterbinaryMessenger nil somehow then assign it again
     if flutterbinaryMessenger == nil || flutterViewController == nil {
       initializeFlutterComponents()
@@ -68,38 +65,6 @@ import UIKit
       vpnModel = try VpnModel(
         flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault,sessionModel:sessionModel)
       messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
-//    // Initialize LanternModel
-//    dispatchGroup.enter()
-//    DispatchQueue.global(qos: .userInitiated).async {
-//      self.lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
-//      dispatchGroup.leave()
-//    }
-//
-//    // Initialize SessionModel
-//    dispatchGroup.enter()
-//    DispatchQueue.global(qos: .userInitiated).async {
-//      do {
-//        self.sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
-//      } catch {
-//        logger.error("Error initializing SessionModel: \(error)")
-//      }
-//      dispatchGroup.leave()
-//    }
-//
-//    // Initialize VpnModel
-//    dispatchGroup.enter()
-//    DispatchQueue.global(qos: .userInitiated).async {
-//      do {
-//        self.vpnModel = try VpnModel(
-//          flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault)
-//      } catch {
-//        logger.error("Error initializing vpnModel: \(error)")
-//      }
-//      dispatchGroup.leave()
-//    }
-//    logger.log("Initializing setupModels done")
-//    messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
-//    dispatchGroup.wait()  // Wait for all initializations to complete
   }
 
   // Post start up

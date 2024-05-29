@@ -21,10 +21,12 @@ import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.model.PaymentProvider
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProUser
+import org.getlantern.lantern.model.toPaymentProvider
 import org.getlantern.mobilesdk.Logger
 
 class PaymentsUtil(private val activity: Activity) {
     private val session: LanternSessionManager = LanternApp.getSession()
+
 
     fun submitStripePayment(
         planID: String,
@@ -43,7 +45,19 @@ class PaymentsUtil(private val activity: Activity) {
                     date[1].toInt(), // expYear
                     cvc,
                 )
-            val stripe: Stripe = Stripe(activity, session.stripePubKey()!!)
+
+            val stripeKey = session.stripePubKey()
+            //Make sure if key null throw error
+            if (stripeKey.isNullOrEmpty()) {
+                Logger.error(TAG, "Stripe public key is not set")
+                methodCallResult.error(
+                    "errorSubmittingToStripe",
+                    activity.getString(R.string.error_making_purchase),
+                    null,
+                )
+                return
+            }
+            val stripe = Stripe(activity, session.stripePubKey()!!)
             stripe.createCardToken(
                 card,
                 callback =
@@ -84,56 +98,88 @@ class PaymentsUtil(private val activity: Activity) {
         }
     }
 
-    fun submitBitcoinPayment(
+
+    fun generatePaymentRedirectUrl(
         planID: String,
         email: String,
-        refCode: String,
+        provider: String,
         methodCallResult: MethodChannel.Result,
     ) {
         try {
-            val provider = PaymentProvider.BTCPay.toString().lowercase()
+            val provider = provider.toPaymentProvider().toString().lowercase()
+            if (provider == null) {
+                methodCallResult.error(
+                    "unknownError",
+                    "$provider is unavailable", // This error message is localized Flutter-side
+                    null,
+                )
+                return
+            }
             val params =
-                mutableMapOf<String, String>(
+                mutableMapOf(
                     "email" to email,
                     "plan" to planID,
                     "provider" to provider,
                     "deviceName" to session.deviceName(),
                 )
-            lanternClient.get(
-                LanternHttpClient.createProUrl("/payment-redirect", params),
-                object : ProCallback {
-                    override fun onFailure(
-                        throwable: Throwable?,
-                        error: ProError?,
-                    ) {
-                        Logger.error(TAG, "BTCPay is unavailable", throwable)
-                        methodCallResult.error(
-                            "unknownError",
-                            "BTCPay is unavailable", // This error message is localized Flutter-side
-                            null,
-                        )
-                        return
-                    }
 
-                    override fun onSuccess(
-                        response: Response?,
-                        result: JsonObject?,
-                    ) {
-                        Logger.debug(
-                            TAG,
-                            "Email successfully validated $email",
-                        )
-                        methodCallResult.success(result.toString())
-                    }
-                },
-            )
+            sendPaymentRedirectRequest(params, object : ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "$provider is unavailable ", throwable)
+                    methodCallResult.error(
+                        "unknownError",
+                        "$provider is unavailable", // This error message is localized Flutter-side
+                        null,
+                    )
+                    return
+                }
+
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    val providerUrl = result!!.get("redirect").asString
+                    Logger.debug(
+                        TAG,
+                        "$provider url is  $providerUrl",
+                    )
+
+                    methodCallResult.success(providerUrl)
+                }
+            })
         } catch (t: Throwable) {
             methodCallResult.error(
                 "unknownError",
-                "BTCPay is unavailable", // This error message is localized Flutter-side
+                "$provider is unavailable", // This error message is localized Flutter-side
                 null,
             )
         }
+    }
+
+    private fun sendPaymentRedirectRequest(params: Map<String, String>, proCallback: ProCallback) {
+        lanternClient.get(
+            LanternHttpClient.createProUrl("/payment-redirect", params),
+            object : ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    proCallback.onFailure(throwable, error)
+                    return
+                }
+
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    proCallback.onSuccess(response, result)
+
+                }
+            },
+        )
     }
 
     // getPlanYear splits the given plan ID by hyphen and returns the year the given startas with
@@ -154,10 +200,6 @@ class PaymentsUtil(private val activity: Activity) {
         methodCallResult: MethodChannel.Result,
     ) {
         val inAppBilling = LanternApp.getInAppBilling()
-        val currency =
-            LanternApp.getSession().planByID(planID)?.let {
-                it.currency
-            } ?: "usd"
         val plan = getPlanYear(planID)
         Logger.debug(TAG, "Starting in-app purchase for plan with ID $plan")
         inAppBilling.startPurchase(
@@ -187,6 +229,7 @@ class PaymentsUtil(private val activity: Activity) {
                             TAG,
                             "Unexpected number of purchased products, not proceeding with purchase",
                         )
+
                         methodCallResult.error(
                             "unknownError",
                             activity.resources.getString(R.string.error_making_purchase),
@@ -195,12 +238,47 @@ class PaymentsUtil(private val activity: Activity) {
                         return
                     }
 
+
+                    if (purchases[0].purchaseState != Purchase.PurchaseState.PURCHASED) {
+                        /*
+                        * if the purchase state is not purchased then do not call api
+                        * make user pro temporary next user open app it will check the purchase state and call api accordingly
+                        * */
+                        session.linkDevice()
+                        session.setIsProUser(true)
+                        lanternClient.userData(object : LanternHttpClient.ProUserCallback {
+                            override fun onSuccess(response: Response, userData: ProUser) {
+                                Logger.e(TAG, "User detail : $userData")
+                                activity.runOnUiThread {
+                                    methodCallResult.success("purchaseSuccessful")
+                                }
+                            }
+
+                            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                                Logger.error(TAG, "Unable to fetch user data: $throwable.message")
+                                /* Regardless of failure send success coz purchase has been processed  */
+                                activity.runOnUiThread {
+                                    methodCallResult.success("purchaseSuccessful")
+                                }
+
+                            }
+                        })
+                        return
+                    }
+
+                    /*
+                    * Important: Google Play payment ignores the app-selected locale and currency
+                    * It always uses the device's locale so
+                    * We need to pass device local it does not mismatch to server while acknolgment*/
+                    val defaultLocale = LanternApp.getSession().deviceCurrencyCode()
                     sendPurchaseRequest(
-                        plan + "-" + currency,
+                        "$plan-$defaultLocale",
                         email,
                         tokens[0],
                         PaymentProvider.GooglePlay,
                         methodCallResult,
+                        defaultLocale
+
                     )
                 }
             },
@@ -281,11 +359,13 @@ class PaymentsUtil(private val activity: Activity) {
         token: String,
         provider: PaymentProvider,
         methodCallResult: MethodChannel.Result,
+        deviceLocal: String = "",
     ) {
-        val currency =
+        val currency = deviceLocal.ifEmpty {
             LanternApp.getSession().planByID(planID)?.let {
                 it.currency
             } ?: "usd"
+        }
         Logger.d(
             TAG,
             "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency"
@@ -339,7 +419,6 @@ class PaymentsUtil(private val activity: Activity) {
                             activity.runOnUiThread {
                                 methodCallResult.success("purchaseSuccessful")
                             }
-
                         }
 
                         override fun onFailure(throwable: Throwable?, error: ProError?) {
@@ -358,6 +437,7 @@ class PaymentsUtil(private val activity: Activity) {
                     t: Throwable?,
                     error: ProError?,
                 ) {
+
                     Logger.e(TAG, "Error with purchase request: $error")
                     methodCallResult.error(
                         "errorMakingPurchase",

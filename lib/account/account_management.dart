@@ -1,4 +1,5 @@
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/plans/utils.dart';
 
 @RoutePage<void>(name: 'AccountManagement')
 class AccountManagement extends StatefulWidget {
@@ -13,7 +14,6 @@ class _AccountManagementState extends State<AccountManagement>
     with SingleTickerProviderStateMixin {
   late final TabController tabController;
   bool textCopied = false;
-
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
@@ -377,6 +377,64 @@ class _AccountManagementState extends State<AccountManagement>
         )
       ],
     );
+  }
+
+  Future<void> onUnlink(BuildContext context, String deviceId) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.removeDevice(deviceId);
+      context.loaderOverlay.hide();
+      context.popRoute();
+    } catch (e) {
+      context.loaderOverlay.hide();
+      showError(context,error: e);
+
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return sessionModel.deviceId((context, myDeviceId, child) => sessionModel
+        .devices((BuildContext context, Devices devices, Widget? child) {
+      return Column(children: [
+        ...devices.devices.map<Widget>((device) {
+          var isMyDevice = device.id == myDeviceId;
+          var allowRemoval = devices.devices.length > 1 || !isMyDevice;
+          var index = devices.devices.indexWhere((d) => d == device);
+          return Padding(
+            padding: const EdgeInsetsDirectional.only(start: 4),
+            child: ListItemFactory.settingsItem(
+              header: index == 0 ? 'pro_devices_header'.i18n : null,
+              content: device.name,
+              onTap:
+              !allowRemoval ? null : () => onRemoveTap(context, device),
+              trailingArray: !allowRemoval
+                  ? []
+                  : [
+                CText(
+                  (isMyDevice ? 'Log Out' : 'Remove')
+                      .i18n
+                      .toUpperCase(),
+                  style: tsButtonPink,
+                )
+              ],
+            ),
+          );
+        }).toList(),
+        // IOS does not support Link devices at the moment
+        if (devices.devices.length < 3)
+          ListItemFactory.settingsItem(
+            content: '',
+            onTap: () async => await context.pushRoute(ApproveDevice()),
+            trailingArray: [
+              CText(
+                'Link Device'.i18n.toUpperCase(),
+                style: tsButtonPink,
+              )
+            ],
+          )
+      ]);
+    }));
   }
 }
 

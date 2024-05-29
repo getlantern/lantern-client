@@ -13,9 +13,17 @@ const languages = [
   'vi_VN',
   'th_TH',
   'es_ES',
+  'es_CU',
   'fr_FR',
   'bn_BD',
 ];
+
+String checkSupportedLanguages(String language){
+  if(languages.contains(language)){
+    return language;
+  }
+  return 'en_Us';
+}
 
 String displayLanguage(String languageCode) {
   if (languageCode == 'ar_EG') {
@@ -29,6 +37,9 @@ String displayLanguage(String languageCode) {
   }
   if (languageCode == 'zh_HK') {
     return '中文 (繁體)';
+  }
+  if (languageCode == 'es_CU') {
+    return 'Español (Cuba)';
   }
   if (languageCode == 'my_MM') {
     return 'မြန်မာစာ';

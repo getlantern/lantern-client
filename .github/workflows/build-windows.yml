@@ -29,15 +29,15 @@ env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
 jobs:
-    build-desktop:
-      permissions:
-        contents: "read"
-        id-token: "write"
-      env:
-        version: ${{ inputs.version }}
-        prefix: ${{ inputs.prefix }}
-      runs-on: ubuntu-20.04
-      steps:
+  build-desktop:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      version: ${{ inputs.version }}
+      prefix: ${{ inputs.prefix }}
+    runs-on: ubuntu-20.04
+    steps:
       - uses: actions/checkout@v3
         with:
           lfs: true
@@ -71,7 +71,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get install -y file build-essential pkg-config
-          sudo apt-get install -y mingw-w64 nsis    
+          sudo apt-get install -y mingw-w64 nsis
 
       - name: Build liblantern.dll
         if: ${{inputs.update-suffix == '386'}}
@@ -80,6 +80,9 @@ jobs:
 
       - name: Build liblantern.dll
         if: ${{inputs.update-suffix == 'x64'}}
+        env:
+          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+          VERSION: "${{ env.version }}"
         run: |
           make windows64
 
@@ -99,7 +102,7 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: "3.12"
 
       - name: Install s3cmd
         run: pip install s3cmd
@@ -113,198 +116,199 @@ jobs:
       - name: Push libgo to S3
         run: s3cmd put --acl-public liblantern.dll "s3://lantern/liblantern-${{inputs.update-suffix}}.dll"
 
-    build-windows:
-      needs: build-desktop
-      permissions:
-        contents: "read"
-        id-token: "write"
-      env:
-        version: ${{ inputs.version }}
-        prefix: ${{ inputs.prefix }}
-      runs-on: windows-latest
-      steps:
-        - uses: actions/checkout@v3
-          with:
-            lfs: true
+  build-windows:
+    needs: build-desktop
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      version: ${{ inputs.version }}
+      prefix: ${{ inputs.prefix }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      # Using flutter-version-file requires yq, which is not pre-installed in windows images
+      - run: choco install yq
+      # Install Flutter
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version-file: pubspec.yaml
 
-        # Install Flutter
-        - uses: subosito/flutter-action@v2
-          with:
-            channel: "stable"
+      - run: flutter --version
 
-        - run: flutter --version
+      - name: Setup protoc
+        uses: arduino/setup-protoc@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Setup protoc
-          uses: arduino/setup-protoc@v2
-          with:
-            repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Activate protoc-gen-dart plugin
+        run: |
+          dart pub global activate protoc_plugin
 
-        - name: Activate protoc-gen-dart plugin
-          run: |
-            dart pub global activate protoc_plugin
+      - name: Download the win build output
+        uses: actions/download-artifact@v4
+        with:
+          name: libgo-windows-${{inputs.update-suffix}}-build
 
-        - name: Download the win build output
-          uses: actions/download-artifact@v4
-          with:
-            name: libgo-windows-${{inputs.update-suffix}}-build
+      - name: Download the win build output
+        uses: actions/download-artifact@v4
+        with:
+          name: libgo-windows-${{inputs.update-suffix}}-header
 
-        - name: Download the win build output
-          uses: actions/download-artifact@v4
-          with:
-            name: libgo-windows-${{inputs.update-suffix}}-header
+      - run: make ffigen
 
-        - run: make ffigen
+      - run: touch app.env
 
-        - run: touch app.env
+      - name: Build Flutter app
+        run: flutter build windows
 
-        - name: Build Flutter app
-          run: flutter build windows
+      - name: Sign liblantern.dll with Azure Code Signing
+        uses: getlantern/trusted-signing-action@main
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: https://wus2.codesigning.azure.net/
+          code-signing-account-name: code-signing
+          certificate-profile-name: Lantern
+          files-folder: ${{ github.workspace }}\
+          files-folder-filter: dll
+          file-digest: SHA256
+          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+          timestamp-digest: SHA256
 
-        - name: Sign liblantern.dll with Azure Code Signing
-          uses: azure/azure-code-signing-action@v0.2.22
-          with:
-            azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-            endpoint: https://wus2.codesigning.azure.net/
-            code-signing-account-name: code-signing
-            certificate-profile-name: Lantern
-            files-folder: ${{ github.workspace }}\
-            files-folder-filter: dll
-            file-digest: SHA256
-            timestamp-rfc3161: http://timestamp.acs.microsoft.com
-            timestamp-digest: SHA256
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: windows${{inputs.build-suffix}}-build-signed
+          path: |
+            liblantern.dll
 
-        - uses: actions/upload-artifact@v4
-          with:
-            if-no-files-found: error
-            name: windows${{inputs.build-suffix}}-build-signed
-            path: |
-              liblantern.dll
+      - name: Create archive
+        run: |
+          ls build/windows
+          cp liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
+          Compress-Archive "build/windows/${{inputs.arch}}/runner/Release" lantern.zip
 
-        - name: Create archive
-          run: |
-            ls build/windows
-            cp liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
-            Compress-Archive "build/windows/${{inputs.arch}}/runner/Release" lantern.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: windows${{inputs.build-suffix}}-build
+          path: lantern.zip
 
-        - uses: actions/upload-artifact@v4
-          with:
-            if-no-files-found: error
-            name: windows${{inputs.build-suffix}}-build
-            path: lantern.zip
+  build-installer:
+    needs: build-windows
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      version: ${{ inputs.version }}
+      prefix: ${{ inputs.prefix }}
+    runs-on: ubuntu-20.04
 
-    build-installer:
-      needs: build-windows
-      permissions:
-        contents: "read"
-        id-token: "write"
-      env:
-        version: ${{ inputs.version }}
-        prefix: ${{ inputs.prefix }}
-      runs-on: ubuntu-20.04
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y file build-essential pkg-config
+          sudo apt-get install -y mingw-w64 nsis
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows${{inputs.build-suffix}}-build
+      - name: Make installer
+        run: |
+          pwd
+          unzip lantern.zip
+          cp installer-resources-lantern/.packaged-lantern.yaml installer-resources-lantern/windows/.packaged-lantern.yaml
+          cp installer-resources-lantern/lantern.yaml installer-resources-lantern/windows/lantern.yaml
+          cp -r Release/* installer-resources-lantern/windows
+          makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
+          mv installer-resources-lantern/windows/lantern-installer${{inputs.installer-suffix}}.exe lantern-installer${{inputs.installer-suffix}}.exe
 
-      steps:
-        - name: Install dependencies
-          run: |
-            sudo apt-get install -y file build-essential pkg-config
-            sudo apt-get install -y mingw-w64 nsis
-        - uses: actions/checkout@v3
-        - uses: actions/download-artifact@v4
-          with:
-            name: windows${{inputs.build-suffix}}-build
-        - name: Make installer
-          run: |
-            pwd
-            unzip lantern.zip
-            cp installer-resources-lantern/.packaged-lantern.yaml installer-resources-lantern/windows/.packaged-lantern.yaml
-            cp installer-resources-lantern/lantern.yaml installer-resources-lantern/windows/lantern.yaml
-            cp -r Release/* installer-resources-lantern/windows
-            makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
-            mv installer-resources-lantern/windows/lantern-installer${{inputs.installer-suffix}}.exe lantern-installer${{inputs.installer-suffix}}.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: windows${{inputs.build-suffix}}-installer-unsigned
+          path: lantern-installer${{inputs.installer-suffix}}.exe
 
-        - uses: actions/upload-artifact@v4
-          with:
-            if-no-files-found: error
-            name: windows${{inputs.build-suffix}}-installer-unsigned
-            path: lantern-installer${{inputs.installer-suffix}}.exe
+  sign-installer:
+    needs: build-installer
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      version: ${{ inputs.version }}
+      prefix: ${{ inputs.prefix }}
+    runs-on: windows-latest
+    steps:
+      - name: Download the win build output
+        uses: actions/download-artifact@v4
+        with:
+          name: windows${{inputs.build-suffix}}-installer-unsigned
 
-    sign-installer:
-      needs: build-installer
-      permissions:
-        contents: "read"
-        id-token: "write"
-      env:
-        version: ${{ inputs.version }}
-        prefix: ${{ inputs.prefix }}
-      runs-on: windows-latest
-      steps:
-        - name: Download the win build output
-          uses: actions/download-artifact@v4
-          with:
-            name: windows${{inputs.build-suffix}}-installer-unsigned
+      - name: Sign EXE with Azure Code Signing
+        uses: getlantern/trusted-signing-action@main
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: https://wus2.codesigning.azure.net/
+          code-signing-account-name: code-signing
+          certificate-profile-name: Lantern
+          files-folder: ${{ github.workspace }}\
+          files-folder-filter: exe
+          file-digest: SHA256
+          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+          timestamp-digest: SHA256
 
-        - name: Sign EXE with Azure Code Signing
-          uses: azure/azure-code-signing-action@v0.2.22
-          with:
-            azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-            azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
-            azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-            endpoint: https://wus2.codesigning.azure.net/
-            code-signing-account-name: code-signing
-            certificate-profile-name: Lantern
-            files-folder: ${{ github.workspace }}\
-            files-folder-filter: exe
-            file-digest: SHA256
-            timestamp-rfc3161: http://timestamp.acs.microsoft.com
-            timestamp-digest: SHA256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows${{inputs.build-suffix}}-installer-signed
+          path: |
+            lantern-installer${{inputs.installer-suffix}}.exe
 
-        - uses: actions/upload-artifact@v4
-          with:
-            name: windows${{inputs.build-suffix}}-installer-signed
-            path: |
-              lantern-installer${{inputs.installer-suffix}}.exe
+  upload-windows:
+    needs: sign-installer
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      version: ${{ inputs.version }}
+      prefix: ${{ inputs.prefix }}
+    runs-on: ubuntu-20.04
 
-    upload-windows:
-      needs: sign-installer
-      permissions:
-        contents: "read"
-        id-token: "write"
-      env:
-        version: ${{ inputs.version }}
-        prefix: ${{ inputs.prefix }}
-      runs-on: ubuntu-20.04
+    steps:
+      - name: Download the artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows${{inputs.build-suffix}}-installer-signed
 
-      steps:
-        - name: Download the artifact
-          uses: actions/download-artifact@v4
-          with:
-            name: windows${{inputs.build-suffix}}-installer-signed
+      - name: Install s3cmd
+        run: pip install s3cmd
 
-        - name: Install s3cmd
-          run: pip install s3cmd
+      - name: Set s3cmd permissions
+        run: |
+          echo "[default]" > "$HOME/.s3cfg"
+          echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
+          echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
 
-        - name: Set s3cmd permissions
-          run: |
-            echo "[default]" > "$HOME/.s3cfg"
-            echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
-            echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
+      - name: Push binaries to s3
+        env:
+          VERSION: "${{ inputs.version }}"
+          dist_versionless: "${{inputs.prefix}}-${{inputs.dist-suffix}}.exe"
+          dist: "${{inputs.prefix}}-${{inputs.version}}-${{inputs.dist-suffix}}.exe"
+          update: "lantern_update_windows_${{inputs.update-suffix}}-${{inputs.version}}.bz2"
 
-        - name: Push binaries to s3
-          env:
-            VERSION: "${{ inputs.version }}"
-            dist_versionless: "${{inputs.prefix}}-${{inputs.dist-suffix}}.exe"
-            dist: "${{inputs.prefix}}-${{inputs.version}}-${{inputs.dist-suffix}}.exe"
-            update: "lantern_update_windows_${{inputs.update-suffix}}-${{inputs.version}}.bz2"
+        run: |
+          ls -l
+          cat lantern.exe | bzip2 > ${{ env.update }}
+          mv lantern-installer${{inputs.installer-suffix}}.exe ${{ env.dist }}
 
-          run: |
-            ls -l
-            cat lantern.exe | bzip2 > ${{ env.update }}
-            mv lantern-installer${{inputs.installer-suffix}}.exe ${{ env.dist }}
+          shasum -a 256 ${{ env.dist }} | cut -d " " -f 1 > ${{ env.dist }}.sha256
+          shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
+          ls -l
 
-            shasum -a 256 ${{ env.dist }} | cut -d " " -f 1 > ${{ env.dist }}.sha256
-            shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
-            ls -l
-
-            s3cmd put --acl-public ${{ env.dist }} ${{ env.update }} ${{ env.update }}.sha256 ${{ env.dist }}.sha256 "s3://lantern"
-
+          s3cmd put --acl-public ${{ env.dist }} ${{ env.update }} ${{ env.update }}.sha256 ${{ env.dist }}.sha256 "s3://lantern"

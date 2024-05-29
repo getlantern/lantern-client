@@ -44,26 +44,13 @@ class PaymentProvider extends StatelessWidget {
             ...logoPaths.map(
               (p) => Flexible(
                   child: Container(
-                width: 47,
-                height: 32,
                 margin: const EdgeInsetsDirectional.only(
                   end: 8,
                 ),
-                padding: const EdgeInsetsDirectional.only(
-                  start: 8.0,
-                  end: 8.0,
-                  top: 8.0,
-                  bottom: 8.0,
-                ),
+                padding: EdgeInsetsDirectional.all(isDesktop() ? 3.0 : 8.0),
                 decoration: BoxDecoration(
                   color: white,
                   borderRadius: BorderRadius.circular(5.0),
-                  border: Border(
-                    top: borderSide(),
-                    left: borderSide(),
-                    right: borderSide(),
-                    bottom: borderSide(),
-                  ),
                 ),
                 child: useNetwork
                     ? SvgPicture.network(p)

@@ -175,7 +175,7 @@ class Introductions extends StatelessWidget {
                                                       duration:
                                                           longAnimationDuration,
                                                       action: SnackBarAction(
-                                                        textColor: pink3,
+                                                        textColor: yellow4,
                                                         label: 'start_chat'
                                                             .i18n
                                                             .toUpperCase(),

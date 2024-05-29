@@ -11,8 +11,7 @@ on:
 jobs:
 
   build:
-    runs-on:
-      group: large-runners
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Install libpcap
@@ -32,8 +31,8 @@ jobs:
         go test -failfast -coverprofile=profile.cov ./...
     - name: Install goveralls
       env:
-        GO111MODULE: off
-      run: go get github.com/mattn/goveralls
+        GO111MODULE: auto
+      run: go install github.com/mattn/goveralls@latest
     - name: Send coverage
       env:
         COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}

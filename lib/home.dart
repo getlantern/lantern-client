@@ -26,22 +26,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
-  BuildContext? _context;
-  MethodChannel? mainMethodChannel;
-  MethodChannel? navigationChannel;
+
   Function()? _cancelEventSubscription;
 
   @override
   void initState() {
-    if (isDesktop()) {
-      setupTrayManager();
-      windowManager.addListener(this);
-      _init();
-    }
+    _startupSequence();
     super.initState();
+  }
+
+  void _startupSequence() {
     if (isMobile()) {
-      mainMethodChannel = const MethodChannel('lantern_method_channel');
-      navigationChannel = const MethodChannel('navigation');
+      // This is a mobile device
+      channelListener();
+    } else {
+      // This is a desktop device
+      setupTrayManager();
+      _initWindowManager();
+    }
+  }
+
+  void channelListener() {
+    if(Platform.isIOS) return;
+
+    const mainMethodChannel = MethodChannel('lantern_method_channel');
+    const navigationChannel = MethodChannel('navigation');
+    if (Platform.isAndroid) {
       sessionModel.getChatEnabled().then((chatEnabled) {
         if (chatEnabled) {
           messagingModel
@@ -49,7 +59,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               .then((shouldShowModal) async {
             if (shouldShowModal) {
               // open VPN tab
-              await sessionModel.setSelectedTab(TAB_VPN);
+               sessionModel.setSelectedTab(context,TAB_VPN);
               // show Try Lantern Chat dialog
               await context.router
                   .push(FullScreenDialogPage(widget: TryLanternChat()));
@@ -57,89 +67,41 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
           });
         }
       });
-
-      navigationChannel?.setMethodCallHandler(_handleNativeNavigationRequest);
-      // Let back-end know that we're ready to handle navigation
-      navigationChannel?.invokeListMethod('ready');
-      _cancelEventSubscription =
-          sessionModel.eventManager.subscribe(Event.All, (event, params) {
-        switch (event) {
-          case Event.SurveyAvailable:
-            final message = params['message'] as String;
-            final buttonText = params['buttonText'] as String;
-            final snackBar = SnackBar(
-              backgroundColor: Colors.black,
-              duration: const Duration(days: 99999),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-              ),
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsetsDirectional.only(
-                  start: 8, end: 8, bottom: 16),
-              // simple way to show indefinitely
-              content: CText(
-                message,
-                style: CTextStyle(
-                  fontSize: 14,
-                  lineHeight: 21,
-                  color: white,
-                ),
-              ),
-              action: SnackBarAction(
-                textColor: pink3,
-                label: buttonText.toUpperCase(),
-                onPressed: () {
-                  mainMethodChannel?.invokeMethod('showLastSurvey');
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                },
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            break;
-          default:
-            break;
-        }
-      });
     }
+
+    navigationChannel.setMethodCallHandler(_handleNativeNavigationRequest);
+    // Let back-end know that we're ready to handle navigation
+    navigationChannel.invokeListMethod('ready');
+    _cancelEventSubscription =
+        sessionModel.eventManager.subscribe(Event.All, (event, params) {
+      switch (event) {
+        case Event.SurveyAvailable:
+          // show survey snackbar
+          showSuerySnackbar(
+              context: context,
+              buttonText: params['buttonText'] as String,
+              message: params['message'] as String,
+              onPressed: () {
+                mainMethodChannel.invokeMethod('showLastSurvey');
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              });
+
+          break;
+        default:
+          break;
+      }
+    });
   }
 
-  void _init() async {
+  void _initWindowManager() async {
+    windowManager.addListener(this);
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
     setState(() {});
   }
 
   void setupTrayManager() async {
-    trayManager.addListener(this);
-    await setupMenu(false);
-  }
-
-  @override
-  void onTrayIconMouseDown() {
-    windowManager.show();
-    trayManager.popUpContextMenu();
-  }
-
-  @override
-  void onTrayIconRightMouseDown() {
-    trayManager.popUpContextMenu();
-  }
-
-  @override
-  void onTrayMenuItemClick(MenuItem menuItem) async {
-    switch (menuItem.key) {
-      case 'exit':
-        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      case 'status':
-        bool isConnected = await vpnStatus() == "connected";
-        if (isConnected) {
-          sysProxyOff();
-          await setupMenu(false);
-        } else {
-          sysProxyOn();
-          await setupMenu(true);
-        }
-    }
+    trayManager.addListener(TrayHandler.instance);
   }
 
   @override
@@ -172,11 +134,16 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
   }
 
+  @override
+  void onWindowEvent(String eventName) {
+    print('[WindowManager] onWindowEvent: $eventName');
+  }
+
   Future<dynamic> _handleNativeNavigationRequest(MethodCall methodCall) async {
     switch (methodCall.method) {
       case 'openConversation':
         final contact = Contact.fromBuffer(methodCall.arguments as Uint8List);
-        await _context!.router.push(Conversation(contactId: contact.contactId));
+        await context.router.push(Conversation(contactId: contact.contactId));
         break;
       default:
         return;
@@ -186,7 +153,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void dispose() {
     if (isDesktop()) {
-      trayManager.removeListener(this);
+      trayManager.removeListener(TrayHandler.instance);
       windowManager.removeListener(this);
     }
     if (_cancelEventSubscription != null) {
@@ -199,12 +166,13 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   Widget build(BuildContext context) {
     _context = context;
     print("Home build called");
+    final tabModel = context.watch<BottomBarChangeNotifier>();
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
             if (developmentMode) {
-              Logger.level = Level.all;
+              Logger.level = Level.trace;
             } else {
               Logger.level = Level.error;
             }
@@ -217,26 +185,23 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               // not already been accepted
               return const PrivacyDisclosure();
             }
-            return sessionModel.selectedTab(
-              (context, selectTab, child) =>
-                  messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-                final isTesting = const String.fromEnvironment(
-                      'driver',
-                      defaultValue: 'false',
-                    ).toLowerCase() ==
-                    'true';
-                final tab =
-                    isMobile() ? selectTab : ffiSelectedTab().toDartString();
-                return Scaffold(
-                  body: buildBody(tab, isOnboarded),
-                  bottomNavigationBar: CustomBottomBar(
-                    selectedTab: tab,
-                    isDevelop: developmentMode,
-                    isTesting: kDebugMode,
-                  ),
-                );
-              }),
-            );
+            return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
+              final isTesting = const String.fromEnvironment(
+                    'driver',
+                    defaultValue: 'false',
+                  ).toLowerCase() ==
+                  'true';
+
+              final tab = tabModel.currentIndex;
+              return Scaffold(
+                body: buildBody(tab, isOnboarded),
+                bottomNavigationBar: CustomBottomBar(
+                  selectedTab: tab,
+                  isDevelop: developmentMode,
+                  isTesting: isTesting,
+                ),
+              );
+            });
           },
         );
       },
@@ -258,7 +223,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                 ? Chats()
                 : Welcome();
       case TAB_VPN:
-        return const VPNTab();
+        return VPNTab();
       case TAB_REPLICA:
         return ReplicaTab();
       case TAB_ACCOUNT:

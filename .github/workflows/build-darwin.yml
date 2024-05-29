@@ -17,9 +17,6 @@ on:
       prefix:
         type: string
         required: true
-      suffix:
-        type: string
-        required: true
 
 env:
   GOPRIVATE: github.com/getlantern
@@ -33,7 +30,6 @@ jobs:
       version: ${{ inputs.version }}
       version_file: ${{ inputs.version_file }}
       prefix: ${{ inputs.prefix }}
-      suffix: ${{ inputs.suffix }}
       AC_USERNAME: accounts@getlantern.org
       AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
     runs-on: ${{ inputs.macos_version }}
@@ -74,11 +70,14 @@ jobs:
         project: android
 
     - name: Build liblantern.dylib
+      env:
+        SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+        VERSION: "${{ env.version }}"
       run: make darwin
 
     - uses: actions/upload-artifact@v4
       with:
-        name: "libgo-${{ env.suffix }}-build"
+        name: "libgo-osx-build"
         if-no-files-found: error
         path: |
           liblantern.dylib
@@ -87,6 +86,7 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         channel: "stable"
+        flutter-version-file: pubspec.yaml
 
     - run: flutter --version
 
@@ -144,27 +144,21 @@ jobs:
         echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
         echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
 
-    - name: Rename build
-      env:
-        DMG: "${{ env.prefix }}-${{ env.version }}-${{ env.suffix}}.dmg"
-      run: |
-        mv lantern-installer.dmg "$DMG"
-        cp "$DMG" "lantern-installer-${{ env.suffix }}.dmg"
-
     - uses: actions/upload-artifact@v4
       with:
-        name: "${{ env.suffix}}-build"
+        name: osx-build
         retention-days: 2
         path: |
-          lantern-installer-${{ env.suffix }}.dmg
+          lantern-installer.dmg
 
     - name: Push binaries to s3
       env:
         VERSION: "${{ env.version }}"
-        DMG: "${{ env.prefix }}-${{ env.version }}-${{ env.suffix}}.dmg"
+        DMG: "${{ env.prefix }}-${{ env.version }}.dmg"
       run: |
-        cp "$DMG" ${{ env.prefix }}-${{ env.suffix }}.dmg
+        mv lantern-installer.dmg "$DMG"
+        cp "$DMG" ${{ env.prefix }}.dmg
         echo ${{ env.version }} > ${{ env.version_file }}
         shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
-        cp "$DMG".sha256 ${{ env.prefix }}-${{ env.suffix }}.dmg.sha256
-        s3cmd put --acl-public "$DMG" ${{ env.version_file }} "$DMG".sha256 ${{ env.prefix }}-${{ env.suffix }}.dmg.sha256 ${{ env.prefix }}-${{ env.suffix }}.dmg "s3://lantern"
+        cp "$DMG".sha256 ${{ env.prefix }}.dmg.sha256
+        s3cmd put --acl-public "$DMG" ${{ env.version_file }} "$DMG".sha256 ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"

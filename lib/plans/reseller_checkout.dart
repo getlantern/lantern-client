@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:email_validator/email_validator.dart';
+import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
@@ -128,13 +130,21 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
   Future<void> onRegisterPro() async {
     try {
       context.loaderOverlay.show();
+      Locale locale = Localizations.localeOf(context);
+      final format = NumberFormat.simpleCurrency(locale: locale.toString());
+      final currencyName = format.currencyName ?? "USD";
       await sessionModel.redeemResellerCode(
         widget.email,
+        emailController.text,
+        currencyName,
+        Platform.operatingSystem,
         resellerCodeController.text,
       );
       context.loaderOverlay.hide();
       showSuccessDialog(context, widget.isPro, isReseller: true);
     } catch (error, stackTrace) {
+      print(stackTrace);
+      appLogger.e(error, stackTrace: stackTrace);
       context.loaderOverlay.hide();
       CDialog.showError(
         context,

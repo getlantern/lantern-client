@@ -1,8 +1,8 @@
 package org.getlantern.lantern.model;
 
 public class UserStatus {
-    private boolean status;
-    private long monthsLeft;
+    private final boolean status;
+    private final long monthsLeft;
 
     public UserStatus(boolean status, long monthsLeft) {
         this.status = status;

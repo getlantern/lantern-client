@@ -2,10 +2,10 @@ package org.getlantern.lantern.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageView
 import android.widget.ProgressBar
 import com.google.gson.JsonObject
 import okhttp3.FormBody
@@ -15,6 +15,7 @@ import org.androidannotations.annotations.EActivity
 import org.androidannotations.annotations.Extra
 import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.ProError
@@ -47,7 +48,12 @@ open class FreeKassaActivity : BaseFragmentActivity() {
 
     @ViewById
     @JvmField
-    protected var progressBar: ProgressBar? = null;
+    protected var closeButton: ImageView? = null
+
+
+    @ViewById
+    @JvmField
+    protected var progressBar: ProgressBar? = null
 
     @Extra
     @JvmField
@@ -64,6 +70,9 @@ open class FreeKassaActivity : BaseFragmentActivity() {
     @AfterViews
     fun afterViews() {
         assertIntentExtras()
+        closeButton?.setOnClickListener(View.OnClickListener {
+            finish()
+        })
         makeRequestToPrepayHandler(
             { transactionID: String -> displayWebView(transactionID) },
             { error: String -> showErrorDialog(error) }
@@ -156,7 +165,7 @@ open class FreeKassaActivity : BaseFragmentActivity() {
     // using it to make a purchase. The purchase state will be "pending" in the
     // backend, but it'll eventually fail.
     private fun convertToPro() {
-        val intent = Intent(this, WelcomeActivity_::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         LanternApp.getSession().linkDevice()
         LanternApp.getSession().setIsProUser(true)
         intent.putExtra("provider", "freekassa")
