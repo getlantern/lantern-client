@@ -380,6 +380,8 @@ github.com/getlantern/netx v0.0.0-20240124040039-163b1628a66b h1:PD3SpvkPDevU1eN
 github.com/getlantern/netx v0.0.0-20240124040039-163b1628a66b/go.mod h1:of3zrQoL7Av3VzWiRXz4vSbnnUyJLMr5lIQ1vPRA4FA=
 github.com/getlantern/notifier v0.0.0-20240528035602-dc0835ec251e h1:ujzN1SEDk8khBYD+jzPBm70/jMkBBdc8wjZPWK3iPLw=
 github.com/getlantern/notifier v0.0.0-20240528035602-dc0835ec251e/go.mod h1:n7hX6x/5Fy7R1zPhCzoKB6cdwEFMofoDwWvfJq4qp44=
+github.com/getlantern/notifier v0.0.0-20240529182616-a162ef2bc966 h1:FfQrVyTbxJOLD08Us4QzY1LOPl5FbfqLfRvigfV9/xc=
+github.com/getlantern/notifier v0.0.0-20240529182616-a162ef2bc966/go.mod h1:n7hX6x/5Fy7R1zPhCzoKB6cdwEFMofoDwWvfJq4qp44=
 github.com/getlantern/ops v0.0.0-20190325191751-d70cb0d6f85f/go.mod h1:D5ao98qkA6pxftxoqzibIBBrLSUli+kYnJqrgBf9cIA=
 github.com/getlantern/ops v0.0.0-20200403153110-8476b16edcd6/go.mod h1:D5ao98qkA6pxftxoqzibIBBrLSUli+kYnJqrgBf9cIA=
 github.com/getlantern/ops v0.0.0-20231025133620-f368ab734534 h1:3BwvWj0JZzFEvNNiMhCu4bf60nqcIuQpTYb00Ezm1ag=

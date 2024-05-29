@@ -53,7 +53,7 @@ require (
 	github.com/getlantern/memhelper v0.0.0-20220104170102-df557102babd
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20240124040039-163b1628a66b
-	github.com/getlantern/notifier v0.0.0-20240528035602-dc0835ec251e
+	github.com/getlantern/notifier v0.0.0-20240529182616-a162ef2bc966
 	github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
