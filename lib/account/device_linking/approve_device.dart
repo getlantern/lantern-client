@@ -1,5 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/utils.dart';
+
 import 'explanation_step.dart';
 
 @RoutePage<void>(name: 'ApproveDevice')

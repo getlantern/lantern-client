@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:lantern/common/common.dart';
 
 class CText extends StatelessWidget {

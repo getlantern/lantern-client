@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
+
 import 'package:lantern/common/common_desktop.dart';
 
 abstract class WebsocketService {

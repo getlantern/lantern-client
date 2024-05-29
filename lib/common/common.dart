@@ -33,6 +33,7 @@ export 'package:stop_watch_timer/stop_watch_timer.dart';
 
 export 'add_nonbreaking_spaces.dart';
 export 'app_keys.dart';
+export 'app_secret.dart';
 export 'disable_back_button.dart';
 export 'iterable_extension.dart';
 export 'list_subscriber.dart';
@@ -51,7 +52,6 @@ export 'ui/continue_arrow.dart';
 export 'ui/copy_text.dart';
 export 'ui/countdown_min_sec.dart';
 export 'ui/countdown_stopwatch.dart';
-
 // custom components
 export 'ui/custom/asset_image.dart';
 export 'ui/custom/badge.dart';
@@ -62,10 +62,10 @@ export 'ui/custom/fullscreen_video_viewer.dart';
 export 'ui/custom/fullscreen_viewer.dart';
 export 'ui/custom/ink_well.dart';
 export 'ui/custom/list_item_factory.dart';
+export 'ui/custom/retry_widget.dart';
 export 'ui/custom/rounded_rectangle_border.dart';
 export 'ui/custom/text.dart';
 export 'ui/custom/text_field.dart';
-export 'ui/custom/retry_widget.dart';
 export 'ui/dimens.dart';
 export 'ui/focused_menu.dart';
 export 'ui/full_screen_dialog.dart';
@@ -87,11 +87,9 @@ export 'ui/round_button.dart';
 export 'ui/search_field.dart';
 export 'ui/show_bottom_modal.dart';
 export 'ui/show_snackbar.dart';
-
 export 'ui/text_highlighter.dart';
 export 'ui/text_styles.dart';
 export 'ui/transitions.dart';
-export 'app_secret.dart';
 
 final appLogger = Logger(
   printer: PrettyPrinter(

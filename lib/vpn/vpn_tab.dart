@@ -1,6 +1,7 @@
 import 'package:lantern/account/split_tunneling.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn.dart';
+
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
@@ -8,7 +9,7 @@ import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
 class VPNTab extends StatelessWidget {
-  VPNTab({Key? key}) : super(key: key);
+  const VPNTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class VPNTab extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (!proUser && !Platform.isIOS) ProBanner() else const SizedBox(),
+            if (!proUser && !Platform.isIOS) const ProBanner() else const SizedBox(),
             const VPNSwitch(),
             Container(
               padding: const EdgeInsetsDirectional.all(16),
@@ -44,12 +45,12 @@ class VPNTab extends StatelessWidget {
                 children: [
                   VPNStatus(),
                   const CDivider(height: 32.0),
-                  ServerLocationWidget(),
+                  const ServerLocationWidget(),
                   if (Platform.isAndroid) ...{
                     const CDivider(height: 32.0),
                     SplitTunnelingWidget(),
                   },
-                  if (!proUser) const VPNBandwidth(),
+                  if (!proUser&& Platform.isAndroid) const VPNBandwidth(),
                 ],
               ),
             ),

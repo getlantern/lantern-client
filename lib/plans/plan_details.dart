@@ -1,5 +1,4 @@
 import 'package:lantern/common/common.dart';
-import 'package:lantern/plans/payment_provider.dart';
 import 'package:lantern/plans/utils.dart';
 
 class PlanCard extends StatelessWidget {
