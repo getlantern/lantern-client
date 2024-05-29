@@ -120,7 +120,7 @@ extension PacketTunnelProvider {
       var error: NSError?
       welf.client = IosClient(
         welf, UDPDialer(), MemChecker(), welf.constants.configDirectoryURL.path, welf.mtu,
-        Constants.capturedDNSHost, Constants.realDNSHost, &error)
+        Constants.capturedDNSHost, Constants.realDNSHost, StatsTracker(), &error)
 
       if let err = error {
         logger.error(err.localizedDescription)

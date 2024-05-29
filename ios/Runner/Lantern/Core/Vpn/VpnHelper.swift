@@ -61,7 +61,6 @@ class VpnHelper: NSObject {
     }
   }
 
-  static let hasFetchedConfigDefaultsKey = "Lantern.hasConfig"
   // Apple
   let fileManager: FileManager
   let userDefaults: UserDefaults
@@ -70,11 +69,12 @@ class VpnHelper: NSObject {
   let constants: Constants
   let flashlightManager: FlashlightManager
   let vpnManager: VPNBase
-  var configFetchTimer: Timer!
+  //  var configFetchTimer: Timer!
   var hasConfiguredThisSession = false
-  var hasFetchedConfigOnce: Bool {
-    return (userDefaults.value(forKey: VpnHelper.hasFetchedConfigDefaultsKey) as? Bool) ?? false
-  }
+  var configFetchInProcess: Bool = false
+
+  private var configFetchTimer: DispatchSourceTimer?
+  private let fetchQueue = DispatchQueue(label: "org.getlantern.configfetch", qos: .background)
 
   init(
     constants: Constants,
@@ -94,7 +94,7 @@ class VpnHelper: NSObject {
     configuring = true
     _state = .idle(nil)
     super.init()
-    if self.hasFetchedConfigOnce {
+    if self.hasConfiguredThisSession {
       self.configuring = false
     }
     performAppSetUp()
@@ -126,7 +126,7 @@ class VpnHelper: NSObject {
     // create process-specific directory @ ~/app
 
     do {
-        try fileManager.ensureDirectoryExists(at: Constants.lanternDirectory)
+      try fileManager.ensureDirectoryExists(at: Constants.lanternDirectory)
     } catch {
       logger.error("Failed to create directory @ \(Constants.lanternDirectory.path)")
     }
@@ -166,7 +166,7 @@ class VpnHelper: NSObject {
     onSuccess: (() -> Void)? = nil
   ) {
     guard state.isIdle else { return }
-    if !hasFetchedConfigOnce {
+    if !hasConfiguredThisSession {
       initiateConfigFetching(onError: onError, onSuccess: onSuccess)
     } else {
       initiateVPNStart(onError: onError, onSuccess: onSuccess)
@@ -237,24 +237,111 @@ class VpnHelper: NSObject {
   }
 
   func fetchConfigIfNecessary() {
-    logger.debug("Checking if config fetch is needed")
-    guard !self.hasConfiguredThisSession else { return }
-    logger.debug("Will fetch config")
-    self.hasConfiguredThisSession = true
-    let hasFetchedConfigOnce = self.hasFetchedConfigOnce
+    guard configFetchInProcess == false else {
+      logger.debug("Config fetch is already in progress.")
+      return
+    }
+    logger.debug("Checking if config fetch is needed for state: \(state)")
+    if !self.hasConfiguredThisSession {
+      logger.debug("Config fetch is needed for first time")
+      self.fetchAndSetUpTimer()
+      return
+    }
+
+    guard state == .connected else {
+      logger.debug("Config fetch not needed: state is not connected.")
+      return
+    }
+
+    logger.debug("State is connected, will fetch config")
+    self.fetchAndSetUpTimer()
+  }
+
+  private func fetchAndSetUpTimer() {
+    configFetchInProcess = true
+    logger.debug("Starting config fetch...")
     fetchConfig { [weak self] result in
-      self?.setUpConfigFetchTimer()
       DispatchQueue.main.async {
-        self?.configuring = false
-        if let state = self?.state {
-          guard state.isIdle else { return }
+        guard let strongSelf = self else { return }
+        switch result {
+        case .success:
+          logger.debug("Config fetch succeeded.")
+          strongSelf.configuring = false
+          strongSelf.hasConfiguredThisSession = true
+          strongSelf.configFetchInProcess = false
+        case .failure(let error):
+          logger.error("Config fetch failed: \(error.localizedDescription)")
+          if !strongSelf.hasConfiguredThisSession {
+            strongSelf.state = .configuring
+            // if the config not fetched we need to try again
+            strongSelf.fetchAndSetUpTimer()
+            return
+          }
         }
-        if !result.isSuccess && !hasFetchedConfigOnce {
-          self?.state = .idle(.unableToFetchConfig)
-        }
+        //  Start the timer to fetch config periodically if connected
+        strongSelf.setUpConfigFetchTimer()
       }
     }
   }
+
+  // this use DispatchSource more efficient method
+  func setUpConfigFetchTimer() {
+    // Cancel any existing timer
+    configFetchTimer?.cancel()
+    configFetchTimer = nil
+
+    // Create a new DispatchSourceTimer
+    configFetchTimer = DispatchSource.makeTimerSource(queue: fetchQueue)
+
+    let time: Double = 60
+    configFetchTimer?.schedule(deadline: .now() + time, repeating: time)
+
+    configFetchTimer?.setEventHandler { [weak self] in
+      // Only auto-fetch new config when VPN is on
+      guard self?.state == .connected else {
+        logger.debug("Skipping config fetch because state is not connected.")
+        return
+      }
+      logger.debug("Config Fetch timer fired after \(time) seconds, fetching...")
+      self?.fetchConfig { result in
+        switch result {
+        case .success:
+          logger.debug("Auto-config fetch success")
+        case .failure(let error):
+          logger.error("Auto-config fetch failed: \(error.localizedDescription)")
+        }
+      }
+    }
+
+    // Start the timer
+    configFetchTimer?.resume()
+  }
+
+  //  private func startConfigFetchTimer() {
+  //    DispatchQueue.main.async { [weak self] in
+  //      guard let strongSelf = self else { return }
+  //      let time: TimeInterval = 60
+  //      strongSelf.configFetchTimer?.invalidate()  // Invalidate any existing timer
+  //      logger.debug("Setting up config fetch timer with interval: \(time) seconds")
+  //      strongSelf.configFetchTimer = Timer.scheduledTimer(withTimeInterval: time, repeats: true) {
+  //        [weak self] _ in
+  //        guard let strongSelf = self else { return }
+  //        guard strongSelf.state == .connected else {
+  //          logger.debug("Skipping config fetch because state is not connected.")
+  //          return
+  //        }
+  //        logger.debug("Config fetch timer fired, fetching config...")
+  //        strongSelf.fetchConfig { result in
+  //          switch result {
+  //          case .success:
+  //            logger.debug("Auto-config fetch succeeded.")
+  //          case .failure(let error):
+  //            logger.error("Auto-config fetch failed: \(error.localizedDescription)")
+  //          }
+  //        }
+  //      }
+  //    }
+  //  }
 
   func fetchConfig(
     refreshProxies: Bool = true, _ completion: @escaping (Result<Void, Swift.Error>) -> Void
@@ -268,7 +355,6 @@ class VpnHelper: NSObject {
         if vpnNeedsReconfiguring {
           self?.messageNetExToUpdateExcludedIPs()
         }
-        self?.userDefaults.set(refreshProxies, forKey: VpnHelper.hasFetchedConfigDefaultsKey)
         logger.debug("Successfully fetched new config with \(result)")
         completion(.success(()))
       case .failure(let error):
@@ -276,29 +362,6 @@ class VpnHelper: NSObject {
         logger.error("Fetch config failed:" + error.localizedDescription)
         completion(.failure(error))
       }
-    }
-  }
-
-  func setUpConfigFetchTimer() {
-    // set up timer on Main queue's runloop
-    // FlashlightManager will automatically use its designated goQueue when fetching
-    DispatchQueue.main.async { [weak self] in
-      let time: Double = 60
-      self?.configFetchTimer = Timer.scheduledTimer(
-        withTimeInterval: time, repeats: true,
-        block: { [weak self] _ in
-          // Only auto-fetch new config when VPN is on
-          guard self?.state == .connected else { return }
-          logger.debug("Config Fetch timer fired after \(time), fetching...")
-          self?.fetchConfig { result in
-            switch result {
-            case .success:
-              logger.debug("Auto-config fetch success")
-            case .failure(let error):
-              logger.error("Auto-config fetch failed: \(error.localizedDescription)")
-            }
-          }
-        })
     }
   }
 

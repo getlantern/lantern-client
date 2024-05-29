@@ -3,14 +3,13 @@ package internalsdk
 import (
 	"context"
 	"fmt"
-	"net/http"
-	"path/filepath"
 	"strconv"
 	"time"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/proxied"
+
+	//"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -86,17 +85,15 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
+	dialTimeout := 30 * time.Second
 	if opts.Platform == "ios" {
+		dialTimeout = 20 * time.Second
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 	}
 	m := &SessionModel{baseModel: base}
-
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
-		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   30 * time.Second,
-		},
+		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
 		UserConfig: func() common.UserConfig {
 			deviceID, _ := m.GetDeviceID()
 			userID, _ := m.GetUserID()
@@ -114,7 +111,8 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	})
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
-	return m, m.initSessionModel(context.Background(), opts)
+	go m.initSessionModel(context.Background(), opts)
+	return m, nil
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -184,7 +182,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "createUser":
 		err := m.userCreate(context.Background(), arguments.Scalar().String())
 		if err != nil {
-			return nil, err
+			log.Error(err)
 		}
 		return true, nil
 	case "hasAllNetworkPermssion":
@@ -196,21 +194,21 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		checkAdsEnabled(m)
 		return true, nil
+	case "updateStats":
+		city := arguments.Get("city").String()
+		country := arguments.Get("country").String()
+		serverCountryCode := arguments.Get("serverCountryCode").String()
+		httpsUpgrades := arguments.Get("httpsUpgrades").Int()
+		adsBlocked := arguments.Get("adsBlocked").Int()
+		hasSucceedingProxy := arguments.Get("hasSucceedingProxy").Bool()
+		err := m.UpdateStats(city, country, serverCountryCode, httpsUpgrades, adsBlocked, hasSucceedingProxy)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	default:
 		return m.methodNotImplemented(method)
 	}
-}
-
-// Internal functions that manage method
-func (m *SessionModel) StartService(configDir string,
-	locale string,
-	settings Settings) {
-	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
-	session := &panickingSessionImpl{m}
-	startOnce.Do(func() {
-		go run(configDir, locale, settings, session)
-	})
-
 }
 
 // InvokeMethod handles method invocations on the SessionModel.
@@ -275,19 +273,20 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	if userId == 0 {
 		local, err := m.Locale()
 		if err != nil {
-			return err
-		}
-		// Create user
-		err = m.userCreate(ctx, local)
-		if err != nil {
-			return err
+			log.Error(err)
+		} else {
+			// Create user
+			err = m.userCreate(ctx, local)
+			if err != nil {
+				log.Error(err)
+			}
 		}
 	}
 
 	// Get all user details
 	err = m.userDetail(ctx)
 	if err != nil {
-		return err
+		log.Error(err)
 	}
 	return checkAdsEnabled(m)
 }
