@@ -89,7 +89,6 @@ class SessionModel extends Model {
       enableScreenShot();
     }
 
-
     /*Note
     * Make proxyAvailable default value to true on IOS it take some to get data from go side
     * So show banner only if proxyAvailable is false
@@ -387,7 +386,8 @@ class SessionModel extends Model {
     });
   }
 
-  Future<void> startChangeEmail(String email, String newEmail, String password) {
+  Future<void> startChangeEmail(
+      String email, String newEmail, String password) {
     return methodChannel.invokeMethod('startChangeEmail', <String, dynamic>{
       'email': email,
       'newEmail': newEmail,
@@ -425,7 +425,6 @@ class SessionModel extends Model {
   Future<void> setFirstTimeVisit() async {
     return methodChannel
         .invokeMethod<void>('setFirstTimeVisit', <String, dynamic>{});
-
   }
 
   Future<void> setProxyAll<T>(bool isOn) async {
@@ -434,7 +433,6 @@ class SessionModel extends Model {
     }
     throw Exception("Not supported on mobile");
   }
-
 
   /// Auth API end
   Future<String> getCountryCode() async {
@@ -779,9 +777,6 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('redeemLinkCode');
   }
 
-
-
-
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
@@ -859,9 +854,10 @@ class SessionModel extends Model {
     return await compute(
         ffiPaymentRedirect, [planID, currencyName, provider.name, email, os]);
   }
-  
-  Future<void> submitApplePlay(String email,String planID, String purchaseToken) async {
-      return methodChannel
+
+  Future<void> submitApplePlay(
+      String email, String planID, String purchaseToken) async {
+    return methodChannel
         .invokeMethod('submitApplePayPayment', <String, dynamic>{
       'planID': planID,
       'purchaseId': purchaseToken,

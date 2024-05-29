@@ -98,8 +98,6 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _emailFormKey.currentState?.dispose();
     super.dispose();
   }
 

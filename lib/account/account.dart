@@ -71,41 +71,13 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
     return [
-      if (Platform.isAndroid) messagingModel.getOnBoardingStatus(
-        (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
-            ? messagingModel.getCopiedRecoveryStatus(
-                (
-                  BuildContext context,
-                  bool hasCopiedRecoveryKey,
-                  Widget? child,
-                ) =>
-                    ListItemFactory.settingsItem(
-                  icon: ImagePaths.account,
-                  content: 'account_management'.i18n,
-                  onTap: () => onAccountManagementTap(context, false),
-                  trailingArray: [
-                    if (!hasCopiedRecoveryKey)
-                      const CAssetImage(
-                        path: ImagePaths.badge,
-                      ),
-                  ],
-                ),
-              )
-            : const SizedBox(),
-      ),
+
       ListItemFactory.settingsItem(
         icon: ImagePaths.signIn,
         content: 'sign_in'.i18n,
         onTap: () => openSignIn(context),
       ),
-      ListItemFactory.settingsItem(
-        key: AppKeys.upgrade_lantern_pro,
-        icon: ImagePaths.pro_icon_black,
-        content: 'Upgrade to Lantern Pro'.i18n,
-        onTap: () {
-          upgradeToLanternPro(context);
-        },
-      ),
+
       if (Platform.isAndroid)
         messagingModel.getOnBoardingStatus(
           (context, hasBeenOnboarded, child) => hasBeenOnboarded == true

@@ -33,9 +33,6 @@ import UIKit
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-    
-
-    
 
   // Flutter related stuff
   private func initializeFlutterComponents() {
@@ -55,16 +52,17 @@ import UIKit
   // Init all the models
   private func setupModels() throws {
     logger.log("setupModels method called")
-      
+
     // If flutterbinaryMessenger nil somehow then assign it again
     if flutterbinaryMessenger == nil || flutterViewController == nil {
       initializeFlutterComponents()
     }
-      lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
-      sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
-      vpnModel = try VpnModel(
-        flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault,sessionModel:sessionModel)
-      messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
+    lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
+    sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
+    vpnModel = try VpnModel(
+      flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault,
+      sessionModel: sessionModel)
+    messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
   }
 
   // Post start up

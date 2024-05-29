@@ -111,8 +111,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _emailFormKey.currentState?.dispose();
+
     super.dispose();
   }
 

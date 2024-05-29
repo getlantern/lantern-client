@@ -57,6 +57,8 @@ class BaseScreen extends StatelessWidget {
   }
 
   Widget doBuild(BuildContext context, double networkWarningBarHeightRatio) {
+    bool canPop = Navigator.of(context).canPop();
+
     final screenInfo = MediaQuery.of(context);
     var verticalCorrection =
         (screenInfo.viewInsets.top + screenInfo.padding.top) *
@@ -84,8 +86,9 @@ class BaseScreen extends StatelessWidget {
                       ),
                       AppBar(
                         automaticallyImplyLeading: automaticallyImplyLeading,
-                        leading: automaticallyImplyLeading
-                            ? IconButton(
+                        leading: automaticallyImplyLeading && canPop
+                            ?
+                          IconButton(
                                 icon: const Icon(Icons.arrow_back,
                                     color: Colors.black),
                                 onPressed: () {

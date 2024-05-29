@@ -1690,7 +1690,7 @@ func deleteAccount(session SessionModel, password string) error {
 
 // Request code for linking device for LINK WITH PIN method
 func linkCodeRequest(session *SessionModel) error {
-	log.Debugf("LinkCodeRequest")
+	log.Debug("LinkCodeRequest")
 	// local, err := session.Locale()
 	// if err != nil {
 	// 	log.Errorf("Error while getting local %v", err)
@@ -1701,6 +1701,7 @@ func linkCodeRequest(session *SessionModel) error {
 		log.Errorf("Error while getting local %v", err)
 		return err
 	}
+	log.Debugf("Device %v", device)
 	// //Create body
 	// linkCodeRequest := map[string]string{
 	// 	"locale":     local,
