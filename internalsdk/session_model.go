@@ -25,7 +25,8 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
-	proClient pro.ProClient
+	proClient  pro.ProClient
+	authClient pro.ProClient
 }
 
 // Expose payment providers
@@ -124,22 +125,29 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 
 	m := &SessionModel{baseModel: base}
+
+	userConfig := func() common.UserConfig {
+		deviceID, _ := m.GetDeviceID()
+		userID, _ := m.GetUserID()
+		token, _ := m.GetToken()
+		lang, _ := m.Locale()
+		return common.NewUserConfig(
+			common.DefaultAppName,
+			deviceID,
+			userID,
+			token,
+			nil,
+			lang,
+		)
+	}
+
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
 		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
-		UserConfig: func() common.UserConfig {
-			deviceID, _ := m.GetDeviceID()
-			userID, _ := m.GetUserID()
-			token, _ := m.GetToken()
-			lang, _ := m.Locale()
-			return common.NewUserConfig(
-				common.DefaultAppName,
-				deviceID,
-				userID,
-				token,
-				nil,
-				lang,
-			)
-		},
+		UserConfig: userConfig,
+	})
+	m.authClient = pro.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), &pro.Opts{
+		// HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
+		UserConfig: userConfig,
 	})
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
@@ -940,12 +948,8 @@ func getUserSalt(m *SessionModel, email string) ([]byte, error) {
 		log.Debugf("salt return from cache %v", userSalt)
 		return userSalt, nil
 	}
-
-	email, err = pathdb.Get[string](m.db, pathEmailAddress)
-	if err != nil {
-		return nil, err
-	}
-	salt, err := m.proClient.GetSalt(context.Background(), email)
+	log.Debugf("Salt not found calling api for %s", email)
+	salt, err := m.authClient.GetSalt(context.Background(), email)
 	if err != nil {
 		return nil, err
 	}

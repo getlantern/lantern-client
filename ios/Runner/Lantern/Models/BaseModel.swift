@@ -148,14 +148,10 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
 
   internal func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
     do {
-        let arguments = call.arguments != nil ? try Arguments(call.arguments!) : nil
-
-        
-     
+      let arguments = call.arguments != nil ? try Arguments(call.arguments!) : nil
       let invocationResult = try model.invokeMethod(
         call.method, arguments: arguments)
-
-      if let originalValue = ValueUtil.convertFromMinisqlValue(
+        if let originalValue = ValueUtil.convertFromMinisqlValue(
         from: invocationResult as! MinisqlValue)
       {
         result(originalValue)

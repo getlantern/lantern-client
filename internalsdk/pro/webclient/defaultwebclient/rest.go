@@ -2,12 +2,13 @@ package defaultwebclient
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
+
+	"github.com/moul/http2curl"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -28,16 +29,19 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 	}
 	c.SetBaseURL(baseURL)
 
-	return func(ctx context.Context, method string, path string, reqParams any, header any, body []byte) ([]byte, error) {
+	return func(ctx context.Context, method string, path string, reqParams any, header map[string]string, body []byte) ([]byte, error) {
 		req := c.R().SetContext(ctx)
+
 		if reqParams != nil {
 			switch reqParams.(type) {
 			case map[string]interface{}:
 				params := reqParams.(map[string]interface{})
 				stringParams := make(map[string]string, len(params))
 				for key, value := range params {
-					stringParams[key] = fmt.Sprint(value)
+					log.Debugf("key: %v, value: %v", key, value)
+					stringParams[key] = value.(string)
 				}
+
 				if method == http.MethodGet {
 					req.SetQueryParams(stringParams)
 				} else {
@@ -51,26 +55,23 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 		}
 
 		if header != nil {
-			switch header.(type) {
-			case map[string]interface{}:
-				headers := header.(map[string]interface{})
-				stringHeaders := make(map[string]string, len(headers))
-				for key, value := range headers {
-					stringHeaders[key] = fmt.Sprint(value)
-				}
-				req.SetHeaders(stringHeaders)
-			default:
-				req.SetHeaders(header.(map[string]string))
-			}
+			log.Debugf("header: %v", header)
+			req.SetHeaders(header)
 		}
 
+		log.Debugf("method: %v, path: %v", method, path)
 		resp, err := req.Execute(method, path)
 		if err != nil {
+			log.Errorf("Error sending request: %v", err)
 			return nil, err
 		}
+		command, _ := http2curl.GetCurlCommand(req.RawRequest)
+		log.Debugf("curl command: %v", command)
 		responseBody := resp.Body()
+		log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
+
 		if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
-			log.Errorf("Unexpected status code %d\n\n%v", resp.StatusCode(), string(responseBody))
+			log.Errorf("Unexpected status code %d response body%v", resp.StatusCode(), string(responseBody))
 			return nil, errors.New("Unexpected status code %d", resp.StatusCode())
 		}
 		return responseBody, nil

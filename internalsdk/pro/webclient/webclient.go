@@ -33,7 +33,7 @@ type RESTClient interface {
 // If specified, params should be encoded as query params for GET requests and as form data for POST and PUT requests.
 // If specified, the body bytes should be sent as the body for POST and PUT requests.
 // Returns the response body as bytes.
-type SendRequest func(ctx context.Context, method string, path string, params any, header any, body []byte) ([]byte, error)
+type SendRequest func(ctx context.Context, method string, path string, params any, header map[string]string, body []byte) ([]byte, error)
 
 type restClient struct {
 	send SendRequest

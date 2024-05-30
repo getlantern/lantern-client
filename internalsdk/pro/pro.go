@@ -25,6 +25,12 @@ var (
 	errMissingDeviceName = errors.New("Missing device name")
 )
 
+const (
+	// publicBaseUrl = "https://api.iantem.io/v1"
+	// userGroup     = publicBaseUrl + "/users"
+	saltUrl = "/users/salt"
+)
+
 type proClient struct {
 	userConfig func() common.UserConfig
 	webclient  webclient.RESTClient
@@ -342,6 +348,7 @@ func (c *proClient) PurchaseRequest(ctx context.Context, data map[string]interfa
 
 func (c *proClient) GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error) {
 	var resp protos.GetSaltResponse
+	log.Debugf("Getting salt for email %v", email)
 	err := c.webclient.GetPROTOC(ctx, "/users/salt", map[string]interface{}{
 		"email": email,
 	}, &resp)
@@ -351,6 +358,7 @@ func (c *proClient) GetSalt(ctx context.Context, email string) (*protos.GetSaltR
 	return &resp, nil
 }
 
+// Sign up API
 func (c *proClient) SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp)

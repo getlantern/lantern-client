@@ -42,6 +42,8 @@ var (
 
 	ProAPIHost = "api.getiantem.org"
 
+	V1BaseUrl = "api.iantem.io/v1"
+
 	log = golog.LoggerFor("flashlight.common")
 
 	forceAds bool

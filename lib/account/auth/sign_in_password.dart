@@ -91,8 +91,6 @@ class _SignInPasswordState extends State<SignInPassword> {
 
   @override
   void dispose() {
-    _passwordController.dispose();
-    _passwordFormKey.currentState?.dispose();
     super.dispose();
   }
 

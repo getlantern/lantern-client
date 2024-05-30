@@ -228,7 +228,7 @@ func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) *protos.Us
 		Invitees:     user.Invitees,
 		Purchases:    user.Purchases,
 	}
-	log.Debugf("ConvertToUserDetailsResponse %+v", userData)
+	log.Debugf("ConvertToUserDetailsResponse %+v", &userData)
 
 	for _, d := range user.Devices {
 		// Map the fields from LoginResponse_Device to UserDevice
