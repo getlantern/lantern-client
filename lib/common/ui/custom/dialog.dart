@@ -165,8 +165,7 @@ class CDialogState extends State<CDialog> {
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment:
-            hasIcon ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        // crossAxisAlignment: hasIcon ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
           if (hasIcon)
             Padding(
@@ -191,6 +190,7 @@ class CDialogState extends State<CDialog> {
                     ? widget.description
                     : CText(
                         widget.description as String,
+                        textAlign: TextAlign.center,
                         style: tsBody1.copiedWith(
                           color: grey5,
                         ),

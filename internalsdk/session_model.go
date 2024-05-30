@@ -1197,6 +1197,8 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 	return setProUser(m.baseModel, true)
 }
 
+/// Auth APIS
+
 // Authenticates the user with the given email and password.
 //
 //	Note-: On Sign up Client needed to generate 16 byte slat
@@ -1233,7 +1235,7 @@ func signup(session *SessionModel, email string, password string) error {
 	// if err != nil {
 	// 	return err
 	// }
-	signupResponse, err := session.proClient.SignUp(context.Background(), signUpRequestBody)
+	signupResponse, err := session.authClient.SignUp(context.Background(), signUpRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1265,7 +1267,7 @@ func signupEmailResend(session *SessionModel, email string) error {
 		Salt:  salt,
 	}
 
-	signupEmailResendResponse, err := session.proClient.SignupEmailResendCode(context.Background(), signUpEmailResendRequestBody)
+	signupEmailResendResponse, err := session.authClient.SignupEmailResendCode(context.Background(), signUpEmailResendRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1280,7 +1282,7 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 	}
 
 	log.Debugf("Signup verfication request body %v", signUpEmailResendRequestBody)
-	signupEmailResendResponse, err := session.proClient.SignupEmailConfirmation(context.Background(), signUpEmailResendRequestBody)
+	signupEmailResendResponse, err := session.authClient.SignupEmailConfirmation(context.Background(), signUpEmailResendRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1309,7 +1311,7 @@ func login(session *SessionModel, email string, password string) error {
 		Email: email,
 		A:     A.Bytes(),
 	}
-	srpB, err := session.proClient.LoginPrepare(context.Background(), prepareRequestBody)
+	srpB, err := session.authClient.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1424,7 +1426,7 @@ func startRecoveryByEmail(session *SessionModel, email string) error {
 	prepareRequestBody := &protos.StartRecoveryByEmailRequest{
 		Email: email,
 	}
-	recovery, err := session.proClient.StartRecoveryByEmail(context.Background(), prepareRequestBody)
+	recovery, err := session.authClient.StartRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1453,7 +1455,7 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 		NewVerifier: verifierKey.Bytes(),
 	}
 
-	recovery, err := session.proClient.CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
+	recovery, err := session.authClient.CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1470,7 +1472,7 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 		Email: email,
 		Code:  code,
 	}
-	recovery, err := session.proClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
+	recovery, err := session.authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1497,7 +1499,7 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 		Email: email,
 		A:     A.Bytes(),
 	}
-	srpB, err := session.proClient.LoginPrepare(context.Background(), prepareRequestBody)
+	srpB, err := session.authClient.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1563,7 +1565,7 @@ func completeChangeEmail(session SessionModel, email string, newEmail string, pa
 		Code:        code,
 	}
 
-	isEmailChanged, err := session.proClient.CompleteChangeEmail(context.Background(), completeChangeEmail)
+	isEmailChanged, err := session.authClient.CompleteChangeEmail(context.Background(), completeChangeEmail)
 	if err != nil {
 		return err
 	}
@@ -1613,7 +1615,7 @@ func deleteAccount(session SessionModel, password string) error {
 		A:     A.Bytes(),
 	}
 	log.Debugf("A Bytes %v", A.Bytes())
-	srpB, err := session.proClient.LoginPrepare(context.Background(), prepareRequestBody)
+	srpB, err := session.authClient.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
