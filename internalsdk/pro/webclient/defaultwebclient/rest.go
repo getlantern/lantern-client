@@ -8,7 +8,7 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 
-	// "github.com/moul/http2curl"
+	"github.com/moul/http2curl"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -30,6 +30,7 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 	c.SetBaseURL(baseURL)
 
 	return func(ctx context.Context, method string, path string, reqParams any, header map[string]string, body []byte) ([]byte, error) {
+
 		req := c.R().SetContext(ctx)
 
 		if reqParams != nil {
@@ -38,7 +39,6 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 				params := reqParams.(map[string]interface{})
 				stringParams := make(map[string]string, len(params))
 				for key, value := range params {
-					log.Debugf("key: %v, value: %v", key, value)
 					stringParams[key] = value.(string)
 				}
 				if method == http.MethodGet {
@@ -54,17 +54,16 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 		}
 
 		if header != nil {
-			log.Debugf("header: %v", header)
+			log.Debugf("Found the custom header %v path %v", header, path)
 			req.SetHeaders(header)
 		}
 
-		log.Debugf("method: %v, path: %v", method, path)
 		resp, err := req.Execute(method, path)
 		if err != nil {
 			return nil, errors.New("we_are_experiencing_technical_difficulties Error sending request: %v", err)
 		}
-		// command, _ := http2curl.GetCurlCommand(req.RawRequest)
-		// log.Debugf("curl command: %v", command)
+		command, _ := http2curl.GetCurlCommand(req.RawRequest)
+		log.Debugf("curl command: %v", command)
 		responseBody := resp.Body()
 		log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
 
