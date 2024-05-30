@@ -63,16 +63,22 @@ type ProClient interface {
 }
 
 type AuthClient interface {
-	GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error)
+	//Sign up methods
 	SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error)
 	SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error)
 	SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error)
+
+	//Login methods
+	GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error)
 	LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error)
 	Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error)
+	// Recovery methods
 	StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error)
 	CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error)
 	ValidateEmailRecoveryCode(ctx context.Context, loginData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error)
+	// Change email methods
 	ChangeEmail(ctx context.Context, loginData *protos.ChangeEmailRequest) (bool, error)
+	// Complete change email methods
 	CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error)
 	DeleteAccount(ctc context.Context, loginData *protos.DeleteUserRequest) (bool, error)
 }
@@ -345,7 +351,7 @@ func (c *proClient) PurchaseRequest(ctx context.Context, data map[string]interfa
 }
 
 // Auth APIS
-
+// GetSalt is used to get the salt for a given email address
 func (c *proClient) GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error) {
 	var resp protos.GetSaltResponse
 	err := c.webclient.GetPROTOC(ctx, "/users/salt", map[string]interface{}{
@@ -358,6 +364,7 @@ func (c *proClient) GetSalt(ctx context.Context, email string) (*protos.GetSaltR
 }
 
 // Sign up API
+// SignUp is used to sign up a new user with the SignupRequest
 func (c *proClient) SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp)
@@ -367,6 +374,8 @@ func (c *proClient) SignUp(ctx context.Context, signupData *protos.SignupRequest
 	return true, nil
 }
 
+// SignupEmailResendCode is used to resend the email confirmation code
+// Params: ctx context.Context, data *protos.SignupEmailResendRequest
 func (c *proClient) SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/signup/resend/email", nil, data, &resp)
@@ -376,6 +385,8 @@ func (c *proClient) SignupEmailResendCode(ctx context.Context, data *protos.Sign
 	return true, nil
 }
 
+// SignupEmailConfirmation is used to confirm the email address once user enter code
+// Params: ctx context.Context, data *protos.ConfirmSignupRequest
 func (c *proClient) SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/signup/complete/email", nil, data, &resp)
@@ -385,6 +396,7 @@ func (c *proClient) SignupEmailConfirmation(ctx context.Context, data *protos.Co
 	return true, nil
 }
 
+// LoginPrepare does the initial login preparation with come make sure the user exists and match user salt
 func (c *proClient) LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error) {
 	var resp protos.PrepareResponse
 	err := c.webclient.PostPROTOC(ctx, "/prepare", nil, loginData, &resp)
@@ -394,6 +406,7 @@ func (c *proClient) LoginPrepare(ctx context.Context, loginData *protos.PrepareR
 	return nil, nil
 }
 
+// Login is used to login a user with the LoginRequest
 func (c *proClient) Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
 	var resp protos.LoginResponse
 	err := c.webclient.PostPROTOC(ctx, "/login", nil, loginData, &resp)
@@ -403,6 +416,7 @@ func (c *proClient) Login(ctx context.Context, loginData *protos.LoginRequest) (
 	return &resp, nil
 }
 
+// StartRecoveryByEmail is used to start the recovery process by sending a recovery code to the user's email
 func (c *proClient) StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/recovery/start/email", nil, loginData, &resp)
@@ -412,6 +426,7 @@ func (c *proClient) StartRecoveryByEmail(ctx context.Context, loginData *protos.
 	return true, nil
 }
 
+// CompleteRecoveryByEmail is used to complete the recovery process by validating the recovery code
 func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/recovery/complete/email", nil, loginData, &resp)
@@ -421,6 +436,7 @@ func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *prot
 	return true, nil
 }
 
+// ValidateEmailRecoveryCode is used to validate the recovery code
 func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, loginData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error) {
 	var resp protos.ValidateRecoveryCodeResponse
 	err := c.webclient.PostPROTOC(ctx, "/recovery/complete/email", nil, loginData, &resp)
@@ -430,6 +446,7 @@ func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, loginData *pr
 	return &resp, nil
 }
 
+// ChangeEmail is used to change the email address of a user
 func (c *proClient) ChangeEmail(ctx context.Context, loginData *protos.ChangeEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/change_email", nil, loginData, &resp)
@@ -439,6 +456,7 @@ func (c *proClient) ChangeEmail(ctx context.Context, loginData *protos.ChangeEma
 	return true, nil
 }
 
+// CompleteChangeEmail is used to complete the email change process
 func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/change_email/complete/email", nil, loginData, &resp)
@@ -448,6 +466,8 @@ func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.C
 	return true, nil
 }
 
+// DeleteAccount is used to delete the account of a user
+// Once account is delete make sure to create new account
 func (c *proClient) DeleteAccount(ctx context.Context, accountData *protos.DeleteUserRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/change_email/complete/email", nil, accountData, &resp)

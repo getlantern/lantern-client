@@ -17,7 +17,7 @@ var (
 type RESTClient interface {
 	// Gets a JSON document from the given path with the given querystring parameters, reading the result into target.
 	GetJSON(ctx context.Context, path string, params, target any) error
-
+	// Get data from server and parse to protoc file
 	GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error
 
 	// Post the given parameters as form data and reads the result JSON into target.
@@ -26,6 +26,7 @@ type RESTClient interface {
 	// Post the given body as JSON with the given querystring parameters and reads the result JSON into target.
 	PostJSONReadingJSON(ctx context.Context, path string, params, body, target any) error
 
+	// PostPROTOC sends a POST request with protoc file and parse the response to protoc file
 	PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error
 }
 
