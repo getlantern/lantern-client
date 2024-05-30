@@ -62,8 +62,7 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 		log.Debugf("method: %v, path: %v", method, path)
 		resp, err := req.Execute(method, path)
 		if err != nil {
-			log.Errorf("Error sending request: %v", err)
-			return nil, err
+			return nil, errors.New("we_are_experiencing_technical_difficulties Error sending request: %v", err)
 		}
 		command, _ := http2curl.GetCurlCommand(req.RawRequest)
 		log.Debugf("curl command: %v", command)

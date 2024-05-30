@@ -957,14 +957,6 @@ func getUserSalt(m *SessionModel, email string) ([]byte, error) {
 	return salt.Salt, nil
 }
 
-// func userCreate(m *baseModel, local string) error {
-// 	deviceID, err := pathdb.Get[string](m.db, pathDeviceID)
-// 	if err != nil {
-// 		return err
-// 	}
-
-//	userResponse, err := apimodels.UserCreate(deviceID, local)
-//
 // userCreate creates a new user and stores it in pathdb
 func (session *SessionModel) userCreate(ctx context.Context) error {
 	resp, err := session.proClient.UserCreate(ctx)

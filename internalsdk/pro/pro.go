@@ -348,7 +348,6 @@ func (c *proClient) PurchaseRequest(ctx context.Context, data map[string]interfa
 
 func (c *proClient) GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error) {
 	var resp protos.GetSaltResponse
-	log.Debugf("Getting salt for email %v", email)
 	err := c.webclient.GetPROTOC(ctx, "/users/salt", map[string]interface{}{
 		"email": email,
 	}, &resp)
