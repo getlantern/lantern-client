@@ -62,14 +62,18 @@ var issueMap = map[string]string{
 }
 
 //export start
-func start() {
+func start(cfgDir, proxyAll *C.char) {
 	runtime.LockOSThread()
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
 	flags := flashlight.ParseFlags()
+	flags.ConfigDir = C.GoString(cfgDir)
+
+	flags.ProxyAll, _ = strconv.ParseBool(C.GoString(proxyAll))
 
 	cdir := configDir(&flags)
+
 	settings := loadSettings(cdir)
 	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &proclient.Opts{
 		HttpClient: &http.Client{

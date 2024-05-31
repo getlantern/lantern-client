@@ -197,8 +197,8 @@ final DynamicLibrary _dylib = () {
 /// The bindings to the native functions in [dylib].
 final NativeLibrary _bindings = NativeLibrary(_dylib);
 
-void loadLibrary() {
-  _bindings.start();
+void loadLibrary(String configDir, bool proxyAll) {
+  _bindings.start(configDir.toPointerChar(), proxyAll.toString().toPointerChar());
 }
 
 //Custom exception for handling error

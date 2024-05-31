@@ -32,7 +32,9 @@ Future<void> main() async {
   }
 
   if (isDesktop()) {
-    loadLibrary();
+    const configDir = String.fromEnvironment('config_dir', defaultValue: '');
+    const proxyAll = bool.fromEnvironment("proxyall", defaultValue: false);
+    loadLibrary(configDir, proxyAll);
     await WebsocketImpl.instance()!.connect();
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
