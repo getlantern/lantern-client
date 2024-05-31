@@ -32,6 +32,7 @@ import (
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
+	"github.com/joho/godotenv"
 
 	"google.golang.org/protobuf/encoding/protojson"
 )
@@ -62,15 +63,21 @@ var issueMap = map[string]string{
 }
 
 //export start
-func start(cfgDir, proxyAll *C.char) {
+func start() {
 	runtime.LockOSThread()
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
-	flags := flashlight.ParseFlags()
-	flags.ConfigDir = C.GoString(cfgDir)
 
-	flags.ProxyAll, _ = strconv.ParseBool(C.GoString(proxyAll))
+	// Load application configuration from .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Error("Error loading .env file")
+	}
+
+	flags := flashlight.ParseFlags()
+	flags.ConfigDir = os.Getenv("LANTERN_CONFIGDIR")
+	flags.ProxyAll, _ = strconv.ParseBool(os.Getenv("LANTERN_PROXYALL"))
 
 	cdir := configDir(&flags)
 

@@ -15,4 +15,4 @@ mkdir -p "$TMPDIR"
 echo "Generating config for ${PROXY} in ${OUTFILE}..."
 ../lantern-cloud/bin/ptool route dump-config --legacy "$PROXY" > "$OUTFILE"
 
-flutter run -d macOS --dart-define="configdir=$TMPDIR" --dart-define="proxyall=true"
+make darwin ffigen && LANTERN_CONFIGDIR=$TMPDIR LANTERN_PROXYALL=true flutter run -d macOS
