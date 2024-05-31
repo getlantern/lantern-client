@@ -76,8 +76,6 @@ func start() {
 	}
 
 	flags := flashlight.ParseFlags()
-	flags.ConfigDir = os.Getenv("LANTERN_CONFIGDIR")
-	flags.ProxyAll, _ = strconv.ParseBool(os.Getenv("LANTERN_PROXYALL"))
 
 	cdir := configDir(&flags)
 
