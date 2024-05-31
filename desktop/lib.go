@@ -78,7 +78,6 @@ func start() {
 	flags := flashlight.ParseFlags()
 
 	cdir := configDir(&flags)
-
 	settings := loadSettings(cdir)
 	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &proclient.Opts{
 		HttpClient: &http.Client{
