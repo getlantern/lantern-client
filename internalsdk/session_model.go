@@ -146,8 +146,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		Timeout:   dialTimeout,
 	}
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
-
-		// HttpClient: httpClient,
+		HttpClient: httpClient,
 		UserConfig: userConfig,
 	})
 	m.authClient = pro.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), &pro.Opts{

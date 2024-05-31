@@ -8,7 +8,7 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 
-	"github.com/moul/http2curl"
+	// "github.com/moul/http2curl"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -58,15 +58,16 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 
 		resp, err := req.Execute(method, path)
 		if err != nil {
-			return nil, errors.New("we_are_experiencing_technical_difficulties Error sending request: %v", err)
+			return nil, err
 		}
-		command, _ := http2curl.GetCurlCommand(req.RawRequest)
-		log.Debugf("curl command: %v", command)
+
+		// command, _ := http2curl.GetCurlCommand(req.RawRequest)
+		// log.Debugf("curl command: %v", command)
 		responseBody := resp.Body()
 		log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
 
 		if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
-			log.Errorf("Unexpected status code %d response body%v", resp.StatusCode(), string(responseBody))
+			// log.Errorf("Unexpected status code %d response body%v", resp.StatusCode(), string(responseBody))
 			return nil, errors.New("Unexpected status code %d", resp.StatusCode())
 		}
 		return responseBody, nil

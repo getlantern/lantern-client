@@ -149,8 +149,8 @@ class _VerificationState extends State<Verification> {
       context.loaderOverlay.show();
       await sessionModel.startRecoveryByEmail(widget.email);
       context.loaderOverlay.hide();
-      AppMethods.showToast('email_resend_message'.i18n);
-    } catch (e, s) {
+      showSnackbar(context: context, content: 'email_resend_message'.i18n);
+  } catch (e, s) {
       mainLogger.e('Error while resending code', error: e, stackTrace: s);
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);

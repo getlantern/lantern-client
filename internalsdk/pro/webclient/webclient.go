@@ -102,6 +102,7 @@ func (c *restClient) PostPROTOC(ctx context.Context, path string, params, body p
 	if err != nil {
 		return err
 	}
+	log.Debugf("Response body: %v for path %v", string(bo), path)
 	err1 := proto.Unmarshal(bo, target)
 	if err1 != nil {
 		return err1

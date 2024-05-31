@@ -190,7 +190,6 @@ class CDialogState extends State<CDialog> {
                     ? widget.description
                     : CText(
                         widget.description as String,
-                        textAlign: TextAlign.center,
                         style: tsBody1.copiedWith(
                           color: grey5,
                         ),

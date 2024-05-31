@@ -395,53 +395,22 @@ func (c *proClient) SignupEmailConfirmation(ctx context.Context, data *protos.Co
 // LoginPrepare does the initial login preparation with come make sure the user exists and match user salt
 func (c *proClient) LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error) {
 	var model protos.PrepareResponse
-	// requestBody, err := proto.Marshal(loginData)
-	// if err != nil {
-	// 	log.Errorf("Error marshaling request body: %v", err)
-	// 	return nil, err
-	// }
-
-	// req, _ := http.NewRequest("POST", "https://iantem.io/api/v1/users/prepare", bytes.NewBuffer(requestBody))
-	// req.Header.Set("Content-Type", "application/x-protobuf")
-	// command, _ := http2curl.GetCurlCommand(req)
-	// log.Debugf("curl command: %v", command)
-	// resp, err := httpClient.Do(req)
-	// if err != nil {
-	// 	log.Errorf("Error sending login prepare request: %v", err)
-	// 	return nil, err
-	// }
-	// defer resp.Body.Close()
-	// // Read the response body
-	// body, err := io.ReadAll(resp.Body)
-	// if err != nil {
-	// 	fmt.Println("Error reading response:", err)
-	// 	return nil, err
-	// }
-
-	// log.Debugf("Login prepare response %v with status code %d", string(body), resp.StatusCode)
-
-	// //Todo change message for StatusServiceUnavailable
-	// if resp.StatusCode == http.StatusForbidden || resp.StatusCode == http.StatusServiceUnavailable {
-	// 	return nil, log.Errorf("user_not_found %v", err)
-	// }
-	// if err := proto.Unmarshal(body, &model); err != nil {
-	// 	log.Errorf("Error unmarshalling response: ", err)
-	// }
-
 	err := c.webclient.PostPROTOC(ctx, "/users/prepare", nil, loginData, &model)
 	if err != nil {
-		return nil, err
+		// Send custom error to show error on client side
+		return nil, log.Errorf("user_not_found %v", err)
 	}
-	return nil, nil
+	return &model, nil
 }
 
 // Login is used to login a user with the LoginRequest
 func (c *proClient) Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
 	var resp protos.LoginResponse
-	err := c.webclient.PostPROTOC(ctx, "/¯users/login", nil, loginData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/users/login", nil, loginData, &resp)
 	if err != nil {
 		return nil, err
 	}
+
 	return &resp, nil
 }
 
