@@ -31,6 +31,9 @@ class _VerificationState extends State<Verification> {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: const AppBarProHeader(),
+      onBackButtonPressed: () {
+        print("user has press back button");
+      },
       body: _buildBody(context),
     );
   }

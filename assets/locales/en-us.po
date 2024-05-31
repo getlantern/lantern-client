@@ -1704,18 +1704,6 @@ msgid "verify"
 msgstr "Verify"
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 msgid "cannot_login"
 msgstr "Cannot login"
 

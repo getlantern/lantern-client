@@ -96,10 +96,6 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   ///Widget methods
 

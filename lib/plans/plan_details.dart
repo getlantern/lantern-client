@@ -2,7 +2,7 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/core/purchase/app_purchase.dart';
 import 'package:lantern/plans/utils.dart';
 
-class PlanCard extends StatelessWidget {
+class PlanCard extends StatefulWidget {
   final Plan plan;
   final bool isPro;
 
@@ -13,11 +13,16 @@ class PlanCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<PlanCard> createState() => _PlanCardState();
+}
+
+class _PlanCardState extends State<PlanCard> {
+  @override
   Widget build(BuildContext context) {
-    final planName = plan.id.split('-')[0];
-    final formattedPricePerYear = plan.totalCostBilledOneTime;
-    final formattedPricePerMonth = plan.oneMonthCost;
-    final isBestValue = plan.bestValue;
+    final planName = widget.plan.id.split('-')[0];
+    final formattedPricePerYear = widget.plan.totalCostBilledOneTime;
+    final formattedPricePerMonth = widget.plan.oneMonthCost;
+    final isBestValue = widget.plan.bestValue;
 
     return Padding(
       padding: const EdgeInsetsDirectional.only(bottom: 16.0),
@@ -124,7 +129,8 @@ class PlanCard extends StatelessWidget {
   void onPlanTap(BuildContext context) {
     switch (Platform.operatingSystem) {
       case 'ios':
-        _proceedToCheckoutIOS(context);
+        resolveRouteIOS();
+
         break;
       default:
         // proceed to the default checkout page on Android and desktop
@@ -152,8 +158,8 @@ class PlanCard extends StatelessWidget {
     if (isPlayVersion && !inRussia) {
       await context.pushRoute(
         PlayCheckout(
-          plan: plan,
-          isPro: isPro,
+          plan: widget.plan,
+          isPro: widget.isPro,
         ),
       );
       return;
@@ -167,7 +173,7 @@ class PlanCard extends StatelessWidget {
         final providerName = providers[0].name.toPaymentEnum();
         final redirectUrl = await sessionModel.paymentRedirectForDesktop(
           context,
-          plan.id,
+          widget.plan.id,
           "",
           providerName,
         );
@@ -180,23 +186,33 @@ class PlanCard extends StatelessWidget {
     // * Proceed to our own Checkout
     await context.pushRoute(
       Checkout(
-        plan: plan,
-        isPro: isPro,
+        plan: widget.plan,
+        isPro: widget.isPro,
       ),
     );
   }
 
-  //Todo get the latest email from the session model
+  void resolveRouteIOS() {
+    if (widget.isPro) {
+      //user is signed in
+      _proceedToCheckoutIOS(context);
+    } else {
+      context.pushRoute(CreateAccountEmail(authFlow: AuthFlow.createAccount));
+    }
+  }
+
+  void signUpFlow() {}
+
   void _proceedToCheckoutIOS(BuildContext context) {
     final appPurchase = sl<AppPurchase>();
     try {
       context.loaderOverlay.show();
       appPurchase.startPurchase(
         email: sessionModel.userEmail.value ?? "",
-        planId: plan.id,
+        planId: widget.plan.id,
         onSuccess: () {
           context.loaderOverlay.hide();
-          showSuccessDialog(context, isPro);
+          showSuccessDialog(context, widget.isPro);
         },
         onFailure: (error) {
           context.loaderOverlay.hide();

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"math/big"
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -141,16 +140,16 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		)
 	}
 
-	httpClient := &http.Client{
-		Transport: proxied.ChainedThenFronted(),
-		Timeout:   dialTimeout,
-	}
+	// httpClient := &http.Client{
+	// 	Transport: proxied.ChainedThenFronted(),
+	// 	Timeout:   dialTimeout,
+	// }
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
-		HttpClient: httpClient,
+		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
 		UserConfig: userConfig,
 	})
 	m.authClient = pro.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), &pro.Opts{
-		HttpClient: httpClient,
+		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
 		UserConfig: userConfig,
 	})
 
@@ -396,6 +395,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "isUserFirstTimeVisit":
+		return checkFirstTimeVisit(m.baseModel)
+	case "setFirstTimeVisit":
+		err := isShowFirstTimeUserVisit(m.baseModel)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -497,11 +504,13 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	// 	userIdStr = fmt.Sprintf("%d", tempUserId)
 	// }
 
-	err = m.paymentMethods()
-	if err != nil {
-		log.Debugf("Plans V3 error: %v", err)
-		return err
-	}
+	go func() {
+		err = m.paymentMethods()
+		if err != nil {
+			log.Debugf("Plans V3 error: %v", err)
+			// return err
+		}
+	}()
 
 	// isAccountVerified, err := pathdb.Get[bool](m.db, pathIsAccountVerified)
 	// if err != nil {
@@ -1231,14 +1240,6 @@ func signup(session *SessionModel, email string, password string) error {
 		SkipEmailConfirmation: true,
 	}
 
-	// userId, err := session.GetUserID()
-	// if err != nil {
-	// 	return err
-	// }
-	// token, err := session.GetToken()
-	// if err != nil {
-	// 	return err
-	// }
 	signupResponse, err := session.authClient.SignUp(context.Background(), signUpRequestBody)
 	if err != nil {
 		return err
@@ -1358,7 +1359,7 @@ func login(session *SessionModel, email string, password string) error {
 	}
 	log.Debugf("Login request body %v", loginRequestBody)
 
-	login, err := session.proClient.Login(context.Background(), loginRequestBody)
+	login, err := session.authClient.Login(context.Background(), loginRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1476,7 +1477,7 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 		Email: email,
 		Code:  code,
 	}
-	recovery, err := session.authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
+	recovery, err := session.proClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1844,9 +1845,7 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 		log.Errorf("Error while getting deviceId %v", err)
 		return err
 	}
-	// validateRequestBody := map[string]string{
-	// 	"code": code,
-	// }
+
 	linkResponse, err := session.proClient.UserLinkValidate(context.Background(), deviceId)
 	if err != nil {
 		return err

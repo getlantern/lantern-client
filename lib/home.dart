@@ -26,7 +26,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
-
   Function()? _cancelEventSubscription;
 
   @override
@@ -44,10 +43,13 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       setupTrayManager();
       _initWindowManager();
     }
+    if (!Platform.isAndroid) {
+      _checkForFirstTimeVisit();
+    }
   }
 
   void channelListener() {
-    if(Platform.isIOS) return;
+    if (Platform.isIOS) return;
 
     const mainMethodChannel = MethodChannel('lantern_method_channel');
     const navigationChannel = MethodChannel('navigation');
@@ -59,7 +61,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               .then((shouldShowModal) async {
             if (shouldShowModal) {
               // open VPN tab
-               sessionModel.setSelectedTab(context,TAB_VPN);
+              sessionModel.setSelectedTab(context, TAB_VPN);
               // show Try Lantern Chat dialog
               await context.router
                   .push(FullScreenDialogPage(widget: TryLanternChat()));
@@ -102,6 +104,14 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   void setupTrayManager() async {
     trayManager.addListener(TrayHandler.instance);
+  }
+
+  Future<void> _checkForFirstTimeVisit() async {
+    final isFirstTime = await sessionModel.isUserFirstTimeVisit();
+    if (isFirstTime) {
+      context.router.push(const AuthLanding());
+      sessionModel.setFirstTimeVisit();
+    }
   }
 
   @override

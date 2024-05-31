@@ -51,6 +51,7 @@ type ProClient interface {
 	//Device Linking
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
+	ValidateEmailRecoveryCode(ctx context.Context, loginData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error)
 	UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error)
 	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
 	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
@@ -69,7 +70,6 @@ type AuthClient interface {
 	// Recovery methods
 	StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error)
 	CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error)
-	ValidateEmailRecoveryCode(ctx context.Context, loginData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error)
 	// Change email methods
 	ChangeEmail(ctx context.Context, loginData *protos.ChangeEmailRequest) (bool, error)
 	// Complete change email methods
@@ -435,9 +435,9 @@ func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *prot
 }
 
 // ValidateEmailRecoveryCode is used to validate the recovery code
-func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, loginData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error) {
+func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, recoveryData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error) {
 	var resp protos.ValidateRecoveryCodeResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/recovery/complete/email", nil, loginData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/user-link-validate", recoveryData, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
