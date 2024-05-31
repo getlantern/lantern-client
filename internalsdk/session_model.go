@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 	"math/big"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/1Password/srp"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/proxied"
 
-	//"github.com/getlantern/flashlight/v7/proxied"
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -141,12 +141,17 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		)
 	}
 
+	httpClient := &http.Client{
+		Transport: proxied.ChainedThenFronted(),
+		Timeout:   dialTimeout,
+	}
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
-		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
+
+		// HttpClient: httpClient,
 		UserConfig: userConfig,
 	})
 	m.authClient = pro.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), &pro.Opts{
-		// HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
+		HttpClient: httpClient,
 		UserConfig: userConfig,
 	})
 

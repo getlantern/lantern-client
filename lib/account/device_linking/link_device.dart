@@ -30,7 +30,7 @@ class _LinkDeviceState extends State<LinkDevice> {
       //   () => {sessionModel.redeemLinkCode()},
       // );
     } catch (e) {
-      appLogger.e("error while requesting link code: $e", error: e);
+      appLogger.e("error while requesting link code: $e",   error: e);
     }
   }
 

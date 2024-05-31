@@ -30,9 +30,7 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 	c.SetBaseURL(baseURL)
 
 	return func(ctx context.Context, method string, path string, reqParams any, header map[string]string, body []byte) ([]byte, error) {
-
 		req := c.R().SetContext(ctx)
-
 		if reqParams != nil {
 			switch reqParams.(type) {
 			case map[string]interface{}:

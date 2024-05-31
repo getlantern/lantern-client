@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/getlantern/golog"
+	"github.com/go-resty/resty/v2"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -58,7 +59,7 @@ func (c *restClient) GetJSON(ctx context.Context, path string, params, target an
 func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error {
 	header := make(map[string]string)
 	header["Content-Type"] = "application/x-protobuf"
-	body, err := c.send(ctx, http.MethodGet, path, params, header, nil)
+	body, err := c.send(ctx, resty.MethodGet, path, params, header, nil)
 	if err != nil {
 		return err
 	}
@@ -97,7 +98,7 @@ func (c *restClient) PostPROTOC(ctx context.Context, path string, params, body p
 	}
 	header := make(map[string]string)
 	header["Content-Type"] = "application/x-protobuf"
-	bo, err := c.send(ctx, http.MethodPost, path, params, header, bodyBytes)
+	bo, err := c.send(ctx, http.MethodPost, path, params, nil, bodyBytes)
 	if err != nil {
 		return err
 	}

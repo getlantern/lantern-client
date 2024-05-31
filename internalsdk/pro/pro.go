@@ -25,12 +25,6 @@ var (
 	errMissingDeviceName = errors.New("Missing device name")
 )
 
-const (
-	// publicBaseUrl = "https://api.iantem.io/v1"
-	// userGroup     = publicBaseUrl + "/users"
-	saltUrl = "/users/salt"
-)
-
 type proClient struct {
 	userConfig func() common.UserConfig
 	webclient  webclient.RESTClient
@@ -98,6 +92,8 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 
 func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Request) error {
 	return func(client *resty.Client, req *resty.Request) error {
+
+		log.Debugf("Setting headers")
 
 		uc := c.userConfig()
 
@@ -398,8 +394,41 @@ func (c *proClient) SignupEmailConfirmation(ctx context.Context, data *protos.Co
 
 // LoginPrepare does the initial login preparation with come make sure the user exists and match user salt
 func (c *proClient) LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error) {
-	var resp protos.PrepareResponse
-	err := c.webclient.PostPROTOC(ctx, "/prepare", nil, loginData, &resp)
+	var model protos.PrepareResponse
+	// requestBody, err := proto.Marshal(loginData)
+	// if err != nil {
+	// 	log.Errorf("Error marshaling request body: %v", err)
+	// 	return nil, err
+	// }
+
+	// req, _ := http.NewRequest("POST", "https://iantem.io/api/v1/users/prepare", bytes.NewBuffer(requestBody))
+	// req.Header.Set("Content-Type", "application/x-protobuf")
+	// command, _ := http2curl.GetCurlCommand(req)
+	// log.Debugf("curl command: %v", command)
+	// resp, err := httpClient.Do(req)
+	// if err != nil {
+	// 	log.Errorf("Error sending login prepare request: %v", err)
+	// 	return nil, err
+	// }
+	// defer resp.Body.Close()
+	// // Read the response body
+	// body, err := io.ReadAll(resp.Body)
+	// if err != nil {
+	// 	fmt.Println("Error reading response:", err)
+	// 	return nil, err
+	// }
+
+	// log.Debugf("Login prepare response %v with status code %d", string(body), resp.StatusCode)
+
+	// //Todo change message for StatusServiceUnavailable
+	// if resp.StatusCode == http.StatusForbidden || resp.StatusCode == http.StatusServiceUnavailable {
+	// 	return nil, log.Errorf("user_not_found %v", err)
+	// }
+	// if err := proto.Unmarshal(body, &model); err != nil {
+	// 	log.Errorf("Error unmarshalling response: ", err)
+	// }
+
+	err := c.webclient.PostPROTOC(ctx, "/users/prepare", nil, loginData, &model)
 	if err != nil {
 		return nil, err
 	}
@@ -409,7 +438,7 @@ func (c *proClient) LoginPrepare(ctx context.Context, loginData *protos.PrepareR
 // Login is used to login a user with the LoginRequest
 func (c *proClient) Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
 	var resp protos.LoginResponse
-	err := c.webclient.PostPROTOC(ctx, "/login", nil, loginData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/¯users/login", nil, loginData, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -419,7 +448,7 @@ func (c *proClient) Login(ctx context.Context, loginData *protos.LoginRequest) (
 // StartRecoveryByEmail is used to start the recovery process by sending a recovery code to the user's email
 func (c *proClient) StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/recovery/start/email", nil, loginData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/users/recovery/start/email", nil, loginData, &resp)
 	if err != nil {
 		return false, err
 	}
@@ -429,7 +458,7 @@ func (c *proClient) StartRecoveryByEmail(ctx context.Context, loginData *protos.
 // CompleteRecoveryByEmail is used to complete the recovery process by validating the recovery code
 func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/recovery/complete/email", nil, loginData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/users/recovery/complete/email", nil, loginData, &resp)
 	if err != nil {
 		return false, err
 	}
@@ -439,7 +468,7 @@ func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *prot
 // ValidateEmailRecoveryCode is used to validate the recovery code
 func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, loginData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error) {
 	var resp protos.ValidateRecoveryCodeResponse
-	err := c.webclient.PostPROTOC(ctx, "/recovery/complete/email", nil, loginData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/users/recovery/complete/email", nil, loginData, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -449,7 +478,7 @@ func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, loginData *pr
 // ChangeEmail is used to change the email address of a user
 func (c *proClient) ChangeEmail(ctx context.Context, loginData *protos.ChangeEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/change_email", nil, loginData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/users/change_email", nil, loginData, &resp)
 	if err != nil {
 		return false, err
 	}
@@ -459,7 +488,7 @@ func (c *proClient) ChangeEmail(ctx context.Context, loginData *protos.ChangeEma
 // CompleteChangeEmail is used to complete the email change process
 func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/change_email/complete/email", nil, loginData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/users/change_email/complete/email", nil, loginData, &resp)
 	if err != nil {
 		return false, err
 	}
@@ -470,7 +499,7 @@ func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.C
 // Once account is delete make sure to create new account
 func (c *proClient) DeleteAccount(ctx context.Context, accountData *protos.DeleteUserRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/change_email/complete/email", nil, accountData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/users/change_email/complete/email", nil, accountData, &resp)
 	if err != nil {
 		return false, err
 	}
