@@ -12,6 +12,7 @@ class Verification extends StatefulWidget {
   final AuthFlow authFlow;
   final Plan? plan;
   final ChangeEmailPageArgs? changeEmailArgs;
+  final String? tempPassword;
 
   const Verification({
     super.key,
@@ -19,6 +20,7 @@ class Verification extends StatefulWidget {
     this.authFlow = AuthFlow.reset,
     this.changeEmailArgs,
     this.plan,
+    this.tempPassword,
   });
 
   @override
@@ -32,9 +34,7 @@ class _VerificationState extends State<Verification> {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: const AppBarProHeader(),
-      onBackButtonPressed: () {
-        print("user has press back button");
-      },
+      onBackButtonPressed: onBackPressed,
       body: _buildBody(context),
     );
   }
@@ -81,7 +81,8 @@ class _VerificationState extends State<Verification> {
               ),
               const SizedBox(height: 14),
               if (!widget.authFlow.isVerifyEmail &&
-                  !widget.authFlow.isCreateAccount&&!widget.authFlow.isProCodeActivation)
+                  !widget.authFlow.isCreateAccount &&
+                  !widget.authFlow.isProCodeActivation)
                 AppTextButton(
                   text: 'change_email'.i18n.toUpperCase(),
                   onPressed: () {
@@ -154,7 +155,7 @@ class _VerificationState extends State<Verification> {
       await sessionModel.startRecoveryByEmail(widget.email);
       context.loaderOverlay.hide();
       showSnackbar(context: context, content: 'email_resend_message'.i18n);
-  } catch (e, s) {
+    } catch (e, s) {
       mainLogger.e('Error while resending code', error: e, stackTrace: s);
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
@@ -295,6 +296,30 @@ class _VerificationState extends State<Verification> {
         ));
       case AuthFlow.changeEmail:
       // TODO: Handle this case.
+    }
+  }
+
+  Future<void> onBackPressed() async {
+    if (widget.authFlow == AuthFlow.createAccount) {
+      assert (widget.tempPassword != null, 'Temp password is null');
+      // if user press back button while creating account
+      // we need to delete that temp account
+      await _deleteAccount(widget.tempPassword!);
+      context.maybePop();
+      return;
+    }
+    context.maybePop();
+  }
+
+  Future<void> _deleteAccount(String password) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.deleteAccount(password);
+      context.loaderOverlay.hide();
+    } catch (e) {
+      context.loaderOverlay.hide();
+      mainLogger.e("Error while deleting account", error: e);
+      CDialog.showError(context, description: e.localizedDescription);
     }
   }
 }

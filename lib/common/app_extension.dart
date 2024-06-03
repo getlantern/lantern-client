@@ -22,6 +22,9 @@ extension ErrorX on Object {
         if (description.contains("we_are_experiencing_technical_difficulties")) {
           return "we_are_experiencing_technical_difficulties".i18n;
         }
+        if (description.contains("user already exists")) {
+          return "signup_error_user_exists".i18n;
+        }
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;
         } else {

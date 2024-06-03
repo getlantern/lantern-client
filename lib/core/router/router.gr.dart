@@ -71,6 +71,7 @@ import 'package:lantern/replica/ui/viewers/video.dart' as _i41;
 import 'package:lantern/replica/upload/description.dart' as _i38;
 import 'package:lantern/replica/upload/review.dart' as _i39;
 import 'package:lantern/replica/upload/title.dart' as _i40;
+import 'package:lantern/vpn/vpn.dart' as _i59;
 
 abstract class $AppRouter extends _i52.RootStackRouter {
   $AppRouter({super.navigatorKey});
@@ -526,6 +527,7 @@ abstract class $AppRouter extends _i52.RootStackRouter {
           authFlow: args.authFlow,
           changeEmailArgs: args.changeEmailArgs,
           plan: args.plan,
+          tempPassword: args.tempPassword,
         ),
       );
     },
@@ -2051,11 +2053,12 @@ class Support extends _i52.PageRouteInfo<void> {
 /// [_i51.Verification]
 class Verification extends _i52.PageRouteInfo<VerificationArgs> {
   Verification({
-    _i54.Key? key,
+    _i59.Key? key,
     required String email,
-    _i54.AuthFlow authFlow = _i54.AuthFlow.reset,
+    _i59.AuthFlow authFlow = _i59.AuthFlow.reset,
     _i11.ChangeEmailPageArgs? changeEmailArgs,
-    _i54.Plan? plan,
+    _i59.Plan? plan,
+    String? tempPassword,
     List<_i52.PageRouteInfo>? children,
   }) : super(
           Verification.name,
@@ -2065,6 +2068,7 @@ class Verification extends _i52.PageRouteInfo<VerificationArgs> {
             authFlow: authFlow,
             changeEmailArgs: changeEmailArgs,
             plan: plan,
+            tempPassword: tempPassword,
           ),
           initialChildren: children,
         );
@@ -2079,23 +2083,26 @@ class VerificationArgs {
   const VerificationArgs({
     this.key,
     required this.email,
-    this.authFlow = _i54.AuthFlow.reset,
+    this.authFlow = _i59.AuthFlow.reset,
     this.changeEmailArgs,
     this.plan,
+    this.tempPassword,
   });
 
-  final _i54.Key? key;
+  final _i59.Key? key;
 
   final String email;
 
-  final _i54.AuthFlow authFlow;
+  final _i59.AuthFlow authFlow;
 
   final _i11.ChangeEmailPageArgs? changeEmailArgs;
 
-  final _i54.Plan? plan;
+  final _i59.Plan? plan;
+
+  final String? tempPassword;
 
   @override
   String toString() {
-    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow, changeEmailArgs: $changeEmailArgs, plan: $plan}';
+    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow, changeEmailArgs: $changeEmailArgs, plan: $plan, tempPassword: $tempPassword}';
   }
 }

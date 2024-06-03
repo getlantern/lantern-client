@@ -89,6 +89,18 @@ const Devices$json = {
 final $typed_data.Uint8List devicesDescriptor = $convert.base64Decode(
     'CgdEZXZpY2VzEiEKB2RldmljZXMYASADKAsyBy5EZXZpY2VSB2RldmljZXM=');
 
+@$core.Deprecated('Use plansDescriptor instead')
+const Plans$json = {
+  '1': 'Plans',
+  '2': [
+    {'1': 'plan', '3': 1, '4': 3, '5': 11, '6': '.Plan', '10': 'plan'},
+  ],
+};
+
+/// Descriptor for `Plans`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List plansDescriptor = $convert.base64Decode(
+    'CgVQbGFucxIZCgRwbGFuGAEgAygLMgUuUGxhblIEcGxhbg==');
+
 @$core.Deprecated('Use planDescriptor instead')
 const Plan$json = {
   '1': 'Plan',
@@ -187,6 +199,9 @@ const User$json = {
     {'1': 'referral', '3': 11, '4': 1, '5': 9, '10': 'referral'},
     {'1': 'token', '3': 12, '4': 1, '5': 9, '10': 'token'},
     {'1': 'yinbiEnabled', '3': 13, '4': 1, '5': 8, '10': 'yinbiEnabled'},
+    {'1': 'inviters', '3': 14, '4': 3, '5': 9, '10': 'inviters'},
+    {'1': 'invitees', '3': 15, '4': 3, '5': 9, '10': 'invitees'},
+    {'1': 'purchases', '3': 16, '4': 3, '5': 9, '10': 'purchases'},
   ],
 };
 
@@ -198,7 +213,9 @@ final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
     'xlEh4KCmV4cGlyYXRpb24YByABKANSCmV4cGlyYXRpb24SIQoHZGV2aWNlcxgIIAMoCzIHLkRl'
     'dmljZVIHZGV2aWNlcxISCgRjb2RlGAkgASgJUgRjb2RlEhoKCGV4cGlyZUF0GAogASgDUghleH'
     'BpcmVBdBIaCghyZWZlcnJhbBgLIAEoCVIIcmVmZXJyYWwSFAoFdG9rZW4YDCABKAlSBXRva2Vu'
-    'EiIKDHlpbmJpRW5hYmxlZBgNIAEoCFIMeWluYmlFbmFibGVk');
+    'EiIKDHlpbmJpRW5hYmxlZBgNIAEoCFIMeWluYmlFbmFibGVkEhoKCGludml0ZXJzGA4gAygJUg'
+    'hpbnZpdGVycxIaCghpbnZpdGVlcxgPIAMoCVIIaW52aXRlZXMSHAoJcHVyY2hhc2VzGBAgAygJ'
+    'UglwdXJjaGFzZXM=');
 
 @$core.Deprecated('Use baseResponseDescriptor instead')
 const BaseResponse$json = {

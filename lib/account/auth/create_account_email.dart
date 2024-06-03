@@ -150,26 +150,26 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
   Future<void> createAccount() async {
     try {
       context.loaderOverlay.show();
+     final userTempPass =  AppMethods().generatePassword();
       await sessionModel.signUp(
-          _emailController.text.validateEmail, AppMethods().generatePassword());
+          _emailController.text.validateEmail, userTempPass);
       //start forgot password flow
-      forgotPasswordFlow();
+      forgotPasswordFlow(userTempPass);
     } catch (e, s) {
-      mainLogger.w('Error while creating account', error: e, stackTrace: s);
+      mainLogger.e('Error while creating account', error: e, stackTrace: s);
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
-    }
+ }
   }
 
   //forgot password flow
-  Future<void> forgotPasswordFlow() async {
+  Future<void> forgotPasswordFlow(String userTempPass) async {
     try {
       final email = _emailController.text.validateEmail;
       //Send verification code to email
       await sessionModel.startRecoveryByEmail(email);
       context.loaderOverlay.hide();
-      context.pushRoute(Verification(
-          email: email, authFlow: widget.authFlow, plan: widget.plan),);
+      context.pushRoute(Verification(email: email, authFlow: widget.authFlow, plan: widget.plan,tempPassword: userTempPass));
     } catch (e, s) {
       mainLogger.w('Error starting recovery', error: e, stackTrace: s);
       context.loaderOverlay.hide();

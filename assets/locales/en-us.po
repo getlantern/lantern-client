@@ -1576,6 +1576,9 @@ msgstr "Your new confirmation code has been sent"
 msgid "signup_error"
 msgstr "It looks like something went wrong with the sign-up. Please try again, and if the issue continues, reach out to our support team"
 
+msgid "signup_error_user_exists"
+msgstr "It looks like something went wrong with the sign-up. Please try resetting your password, and if the issue continues, reach out to our support team"
+
 msgid "confirm_email_error"
 msgstr "Please confirm your email"
 

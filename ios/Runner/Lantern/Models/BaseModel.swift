@@ -177,6 +177,9 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
         result(
           FlutterError(code: String(error.code), message: error.localizedDescription, details: nil))
       }
+    } catch let error as NSException {
+        result(
+            FlutterError(code: error.name.rawValue, message: error.reason, details: nil))
     }
   }
 

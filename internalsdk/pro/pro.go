@@ -3,9 +3,11 @@ package pro
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
@@ -92,9 +94,6 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 
 func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Request) error {
 	return func(client *resty.Client, req *resty.Request) error {
-
-		log.Debugf("Setting headers")
-
 		uc := c.userConfig()
 
 		//req.Header.Set("Referer", "http://localhost:37457/")
@@ -116,14 +115,62 @@ func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Reque
 				req.Header.Set(common.ProTokenHeader, token)
 			}
 		}
+
 		if req.Header.Get(common.UserIdHeader) == "" {
 			if userID := uc.GetUserID(); userID != 0 {
 				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
 			}
 		}
+		/// Remove the header for signup we don't need to pass token and userid
+		if strings.HasSuffix(req.URL, "/signup") {
+			req.Header.Del(common.UserIdHeader)
+			req.Header.Del(common.ProTokenHeader)
+		}
 
+		// logRequest(req)
 		return nil
 	}
+}
+
+// Function to log request details
+func logRequest(req *resty.Request) {
+	url := req.URL
+	method := req.Method
+	headers := req.Header
+	body := req.Body
+
+	logEntry := fmt.Sprintf("Time: %s\nMethod: %s\nURL: %s\nHeaders:\n",
+		time.Now().Format(time.RFC3339), method, url)
+
+	for key, values := range headers {
+		for _, value := range values {
+			logEntry += fmt.Sprintf("%s: %s\n", key, value)
+		}
+	}
+
+	logEntry += fmt.Sprintf("Body: %v\n\n", body)
+
+	fmt.Println(logEntry)
+}
+
+// Function to log response details
+func logResponse(resp *resty.Response) {
+	status := resp.Status()
+	headers := resp.Header()
+	body := resp.Body()
+
+	logEntry := fmt.Sprintf("Time: %s\nStatus: %s\nHeaders:\n",
+		time.Now().Format(time.RFC3339), status)
+
+	for key, values := range headers {
+		for _, value := range values {
+			logEntry += fmt.Sprintf("%s: %s\n", key, value)
+		}
+	}
+
+	logEntry += fmt.Sprintf("Response Body: %s\n\n", string(body))
+
+	fmt.Println(logEntry)
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {
@@ -365,7 +412,7 @@ func (c *proClient) SignUp(ctx context.Context, signupData *protos.SignupRequest
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp)
 	if err != nil {
-		return false, err
+		return false, log.Errorf("error while sign up %v", err)
 	}
 	return true, nil
 }
@@ -469,7 +516,7 @@ func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.C
 // Once account is delete make sure to create new account
 func (c *proClient) DeleteAccount(ctx context.Context, accountData *protos.DeleteUserRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/change_email/complete/email", nil, accountData, &resp)
+	err := c.webclient.PostPROTOC(ctx, "/users/delete", nil, accountData, &resp)
 	if err != nil {
 		return false, err
 	}

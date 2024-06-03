@@ -398,6 +398,50 @@ class Devices extends $pb.GeneratedMessage {
   $core.List<Device> get devices => $_getList(0);
 }
 
+class Plans extends $pb.GeneratedMessage {
+  factory Plans({
+    $core.Iterable<Plan>? plan,
+  }) {
+    final $result = create();
+    if (plan != null) {
+      $result.plan.addAll(plan);
+    }
+    return $result;
+  }
+  Plans._() : super();
+  factory Plans.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Plans.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Plans', createEmptyInstance: create)
+    ..pc<Plan>(1, _omitFieldNames ? '' : 'plan', $pb.PbFieldType.PM, subBuilder: Plan.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Plans clone() => Plans()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Plans copyWith(void Function(Plans) updates) => super.copyWith((message) => updates(message as Plans)) as Plans;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Plans create() => Plans._();
+  Plans createEmptyInstance() => create();
+  static $pb.PbList<Plans> createRepeated() => $pb.PbList<Plans>();
+  @$core.pragma('dart2js:noInline')
+  static Plans getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Plans>(create);
+  static Plans? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<Plan> get plan => $_getList(0);
+}
+
 class Plan extends $pb.GeneratedMessage {
   factory Plan({
     $core.String? id,
@@ -707,6 +751,9 @@ class User extends $pb.GeneratedMessage {
     $core.String? referral,
     $core.String? token,
     $core.bool? yinbiEnabled,
+    $core.Iterable<$core.String>? inviters,
+    $core.Iterable<$core.String>? invitees,
+    $core.Iterable<$core.String>? purchases,
   }) {
     final $result = create();
     if (userId != null) {
@@ -748,6 +795,15 @@ class User extends $pb.GeneratedMessage {
     if (yinbiEnabled != null) {
       $result.yinbiEnabled = yinbiEnabled;
     }
+    if (inviters != null) {
+      $result.inviters.addAll(inviters);
+    }
+    if (invitees != null) {
+      $result.invitees.addAll(invitees);
+    }
+    if (purchases != null) {
+      $result.purchases.addAll(purchases);
+    }
     return $result;
   }
   User._() : super();
@@ -768,6 +824,9 @@ class User extends $pb.GeneratedMessage {
     ..aOS(11, _omitFieldNames ? '' : 'referral')
     ..aOS(12, _omitFieldNames ? '' : 'token')
     ..aOB(13, _omitFieldNames ? '' : 'yinbiEnabled', protoName: 'yinbiEnabled')
+    ..pPS(14, _omitFieldNames ? '' : 'inviters')
+    ..pPS(15, _omitFieldNames ? '' : 'invitees')
+    ..pPS(16, _omitFieldNames ? '' : 'purchases')
     ..hasRequiredFields = false
   ;
 
@@ -902,6 +961,15 @@ class User extends $pb.GeneratedMessage {
   $core.bool hasYinbiEnabled() => $_has(12);
   @$pb.TagNumber(13)
   void clearYinbiEnabled() => clearField(13);
+
+  @$pb.TagNumber(14)
+  $core.List<$core.String> get inviters => $_getList(13);
+
+  @$pb.TagNumber(15)
+  $core.List<$core.String> get invitees => $_getList(14);
+
+  @$pb.TagNumber(16)
+  $core.List<$core.String> get purchases => $_getList(15);
 }
 
 /// API

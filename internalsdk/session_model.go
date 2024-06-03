@@ -1152,20 +1152,6 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 		return err
 	}
 
-	// deviecId, err := m.GetDeviceID()
-	// if err != nil {
-	// 	return err
-	// }
-	// userId, err := m.GetUserID()
-	// if err != nil {
-	// 	return err
-	// }
-	// userIdStr := fmt.Sprintf("%d", userId)
-
-	// token, err := m.GetToken()
-	// if err != nil {
-	// 	return err
-	// }
 	purchase, err := m.proClient.PurchaseRequest(context.Background(), purchaseData)
 	if err != nil {
 		return err
@@ -1226,7 +1212,6 @@ func signup(session *SessionModel, email string, password string) error {
 	if err != nil {
 		return err
 	}
-	log.Debugf("Slat %v and length %v", salt, len(salt))
 
 	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, salt), nil)
 	verifierKey, err := srpClient.Verifier()
@@ -1239,7 +1224,7 @@ func signup(session *SessionModel, email string, password string) error {
 		Verifier:              verifierKey.Bytes(),
 		SkipEmailConfirmation: true,
 	}
-
+	log.Debugf("Sign up request email %v, salt %v verifier %v verifiter in bytes", email, salt, verifierKey, verifierKey.Bytes())
 	signupResponse, err := session.authClient.SignUp(context.Background(), signUpRequestBody)
 	if err != nil {
 		return err
@@ -1619,7 +1604,7 @@ func deleteAccount(session SessionModel, password string) error {
 		Email: email,
 		A:     A.Bytes(),
 	}
-	log.Debugf("A Bytes %v", A.Bytes())
+	log.Debugf("Login prepare request  email %v, a bytes %v", email, A.Bytes())
 	srpB, err := session.authClient.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
@@ -1659,7 +1644,8 @@ func deleteAccount(session SessionModel, password string) error {
 		DeviceId:  deviceId,
 	}
 
-	isAccountDeleted, err := session.proClient.DeleteAccount(context.Background(), changeEmailRequestBody)
+	log.Debugf("Delete Account request email %v prooof %v deviceId %v", email, clientProof, deviceId)
+	isAccountDeleted, err := session.authClient.DeleteAccount(context.Background(), changeEmailRequestBody)
 	if err != nil {
 		return err
 	}
@@ -1681,11 +1667,6 @@ func deleteAccount(session SessionModel, password string) error {
 	if err != nil {
 		return err
 	}
-	// // Create New user
-	// local, err := session.Locale()
-	// if err != nil {
-	// 	return err
-	// }
 	return session.userCreate(context.Background())
 }
 
@@ -1810,26 +1791,12 @@ func userLinkRemove(session *SessionModel, deviceId string) error {
 
 // Add device for LINK WITH EMAIL method
 func requestRecoveryEmail(session *SessionModel, email string) error {
-	// deviceName, err := pathdb.Get[string](session.db, pathModel)
-	// if err != nil {
-	// 	log.Errorf("Error while getting deviceId %v", err)
-	// 	return err
-	// }
 	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
 	if err != nil {
 		log.Errorf("Error while getting deviceId %v", err)
 		return err
 	}
-	// locale, err := session.Locale()
-	// if err != nil {
-	// 	log.Errorf("Error while getting deviceId %v", err)
-	// 	return err
-	// }
-	// userLinkRequestBody := map[string]string{
-	// 	"email":      email,
-	// 	"deviceName": deviceName,
-	// 	"locale":     locale,
-	// }
+
 	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), deviceId)
 	if err != nil {
 		return err

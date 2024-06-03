@@ -100,9 +100,9 @@ func (c *restClient) PostPROTOC(ctx context.Context, path string, params, body p
 	header["Content-Type"] = "application/x-protobuf"
 	bo, err := c.send(ctx, http.MethodPost, path, params, nil, bodyBytes)
 	if err != nil {
+		log.Debugf("Error in sending request: %v", err)
 		return err
 	}
-	log.Debugf("Response body: %v for path %v", string(bo), path)
 	err1 := proto.Unmarshal(bo, target)
 	if err1 != nil {
 		return err1

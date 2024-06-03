@@ -194,11 +194,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               return const PrivacyDisclosure();
             }
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-              final isTesting = const String.fromEnvironment(
-                    'driver',
-                    defaultValue: 'false',
-                  ).toLowerCase() ==
-                  'true';
 
               final tab = tabModel.currentIndex;
               return Scaffold(
@@ -206,7 +201,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                 bottomNavigationBar: CustomBottomBar(
                   selectedTab: tab,
                   isDevelop: developmentMode,
-                  isTesting: isTesting,
                 ),
               );
             });
