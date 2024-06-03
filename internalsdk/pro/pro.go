@@ -327,6 +327,10 @@ func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.B
 	if err != nil {
 		return nil, err
 	}
+	if resp.Error != "" && resp.Status != "ok" {
+		return nil, errors.New("%v approving link code: %v", resp.ErrorId, resp.Error)
+	}
+
 	return &resp, nil
 }
 

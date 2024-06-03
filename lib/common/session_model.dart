@@ -466,11 +466,11 @@ class SessionModel extends Model {
     }).then((value) => value.toString());
   }
 
-  Future<String> approveDevice(String code) async {
+  Future<void> approveDevice(String code) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
         'code': code,
-      }).then((value) => value as String);
+      });
     }
     return await compute(ffiApproveDevice, code);
   }

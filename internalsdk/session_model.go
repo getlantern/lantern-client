@@ -486,32 +486,13 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		log.Error(err)
 	}
 
-	// token, err := m.GetToken()
-	// if err != nil {
-	// 	return err
-	// }
-	// countryCode, err := m.GetCountryCode()
-	// if err != nil {
-	// 	return err
-	// }
-	// //Get all the Plans
-	// userIdStr := fmt.Sprintf("%d", userId)
-	// if userId == 0 {
-	// 	tempUserId, err := m.GetUserID()
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	userIdStr = fmt.Sprintf("%d", tempUserId)
-	// }
-
-	// todo uncomment this code
-	// go func() {
-	// 	err = m.paymentMethods()
-	// 	if err != nil {
-	// 		log.Debugf("Plans V3 error: %v", err)
-	// 		// return err
-	// 	}
-	// }()
+	go func() {
+		err = m.paymentMethods()
+		if err != nil {
+			log.Debugf("Plans V3 error: %v", err)
+			// return err
+		}
+	}()
 
 	// isAccountVerified, err := pathdb.Get[bool](m.db, pathIsAccountVerified)
 	// if err != nil {
@@ -1707,63 +1688,20 @@ func linkCodeRequest(session *SessionModel) error {
 
 // Approve code for linking device for LINK WITH PIN method
 func linkCodeApprove(session *SessionModel, code string) error {
-	// locale, err := session.Locale()
-	// if err != nil {
-	// 	log.Errorf("Error while getting locale %v", err)
-	// 	return err
-	// }
-	// userRecoveryBody := map[string]string{
-	// 	"locale": locale,
-	// 	"code":   code,
-	// }
-
-	// userId, err := session.GetUserID()
-	// if err != nil {
-	// 	log.Errorf("Error while getting userid %v", err)
-	// 	return err
-	// }
-
-	// token, err := session.GetToken()
-	// if err != nil {
-	// 	log.Errorf("Error while getting pro token %v", err)
-	// 	return err
-	// }
 	linkResponse, err := session.proClient.LinkCodeApprove(context.Background(), code)
 	if err != nil {
 		return err
 	}
 	log.Debugf("LinkCodeApprove response %v", linkResponse)
+	// refresh user detail in background
+	go func() {
+		session.userDetail(context.Background())
+	}()
 	return nil
 }
 
 // Remove device for LINK WITH PIN method
 func userLinkRemove(session *SessionModel, deviceId string) error {
-	// locale, err := session.Locale()
-	// if err != nil {
-	// 	log.Errorf("Error while getting locale %v", err)
-	// 	return err
-	// }
-	// userLinkRemove := map[string]string{
-	// 	"deviceID": deviceId,
-	// 	"locale":   locale,
-	// }
-
-	// userId, err := session.GetUserID()
-	// if err != nil {
-	// 	log.Errorf("Error while getting userid %v", err)
-	// 	return err
-	// }
-
-	// userDeviceId, err := session.GetDeviceID()
-	// if err != nil {
-	// 	log.Errorf("Error while getting pro token %v", err)
-	// 	return err
-	// }
-	// proToken, err := session.GetToken()
-	// if err != nil {
-	// 	log.Errorf("Error while getting pro token %v", err)
-	// 	return err
-	// }
 	linkResponse, err := session.proClient.DeviceRemove(context.Background(), deviceId)
 	if err != nil {
 		return err
@@ -1784,7 +1722,7 @@ func requestRecoveryEmail(session *SessionModel, email string) error {
 	if err != nil {
 		return err
 	}
-	log.Debugf("LinkCodeRequest response %v", linkResponse)
+	log.Debugf("requestRecoveryEmail response %v", linkResponse)
 	return nil
 }
 
