@@ -37,6 +37,12 @@ type LinkCodeResponse struct {
 	Code                 string
 	ExpireAt             int64
 }
+type LinkCodeRedeemResponse struct {
+	*protos.BaseResponse `json:",inline"`
+	Status               string `json:"status"`
+	UserID               int64  `json:"userId"`
+	Code                 string `json:"code"`
+}
 
 type PurchaseResponse struct {
 	PaymentStatus string      `json:"paymentStatus"`

@@ -69,9 +69,9 @@ class AccountMenu extends StatelessWidget {
     );
   }
 
-  List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
+  List<Widget> freeItems(BuildContext context, bool hasUserLoggedIn) {
     return [
-
+    if(!hasUserLoggedIn)
       ListItemFactory.settingsItem(
         icon: ImagePaths.signIn,
         content: 'sign_in'.i18n,
@@ -216,7 +216,7 @@ class AccountMenu extends StatelessWidget {
           return ListView(
             children: proUser && hasUserLoggedIn
                 ? proItems(sessionContext)
-                : freeItems(sessionContext, sessionModel),
+                : freeItems(sessionContext,hasUserLoggedIn),
           );
         });
       }),

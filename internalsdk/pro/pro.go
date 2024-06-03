@@ -53,6 +53,7 @@ type ProClient interface {
 	//Device Linking
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
+	LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error)
 	UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error)
 	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
 	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
@@ -348,8 +349,22 @@ func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*Li
 	if err != nil {
 		return nil, err
 	}
-	b, _ := json.Marshal(resp)
-	log.Debugf("LinkCodeResponse is %s", string(b))
+	return &resp, nil
+}
+
+// LinkCodeRequest returns a code that can be used to link a device to an existing Pro account
+func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error) {
+	var resp LinkCodeRedeemResponse
+	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-redeem", map[string]interface{}{
+		"deviceName": deviceName,
+		"code":       deviceCode,
+	}, nil, &resp)
+	if err != nil {
+		return nil, err
+	}
+	if resp.Error != "" && resp.Status != "ok" {
+		return nil, errors.New("%v redeeming link code: %v", resp.ErrorId, resp.Error)
+	}
 	return &resp, nil
 }
 

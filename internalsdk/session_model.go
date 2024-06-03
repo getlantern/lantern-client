@@ -355,6 +355,12 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "redeemLinkCode":
+		err := linkCodeRedeem(m)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	case "authorizeViaEmail":
 		email := arguments.Get("emailAddress").String()
 		err := requestRecoveryEmail(m, email)
@@ -974,6 +980,9 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	if err != nil {
 		return nil
 	}
+	if resp.User == nil {
+		return errors.New("User data not found")
+	}
 	log.Debugf("User detail: %+v", resp.User)
 
 	userDetail := resp.User
@@ -1002,9 +1011,9 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
+		return nil
 	}
 
-	err = cacheUserDetail(session.baseModel, userDetail)
 	log.Debugf("User detail: %+v", resp.User)
 	err = cacheUserDetail(session.baseModel, resp.User)
 	if err != nil {
@@ -1435,6 +1444,10 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 	//Save new salt
 	saveUserSalt(session.baseModel, newsalt)
 	log.Debugf("CompleteRecoveryByEmail response %v", recovery)
+	//refresh the user details
+	go func() {
+		session.userDetail(context.Background())
+	}()
 	return nil
 }
 
@@ -1660,14 +1673,9 @@ func deleteAccount(session SessionModel, password string) error {
 // Request code for linking device for LINK WITH PIN method
 func linkCodeRequest(session *SessionModel) error {
 	log.Debug("LinkCodeRequest")
-	// local, err := session.Locale()
-	// if err != nil {
-	// 	log.Errorf("Error while getting local %v", err)
-	// 	return err
-	// }
 	device, err := pathdb.Get[string](session.db, pathDevice)
 	if err != nil {
-		log.Errorf("Error while getting local %v", err)
+		log.Errorf("Error while getting device %v", err)
 		return err
 	}
 	log.Debugf("Device %v", device)
@@ -1684,6 +1692,35 @@ func linkCodeRequest(session *SessionModel) error {
 		}
 		return pathdb.Put[string](tx, pathDeviceLinkingCode, linkResponse.Code, "")
 	})
+}
+
+// Approve code for linking device for LINK WITH PIN method
+func linkCodeRedeem(session *SessionModel) error {
+	device, err := pathdb.Get[string](session.db, pathDevice)
+	if err != nil {
+		log.Errorf("Error while getting device %v", err)
+		return err
+	}
+	deviceCode, err := pathdb.Get[string](session.db, pathDeviceLinkingCode)
+	if err != nil {
+		log.Errorf("Error while getting device %v", err)
+		return err
+	}
+	if deviceCode == "" || device == "" {
+		return errors.New("Device code or device not found")
+	}
+
+	log.Debugf("Device %v deviceCode %v", device, deviceCode)
+	linkRedeemResponse, err := session.proClient.LinkCodeRedeem(context.Background(), device, deviceCode)
+	if err != nil {
+		return err
+	}
+	log.Debugf("linkCodeRedeem response %+v", linkRedeemResponse)
+	err = setUserIdAndToken(session.baseModel, linkRedeemResponse.UserID, linkRedeemResponse.Code)
+	if err != nil {
+		return log.Errorf("Error while setting user id and token %v", err)
+	}
+	return session.userDetail(context.Background())
 }
 
 // Approve code for linking device for LINK WITH PIN method

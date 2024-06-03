@@ -4,9 +4,7 @@ import 'package:flutter/gestures.dart';
 import '../../common/common.dart';
 
 /// Test users
-// jigar@getlantern.org
-// Jigar@123
-// jigar+ios4@getlantern.org
+// jigar+ios7@getlantern.org
 // Jigar@123
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {

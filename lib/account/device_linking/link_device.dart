@@ -18,7 +18,6 @@ class _LinkDeviceState extends State<LinkDevice> {
   void initState() {
     super.initState();
       requestLinkCode();
-    
   }
 
   Future<void> requestLinkCode() async {
@@ -26,9 +25,9 @@ class _LinkDeviceState extends State<LinkDevice> {
       await sessionModel.requestLinkCode();
       // We need to call redeemLinkCode multiple times when user enter code we redeem it
       // then it will show on the device list
-      // retry(
-      //   () => {sessionModel.redeemLinkCode()},
-      // );
+      retry(
+        () => {sessionModel.redeemLinkCode()},
+      );
     } catch (e) {
       appLogger.e("error while requesting link code: $e",   error: e);
     }

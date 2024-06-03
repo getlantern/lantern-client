@@ -758,7 +758,7 @@ class SessionModel extends Model {
     String url,
     String title,
   ) async {
-    if (isMobile()) {
+    if (Platform.isAndroid) {
       return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
         'name': name,
         'url': url,
