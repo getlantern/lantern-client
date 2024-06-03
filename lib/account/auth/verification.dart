@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:lantern/core/purchase/app_purchase.dart';
+import 'package:lantern/vpn/vpn.dart';
 
 import '../../common/common.dart';
 import 'change_email.dart';
@@ -237,6 +238,7 @@ class _VerificationState extends State<Verification> {
 
   // Purchase flow
   void startPurchase() {
+    assert(widget.plan != null, 'Plan object is null');
     final appPurchase = sl<AppPurchase>();
     try {
       context.loaderOverlay.show();
@@ -258,6 +260,7 @@ class _VerificationState extends State<Verification> {
         },
       );
     } catch (e) {
+      mainLogger.e("Error while purchase flow", error: e);
       context.loaderOverlay.hide();
       CDialog.showError(
         context,
@@ -279,11 +282,11 @@ class _VerificationState extends State<Verification> {
       case AuthFlow.signIn:
       // TODO: Handle this case.
       case AuthFlow.reset:
-        context.router.pop();
+        context.router.maybePop();
       case AuthFlow.createAccount:
         startPurchase();
       case AuthFlow.verifyEmail:
-        context.router.pop();
+        context.router.maybePop();
       case AuthFlow.proCodeActivation:
         context.pushRoute(ResellerCodeCheckout(
           isPro: false,

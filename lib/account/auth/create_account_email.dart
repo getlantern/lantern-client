@@ -169,7 +169,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
       await sessionModel.startRecoveryByEmail(email);
       context.loaderOverlay.hide();
       context.pushRoute(Verification(
-          email: email, authFlow: widget.authFlow, plan: widget.plan));
+          email: email, authFlow: widget.authFlow, plan: widget.plan),);
     } catch (e, s) {
       mainLogger.w('Error starting recovery', error: e, stackTrace: s);
       context.loaderOverlay.hide();

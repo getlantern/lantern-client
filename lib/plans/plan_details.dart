@@ -130,7 +130,6 @@ class _PlanCardState extends State<PlanCard> {
     switch (Platform.operatingSystem) {
       case 'ios':
         resolveRouteIOS();
-
         break;
       default:
         // proceed to the default checkout page on Android and desktop
@@ -197,11 +196,15 @@ class _PlanCardState extends State<PlanCard> {
       //user is signed in
       _proceedToCheckoutIOS(context);
     } else {
-      context.pushRoute(CreateAccountEmail(authFlow: AuthFlow.createAccount));
+      signUpFlow();
     }
   }
 
-  void signUpFlow() {}
+  void signUpFlow() {
+    // If user is new we need to send plans id to create account flow
+    context.pushRoute(CreateAccountEmail(
+        authFlow: AuthFlow.createAccount, plan: widget.plan));
+  }
 
   void _proceedToCheckoutIOS(BuildContext context) {
     final appPurchase = sl<AppPurchase>();

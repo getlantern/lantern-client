@@ -91,7 +91,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
             Constants.appGroupDefaults.set(proToken, forKey: Constants.proToken)
             logger.log("Sucessfully got protoken \(proToken)")
           } else {
-            logger.log("Failed to get user id")
+            logger.log("Failed to get protoken")
           }
         }
       } catch {

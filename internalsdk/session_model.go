@@ -1477,11 +1477,11 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 		Email: email,
 		Code:  code,
 	}
-	recovery, err := session.proClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
+	recovery, err := session.authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
 	}
-	log.Debugf("CompleteRecoveryByEmail response %v", recovery)
+	log.Debugf("Validate code response %v", recovery)
 	return nil
 }
 

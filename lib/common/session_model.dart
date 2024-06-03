@@ -59,7 +59,7 @@ class SessionModel extends Model {
       * So show banner only if proxyAvailable is false
       */
       proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
-      country = singleValueNotifier('geo_country_code', 'US');
+      country =  singleValueNotifier('geo_country_code', 'US');
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
       isPlayVersion = ffiValueNotifier(
