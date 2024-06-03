@@ -24,7 +24,6 @@ import (
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/i18n"
 	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
@@ -119,7 +118,7 @@ func start() {
 
 	go func() {
 		defer logging.Close()
-		i18nInit(a)
+		// i18nInit(a)
 		a.Run(true)
 
 		err := a.WaitForExit()
@@ -435,7 +434,8 @@ func storeVersion() *C.char {
 
 //export lang
 func lang() *C.char {
-	lang := a.Settings().GetLanguage()
+	lang := a.GetLanguage()
+	log.Debugf("DEBUG: Language is %v", lang)
 	if lang == "" {
 		// Default language is English
 		lang = defaultLocale
@@ -598,7 +598,7 @@ func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 		C.GoString(description),
 		subscriptionLevel,
 		C.GoString(email),
-		app.ApplicationVersion,
+		common.ApplicationVersion,
 		deviceID,
 		osVersion,
 		"",
@@ -620,7 +620,7 @@ func checkUpdates() *C.char {
 	op := ops.Begin("check_update").
 		Set("user_id", userID).
 		Set("device_id", deviceID).
-		Set("current_version", app.ApplicationVersion)
+		Set("current_version", common.ApplicationVersion)
 	defer op.End()
 	updateURL, err := autoupdate.CheckUpdates()
 	if err != nil {
@@ -634,11 +634,11 @@ func checkUpdates() *C.char {
 // loadSettings loads the initial settings at startup, either from disk or using defaults.
 func loadSettings(configDir string) *settings.Settings {
 	path := filepath.Join(configDir, "settings.yaml")
-	if common.Staging {
+	if common.IsStagingEnvironment() {
 		path = filepath.Join(configDir, "settings-staging.yaml")
 	}
-	settings := settings.LoadSettingsFrom(app.ApplicationVersion, app.RevisionDate, app.BuildDate, path)
-	if common.Staging {
+	settings := settings.LoadSettingsFrom(common.ApplicationVersion, common.RevisionDate, common.BuildDate, path)
+	if common.IsStagingEnvironment() {
 		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
 	}
 	return settings
@@ -673,25 +673,27 @@ func useOSLocale() (string, error) {
 	return userLocale, nil
 }
 
-func i18nInit(a *app.App) {
-	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
-		return a.GetTranslations(filename)
-	})
-	locale := a.GetLanguage()
-	log.Debugf("Using locale: %v", locale)
-	if _, err := i18n.SetLocale(locale); err != nil {
-		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
+//Do not need to call this function
+// Since localisation is happing on client side
+// func i18nInit(a *app.App) {
+// 	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
+// 		return a.GetTranslations(filename)
+// 	})
+// 	locale := a.GetLanguage()
+// 	log.Debugf("Using locale: %v", locale)
+// 	if _, err := i18n.SetLocale(locale); err != nil {
+// 		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
 
-		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
-		// populated.
-		if locale, err := useOSLocale(); err != nil {
-			log.Debugf("i18n.UseOSLocale: %q", err)
-			a.SetLanguage(defaultLocale)
-		} else {
-			a.SetLanguage(locale)
-		}
-	}
-}
+// 		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
+// 		// populated.
+// 		if locale, err := useOSLocale(); err != nil {
+// 			log.Debugf("i18n.UseOSLocale: %q", err)
+// 			a.SetLanguage(defaultLocale)
+// 		} else {
+// 			a.SetLanguage(locale)
+// 		}
+// 	}
+// }
 
 // Handle system signals for clean exit
 func handleSignals(a *app.App) {

@@ -26,17 +26,17 @@ Note - you might see an error like `Can't load Kernel binary: Invalid SDK hash.`
 
 ### Dependencies
 
-All those dependencies must be in your PATH
+All these dependencies must be in your PATH. Some of this is Android specific, see below for other platforms.
 
 * Java 11 or greater
-* [Android Studio](https://developer.android.com/studio)
+* [Android Studio](https://developer.android.com/studio?_gl=1*1wowe6v*_up*MQ..&gclid=Cj0KCQjw6auyBhDzARIsALIo6v-bn0juONfkfmQAJtwssRCQWADJMgGfRBisMNTSXHt5CZnyZVSK2Y8aAgCmEALw_wcB&gclsrc=aw.ds) (Android Studio Jellyfish | 2023.3.1 Patch 1)
 * [Xcode](https://developer.apple.com/xcode/resources/)
 * [Git](https://git-scm.com/downloads)
 * [Android NDK](#steps-to-run-the-project)
   * NDK should be version 26.x, for example 26.0.10792818.
 * [Git LFS](https://git-lfs.github.com)
   - more information in [Usage](#usage)
-* [Flutter (3.13.5)](https://flutter.dev)
+* [Flutter (3.19.6)](https://flutter.dev)
 * [sentry-cli](https://docs.sentry.io/product/cli/installation/)
   - This is used for uploading native debug symbols to Sentry
 * [gomobile](https://github.com/golang/go/wiki/Mobile#tools)
@@ -44,13 +44,15 @@ All those dependencies must be in your PATH
   * Only necessary for testing Replica
 * CMake 3.22.1
   * You can get this from Android SDK Manager
-
+* [CocoaPods](https://cocoapods.org/)
+  * Possibly this is only needed on Apple platforms.
 
 ### 🚀 Setup Project:
 
 * Install all prerequisites
 * Run `git submodule update --init --recursive`
-* Run `git lfs install && git pull`
+* Run `git lfs install && git pull`.
+* Put the [app.env](https://my.1password.com/vaults/all/allitems/adqasjh2hspgjgvgfllyekhcrq) file from 1Password in the repo root.
 * Go to the **SDK MANAGER**
 * Select **Android SDK**
 * Check the SDK from android 5.0(LOLLIPOP) up to the Latest Version at the moment.
@@ -59,13 +61,13 @@ All those dependencies must be in your PATH
 * On the NDK(Side by side) check the latest version of 22.x (not anything newer)
 * Make sure that you have the latest **Android SDK Command-line Tools**
 * Finally select the following:
-   - Android Emulator
-   - Android SDK Platform-Tools
-   - Google play APK Expansion Library
-   - Google play Instant Development SDK
-   - Google Play Licensing Library
-   - Google Play Services
-   - Intel x86 Emulator Accelerator (HAXM installer)
+  - Android Emulator
+  - Android SDK Platform-Tools
+  - Google play APK Expansion Library
+  - Google play Instant Development SDK
+  - Google Play Licensing Library
+  - Google Play Services
+  - Intel x86 Emulator Accelerator (HAXM installer)
 * Click on Apply and accept the Terms and Conditions.
 * If you are opening Xcode first time open Xcode and install necessary components
 * Lastly `Flutter Doctor` to confirm that your setup is correct and ready!
@@ -76,7 +78,6 @@ All those dependencies must be in your PATH
 * `flutter pub get`
 * `flutter run --flavor prod`
 
-
 ### 🍏 Running the project on iOS
 
 * `make build-framework` (you need to generated Internalsdk.xcframework. containing the Go backend code in order for the project to compile.)
@@ -85,7 +86,25 @@ All those dependencies must be in your PATH
 
 **Note**: If you're using an M1 or M2 chip, navigate to the ios folder and run `arch -x86_64 pod install`
 
+### 💻 Running the Project on Desktop
+
+**Note**: Make sure to run all the commands from the root of the project.
+
+#### macOS
+
+* `make darwin`
+* `make ffigen`
+* `flutter run -d macos`
+
+#### Other OS
+
+* Windows run `make windows` Linux run `linux-amd64`
+* `make ffigen`
+* `flutter pub get`
+* `flutter run --flavor prod` or if you are using android studio use desktop configuration
+
 ### Running on emulators
+
 You can easily run emulators directly from the command line with the following:
 
 * `flutter devices`
@@ -98,46 +117,43 @@ We've got you covered! If you prefer using Android Studio, we have already set u
 You can build an emulator with `./scripts/run_avd.rb`. Here's an example run: `./scripts/run_avd.rb --level=30 --abi=x86 --use_google_apis --window`.
 You'll need Ruby >= 2.3 installed and `colorize` gem (i.e., `gem install colorize`).
 
-#### Flutter Logging
+[//]: # (#### Flutter Logging)
 
-The Flutter component uses [logger](https://pub.dev/packages/logger) package for logging.
-See `home.dart#build()` to know where it's configured.
+[//]: # ()
+[//]: # (The Flutter component uses [logger]&#40;https://pub.dev/packages/logger&#41; package for logging.)
 
-During development, you'll notice a lot of `GoLog`-tagged code. Feel-free to comment that out during your flutter work.
-A sane terminal command (using [pidcat](https://github.com/JakeWharton/pidcat)) is `pidcat org.getlantern.lantern -i GoLog -i System.out -w 3`.
+[//]: # (See `home.dart#build&#40;&#41;` to know where it's configured.)
+
+[//]: # ()
+[//]: # (During development, you'll notice a lot of `GoLog`-tagged code. Feel-free to comment that out during your flutter work.)
+
+[//]: # (A sane terminal command &#40;using [pidcat]&#40;https://github.com/JakeWharton/pidcat&#41;&#41; is `pidcat org.getlantern.lantern -i GoLog -i System.out -w 3`.)
 
 ### Building the InternalSdk (AKA Lantern Core) as a library
 
-
 The core Lantern functionality is written in Go and lives in `./internalsdk`.
-It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to an AAR file that
+It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to appropriate formats for each platform.
 
 #### Android
-For compiled code lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
+* To generate AAR run `make android-lib ANDROID_ARCH=all`
 
-Package the AAR with `make android-lib ANDROID_ARCH=all`
+* For compiled code lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
 
 #### IOS
+* To generate XCodeFramework run `make build-framework`
+
 For compiled code lives in `./ios/internalsdk/` and is called `Internalsdk.xcframework`.
 
-
 #### Desktop
-
 The desktop app lives under `desktop` .. To build the Go shared library on macOS:
 
-```
-make darwin ffigen
-```
+* To build for desktop `make darwin` for macOS, `make windows` for Windows, and `make linux-amd64` for Linux.
+* Generate the FFI bindings `make ffigen`
 
-Then to run the Flutter app on macOS:
+[//]: # (#### Testing against Lantern's staging servers)
 
-```
-flutter run -d macOS
-```
-
-#### Testing against Lantern's staging servers
-
-Package the AAR with `make android-lib ANDROID_ARCH=all STAGING=true`
+[//]: # ()
+[//]: # (Package the AAR with `make android-lib ANDROID_ARCH=all STAGING=true`)
 
 ### Making Android debug builds (Not yet implemented on IOS)
 
@@ -159,16 +175,21 @@ or
 make android-release-install
 ```
 
-### 🚧 Making Staging Builds
+[//]: # (### 🚧 Making Staging Builds)
 
+[//]: # ()
+[//]: # ()
+[//]: # (To build mobile for staging, use the STAGING command line argument:)
 
-To build mobile for staging, use the STAGING command line argument:
+[//]: # ()
+[//]: # (```)
 
-```
-STAGING=true make android-debug android-install
-```
+[//]: # (STAGING=true make android-debug android-install)
 
-This will build Flashlight with the same [STAGING flag](https://github.com/getlantern/flashlight/v7/blob/9eb8abbe036e86b9e72a1a938f29e59f75391676/common/const.go#L43), which allows your client to use the [staging pro-server](https://github.com/getlantern/pro-server-neu/blob/fa2859edf213998e15cd7c00461e52fd97a9e570/README.md#L125) instance instead of the production one.
+[//]: # (```)
+
+[//]: # ()
+[//]: # (This will build Flashlight with the same [STAGING flag]&#40;https://github.com/getlantern/flashlight/v7/blob/9eb8abbe036e86b9e72a1a938f29e59f75391676/common/const.go#L43&#41;, which allows your client to use the [staging pro-server]&#40;https://github.com/getlantern/pro-server-neu/blob/fa2859edf213998e15cd7c00461e52fd97a9e570/README.md#L125&#41; instance instead of the production one.)
 
 ### 🎉 Making Release Builds
 
@@ -178,7 +199,7 @@ Do this to make a release build:
 ```
  VERSION=x.x.x make ios-release
 ```
- **Note**: Replace x.x.x with the version number of your release.
+**Note**: Replace x.x.x with the version number of your release.
 
 This will
 - Set the version number in the info.plist file and increment the build number 1
@@ -300,10 +321,10 @@ You can run integration tests from the integration_test directory against a live
 5. All tests should start with testing device showing Chats tab.
 6. Start by running test `1A`.
 7. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
-   1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
-   2. `6B_request_flow_test` requires a message request to have just been received
-   3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
-   4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
+  1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
+  2. `6B_request_flow_test` requires a message request to have just been received
+  3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
+  4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
 8. We will have some duplicate screenshots in there - run `python3 scripts/screenshot_generation_assets/remove_dups.py [your android-lantern-path]/screenshots/` to deduplicate.
 9. To generate stitched landscape images for all screenshots in a given test folder, run `python3 scripts/screenshot_generation_assets/merge_screenshots.py [your android-lantern-path]/screenshots/[a locale e.g. en_US]`
 
@@ -400,7 +421,7 @@ appium driver install espresso
 ```
 
 3. Generate a debug build with `CI=true make android-debug ANDROID_ARCH=all` ... CI needs to be set to true to enable the
-Flutter driver extension.
+   Flutter driver extension.
 
 4. Modify [local_config.json](appium_kotlin/app/src/test/resources/local/local_config.json) to specify the path of a debug build APK on your system, and change `appium:udid` to specify your device ID (you can get this from `adb devices`)
 

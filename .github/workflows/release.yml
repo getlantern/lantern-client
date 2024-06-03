@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ atavism/pro-client-updates ]
+    branches: [ main ]
     tags:
       - '*'
 
@@ -119,6 +119,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: "stable"
+          flutter-version-file: pubspec.yaml
+
       - run: flutter --version
 
       - name: Setup Go

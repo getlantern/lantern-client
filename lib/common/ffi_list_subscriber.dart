@@ -2,10 +2,6 @@ import 'dart:collection';
 
 import 'common.dart';
 import 'common_desktop.dart';
-import 'list_subscriber.dart';
-import 'package:lantern/i18n/i18n.dart';
-import 'package:fixnum/fixnum.dart';
-import 'package:intl/intl.dart';
 
 class FfiListNotifier<T> extends SubscribedNotifier<ChangeTrackingList<T>> {
   FfiListNotifier(

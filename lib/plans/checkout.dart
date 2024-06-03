@@ -238,20 +238,25 @@ class _CheckoutState extends State<Checkout>
         widgets.add(options());
         if (!showMoreOptions) break;
       }
-      for (final provider in paymentMethod.value.providers) {
-        widgets.add(
-          PaymentProvider(
-            logoPaths: provider.logoUrls,
-            onChanged: () =>
-                selectPaymentProvider(provider.name.toPaymentEnum()),
-            selectedPaymentProvider: selectedPaymentProvider!,
-            paymentType: provider.name.toPaymentEnum(),
-            useNetwork: true,
-          ),
-        );
-      }
+      widgets.addAll(paymentProviders(paymentMethod.value));
     }
     return widgets;
+  }
+
+  List<PaymentProvider> paymentProviders(PaymentMethod paymentMethods) {
+    var providers = <PaymentProvider>[];
+    for (final provider in paymentMethods.providers) {
+      providers.add(
+        PaymentProvider(
+          logoPaths: provider.logoUrls,
+          onChanged: () => selectPaymentProvider(provider.name.toPaymentEnum()),
+          selectedPaymentProvider: selectedPaymentProvider!,
+          paymentType: provider.name.toPaymentEnum(),
+          useNetwork: true,
+        ),
+      );
+    }
+    return providers;
   }
 
   bool enableContinueButton() {
@@ -285,14 +290,14 @@ class _CheckoutState extends State<Checkout>
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
         if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.stripe.name);
+          _proceedWithPaymentRedirect(Providers.stripe);
           return;
         }
         _proceedWithStripe();
         break;
       case Providers.btcpay:
         if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.btcpay.name);
+          _proceedWithPaymentRedirect(Providers.btcpay);
           return;
         }
         _proceedWithBTCPay();
@@ -302,13 +307,13 @@ class _CheckoutState extends State<Checkout>
         break;
       case Providers.fropay:
         if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.fropay.name);
+          _proceedWithPaymentRedirect(Providers.fropay);
           return;
         }
         _proceedWithFroPay();
       case Providers.paymentwall:
         if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.paymentwall.name);
+          _proceedWithPaymentRedirect(Providers.paymentwall);
           return;
         }
         _proceedWithPaymentWall();
@@ -362,7 +367,30 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-  void _proceedWithPaymentRedirect(String provider) async {
+  // This methods is responsible for polling for user data
+  // so if user has done payment or renew plans and show
+  void hasPlansUpdateOrBuy() {
+    appLogger.i("calling hasPlansUpdateOrBuy to update plans or buy");
+    try {
+      retry(
+        () async {
+          /// Polling for userData that user has updates plans or buy
+          final plansUpdated = await sessionModel.hasUpdatePlansOrBuy();
+          if (plansUpdated) {
+            if (mounted) {
+              showSuccessDialog(context, widget.isPro);
+            }
+          }
+        },
+        delayFactor: const Duration(seconds: 2),
+        retryIf: (e) => e is NoPlansUpdate,
+      );
+    } catch (e) {
+      appLogger.e('Error while polling for plans update or buy', error: e);
+    }
+  }
+
+  void _proceedWithPaymentRedirect(Providers provider) async {
     try {
       context.loaderOverlay.show();
       final redirectUrl = await sessionModel.paymentRedirectForDesktop(
@@ -371,14 +399,13 @@ class _CheckoutState extends State<Checkout>
         emailController.text,
         provider,
       );
-
       context.loaderOverlay.hide();
       openDesktopWebview(
           context: context,
           provider: provider,
           redirectUrl: redirectUrl,
           onClose: checkProUser);
-      //as soon user click we should start polling userData
+      // as soon user click we should start polling userData
       Future.delayed(const Duration(seconds: 2), hasPlansUpdateOrBuy);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
@@ -466,29 +493,6 @@ class _CheckoutState extends State<Checkout>
         stackTrace: stackTrace,
       );
       return false;
-    }
-  }
-
-  ///This methods is responsible for polling for user data
-  ///so if user has done payment or renew plans and show
-  void hasPlansUpdateOrBuy() {
-    appLogger.i("calling hasPlansUpdateOrBuy to update plans or buy");
-    try {
-      retry(
-        () async {
-          /// Polling for userData that user has updates plans or buy
-          final plansUpdated = await sessionModel.hasUpdatePlansOrBuy();
-          if (plansUpdated) {
-            if (mounted) {
-              showSuccessDialog(context, widget.isPro);
-            }
-          }
-        },
-        delayFactor: const Duration(seconds: 2),
-        retryIf: (e) => e is NoPlansUpdate,
-      );
-    } catch (e) {
-      appLogger.e('Error while polling for plans update or buy', error: e);
     }
   }
 }

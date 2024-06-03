@@ -1,9 +1,7 @@
+import 'package:web_socket_channel/status.dart' as status;
+
 import 'common.dart';
 import 'common_desktop.dart';
-import 'dart:convert';
-import 'package:web_socket_channel/io.dart';
-import 'package:web_socket_channel/status.dart' as status;
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 extension BoolParsing on String {
   bool parseBool() {
@@ -13,7 +11,7 @@ extension BoolParsing on String {
 
 class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
   FfiValueNotifier(
-    Pointer<Utf8> Function() ffiFunction,
+    Pointer<Utf8> Function()? ffiFunction,
     String path,
     T? defaultValue,
     void Function() removeFromCache, {
@@ -28,6 +26,7 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
         value = newValue;
       });
     }
+    if (ffiFunction == null) return;
     if (defaultValue is int) {
         value = null;
         //value = int.parse(ffiFunction().toDartString()) as T?;

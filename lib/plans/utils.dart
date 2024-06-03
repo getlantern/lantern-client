@@ -76,19 +76,18 @@ enum Providers { stripe, btcpay, freekassa, fropay, paymentwall }
 
 extension ProviderExtension on String {
   Providers toPaymentEnum() {
-    if (this == "stripe") {
-      return Providers.stripe;
+    switch (this) {
+      case "btcpay":
+        return Providers.btcpay;
+      case "freekassa":
+        return Providers.freekassa;
+      case "fropay":
+        return Providers.fropay;
+      case "paymentwall":
+        return Providers.paymentwall;
+      default:
+        return Providers.stripe;
     }
-    if (this == "freekassa") {
-      return Providers.freekassa;
-    }
-    if (this == "fropay") {
-      return Providers.fropay;
-    }
-    if (this == "paymentwall") {
-      return Providers.paymentwall;
-    }
-    return Providers.btcpay;
   }
 }
 
@@ -105,14 +104,14 @@ extension PlansExtension on Plan {
 Future<void> openDesktopWebview(
     {required BuildContext context,
     required String redirectUrl,
-    required String provider,
-    required VoidCallback onClose}) async {
+    required Providers provider,
+    VoidCallback? onClose}) async {
   switch (Platform.operatingSystem) {
     case 'windows':
       await AppBrowser.openWindowsWebview(redirectUrl);
       break;
     case 'macos':
-      if (provider == Providers.fropay.name) {
+      if (provider == Providers.fropay) {
         // Open with system browser browser on mac due to not able to by pass human verification.
         await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
       } else {

@@ -1,10 +1,10 @@
 import 'dart:collection';
 
-import 'package:lantern/common/ffi_subscriber.dart';
 import 'package:lantern/common/ffi_list_subscriber.dart';
+import 'package:lantern/common/ffi_subscriber.dart';
 import 'package:lantern/messaging/messaging.dart';
+
 import 'common_desktop.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;
@@ -56,7 +56,7 @@ abstract class Model {
 
   ValueListenableBuilder<T?> ffiValueBuilder<T>(
     String path, 
-    Pointer<Utf8> Function() ffiFunction, {
+    Pointer<Utf8> Function()? ffiFunction, {
     T? defaultValue,
     required ValueWidgetBuilder<T> builder,
     bool details = false,
@@ -95,7 +95,7 @@ abstract class Model {
   }
 
   ValueNotifier<T?> ffiValueNotifier<T>(
-    Pointer<Utf8> Function() ffiFunction,
+    Pointer<Utf8> Function()? ffiFunction,
     String path,
     T? defaultValue, {
       bool details = false,

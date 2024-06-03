@@ -1,6 +1,7 @@
 package org.getlantern.lantern.util
 
 import android.app.Activity
+import android.content.Context
 import android.content.res.Resources
 import android.text.TextUtils
 import org.getlantern.lantern.LanternApp
@@ -12,7 +13,7 @@ import org.joda.time.LocalDateTime
 
 object PlansUtil {
     @JvmStatic
-    fun updatePrice(activity: Activity, plan: ProPlan) {
+    fun updatePrice(activity: Context, plan: ProPlan) {
         val formattedBonus = formatRenewalBonusExpected(activity, plan.renewalBonusExpected, false)
         val totalCost = plan.costWithoutTaxStr
         var totalCostBilledOneTime = activity.resources.getString(R.string.total_cost, totalCost)
@@ -58,7 +59,7 @@ object PlansUtil {
     // longForm == false -> a day-only format (e.g. "45 days")
     // longForm == true -> month and day format (e.g. "1 month and 15 days"
     private fun formatRenewalBonusExpected(
-        activity: Activity, planBonus: MutableMap<String, Int>,
+        activity: Context, planBonus: MutableMap<String, Int>,
         longForm: Boolean
     ): String {
         val bonusMonths: Int? = planBonus["months"]

@@ -1,9 +1,9 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
-import 'package:intl/intl.dart';
 
 class ResellerCodeFormatter extends TextInputFormatter {
   @override

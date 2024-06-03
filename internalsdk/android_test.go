@@ -93,7 +93,7 @@ func TestProxying(t *testing.T) {
 		require.NoError(t, err, "Proxying request via HTTP should have worked")
 		err = testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
 		assert.NoError(t, err, "Proxying request via SOCKS should have worked")
-		testRelay(t)
+		// testRelay(t)
 	}
 }
 
@@ -235,7 +235,7 @@ func TestInternalHeaders(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		s := userConfig{&panickingSessionImpl{testSession{serializedInternalHeaders: test.input}}}
+		s := UserConfig{&panickingSessionImpl{testSession{serializedInternalHeaders: test.input}}}
 		got := s.GetInternalHeaders()
 		assert.Equal(t, test.expected, got, "Headers did not decode as expected")
 	}

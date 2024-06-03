@@ -4,7 +4,7 @@ import 'package:lantern/i18n/localization_constants.dart';
 
 @RoutePage<void>(name: 'Language')
 class Language extends StatelessWidget {
-  Language({Key? key}) : super(key: key);
+  const Language({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class Language extends StatelessWidget {
       body: sessionModel
           .language((BuildContext context, String currentLang, Widget? child) {
            // Splint language by just code
-        final countryCode= currentLang;
+        final countryCode= checkSupportedLanguages(currentLang) ;
             return ListView.builder(
           itemCount: languages.length,
           itemBuilder: (BuildContext context, int index) {
@@ -30,14 +30,20 @@ class Language extends StatelessWidget {
               ),
               value: lang,
               groupValue: countryCode,
-              onChanged: (String? value) async {
-                await sessionModel.setLanguage(lang);
-                Navigator.pop(context);
-              },
+              onChanged: (newLocal) => onLocalChange(newLocal!,context)
             );
           },
         );
       }),
     );
   }
+
+  Future<void> onLocalChange(String newLocal, BuildContext context) async {
+    await sessionModel.setLanguage(newLocal);
+    Navigator.pop(context);
+  }
+
+
+
+
 }

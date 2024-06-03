@@ -6,9 +6,9 @@ import (
 	"strconv"
 
 	"github.com/getlantern/lantern-client/desktop/settings"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/util"
 	"github.com/getlantern/osversion"
@@ -54,7 +54,7 @@ func newIssueReporter(app *App) *issueReporter {
 // lantern-cloud/issue service, which is then forwarded to the ticket system via API
 func (reporter *issueReporter) sendIssueReport(msg *issueMessage) error {
 	settings := reporter.settings
-	uc := common.NewUserConfigData(
+	uc := common.NewUserConfig(
 		common.DefaultAppName,
 		settings.GetDeviceID(),
 		settings.GetUserID(),
@@ -114,7 +114,7 @@ func (reporter *issueReporter) sendIssueReport(msg *issueMessage) error {
 		msg.Note,
 		subscriptionLevel,
 		msg.Email,
-		ApplicationVersion,
+		common.ApplicationVersion,
 		"",
 		"",
 		osVersion,

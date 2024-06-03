@@ -49,13 +49,13 @@ open class LanternApp : Application() {
 
         LanternProxySelector(session)
 
-        inAppBilling = InAppBilling(this)
-
         lanternHttpClient = LanternHttpClient()
 
         // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
         // about proxies being unavailable.
         session.resetHasSucceedingProxy()
+
+        inAppBilling = InAppBilling(this)
     }
 
     companion object {
