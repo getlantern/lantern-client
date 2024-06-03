@@ -17,7 +17,9 @@ class _LinkDeviceState extends State<LinkDevice> {
   @override
   void initState() {
     super.initState();
+    if (isMobile()) {
       requestLinkCode();
+    }
   }
 
   Future<void> requestLinkCode() async {
@@ -29,7 +31,7 @@ class _LinkDeviceState extends State<LinkDevice> {
         () => {sessionModel.redeemLinkCode()},
       );
     } catch (e) {
-      appLogger.e("error while requesting link code: $e",   error: e);
+      appLogger.e("error while requesting link code: $e", error: e);
     }
   }
 
