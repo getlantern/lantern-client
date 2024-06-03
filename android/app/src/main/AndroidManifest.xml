@@ -92,7 +92,8 @@
             android:exported="false"
             android:stopWithTask="false" />
 
-        <receiver android:name=".model.DeclineCallBroadcastReceiver" />
+        <receiver android:name=".model.DeclineCallBroadcastReceiver"
+        android:exported="false"/>
 
         <receiver
             android:name="org.getlantern.lantern.notification.NotificationReceiver"
