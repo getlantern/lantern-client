@@ -389,7 +389,6 @@ func (c *proClient) PurchaseRequest(ctx context.Context, data map[string]interfa
 	if err != nil {
 		return nil, err
 	}
-	log.Debugf("PurchaseRequest is %+v", &resp)
 	return &resp, nil
 }
 
@@ -488,6 +487,9 @@ func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, recoveryData 
 	err := c.webclient.PostPROTOC(ctx, "/users/recovery/validate/email", recoveryData, nil, &resp)
 	if err != nil {
 		return nil, err
+	}
+	if !resp.Valid {
+		return nil, log.Errorf("invalid_code Error decoding response body: %v", err)
 	}
 	return &resp, nil
 }

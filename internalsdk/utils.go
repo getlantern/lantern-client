@@ -226,7 +226,7 @@ func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) *protos.Us
 		YinbiEnabled: user.YinbiEnabled,
 		Inviters:     user.Inviters,
 		Invitees:     user.Invitees,
-		Purchases:    user.Purchases,
+		// Purchases:    user.Purchases,
 	}
 	log.Debugf("ConvertToUserDetailsResponse %+v", &userData)
 

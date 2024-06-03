@@ -504,13 +504,14 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	// 	userIdStr = fmt.Sprintf("%d", tempUserId)
 	// }
 
-	go func() {
-		err = m.paymentMethods()
-		if err != nil {
-			log.Debugf("Plans V3 error: %v", err)
-			// return err
-		}
-	}()
+	// todo uncomment this code
+	// go func() {
+	// 	err = m.paymentMethods()
+	// 	if err != nil {
+	// 		log.Debugf("Plans V3 error: %v", err)
+	// 		// return err
+	// 	}
+	// }()
 
 	// isAccountVerified, err := pathdb.Get[bool](m.db, pathIsAccountVerified)
 	// if err != nil {
@@ -1466,7 +1467,10 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 	if err != nil {
 		return err
 	}
-	log.Debugf("Validate code response %v", recovery)
+	if !recovery.Valid {
+		return log.Errorf("invalid_code Error: %v", err)
+	}
+	log.Debugf("Validate code response %v", recovery.Valid)
 	return nil
 }
 
@@ -1686,28 +1690,7 @@ func linkCodeRequest(session *SessionModel) error {
 		return err
 	}
 	log.Debugf("Device %v", device)
-	// //Create body
-	// linkCodeRequest := map[string]string{
-	// 	"locale":     local,
-	// 	"deviceName": device,
-	// }
 
-	// deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
-	// if err != nil {
-	// 	log.Errorf("Error while getting local %v", err)
-	// 	return err
-	// }
-	// userId, err := session.GetUserID()
-	// if err != nil {
-	// 	log.Errorf("Error while getting local %v", err)
-	// 	return err
-	// }
-
-	// token, err := session.GetToken()
-	// if err != nil {
-	// 	log.Errorf("Error while getting local %v", err)
-	// 	return err
-	// }
 	linkResponse, err := session.proClient.LinkCodeRequest(context.Background(), device)
 	if err != nil {
 		return err

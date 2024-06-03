@@ -86,7 +86,7 @@ class _VerificationState extends State<Verification> {
                 AppTextButton(
                   text: 'change_email'.i18n.toUpperCase(),
                   onPressed: () {
-                    context.popRoute();
+                    context.maybePop();
                   },
                 ),
             ],
