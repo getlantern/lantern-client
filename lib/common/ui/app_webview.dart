@@ -1,7 +1,6 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/ui/app_loading_dialog.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {

@@ -18,6 +18,13 @@ const languages = [
   'bn_BD',
 ];
 
+String checkSupportedLanguages(String language){
+  if(languages.contains(language)){
+    return language;
+  }
+  return 'en_Us';
+}
+
 String displayLanguage(String languageCode) {
   if (languageCode == 'ar_EG') {
     return 'العربية';

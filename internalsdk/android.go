@@ -106,8 +106,8 @@ type InitCallback struct {
 	onSuccess       bool
 }
 
-// panickingSession wraps the Session interface but panics instead of returning errors
-type panickingSession interface {
+// PanickingSession wraps the Session interface but panics instead of returning errors
+type PanickingSession interface {
 	common.AuthConfig
 	SetCountry(string)
 	UpdateAdSettings(AdSettings)
@@ -141,9 +141,13 @@ type panickingSession interface {
 	Wrapped() Session
 }
 
-// panickingSessionImpl implements panickingSession
+// panickingSessionImpl implements PanickingSession
 type panickingSessionImpl struct {
 	wrapped Session
+}
+
+func NewPanickingSession(s *SessionModel) PanickingSession {
+	return &panickingSessionImpl{s}
 }
 
 func (s *panickingSessionImpl) Wrapped() Session {
@@ -300,18 +304,18 @@ func (s *panickingSessionImpl) SetOnSuccess(fetached bool) {
 	s.wrapped.SetOnSuccess(fetached)
 }
 
-type userConfig struct {
-	session panickingSession
+type UserConfig struct {
+	session PanickingSession
 }
 
-func (uc *userConfig) GetAppName() string              { return common.DefaultAppName }
-func (uc *userConfig) GetDeviceID() string             { return uc.session.GetDeviceID() }
-func (uc *userConfig) GetUserID() int64                { return uc.session.GetUserID() }
-func (uc *userConfig) GetToken() string                { return uc.session.GetToken() }
-func (uc *userConfig) GetEnabledExperiments() []string { return nil }
-func (uc *userConfig) GetLanguage() string             { return uc.session.Locale() }
-func (uc *userConfig) GetTimeZone() (string, error)    { return uc.session.GetTimeZone(), nil }
-func (uc *userConfig) GetInternalHeaders() map[string]string {
+func (uc *UserConfig) GetAppName() string              { return common.DefaultAppName }
+func (uc *UserConfig) GetDeviceID() string             { return uc.session.GetDeviceID() }
+func (uc *UserConfig) GetUserID() int64                { return uc.session.GetUserID() }
+func (uc *UserConfig) GetToken() string                { return uc.session.GetToken() }
+func (uc *UserConfig) GetEnabledExperiments() []string { return nil }
+func (uc *UserConfig) GetLanguage() string             { return uc.session.Locale() }
+func (uc *UserConfig) GetTimeZone() (string, error)    { return uc.session.GetTimeZone(), nil }
+func (uc *UserConfig) GetInternalHeaders() map[string]string {
 	h := make(map[string]string)
 
 	var f interface{}
@@ -332,8 +336,8 @@ func (uc *userConfig) GetInternalHeaders() map[string]string {
 	return h
 }
 
-func newUserConfig(session panickingSession) *userConfig {
-	return &userConfig{session: session}
+func NewUserConfig(session PanickingSession) *UserConfig {
+	return &UserConfig{session: session}
 }
 
 func getClient(ctx context.Context) *client.Client {
@@ -369,8 +373,7 @@ type StartResult struct {
 	DNSGrabAddr string
 }
 
-// AdSettings is an interface for retrieving mobile ad settings from the
-// global config
+// AdSettings is an interface for retrieving mobile ad settings from the global config
 type AdSettings interface {
 	// GetAdProvider gets an ad provider if and only if ads are enabled based on the passed parameters.
 	GetAdProvider(isPro bool, countryCode string, daysSinceInstalled int) (AdProvider, error)
@@ -449,7 +452,7 @@ func Start(configDir string,
 		da.(string)}, nil
 }
 
-func newAnalyticsSession(session panickingSession) analytics.Session {
+func newAnalyticsSession(session PanickingSession) analytics.Session {
 	analyticsSession := analytics.Start(session.GetDeviceID(), common.ApplicationVersion)
 	go func() {
 		ipAddress := geolookup.GetIP(forever)
@@ -459,13 +462,59 @@ func newAnalyticsSession(session panickingSession) analytics.Session {
 	return analyticsSession
 }
 
-func run(configDir, locale string,
-	settings Settings, session panickingSession) {
+func InitDnsGrab(configDir string, session PanickingSession) (dnsgrab.Server, error) {
+	cache, err := persistentcache.New(filepath.Join(configDir, "dnsgrab.cache"), maxDNSGrabAge)
+	if err != nil {
+		log.Errorf("unable to open dnsgrab cache: %v", err)
+		return nil, err
+	}
+	grabber, err := dnsgrab.ListenWithCache(
+		"127.0.0.1:0",
+		session.GetDNSServer,
+		cache,
+	)
+	if err != nil {
+		log.Errorf("unable to start dnsgrab: %v", err)
+		return nil, err
+	}
+	dnsGrabEventual.Set(grabber)
+	dnsGrabAddrEventual.Set(grabber.LocalAddr().String())
+	go func() {
+		serveErr := grabber.Serve()
+		if serveErr != nil {
+			log.Errorf("error serving dns: %v", serveErr)
+		}
+	}()
+	return grabber, nil
+}
 
-	// memhelper won't build for iOS right now
-	// memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
-	// 	log.Debugf("Unable to track memory stats: %v", err)
-	// })
+func ReverseDns(grabber dnsgrab.Server) func(string) (string, error) {
+	return func(addr string) (string, error) {
+		op := ops.Begin("reverse_dns")
+		defer op.End()
+
+		host, port, splitErr := net.SplitHostPort(addr)
+		if splitErr != nil {
+			host = addr
+		}
+		ip := net.ParseIP(host)
+		if ip == nil {
+			log.Debugf("Unable to parse IP %v, passing through address as is", host)
+			return addr, nil
+		}
+		updatedHost, ok := grabber.ReverseLookup(ip)
+		if !ok {
+			return "", op.FailIf(errors.New("unknown IP address %v", ip))
+		}
+		if splitErr != nil {
+			return updatedHost, nil
+		}
+		return fmt.Sprintf("%v:%v", updatedHost, port), nil
+	}
+}
+
+func run(configDir, locale string, settings Settings, session PanickingSession) {
+
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(false)
 
@@ -491,29 +540,10 @@ func run(configDir, locale string,
 
 	log.Debugf("Writing log messages to %s/lantern.log", configDir)
 
-	cache, err := persistentcache.New(filepath.Join(configDir, "dnsgrab.cache"), maxDNSGrabAge)
+	grabber, err := InitDnsGrab(configDir, session)
 	if err != nil {
-		log.Errorf("unable to open dnsgrab cache: %v", err)
 		return
 	}
-
-	grabber, err := dnsgrab.ListenWithCache(
-		"127.0.0.1:0",
-		session.GetDNSServer,
-		cache,
-	)
-	if err != nil {
-		log.Errorf("unable to start dnsgrab: %v", err)
-		return
-	}
-	dnsGrabEventual.Set(grabber)
-	dnsGrabAddrEventual.Set(grabber.LocalAddr().String())
-	go func() {
-		serveErr := grabber.Serve()
-		if serveErr != nil {
-			log.Errorf("error serving dns: %v", serveErr)
-		}
-	}()
 
 	httpProxyAddr := fmt.Sprintf("%s:%d",
 		settings.GetHttpProxyHost(),
@@ -524,7 +554,7 @@ func run(configDir, locale string,
 		config.ForceCountry(forcedCountryCode)
 	}
 
-	userConfig := newUserConfig(session)
+	userConfig := NewUserConfig(session)
 	globalConfigChanged := make(chan interface{})
 	geoRefreshed := geolookup.OnRefresh()
 
@@ -543,28 +573,7 @@ func run(configDir, locale string,
 		NewStatsTracker(session),
 		session.IsProUser,
 		func() string { return "" }, // only used for desktop
-		func(addr string) (string, error) {
-			op := ops.Begin("reverse_dns")
-			defer op.End()
-
-			host, port, splitErr := net.SplitHostPort(addr)
-			if splitErr != nil {
-				host = addr
-			}
-			ip := net.ParseIP(host)
-			if ip == nil {
-				log.Debugf("Unable to parse IP %v, passing through address as is", host)
-				return addr, nil
-			}
-			updatedHost, ok := grabber.ReverseLookup(ip)
-			if !ok {
-				return "", op.FailIf(errors.New("unknown IP address %v", ip))
-			}
-			if splitErr != nil {
-				return updatedHost, nil
-			}
-			return fmt.Sprintf("%v:%v", updatedHost, port), nil
-		},
+		ReverseDns(grabber),
 		func(category, action, label string) {},
 		client.WithOnConfig(func(g *config.Global, s config.Source) {
 			session.SetHasConfigFetched(true)
@@ -638,7 +647,7 @@ func run(configDir, locale string,
 	)
 }
 
-func bandwidthUpdates(session panickingSession) {
+func bandwidthUpdates(session PanickingSession) {
 	go func() {
 		for quota := range bandwidth.Updates {
 			percent, remaining, allowed := getBandwidth(quota)
@@ -669,13 +678,13 @@ func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	return percent, remaining, int(quota.MiBAllowed)
 }
 
-func geoLookup(session panickingSession) {
+func geoLookup(session PanickingSession) {
 	country := geolookup.GetCountry(0)
 	log.Debugf("Successful geolookup: country %s", country)
 	session.SetCountry(country)
 }
 
-func afterStart(session panickingSession) {
+func afterStart(session PanickingSession) {
 	bandwidthUpdates(session)
 
 	go func() {

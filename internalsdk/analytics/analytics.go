@@ -216,6 +216,8 @@ func getExecutableHash() string {
 	// bad happening here.
 	if common.Platform == "android" {
 		return "android"
+	} else if common.Platform == "ios" {
+		return "ios"
 	}
 	if lanternPath, err := os.Executable(); err != nil {
 		log.Debugf("Could not get path to executable %v", err)

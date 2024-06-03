@@ -5,6 +5,7 @@ import 'package:lantern/vpn/vpn_notifier.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../common/ui/custom/internet_checker.dart';
+
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';

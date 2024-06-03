@@ -6,10 +6,10 @@ import (
 
 type statsTracker struct {
 	stats.Tracker
-	session panickingSession
+	session PanickingSession
 }
 
-func NewStatsTracker(session panickingSession) *statsTracker {
+func NewStatsTracker(session PanickingSession) *statsTracker {
 	s := &statsTracker{
 		Tracker: stats.NewTracker(),
 		session: session,

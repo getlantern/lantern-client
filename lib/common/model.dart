@@ -1,10 +1,10 @@
 import 'dart:collection';
 
-import 'package:lantern/common/ffi_subscriber.dart';
 import 'package:lantern/common/ffi_list_subscriber.dart';
+import 'package:lantern/common/ffi_subscriber.dart';
 import 'package:lantern/messaging/messaging.dart';
+
 import 'common_desktop.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;
