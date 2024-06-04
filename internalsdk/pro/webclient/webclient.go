@@ -17,18 +17,19 @@ var (
 
 type RESTClient interface {
 	// Gets a JSON document from the given path with the given querystring parameters, reading the result into target.
-	GetJSON(ctx context.Context, path string, params, target any) error
+	GetJSON(ctx context.Context, path string, params, target any, header map[string]string) error
+
 	// Get data from server and parse to protoc file
-	GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error
+	GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage, header map[string]string) error
 
 	// Post the given parameters as form data and reads the result JSON into target.
-	PostFormReadingJSON(ctx context.Context, path string, params, target any) error
+	PostFormReadingJSON(ctx context.Context, path string, params, target any, header map[string]string) error
 
 	// Post the given body as JSON with the given querystring parameters and reads the result JSON into target.
-	PostJSONReadingJSON(ctx context.Context, path string, params, body, target any) error
+	PostJSONReadingJSON(ctx context.Context, path string, params, body, target any, header map[string]string) error
 
 	// PostPROTOC sends a POST request with protoc file and parse the response to protoc file
-	PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error
+	PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage, header map[string]string) error
 }
 
 // A function that can send RESTful requests and receive response bodies.
@@ -48,16 +49,18 @@ func NewRESTClient(send SendRequest) RESTClient {
 	}
 }
 
-func (c *restClient) GetJSON(ctx context.Context, path string, params, target any) error {
-	b, err := c.send(ctx, http.MethodGet, path, params, nil, nil)
+func (c *restClient) GetJSON(ctx context.Context, path string, params, target any, header map[string]string) error {
+	b, err := c.send(ctx, http.MethodGet, path, params, header, nil)
 	if err != nil {
 		return err
 	}
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error {
-	header := make(map[string]string)
+func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage, header map[string]string) error {
+	if header == nil {
+		header = make(map[string]string)
+	}
 	header["Content-Type"] = "application/x-protobuf"
 	body, err := c.send(ctx, resty.MethodGet, path, params, header, nil)
 	if err != nil {
@@ -71,32 +74,34 @@ func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, tar
 
 }
 
-func (c *restClient) PostFormReadingJSON(ctx context.Context, path string, params, target any) error {
-	b, err := c.send(ctx, http.MethodPost, path, params, nil, nil)
+func (c *restClient) PostFormReadingJSON(ctx context.Context, path string, params, target any, header map[string]string) error {
+	b, err := c.send(ctx, http.MethodPost, path, params, header, nil)
 	if err != nil {
 		return err
 	}
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) PostJSONReadingJSON(ctx context.Context, path string, params, body, target any) error {
+func (c *restClient) PostJSONReadingJSON(ctx context.Context, path string, params, body, target any, header map[string]string) error {
 	bodyBytes, err := json.Marshal(body)
 	if err != nil {
 		return err
 	}
-	b, err := c.send(ctx, http.MethodPost, path, params, nil, bodyBytes)
+	b, err := c.send(ctx, http.MethodPost, path, params, header, bodyBytes)
 	if err != nil {
 		return err
 	}
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error {
+func (c *restClient) PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage, header map[string]string) error {
 	bodyBytes, err := proto.Marshal(body)
 	if err != nil {
 		return err
 	}
-	header := make(map[string]string)
+	if header == nil {
+		header = make(map[string]string)
+	}
 	header["Content-Type"] = "application/x-protobuf"
 	bo, err := c.send(ctx, http.MethodPost, path, params, nil, bodyBytes)
 	if err != nil {

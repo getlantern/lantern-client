@@ -309,27 +309,27 @@ class _AccountManagementState extends State<AccountManagement>
             icon: ImagePaths.email,
             content: emailAddress,
             trailingArray: [
-              sessionModel.hasAccountVerified.value == true
-                  ? Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 16.0),
-                      child: TextButton(
-                        onPressed: () => openChangeEmail(emailAddress),
-                        child: CText(
-                          'change_email'.i18n.toUpperCase(),
-                          style: tsButtonPink,
-                        ),
-                      ),
-                    )
-                  : Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 16.0),
-                      child: TextButton(
-                        onPressed: () => openEmailVerification(emailAddress),
-                        child: CText(
-                          'confirm'.i18n.toUpperCase(),
-                          style: tsButtonPink,
-                        ),
-                      ),
-                    )
+              // sessionModel.hasAccountVerified.value == true
+              //     ? Padding(
+              //         padding: const EdgeInsetsDirectional.only(start: 16.0),
+              //         child: TextButton(
+              //           onPressed: () => openChangeEmail(emailAddress),
+              //           child: CText(
+              //             'change_email'.i18n.toUpperCase(),
+              //             style: tsButtonPink,
+              //           ),
+              //         ),
+              //       )
+              //     : Padding(
+              //         padding: const EdgeInsetsDirectional.only(start: 16.0),
+              //         child: TextButton(
+              //           onPressed: () => openEmailVerification(emailAddress),
+              //           child: CText(
+              //             'confirm'.i18n.toUpperCase(),
+              //             style: tsButtonPink,
+              //           ),
+              //         ),
+              //       )
             ],
           );
         }),

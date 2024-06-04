@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math/big"
+	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -140,16 +141,16 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		)
 	}
 
-	// httpClient := &http.Client{
-	// 	Transport: proxied.ChainedThenFronted(),
-	// 	Timeout:   dialTimeout,
-	// }
+	httpClient := &http.Client{
+		Transport: proxied.Fronted(dialTimeout),
+		Timeout:   dialTimeout,
+	}
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
-		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
+		HttpClient: httpClient,
 		UserConfig: userConfig,
 	})
 	m.authClient = pro.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), &pro.Opts{
-		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
+		HttpClient: httpClient,
 		UserConfig: userConfig,
 	})
 
@@ -943,7 +944,9 @@ func (session *SessionModel) userCreate(ctx context.Context) error {
 		log.Errorf("Error sending request: %v", err)
 		return err
 	}
+
 	user := resp.User
+
 	//Save user id and token
 	err = setUserIdAndToken(session.baseModel, int64(user.UserId), user.Token)
 	if err != nil {
@@ -964,36 +967,36 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	log.Debugf("User detail: %+v", resp.User)
 
 	userDetail := resp.User
-	currentDevice, err := session.GetDeviceID()
-	if err != nil {
-		log.Debugf("Error while getting device id %v", err)
-	}
-	// Check if devuce id is connect to same device if not create new user
-	// THis is for the case when user removed device from other device
-	found := false
-	if userDetail.Devices != nil {
-		for _, device := range userDetail.Devices {
-			if device.Id == currentDevice {
-				found = true
-				break
-			}
-		}
-	}
-	log.Debugf("Device found %v", found)
-	if !found {
-		// Device has not found in the list
-		// Switch to free user
-		signOut(*session)
-		log.Debugf("Device has not found in the list creating new user")
-		err = session.userCreate(context.Background())
-		if err != nil {
-			return err
-		}
-		return nil
-	}
+	// currentDevice, err := session.GetDeviceID()
+	// if err != nil {
+	// 	log.Debugf("Error while getting device id %v", err)
+	// }
+	// // Check if devuce id is connect to same device if not create new user
+	// // THis is for the case when user removed device from other device
+	// found := false
+	// if userDetail.Devices != nil {
+	// 	for _, device := range userDetail.Devices {
+	// 		if device.Id == currentDevice {
+	// 			found = true
+	// 			break
+	// 		}
+	// 	}
+	// }
+	// log.Debugf("Device found %v", found)
+	// if !found {
+	// 	// Device has not found in the list
+	// 	// Switch to free user
+	// 	signOut(*session)
+	// 	log.Debugf("Device has not found in the list creating new user")
+	// 	err = session.userCreate(context.Background())
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	return nil
+	// }
 
-	log.Debugf("User detail: %+v", resp.User)
-	err = cacheUserDetail(session.baseModel, resp.User)
+	log.Debugf("User detail: %+v", userDetail)
+	err = cacheUserDetail(session.baseModel, userDetail)
 	if err != nil {
 		return err
 	}

@@ -6,6 +6,7 @@ import (
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 
 	"github.com/moul/http2curl"
@@ -19,7 +20,7 @@ var (
 
 // Create function that sends requests to the given URL, optionally sending them through a proxy,
 // optionally processing requests with the given beforeRequest middleware and/or responses with the given afterResponse middleware.
-func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.RequestMiddleware, afterResponse resty.ResponseMiddleware) webclient.SendRequest {
+func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.RequestMiddleware, afterResponse resty.ResponseMiddleware, userConfig common.UserConfig) webclient.SendRequest {
 	c := resty.NewWithClient(httpClient)
 	if beforeRequest != nil {
 		c.OnBeforeRequest(beforeRequest)
@@ -51,11 +52,7 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 			req.Body = body
 		}
 
-		if header != nil {
-			log.Debugf("Found the custom header %v path %v", header, path)
-			req.SetHeaders(header)
-		}
-
+		req.SetHeaders(header)
 		resp, err := req.Execute(method, path)
 		if err != nil {
 			return nil, err

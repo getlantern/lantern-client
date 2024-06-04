@@ -17,6 +17,7 @@ class VPNTab extends StatelessWidget {
         .proUser((BuildContext context, bool proUser, Widget? child) {
       return sessionModel.isUserSignedIn(
         (context, hasUserSignedIn, child) => BaseScreen(
+          automaticallyImplyLeading: false,
           title: SvgPicture.asset(
             proUser && hasUserSignedIn
                 ? ImagePaths.pro_logo
