@@ -56,6 +56,11 @@ PACKAGE_MAINTAINER := Lantern Team <team@getlantern.org>
 PACKAGE_VENDOR := Brave New Software Project, Inc
 PACKAGE_URL := https://lantern.io
 
+GH_USER ?= getlantern
+GH_RELEASE_REPOSITORY ?= lantern
+BINARIES_PATH ?= ../lantern-binaries
+BINARIES_BRANCH ?= main
+
 APP_DESCRIPTION := Censorship circumvention tool
 APP_EXTENDED_DESCRIPTION := Lantern allows you to access sites blocked by internet censorship.\nWhen you run it, Lantern reroutes traffic to selected domains through servers located where such domains are uncensored.
 
@@ -108,9 +113,6 @@ LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDa
 # LD_STRIP_FLAGS := -s -w
 # DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
 GOMOBILE_EXTRA_BUILD_FLAGS :=
-
-BINARIES_PATH ?= ../lantern-binaries
-BINARIES_BRANCH ?= main
 
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
