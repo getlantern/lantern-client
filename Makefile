@@ -453,7 +453,7 @@ set-version:
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
 
 
-ios-release:set-version build-framework
+ios-release:set-version build-release-framework
 	@echo "Creating the Flutter iOS build..."
 	flutter build ipa --flavor prod --release
 	@echo "Uploading debug symbols to Sentry..."
@@ -674,6 +674,21 @@ build-framework: assert-go-version install-gomobile
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
+	-tags='headless lantern ios netgo' \
+	-ldflags="$(LDFLAGS)"  \
+    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+    		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
+	@echo "moving framework"
+	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
+	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+
+build-release-framework: assert-go-version install-gomobile
+	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
+	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
+	@echo "generating Ios.xcFramework"
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	gomobile init && \
+	gomobile bind -target=ios \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
