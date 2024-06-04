@@ -191,7 +191,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "setProUser":
 		// Todo Implement setCurrency server
-		err := setCurrency(m.baseModel, "Test")
+		err := setProUser(m.baseModel, arguments.Scalar().Bool())
 		if err != nil {
 			return nil, err
 		}
@@ -710,7 +710,7 @@ func setPlans(m *baseModel, plans []protos.Plan) error {
 				log.Debugf("Error while updateing price")
 				return err
 			}
-			log.Debugf("Plans Values %+v", plans)
+			log.Debugf("Plans Values %+v", &plans)
 			pathPlanId := pathPlans + strings.Split(plans.Id, "-")[0]
 			protoPlan := &protos.Plan{
 				Id:                     plans.Id,
