@@ -194,6 +194,7 @@ func (c *proClient) defaultHeader() map[string]string {
 	if token := uc.GetToken(); token != "" {
 		params[common.ProTokenHeader] = token
 	}
+	params[common.ContentType] = "application/json"
 	return params
 }
 
@@ -447,7 +448,7 @@ func (c *proClient) GetSalt(ctx context.Context, email string) (*protos.GetSaltR
 // SignUp is used to sign up a new user with the SignupRequest
 func (c *proClient) SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp, c.defaultHeader())
 	if err != nil {
 		return false, log.Errorf("error while sign up %v", err)
 	}
@@ -522,7 +523,7 @@ func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *prot
 func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, recoveryData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error) {
 	var resp protos.ValidateRecoveryCodeResponse
 	log.Debugf("ValidateEmailRecoveryCode request is %v", recoveryData)
-	err := c.webclient.PostPROTOC(ctx, "/users/recovery/validate/email", recoveryData, nil, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/recovery/validate/email", nil, recoveryData, &resp, nil)
 	if err != nil {
 		return nil, err
 	}

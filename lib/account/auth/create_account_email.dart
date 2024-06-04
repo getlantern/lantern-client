@@ -96,7 +96,6 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
     );
   }
 
-
   ///Widget methods
 
   void openSignInFlow() {
@@ -105,11 +104,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
 
   void onContinue() {
     FocusManager.instance.primaryFocus?.unfocus();
-    _showEmailVerificationDialog(
-      onVerified: () {
-        createAccount();
-      },
-    );
+    createAccount();
   }
 
   void _showEmailVerificationDialog({required VoidCallback onVerified}) {
@@ -150,7 +145,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
   Future<void> createAccount() async {
     try {
       context.loaderOverlay.show();
-     final userTempPass =  AppMethods().generatePassword();
+      final userTempPass = AppMethods().generatePassword();
       await sessionModel.signUp(
           _emailController.text.validateEmail, userTempPass);
       //start forgot password flow
@@ -159,7 +154,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
       mainLogger.e('Error while creating account', error: e, stackTrace: s);
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);
- }
+    }
   }
 
   //forgot password flow
@@ -169,7 +164,11 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
       //Send verification code to email
       await sessionModel.startRecoveryByEmail(email);
       context.loaderOverlay.hide();
-      context.pushRoute(Verification(email: email, authFlow: widget.authFlow, plan: widget.plan,tempPassword: userTempPass));
+      context.pushRoute(Verification(
+          email: email,
+          authFlow: widget.authFlow,
+          plan: widget.plan,
+          tempPassword: userTempPass));
     } catch (e, s) {
       mainLogger.w('Error starting recovery', error: e, stackTrace: s);
       context.loaderOverlay.hide();

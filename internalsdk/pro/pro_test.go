@@ -66,3 +66,34 @@ func TestLinkValidate(t *testing.T) {
 	log.Debugf("Got response: %v", res)
 	assert.NotNil(t, res)
 }
+
+func TestSignUp(t *testing.T) {
+	log := golog.LoggerFor("pro-http-test")
+	client := NewClient("https://api.getiantem.org", &Opts{
+		// Just use the default transport since otherwise test setup is difficult.
+		// This means it does not actually touch the proxying code, but that should
+		// be tested separately.
+		HttpClient: &http.Client{},
+		UserConfig: func() common.UserConfig {
+			return common.NewUserConfig(
+				"Lantern",
+				"device123", // deviceID
+				123,         // userID
+				"token",     // token
+				nil,
+				"en", // language
+			)
+		},
+	})
+	prepareRequestBody := &protos.SignupRequest{
+		Email:    "jigar@getlanern.org",
+		Salt:     []byte("salt"),
+		Verifier: []byte("verifier"),
+	}
+	res, e := client.SignUp(context.Background(), prepareRequestBody)
+	if !assert.NoError(t, e) {
+		return
+	}
+	log.Debugf("Got response: %v", res)
+	assert.NotNil(t, res)
+}

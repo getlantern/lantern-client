@@ -36,6 +36,7 @@ const (
 	LocaleHeader                        = "X-Lantern-Locale"
 	XBQHeader                           = "XBQ"
 	XBQHeaderv2                         = "XBQv2"
+	ContentType                         = "Content-Type"
 )
 
 var (
