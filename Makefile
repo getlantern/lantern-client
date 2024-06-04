@@ -43,7 +43,10 @@ TEST ?= *_test
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
-TAG ?= $$VERSION
+APP ?= lantern
+CAPITALIZED_APP := Lantern
+
+TAG ?= $(APP)-$$VERSION
 TAG_HEAD := $(shell git rev-parse HEAD)
 INSTALLER_NAME ?= lantern-installer
 CHANGELOG_NAME ?= CHANGELOG.md
@@ -63,6 +66,7 @@ NODE      := $(call get-command,node)
 NPM       := $(call get-command,npm)
 GULP      := $(call get-command,gulp)
 AWSCLI    := $(call get-command,aws)
+S3CMD     := $(call get-command,s3cmd)
 CHANGE    := $(call get-command,git-chglog)
 PIP       := $(call get-command,pip)
 WGET      := $(call get-command,wget)
@@ -131,8 +135,6 @@ SENTRY_PROJECT_IOS=lantern-ios
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/Release-prod-iphoneos/Runner.app.dSYM
 INFO_PLIST := ios/Runner/Info.plist
 
-APP ?= lantern
-CAPITALIZED_APP := Lantern
 DESKTOP_LIB_NAME ?= liblantern
 DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
 DARWIN_LIB_AMD64 ?= $(DESKTOP_LIB_NAME)_amd64.dylib
@@ -308,7 +310,10 @@ require-awscli:
 
 .PHONY: require-s3cmd
 require-s3cmd:
-	@if [[ -z "s3cmd" ]]; then echo 'Missing "s3cmd" command. Use "brew install s3cmd" or see https://github.com/s3tools/s3cmd/blob/master/INSTALL'; exit 1; fi
+	@if [[ -z "$(S3CMD)" ]]; then echo 'Missing "s3cmd" command. Use "brew install s3cmd" or see https://github.com/s3tools/s3cmd/blob/master/INSTALL.md'; exit 1; fi
+
+.PHONY: require-gh-token
+require-gh-token: guard-GH_TOKEN
 
 .PHONY: require-changelog
 require-changelog:
@@ -342,9 +347,29 @@ require-appdmg:
 require-retry:
 	@if [[ -z "$(RETRY)" ]]; then echo 'Missing retry command. Try go install github.com/joshdk/retry'; exit 1; fi
 
+.PHONY: require-ruby
+require-ruby:
+	@if [[ -z "$(RUBY)" ]]; then echo 'Missing "ruby" command.'; exit 1; fi
+
 release-autoupdate: require-version
 	@curl https://s3.amazonaws.com/lantern/lantern-installer.apk | bzip2 > update_android_arm.bz2 && \
 	$(RUBY) ./create_or_update_release.rb getlantern lantern $$VERSION update_android_arm.bz2
+
+.PHONY: auto-updates
+auto-updates: require-version require-s3cmd require-gh-token require-ruby
+	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
+	if [[ -z "$$TAG_COMMIT" ]]; then \
+		echo "Could not find given tag $(TAG)."; \
+	fi && \
+	for URL in $$($(S3CMD) ls s3://$(S3_BUCKET)/ | grep -v "sha256" | grep $(APP)_update_ | grep -F "$$VERSION." | awk '{print $$4}'); do \
+		NAME=$$(basename $$URL) && \
+		STRIPPED_NAME=$$(echo "$$NAME" | cut -d - -f 1 | sed s/$(APP)_//).bz2 && \
+		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $$STRIPPED_NAME && \
+		ALL="$$ALL $$STRIPPED_NAME"; \
+	done && \
+	ALL=`echo $$ALL | xargs` && \
+	echo "Uploading $$ALL for auto-updates" && \
+	echo $$ALL | xargs $(RUBY) ./$(INSTALLER_RESOURCES)/tools/create_or_update_release.rb $(GH_USER) $(GH_RELEASE_REPOSITORY) $$VERSION
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 

@@ -254,8 +254,10 @@ To publish a release on Google Play, go to the Lantern App on the [Google Play C
 Just because something's been released to prod doesn't mean clients will auto-update, there's an additional step for that. The below will release the current production version to autoupdate. Please make sure the VERSION parameter matches the current production version.
 
 ```
-GH_TOKEN=<token> VERSION=7.2.0 make release-autoupdate
+GH_TOKEN=<token> VERSION=7.2.0 make auto-updates
 ```
+
+To find the latest version that's been set for auto updates, check the [lantern](https://github.com/getlantern/lantern/releases) repo.
 
 You can obtain the GH_TOKEN for releasing auto-updates from [1Password](https://start.1password.com/open/i?a=HHU7O6L7H5E33C6UDFD6Q3SYH4&v=nupvcrpazomdrozlmemsywqfj4&i=qlxf7ffkjnhu7nqkshvwi7ocpm&h=lantern.1password.com).
 
