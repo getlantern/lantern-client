@@ -164,6 +164,7 @@ class _ReportIssueState extends State<ReportIssue> {
                   autovalidateMode: AutovalidateMode.disabled,
                   maxLines: 8,
                   keyboardType: TextInputType.multiline,
+                  textInputAction: TextInputAction.done,
                   onChanged: (value) {
                     setState(() {});
                   },
