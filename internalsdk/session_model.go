@@ -1341,7 +1341,26 @@ func login(session *SessionModel, email string, password string) error {
 		return err
 	}
 	end := time.Now()
+	go func() {
+		deviceAdd(session, deviceId)
+	}()
 	log.Debugf("Login took %v", end.Sub(start))
+	return nil
+}
+
+// Add device to user currect device list
+// this gets called when user to login
+func deviceAdd(session *SessionModel, deviceName string) error {
+	device, err := pathdb.Get[string](session.db, pathDevice)
+	if err != nil {
+		log.Errorf("Error while getting device %v", err)
+		return err
+	}
+	addDevice, err := session.proClient.DeviceAdd(context.Background(), device)
+	if err != nil {
+		log.Errorf("Error while adding device %v", err)
+	}
+	log.Debugf("Add device response %v", addDevice)
 	return nil
 }
 
@@ -1369,6 +1388,7 @@ func deviceLimitFlow(session *SessionModel, login *protos.LoginResponse) error {
 	}
 	return setUserIdAndToken(session.baseModel, login.LegacyID, login.LegacyToken)
 }
+
 func startRecoveryByEmail(session *SessionModel, email string) error {
 	//Create body
 	prepareRequestBody := &protos.StartRecoveryByEmailRequest{

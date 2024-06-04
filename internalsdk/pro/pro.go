@@ -57,6 +57,7 @@ type ProClient interface {
 	UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error)
 	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
 	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
+	DeviceAdd(ctx context.Context, deviceName string) (bool, error)
 }
 
 type AuthClient interface {
@@ -92,46 +93,6 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, nil, nil, opts.UserConfig()))
 	return client
 }
-
-// func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Request) error {
-// 	return func(client *resty.Client, req *resty.Request) error {
-// 		uc := c.userConfig()
-
-// 		//req.Header.Set("Referer", "http://localhost:37457/")
-// 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
-// 			common.DeviceIdHeader,
-// 			common.ProTokenHeader,
-// 			common.UserIdHeader,
-// 		}, ", "))
-// 		req.Header.Set(common.LocaleHeader, uc.GetLanguage())
-
-// 		if req.Header.Get(common.DeviceIdHeader) == "" {
-// 			if deviceID := uc.GetDeviceID(); deviceID != "" {
-// 				req.Header.Set(common.DeviceIdHeader, deviceID)
-// 			}
-// 		}
-
-// 		if req.Header.Get(common.ProTokenHeader) == "" {
-// 			if token := uc.GetToken(); token != "" {
-// 				req.Header.Set(common.ProTokenHeader, token)
-// 			}
-// 		}
-
-// 		if req.Header.Get(common.UserIdHeader) == "" {
-// 			if userID := uc.GetUserID(); userID != 0 {
-// 				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
-// 			}
-// 		}
-// 		/// Remove the header for signup we don't need to pass token and userid
-// 		if strings.HasSuffix(req.URL, "/signup") || strings.HasSuffix(req.URL, "/login") || strings.HasSuffix(req.URL, "/prepare") {
-// 			req.Header.Del(common.UserIdHeader)
-// 			req.Header.Del(common.ProTokenHeader)
-// 		}
-
-// 		// logRequest(req)
-// 		return nil
-// 	}
-// }
 
 // Function to log request details
 func logRequest(req *resty.Request) {
@@ -337,6 +298,22 @@ func (c *proClient) DeviceRemove(ctx context.Context, deviceId string) (*LinkRes
 		return nil, err
 	}
 	return &resp, nil
+}
+
+// DeviceAdd adds a device with the given name to a user's Pro account
+// This get calles when user login to attech device
+func (c *proClient) DeviceAdd(ctx context.Context, deviceName string) (bool, error) {
+	var resp protos.BaseResponse
+	params := c.defaultParams()
+	params["deviceName"] = deviceName
+	err := c.webclient.PostJSONReadingJSON(ctx, "/device-add", params, nil, &resp, c.defaultHeader())
+	if err != nil {
+		return false, err
+	}
+	if resp.Error != "" && resp.Status != "ok" {
+		return false, errors.New("%v adding device: %v", resp.ErrorId, resp.Error)
+	}
+	return true, nil
 }
 
 // LinkCodeApprove is used to approve a code to link a device to an existing Pro account
