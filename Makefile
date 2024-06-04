@@ -351,10 +351,6 @@ require-retry:
 require-ruby:
 	@if [[ -z "$(RUBY)" ]]; then echo 'Missing "ruby" command.'; exit 1; fi
 
-release-autoupdate: require-version
-	@curl https://s3.amazonaws.com/lantern/lantern-installer.apk | bzip2 > update_android_arm.bz2 && \
-	$(RUBY) ./create_or_update_release.rb getlantern lantern $$VERSION update_android_arm.bz2
-
 .PHONY: auto-updates
 auto-updates: require-version require-s3cmd require-gh-token require-ruby
 	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
@@ -600,6 +596,8 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/Frameworks/liblantern.dylib) && \
 		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/MacOS/Lantern) && \
 		$(call osxcodesign,$$DARWIN_APP_NAME) && \
+		cat $(DARWIN_APP_NAME)/Contents/MacOS/$(APP) | bzip2 > $(APP)_update_darwin.bz2 && \
+		ls -l $(APP)_update_darwin.bz2 && \
 		rm -rf $(INSTALLER_NAME).dmg && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
 		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
