@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,7 +19,7 @@ const (
 )
 
 func TestConfigure(t *testing.T) {
-	common.CompileTimeApplicationVersion = "8.0.0"
+	common.ApplicationVersion = "8.0.0"
 	common.LibraryVersion = "8.0.0"
 	tmpDir, err := os.MkdirTemp("", "config_test")
 	require.NoError(t, err)
