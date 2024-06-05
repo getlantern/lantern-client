@@ -19,10 +19,7 @@ import UIKit
   private var lanternModel: LanternModel!
   private var vpnModel: VpnModel!
   private var messagingModel: MessagingModel!
-  // IOS
-  var loadingManager: LoadingIndicatorManager?
-  let mainQueue = DispatchQueue.main
-
+  
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -46,7 +43,6 @@ import UIKit
   // Intlize this GO model and callback
   private func setupAppComponents() throws {
     startUpSequency()
-    setupLoadingBar()
   }
 
   // Init all the models
@@ -82,10 +78,6 @@ import UIKit
         logger.debug("Notification Permssion is denied")
       }
     }
-  }
-
-  func setupLoadingBar() {
-    loadingManager = LoadingIndicatorManager(parentView: flutterViewController.view)
   }
 
 }

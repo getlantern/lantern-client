@@ -88,7 +88,7 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, nil, nil, opts.UserConfig()))
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, nil, nil))
 	return client
 }
 

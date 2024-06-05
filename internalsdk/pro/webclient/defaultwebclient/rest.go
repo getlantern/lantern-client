@@ -2,11 +2,11 @@ package defaultwebclient
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 
 	"github.com/moul/http2curl"
@@ -20,7 +20,7 @@ var (
 
 // Create function that sends requests to the given URL, optionally sending them through a proxy,
 // optionally processing requests with the given beforeRequest middleware and/or responses with the given afterResponse middleware.
-func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.RequestMiddleware, afterResponse resty.ResponseMiddleware, userConfig common.UserConfig) webclient.SendRequest {
+func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.RequestMiddleware, afterResponse resty.ResponseMiddleware) webclient.SendRequest {
 	c := resty.NewWithClient(httpClient)
 	if beforeRequest != nil {
 		c.OnBeforeRequest(beforeRequest)
@@ -38,7 +38,7 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 				params := reqParams.(map[string]interface{})
 				stringParams := make(map[string]string, len(params))
 				for key, value := range params {
-					stringParams[key] = value.(string)
+					stringParams[key] = fmt.Sprint(value)
 				}
 				if method == http.MethodGet {
 					req.SetQueryParams(stringParams)
