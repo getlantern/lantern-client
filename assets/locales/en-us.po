@@ -1751,3 +1751,10 @@ msgstr "Sorry, we are unable to load that page at the moment, please tap ‘Refr
 
 msgid "refresh"
 msgstr "Refresh"
+
+msgid "file_size_limit_title"
+msgstr "Limit Reached"
+
+msgid "file_size_limit_description"
+msgstr "Attachment sizes should be under 100 MB"
+
