@@ -19,7 +19,7 @@ import UIKit
   private var lanternModel: LanternModel!
   private var vpnModel: VpnModel!
   private var messagingModel: MessagingModel!
-  
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?

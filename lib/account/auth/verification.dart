@@ -175,7 +175,7 @@ class _VerificationState extends State<Verification> {
   }
 
   void openResetPassword(String code) {
-    context.pushRoute(ResetPassword(email: widget.email, code: code));
+    context.pushRoute(ResetPassword(email: widget.email, code: code,authFlow: widget.authFlow));
   }
 
   void _verifyEmail(String code) async {

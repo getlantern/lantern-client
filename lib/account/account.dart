@@ -201,6 +201,9 @@ class AccountMenu extends StatelessWidget {
         },
       ),
 
+      /// Still needs to figure out what to do when user signout
+      /// or even if want to provide this signout option functionality
+
       // sessionModel.isUserSignedIn((context, hasSignedIn, child) {
       //   return hasSignedIn
       //       ? ListItemFactory.settingsItem(
