@@ -197,7 +197,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "setLanguage":
-		err := setLanguage(m.baseModel, arguments.Get("lang").String())
+		err := setLanguage(m, arguments.Get("lang").String())
 		if err != nil {
 			return nil, err
 		}
@@ -510,7 +510,7 @@ func (session *SessionModel) paymentMethods() error {
 		log.Debugf("Plans V3 error: %v", err)
 		return err
 	}
-	log.Debugf("Plans V3 response: %+v", plans)
+	log.Debugf("Plans V4 response: %+v", plans)
 
 	/// Process Plans and providers
 	err = storePlanDetail(session.baseModel, plans)
@@ -632,7 +632,6 @@ func setExpiration(m *baseModel, expiration int64) error {
 	if expiration == 0 {
 		return nil
 	}
-
 	expiry := time.Unix(0, expiration*int64(time.Second))
 	dateFormat := "01/02/2006"
 	dateStr := expiry.Format(dateFormat)
@@ -658,10 +657,18 @@ func (m *SessionModel) Locale() (string, error) {
 	return pathdb.Get[string](m.baseModel.db, pathLang)
 }
 
-func setLanguage(m *baseModel, lang string) error {
+func setLanguage(m *SessionModel, lang string) error {
+	go func() {
+		err := m.paymentMethods()
+		if err != nil {
+			log.Errorf("Plans V4 error: %v", err)
+			// return
+		}
+	}()
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathLang, lang, "")
 	})
+
 }
 
 func setDevices(m *baseModel, devices []*protos.Device) error {
@@ -697,34 +704,10 @@ func storePlanDetail(m *baseModel, plan *pro.PaymentMethodsResponse) error {
 
 func setPlans(m *baseModel, plans []protos.Plan) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		//Get local from user
-		lang, err := pathdb.Get[string](tx, pathLang)
-		if err != nil {
-			return err
-		}
-
 		for _, plans := range plans {
-			// Update priceing for each plan
-			err := updatePrice(&plans, lang)
-			if err != nil {
-				log.Debugf("Error while updateing price")
-				return err
-			}
 			log.Debugf("Plans Values %+v", &plans)
 			pathPlanId := pathPlans + strings.Split(plans.Id, "-")[0]
-			protoPlan := &protos.Plan{
-				Id:                     plans.Id,
-				Description:            plans.Description,
-				BestValue:              plans.BestValue,
-				UsdPrice:               plans.UsdPrice,
-				TotalCostBilledOneTime: plans.TotalCostBilledOneTime,
-				Price:                  plans.Price,
-				OneMonthCost:           plans.OneMonthCost,
-				TotalCost:              plans.TotalCost,
-				FormattedBonus:         plans.FormattedBonus,
-				RenewalText:            "",
-			}
-			err = pathdb.Put(tx, pathPlanId, protoPlan, "")
+			err := pathdb.Put(tx, pathPlanId, &plans, "")
 			if err != nil {
 				log.Debugf("Error while addding price")
 				return err

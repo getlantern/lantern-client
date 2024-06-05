@@ -52,7 +52,10 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 			req.Body = body
 		}
 
-		req.SetHeaders(header)
+		if header != nil {
+			req.SetHeaders(header)
+		}
+
 		resp, err := req.Execute(method, path)
 		if err != nil {
 			return nil, err

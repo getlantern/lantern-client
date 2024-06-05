@@ -50,6 +50,7 @@ message Plan {
   string totalCost = 9;
   string formattedBonus = 10;
   string renewalText = 11;
+  map<string, int64> renewalBonusExpected = 13;
 }
 
 message PaymentProviders {

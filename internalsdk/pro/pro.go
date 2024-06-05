@@ -195,8 +195,6 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 	if err != nil {
 		return nil, err
 	}
-	b, _ := json.Marshal(resp)
-	log.Debugf("PaymentMethods response is %v", string(b))
 	return &resp, nil
 }
 
@@ -210,20 +208,24 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
 		return nil, errors.New("error received from server: %v", resp.BaseResponse.Error)
 	}
-	log.Debugf("PaymentMethods-V4 plans is %v", resp.Plans)
+	// process plans for currency
 	for i, plan := range resp.Plans {
 		parts := strings.Split(plan.Id, "-")
 		if len(parts) != 3 {
 			continue
 		}
 		cur := parts[1]
-		if currency, ok := accounting.LocaleInfo[strings.ToUpper(cur)]; ok {
-			if oneMonthCost, ok2 := plan.ExpectedMonthlyPrice[strings.ToLower(cur)]; ok2 {
-				ac := accounting.Accounting{Symbol: currency.ComSymbol, Precision: 2}
-				amount := decimal.NewFromInt(oneMonthCost).Div(decimal.NewFromInt(100))
-				resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
-			}
-		}
+
+		currency1 := accounting.LocaleInfo[strings.ToUpper(cur)]
+		ac := accounting.Accounting{Symbol: currency1.ComSymbol, Precision: 2}
+		monthlyPrice := plan.ExpectedMonthlyPrice[strings.ToLower(cur)]
+		yearlyPrice := plan.Price[strings.ToLower(cur)]
+
+		amount := decimal.NewFromInt(monthlyPrice).Div(decimal.NewFromInt(100))
+		yearAmount := decimal.NewFromInt(yearlyPrice)
+		resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
+		resp.Plans[i].TotalCost = ac.FormatMoneyDecimal(yearAmount)
+		resp.Plans[i].TotalCostBilledOneTime = fmt.Sprintf("%v billed one time", ac.FormatMoneyDecimal(yearAmount))
 	}
 	return &resp, nil
 }

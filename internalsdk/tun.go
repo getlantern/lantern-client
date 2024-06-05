@@ -20,8 +20,8 @@ import (
 
 var (
 	currentDeviceMx sync.Mutex
-	currentDevice   io.ReadWriteCloser
-	currentIPP      ipproxy.Proxy
+	// currentDevice   io.ReadWriteCloser
+	currentIPP ipproxy.Proxy
 )
 
 // Tun2Socks wraps the TUN device identified by fd with an ipproxy server that
@@ -100,7 +100,7 @@ func StopTun2Socks() {
 
 	currentDeviceMx.Lock()
 	ipp := currentIPP
-	currentDevice = nil
+
 	currentIPP = nil
 	currentDeviceMx.Unlock()
 	if ipp != nil {
