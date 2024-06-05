@@ -243,7 +243,9 @@ func (c *proClient) RedeemResellerCode(ctx context.Context, req *protos.RedeemRe
 		log.Errorf("Failed to redeem reseller code: %v", err)
 		return nil, err
 	}
-
+	if resp.Error != "" {
+		return nil, errors.New("error redeeming reseller code: %v", resp.Error)
+	}
 	return &resp, nil
 }
 
