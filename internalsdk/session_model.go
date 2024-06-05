@@ -141,6 +141,9 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		)
 	}
 
+	// Use proxied.Fronted for IOS client since ChainedThenFronted it does not work with ios due to (chained proxy unavailable)
+	// because we are not using the flashlight on ios
+	// We need to figure out where to put proxied SetProxyAddr
 	httpClient := &http.Client{
 		Transport: proxied.Fronted(dialTimeout),
 		Timeout:   dialTimeout,
@@ -668,7 +671,6 @@ func setLanguage(m *SessionModel, lang string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathLang, lang, "")
 	})
-
 }
 
 func setDevices(m *baseModel, devices []*protos.Device) error {
