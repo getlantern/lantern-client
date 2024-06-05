@@ -5,15 +5,15 @@ import '../../common/ui/password_criteria.dart';
 
 @RoutePage<void>(name: 'ResetPassword')
 class ResetPassword extends StatefulWidget {
-  final bool signInMandatory;
   final String? email;
   final String? code;
+  final AuthFlow authFlow;
 
   const ResetPassword({
     super.key,
     this.email,
     this.code,
-    this.signInMandatory = false,
+    this.authFlow = AuthFlow.reset,
   });
 
   @override
@@ -139,7 +139,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       await sessionModel.completeRecoveryByEmail(
           widget.email!, _passwordController.text, widget.code!);
       context.loaderOverlay.hide();
-      if (widget.signInMandatory) {
+      if (widget.authFlow == AuthFlow.updateAccount) {
         showSignDialog();
       } else {
         showPasswordSuccessDialog();

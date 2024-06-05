@@ -460,6 +460,7 @@ abstract class $AppRouter extends _i52.RootStackRouter {
           key: args.key,
           email: args.email,
           code: args.code,
+          authFlow: args.authFlow,
         ),
       );
     },
@@ -1828,6 +1829,7 @@ class ResetPassword extends _i52.PageRouteInfo<ResetPasswordArgs> {
     _i58.Key? key,
     String? email,
     String? code,
+    _i54.AuthFlow authFlow = _i54.AuthFlow.reset,
     List<_i52.PageRouteInfo>? children,
   }) : super(
           ResetPassword.name,
@@ -1835,6 +1837,7 @@ class ResetPassword extends _i52.PageRouteInfo<ResetPasswordArgs> {
             key: key,
             email: email,
             code: code,
+            authFlow: authFlow,
           ),
           initialChildren: children,
         );
@@ -1850,6 +1853,7 @@ class ResetPasswordArgs {
     this.key,
     this.email,
     this.code,
+    this.authFlow = _i54.AuthFlow.reset,
   });
 
   final _i58.Key? key;
@@ -1858,9 +1862,11 @@ class ResetPasswordArgs {
 
   final String? code;
 
+  final _i54.AuthFlow authFlow;
+
   @override
   String toString() {
-    return 'ResetPasswordArgs{key: $key, email: $email, code: $code}';
+    return 'ResetPasswordArgs{key: $key, email: $email, code: $code, authFlow: $authFlow}';
   }
 }
 

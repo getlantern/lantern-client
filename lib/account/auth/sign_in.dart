@@ -9,12 +9,10 @@ import '../../common/common.dart';
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final AuthFlow authFlow;
-  final bool signInMandatory;
 
   const SignIn({
     super.key,
     this.authFlow = AuthFlow.signIn,
-    this.signInMandatory =false,
   });
 
   @override
@@ -56,7 +54,7 @@ class _SignInState extends State<SignIn> {
           children: [
             const SizedBox(height: 24),
             HeadingText(
-              title: widget.authFlow.isReset
+              title: widget.authFlow.isReset || widget.authFlow.isUpdateAccount
                   ? 'reset_password'.i18n
                   : 'sign_in'.i18n,
             ),
@@ -65,7 +63,7 @@ class _SignInState extends State<SignIn> {
               key: _emailFormKey,
               child: CTextField(
                 controller: _emailController,
-                label: widget.authFlow.isReset
+                label: widget.authFlow.isReset || widget.authFlow.isReset
                     ? "lantern_pro_email".i18n
                     : "enter_email".i18n,
                 textInputAction: TextInputAction.done,
@@ -80,12 +78,10 @@ class _SignInState extends State<SignIn> {
             SizedBox(
               width: double.infinity,
               child: Button(
-                disabled: _emailController.text.isEmpty ||
-                    _emailFormKey?.currentState?.validate() == false,
-                text: widget.authFlow.isReset ? "next".i18n : 'continue'.i18n,
-                onPressed:
-                    widget.authFlow.isReset ? onNextTap : openCreatePassword,
-              ),
+                  disabled: _emailController.text.isEmpty ||
+                      _emailFormKey?.currentState?.validate() == false,
+                  text: widget.authFlow.isReset ? "next".i18n : 'continue'.i18n,
+                  onPressed: onTapResolved),
             ),
             const SizedBox(height: 24),
             if (widget.authFlow.isSignIn &&
@@ -111,12 +107,26 @@ class _SignInState extends State<SignIn> {
     );
   }
 
+  void onTapResolved() {
+    switch (widget.authFlow) {
+      case AuthFlow.reset:
+        resetPasswordFlow();
+        break;
+      case AuthFlow.updateAccount:
+        createAccount();
+        break;
+      default:
+        openCreatePassword();
+        break;
+    }
+  }
+
   ///Widget methods
   void openCreatePassword() {
     context.pushRoute(SignInPassword(email: _emailController.text));
   }
 
-  Future<void> onNextTap() async {
+  Future<void> resetPasswordFlow() async {
     try {
       FocusManager.instance.primaryFocus?.unfocus();
       context.loaderOverlay.show();
@@ -132,15 +142,54 @@ class _SignInState extends State<SignIn> {
   }
 
   void openVerification() {
-    context.pushRoute(
-        Verification(email: _emailController.text, authFlow: AuthFlow.reset,));
+    context.pushRoute(Verification(
+      email: _emailController.text,
+      authFlow: AuthFlow.reset,
+    ));
   }
 
   void returnToSignIn() {
-    context.popRoute();
+    context.maybePop();
   }
 
   Future<void> openPlans() async {
     await context.pushRoute(const PlansPage());
+  }
+
+  /// Process for creating account
+  /// Create new temp account with random password
+  /// Once account is created by pass email verification start forgot password flow
+  ///  THis needs to be done to make sure user has legit email
+  Future<void> createAccount() async {
+    try {
+      context.loaderOverlay.show();
+      final userTempPass = AppMethods().generatePassword();
+      await sessionModel.signUp(
+          _emailController.text.validateEmail, userTempPass);
+      //start forgot password flow
+      forgotPasswordFlow(userTempPass);
+    } catch (e, s) {
+      mainLogger.e('Error while creating account', error: e, stackTrace: s);
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
+  //forgot password flow
+  Future<void> forgotPasswordFlow(String userTempPass) async {
+    try {
+      final email = _emailController.text.validateEmail;
+      //Send verification code to email
+      await sessionModel.startRecoveryByEmail(email);
+      context.loaderOverlay.hide();
+      context.pushRoute(Verification(
+          email: _emailController.text,
+          authFlow: widget.authFlow,
+          tempPassword: userTempPass));
+    } catch (e, s) {
+      mainLogger.w('Error starting recovery', error: e, stackTrace: s);
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
   }
 }

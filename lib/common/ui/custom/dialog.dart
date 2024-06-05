@@ -335,7 +335,7 @@ void showProUserDialog(BuildContext context, {VoidCallback? onSuccess}) {
         onSuccess.call();
         return true;
       }
-      context.pushRoute(SignIn(authFlow: AuthFlow.reset));
+      context.pushRoute(SignIn(authFlow: AuthFlow.updateAccount, updateAccount: true));
       return true;
     },
   ).show(context);

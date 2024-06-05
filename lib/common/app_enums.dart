@@ -5,7 +5,8 @@ enum AuthFlow {
   createAccount,
   verifyEmail,
   proCodeActivation,
-  changeEmail
+  changeEmail,
+  updateAccount
 }
 
 extension AuthFlowExtension on AuthFlow {
@@ -18,4 +19,5 @@ extension AuthFlowExtension on AuthFlow {
   bool get isVerifyEmail => this == AuthFlow.verifyEmail;
 
   bool get isProCodeActivation => this == AuthFlow.proCodeActivation;
+  bool get isUpdateAccount => this == AuthFlow.updateAccount;
 }

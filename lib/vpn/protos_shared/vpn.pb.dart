@@ -455,6 +455,7 @@ class Plan extends $pb.GeneratedMessage {
     $core.String? totalCost,
     $core.String? formattedBonus,
     $core.String? renewalText,
+    $core.Map<$core.String, $fixnum.Int64>? renewalBonusExpected,
   }) {
     final $result = create();
     if (id != null) {
@@ -490,6 +491,9 @@ class Plan extends $pb.GeneratedMessage {
     if (renewalText != null) {
       $result.renewalText = renewalText;
     }
+    if (renewalBonusExpected != null) {
+      $result.renewalBonusExpected.addAll(renewalBonusExpected);
+    }
     return $result;
   }
   Plan._() : super();
@@ -508,6 +512,7 @@ class Plan extends $pb.GeneratedMessage {
     ..aOS(9, _omitFieldNames ? '' : 'totalCost', protoName: 'totalCost')
     ..aOS(10, _omitFieldNames ? '' : 'formattedBonus', protoName: 'formattedBonus')
     ..aOS(11, _omitFieldNames ? '' : 'renewalText', protoName: 'renewalText')
+    ..m<$core.String, $fixnum.Int64>(13, _omitFieldNames ? '' : 'renewalBonusExpected', protoName: 'renewalBonusExpected', entryClassName: 'Plan.RenewalBonusExpectedEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.O6)
     ..hasRequiredFields = false
   ;
 
@@ -618,6 +623,9 @@ class Plan extends $pb.GeneratedMessage {
   $core.bool hasRenewalText() => $_has(10);
   @$pb.TagNumber(11)
   void clearRenewalText() => clearField(11);
+
+  @$pb.TagNumber(13)
+  $core.Map<$core.String, $fixnum.Int64> get renewalBonusExpected => $_getMap(11);
 }
 
 class PaymentProviders extends $pb.GeneratedMessage {
@@ -753,7 +761,7 @@ class User extends $pb.GeneratedMessage {
     $core.bool? yinbiEnabled,
     $core.Iterable<$core.String>? inviters,
     $core.Iterable<$core.String>? invitees,
-    $core.Iterable<$core.String>? purchases,
+    $core.Iterable<Purchase>? purchases,
   }) {
     final $result = create();
     if (userId != null) {
@@ -826,7 +834,7 @@ class User extends $pb.GeneratedMessage {
     ..aOB(13, _omitFieldNames ? '' : 'yinbiEnabled', protoName: 'yinbiEnabled')
     ..pPS(14, _omitFieldNames ? '' : 'inviters')
     ..pPS(15, _omitFieldNames ? '' : 'invitees')
-    ..pPS(16, _omitFieldNames ? '' : 'purchases')
+    ..pc<Purchase>(16, _omitFieldNames ? '' : 'purchases', $pb.PbFieldType.PM, subBuilder: Purchase.create)
     ..hasRequiredFields = false
   ;
 
@@ -969,7 +977,57 @@ class User extends $pb.GeneratedMessage {
   $core.List<$core.String> get invitees => $_getList(14);
 
   @$pb.TagNumber(16)
-  $core.List<$core.String> get purchases => $_getList(15);
+  $core.List<Purchase> get purchases => $_getList(15);
+}
+
+class Purchase extends $pb.GeneratedMessage {
+  factory Purchase({
+    $core.String? plan,
+  }) {
+    final $result = create();
+    if (plan != null) {
+      $result.plan = plan;
+    }
+    return $result;
+  }
+  Purchase._() : super();
+  factory Purchase.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Purchase.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Purchase', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'plan')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Purchase clone() => Purchase()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Purchase copyWith(void Function(Purchase) updates) => super.copyWith((message) => updates(message as Purchase)) as Purchase;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Purchase create() => Purchase._();
+  Purchase createEmptyInstance() => create();
+  static $pb.PbList<Purchase> createRepeated() => $pb.PbList<Purchase>();
+  @$core.pragma('dart2js:noInline')
+  static Purchase getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Purchase>(create);
+  static Purchase? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get plan => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set plan($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasPlan() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearPlan() => clearField(1);
 }
 
 /// API

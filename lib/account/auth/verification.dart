@@ -115,21 +115,9 @@ class _VerificationState extends State<Verification> {
       case AuthFlow.changeEmail:
         resendChangeEmailVerificationCode();
       case AuthFlow.signIn:
-
-      /// there is no verification flow for sign in
-    }
-  }
-
-  Future<void> resendCreateAccountVerificationCode() async {
-    try {
-      context.loaderOverlay.show();
-      await sessionModel.signUpEmailResendCode(widget.email);
-      context.loaderOverlay.hide();
-      AppMethods.showToast('email_resend_message'.i18n);
-    } catch (e, s) {
-      mainLogger.e('Error while resending code', error: e, stackTrace: s);
-      context.loaderOverlay.hide();
-      CDialog.showError(context, description: e.localizedDescription);
+  /// there is no verification flow for sign in
+      case AuthFlow.updateAccount:
+        resendResetEmailVerificationCode();
     }
   }
 
@@ -181,6 +169,8 @@ class _VerificationState extends State<Verification> {
         _verifyEmail(code);
       case AuthFlow.changeEmail:
         _changeEmail(code);
+      case AuthFlow.updateAccount:
+        _verifyEmail(code);
     }
   }
 
@@ -194,7 +184,7 @@ class _VerificationState extends State<Verification> {
       await sessionModel.validateRecoveryCode(widget.email, code);
       sessionModel.hasAccountVerified.value = true;
       context.loaderOverlay.hide();
-      resolveRoute();
+      resolveRoute(code);
     } catch (e) {
       mainLogger.e(e);
       context.loaderOverlay.hide();
@@ -278,7 +268,7 @@ class _VerificationState extends State<Verification> {
     ));
   }
 
-  void resolveRoute() {
+  void resolveRoute(String code) {
     switch (widget.authFlow) {
       case AuthFlow.signIn:
       // TODO: Handle this case.
@@ -296,12 +286,15 @@ class _VerificationState extends State<Verification> {
         ));
       case AuthFlow.changeEmail:
       // TODO: Handle this case.
+      case AuthFlow.updateAccount:
+        openResetPassword(code);
     }
   }
 
   Future<void> onBackPressed() async {
-    if (widget.authFlow == AuthFlow.createAccount) {
-      assert (widget.tempPassword != null, 'Temp password is null');
+    if (widget.authFlow == AuthFlow.createAccount ||
+        widget.authFlow == AuthFlow.updateAccount) {
+      assert(widget.tempPassword != null, 'Temp password is null');
       // if user press back button while creating account
       // we need to delete that temp account
       await _deleteAccount(widget.tempPassword!);
