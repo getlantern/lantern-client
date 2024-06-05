@@ -24,15 +24,15 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     let device = UIDevice.current
     let deviceId = DeviceIdentifier.getUDID()
     let modelName = UIDevice.modelName
-    let deviceModel = device.model
     let systemVersion = device.systemVersion
+    let systemName = device.systemName
     opts.deviceID = deviceId
     opts.lang = Locale.current.identifier
     opts.developmentMode = (!isRunningFromAppStore() && !isRunningInTestFlightEnvironment())
     opts.proUser = false
     opts.playVersion = (isRunningFromAppStore() || isRunningInTestFlightEnvironment())
     opts.timeZone = TimeZone.current.identifier
-    opts.device = systemName  // IOS does not provide Device name directly
+    opts.device = modelName  // IOS does not provide Device name directly
     opts.model = modelName
     opts.osVersion = systemVersion
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest

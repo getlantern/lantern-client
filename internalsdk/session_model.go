@@ -952,6 +952,9 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	log.Debugf("User detail: %+v", resp.User)
 
 	userDetail := resp.User
+
+	// todo if user removes device then it should reomve pro status from server itself
+
 	// currentDevice, err := session.GetDeviceID()
 	// if err != nil {
 	// 	log.Debugf("Error while getting device id %v", err)
@@ -1681,14 +1684,13 @@ func linkCodeRedeem(session *SessionModel) error {
 	if deviceCode == "" || device == "" {
 		return errors.New("Device code or device not found")
 	}
-
 	log.Debugf("Device %v deviceCode %v", device, deviceCode)
 	linkRedeemResponse, err := session.proClient.LinkCodeRedeem(context.Background(), device, deviceCode)
 	if err != nil {
 		return err
 	}
 	log.Debugf("linkCodeRedeem response %+v", linkRedeemResponse)
-	err = setUserIdAndToken(session.baseModel, linkRedeemResponse.UserID, linkRedeemResponse.Code)
+	err = setUserIdAndToken(session.baseModel, linkRedeemResponse.UserID, linkRedeemResponse.Token)
 	if err != nil {
 		return log.Errorf("Error while setting user id and token %v", err)
 	}

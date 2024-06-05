@@ -461,7 +461,7 @@ class UserDevices extends StatelessWidget {
                       ? []
                       : [
                           CText(
-                            (isMyDevice ? 'Log Out' : 'Remove')
+                            (isMyDevice ? '' : 'Remove')
                                 .i18n
                                 .toUpperCase(),
                             style: tsButtonPink,

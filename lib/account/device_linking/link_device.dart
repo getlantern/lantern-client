@@ -28,7 +28,15 @@ class _LinkDeviceState extends State<LinkDevice> {
       // We need to call redeemLinkCode multiple times when user enter code we redeem it
       // then it will show on the device list
       retry(
-        () => {sessionModel.redeemLinkCode()},
+        () => {
+          sessionModel.redeemLinkCode().then((value) {
+            if (context.mounted) {
+              context.router.popUntilRoot();
+            }
+          })
+        },
+        retryIf: (e) => (e is Exception || e is PlatformException),
+        delayFactor: const Duration(seconds: 1),
       );
     } catch (e) {
       appLogger.e("error while requesting link code: $e", error: e);

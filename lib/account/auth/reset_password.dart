@@ -5,6 +5,7 @@ import '../../common/ui/password_criteria.dart';
 
 @RoutePage<void>(name: 'ResetPassword')
 class ResetPassword extends StatefulWidget {
+  final bool signInMandatory;
   final String? email;
   final String? code;
 
@@ -12,6 +13,7 @@ class ResetPassword extends StatefulWidget {
     super.key,
     this.email,
     this.code,
+    this.signInMandatory = false,
   });
 
   @override
@@ -137,7 +139,11 @@ class _ResetPasswordState extends State<ResetPassword> {
       await sessionModel.completeRecoveryByEmail(
           widget.email!, _passwordController.text, widget.code!);
       context.loaderOverlay.hide();
-      showPasswordSuccessDialog();
+      if (widget.signInMandatory) {
+        showSignDialog();
+      } else {
+        showPasswordSuccessDialog();
+      }
     } catch (e) {
       mainLogger.e(e);
       context.loaderOverlay.hide();
@@ -159,6 +165,26 @@ class _ResetPasswordState extends State<ResetPassword> {
           context.router.popUntilRoot();
         });
       },
+      agreeAction: () async {
+        print("agree");
+        Future.delayed(const Duration(milliseconds: 300), () {
+          context.router.pushAndPopUntil(
+            SignIn(),
+            predicate: (route) => route.isFirst,
+          );
+        });
+        return true;
+      },
+    ).show(context);
+  }
+
+  void showSignDialog() {
+    CDialog(
+      icon: const CAssetImage(path: ImagePaths.check_green_large),
+      title: "password_has_been_updated".i18n,
+      description: "password_has_been_updated_message".i18n,
+      barrierDismissible: false,
+      agreeText: "sign_in".i18n,
       agreeAction: () async {
         print("agree");
         Future.delayed(const Duration(milliseconds: 300), () {

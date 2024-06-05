@@ -48,8 +48,15 @@ class AccountMenu extends StatelessWidget {
     ).show(context);
   }
 
-  void onAccountManagementTap(BuildContext context, bool isProUser) {
-    context.pushRoute(AccountManagement(isPro: isProUser));
+  void onAccountManagementTap(
+      BuildContext context, bool isProUser, bool hasUserLoggedIn) {
+    if (hasUserLoggedIn) {
+      // User has gone through onboarding
+      context.pushRoute(AccountManagement(isPro: isProUser));
+    } else {
+      // Ask user to update their email and password
+      showProUserDialog(context);
+    }
   }
 
   void openSignIn(BuildContext context) => context.pushRoute(SignIn());
@@ -71,13 +78,12 @@ class AccountMenu extends StatelessWidget {
 
   List<Widget> freeItems(BuildContext context, bool hasUserLoggedIn) {
     return [
-    if(!hasUserLoggedIn)
-      ListItemFactory.settingsItem(
-        icon: ImagePaths.signIn,
-        content: 'sign_in'.i18n,
-        onTap: () => openSignIn(context),
-      ),
-
+      if (!hasUserLoggedIn)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.signIn,
+          content: 'sign_in'.i18n,
+          onTap: () => openSignIn(context),
+        ),
       if (Platform.isAndroid)
         messagingModel.getOnBoardingStatus(
           (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
@@ -126,7 +132,7 @@ class AccountMenu extends StatelessWidget {
     ];
   }
 
-  List<Widget> proItems(BuildContext context) {
+  List<Widget> proItems(BuildContext context, bool hasUserLoggedIn) {
     return [
       messagingModel.getOnBoardingStatus(
         (context, hasBeenOnboarded, child) =>
@@ -136,7 +142,8 @@ class AccountMenu extends StatelessWidget {
                   key: AppKeys.account_management,
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
-                  onTap: () => onAccountManagementTap(context, true),
+                  onTap: () =>
+                      onAccountManagementTap(context, true, hasUserLoggedIn),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
                       const CAssetImage(
@@ -193,15 +200,16 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
-      sessionModel.isUserSignedIn((context, hasSignedIn, child) {
-        return hasSignedIn
-            ? ListItemFactory.settingsItem(
-                icon: ImagePaths.signOut,
-                content: 'sign_out'.i18n,
-                onTap: () => showSingOutDialog(context),
-              )
-            : const SizedBox.shrink();
-      })
+
+      // sessionModel.isUserSignedIn((context, hasSignedIn, child) {
+      //   return hasSignedIn
+      //       ? ListItemFactory.settingsItem(
+      //           icon: ImagePaths.signOut,
+      //           content: 'sign_out'.i18n,
+      //           onTap: () => showSingOutDialog(context),
+      //         )
+      //       : const SizedBox.shrink();
+      // })
     ];
   }
 
@@ -214,9 +222,9 @@ class AccountMenu extends StatelessWidget {
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
         return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
           return ListView(
-            children: proUser && hasUserLoggedIn
-                ? proItems(sessionContext)
-                : freeItems(sessionContext,hasUserLoggedIn),
+            children: proUser
+                ? proItems(sessionContext, hasUserLoggedIn)
+                : freeItems(sessionContext, hasUserLoggedIn),
           );
         });
       }),

@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   void _initWindowManager() async {
     windowManager.addListener(this);
-    // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
     setState(() {});
   }
@@ -107,6 +106,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   Future<void> _checkForFirstTimeVisit() async {
+    //if the user pro for first time by passing the pro user notifier
+    if( sessionModel.proUserNotifier.value??false) {
+      sessionModel.setFirstTimeVisit();
+      return;
+    }
     final isFirstTime = await sessionModel.isUserFirstTimeVisit();
     if (isFirstTime) {
       context.router.push(const AuthLanding());

@@ -37,11 +37,11 @@ class CDialog extends StatefulWidget {
       agreeText: agreeText ?? "continue".i18n,
       includeCancel: false,
       agreeAction: () async {
-       Future.delayed(const Duration(milliseconds: 300), () {
-         if (successCallback != null) {
-           successCallback.call();
-           return true;
-         }
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (successCallback != null) {
+            successCallback.call();
+            return true;
+          }
         });
         return true;
       },
@@ -320,27 +320,23 @@ void showEmailExistsDialog(
   ).show(context);
 }
 
-// void showProUserDialog(BuildContext context, {VoidCallback? onSuccess}) {
-//   CDialog(
-//     title: 'update_pro_account'.i18n,
-//     description: "update_pro_account_message".i18n,
-//     icon: const CAssetImage(
-//       path: ImagePaths.addAccountIllustration,
-//       height: 110,
-//     ),
-//     agreeText: "update_account".i18n,
-//     dismissText: "not_now".i18n,
-//     includeCancel: true,
-//     agreeAction: () async {
-//       if (onSuccess != null) {
-//         onSuccess.call();
-//         return true;
-//       }
-//       context.pushRoute(CreateAccountEmail());
-//       return true;
-//     },
-//     dismissAction: () async {
-//       print("Go back");
-//     },
-//   ).show(context);
-// }
+void showProUserDialog(BuildContext context, {VoidCallback? onSuccess}) {
+  CDialog(
+    title: 'update_pro_account'.i18n,
+    description: "update_pro_account_message".i18n,
+    icon: const CAssetImage(
+      path: ImagePaths.addAccountIllustration,
+      height: 110,
+    ),
+    agreeText: "update_account".i18n,
+    includeCancel: false,
+    agreeAction: () async {
+      if (onSuccess != null) {
+        onSuccess.call();
+        return true;
+      }
+      context.pushRoute(SignIn(authFlow: AuthFlow.reset));
+      return true;
+    },
+  ).show(context);
+}

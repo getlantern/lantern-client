@@ -41,7 +41,7 @@ type LinkCodeRedeemResponse struct {
 	*protos.BaseResponse `json:",inline"`
 	Status               string `json:"status"`
 	UserID               int64  `json:"userId"`
-	Code                 string `json:"code"`
+	Token                string `json:"token"`
 }
 
 type PurchaseResponse struct {

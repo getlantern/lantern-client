@@ -9,10 +9,12 @@ import '../../common/common.dart';
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final AuthFlow authFlow;
+  final bool signInMandatory;
 
   const SignIn({
     super.key,
     this.authFlow = AuthFlow.signIn,
+    this.signInMandatory =false,
   });
 
   @override
@@ -109,12 +111,6 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  @override
-  void dispose() {
-
-    super.dispose();
-  }
-
   ///Widget methods
   void openCreatePassword() {
     context.pushRoute(SignInPassword(email: _emailController.text));
@@ -137,7 +133,7 @@ class _SignInState extends State<SignIn> {
 
   void openVerification() {
     context.pushRoute(
-        Verification(email: _emailController.text, authFlow: AuthFlow.reset));
+        Verification(email: _emailController.text, authFlow: AuthFlow.reset,));
   }
 
   void returnToSignIn() {

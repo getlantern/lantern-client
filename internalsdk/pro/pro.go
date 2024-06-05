@@ -320,7 +320,7 @@ func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, devic
 	if err != nil {
 		return nil, err
 	}
-	if resp.Error != "" && resp.Status != "ok" {
+	if resp.BaseResponse != nil && resp.Status != "ok" {
 		return nil, errors.New("%v redeeming link code: %v", resp.ErrorId, resp.Error)
 	}
 	return &resp, nil
