@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
@@ -16,7 +15,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 
-	"github.com/go-resty/resty/v2"
 	"github.com/leekchan/accounting"
 	"github.com/shopspring/decimal"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -92,47 +90,6 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 	}
 	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, nil, nil, opts.UserConfig()))
 	return client
-}
-
-// Function to log request details
-func logRequest(req *resty.Request) {
-	url := req.URL
-	method := req.Method
-	headers := req.Header
-	body := req.Body
-
-	logEntry := fmt.Sprintf("Time: %s\nMethod: %s\nURL: %s\nHeaders:\n",
-		time.Now().Format(time.RFC3339), method, url)
-
-	for key, values := range headers {
-		for _, value := range values {
-			logEntry += fmt.Sprintf("%s: %s\n", key, value)
-		}
-	}
-
-	logEntry += fmt.Sprintf("Body: %v\n\n", body)
-
-	fmt.Println(logEntry)
-}
-
-// Function to log response details
-func logResponse(resp *resty.Response) {
-	status := resp.Status()
-	headers := resp.Header()
-	body := resp.Body()
-
-	logEntry := fmt.Sprintf("Time: %s\nStatus: %s\nHeaders:\n",
-		time.Now().Format(time.RFC3339), status)
-
-	for key, values := range headers {
-		for _, value := range values {
-			logEntry += fmt.Sprintf("%s: %s\n", key, value)
-		}
-	}
-
-	logEntry += fmt.Sprintf("Response Body: %s\n\n", string(body))
-
-	fmt.Println(logEntry)
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {
