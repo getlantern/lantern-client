@@ -32,6 +32,7 @@ import (
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
+	"github.com/joho/godotenv"
 
 	"google.golang.org/protobuf/encoding/protojson"
 )
@@ -67,6 +68,13 @@ func start() {
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
+
+	// Load application configuration from .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Error("Error loading .env file")
+	}
+
 	flags := flashlight.ParseFlags()
 
 	cdir := configDir(&flags)
