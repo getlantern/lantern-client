@@ -329,7 +329,8 @@ void showProUserDialog(BuildContext context, {VoidCallback? onSuccess}) {
       height: 110,
     ),
     agreeText: "update_account".i18n,
-    includeCancel: false,
+    includeCancel: true,
+    dismissText: "sign_in".i18n,
     agreeAction: () async {
       if (onSuccess != null) {
         onSuccess.call();
@@ -337,6 +338,10 @@ void showProUserDialog(BuildContext context, {VoidCallback? onSuccess}) {
       }
       context.pushRoute(SignIn(authFlow: AuthFlow.updateAccount));
       return true;
+    },
+    dismissAction: () async{
+      context.pushRoute(SignIn(authFlow: AuthFlow.signIn));
+
     },
   ).show(context);
 }

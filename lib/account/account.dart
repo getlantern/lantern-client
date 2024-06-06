@@ -200,19 +200,17 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
-
       /// Still needs to figure out what to do when user signout
       /// or even if want to provide this signout option functionality
-
-      // sessionModel.isUserSignedIn((context, hasSignedIn, child) {
-      //   return hasSignedIn
-      //       ? ListItemFactory.settingsItem(
-      //           icon: ImagePaths.signOut,
-      //           content: 'sign_out'.i18n,
-      //           onTap: () => showSingOutDialog(context),
-      //         )
-      //       : const SizedBox.shrink();
-      // })
+      sessionModel.isUserSignedIn((context, hasSignedIn, child) {
+        return hasSignedIn
+            ? ListItemFactory.settingsItem(
+                icon: ImagePaths.signOut,
+                content: 'sign_out'.i18n,
+                onTap: () => showSingOutDialog(context),
+              )
+            : const SizedBox.shrink();
+      })
     ];
   }
 

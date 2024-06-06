@@ -413,6 +413,13 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+
+	case "updatePaymentPlans":
+		err := m.paymentMethods()
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -929,8 +936,11 @@ func (session *SessionModel) userCreate(ctx context.Context) error {
 		log.Errorf("Error sending request: %v", err)
 		return err
 	}
-
 	user := resp.User
+	if user == nil || user.UserId == 0 {
+		log.Errorf("User not found in response")
+		return errors.New("User not found in response")
+	}
 
 	//Save user id and token
 	err = setUserIdAndToken(session.baseModel, int64(user.UserId), user.Token)

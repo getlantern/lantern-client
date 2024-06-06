@@ -114,7 +114,7 @@ class _ResetPasswordState extends State<ResetPassword> {
               ),
               const SizedBox(height: 24),
               PasswordCriteriaWidget(
-                  textEditingController: _confirmPasswordController),
+                  textEditingController: _passwordController),
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
@@ -139,8 +139,9 @@ class _ResetPasswordState extends State<ResetPassword> {
       await sessionModel.completeRecoveryByEmail(
           widget.email!, _passwordController.text, widget.code!);
       context.loaderOverlay.hide();
+      print(widget.authFlow);
       if (widget.authFlow == AuthFlow.updateAccount) {
-        showSignDialog();
+        showContiuneDialog();
       } else {
         showPasswordSuccessDialog();
       }
@@ -178,20 +179,17 @@ class _ResetPasswordState extends State<ResetPassword> {
     ).show(context);
   }
 
-  void showSignDialog() {
+  void showContiuneDialog() {
     CDialog(
       icon: const CAssetImage(path: ImagePaths.check_green_large),
       title: "password_has_been_updated".i18n,
       description: "password_has_been_updated_message".i18n,
       barrierDismissible: false,
-      agreeText: "sign_in".i18n,
+      agreeText: "continue".i18n,
+      includeCancel: false,
       agreeAction: () async {
-        print("agree");
         Future.delayed(const Duration(milliseconds: 300), () {
-          context.router.pushAndPopUntil(
-            SignIn(),
-            predicate: (route) => route.isFirst,
-          );
+          context.router.popUntilRoot();
         });
         return true;
       },
