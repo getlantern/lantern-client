@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 
+import 'package:flutter/gestures.dart';
 import 'package:lantern/common/common.dart';
 
 /// CDialog incorporates the standard dialog styling and behavior as defined
@@ -321,27 +322,72 @@ void showEmailExistsDialog(
 }
 
 void showProUserDialog(BuildContext context, {VoidCallback? onSuccess}) {
-  CDialog(
-    title: 'update_pro_account'.i18n,
-    description: "update_pro_account_message".i18n,
-    icon: const CAssetImage(
-      path: ImagePaths.addAccountIllustration,
-      height: 110,
-    ),
-    agreeText: "update_account".i18n,
-    includeCancel: true,
-    dismissText: "sign_in".i18n,
-    agreeAction: () async {
-      if (onSuccess != null) {
-        onSuccess.call();
-        return true;
-      }
-      context.pushRoute(SignIn(authFlow: AuthFlow.updateAccount));
-      return true;
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        title: const CAssetImage(
+          path: ImagePaths.addAccountIllustration,
+          height: 110,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CText(
+              'update_pro_account'.i18n,
+              textAlign: TextAlign.center,
+              style: tsSubtitle1Short,
+            ),
+            const SizedBox(height: 16),
+            CText(
+              'update_pro_account_message'.i18n,
+              style: tsBody1.copiedWith(
+                color: grey5,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Button(
+                text: "update_account".i18n,
+                onPressed: () {
+                  if (onSuccess != null) {
+                    onSuccess.call();
+                    return;
+                  }
+                  context.maybePop();
+                  context.pushRoute(SignIn(authFlow: AuthFlow.updateAccount));
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
+            RichText(
+              text: TextSpan(
+                text: 'already_have_an_account'.i18n,
+                style:
+                    tsBody1.copyWith(fontWeight: FontWeight.w400, color: grey5),
+                children: [
+                  TextSpan(
+                    text: "sign_in".i18n.toUpperCase(),
+                    style: tsBody1.copyWith(
+                        fontWeight: FontWeight.w500, color: pink5),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        context.maybePop();
+                        context.pushRoute(SignIn(authFlow: AuthFlow.signIn));
+                      },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
     },
-    dismissAction: () async{
-      context.pushRoute(SignIn(authFlow: AuthFlow.signIn));
-
-    },
-  ).show(context);
+  );
 }
