@@ -96,7 +96,7 @@ const (
 
 type SessionModelOpts struct {
 	DevelopmentMode bool
-	ProUser         bool
+	// ProUser         bool
 	DeviceID        string
 	Device          string
 	Model           string
@@ -443,7 +443,6 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	}
 	err = pathdb.PutAll(tx, map[string]interface{}{
 		pathDevelopmentMode: opts.DevelopmentMode,
-		pathProUser:         opts.ProUser,
 		pathDeviceID:        opts.DeviceID,
 		pathStoreVersion:    opts.PlayVersion,
 		pathTimezoneID:      opts.TimeZone,

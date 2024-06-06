@@ -25,7 +25,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
+class _HomePageState extends State<HomePage> with WindowListener {
   Function()? _cancelEventSubscription;
 
   @override
@@ -38,13 +38,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     if (isMobile()) {
       // This is a mobile device
       channelListener();
+      _checkForFirstTimeVisit();
     } else {
       // This is a desktop device
       setupTrayManager();
       _initWindowManager();
-    }
-    if (!Platform.isAndroid) {
-      _checkForFirstTimeVisit();
     }
   }
 
@@ -106,8 +104,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   Future<void> _checkForFirstTimeVisit() async {
+    if(!Platform.isIOS) return;
     //if the user pro for first time by passing the pro user notifier
-    if( sessionModel.proUserNotifier.value??false) {
+    if (sessionModel.proUserNotifier.value ?? false) {
       sessionModel.setFirstTimeVisit();
       return;
     }
@@ -198,7 +197,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               return const PrivacyDisclosure();
             }
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-
               final tab = tabModel.currentIndex;
               return Scaffold(
                 body: buildBody(tab, isOnboarded),
