@@ -62,6 +62,7 @@ dependencies:
   video_thumbnail: ^0.5.3
   file_picker: ^5.3.3
   filesize: ^2.0.1
+  flutter_image_compress: ^2.3.0
 
   # Networking
   cached_network_image: ^3.3.1
