@@ -139,9 +139,8 @@ class _ResetPasswordState extends State<ResetPassword> {
       await sessionModel.completeRecoveryByEmail(
           widget.email!, _passwordController.text, widget.code!);
       context.loaderOverlay.hide();
-      print(widget.authFlow);
       if (widget.authFlow == AuthFlow.updateAccount) {
-        showContiuneDialog();
+        showContinueDialog();
       } else {
         showPasswordSuccessDialog();
       }
@@ -179,7 +178,7 @@ class _ResetPasswordState extends State<ResetPassword> {
     ).show(context);
   }
 
-  void showContiuneDialog() {
+  void showContinueDialog() {
     CDialog(
       icon: const CAssetImage(path: ImagePaths.check_green_large),
       title: "password_has_been_updated".i18n,

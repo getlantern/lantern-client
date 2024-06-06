@@ -470,7 +470,9 @@ class UserDevices extends StatelessWidget {
                 ),
               );
             }).toList(),
-            // IOS does not support Link devices at the moment
+            // IOS does not need device linking
+            // User should use Username and Password flow
+            if(!Platform.isIOS)
             if (devices.devices.length < 3)
               ListItemFactory.settingsItem(
                 content: '',

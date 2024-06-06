@@ -159,6 +159,7 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
+      if(!Platform.isIOS)
       ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
         content: 'add_device'.i18n,
