@@ -6,9 +6,10 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
+import 'package:lantern/core/purchase/app_purchase.dart';
 import 'package:lantern/replica/ui/utils.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:lantern/core/purchase/app_purchase.dart';
+
 import 'catcher_setup.dart';
 
 // IOS issue
@@ -52,15 +53,16 @@ Future<void> main() async {
     // Due to replica we are using lot of cache
     // clear if goes to above limit
     CustomCacheManager().clearCacheIfExceeded();
+    if (Platform.isIOS) {
+      // Inject all the services
+      init();
+      sl<AppPurchase>().init();
+    }
   }
 
-  // Inject all the services
-  init();
-  sl<AppPurchase>().init();
-  // await _initGoogleMobileAds();
   await Localization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  
+
 //Todo if catcher is not picking up error and exception then we should switch to sentryFlutter
 // SentryFlutter.init((options) {
 //   options.debug = true;
@@ -71,9 +73,7 @@ Future<void> main() async {
 //       ? 'https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353'
 //       : 'https://c14296fdf5a6be272e1ecbdb7cb23f76@o75725.ingest.sentry.io/4506081382694912';
 // }, appRunner: () => setupCatcherAndRun(LanternApp()));
-
   setupCatcherAndRun(const LanternApp());
-
 }
 
 Future<void> _initGoogleMobileAds() async {

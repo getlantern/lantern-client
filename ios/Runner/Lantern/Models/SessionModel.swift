@@ -28,7 +28,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     let systemName = device.systemName
     opts.deviceID = deviceId
     opts.lang = Locale.current.identifier
-    opts.developmentMode = (!isRunningFromAppStore() && !isRunningInTestFlightEnvironment())
+    opts.developmentMode = !(isRunningFromAppStore() && isRunningInTestFlightEnvironment())
     opts.playVersion = (isRunningFromAppStore() || isRunningInTestFlightEnvironment())
     opts.timeZone = TimeZone.current.identifier
     opts.device = modelName  // IOS does not provide Device name directly

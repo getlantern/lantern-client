@@ -24,6 +24,10 @@ class AppPurchase {
     getAvailablePlans();
   }
 
+  Future<bool> checkForAppStoreIsAvailable() async {
+    return await InAppPurchase.instance.isAvailable();
+  }
+
   Future<void> getAvailablePlans() async {
     final response = await _inAppPurchase.queryProductDetails(_iosPlansIds);
     plansSku.clear();
@@ -36,6 +40,10 @@ class AppPurchase {
     required VoidCallback onSuccess,
     required Function(dynamic error) onFailure,
   }) async {
+    if (!(await checkForAppStoreIsAvailable())) {
+      onFailure("App store is not available");
+      return;
+    }
     _email = email;
     _planId = planId;
     _onSuccess = onSuccess;
@@ -68,9 +76,9 @@ class AppPurchase {
   Future<void> _onPurchaseUpdate(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
-    logger.i("_onPurchaseUpdate called with $purchaseDetailsList");
     for (var purchaseDetails in purchaseDetailsList) {
       await _handlePurchase(purchaseDetails);
+      mainLogger.d('Purchase data: ${purchaseDetails}');
     }
   }
 

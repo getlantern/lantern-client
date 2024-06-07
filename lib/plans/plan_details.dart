@@ -192,7 +192,7 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   void resolveRouteIOS() {
-    if (widget.isPro) {
+    if (widget.isPro ) {
       //user is signed in
       _proceedToCheckoutIOS(context);
     } else {

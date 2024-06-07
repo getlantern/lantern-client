@@ -1138,6 +1138,7 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
 	}
+	log.Debugf("Purchase data %+v", purchaseData)
 	purchase, err := m.proClient.PurchaseRequest(context.Background(), purchaseData)
 	if err != nil {
 		return err

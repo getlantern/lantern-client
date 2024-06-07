@@ -31,6 +31,7 @@
 		035BE7062A7122BC0084059A /* SessionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035BE7042A7122BC0084059A /* SessionModel.swift */; };
 		036663D92A9E0C0E00595971 /* JsonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036663D82A9E0C0E00595971 /* JsonUtils.swift */; };
 		03802FA32A98C9B000DACDFC /* SubscriberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */; };
+		038562282C131388008958B6 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 038562272C131388008958B6 /* StoreKit.framework */; };
 		039D7C442B43E047007667CD /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039D7C432B43E047007667CD /* KeychainService.swift */; };
 		03A1AB142AA88BDA00FB41B2 /* VPNManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A1AB132AA88BDA00FB41B2 /* VPNManager.swift */; };
 		03A1AB322AA890AB00FB41B2 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A1AB312AA890AB00FB41B2 /* NetworkExtension.framework */; };
@@ -111,6 +112,7 @@
 		035FDDD42A6A547F007B15C8 /* Internalsdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Internalsdk.xcframework; sourceTree = "<group>"; };
 		036663D82A9E0C0E00595971 /* JsonUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonUtils.swift; sourceTree = "<group>"; };
 		03802FA22A98C9B000DACDFC /* SubscriberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriberRequest.swift; sourceTree = "<group>"; };
+		038562272C131388008958B6 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		038EBA8F187F39DA9C6ED912 /* Pods-LanternTests.release-appium-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.release-appium-test.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.release-appium-test.xcconfig"; sourceTree = "<group>"; };
 		039D7C432B43E047007667CD /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		03A1AB102AA8893900FB41B2 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 			files = (
 				ECA871BD2AC59104007C400D /* Pods_Runner.framework in Frameworks */,
 				ECA871BF2AC59109007C400D /* NetworkExtension.framework in Frameworks */,
+				038562282C131388008958B6 /* StoreKit.framework in Frameworks */,
 				EC27DE902AC44FAD00B840F2 /* DBModule in Frameworks */,
 				EC22F6242AC44C8E0017D36C /* Internalsdk.xcframework in Frameworks */,
 			);
@@ -422,6 +425,7 @@
 		FF47084EFEAB686FD7974BE4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				038562272C131388008958B6 /* StoreKit.framework */,
 				0315F55C2AC1C1A500D49F7B /* DatabaseFramework.framework */,
 				03D97B1B2AC1900E0092BFC2 /* Pods_DatabaseFramework.framework */,
 				03C58B082AC18BE7003C9788 /* DatabaseFramework.framework */,

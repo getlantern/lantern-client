@@ -10,6 +10,7 @@ import (
 	"math"
 	"math/big"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/getlantern/errors"
@@ -104,23 +105,28 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 	if err != nil {
 		return err, nil
 	}
+	// get currency from plan id
+	parts := strings.Split(planId, "-")
+	if len(parts) != 3 {
+		return errors.New("Invalid plan id"), nil
+	}
+	cur := parts[1]
 
 	data := map[string]interface{}{
 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
 		"provider":       paymentProvider,
 		"email":          email,
 		"deviceName":     device,
+		"currency":       cur,
 	}
 
 	switch paymentProvider {
 	case paymentProviderResellerCode:
 		data["provider"] = paymentProviderResellerCode
 		data["resellerCode"] = resellerCode
-		data["currency"] = "usd"
 		data["plan"] = planId
 	case paymentProviderApplePay:
 		data["token"] = purchaseToken
-		data["currency"] = "usd"
 		data["plan"] = planId
 	}
 	return nil, data
