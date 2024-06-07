@@ -454,6 +454,10 @@ set-version:
 
 
 ios-release:set-version build-release-framework
+	@echo "Flutter Clean..."
+	flutter clean
+	@echo "Flutter Pub get..."
+	flutter pub get
 	@echo "Creating the Flutter iOS build..."
 	flutter build ipa --flavor prod --release
 	@echo "Uploading debug symbols to Sentry..."
