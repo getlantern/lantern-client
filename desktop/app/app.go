@@ -188,12 +188,6 @@ func (app *App) Run(isMain bool) {
 			}()
 		}
 
-		app.statsTracker.AddListener(func(newStats stats.Stats) {
-			if newStats.HasSucceedingProxy {
-				app.setHasSucceedingProxy(true)
-			}
-		})
-
 		cacheDir, err := os.UserCacheDir()
 		if err != nil {
 			cacheDir = os.TempDir()

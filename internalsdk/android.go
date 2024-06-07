@@ -568,6 +568,7 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		func() bool { return false }, // always connected
 		func() bool { return true },
 		func() bool { return false }, // do not proxy private hosts on Android
+		func() bool { return true },  // auto report
 		flags,
 		userConfig,
 		NewStatsTracker(session),
@@ -575,14 +576,19 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		func() string { return "" }, // only used for desktop
 		ReverseDns(grabber),
 		func(category, action, label string) {},
-		client.WithOnConfig(func(g *config.Global, s config.Source) {
+		flashlight.WithOnConfig(func(g *config.Global, s config.Source) {
 			session.SetHasConfigFetched(true)
 		}),
-		client.WithProxies(func(d []bandit.Dialer, s config.Source) {
+		flashlight.WithOnProxies(func(d []bandit.Dialer, s config.Source) {
 			session.SetHasProxyFetched(true)
 		}),
-		client.WithSucceedingProxy(func(isConnected bool) {
-			session.SetOnSuccess(isConnected)
+		flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
+			if err != nil && !hasSucceeding {
+				session.SetOnSuccess(false)
+			}
+		}),
+		flashlight.WithOnSucceedingProxy(func() {
+			session.SetOnSuccess(true)
 		}),
 	)
 	if err != nil {
@@ -606,13 +612,13 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
 	checkFeatures := func() {
 		replicaServer.CheckEnabled()
-		chatEnabled := runner.Client().FeatureEnabled("chat", common.ApplicationVersion)
+		chatEnabled := runner.FeatureEnabled("chat", common.ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
-			showAdsEnabled := runner.Client().FeatureEnabled("interstitialads", common.ApplicationVersion)
+			showAdsEnabled := runner.FeatureEnabled("interstitialads", common.ApplicationVersion)
 			log.Debugf("Show ads enabled? %v", showAdsEnabled)
 			session.SetShowInterstitialAdsEnabled(showAdsEnabled)
 
