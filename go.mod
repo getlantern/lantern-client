@@ -69,6 +69,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/jackpal/gateway v1.0.13
+	github.com/joho/godotenv v1.5.1
 	github.com/leekchan/accounting v1.0.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/stretchr/testify v1.9.0

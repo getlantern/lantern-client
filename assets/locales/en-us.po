@@ -1552,5 +1552,9 @@ msgid "establish_connection_to_server"
 msgstr "Establish connection to server"
 
 
+msgid "file_size_limit_title"
+msgstr "Limit Reached"
 
+msgid "file_size_limit_description"
+msgstr "Attachment sizes should be under 100 MB"
 
