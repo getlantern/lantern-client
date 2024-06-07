@@ -127,10 +127,10 @@ dependencies:
   flutter_markdown: ^0.6.17+1
 
   # Purchase
-  in_app_purchase: ^3.1.11
+  in_app_purchase: ^3.2.0
 
   # Ads
-  google_mobile_ads: ^5.0.0
+  google_mobile_ads: ^5.1.0
   retry: ^3.1.2
   # Generate bindings to native libraries
   ffi: ^2.1.0
