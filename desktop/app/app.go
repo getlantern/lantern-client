@@ -189,7 +189,9 @@ func (app *App) Run(isMain bool) {
 		}
 
 		app.statsTracker.AddListener(func(newStats stats.Stats) {
-			app.onSucceedingProxy(newStats.HasSucceedingProxy)
+			if newStats.HasSucceedingProxy {
+				app.setHasSucceedingProxy(true)
+			}
 		})
 
 		cacheDir, err := os.UserCacheDir()
@@ -206,7 +208,8 @@ func (app *App) Run(isMain bool) {
 			app.configDir,
 			app.Flags.VPN,
 			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
-			func() bool { return false },                          // on desktop, we do not allow private hosts
+			app.settings.GetProxyAll,
+			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
 			app.Flags.AsMap(),
 			app.settings,
@@ -215,10 +218,16 @@ func (app *App) Run(isMain bool) {
 			app.settings.GetLanguage,
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
 			app.analyticsSession.EventWithLabel,
-			flashlightClient.WithOnConfig(app.onConfigUpdate),
-			flashlightClient.WithProxies(app.onProxiesUpdate),
-			flashlightClient.WithIsPro(app.IsPro),
-			flashlightClient.WithSucceedingProxy(app.onSucceedingProxy),
+			flashlight.WithOnConfig(app.onConfigUpdate),
+			flashlight.WithOnProxies(app.onProxiesUpdate),
+			flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
+				if err != nil && !hasSucceeding {
+					app.onSucceedingProxy(hasSucceeding)
+				}
+			}),
+			flashlight.WithOnSucceedingProxy(func() {
+				app.onSucceedingProxy(true)
+			}),
 		)
 		if err != nil {
 			app.Exit(err)
@@ -238,9 +247,9 @@ func (app *App) Run(isMain bool) {
 
 		notifyConfigSaveErrorOnce := new(sync.Once)
 
-		app.flashlight.Client().SetErrorHandler(func(t flashlightClient.HandledErrorType, err error) {
+		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
 			switch t {
-			case flashlightClient.ErrorTypeProxySaveFailure, flashlightClient.ErrorTypeConfigSaveFailure:
+			case flashlight.ErrorTypeProxySaveFailure, flashlight.ErrorTypeConfigSaveFailure:
 				log.Errorf("failed to save config (%v): %v", t, err)
 
 				notifyConfigSaveErrorOnce.Do(func() {
@@ -281,7 +290,7 @@ func (app *App) setFeatures(enabledFeatures map[string]bool, values map[features
 // (based on the env vars at build time or the user's settings/geolocation)
 // and starts appropriate services
 func (app *App) checkEnabledFeatures() {
-	enabledFeatures := app.flashlight.Client().EnabledFeatures()
+	enabledFeatures := app.flashlight.EnabledFeatures()
 
 	app.setFeatures(enabledFeatures, features.EnabledFeatures)
 
@@ -351,20 +360,6 @@ func (app *App) beforeStart(listenAddr string) {
 	}))
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
-
-// Connect turns on proxying
-// func (app *App) Connect() {
-// 	app.analyticsSession.Event("systray-menu", "connect")
-// 	ops.Begin("connect").End()
-// 	app.settings.SetDisconnected(false)
-// }
-
-// // Disconnect turns off proxying
-// func (app *App) Disconnect() {
-// 	app.analyticsSession.Event("systray-menu", "disconnect")
-// 	ops.Begin("disconnect").End()
-// 	app.settings.SetDisconnected(true)
-// }
 
 // GetLanguage returns the user language
 func (app *App) GetLanguage() string {
@@ -454,7 +449,7 @@ func (app *App) onSucceedingProxy(succeeding bool) {
 		hasSucceedingProxy = 1
 	}
 	atomic.StoreInt32(&app.hasSucceedingProxy, hasSucceedingProxy)
-	log.Debugf("[Startup Desktop] onSucceedingProxy  %v", succeeding)
+	log.Debugf("[Startup Desktop] onSucceedingProxy %v", succeeding)
 }
 
 // HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
