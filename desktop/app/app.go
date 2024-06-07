@@ -101,6 +101,7 @@ type App struct {
 func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, settings *settings.Settings) *App {
 	analyticsSession := newAnalyticsSession(settings)
 	app := &App{
+		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
 		proClient:                 proClient,
