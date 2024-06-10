@@ -31,25 +31,7 @@ class AppMethods {
     const allChars =
         'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789!@#\$%^&*()-=+{};:,<.>/?';
     final random = Random.secure();
-
-    return List.generate(8, (i) => allChars[random.nextInt(allChars.length)])
+   return List.generate(8, (i) => allChars[random.nextInt(allChars.length)])
         .join();
   }
-// String generatePassword() {
-//   String _lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
-//   String _uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-//   String _numbers = '0123456789';
-//   String _specialCharacters = '!@#\$%^&*()-+';
-//
-//   // Combine all characters into one string
-//   String _allCharacters =
-//       _lowercaseLetters + _uppercaseLetters + _numbers + _specialCharacters;
-//
-//   Random _random = Random.secure();
-//
-//   // Generate a password by picking a random character from the combined string
-//   return List.generate(8,
-//           (index) => _allCharacters[_random.nextInt(_allCharacters.length)])
-//       .join();
-// }
 }
