@@ -146,6 +146,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
     try {
       context.loaderOverlay.show();
       final userTempPass = AppMethods().generatePassword();
+      mainLogger.d('Generated password is $userTempPass');
       await sessionModel.signUp(
           _emailController.text.validateEmail, userTempPass);
       //start forgot password flow

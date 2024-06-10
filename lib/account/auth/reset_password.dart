@@ -78,7 +78,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                       child: obscureText
                           ? const Icon(CupertinoIcons.eye_slash_fill)
                           : SvgPicture.asset(ImagePaths.eye)),
-                  // suffix: SvgPicture.asset(ImagePaths.eye),
                   onChanged: (value) {
                     setState(() {});
                   },

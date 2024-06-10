@@ -19,7 +19,8 @@ extension ErrorX on Object {
         if (description.contains("wrong-link-code")) {
           return "wrong_link_code".i18n;
         }
-        if (description.contains("we_are_experiencing_technical_difficulties")) {
+        if (description
+            .contains("we_are_experiencing_technical_difficulties")) {
           return "we_are_experiencing_technical_difficulties".i18n;
         }
         if (description.contains("user already exists")) {
@@ -49,12 +50,12 @@ extension Validations on String? {
 
 extension PasswordValidations on String {
   bool isPasswordValid() {
+    trim(); // Remove spaces at the start and end
     bool has6Characters = length >= 8;
     bool hasUppercase = contains(RegExp(r'[A-Z]'));
     bool hasLowercase = contains(RegExp(r'[a-z]'));
     bool hasNumber = contains(RegExp(r'[0-9]'));
     bool hasSpecialCharacter = contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
-
     return has6Characters &&
         hasUppercase &&
         hasLowercase &&

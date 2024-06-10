@@ -236,7 +236,8 @@ func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) *protos.Us
 
 // Takes password and email, salt and returns encrypted key
 func GenerateEncryptedKey(password string, email string, salt []byte) *big.Int {
-	combinedInput := password + email
+	lowerCaseEmail := strings.ToLower(email)
+	combinedInput := password + lowerCaseEmail
 	encryptedKey := pbkdf2.Key([]byte(combinedInput), salt, 4096, 32, sha256.New)
 	encryptedKeyBigInt := big.NewInt(0).SetBytes(encryptedKey)
 	return encryptedKeyBigInt

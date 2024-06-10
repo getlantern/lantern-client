@@ -911,6 +911,7 @@ func setResellerCode(m *baseModel, resellerCode string) error {
 }
 
 func getUserSalt(m *SessionModel, email string) ([]byte, error) {
+	lowerCaseEmail := strings.ToLower(email)
 	userSalt, err := pathdb.Get[[]byte](m.db, pathUserSalt)
 	if err != nil {
 		return nil, err
@@ -920,7 +921,7 @@ func getUserSalt(m *SessionModel, email string) ([]byte, error) {
 		return userSalt, nil
 	}
 	log.Debugf("Salt not found calling api for %s", email)
-	salt, err := m.authClient.GetSalt(context.Background(), email)
+	salt, err := m.authClient.GetSalt(context.Background(), lowerCaseEmail)
 	if err != nil {
 		return nil, err
 	}
@@ -1038,12 +1039,9 @@ func cacheUserDetail(m *baseModel, userDetail *protos.User) error {
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
 	// Check if email is there is yes then store it
 	if email != "" {
-		err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 			return pathdb.Put(tx, pathEmailAddress, email, "")
 		})
-		if err != nil {
-			return err
-		}
 	}
 
 	level, err := getUserLevel(session.baseModel)
@@ -1104,7 +1102,8 @@ func checkAdsEnabled(session *SessionModel) error {
 
 }
 func redeemResellerCode(m *SessionModel, email string, resellerCode string) error {
-	err := setEmail(m.baseModel, email)
+	lowerCaseEmail := strings.ToLower(email)
+	err := setEmail(m.baseModel, lowerCaseEmail)
 	if err != nil {
 		log.Errorf("Error while setting email %v", err)
 		return err
@@ -1115,7 +1114,7 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 		return err
 	}
 
-	err, purchaseData := createPurchaseData(m, email, paymentProviderResellerCode, resellerCode, "", "")
+	err, purchaseData := createPurchaseData(m, lowerCaseEmail, paymentProviderResellerCode, resellerCode, "", "")
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
@@ -1160,7 +1159,8 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 //	Then use that salt, password and email generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
 //	Then use srpClient.Verifier() to generate verifierKey
 func signup(session *SessionModel, email string, password string) error {
-	err := setEmail(session.baseModel, email)
+	lowerCaseEmail := strings.ToLower(email)
+	err := setEmail(session.baseModel, lowerCaseEmail)
 	if err != nil {
 		return err
 	}
@@ -1169,18 +1169,18 @@ func signup(session *SessionModel, email string, password string) error {
 		return err
 	}
 
-	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, salt), nil)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
 	verifierKey, err := srpClient.Verifier()
 	if err != nil {
 		return err
 	}
 	signUpRequestBody := &protos.SignupRequest{
-		Email:                 email,
+		Email:                 lowerCaseEmail,
 		Salt:                  salt,
 		Verifier:              verifierKey.Bytes(),
 		SkipEmailConfirmation: true,
 	}
-	log.Debugf("Sign up request email %v, salt %v verifier %v verifiter in bytes", email, salt, verifierKey, verifierKey.Bytes())
+	log.Debugf("Sign up request email %v, salt %v verifier %v verifiter in bytes %v", lowerCaseEmail, salt, verifierKey, verifierKey.Bytes())
 	signupResponse, err := session.authClient.SignUp(context.Background(), signUpRequestBody)
 	if err != nil {
 		return err
@@ -1191,7 +1191,7 @@ func signup(session *SessionModel, email string, password string) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:          salt,
 			pathIsAccountVerified: false,
-			pathEmailAddress:      email,
+			pathEmailAddress:      lowerCaseEmail,
 		})
 	})
 	if err != nil {
@@ -1241,20 +1241,23 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 
 // Todo find way to optimize this method
 func login(session *SessionModel, email string, password string) error {
+	lowerCaseEmail := strings.ToLower(email)
 	start := time.Now()
 	// Get the salt
-	salt, err := getUserSalt(session, email)
+	salt, err := getUserSalt(session, lowerCaseEmail)
 	if err != nil {
 		return err
 	}
 
+	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
+	log.Debugf("Encrypted key %v Login", encryptedKey)
 	// Prepare login request body
-	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, salt), nil)
+	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
 	//Send this key to client
 	A := client.EphemeralPublic()
 	//Create body
 	prepareRequestBody := &protos.PrepareRequest{
-		Email: email,
+		Email: lowerCaseEmail,
 		A:     A.Bytes(),
 	}
 	srpB, err := session.authClient.LoginPrepare(context.Background(), prepareRequestBody)
@@ -1281,7 +1284,7 @@ func login(session *SessionModel, email string, password string) error {
 	// // Step 3
 
 	// // check if the server proof is valid
-	if !client.GoodServerProof(salt, email, srpB.Proof) {
+	if !client.GoodServerProof(salt, lowerCaseEmail, srpB.Proof) {
 		return log.Errorf("user_not_found error while checking server proof%v", err)
 	}
 
@@ -1294,7 +1297,7 @@ func login(session *SessionModel, email string, password string) error {
 		return err
 	}
 	loginRequestBody := &protos.LoginRequest{
-		Email:    email,
+		Email:    lowerCaseEmail,
 		Proof:    clientProof,
 		DeviceId: deviceId,
 	}
@@ -1389,8 +1392,9 @@ func deviceLimitFlow(session *SessionModel, login *protos.LoginResponse) error {
 
 func startRecoveryByEmail(session *SessionModel, email string) error {
 	//Create body
+	lowerCaseEmail := strings.ToLower(email)
 	prepareRequestBody := &protos.StartRecoveryByEmailRequest{
-		Email: email,
+		Email: lowerCaseEmail,
 	}
 	recovery, err := session.authClient.StartRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
@@ -1402,25 +1406,29 @@ func startRecoveryByEmail(session *SessionModel, email string) error {
 
 func completeRecoveryByEmail(session *SessionModel, email string, code string, password string) error {
 	//Create body
+	lowerCaseEmail := strings.ToLower(email)
 	newsalt, err := GenerateSalt()
 	if err != nil {
 		return err
 	}
 	log.Debugf("Slat %v and length %v", newsalt, len(newsalt))
 
-	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, newsalt), nil)
+	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, newsalt)
+	log.Debugf("Encrypted key %v completeRecoveryByEmail", encryptedKey)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
 	verifierKey, err := srpClient.Verifier()
 	if err != nil {
 		return err
 	}
 
 	prepareRequestBody := &protos.CompleteRecoveryByEmailRequest{
-		Email:       email,
+		Email:       lowerCaseEmail,
 		Code:        code,
 		NewSalt:     newsalt,
 		NewVerifier: verifierKey.Bytes(),
 	}
 
+	log.Debugf("new Verifier %v and salt %v", verifierKey.Bytes(), newsalt)
 	recovery, err := session.authClient.CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
@@ -1438,8 +1446,9 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 
 // This will validate code send by server
 func validateRecoveryByEmail(session *SessionModel, email string, code string) error {
+	lowerCaseEmail := strings.ToLower(email)
 	prepareRequestBody := &protos.ValidateRecoveryCodeRequest{
-		Email: email,
+		Email: lowerCaseEmail,
 		Code:  code,
 	}
 	recovery, err := session.authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
@@ -1456,20 +1465,22 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 // Change Email flow
 
 func startChangeEmail(session SessionModel, email string, newEmail string, password string) error {
-	salt, err := getUserSalt(&session, email)
+	lowerCaseEmail := strings.ToLower(email)
+	lowerCaseNewEmail := strings.ToLower(newEmail)
+	salt, err := getUserSalt(&session, lowerCaseEmail)
 	if err != nil {
 		return err
 	}
 
 	// Prepare login request body
-	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, salt), nil)
+	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
 
 	//Send this key to client
 	A := client.EphemeralPublic()
 
 	//Create body
 	prepareRequestBody := &protos.PrepareRequest{
-		Email: email,
+		Email: lowerCaseEmail,
 		A:     A.Bytes(),
 	}
 	srpB, err := session.authClient.LoginPrepare(context.Background(), prepareRequestBody)
@@ -1493,7 +1504,7 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 	}
 
 	// // check if the server proof is valid
-	if !client.GoodServerProof(salt, email, srpB.Proof) {
+	if !client.GoodServerProof(salt, lowerCaseEmail, srpB.Proof) {
 		return log.Errorf("user_not_found error while checking server proof%v", err)
 	}
 
@@ -1503,8 +1514,8 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 	}
 
 	changeEmailRequestBody := &protos.ChangeEmailRequest{
-		OldEmail: email,
-		NewEmail: newEmail,
+		OldEmail: lowerCaseEmail,
+		NewEmail: lowerCaseNewEmail,
 		Proof:    clientProof,
 	}
 
@@ -1571,23 +1582,24 @@ func deleteAccount(session SessionModel, password string) error {
 		return errors.New("Email not found")
 	}
 
-	salt, err := getUserSalt(&session, email)
+	lowerCaseEmail := strings.ToLower(email)
+	salt, err := getUserSalt(&session, lowerCaseEmail)
 	if err != nil {
 		return err
 	}
 
 	// Prepare login request body
-	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, email, salt), nil)
+	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
 
 	//Send this key to client
 	A := client.EphemeralPublic()
 
 	//Create body
 	prepareRequestBody := &protos.PrepareRequest{
-		Email: email,
+		Email: lowerCaseEmail,
 		A:     A.Bytes(),
 	}
-	log.Debugf("Login prepare request  email %v, a bytes %v", email, A.Bytes())
+	log.Debugf("Login prepare request  email %v, a bytes %v", lowerCaseEmail, A.Bytes())
 	srpB, err := session.authClient.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return err
@@ -1607,7 +1619,7 @@ func deleteAccount(session SessionModel, password string) error {
 	}
 
 	// // check if the server proof is valid
-	if !client.GoodServerProof(salt, email, srpB.Proof) {
+	if !client.GoodServerProof(salt, lowerCaseEmail, srpB.Proof) {
 		return log.Errorf("user_not_found error while checking server proof%v", err)
 	}
 
@@ -1621,13 +1633,13 @@ func deleteAccount(session SessionModel, password string) error {
 		return err
 	}
 	changeEmailRequestBody := &protos.DeleteUserRequest{
-		Email:     email,
+		Email:     lowerCaseEmail,
 		Proof:     clientProof,
 		Permanent: true,
 		DeviceId:  deviceId,
 	}
 
-	log.Debugf("Delete Account request email %v prooof %v deviceId %v", email, clientProof, deviceId)
+	log.Debugf("Delete Account request email %v prooof %v deviceId %v", lowerCaseEmail, clientProof, deviceId)
 	isAccountDeleted, err := session.authClient.DeleteAccount(context.Background(), changeEmailRequestBody)
 	if err != nil {
 		return err
