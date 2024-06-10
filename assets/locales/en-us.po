@@ -178,7 +178,7 @@ msgstr "I confirm that I want to delete my chat data"
 msgid "Pro Account Management"
 msgstr "Pro Account Management"
 
-msgid "Link Device"
+msgid "link_device"
 msgstr "Link Device"
 
 msgid "Upgrade to Lantern Pro"

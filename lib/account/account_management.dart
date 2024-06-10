@@ -14,6 +14,7 @@ class _AccountManagementState extends State<AccountManagement>
     with SingleTickerProviderStateMixin {
   late final TabController tabController;
   bool textCopied = false;
+
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
@@ -387,11 +388,9 @@ class _AccountManagementState extends State<AccountManagement>
       context.popRoute();
     } catch (e) {
       context.loaderOverlay.hide();
-      showError(context,error: e);
-
+      showError(context, error: e);
     }
   }
-
 }
 
 class UserDevices extends StatelessWidget {
@@ -461,9 +460,7 @@ class UserDevices extends StatelessWidget {
                       ? []
                       : [
                           CText(
-                            (isMyDevice ? '' : 'Remove')
-                                .i18n
-                                .toUpperCase(),
+                            (isMyDevice ? '' : 'Remove').i18n.toUpperCase(),
                             style: tsButtonPink,
                           )
                         ],
@@ -472,14 +469,13 @@ class UserDevices extends StatelessWidget {
             }).toList(),
             // IOS does not need device linking
             // User should use Username and Password flow
-            if(!Platform.isIOS)
             if (devices.devices.length < 3)
               ListItemFactory.settingsItem(
                 content: '',
                 onTap: () async => await context.pushRoute(ApproveDevice()),
                 trailingArray: [
                   CText(
-                    'Link Device'.i18n.toUpperCase(),
+                    'link_device'.i18n.toUpperCase(),
                     style: tsButtonPink,
                   )
                 ],

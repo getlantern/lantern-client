@@ -31,7 +31,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.developmentMode = !(isRunningFromAppStore() && isRunningInTestFlightEnvironment())
     opts.playVersion = (isRunningFromAppStore() || isRunningInTestFlightEnvironment())
     opts.timeZone = TimeZone.current.identifier
-    opts.device = modelName  // IOS does not provide Device name directly
+    opts.device = modelName  
     opts.model = modelName
     opts.osVersion = systemVersion
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest

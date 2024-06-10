@@ -159,7 +159,6 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-      if(!Platform.isIOS)
       ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
         content: 'add_device'.i18n,
@@ -201,6 +200,7 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
+
       /// Still needs to figure out what to do when user signout
       /// or even if want to provide this signout option functionality
       sessionModel.isUserSignedIn((context, hasSignedIn, child) {
