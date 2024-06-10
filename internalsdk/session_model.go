@@ -441,6 +441,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	if err != nil {
 		return err
 	}
+	log.Debugf("my device id %v", opts.DeviceID)
 	err = pathdb.PutAll(tx, map[string]interface{}{
 		pathDevelopmentMode: opts.DevelopmentMode,
 		pathDeviceID:        opts.DeviceID,
@@ -963,35 +964,33 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 
 	userDetail := resp.User
 
-	// todo if user removes device then it should reomve pro status from server itself
-
-	// currentDevice, err := session.GetDeviceID()
-	// if err != nil {
-	// 	log.Debugf("Error while getting device id %v", err)
-	// }
-	// // Check if devuce id is connect to same device if not create new user
-	// // THis is for the case when user removed device from other device
-	// found := false
-	// if userDetail.Devices != nil {
-	// 	for _, device := range userDetail.Devices {
-	// 		if device.Id == currentDevice {
-	// 			found = true
-	// 			break
-	// 		}
-	// 	}
-	// }
-	// log.Debugf("Device found %v", found)
-	// if !found {
-	// 	// Device has not found in the list
-	// 	// Switch to free user
-	// 	signOut(*session)
-	// 	log.Debugf("Device has not found in the list creating new user")
-	// 	err = session.userCreate(context.Background())
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	return nil
-	// }
+	currentDevice, err := session.GetDeviceID()
+	if err != nil {
+		log.Debugf("Error while getting device id %v", err)
+	}
+	// Check if devuce id is connect to same device if not create new user
+	// this is for the case when user removed device from other device
+	found := false
+	if userDetail.Devices != nil {
+		for _, device := range userDetail.Devices {
+			if device.Id == currentDevice {
+				found = true
+				break
+			}
+		}
+	}
+	log.Debugf("Device found %v", found)
+	if !found {
+		// Device has not found in the list
+		// Switch to free user
+		signOut(*session)
+		log.Debugf("Device has not found in the list creating new user")
+		err = session.userCreate(context.Background())
+		if err != nil {
+			return err
+		}
+		return nil
+	}
 
 	log.Debugf("User detail: %+v", userDetail)
 	err = cacheUserDetail(session.baseModel, userDetail)
@@ -1559,14 +1558,14 @@ func completeChangeEmail(session SessionModel, email string, newEmail string, pa
 
 // Clear slat and change accoutn state
 func signOut(session SessionModel) error {
-	err := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+	err1 := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:     nil,
 			pathEmailAddress: "",
 		})
 	})
-	if err != nil {
-		return err
+	if err1 != nil {
+		return err1
 	}
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put[bool](tx, pathIsUserLoggedIn, false, "")

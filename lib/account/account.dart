@@ -21,11 +21,14 @@ class AccountMenu extends StatelessWidget {
     context.pushRoute(const Support());
   }
 
-  void onSignOut(BuildContext context) {
+  Future<void> onSignOut(BuildContext context) async {
     try {
-      sessionModel.signOut();
+      context.loaderOverlay.show();
+      await sessionModel.signOut();
+      context.loaderOverlay.hide();
     } catch (e) {
       print(e);
+      context.loaderOverlay.hide();
     }
   }
 

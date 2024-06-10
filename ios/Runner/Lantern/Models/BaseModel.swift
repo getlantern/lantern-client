@@ -45,6 +45,7 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
 
   internal static func getDatabasePath() -> String {
     let fileManager = FileManager.default
+      
     var dbDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
       .appendingPathComponent("masterDBv3")
     var values = URLResourceValues()

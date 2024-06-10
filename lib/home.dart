@@ -104,16 +104,31 @@ class _HomePageState extends State<HomePage> with WindowListener {
   }
 
   Future<void> _checkForFirstTimeVisit() async {
-    if(!Platform.isIOS) return;
-    //if the user pro for first time by passing the pro user notifier
-    if (sessionModel.proUserNotifier.value ?? false) {
-      sessionModel.setFirstTimeVisit();
-      return;
+    if (!Platform.isIOS) return;
+    checkForFirstTimeVisit() async {
+      if (sessionModel.proUserNotifier.value!) {
+        sessionModel.setFirstTimeVisit();
+        if (sessionModel.proUserNotifier.hasListeners) {
+          sessionModel.proUserNotifier.removeListener(() {});
+        }
+        return;
+      }
+      final isFirstTime = await sessionModel.isUserFirstTimeVisit();
+      if (isFirstTime) {
+        context.router.push(const AuthLanding());
+        sessionModel.setFirstTimeVisit();
+        if (sessionModel.proUserNotifier.hasListeners) {
+          sessionModel.proUserNotifier.removeListener(() {});
+        }
+      }
     }
-    final isFirstTime = await sessionModel.isUserFirstTimeVisit();
-    if (isFirstTime) {
-      context.router.push(const AuthLanding());
-      sessionModel.setFirstTimeVisit();
+
+    if (sessionModel.proUserNotifier.value == null) {
+      checkForFirstTimeVisit();
+    } else {
+      sessionModel.proUserNotifier.addListener(() async {
+        checkForFirstTimeVisit();
+      });
     }
   }
 
