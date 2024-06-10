@@ -1,3 +1,5 @@
+import 'package:catcher_2/core/catcher_2.dart';
+import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/common/app_methods.dart';
@@ -182,16 +184,13 @@ class Settings extends StatelessWidget {
                   ),
                 ),
                 trailingArray: [
-                  FlutterSwitch(
+                  AdvancedSwitch(
                     width: 44.0,
                     height: 24.0,
-                    valueFontSize: 12.0,
-                    padding: 2,
-                    toggleSize: 18.0,
-                    value: proxyAll,
+                    initialValue: proxyAll,
                     activeColor: indicatorGreen,
                     inactiveColor: offSwitchColor,
-                    onToggle: (bool newValue) {
+                    onChanged: ( newValue) {
                       sessionModel.setProxyAll(newValue);
                     },
                   ),

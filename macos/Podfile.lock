@@ -3,6 +3,9 @@ PODS:
     - FlutterMacOS
   - audioplayers_darwin (0.0.1):
     - FlutterMacOS
+  - connectivity_plus (0.0.1):
+    - FlutterMacOS
+    - ReachabilitySwift
   - device_info_plus (0.0.1):
     - FlutterMacOS
   - emoji_picker_flutter (0.0.1):
@@ -21,6 +24,7 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - ReachabilitySwift (5.2.2)
   - screen_retriever (0.0.1):
     - FlutterMacOS
   - Sentry/HybridSDK (8.21.0):
@@ -53,6 +57,7 @@ PODS:
 DEPENDENCIES:
   - app_links (from `Flutter/ephemeral/.symlinks/plugins/app_links/macos`)
   - audioplayers_darwin (from `Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos`)
+  - connectivity_plus (from `Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos`)
   - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - emoji_picker_flutter (from `Flutter/ephemeral/.symlinks/plugins/emoji_picker_flutter/macos`)
   - flutter_image_compress_macos (from `Flutter/ephemeral/.symlinks/plugins/flutter_image_compress_macos/macos`)
@@ -75,6 +80,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - OrderedSet
+    - ReachabilitySwift
     - Sentry
     - SentryPrivate
 
@@ -83,6 +89,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/app_links/macos
   audioplayers_darwin:
     :path: Flutter/ephemeral/.symlinks/plugins/audioplayers_darwin/macos
+  connectivity_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/connectivity_plus/macos
   device_info_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
   emoji_picker_flutter:
@@ -123,6 +131,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   app_links: 10e0a0ab602ffaf34d142cd4862f29d34b303b2a
   audioplayers_darwin: dcad41de4fbd0099cb3749f7ab3b0cb8f70b810c
+  connectivity_plus: 18d3c32514c886e046de60e9c13895109866c747
   device_info_plus: 5401765fde0b8d062a2f8eb65510fb17e77cf07f
   emoji_picker_flutter: 533634326b1c5de9a181ba14b9758e6dfe967a20
   flutter_image_compress_macos: c26c3c13ea0f28ae6dea4e139b3292e7729f99f1
@@ -132,6 +141,7 @@ SPEC CHECKSUMS:
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: 02d7a575e80f194102bef286361c6c326e4c29ce
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
+  ReachabilitySwift: 2128f3a8c9107e1ad33574c6e58e8285d460b149
   screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
   Sentry: ebc12276bd17613a114ab359074096b6b3725203
   sentry_flutter: dff1df05dc39c83d04f9330b36360fc374574c5e
@@ -147,4 +157,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 9ebaf0ce3d369aaa26a9ea0e159195ed94724cf3
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.14.3

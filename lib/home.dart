@@ -1,3 +1,4 @@
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/account/privacy_disclosure.dart';
@@ -26,7 +27,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
-
   Function()? _cancelEventSubscription;
 
   @override
@@ -92,6 +92,8 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       }
     });
   }
+
+
 
   void _initWindowManager() async {
     windowManager.addListener(this);
@@ -221,7 +223,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                 ? Chats()
                 : Welcome();
       case TAB_VPN:
-        return VPNTab();
+        return const VPNTab();
       case TAB_REPLICA:
         return ReplicaTab();
       case TAB_ACCOUNT:
