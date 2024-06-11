@@ -3,22 +3,22 @@
 # Kudret <kudretemre@hotmail.com.tr>, 2022
 # Zeynel Cebeci <cebeciz@gmail.com>, 2022
 # Aşkın Özgür <askin@askin.ws>, 2022
-# Derek F <derek@getlantern.org>, 2023
 # M. Utkun Uyar, 2023
 # Emre Deniz, 2023
-# Volkan Gezer <volkangezer@gmail.com>, 2023
 # Alexander B. <road2monstercat@gmail.com>, 2023
 # fffw <fffw@getlantern.org>, 2023
 # Gökhan Kalayci <gkmediagokhan@gmail.com>, 2023
 # Lantern, 2023
-# efe kerem sözeri <eksozeri@hotmail.com>, 2023
-# e2f <projects@e2f.com>, 2023
-# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023
-# Teo Westbrook, 2023
+# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2024
+# e2f <projects@e2f.com>, 2024
+# efe kerem sözeri <eksozeri@hotmail.com>, 2024
+# Volkan Gezer <volkangezer@gmail.com>, 2024
+# Derek F <derek@getlantern.org>, 2024
+# Teo Westbrook, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Teo Westbrook, 2023\n"
+"Last-Translator: Teo Westbrook, 2024\n"
 "Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -49,6 +49,12 @@ msgstr "Günlük Veri Kullanımı"
 
 msgid "is"
 msgstr ":"
+
+msgid "connect"
+msgstr "Bağlan"
+
+msgid "disconnect"
+msgstr "Bağlantıyı kes"
 
 msgid "connected"
 msgstr "Bağlandı"
@@ -202,17 +208,35 @@ msgstr "Engellenen sitelere erişilemiyor"
 msgid "cannot_complete_purchase"
 msgstr "Satın alma tamamlanamıyor"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "Giriş yapılamadı"
 
 msgid "spinner_loads_endlessly"
 msgstr "Yükleme ekranı sürekli dönüyor"
 
+msgid "slow"
+msgstr "Yavaş"
+
+msgid "cannot_link_devices"
+msgstr "Cihazlar ilişkilendirilemiyor"
+
+msgid "wrong_device_linking_code"
+msgstr "Yanlış veya geçersiz cihaz bağlama kodu"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "Uygulama çökmeleri"
+
 msgid "other"
 msgstr "Diğer"
 
 msgid "issue_description"
-msgstr "Sorun Açıklaması"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "Güncellemeleri Kontrol Et"
@@ -282,6 +306,9 @@ msgstr "Lantern Pro E-Postası"
 msgid "lantern_desktop"
 msgstr "Lantern Masaüstü"
 
+msgid "report_description"
+msgstr "Sorun Açıklaması"
+
 msgid "report_issue"
 msgstr ""
 
@@ -339,6 +366,9 @@ msgstr "ay"
 
 msgid "enter_email"
 msgstr "E-posta Gir"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -492,6 +522,18 @@ msgstr "Evet"
 msgid "No"
 msgstr "Hayır"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "Bağlama kodunu girin veya yapıştırın"
 
@@ -529,6 +571,9 @@ msgstr "Oturumu Kapat"
 msgid "confirm_remove_device"
 msgstr "Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "Sınırsız Veri"
 
@@ -540,6 +585,9 @@ msgstr "Reklamsız"
 
 msgid "choose_plan"
 msgstr "Plan Seç"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "3 cihaza kadar bağlayın"
@@ -1547,3 +1595,84 @@ msgstr "SSS"
 
 msgid "add_device"
 msgstr "Hesap Ekle"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "Cihaz Eklendi"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "Geçersiz doğrulama kodu"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "Yenile"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "Tamam"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

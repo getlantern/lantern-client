@@ -1,22 +1,22 @@
 # 
 # Translators:
-# tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2023
 # e2f <projects@e2f.com>, 2023
-# Ox Cart <ox@getlantern.org>, 2023
-# Aki, 2023
 # 474874f569f96a33809d02f1de71479e_77020aa, 2024
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
 # YFdyh000 <yfdyh000@gmail.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
-# Lantern, 2024
 # Po-Chun Huang <aphroteus@gmail.com>, 2024
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
+# tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2024
+# Aki, 2024
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
+# Ox Cart <ox@getlantern.org>, 2024
+# Lantern, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024\n"
+"Last-Translator: Lantern, 2024\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/lantern-1/teams/94371/zh_HK/)\n"
 "Language: zh_HK\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -44,6 +44,12 @@ msgstr "每日數據使用量"
 
 msgid "is"
 msgstr "是"
+
+msgid "connect"
+msgstr "連線"
+
+msgid "disconnect"
+msgstr "斷線"
 
 msgid "connected"
 msgstr "已連線"
@@ -180,17 +186,35 @@ msgstr "Cannot access blocked sites"
 msgid "cannot_complete_purchase"
 msgstr "无法完成购买"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "无法登录"
 
 msgid "spinner_loads_endlessly"
 msgstr "始终在加载中"
 
+msgid "slow"
+msgstr "Slow"
+
+msgid "cannot_link_devices"
+msgstr "Cannot link devices"
+
+msgid "wrong_device_linking_code"
+msgstr "设备关联代码错误或无效"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "蓝灯软件崩溃"
+
 msgid "other"
 msgstr "Other"
 
 msgid "issue_description"
-msgstr "Issue Description"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "检查更新"
@@ -255,6 +279,9 @@ msgstr "蓝灯专业版电子邮件"
 msgid "lantern_desktop"
 msgstr "Lantern 桌面"
 
+msgid "report_description"
+msgstr "Issue Description"
+
 msgid "report_issue"
 msgstr ""
 
@@ -310,6 +337,9 @@ msgstr "月"
 
 msgid "enter_email"
 msgstr "Enter Email"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr "获取计划信息出错，请重启蓝灯后，再次尝试。"
@@ -452,6 +482,18 @@ msgstr "是"
 msgid "No"
 msgstr "否"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "輸入或貼上連結碼"
 
@@ -485,6 +527,9 @@ msgstr "登出"
 msgid "confirm_remove_device"
 msgstr "確定要將此設備自專業版帳號上移除？"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "無流量限制"
 
@@ -496,6 +541,9 @@ msgstr "No Ads"
 
 msgid "choose_plan"
 msgstr "Choose Plan"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "Connect up to 3 devices"
@@ -1459,3 +1507,84 @@ msgstr "蓝灯论坛"
 
 msgid "add_device"
 msgstr "Add Device"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "设备已授权"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "無效的認證碼"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "重新整理"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "Got it"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

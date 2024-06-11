@@ -3,23 +3,23 @@
 # Abdelaziz “Azhou” Houcini <azhouhou@gmail.com>, 2022
 # محيي الدين <tx99h4@hotmail.com>, 2022
 # Layla Taha <layla@asl19.org>, 2022
-# Derek F <derek@getlantern.org>, 2022
 # lamine Kacimi <k_lamine27@yahoo.fr>, 2023
 # ouss <oussjarrouse@gmail.com>, 2023
 # Mhawesh, 2023
 # e2f <projects@e2f.com>, 2023
-# Amin Jobran, 2023
 # Rima Sghaier, 2023
 # Abdulaziz AlObaili <dr.alobaili@gmail.com>, 2023
 # Lantern, 2023
-# dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2023
-# 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2023
-# 6ad90dadbe5d08991a98500e1efbdbb4_9d79615 <7392e61add82b364ab0393a04573af48_721156>, 2023
-# Abed Abedd <abderrahman.younis@gmail.com>, 2023
+# dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2024
+# 6ad90dadbe5d08991a98500e1efbdbb4_9d79615 <7392e61add82b364ab0393a04573af48_721156>, 2024
+# 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2024
+# Amin Jobran, 2024
+# Derek F <derek@getlantern.org>, 2024
+# Abed Abedd <abderrahman.younis@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Abed Abedd <abderrahman.younis@gmail.com>, 2023\n"
+"Last-Translator: Abed Abedd <abderrahman.younis@gmail.com>, 2024\n"
 "Language-Team: Arabic (https://app.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
@@ -49,6 +49,12 @@ msgstr "الاستخدام اليومي للبيانات"
 
 msgid "is"
 msgstr "يتم الآن"
+
+msgid "connect"
+msgstr "اتصال"
+
+msgid "disconnect"
+msgstr "قطع الاتصال"
 
 msgid "connected"
 msgstr "موصول"
@@ -200,17 +206,35 @@ msgstr "لا يمكن الوصول الى المواقع المحظورة"
 msgid "cannot_complete_purchase"
 msgstr "لا يمكن إكمال عملية الشراء"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "لا يُمكن تسجيل الدخول"
 
 msgid "spinner_loads_endlessly"
 msgstr "العجلة تدور بلا نهاية"
 
+msgid "slow"
+msgstr "بطئ"
+
+msgid "cannot_link_devices"
+msgstr "لا يمكن ربط الأجهزة"
+
+msgid "wrong_device_linking_code"
+msgstr "رامز ربط الجهاز خاطئ أو غير صالح"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "تعطل التطبيق"
+
 msgid "other"
 msgstr "أخرى"
 
 msgid "issue_description"
-msgstr "وصف المشكلة"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "تحقق من وجود تحديثات"
@@ -278,6 +302,9 @@ msgstr "البريد الإلكتروني الخاص بـ Lantern Pro"
 msgid "lantern_desktop"
 msgstr "لانترن للكمبيوتر المكتبي"
 
+msgid "report_description"
+msgstr "وصف المشكلة"
+
 msgid "report_issue"
 msgstr ""
 
@@ -334,6 +361,9 @@ msgstr "الشهور"
 
 msgid "enter_email"
 msgstr "أدخل البريد الإلكتروني"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr "حدث خطأ أثناء إحضار الخطط، تُرجى إعادة تشغيل Lantern وإعادة المحاولة."
@@ -485,6 +515,18 @@ msgstr "نعم"
 msgid "No"
 msgstr "لا"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "أدخل أو الصق رمز الربط"
 
@@ -523,6 +565,9 @@ msgstr "تسجيل الخروج"
 msgid "confirm_remove_device"
 msgstr "هل أنت متأكد من أنك تريد فك ربط هذا الجهاز مع حساب برو؟"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "بيانات غير محدودة"
 
@@ -534,6 +579,9 @@ msgstr "بدون إعلانات"
 
 msgid "choose_plan"
 msgstr "اختر الخطة"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "توصيل ما يصل إلى 3 أجهزة"
@@ -1535,3 +1583,84 @@ msgstr "أسئلة متكررة"
 
 msgid "add_device"
 msgstr "أضف جهاز"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "تمت إضافة الجهاز"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "كود تحقق غير صحيح "
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "تحديث"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "فهمت"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

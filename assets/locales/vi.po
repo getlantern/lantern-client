@@ -1,16 +1,16 @@
 # 
 # Translators:
 # Anh Phan <vietnamesel10n@gmail.com>, 2023
-# Yen Le Van <yenlevanbk@gmail.com>, 2023
 # Lantern, 2023
-# Nathan Tran, 2023
-# e2f <projects@e2f.com>, 2023
-# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2023
-# Ngoc Hoang <ngocit09@gmail.com>, 2023
+# e2f <projects@e2f.com>, 2024
+# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024
+# Nathan Tran, 2024
+# Yen Le Van <yenlevanbk@gmail.com>, 2024
+# Ngoc Hoang <ngocit09@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Ngoc Hoang <ngocit09@gmail.com>, 2023\n"
+"Last-Translator: Ngoc Hoang <ngocit09@gmail.com>, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -40,6 +40,12 @@ msgstr "Sử dụng dữ liệu hàng ngày"
 
 msgid "is"
 msgstr "là"
+
+msgid "connect"
+msgstr "Kết nối"
+
+msgid "disconnect"
+msgstr "Ngắt kết nối"
 
 msgid "connected"
 msgstr "Đã kết nối"
@@ -194,17 +200,35 @@ msgstr "Không thể truy cập các trang bị chặn"
 msgid "cannot_complete_purchase"
 msgstr "Không thể hoàn tất việc mua"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "Không thể đăng nhập"
 
 msgid "spinner_loads_endlessly"
 msgstr "Spinner tải vô tận"
 
+msgid "slow"
+msgstr "chậm"
+
+msgid "cannot_link_devices"
+msgstr "Không thể liên kết các thiết bị"
+
+msgid "wrong_device_linking_code"
+msgstr "Mã số kết nối máy sai hoặc không hợp lệ"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "Ứng dụng bị treo"
+
 msgid "other"
 msgstr "Khác"
 
 msgid "issue_description"
-msgstr "Mô tả vấn đề"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "Kiểm tra bản cập nhật"
@@ -271,6 +295,9 @@ msgstr "Lantern Pro Email"
 msgid "lantern_desktop"
 msgstr "Lantern Để Bàn"
 
+msgid "report_description"
+msgstr "Mô tả vấn đề"
+
 msgid "report_issue"
 msgstr ""
 
@@ -328,6 +355,9 @@ msgstr "tháng"
 
 msgid "enter_email"
 msgstr "Nhập Email"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr "Lỗi khi tìm nạp gói, vui lòng khởi động lại Lantern và thử lại."
@@ -481,6 +511,18 @@ msgstr "Có"
 msgid "No"
 msgstr "Không"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "Nhập hoặc dán mã liên kết"
 
@@ -518,6 +560,9 @@ msgstr "Đăng xuất"
 msgid "confirm_remove_device"
 msgstr "Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "Dung Lượng Không Giới Hạn"
 
@@ -529,6 +574,9 @@ msgstr "Không có quảng cáo"
 
 msgid "choose_plan"
 msgstr "Chọn gói"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "Kết nối tối đa 3 thiết bị"
@@ -1538,3 +1586,84 @@ msgstr "FAQ"
 
 msgid "add_device"
 msgstr "Thêm Máy"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "Đã thêm thiết bị"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "Mã số kiểm chứng không hợp lệ"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "Làm mới"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "Đã nhận được"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

@@ -2,28 +2,28 @@
 # Translators:
 # Derek F <derek@getlantern.org>, 2021
 # b0b47d46632b78a09a40de799fda9a65, 2022
-# Evan <alireza.firoozi68@gmail.com>, 2022
-# Mary Sol <salar.adlparvar@gmail.com>, 2022
 # Amir Moezzi <amirreza.mz@yahoo.com>, 2022
 # Mokah <unfilternet@getlantern.org>, 2022
 # Chip Stehr <chip@getlantern.org>, 2022
 # Jigar, 2023
 # 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
-# Vaseto Nora <n.nouri67@gmail.com>, 2023
 # Sina <sina@asl19.org>, 2023
 # Pedram Azizallahi <pedram672004@yahoo.com>, 2023
 # zar24 <zarghamjan@yahoo.com>, 2023
-# NoProfile, 2023
 # Lantern, 2023
 # Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2023
-# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
-# ali jafarizadeh <ebrahimigv@gmail.com>, 2023
-# Mersen M, 2023
-# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2023
+# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2024
+# ali jafarizadeh <ebrahimigv@gmail.com>, 2024
+# Vaseto Nora <n.nouri67@gmail.com>, 2024
+# Evan <alireza.firoozi68@gmail.com>, 2024
+# Mary Sol <salar.adlparvar@gmail.com>, 2024
+# NoProfile, 2024
+# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024
+# Mersen M, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2023\n"
+"Last-Translator: Mersen M, 2024\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -53,6 +53,12 @@ msgstr "میزان مصرف داده روزانه"
 
 msgid "is"
 msgstr "وضعیت:"
+
+msgid "connect"
+msgstr "متصل"
+
+msgid "disconnect"
+msgstr "قطع شدن"
 
 msgid "connected"
 msgstr "متصل شد"
@@ -204,17 +210,35 @@ msgstr "عدم امکان دسترسی به سایت های بسته شده"
 msgid "cannot_complete_purchase"
 msgstr "خرید تکمیل نشد"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "ورود انجام نشد"
 
 msgid "spinner_loads_endlessly"
 msgstr "اندیکاتور بی‌پایان بارگذاری می‌کند"
 
+msgid "slow"
+msgstr "آهسته"
+
+msgid "cannot_link_devices"
+msgstr "عدم امکان ارتباط دستگاه ها"
+
+msgid "wrong_device_linking_code"
+msgstr "کد اتصال  نادرست یا نامعتبر"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "اپلیکیشن با مشکل مواجه است"
+
 msgid "other"
 msgstr "غیره"
 
 msgid "issue_description"
-msgstr "شرح مشکل"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "بررسی وجود به‌روزرسانی‌ها"
@@ -283,6 +307,9 @@ msgstr "ایمیل Lantern Pro"
 msgid "lantern_desktop"
 msgstr "فانوس رایانه"
 
+msgid "report_description"
+msgstr "شرح مشکل"
+
 msgid "report_issue"
 msgstr ""
 
@@ -340,6 +367,9 @@ msgstr "ماه‌ها"
 
 msgid "enter_email"
 msgstr "وارد کردن ایمیل"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -491,6 +521,18 @@ msgstr "بله"
 msgid "No"
 msgstr "خیر"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "کد پیوند دهنده را وارد کنید یا بچسبانید"
 
@@ -529,6 +571,9 @@ msgid "confirm_remove_device"
 msgstr ""
 "آیا مطمئن هستید که میخواهید این دستگاه را از حساب Pro خود قطع اتصال کنید؟ "
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "ترافیک نامحدود"
 
@@ -540,6 +585,9 @@ msgstr "بدون تبلیغ"
 
 msgid "choose_plan"
 msgstr "انتخاب طرح"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "اتصال تا حداکثر 3 دستگاه"
@@ -1541,3 +1589,84 @@ msgstr "‫سوالات متداول"
 
 msgid "add_device"
 msgstr "افزودن دستگاه جدید"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "دستگاه اضافه شد"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "کد تأیید نامعتبر"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "ریفرش"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "فهمیدم/گرفتم"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

@@ -1,15 +1,15 @@
 # 
 # Translators:
-# Acclaro Thailand <bkk-project@acclaro.com>, 2023
 # Lantern, 2023
-# Thai Localization, 2023
-# e2f <projects@e2f.com>, 2023
-# tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2023
-# Amazing Nev <nev@nevagency.com>, 2023
+# tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2024
+# e2f <projects@e2f.com>, 2024
+# Acclaro Thailand <bkk-project@acclaro.com>, 2024
+# Amazing Nev <nev@nevagency.com>, 2024
+# Thai Localization, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Amazing Nev <nev@nevagency.com>, 2023\n"
+"Last-Translator: Thai Localization, 2024\n"
 "Language-Team: Thai (https://app.transifex.com/lantern-1/teams/94371/th/)\n"
 "Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -39,6 +39,12 @@ msgstr "การใช้งานข้อมูลประจำวัน"
 
 msgid "is"
 msgstr "คือ"
+
+msgid "connect"
+msgstr "เชื่อมต่อ"
+
+msgid "disconnect"
+msgstr "ตัดการเชื่อมต่อ"
 
 msgid "connected"
 msgstr "เชื่อมต่อแล้ว"
@@ -191,17 +197,35 @@ msgstr "ไม่สามารถเข้าถึงไซต์ที่ถ
 msgid "cannot_complete_purchase"
 msgstr "ไม่สามารถดำเนินการซื้อได้เสร็จสิ้น"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "ไม่สามารถเข้าสู่ระบบ"
 
 msgid "spinner_loads_endlessly"
 msgstr "Spinner ยังโหลดต่อไป"
 
+msgid "slow"
+msgstr "ช้า"
+
+msgid "cannot_link_devices"
+msgstr "ไม่สามารถเชื่อมโยงอุปกรณ์"
+
+msgid "wrong_device_linking_code"
+msgstr "รหัสเชื่อมโยงอุปกรณ์ที่ไม่ถูกต้องหรือไม่มีอยู่"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "แอปพลิเคชันขัดข้อง"
+
 msgid "other"
 msgstr "อื่นๆ"
 
 msgid "issue_description"
-msgstr "คำอธิบายปัญหา"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "ตรวจสอบการอัพเดต"
@@ -269,6 +293,9 @@ msgstr "อีเมล Lantern Pro"
 msgid "lantern_desktop"
 msgstr "Lantern Desktop"
 
+msgid "report_description"
+msgstr "คำอธิบายปัญหา"
+
 msgid "report_issue"
 msgstr ""
 
@@ -324,6 +351,9 @@ msgstr "เดือน"
 
 msgid "enter_email"
 msgstr "ป้อนอีเมล"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr "เกิดข้อผิดพลาดในการดึงแผน โปรดรีสตาร์ท Lantern และลองอีกครั้ง"
@@ -474,6 +504,18 @@ msgstr "ใช่"
 msgid "No"
 msgstr "ไม่"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "ป้อนหรือวางรหัสการเชื่อมโยง"
 
@@ -512,6 +554,9 @@ msgstr "ออกจากระบบ"
 msgid "confirm_remove_device"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการเลิกเชื่อมโยงอุปกรณ์นี้จากบัญชี Pro ของคุณ"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "ข้อมูลไม่จำกัด"
 
@@ -523,6 +568,9 @@ msgstr "ไม่มีโฆษณา"
 
 msgid "choose_plan"
 msgstr "เลือกแผน"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "เชื่อมต่ออุปกรณ์ได้สูงสุด 3 เครื่อง"
@@ -1520,3 +1568,84 @@ msgstr "คำถามที่พบบ่อย"
 
 msgid "add_device"
 msgstr "เพิ่มอุปกรณ์"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "เพิ่มอุปกรณ์แล้ว"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "รหัสตรวจสอบไม่ถูกต้อง"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr ""
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "เข้าใจแล้ว"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

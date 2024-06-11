@@ -2,15 +2,15 @@
 # Translators:
 # todd <todd@getlantern.org>, 2023
 # fffw <fffw@getlantern.org>, 2023
-# e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2023
 # Derek F <derek@getlantern.org>, 2024
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2024
-# AO <ao@localizationlab.org>, 2024
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2024
+# e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024
+# AO <ao@localizationlab.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2024\n"
+"Last-Translator: AO <ao@localizationlab.org>, 2024\n"
 "Language-Team: French (Canada) (https://app.transifex.com/lantern-1/teams/94371/fr_CA/)\n"
 "Language: fr_CA\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -41,6 +41,12 @@ msgstr "Données quotidiennes utilisées "
 
 msgid "is"
 msgstr "est"
+
+msgid "connect"
+msgstr "Se connecter"
+
+msgid "disconnect"
+msgstr "Se déconnecter"
 
 msgid "connected"
 msgstr "Connecté"
@@ -197,17 +203,35 @@ msgstr "Impossible d’accéder à des sites bloqués"
 msgid "cannot_complete_purchase"
 msgstr "Impossible de terminer l’achat"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "Impossible de se connecter"
 
 msgid "spinner_loads_endlessly"
 msgstr "L’indicateur de chargement tourne sans fin"
 
+msgid "slow"
+msgstr "Lent"
+
+msgid "cannot_link_devices"
+msgstr "Impossible de relier des appareils"
+
+msgid "wrong_device_linking_code"
+msgstr "Code de liaison d’appareil erroné ou invalide"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "L’application plante"
+
 msgid "other"
 msgstr "Autre"
 
 msgid "issue_description"
-msgstr "Description du problème"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "Rechercher des mises à jour"
@@ -278,6 +302,9 @@ msgstr "Adresse courriel de Lantern Pro"
 msgid "lantern_desktop"
 msgstr "Lantern pour ordinateur"
 
+msgid "report_description"
+msgstr "Description du problème"
+
 msgid "report_issue"
 msgstr ""
 
@@ -336,6 +363,9 @@ msgstr "mois"
 
 msgid "enter_email"
 msgstr "Saisissez votre adresse courriel"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -495,6 +525,18 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "Saisissez ou collez un code de liaison d’appareil"
 
@@ -534,6 +576,9 @@ msgstr "Déconnexion"
 msgid "confirm_remove_device"
 msgstr "Voulez-vous vraiment dissocier cet appareil de votre compte Pro ?"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "Données illimitées"
 
@@ -545,6 +590,9 @@ msgstr "Sans publicité"
 
 msgid "choose_plan"
 msgstr "Choisissez un abonnement"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "Connectez jusqu’à trois appareils"
@@ -1579,3 +1627,84 @@ msgstr "FAQ"
 
 msgid "add_device"
 msgstr "Ajouter un appareil"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "L’appareil a été ajouté"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "Code de vérification invalide"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "Rafraîchir"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "D’accord"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

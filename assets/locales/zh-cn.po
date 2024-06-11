@@ -2,15 +2,15 @@
 # Translators:
 # 474874f569f96a33809d02f1de71479e_77020aa, 2023
 # Chi-Hsun Tsai, 2023
-# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2023
 # Lantern, 2023
-# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2023
-# Aki, 2023
-# e2f <projects@e2f.com>, 2023
+# Aki, 2024
+# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
+# e2f <projects@e2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f <projects@e2f.com>, 2023\n"
+"Last-Translator: e2f <projects@e2f.com>, 2024\n"
 "Language-Team: Chinese Simplified (https://app.transifex.com/lantern-1/teams/94371/zh-Hans/)\n"
 "Language: zh-Hans\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -38,6 +38,12 @@ msgstr "每日数据用量"
 
 msgid "is"
 msgstr "是"
+
+msgid "connect"
+msgstr "连接"
+
+msgid "disconnect"
+msgstr "断开连接"
 
 msgid "connected"
 msgstr "已连接"
@@ -172,17 +178,35 @@ msgstr "无法访问被屏蔽的网站"
 msgid "cannot_complete_purchase"
 msgstr "无法完成购买"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "无法登录"
 
 msgid "spinner_loads_endlessly"
 msgstr "始终在加载中"
 
+msgid "slow"
+msgstr "缓慢"
+
+msgid "cannot_link_devices"
+msgstr "无法关联设备"
+
+msgid "wrong_device_linking_code"
+msgstr "设备关联代码错误或无效"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "应用崩溃"
+
 msgid "other"
 msgstr "其他"
 
 msgid "issue_description"
-msgstr "问题描述"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "检查更新"
@@ -247,6 +271,9 @@ msgstr "蓝灯专业版电子邮件"
 msgid "lantern_desktop"
 msgstr "蓝灯桌面版"
 
+msgid "report_description"
+msgstr "问题描述"
+
 msgid "report_issue"
 msgstr ""
 
@@ -300,6 +327,9 @@ msgstr "月"
 
 msgid "enter_email"
 msgstr "输入电子邮件"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr "获取计划信息出错，请重启蓝灯后，再次尝试。"
@@ -442,6 +472,18 @@ msgstr "是"
 msgid "No"
 msgstr "否"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "输入或粘贴连接码"
 
@@ -476,6 +518,9 @@ msgstr "注销"
 msgid "confirm_remove_device"
 msgstr "您是否确定要从您的专业版帐户中取消链接此设备？"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "无限数据"
 
@@ -487,6 +532,9 @@ msgstr "无广告"
 
 msgid "choose_plan"
 msgstr "选择计划"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "最多可连接 3 台设备"
@@ -1450,3 +1498,84 @@ msgstr "蓝灯论坛"
 
 msgid "add_device"
 msgstr "添加设备"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "新增设备"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "验证码无效"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "刷新"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "明白了"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

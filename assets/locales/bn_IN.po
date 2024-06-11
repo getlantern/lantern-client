@@ -1,13 +1,13 @@
 # 
 # Translators:
 # Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2024
-# code smite <codesmite@gmail.com>, 2024
 # tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2024
 # Lantern, 2024
+# code smite <codesmite@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2024\n"
+"Last-Translator: code smite <codesmite@gmail.com>, 2024\n"
 "Language-Team: Bengali (India) (https://app.transifex.com/lantern-1/teams/94371/bn_IN/)\n"
 "Language: bn_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -37,6 +37,12 @@ msgstr "প্রাত্যহিক ডেটা ব্যবহারের 
 
 msgid "is"
 msgstr "সংযোগ"
+
+msgid "connect"
+msgstr "সংযোগ"
+
+msgid "disconnect"
+msgstr "বিচ্ছিন্ন"
 
 msgid "connected"
 msgstr "Connected"
@@ -191,17 +197,35 @@ msgstr "ব্লক সাইটগুলোতে যেতে পারছি
 msgid "cannot_complete_purchase"
 msgstr "কেনা সম্পূর্ণ করা যাচ্ছে না"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "সাইন ইন করা যাচ্ছে না"
 
 msgid "spinner_loads_endlessly"
 msgstr "স্পিনার অবিরাম লোড হয়"
 
+msgid "slow"
+msgstr "ধীরগতি"
+
+msgid "cannot_link_devices"
+msgstr "ডিভাইস লিংক করতে পারছিনা"
+
+msgid "wrong_device_linking_code"
+msgstr "ভুল বা অবৈধ ডিভাইস লিঙ্কিং কোড"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "অ্যাপ্লিকেশন ক্র্যাশ করেছে"
+
 msgid "other"
 msgstr "অন্যান্য"
 
 msgid "issue_description"
-msgstr "সমস্যার বিবরণ"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "নতুন আপডেটের জন্য চেক করুন."
@@ -271,6 +295,9 @@ msgstr "Lantern প্রো ইমেল"
 msgid "lantern_desktop"
 msgstr "Lantern Desktop"
 
+msgid "report_description"
+msgstr "সমস্যার বিবরণ"
+
 msgid "report_issue"
 msgstr ""
 
@@ -330,6 +357,9 @@ msgstr "মাস"
 
 msgid "enter_email"
 msgstr "ইমেল লিখুন"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -485,6 +515,18 @@ msgstr "হ্যা"
 msgid "No"
 msgstr "না"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "লিঙ্ক করার কোডটি লিখুন বা পেস্ট করুন"
 
@@ -523,6 +565,9 @@ msgstr "লগ আউট করুন"
 msgid "confirm_remove_device"
 msgstr "আপনি কি আপনার Pro অ্যাকাউন্ট থেকে এই ডিভাইসটি অপসারন করতে চান?"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "অসীম ডাটা"
 
@@ -534,6 +579,9 @@ msgstr "কোন বিজ্ঞাপণ নেই"
 
 msgid "choose_plan"
 msgstr "প্ল্যান বাছুন"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "সর্বাধিক 3টি ডিভাইসে সংযোগ করুন"
@@ -1543,3 +1591,84 @@ msgstr "FAQ"
 
 msgid "add_device"
 msgstr "ডিভাইস যোগ করুন"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "ডিভাইস যোগ করা হয়েছে"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "অবৈধ যাচাই কোড"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "Refresh"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "পেয়েছি"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

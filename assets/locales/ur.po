@@ -1,13 +1,13 @@
 # 
 # Translators:
 # tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2023
-# e2f <projects@e2f.com>, 2023
-# tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2023
-# Diversity83 83, 2023
+# e2f <projects@e2f.com>, 2024
+# tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2024
+# Diversity83 83, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Diversity83 83, 2023\n"
+"Last-Translator: Diversity83 83, 2024\n"
 "Language-Team: Urdu (https://app.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -37,6 +37,12 @@ msgstr "ڈیٹا کا روزانہ کا استعمال "
 
 msgid "is"
 msgstr "ہے"
+
+msgid "connect"
+msgstr "کنیکٹ"
+
+msgid "disconnect"
+msgstr "منقطع"
 
 msgid "connected"
 msgstr "کنیکٹ ہو چکا ہے"
@@ -191,17 +197,35 @@ msgstr "بلاک سائٹس تک رسائی ممکن نہیں "
 msgid "cannot_complete_purchase"
 msgstr "خریداری مکمل نہیں کر سکتے"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "سائن ان نہیں کر سکتے"
 
 msgid "spinner_loads_endlessly"
 msgstr "اسپنر لا محدود طور پر لوڈ کرتا ہے"
 
+msgid "slow"
+msgstr "آہستہ"
+
+msgid "cannot_link_devices"
+msgstr "ڈیوائس منسلک نہیں ہو سکتی"
+
+msgid "wrong_device_linking_code"
+msgstr "غیر درست ڈیوائس منسلک کوڈ"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "اپیلیکیشن کریش ہوتی ہے"
+
 msgid "other"
 msgstr "دوسرے"
 
 msgid "issue_description"
-msgstr "مسئلہ کی تفصیل"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "اپ ڈیٹس کے لیے پڑتال کریں"
@@ -271,6 +295,9 @@ msgstr "Lantern پرو ای میل"
 msgid "lantern_desktop"
 msgstr "لینٹرن ڈیسک ٹاپ"
 
+msgid "report_description"
+msgstr "مسئلہ کی تفصیل"
+
 msgid "report_issue"
 msgstr ""
 
@@ -329,6 +356,9 @@ msgstr "مہینے"
 
 msgid "enter_email"
 msgstr "ای میل درج کریں"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -482,6 +512,18 @@ msgstr "جی ہاں"
 msgid "No"
 msgstr "نہیں"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "لنکنگ کوڈ درج یا پیسٹ کریں"
 
@@ -519,6 +561,9 @@ msgstr "لاگ آؤٹ کریں"
 msgid "confirm_remove_device"
 msgstr "کیا آپ واقعی اس ڈیوائس کو اپنے پرو اکاؤنٹ سے منقطع کرنا چاہتے ہیں ؟"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "لامحدود ڈیٹا"
 
@@ -530,6 +575,9 @@ msgstr "کوئی اشتہار نہیں"
 
 msgid "choose_plan"
 msgstr "پلان چنیں"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "3 تک آلات کو جوڑیں"
@@ -1544,3 +1592,84 @@ msgstr "اکثر پوچھے جانے والے سوالات"
 
 msgid "add_device"
 msgstr "ڈیوائس شامل کیجئے"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "آلہ جوڑا گیا"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "غیر درست تصدیقی کوڈ"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "ریفریش"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "سمجھ گئے"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

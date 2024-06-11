@@ -9,19 +9,19 @@
 # e2f <projects@e2f.com>, 2022
 # e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023
 # Serg <sergkoshkin@yandex.ru>, 2023
-# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2023
-# Helen Russel <coo@workogram.com>, 2023
 # e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2023
 # Tina T, 2023
 # e2f_ru r1 <tx_e2f_ru_r1@ate2f.com>, 2023
-# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2023
-# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2023
-# Deanna D, 2023
-# sayanvd <sayanvd@yandex.ru>, 2023
+# Deanna D, 2024
+# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2024
+# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2024
+# Helen Russel <coo@workogram.com>, 2024
+# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024
+# sayanvd <sayanvd@yandex.ru>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: sayanvd <sayanvd@yandex.ru>, 2023\n"
+"Last-Translator: sayanvd <sayanvd@yandex.ru>, 2024\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -51,6 +51,12 @@ msgstr "Ежедневное использование данных"
 
 msgid "is"
 msgstr "это"
+
+msgid "connect"
+msgstr "Подключиться"
+
+msgid "disconnect"
+msgstr "Отключиться"
 
 msgid "connected"
 msgstr "Подключён"
@@ -201,17 +207,35 @@ msgstr "Не удается получить доступ к заблокиро�
 msgid "cannot_complete_purchase"
 msgstr "Ваша покупка не может быть завершена"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "Не удается войти в аккаунт"
 
 msgid "spinner_loads_endlessly"
 msgstr "Невозможно загрузить страницу "
 
+msgid "slow"
+msgstr "Медленный"
+
+msgid "cannot_link_devices"
+msgstr "Не удается привязать устройства"
+
+msgid "wrong_device_linking_code"
+msgstr "Неправильный или недействительный код привязки устройства"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "Сбой работы приложения"
+
 msgid "other"
 msgstr "Другое"
 
 msgid "issue_description"
-msgstr "Описание проблемы"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "Проверить обновления"
@@ -282,6 +306,9 @@ msgstr "Адрес эл. почты аккаунта Lantern Pro"
 msgid "lantern_desktop"
 msgstr "Версия Lantern для ПК"
 
+msgid "report_description"
+msgstr "Описание проблемы"
+
 msgid "report_issue"
 msgstr ""
 
@@ -340,6 +367,9 @@ msgstr "месяцы"
 
 msgid "enter_email"
 msgstr "Введите электронную почту"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr "Ошибка загрузки. Перезапустите Lantern и повторите попытку."
@@ -496,6 +526,18 @@ msgstr "Да"
 msgid "No"
 msgstr "Нет"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "Введите или вставьте код привязки"
 
@@ -533,6 +575,9 @@ msgstr "Выйти"
 msgid "confirm_remove_device"
 msgstr "Вы уверены, что хотите отвязать это устройство от аккаунта Pro?"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "Безлимитный трафик"
 
@@ -544,6 +589,9 @@ msgstr "Без рекламы"
 
 msgid "choose_plan"
 msgstr "Выбрать план"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "Подключение до трех устройств"
@@ -1555,3 +1603,84 @@ msgstr "ЧаВо"
 
 msgid "add_device"
 msgstr "Добавить устройство"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "Устройство добавлено"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "Неверный код подтверждения"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "Обновить"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "Понятно"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

@@ -5,13 +5,13 @@
 # Lantern, 2023
 # e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2023
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2023
-# e2f <projects@e2f.com>, 2023
-# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023
-# Alyssa Chung <lisiachung7@gmail.com>, 2023
+# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2024
+# e2f <projects@e2f.com>, 2024
+# Alyssa Chung <lisiachung7@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Alyssa Chung <lisiachung7@gmail.com>, 2023\n"
+"Last-Translator: Alyssa Chung <lisiachung7@gmail.com>, 2024\n"
 "Language-Team: Malay (https://app.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -42,6 +42,12 @@ msgstr "Penggunaan Data Harian"
 
 msgid "is"
 msgstr "is"
+
+msgid "connect"
+msgstr "Sambuungan"
+
+msgid "disconnect"
+msgstr "Putuskan sambungan"
 
 msgid "connected"
 msgstr "Telah disambungkan"
@@ -195,17 +201,35 @@ msgstr "Tidak boleh akses laman-laman disekat"
 msgid "cannot_complete_purchase"
 msgstr "Tidak dapat melengkapkan pembelian"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "Tidak boleh mendaftar masuk"
 
 msgid "spinner_loads_endlessly"
 msgstr "Pemutar dimuatkan tanpa henti"
 
+msgid "slow"
+msgstr "Lambat"
+
+msgid "cannot_link_devices"
+msgstr "Tidak boleh pautkan peranti"
+
+msgid "wrong_device_linking_code"
+msgstr "Kod pautan alatan salah atau tidak sah "
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "Aplikasi ranap"
+
 msgid "other"
 msgstr "Lain-lain"
 
 msgid "issue_description"
-msgstr "Penerangan Isu"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "Semak kemas kini"
@@ -274,6 +298,9 @@ msgstr "E-mel Pro Lantern"
 msgid "lantern_desktop"
 msgstr "Desktop Lantern"
 
+msgid "report_description"
+msgstr "Penerangan Isu"
+
 msgid "report_issue"
 msgstr ""
 
@@ -331,6 +358,9 @@ msgstr "bulan"
 
 msgid "enter_email"
 msgstr "Masukkan E-mel"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr "Ralat mendapatkan pelan, sila mulakan semula Lantern dan cuba lagi."
@@ -483,6 +513,18 @@ msgstr "Ya"
 msgid "No"
 msgstr "Tidak"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "Masukkan atau tampal kod pemautan"
 
@@ -522,6 +564,9 @@ msgid "confirm_remove_device"
 msgstr ""
 "Adakah anda pasti ingin mengeluarkan pautan peranti dari account Pro anda?"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "Data Tidak Terbatas"
 
@@ -533,6 +578,9 @@ msgstr "Tiada Iklan"
 
 msgid "choose_plan"
 msgstr "Pilih Pelan"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "Sambungkan sehingga 3 peranti"
@@ -1553,3 +1601,84 @@ msgstr "FAQ"
 
 msgid "add_device"
 msgstr "Tambah Peranti"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "Peranti Ditambah"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "Kod pengessahan yang tidah sah"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "Muat semula"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "Faham"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""

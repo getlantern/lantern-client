@@ -2,7 +2,6 @@
 # Translators:
 # Tony T <tony@tonytan.io>, 2021
 # 5ffb0e30c16f79bca37af5baff50ee52_58bd05a <18e9486319e95596cee4e2007f6eede0_4750>, 2021
-# todd <todd@getlantern.org>, 2022
 # 77b9f6bcdc842b5b17effe4ccdba1839, 2022
 # Tony Lin, 2022
 # Ox Cart <ox@getlantern.org>, 2022
@@ -12,19 +11,22 @@
 # Rockman Lau <im@rockman.us>, 2023
 # Chi-Hsun Tsai, 2023
 # 刘位, 2023
-# fffw <fffw@getlantern.org>, 2023
 # wwj402 <wwj402@gmail.com>, 2023
 # 474874f569f96a33809d02f1de71479e_77020aa, 2023
-# Lantern, 2023
-# Aki, 2023
-# YFdyh000 <yfdyh000@gmail.com>, 2023
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
+# Aki, 2024
+# Lantern, 2024
+# Mingye Wang <arthur200126@gmail.com>, 2024
+# todd <todd@getlantern.org>, 2024
+# Lafrenze Laurant, 2024
+# fffw <fffw@getlantern.org>, 2024
+# YFdyh000 <yfdyh000@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024\n"
+"Last-Translator: YFdyh000 <yfdyh000@gmail.com>, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/lantern-1/teams/94371/zh_CN/)\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -52,6 +54,12 @@ msgstr "每日數據使用量"
 
 msgid "is"
 msgstr "是"
+
+msgid "connect"
+msgstr "连接"
+
+msgid "disconnect"
+msgstr "断开"
 
 msgid "connected"
 msgstr "已连接"
@@ -184,17 +192,35 @@ msgstr "无法访问被屏蔽网站"
 msgid "cannot_complete_purchase"
 msgstr "无法完成购买"
 
+msgid "discover_not_working"
+msgstr ""
+
 msgid "cannot_sign_in"
 msgstr "无法登录"
 
 msgid "spinner_loads_endlessly"
 msgstr "始终在加载中"
 
+msgid "slow"
+msgstr "很慢"
+
+msgid "cannot_link_devices"
+msgstr "无法链接设备"
+
+msgid "wrong_device_linking_code"
+msgstr "错误或者无效的设备关联码"
+
+msgid "cannot_remove_device"
+msgstr ""
+
+msgid "application_crashes"
+msgstr "蓝灯软件崩溃"
+
 msgid "other"
 msgstr "其他"
 
 msgid "issue_description"
-msgstr "问题描述"
+msgstr ""
 
 msgid "check_for_updates"
 msgstr "检查更新"
@@ -259,6 +285,9 @@ msgstr "蓝灯专业版电子邮件"
 msgid "lantern_desktop"
 msgstr "蓝灯桌面版"
 
+msgid "report_description"
+msgstr "问题描述"
+
 msgid "report_issue"
 msgstr ""
 
@@ -312,6 +341,9 @@ msgstr "月"
 
 msgid "enter_email"
 msgstr "输入邮箱"
+
+msgid "enter_email_to_complete_purchase"
+msgstr ""
 
 msgid "error_fetching_plans"
 msgstr "获取计划信息出错，请重启蓝灯后，再次尝试。"
@@ -454,6 +486,18 @@ msgstr "是的"
 msgid "No"
 msgstr "否"
 
+msgid "exit"
+msgstr ""
+
+msgid "show"
+msgstr ""
+
+msgid "status_on"
+msgstr ""
+
+msgid "status_off"
+msgstr ""
+
 msgid "Enter or paste linking code"
 msgstr "輸入或貼上連結碼"
 
@@ -487,6 +531,9 @@ msgstr "登出"
 msgid "confirm_remove_device"
 msgstr "您确定要取消此设备与 Pro 账户的链接吗？"
 
+msgid "confirm_close_window"
+msgstr ""
+
 msgid "unlimited_data"
 msgstr "無流量限制"
 
@@ -498,6 +545,9 @@ msgstr "No Ads"
 
 msgid "choose_plan"
 msgstr "选择套餐"
+
+msgid "billed_one_time"
+msgstr ""
 
 msgid "connect_up_to_3_devices"
 msgstr "支持3个设备"
@@ -1461,3 +1511,84 @@ msgstr "蓝灯论坛"
 
 msgid "add_device"
 msgstr "授权其他设备使用专业版"
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added"
+msgstr "设备已授权"
+
+msgid "device_added_message"
+msgstr ""
+
+msgid "search_apps"
+msgstr ""
+
+msgid "cannot_login"
+msgstr ""
+
+msgid "invalid_verification_code"
+msgstr "无效的验证码"
+
+msgid "wrong_seller_code"
+msgstr ""
+
+msgid "follow_us"
+msgstr ""
+
+msgid "follow_us_telegram"
+msgstr ""
+
+msgid "follow_us_instagram"
+msgstr ""
+
+msgid "follow_us_facebook"
+msgstr ""
+
+msgid "follow_us_x"
+msgstr ""
+
+msgid "report_issue_error"
+msgstr ""
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+
+msgid "a_temporary_error_occurred"
+msgstr ""
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+
+msgid "refresh"
+msgstr "更新"
+
+msgid "check_your_internet_connection"
+msgstr ""
+
+msgid "please_try"
+msgstr ""
+
+msgid "turning_off_airplane_mode"
+msgstr ""
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr ""
+
+msgid "check_the_signal_in_your_area"
+msgstr ""
+
+msgid "got_it"
+msgstr "明白了"
+
+msgid "fetching_configuration"
+msgstr ""
+
+msgid "establish_connection_to_server"
+msgstr ""
+
+msgid "file_size_limit_title"
+msgstr ""
+
+msgid "file_size_limit_description"
+msgstr ""
