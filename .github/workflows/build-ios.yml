@@ -39,35 +39,35 @@ jobs:
       - name: Pull LFS objects
         run: git lfs pull
 
-#      - name: Setup Go
-#        uses: actions/setup-go@v4
-#        with:
-#          go-version-file: "go.mod"
-#
-#      - name: Setup Xcode
-#        uses: maxim-lobanov/setup-xcode@v1
-#        with:
-#          xcode-version: ${{ inputs.xcode_version }}
-#
-#      - name: Repo access
-#        run: |
-#          mkdir /tmp/cache
-#          echo "machine github.com login ${{ secrets.GH_TOKEN }} password x-oauth-basic" > /tmp/cache/.netrc
-#          chmod 600 /tmp/cache/.netrc
-#
-#      - name: Setup Sentry CLI
-#        uses: mathieu-bour/setup-sentry-cli@v1
-#        with:
-#          version: latest
-#          token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
-#          organization: getlantern
-#          project: android
-#
-#      - name: Install Flutter
-#        uses: subosito/flutter-action@v2
-#        with:
-#          channel: "stable"
-#          flutter-version-file: pubspec.yaml
+      #      - name: Setup Go
+      #        uses: actions/setup-go@v4
+      #        with:
+      #          go-version-file: "go.mod"
+      #
+      #      - name: Setup Xcode
+      #        uses: maxim-lobanov/setup-xcode@v1
+      #        with:
+      #          xcode-version: ${{ inputs.xcode_version }}
+      #
+      #      - name: Repo access
+      #        run: |
+      #          mkdir /tmp/cache
+      #          echo "machine github.com login ${{ secrets.GH_TOKEN }} password x-oauth-basic" > /tmp/cache/.netrc
+      #          chmod 600 /tmp/cache/.netrc
+      #
+      #      - name: Setup Sentry CLI
+      #        uses: mathieu-bour/setup-sentry-cli@v1
+      #        with:
+      #          version: latest
+      #          token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
+      #          organization: getlantern
+      #          project: android
+      #
+      #      - name: Install Flutter
+      #        uses: subosito/flutter-action@v2
+      #        with:
+      #          channel: "stable"
+      #          flutter-version-file: pubspec.yaml
 
       - name: Install the Apple certificate and provisioning profile
         env:
@@ -97,8 +97,9 @@ jobs:
 
            # apply main provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          echo -n "$BUILD_TUNNEL_PROVISION_PROFILE_BASE64" | base64 --decode -o $TPP_PATH
+          echo "$BUILD_TUNNEL_PROVISION_PROFILE_BASE64" | base64 --decode > $TPP_PATH
           cp $TPP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
@@ -121,9 +122,9 @@ jobs:
       - name: Get dependencies
         run: |
           flutter pub get
-#          cd ios
-#          pod install
-#          cd ..
+      #          cd ios
+      #          pod install
+      #          cd ..
 
       - name: Build iOS app
         run: make ios-release
