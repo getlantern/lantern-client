@@ -29,7 +29,11 @@
   <string name="no_purchase_date">Lantern Pro ကို ဝယ်သည့်အခါခန့်မှန်းခြေရက်စွဲကို ရွေးချယ်ပါ</string>
   <string name="purchase_date">ဝယ်ယူသည့်နေ့ရက်</string>
   <string name="common_issue_list_0">ပိတ်ထားသောဆိုဒ်များကို ကြည့်၍မရပါ</string>
+  <string name="common_issue_list_1">ဝယ်ယူမှုကိုပြီးမြောက်စေမရနိုင် </string>
+  <string name="common_issue_list_2">လက်မှတ်ထိုးမရနိုင် </string>
+  <string name="common_issue_list_3">အဆုံးမရှိသော လည်ပတ်ခြင်း </string>
   <string name="common_issue_list_4">နှေးနှေး</string>
+  <string name="common_issue_list_8">အပလီကေးရှင်းမကြာခဏကျွေး </string>
   <string name="common_issue_list_9">အခြား</string>
   <string name="submit_code">ကုဒ်အတည်ပြုပါ</string>
   <string name="on_text">ဖွင့်</string>
@@ -406,6 +410,7 @@
   <string name="privacy_disclosure_title">Lantern Privacy ထုတ်ဖော်</string>
   <string name="privacy_disclosure_accept">ကျွန်တော်လက်ခံသည်</string>
   <string name="privacy_disclosure_body">Lantern သည် သင်၏ ကိုယ်ရေးလုံခြုံမှုကို ကာကွယ်ရန် ကတိကဝတ်ပြုထားသည်။ ကျွန်ုပ်တို့မည်သည့်သတင်းအချက်အလက်များကိုကျွန်ုပ်တို့စုဆောင်းသည်၊ ကျွန်ုပ်တို့မစုဆောင်းမိသောအရာများနှင့်ကျွန်ုပ်တို့မည်သို့စုဆောင်းအသုံးပြုသည်၊ သိုလှောင်ထားသည့်သတင်းအချက်အလက်များကိုသင့်အားနားလည်စေလိုသည်။ သင်၏ငွေပေးချေမှုဆိုင်ရာသတင်းအချက်အလက်များကိုသင်၏ Lantern Pro အကောင့်နှင့်ဆက်သွယ်ခြင်းမပြုပါ။ သင်၏လုပ်ဆောင်မှုမှတ်တမ်းများ၊ browsing history၊ traffic များ၊ အချက်အလက်အကြောင်းအရာများ (သို့) DNS မေးမြန်းခြင်းများမပါဝင်ပါ။ ဆက်သွယ်မှုမှတ်တမ်းများကိုလည်းမည်သည့်အခါမျှသိမ်းဆည်းမည်မဟုတ်ပါ။ ဆိုလိုသည်မှာသင်၏ IP လိပ်စာ၊ log outan Lantern server IP connection connection timestamp နှင့် session session ကြာလိမ့်မည်မဟုတ်ပါ။ တိကျတဲ့ Lantern Pro အကောင့်တစ်ခုအရ Lantern သည် Lantern အကောင့်ကိုအသုံးပြုသူ၏မည်သူမည်ဝါဖြစ်ကြောင်းနှင့်နည်းပညာပိုင်းအရမချိတ်ဆက်နိုင်ပါ။ Lantern အိုင်ပီလိပ်စာတစ်ခုနှင့် တိကျသောအချိန်တံဆိပ်ခေါင်းများအရ Lantern သည် ဤ IP လိပ်စာကို Lantern အသုံးပြုသူသို့မဟုတ် Lantern အသုံးပြုသူအိုင်ပီလိပ်စာအားသတ်မှတ်ရန် နည်းပညာပိုင်းအရမစွမ်းဆောင်နိုင်ပါ။</string>
+  <string name="referral_code_share_description">Lantern Pro ကိုမိတ်ဆွေတစ်ယောက်နှင့်မျှဝေပါ! သင့်မိတ်ဆွေသည်၎င်းတို့၏ Lantern Pro ဝယ်ယူမှုအတွင်း သင့်ရဲ့ ဖော်ပြချက်ကုဒ်ကိုအသုံးပြုပါက, သင်နှင့်သင့်မိတ်ဆွေ နှစ်ယောက်စလုံး Lantern Pro ဝန်ဆောင်မှုကို တစ်လအခမဲ့ရရှိပါမည်! </string>
   <string name="referral_code_share">လွှဲပြောင်းကုဒ်ကို မျှဝေပါ</string>
   <string name="referral_code_share_title">သင်၏လွှဲပြောင်းကုဒ်ကို မျှဝေပါ-</string>
   <string name="lantern_desktop_link">https://github.com/getlantern/lantern</string>
@@ -483,4 +488,7 @@
   <string name="call_notifications_channel">ခေါ်ဆိုမှုများ</string>
   <string name="lantern_service">Lantern ဝန်ဆောင်မှု</string>
   <string name="replica_download">Lantern ဝန်ဆောင်မှု</string>
+  <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <!--Host for plausible backend. Defaults to plausible.io.-->
+  <!--Default domain to send events for. E.g. yourapp.com.-->
 </resources>
