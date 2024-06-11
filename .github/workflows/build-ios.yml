@@ -79,6 +79,7 @@ jobs:
           BUILD_TUNNEL_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_TUNNEL_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
         run: |
+          set -x
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
@@ -99,10 +100,19 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
 
            # apply main provisioning profile
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          PROVISIONING_PROFILES_DIR=~/Library/MobileDevice/Provisioning\ Profiles
+          mkdir -p "$PROVISIONING_PROFILES_DIR"
+          
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-
+          
+          # Verify main provisioning profile
+            if [ -f "$PROVISIONING_PROFILES_DIR/$(basename $PP_PATH)" ]; then
+            echo "Main provisioning profile installed successfully."
+          else
+            echo "Error: Main provisioning profile was not installed."
+            exit 1
+          fi
           # apply tunnel provisioning profile
           echo -n "$BUILD_TUNNEL_PROVISION_PROFILE_BASE64" | base64 --decode -o $TPP_PATH
           cp $TPP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
