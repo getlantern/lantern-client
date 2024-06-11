@@ -2,7 +2,7 @@ name: Publish releases
 
 on:
   push:
-    branches: [ ios-ci ]
+    branches: [ jigar/ios-ci ]
   workflow_dispatch:
 
 permissions:
