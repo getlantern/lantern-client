@@ -97,6 +97,8 @@ jobs:
 
            # apply main provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          echo -n "$BUILD_TUNNEL_PROVISION_PROFILE_BASE64" | base64 --decode -o $TPP_PATH
+          cp $TPP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
