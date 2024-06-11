@@ -101,8 +101,8 @@ jobs:
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
           # apply tunnel provisioning profile
-          echo "$BUILD_TUNNEL_PROVISION_PROFILE_BASE64" | base64 --decode > $TPP_PATH
-          cp $TPP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          echo "$BUILD_TUNNEL_PROVISION_PROFILE_BASE64" | base64 --decode > "$TPP_PATH"
+          cp "$TPP_PATH" ~/Library/MobileDevice/Provisioning\ Profiles
 
       - name: Generate FFI bindings
         run: make ffigen
