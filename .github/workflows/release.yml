@@ -3,8 +3,7 @@ name: Publish releases
 on:
   push:
     branches: [ ios-ci ]
-    tags:
-      - '*'
+  workflow_dispatch:
 
 permissions:
   contents: "read"
