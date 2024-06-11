@@ -4,10 +4,11 @@
 # tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2024
 # Lantern, 2024
 # code smite <codesmite@gmail.com>, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: code smite <codesmite@gmail.com>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Bengali (India) (https://app.transifex.com/lantern-1/teams/94371/bn_IN/)\n"
 "Language: bn_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -78,7 +79,7 @@ msgid "Go Pro Title"
 msgstr "প্রো-তে যান!"
 
 msgid "Go Pro Description"
-msgstr ""
+msgstr "আরও দ্রুত গতি, বিজ্ঞাপনমুক্ত অভিজ্ঞতা, এবং সীমাহীন ডেটা আনলক করুন! "
 
 msgid "Server Location"
 msgstr "সার্ভারের অবস্থান"
@@ -189,7 +190,7 @@ msgid "select_an_issue"
 msgstr "একটি সমস্যা নির্বাচন করুন"
 
 msgid "enter_description"
-msgstr ""
+msgstr "আপনার সমস্যাটি বর্ণনা করুন "
 
 msgid "cannot_access_blocked_sites"
 msgstr "ব্লক সাইটগুলোতে যেতে পারছিনা"
@@ -198,7 +199,7 @@ msgid "cannot_complete_purchase"
 msgstr "কেনা সম্পূর্ণ করা যাচ্ছে না"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "ডিসকভার কাজ করছে না "
 
 msgid "cannot_sign_in"
 msgstr "সাইন ইন করা যাচ্ছে না"
@@ -216,7 +217,7 @@ msgid "wrong_device_linking_code"
 msgstr "ভুল বা অবৈধ ডিভাইস লিঙ্কিং কোড"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "ডিভাইসটি সরানো যাচ্ছে না "
 
 msgid "application_crashes"
 msgstr "অ্যাপ্লিকেশন ক্র্যাশ করেছে"
@@ -225,7 +226,7 @@ msgid "other"
 msgstr "অন্যান্য"
 
 msgid "issue_description"
-msgstr ""
+msgstr "আপনার সমস্যাটি বর্ণনা করুন "
 
 msgid "check_for_updates"
 msgstr "নতুন আপডেটের জন্য চেক করুন."
@@ -267,10 +268,10 @@ msgid "device_linking_pin"
 msgstr "ডিভাইস লিঙ্ক করার পিন"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "আপনার প্রো ডিভাইসে 'ডিভাইস যোগ করুন' মেনু আইটেমটি খুলুন। "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "ডিভাইস লিঙ্কিং পিন প্রবেশ করান এবং জমা দিন "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr ""
@@ -299,7 +300,7 @@ msgid "report_description"
 msgstr "সমস্যার বিবরণ"
 
 msgid "report_issue"
-msgstr ""
+msgstr "সমস্যা রিপোর্ট করুন "
 
 msgid "report_an_issue"
 msgstr "একটি সমস্যা রিপোর্ট করুন"
@@ -323,7 +324,7 @@ msgstr ""
 "উপরের লিঙ্কটিতে দেখা যেতে পারে।"
 
 msgid "share_link"
-msgstr ""
+msgstr "লিঙ্ক শেয়ার করুন "
 
 msgid "share_title"
 msgstr "Lantern ডাউনলোড লিঙ্ক শেয়ার করুন"
@@ -359,7 +360,7 @@ msgid "enter_email"
 msgstr "ইমেল লিখুন"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "ক্রয় সম্পূর্ণ করতে ইমেইল প্রবেশ করুন "
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -391,10 +392,12 @@ msgid "referral_code"
 msgstr "রেফারেল কোড"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "রেফারেল কোড শেয়ার করুন "
 
 msgid "share_message_referral_code"
 msgstr ""
+"এক মাসের জন্য বিনামূল্যে Lantern Pro পেতে, এই রেফারেল কোডটি ব্যবহার করুন: %s"
+" ; এটি এখান থেকে ডাউনলোড করতে পারেন: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "রেফারেল কোড যোগ করুন"
@@ -516,16 +519,16 @@ msgid "No"
 msgstr "না"
 
 msgid "exit"
-msgstr ""
+msgstr "প্রস্থান করুন "
 
 msgid "show"
-msgstr ""
+msgstr "দেখান"
 
 msgid "status_on"
-msgstr ""
+msgstr "স্থিতি: চালু "
 
 msgid "status_off"
-msgstr ""
+msgstr "স্থিতি: বন্ধ "
 
 msgid "Enter or paste linking code"
 msgstr "লিঙ্ক করার কোডটি লিখুন বা পেস্ট করুন"
@@ -566,7 +569,7 @@ msgid "confirm_remove_device"
 msgstr "আপনি কি আপনার Pro অ্যাকাউন্ট থেকে এই ডিভাইসটি অপসারন করতে চান?"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "আপনি কি নিশ্চিত যে আপনি Lantern বন্ধ করতে চান? "
 
 msgid "unlimited_data"
 msgstr "অসীম ডাটা"
@@ -581,7 +584,7 @@ msgid "choose_plan"
 msgstr "প্ল্যান বাছুন"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "একবার বিল করা হয়েছে "
 
 msgid "connect_up_to_3_devices"
 msgstr "সর্বাধিক 3টি ডিভাইসে সংযোগ করুন"
@@ -1593,82 +1596,86 @@ msgid "add_device"
 msgstr "ডিভাইস যোগ করুন"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "পুনরুদ্ধার কোড পাঠানো হয়েছে "
 
 msgid "device_added"
 msgstr "ডিভাইস যোগ করা হয়েছে"
 
 msgid "device_added_message"
 msgstr ""
+"আপনার ডিভাইস সফলভাবে যোগ করা হয়েছে। যদি আপনি ডিভাইসটি সংযুক্ত না দেখেন, তবে"
+" উভয় ডিভাইসে অ্যাপটি পুনরায় চালু করুন "
 
 msgid "search_apps"
-msgstr ""
+msgstr "অ্যাপ অনুসন্ধান করুন "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "প্রবেশ করতে পারছেন না "
 
 msgid "invalid_verification_code"
 msgstr "অবৈধ যাচাই কোড"
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "ভুল রিসেলার কোড। দয়া করে যাচাই করুন এবং আবার চেষ্টা করুন। "
 
 msgid "follow_us"
-msgstr ""
+msgstr "আমাদের অনুসরণ করুন "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "আমাদের অনুসরণ করুন Telegram-এ "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "আমাদের অনুসরণ করুন Instagram-এ "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "আমাদের অনুসরণ করুন Facebook-এ "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "আমাদের অনুসরণ করুন X-এ "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "আমরা প্রযুক্তিগত সমস্যার সম্মুখীন হচ্ছি। পরে আবার চেষ্টা করুন। "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "আমরা প্রযুক্তিগত সমস্যার সম্মুখীন হচ্ছি। পরে আবার চেষ্টা করুন। "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "একটি সাময়িক ত্রুটি ঘটেছে "
 
 msgid "sorry_we_are_unable_to_load_that_page"
 msgstr ""
+"দুঃখিত, আমরা এই মুহূর্তে সেই পৃষ্ঠাটি লোড করতে অক্ষম, দয়া করে আবার চেষ্টা "
+"করতে 'রিফ্রেশ' টিপুন। "
 
 msgid "refresh"
 msgstr "Refresh"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "আপনার ইন্টারনেট সংযোগ পরীক্ষা করুন "
 
 msgid "please_try"
-msgstr ""
+msgstr "দয়া করে চেষ্টা করুন "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "এয়ারপ্লেন মোড বন্ধ করুন "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "মোবাইল ডেটা বা ওয়াইফাই চালু করুন "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "আপনার এলাকায় সিগন্যাল পরীক্ষা করুন "
 
 msgid "got_it"
 msgstr "পেয়েছি"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "কনফিগারেশন আনছে "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "সার্ভারের সাথে সংযোগ স্থাপন করুন "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "সীমা পৌঁছেছে "
 
 msgid "file_size_limit_description"
-msgstr ""
+msgstr "আরও দ্রুত গতি, বিজ্ঞাপনমুক্ত অভিজ্ঞতা, এবং সীমাহীন ডেটা আনলক করুন! "

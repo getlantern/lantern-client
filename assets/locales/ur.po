@@ -4,10 +4,11 @@
 # e2f <projects@e2f.com>, 2024
 # tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2024
 # Diversity83 83, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Diversity83 83, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Urdu (https://app.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -78,7 +79,7 @@ msgid "Go Pro Title"
 msgstr "پرو اپنائیں!"
 
 msgid "Go Pro Description"
-msgstr ""
+msgstr "تیز رفتار، اشتہار سے پاک تجربہ، اور لا محدود ڈیٹا کو ان لاک کریں! "
 
 msgid "Server Location"
 msgstr "سرور لوکیشن"
@@ -189,7 +190,7 @@ msgid "select_an_issue"
 msgstr "برائے مہربانی ایک مسئلے کا انتخاب کیجئے"
 
 msgid "enter_description"
-msgstr ""
+msgstr "براہ کرم اپنی مسئلہ کی وضاحت کریں "
 
 msgid "cannot_access_blocked_sites"
 msgstr "بلاک سائٹس تک رسائی ممکن نہیں "
@@ -198,7 +199,7 @@ msgid "cannot_complete_purchase"
 msgstr "خریداری مکمل نہیں کر سکتے"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "دریافت کام نہیں کر رہا "
 
 msgid "cannot_sign_in"
 msgstr "سائن ان نہیں کر سکتے"
@@ -216,7 +217,7 @@ msgid "wrong_device_linking_code"
 msgstr "غیر درست ڈیوائس منسلک کوڈ"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "ڈیوائس کو ہٹایا نہیں جا سکتا "
 
 msgid "application_crashes"
 msgstr "اپیلیکیشن کریش ہوتی ہے"
@@ -225,7 +226,7 @@ msgid "other"
 msgstr "دوسرے"
 
 msgid "issue_description"
-msgstr ""
+msgstr "اپنی مسئلہ کی وضاحت کریں "
 
 msgid "check_for_updates"
 msgstr "اپ ڈیٹس کے لیے پڑتال کریں"
@@ -266,10 +267,10 @@ msgid "device_linking_pin"
 msgstr "ڈیوائس لنکنگ پن"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "اپنے پرو ڈیوائس پر 'ڈیوائس شامل کریں' مینو آئٹم کو کھولیں۔ "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "ڈیوائس لنکنگ PIN درج کریں اور جمع کرائیں "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr ""
@@ -299,7 +300,7 @@ msgid "report_description"
 msgstr "مسئلہ کی تفصیل"
 
 msgid "report_issue"
-msgstr ""
+msgstr "مسئلہ رپورٹ کریں "
 
 msgid "report_an_issue"
 msgstr "مسئلہ رپورٹ کیجئے"
@@ -322,7 +323,7 @@ msgstr ""
 "پر مل سکتی ہیں۔"
 
 msgid "share_link"
-msgstr ""
+msgstr "لنک شیئر کریں "
 
 msgid "share_title"
 msgstr "لینٹرن ڈاؤن لوڈ کا لنک شیئر کریں"
@@ -358,7 +359,7 @@ msgid "enter_email"
 msgstr "ای میل درج کریں"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "خریداری مکمل کرنے کے لیے ای میل درج کریں "
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -390,10 +391,12 @@ msgid "referral_code"
 msgstr "حوالہ کوڈ"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "ریفرل کوڈ شیئر کریں "
 
 msgid "share_message_referral_code"
 msgstr ""
+"ایک مہینے کے مفت Lantern Pro کے لیے، یہ ریفرل کوڈ استعمال کریں: %s ; آپ اسے "
+"یہاں سے ڈاؤن لوڈ کر سکتے ہیں: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "ریفرل کوڈ شامل کریں"
@@ -513,16 +516,16 @@ msgid "No"
 msgstr "نہیں"
 
 msgid "exit"
-msgstr ""
+msgstr "خروج "
 
 msgid "show"
-msgstr ""
+msgstr "دکھائیں "
 
 msgid "status_on"
-msgstr ""
+msgstr "حالت: چل رہا ہے "
 
 msgid "status_off"
-msgstr ""
+msgstr "حالت: بند ہے "
 
 msgid "Enter or paste linking code"
 msgstr "لنکنگ کوڈ درج یا پیسٹ کریں"
@@ -562,7 +565,7 @@ msgid "confirm_remove_device"
 msgstr "کیا آپ واقعی اس ڈیوائس کو اپنے پرو اکاؤنٹ سے منقطع کرنا چاہتے ہیں ؟"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "کیا آپ یقیناً Lantern کو بند کرنا چاہتے ہیں؟ "
 
 msgid "unlimited_data"
 msgstr "لامحدود ڈیٹا"
@@ -577,7 +580,7 @@ msgid "choose_plan"
 msgstr "پلان چنیں"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "ایک بار بل کیا گیا "
 
 msgid "connect_up_to_3_devices"
 msgstr "3 تک آلات کو جوڑیں"
@@ -1594,82 +1597,90 @@ msgid "add_device"
 msgstr "ڈیوائس شامل کیجئے"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "ریکوری کوڈ بھیج دیا گیا "
 
 msgid "device_added"
 msgstr "آلہ جوڑا گیا"
 
 msgid "device_added_message"
 msgstr ""
+"آپ کا ڈیوائس کامیابی سے شامل کر دیا گیا ہے۔ اگر آپ ڈیوائس کو منسلک نہیں "
+"دیکھتے ہیں، تو براہ کرم دونوں ڈیوائسز پر ایپ کو دوبارہ شروع کریں "
 
 msgid "search_apps"
-msgstr ""
+msgstr "ایپس تلاش کریں "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "لاگ ان نہیں ہو سکتا "
 
 msgid "invalid_verification_code"
 msgstr "غیر درست تصدیقی کوڈ"
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "غلط ری سیلر کوڈ۔ براہ کرم تصدیق کریں اور دوبارہ کوشش کریں۔ "
 
 msgid "follow_us"
-msgstr ""
+msgstr "ہمیں فالو کریں "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "ہمیں فالو کریں Telegram پر "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "ہمیں فالو کریں Instagram پر "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "ہمیں فالو کریں Facebook پر "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "ہمیں فالو کریں X پر "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "ہمیں تکنیکی مشکلات کا سامنا ہے۔ بعد میں دوبارہ کوشش کریں۔ "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "ہمیں تکنیکی مشکلات کا سامنا ہے۔ بعد میں دوبارہ کوشش کریں۔ "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "ایک عارضی غلطی واقع ہوئی "
 
 msgid "sorry_we_are_unable_to_load_that_page"
 msgstr ""
+"معذرت، ہم اس وقت اس صفحے کو لوڈ نہیں کر سکتے، براہ کرم دوبارہ کوشش کرنے کے "
+"لیے 'ریفریش' پر کلک کریں۔ "
 
 msgid "refresh"
 msgstr "ریفریش"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "اپنے انٹرنیٹ کنکشن کی جانچ کریں "
 
 msgid "please_try"
-msgstr ""
+msgstr "براہ کرم کوشش کریں "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "ایئرپلین موڈ بند کریں "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "موبائل ڈیٹا یا وائی فائی کو آن کریں "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "اپنے علاقے میں سگنل چیک کریں "
 
 msgid "got_it"
 msgstr "سمجھ گئے"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "تشکیل حاصل کی جا رہی ہے "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "سرور سے کنکشن قائم کریں "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "حد پوری ہو گئی "
 
 msgid "file_size_limit_description"
 msgstr ""
+"منسلکات کا سائز 100 MB سے کم ہونا چاہئے\n"
+"\n"
+" \n"
+" "

@@ -4,7 +4,6 @@
 # 474874f569f96a33809d02f1de71479e_77020aa, 2024
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
 # YFdyh000 <yfdyh000@gmail.com>, 2024
-# Derek F <derek@getlantern.org>, 2024
 # Po-Chun Huang <aphroteus@gmail.com>, 2024
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
@@ -13,10 +12,11 @@
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
 # Ox Cart <ox@getlantern.org>, 2024
 # Lantern, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/lantern-1/teams/94371/zh_HK/)\n"
 "Language: zh_HK\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -82,7 +82,7 @@ msgid "Go Pro Title"
 msgstr "升級至 Pro 版！"
 
 msgid "Go Pro Description"
-msgstr ""
+msgstr "解锁更快的速度、无广告体验和无限数据！ "
 
 msgid "Server Location"
 msgstr "伺服器位置"
@@ -178,7 +178,7 @@ msgid "select_an_issue"
 msgstr "Please Select an Issue"
 
 msgid "enter_description"
-msgstr ""
+msgstr "请描述您的问题 "
 
 msgid "cannot_access_blocked_sites"
 msgstr "Cannot access blocked sites"
@@ -187,7 +187,7 @@ msgid "cannot_complete_purchase"
 msgstr "无法完成购买"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "发现功能不起作用 "
 
 msgid "cannot_sign_in"
 msgstr "无法登录"
@@ -205,7 +205,7 @@ msgid "wrong_device_linking_code"
 msgstr "设备关联代码错误或无效"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "无法删除设备 "
 
 msgid "application_crashes"
 msgstr "蓝灯软件崩溃"
@@ -214,7 +214,7 @@ msgid "other"
 msgstr "Other"
 
 msgid "issue_description"
-msgstr ""
+msgstr "描述您的问题 "
 
 msgid "check_for_updates"
 msgstr "检查更新"
@@ -253,10 +253,10 @@ msgid "device_linking_pin"
 msgstr "设备码授权"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "在您的Pro设备上打开“添加设备”菜单项。 "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "输入设备链接PIN并点击提交 "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr "* Ensure both devices are running the most recent version of Lantern"
@@ -283,7 +283,7 @@ msgid "report_description"
 msgstr "Issue Description"
 
 msgid "report_issue"
-msgstr ""
+msgstr "报告问题 "
 
 msgid "report_an_issue"
 msgstr "回報問題"
@@ -303,7 +303,7 @@ msgid "most_recent_lantern_apps"
 msgstr "最新版蓝灯下载地址见下"
 
 msgid "share_link"
-msgstr ""
+msgstr "分享链接 "
 
 msgid "share_title"
 msgstr "分享蓝灯下载地址"
@@ -339,7 +339,7 @@ msgid "enter_email"
 msgstr "Enter Email"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "输入电子邮件以完成购买 "
 
 msgid "error_fetching_plans"
 msgstr "获取计划信息出错，请重启蓝灯后，再次尝试。"
@@ -369,10 +369,10 @@ msgid "referral_code"
 msgstr "Referral code"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "分享推荐码 "
 
 msgid "share_message_referral_code"
-msgstr ""
+msgstr "要获得一个月的免费蓝灯，请使用此推荐码：%s；您可以从这里下载：https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "填入推荐码"
@@ -483,16 +483,16 @@ msgid "No"
 msgstr "否"
 
 msgid "exit"
-msgstr ""
+msgstr "退出 "
 
 msgid "show"
-msgstr ""
+msgstr "显示 "
 
 msgid "status_on"
-msgstr ""
+msgstr "状态：开启 "
 
 msgid "status_off"
-msgstr ""
+msgstr "状态：关闭 "
 
 msgid "Enter or paste linking code"
 msgstr "輸入或貼上連結碼"
@@ -528,7 +528,7 @@ msgid "confirm_remove_device"
 msgstr "確定要將此設備自專業版帳號上移除？"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "您确定要关闭蓝灯吗？ "
 
 msgid "unlimited_data"
 msgstr "無流量限制"
@@ -543,7 +543,7 @@ msgid "choose_plan"
 msgstr "Choose Plan"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "一次性收费 "
 
 msgid "connect_up_to_3_devices"
 msgstr "Connect up to 3 devices"
@@ -1509,82 +1509,86 @@ msgid "add_device"
 msgstr "Add Device"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "恢复代码已发送 "
 
 msgid "device_added"
 msgstr "设备已授权"
 
 msgid "device_added_message"
-msgstr ""
+msgstr "您的设备已成功添加。如果您没有看到设备连接，请重新启动两个设备上的应用程序 "
 
 msgid "search_apps"
-msgstr ""
+msgstr "搜索应用程序 "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "无法登录 "
 
 msgid "invalid_verification_code"
 msgstr "無效的認證碼"
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "经销商代码不正确。请验证并重试。 "
 
 msgid "follow_us"
-msgstr ""
+msgstr "关注我们 "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "在Telegram上关注我们 "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "在Instagram上关注我们 "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "在Facebook上关注我们 "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "在X上关注我们 "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "我们遇到了技术问题。请稍后再试。 "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "我们遇到了技术问题。请稍后再试。 "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "发生了临时错误 "
 
 msgid "sorry_we_are_unable_to_load_that_page"
-msgstr ""
+msgstr "对不起，我们目前无法加载该页面，请点击“刷新”重试。 "
 
 msgid "refresh"
 msgstr "重新整理"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "检查您的互联网连接 "
 
 msgid "please_try"
-msgstr ""
+msgstr "请重试 "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "关闭飞行模式 "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "打开移动数据或Wi-Fi "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "打开移动数据或Wi-Fi "
 
 msgid "got_it"
 msgstr "Got it"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "获取配置 "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "建立与服务器的连接 "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "达到限制 "
 
 msgid "file_size_limit_description"
 msgstr ""
+"附件大小应小于100 MB\n"
+"\n"
+" \n"
+" "

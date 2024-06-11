@@ -13,12 +13,12 @@
 # e2f <projects@e2f.com>, 2024
 # efe kerem sözeri <eksozeri@hotmail.com>, 2024
 # Volkan Gezer <volkangezer@gmail.com>, 2024
-# Derek F <derek@getlantern.org>, 2024
 # Teo Westbrook, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Teo Westbrook, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -90,6 +90,7 @@ msgstr "Pro'ya Yükseltin!"
 
 msgid "Go Pro Description"
 msgstr ""
+"Daha hızlı hızların, reklamsız deneyimin ve sınırsız verinin kilidini açın! "
 
 msgid "Server Location"
 msgstr "Sunucu Konumu"
@@ -200,7 +201,7 @@ msgid "select_an_issue"
 msgstr "Bir hata seçiniz"
 
 msgid "enter_description"
-msgstr ""
+msgstr "Lütfen sorununuzu açıklayın "
 
 msgid "cannot_access_blocked_sites"
 msgstr "Engellenen sitelere erişilemiyor"
@@ -209,7 +210,7 @@ msgid "cannot_complete_purchase"
 msgstr "Satın alma tamamlanamıyor"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "Keşfet çalışmıyor "
 
 msgid "cannot_sign_in"
 msgstr "Giriş yapılamadı"
@@ -227,7 +228,7 @@ msgid "wrong_device_linking_code"
 msgstr "Yanlış veya geçersiz cihaz bağlama kodu"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "Cihaz kaldırılamıyor "
 
 msgid "application_crashes"
 msgstr "Uygulama çökmeleri"
@@ -236,7 +237,7 @@ msgid "other"
 msgstr "Diğer"
 
 msgid "issue_description"
-msgstr ""
+msgstr "Sorununuzu açıklayın "
 
 msgid "check_for_updates"
 msgstr "Güncellemeleri Kontrol Et"
@@ -278,10 +279,10 @@ msgid "device_linking_pin"
 msgstr "Cihaz bağlama pini"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "Pro cihazınızda 'Cihaz Ekle' menü öğesini açın. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "Cihaz bağlantı PIN kodunu girin ve gönder'e tıklayın "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr ""
@@ -310,7 +311,7 @@ msgid "report_description"
 msgstr "Sorun Açıklaması"
 
 msgid "report_issue"
-msgstr ""
+msgstr "Sorunu Bildir "
 
 msgid "report_an_issue"
 msgstr "Hata Bildir"
@@ -332,7 +333,7 @@ msgstr ""
 "yukarıdaki bağlantıda bulunabilir."
 
 msgid "share_link"
-msgstr ""
+msgstr "Bağlantıyı Paylaş "
 
 msgid "share_title"
 msgstr "Lantern indirme bağlantısı paylaş"
@@ -368,7 +369,7 @@ msgid "enter_email"
 msgstr "E-posta Gir"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "Satın almayı tamamlamak için e-posta girin "
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -400,10 +401,12 @@ msgid "referral_code"
 msgstr "Referans kodu"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "Referans Kodunu Paylaş "
 
 msgid "share_message_referral_code"
 msgstr ""
+"Bir ay ücretsiz Lantern Pro için, bu referans kodunu kullanın: %s ; Buradan "
+"indirebilirsiniz: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "Referans kodu ekleyin"
@@ -523,16 +526,16 @@ msgid "No"
 msgstr "Hayır"
 
 msgid "exit"
-msgstr ""
+msgstr "Çıkış "
 
 msgid "show"
-msgstr ""
+msgstr "Göster "
 
 msgid "status_on"
-msgstr ""
+msgstr "Durum: Açık "
 
 msgid "status_off"
-msgstr ""
+msgstr "Durum: Kapalı "
 
 msgid "Enter or paste linking code"
 msgstr "Bağlama kodunu girin veya yapıştırın"
@@ -572,7 +575,7 @@ msgid "confirm_remove_device"
 msgstr "Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "Lantern'ı kapatmak istediğinizden emin misiniz? "
 
 msgid "unlimited_data"
 msgstr "Sınırsız Veri"
@@ -587,7 +590,7 @@ msgid "choose_plan"
 msgstr "Plan Seç"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "bir kerelik faturalandırma "
 
 msgid "connect_up_to_3_devices"
 msgstr "3 cihaza kadar bağlayın"
@@ -1597,82 +1600,90 @@ msgid "add_device"
 msgstr "Hesap Ekle"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "Kurtarma Kodu Gönderildi "
 
 msgid "device_added"
 msgstr "Cihaz Eklendi"
 
 msgid "device_added_message"
 msgstr ""
+"Cihazınız başarıyla eklendi. Bağlı cihazı görmüyorsanız, lütfen her iki "
+"cihazda uygulamayı yeniden başlatın "
 
 msgid "search_apps"
-msgstr ""
+msgstr "Uygulamaları Ara "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "Giriş yapılamıyor "
 
 msgid "invalid_verification_code"
 msgstr "Geçersiz doğrulama kodu"
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "Yanlış satıcı kodu. Lütfen doğrulayın ve tekrar deneyin. "
 
 msgid "follow_us"
-msgstr ""
+msgstr "Bizi Takip Edin "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "Telegram'da bizi takip edin "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "Instagram'da bizi takip edin "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "Facebook'ta bizi takip edin "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "X'te bizi takip edin "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "Teknik zorluklar yaşıyoruz. Daha sonra tekrar deneyin. "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "Teknik zorluklar yaşıyoruz. Daha sonra tekrar deneyin. "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "Geçici bir hata oluştu "
 
 msgid "sorry_we_are_unable_to_load_that_page"
 msgstr ""
+"Üzgünüz, şu anda o sayfayı yükleyemiyoruz, lütfen tekrar denemek için "
+"'Yenile'ye dokunun. "
 
 msgid "refresh"
 msgstr "Yenile"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "İnternet bağlantınızı kontrol edin "
 
 msgid "please_try"
-msgstr ""
+msgstr "Lütfen deneyin "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "Uçak modunu kapatma "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "Mobil veri veya wifi açma "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "Bölgenizdeki sinyali kontrol etme "
 
 msgid "got_it"
 msgstr "Tamam"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "Yapılandırma Alınıyor "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "Sunucuya bağlantı kuruluyor "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "Limit Aşıldı "
 
 msgid "file_size_limit_description"
 msgstr ""
+"Ek boyutları 100 MB'dan küçük olmalıdır\n"
+"\n"
+" \n"
+" "

@@ -14,12 +14,12 @@
 # 6ad90dadbe5d08991a98500e1efbdbb4_9d79615 <7392e61add82b364ab0393a04573af48_721156>, 2024
 # 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2024
 # Amin Jobran, 2024
-# Derek F <derek@getlantern.org>, 2024
 # Abed Abedd <abderrahman.younis@gmail.com>, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Abed Abedd <abderrahman.younis@gmail.com>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Arabic (https://app.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
@@ -89,7 +89,7 @@ msgid "Go Pro Title"
 msgstr "الترقية إلى النسخة الاحترافية!"
 
 msgid "Go Pro Description"
-msgstr ""
+msgstr "افتح سرعات أسرع، تجربة خالية من الإعلانات، وبيانات غير محدودة! "
 
 msgid "Server Location"
 msgstr "موقع الخادم"
@@ -198,7 +198,7 @@ msgid "select_an_issue"
 msgstr "يرجى اختيار مشكلة"
 
 msgid "enter_description"
-msgstr ""
+msgstr "يرجى وصف مشكلتك "
 
 msgid "cannot_access_blocked_sites"
 msgstr "لا يمكن الوصول الى المواقع المحظورة"
@@ -207,7 +207,7 @@ msgid "cannot_complete_purchase"
 msgstr "لا يمكن إكمال عملية الشراء"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "ميزة الاكتشاف لا تعمل "
 
 msgid "cannot_sign_in"
 msgstr "لا يُمكن تسجيل الدخول"
@@ -225,7 +225,7 @@ msgid "wrong_device_linking_code"
 msgstr "رامز ربط الجهاز خاطئ أو غير صالح"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "لا يمكن إزالة الجهاز "
 
 msgid "application_crashes"
 msgstr "تعطل التطبيق"
@@ -234,7 +234,7 @@ msgid "other"
 msgstr "أخرى"
 
 msgid "issue_description"
-msgstr ""
+msgstr "وصف مشكلتك "
 
 msgid "check_for_updates"
 msgstr "تحقق من وجود تحديثات"
@@ -276,10 +276,10 @@ msgid "device_linking_pin"
 msgstr "رقم التعريف الشخصي لربط الجهاز"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "افتح عنصر القائمة \"إضافة جهاز\" على جهاز Pro الخاص بك. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "أدخل رقم PIN لربط الجهاز واضغط على إرسال "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr "* تأكد من أن كلا الجهازين يعملان بأحدث إصدار من Lantern"
@@ -306,7 +306,7 @@ msgid "report_description"
 msgstr "وصف المشكلة"
 
 msgid "report_issue"
-msgstr ""
+msgstr "الإبلاغ عن مشكلة "
 
 msgid "report_an_issue"
 msgstr "ابلاغ عن مشكلة"
@@ -327,7 +327,7 @@ msgstr ""
 "الرابط أعلاه."
 
 msgid "share_link"
-msgstr ""
+msgstr "الإبلاغ عن مشكلة "
 
 msgid "share_title"
 msgstr "مشاركة رابط تنزيل لانترن"
@@ -363,7 +363,7 @@ msgid "enter_email"
 msgstr "أدخل البريد الإلكتروني"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "أدخل البريد الإلكتروني لإكمال الشراء "
 
 msgid "error_fetching_plans"
 msgstr "حدث خطأ أثناء إحضار الخطط، تُرجى إعادة تشغيل Lantern وإعادة المحاولة."
@@ -393,10 +393,12 @@ msgid "referral_code"
 msgstr "رمز الإحالة"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "مشاركة كود الإحالة "
 
 msgid "share_message_referral_code"
 msgstr ""
+"للحصول على شهر مجاني من Lantern Pro، استخدم كود الإحالة هذا: %s ; يمكنك "
+"تنزيله من هنا: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "أضف رمز الإحالة"
@@ -516,16 +518,16 @@ msgid "No"
 msgstr "لا"
 
 msgid "exit"
-msgstr ""
+msgstr "خروج "
 
 msgid "show"
-msgstr ""
+msgstr "عرض "
 
 msgid "status_on"
-msgstr ""
+msgstr "الحالة: تشغيل "
 
 msgid "status_off"
-msgstr ""
+msgstr "الحالة: إيقاف "
 
 msgid "Enter or paste linking code"
 msgstr "أدخل أو الصق رمز الربط"
@@ -566,7 +568,7 @@ msgid "confirm_remove_device"
 msgstr "هل أنت متأكد من أنك تريد فك ربط هذا الجهاز مع حساب برو؟"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "هل أنت متأكد أنك تريد إغلاق Lantern؟ "
 
 msgid "unlimited_data"
 msgstr "بيانات غير محدودة"
@@ -581,7 +583,7 @@ msgid "choose_plan"
 msgstr "اختر الخطة"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "تمت الفوترة مرة واحدة "
 
 msgid "connect_up_to_3_devices"
 msgstr "توصيل ما يصل إلى 3 أجهزة"
@@ -1585,82 +1587,86 @@ msgid "add_device"
 msgstr "أضف جهاز"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "تم إرسال رمز الاسترداد "
 
 msgid "device_added"
 msgstr "تمت إضافة الجهاز"
 
 msgid "device_added_message"
 msgstr ""
+"تمت إضافة جهازك بنجاح. إذا لم تر الجهاز متصلاً، يرجى إعادة تشغيل التطبيق على"
+" كلا الجهازين "
 
 msgid "search_apps"
-msgstr ""
+msgstr "البحث عن التطبيقات "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "لا يمكن تسجيل الدخول "
 
 msgid "invalid_verification_code"
 msgstr "كود تحقق غير صحيح "
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "كود البائع غير صحيح. يرجى التحقق والمحاولة مرة أخرى. "
 
 msgid "follow_us"
-msgstr ""
+msgstr "تابعنا "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "تابعنا على Telegram "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "تابعنا على Instagram "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "تابعنا على Facebook "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "تابعنا على X "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "نواجه صعوبات تقنية. حاول مرة أخرى لاحقًا. "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "نواجه صعوبات تقنية. حاول مرة أخرى لاحقًا. "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "حدث خطأ مؤقت "
 
 msgid "sorry_we_are_unable_to_load_that_page"
 msgstr ""
+"عذرًا، لا يمكن تحميل هذه الصفحة في الوقت الحالي، يرجى الضغط على \"تحديث\" "
+"للمحاولة مرة أخرى. "
 
 msgid "refresh"
 msgstr "تحديث"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "تحقق من اتصال الإنترنت لديك "
 
 msgid "please_try"
-msgstr ""
+msgstr "يرجى المحاولة مرة أخرى "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "إيقاف وضع الطيران "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "تشغيل البيانات المحمولة أو الواي فاي "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "تحقق من الإشارة في منطقتك "
 
 msgid "got_it"
 msgstr "فهمت"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "جلب التكوين "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "إقامة اتصال بالخادم "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "تم الوصول إلى الحد "
 
 msgid "file_size_limit_description"
-msgstr ""
+msgstr "يجب أن تكون أحجام المرفقات أقل من 100 ميجابايت"

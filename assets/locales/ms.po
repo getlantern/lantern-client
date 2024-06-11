@@ -8,10 +8,11 @@
 # tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2024
 # e2f <projects@e2f.com>, 2024
 # Alyssa Chung <lisiachung7@gmail.com>, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Alyssa Chung <lisiachung7@gmail.com>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Malay (https://app.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -83,6 +84,8 @@ msgstr "Go Pro!"
 
 msgid "Go Pro Description"
 msgstr ""
+"Buka kelajuan yang lebih pantas, pengalaman tanpa iklan, dan data tanpa had!"
+" "
 
 msgid "Server Location"
 msgstr "Lokasi Server"
@@ -193,7 +196,7 @@ msgid "select_an_issue"
 msgstr "Sila Pilih satu Isu"
 
 msgid "enter_description"
-msgstr ""
+msgstr "Sila jelaskan masalah anda "
 
 msgid "cannot_access_blocked_sites"
 msgstr "Tidak boleh akses laman-laman disekat"
@@ -202,7 +205,7 @@ msgid "cannot_complete_purchase"
 msgstr "Tidak dapat melengkapkan pembelian"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "Fungsi 'Discover' tidak berfungsi "
 
 msgid "cannot_sign_in"
 msgstr "Tidak boleh mendaftar masuk"
@@ -220,7 +223,7 @@ msgid "wrong_device_linking_code"
 msgstr "Kod pautan alatan salah atau tidak sah "
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "Tidak boleh mengeluarkan peranti "
 
 msgid "application_crashes"
 msgstr "Aplikasi ranap"
@@ -229,7 +232,7 @@ msgid "other"
 msgstr "Lain-lain"
 
 msgid "issue_description"
-msgstr ""
+msgstr "Jelaskan masalah anda "
 
 msgid "check_for_updates"
 msgstr "Semak kemas kini"
@@ -271,10 +274,10 @@ msgid "device_linking_pin"
 msgstr "Pin pemautan peranti"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "Buka item menu 'Tambah Peranti' pada peranti Pro anda. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "Masukkan PIN pautan peranti dan klik hantar "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr "* Pastikan kedua-dua peranti menjalankan versi terbaru Lantern"
@@ -302,7 +305,7 @@ msgid "report_description"
 msgstr "Penerangan Isu"
 
 msgid "report_issue"
-msgstr ""
+msgstr "Lapor Masalah "
 
 msgid "report_an_issue"
 msgstr "Melapor suatu Isu"
@@ -324,7 +327,7 @@ msgstr ""
 "didapati di pautan di atas."
 
 msgid "share_link"
-msgstr ""
+msgstr "Kongsi Pautan "
 
 msgid "share_title"
 msgstr "Kongsikan pautan muat turun Lantern"
@@ -360,7 +363,7 @@ msgid "enter_email"
 msgstr "Masukkan E-mel"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "Masukkan e-mel untuk melengkapkan pembelian "
 
 msgid "error_fetching_plans"
 msgstr "Ralat mendapatkan pelan, sila mulakan semula Lantern dan cuba lagi."
@@ -390,10 +393,12 @@ msgid "referral_code"
 msgstr "Kod rujukan"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "Kongsi Kod Rujukan "
 
 msgid "share_message_referral_code"
 msgstr ""
+"Untuk sebulan percuma Lantern Pro, gunakan kod rujukan ini: %s ; Anda boleh "
+"memuat turunnya di sini: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "Tambah kod Rujukan"
@@ -514,16 +519,16 @@ msgid "No"
 msgstr "Tidak"
 
 msgid "exit"
-msgstr ""
+msgstr "Keluar "
 
 msgid "show"
-msgstr ""
+msgstr "Keluar "
 
 msgid "status_on"
-msgstr ""
+msgstr "Status: Hidup "
 
 msgid "status_off"
-msgstr ""
+msgstr "Status: Mati "
 
 msgid "Enter or paste linking code"
 msgstr "Masukkan atau tampal kod pemautan"
@@ -565,7 +570,7 @@ msgstr ""
 "Adakah anda pasti ingin mengeluarkan pautan peranti dari account Pro anda?"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "Adakah anda pasti mahu menutup Lantern? "
 
 msgid "unlimited_data"
 msgstr "Data Tidak Terbatas"
@@ -580,7 +585,7 @@ msgid "choose_plan"
 msgstr "Pilih Pelan"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "dibilkan sekali sahaja "
 
 msgid "connect_up_to_3_devices"
 msgstr "Sambungkan sehingga 3 peranti"
@@ -1603,82 +1608,86 @@ msgid "add_device"
 msgstr "Tambah Peranti"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "Kod Pemulihan Dihantar "
 
 msgid "device_added"
 msgstr "Peranti Ditambah"
 
 msgid "device_added_message"
 msgstr ""
+"Peranti anda telah berjaya ditambah. Jika anda tidak melihat peranti yang "
+"disambungkan, sila mulakan semula aplikasi pada kedua-dua peranti "
 
 msgid "search_apps"
-msgstr ""
+msgstr "Cari Apl "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "Tidak boleh log masuk "
 
 msgid "invalid_verification_code"
 msgstr "Kod pengessahan yang tidah sah"
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "Kod penjual semula tidak betul. Sila sahkan dan cuba lagi. "
 
 msgid "follow_us"
-msgstr ""
+msgstr "Ikuti Kami "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "Ikuti kami di Telegram "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "Ikuti kami di Instagram "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "Ikuti kami di Facebook "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "Ikuti kami di X "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "Kami mengalami kesukaran teknikal. Cuba lagi nanti. "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "Kami mengalami kesukaran teknikal. Cuba lagi nanti. "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "Ralat sementara berlaku "
 
 msgid "sorry_we_are_unable_to_load_that_page"
 msgstr ""
+"Maaf, kami tidak dapat memuatkan halaman itu pada masa ini, sila tekan "
+"'Refresh' untuk mencuba lagi. "
 
 msgid "refresh"
 msgstr "Muat semula"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "Semak sambungan internet anda "
 
 msgid "please_try"
-msgstr ""
+msgstr "Sila cuba "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "Matikan mod kapal terbang "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "Hidupkan data mudah alih atau wifi "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "Semak isyarat di kawasan anda "
 
 msgid "got_it"
 msgstr "Faham"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "Mengambil Konfigurasi "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "Menjalin sambungan ke pelayan "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "Had Tercapai "
 
 msgid "file_size_limit_description"
-msgstr ""
+msgstr "Saiz lampiran hendaklah di bawah 100 MB"

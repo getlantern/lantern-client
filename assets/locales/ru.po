@@ -5,7 +5,6 @@
 # Lowrider <pams@imail.ru>, 2022
 # Николай Кочкин <urfiner@gmail.com>, 2022
 # Helen R <helen.russel88@gmail.com>, 2022
-# Derek F <derek@getlantern.org>, 2022
 # e2f <projects@e2f.com>, 2022
 # e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023
 # Serg <sergkoshkin@yandex.ru>, 2023
@@ -18,10 +17,11 @@
 # Helen Russel <coo@workogram.com>, 2024
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024
 # sayanvd <sayanvd@yandex.ru>, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: sayanvd <sayanvd@yandex.ru>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -92,6 +92,8 @@ msgstr "Перейдите на версию Pro!"
 
 msgid "Go Pro Description"
 msgstr ""
+"Разблокируйте более высокие скорости, просмотр без рекламы и неограниченное "
+"количество данных! "
 
 msgid "Server Location"
 msgstr "Местоположение сервера"
@@ -199,7 +201,7 @@ msgid "select_an_issue"
 msgstr "Выберите проблему"
 
 msgid "enter_description"
-msgstr ""
+msgstr "Пожалуйста, опишите вашу проблему "
 
 msgid "cannot_access_blocked_sites"
 msgstr "Не удается получить доступ к заблокированным сайтам"
@@ -208,7 +210,7 @@ msgid "cannot_complete_purchase"
 msgstr "Ваша покупка не может быть завершена"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "Функция обнаружения не работает "
 
 msgid "cannot_sign_in"
 msgstr "Не удается войти в аккаунт"
@@ -226,7 +228,7 @@ msgid "wrong_device_linking_code"
 msgstr "Неправильный или недействительный код привязки устройства"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "Невозможно удалить устройство "
 
 msgid "application_crashes"
 msgstr "Сбой работы приложения"
@@ -235,7 +237,7 @@ msgid "other"
 msgstr "Другое"
 
 msgid "issue_description"
-msgstr ""
+msgstr "Опишите вашу проблему "
 
 msgid "check_for_updates"
 msgstr "Проверить обновления"
@@ -277,10 +279,10 @@ msgid "device_linking_pin"
 msgstr "Код привязки устройства"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "Откройте пункт меню «Добавить устройство» на вашем Pro-устройстве. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "Введите PIN-код привязки устройства и нажмите «Отправить» "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr ""
@@ -310,7 +312,7 @@ msgid "report_description"
 msgstr "Описание проблемы"
 
 msgid "report_issue"
-msgstr ""
+msgstr "Сообщить о проблеме "
 
 msgid "report_an_issue"
 msgstr "Сообщить о проблеме"
@@ -333,7 +335,7 @@ msgstr ""
 " платформ."
 
 msgid "share_link"
-msgstr ""
+msgstr "Поделиться ссылкой "
 
 msgid "share_title"
 msgstr "Поделитесь ссылкой на скачивание Lantern"
@@ -369,7 +371,7 @@ msgid "enter_email"
 msgstr "Введите электронную почту"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "Введите адрес электронной почты для завершения покупки "
 
 msgid "error_fetching_plans"
 msgstr "Ошибка загрузки. Перезапустите Lantern и повторите попытку."
@@ -401,10 +403,13 @@ msgid "referral_code"
 msgstr "Реферальный код"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "Поделиться реферальным кодом "
 
 msgid "share_message_referral_code"
 msgstr ""
+"Чтобы получить месяц бесплатного доступа к Lantern Pro, используйте этот "
+"реферальный код: %s ; Вы можете скачать его здесь: "
+"https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "Ввести реферальный код "
@@ -527,16 +532,16 @@ msgid "No"
 msgstr "Нет"
 
 msgid "exit"
-msgstr ""
+msgstr "Выйти "
 
 msgid "show"
-msgstr ""
+msgstr "Показать"
 
 msgid "status_on"
-msgstr ""
+msgstr "Статус: Включено "
 
 msgid "status_off"
-msgstr ""
+msgstr "Статус: Выключено "
 
 msgid "Enter or paste linking code"
 msgstr "Введите или вставьте код привязки"
@@ -576,7 +581,7 @@ msgid "confirm_remove_device"
 msgstr "Вы уверены, что хотите отвязать это устройство от аккаунта Pro?"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "Вы уверены, что хотите закрыть Lantern? "
 
 msgid "unlimited_data"
 msgstr "Безлимитный трафик"
@@ -591,7 +596,7 @@ msgid "choose_plan"
 msgstr "Выбрать план"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "одноразовая оплата "
 
 msgid "connect_up_to_3_devices"
 msgstr "Подключение до трех устройств"
@@ -1605,82 +1610,87 @@ msgid "add_device"
 msgstr "Добавить устройство"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "Код восстановления отправлен "
 
 msgid "device_added"
 msgstr "Устройство добавлено"
 
 msgid "device_added_message"
 msgstr ""
+"Ваше устройство успешно добавлено. Если вы не видите подключенное "
+"устройство, пожалуйста, перезапустите приложение на обоих устройствах "
 
 msgid "search_apps"
-msgstr ""
+msgstr "Поиск приложений "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "Не удается войти в систему "
 
 msgid "invalid_verification_code"
 msgstr "Неверный код подтверждения"
 
 msgid "wrong_seller_code"
 msgstr ""
+"Неправильный код реселлера. Пожалуйста, проверьте и попробуйте снова. "
 
 msgid "follow_us"
-msgstr ""
+msgstr "Подпишитесь на нас "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "Следуйте за нами в Telegram "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "Следуйте за нами в Instagram "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "Следуйте за нами в Facebook "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "Следуйте за нами в X "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "Мы испытываем технические трудности. Попробуйте позже. "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "Мы испытываем технические трудности. Попробуйте позже. "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "Произошла временная ошибка "
 
 msgid "sorry_we_are_unable_to_load_that_page"
 msgstr ""
+"Извините, не удается загрузить эту страницу в данный момент, пожалуйста, "
+"нажмите «Обновить», чтобы попробовать снова. "
 
 msgid "refresh"
 msgstr "Обновить"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "Проверьте подключение к Интернету "
 
 msgid "please_try"
-msgstr ""
+msgstr "Пожалуйста, попробуйте "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "Отключите режим полета "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "Включите мобильные данные или Wi-Fi "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "Проверьте сигнал в вашем районе "
 
 msgid "got_it"
 msgstr "Понятно"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "Загрузка конфигурации "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "Установление соединения с сервером "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "Лимит достигнут "
 
 msgid "file_size_limit_description"
-msgstr ""
+msgstr "Размер вложений должен быть менее 100 МБ"

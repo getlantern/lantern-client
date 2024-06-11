@@ -2,17 +2,17 @@
 # Translators:
 # Minnie Kaur <tuteja.minnie@gmail.com>, 2022
 # tx_e2f_hi r2 <tx_e2f_hi_r2@ate2f.com>, 2023
-# Derek F <derek@getlantern.org>, 2023
 # Lantern, 2023
 # tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2024
 # Kalyan Dikshit <dikshitrocks93@gmail.com>, 2024
 # E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2024
 # tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2024
 # e2f <projects@e2f.com>, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f <projects@e2f.com>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Hindi (India) (https://app.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
 "Language: hi_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -82,7 +82,7 @@ msgid "Go Pro Title"
 msgstr "Pro आज़माएँ!"
 
 msgid "Go Pro Description"
-msgstr ""
+msgstr "तेज़ गति, विज्ञापन-मुक्त अनुभव, और असीमित डेटा को अनलॉक करें! "
 
 msgid "Server Location"
 msgstr "सर्वर स्थान"
@@ -191,7 +191,7 @@ msgid "select_an_issue"
 msgstr "कृपया एक मुद्दा चयन"
 
 msgid "enter_description"
-msgstr ""
+msgstr "कृपया अपनी समस्या का वर्णन करें "
 
 msgid "cannot_access_blocked_sites"
 msgstr "अवरुद्ध साइटों तक नहीं पहुँच सकते"
@@ -200,7 +200,7 @@ msgid "cannot_complete_purchase"
 msgstr "खरीदारी पूरी नहीं की जा सकती है"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "खोज काम नहीं कर रहा है "
 
 msgid "cannot_sign_in"
 msgstr "साइन इन नहीं किया जा सकता है"
@@ -218,7 +218,7 @@ msgid "wrong_device_linking_code"
 msgstr "गलत या अवैध सत्यापन कोड"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "डिवाइस को हटाया नहीं जा सकता "
 
 msgid "application_crashes"
 msgstr "एप्लिकेशन क्रैश हो जाता है"
@@ -227,7 +227,7 @@ msgid "other"
 msgstr "अन्य"
 
 msgid "issue_description"
-msgstr ""
+msgstr "अपनी समस्या का वर्णन करें "
 
 msgid "check_for_updates"
 msgstr "अपडेट के लिए चेक करें।"
@@ -269,10 +269,10 @@ msgid "device_linking_pin"
 msgstr "डिवाइस लिंकिंग पिन"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "अपने प्रो डिवाइस पर 'डिवाइस जोड़ें' मेनू आइटम खोलें। "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "डिवाइस लिंकिंग पिन दर्ज करें और सबमिट पर क्लिक करें "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr ""
@@ -300,7 +300,7 @@ msgid "report_description"
 msgstr "समस्या का विवरण"
 
 msgid "report_issue"
-msgstr ""
+msgstr "समस्या रिपोर्ट करें "
 
 msgid "report_an_issue"
 msgstr "मामले की रिपोर्ट करें"
@@ -322,7 +322,7 @@ msgstr ""
 "लिंक पर पाया जा सकता है."
 
 msgid "share_link"
-msgstr ""
+msgstr "लिंक साझा करें "
 
 msgid "share_title"
 msgstr "Lantern डाउनलोड लिंक शेयर करें"
@@ -358,7 +358,7 @@ msgid "enter_email"
 msgstr "ईमेल दर्ज करें"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "खरीद पूरी करने के लिए ईमेल दर्ज करें "
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -389,10 +389,12 @@ msgid "referral_code"
 msgstr "रेफरल कोड"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "रेफरल कोड साझा करें "
 
 msgid "share_message_referral_code"
 msgstr ""
+"एक महीने के लिए मुफ़्त Lantern Pro पाने के लिए, इस रेफरल कोड का उपयोग करें: "
+"%s ; आप इसे यहां से डाउनलोड कर सकते हैं: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "रेफरल कोड जोड़ें"
@@ -512,16 +514,16 @@ msgid "No"
 msgstr "नहीं"
 
 msgid "exit"
-msgstr ""
+msgstr "बाहर निकलें "
 
 msgid "show"
-msgstr ""
+msgstr "दिखाओ "
 
 msgid "status_on"
-msgstr ""
+msgstr "स्थिति: चालू "
 
 msgid "status_off"
-msgstr ""
+msgstr "स्थिति: बंद "
 
 msgid "Enter or paste linking code"
 msgstr "लिंकिंग कोड डालें या पेस्ट करें"
@@ -561,7 +563,7 @@ msgid "confirm_remove_device"
 msgstr "क्या आप वाकई इस डिवाइस को अपने Pro खाते से अनलिंक करना चाहते हैं?"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "क्या आप वाकई Lantern को बंद करना चाहते हैं? "
 
 msgid "unlimited_data"
 msgstr "असीमित डेटा"
@@ -576,7 +578,7 @@ msgid "choose_plan"
 msgstr "योजना चुनें"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "एक बार बिल किया गया "
 
 msgid "connect_up_to_3_devices"
 msgstr "3 डिवाइस तक कनेक्ट करें"
@@ -1584,82 +1586,86 @@ msgid "add_device"
 msgstr "डिवाइस जोडे"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "पुनर्प्राप्ति कोड भेजा गया "
 
 msgid "device_added"
 msgstr "डिवाइस जोड़ा गया"
 
 msgid "device_added_message"
 msgstr ""
+"आपका डिवाइस सफलतापूर्वक जोड़ा गया है। यदि आप जुड़े हुए डिवाइस को नहीं देखते "
+"हैं, तो कृपया दोनों डिवाइसों पर ऐप को पुनः प्रारंभ करें "
 
 msgid "search_apps"
-msgstr ""
+msgstr "ऐप्स खोजें "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "लॉगिन नहीं हो पा रहा "
 
 msgid "invalid_verification_code"
 msgstr "अमान्य सत्यापन कोड"
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "गलत पुनर्विक्रेता कोड। कृपया सत्यापित करें और पुनः प्रयास करें। "
 
 msgid "follow_us"
-msgstr ""
+msgstr "हमें फॉलो करें "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "हमें Telegram पर फॉलो करें "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "हमें Instagram पर फॉलो करें "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "हमें Facebook पर फॉलो करें "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "हमें X पर फॉलो करें "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "हम तकनीकी कठिनाइयों का सामना कर रहे हैं। बाद में पुनः प्रयास करें। "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "हम तकनीकी कठिनाइयों का सामना कर रहे हैं। बाद में पुनः प्रयास करें। "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "एक अस्थायी त्रुटि हुई "
 
 msgid "sorry_we_are_unable_to_load_that_page"
 msgstr ""
+"क्षमा करें, हम इस समय उस पृष्ठ को लोड करने में असमर्थ हैं, कृपया पुनः प्रयास"
+" करने के लिए 'रिफ्रेश' टैप करें। "
 
 msgid "refresh"
 msgstr "ताज़ा करें"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "अपना इंटरनेट कनेक्शन जांचें "
 
 msgid "please_try"
-msgstr ""
+msgstr "कृपया प्रयास करें "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "हवाई जहाज मोड बंद करें "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "मोबाइल डेटा या वाईफाई चालू करें "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "अपने क्षेत्र में सिग्नल की जांच करें "
 
 msgid "got_it"
 msgstr "समझ गया"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "कॉन्फ़िगरेशन प्राप्त कर रहा है "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "सर्वर से कनेक्शन स्थापित कर रहा है "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "सीमा पूरी हो गई है "
 
 msgid "file_size_limit_description"
-msgstr ""
+msgstr "संलग्नक का आकार 100 एमबी से कम होना चाहिए"

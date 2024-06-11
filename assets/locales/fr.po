@@ -1,16 +1,16 @@
 # 
 # Translators:
-# Derek F <derek@getlantern.org>, 2022
 # e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2022
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2023
 # fffw <fffw@getlantern.org>, 2023
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2023
 # e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024
 # AO <ao@localizationlab.org>, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: AO <ao@localizationlab.org>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: French (https://app.transifex.com/lantern-1/teams/94371/fr/)\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -83,6 +83,8 @@ msgstr "Passez à la version Pro !"
 
 msgid "Go Pro Description"
 msgstr ""
+"Débloquez des vitesses plus rapides, une expérience sans publicité et des "
+"données illimitées! "
 
 msgid "Server Location"
 msgstr "Emplacement du serveur"
@@ -196,7 +198,7 @@ msgid "select_an_issue"
 msgstr "Veuillez choisir un problème"
 
 msgid "enter_description"
-msgstr ""
+msgstr "Veuillez décrire votre problème "
 
 msgid "cannot_access_blocked_sites"
 msgstr "Impossible d’accéder à des sites bloqués"
@@ -205,7 +207,7 @@ msgid "cannot_complete_purchase"
 msgstr "Impossible de terminer l’achat"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "Découverte ne fonctionne pas "
 
 msgid "cannot_sign_in"
 msgstr "Impossible de se connecter"
@@ -223,7 +225,7 @@ msgid "wrong_device_linking_code"
 msgstr "Code de liaison d’appareil erroné ou invalide"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "Impossible de supprimer l'appareil "
 
 msgid "application_crashes"
 msgstr "L’application plante"
@@ -232,7 +234,7 @@ msgid "other"
 msgstr "Autre"
 
 msgid "issue_description"
-msgstr ""
+msgstr "Décrivez votre problème "
 
 msgid "check_for_updates"
 msgstr "Rechercher des mises à jour"
@@ -275,9 +277,10 @@ msgstr "Code de liaison d’appareil"
 
 msgid "link_device_step_one"
 msgstr ""
+"Ouvrez l'élément de menu 'Ajouter un appareil' sur votre appareil Pro. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "Entrez le code PIN de liaison de l'appareil et cliquez sur soumettre "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr ""
@@ -307,7 +310,7 @@ msgid "report_description"
 msgstr "Description du problème"
 
 msgid "report_issue"
-msgstr ""
+msgstr "Signaler un problème "
 
 msgid "report_an_issue"
 msgstr "Signaler un problème"
@@ -330,7 +333,7 @@ msgstr ""
 "formes sont accessibles à partir du lien ci-dessus."
 
 msgid "share_link"
-msgstr ""
+msgstr "Partager le lien "
 
 msgid "share_title"
 msgstr "Partager le lien de téléchargement de Lantern"
@@ -366,7 +369,7 @@ msgid "enter_email"
 msgstr "Saisissez votre adresse courriel"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "Entrez l'email pour compléter l'achat "
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -398,10 +401,12 @@ msgid "referral_code"
 msgstr "Code de parrainage"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "Partager le code de parrainage "
 
 msgid "share_message_referral_code"
 msgstr ""
+"Pour un mois gratuit de Lantern Pro, utilisez ce code de parrainage :%s; "
+"Vous pouvez le télécharger ici : https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "Ajouter un code de parrainage"
@@ -527,16 +532,16 @@ msgid "No"
 msgstr "Non"
 
 msgid "exit"
-msgstr ""
+msgstr "Quitter"
 
 msgid "show"
-msgstr ""
+msgstr "Afficher "
 
 msgid "status_on"
-msgstr ""
+msgstr "Statut : Activé "
 
 msgid "status_off"
-msgstr ""
+msgstr "Statut : Désactivé "
 
 msgid "Enter or paste linking code"
 msgstr "Saisissez ou collez un code de liaison d’appareil"
@@ -578,7 +583,7 @@ msgid "confirm_remove_device"
 msgstr "Voulez-vous vraiment dissocier cet appareil de votre compte Pro ?"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir fermer Lantern ? "
 
 msgid "unlimited_data"
 msgstr "Données illimitées"
@@ -593,7 +598,7 @@ msgid "choose_plan"
 msgstr "Choisissez un abonnement"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "facturé une fois "
 
 msgid "connect_up_to_3_devices"
 msgstr "Connectez jusqu’à trois appareils"
@@ -1630,82 +1635,86 @@ msgid "add_device"
 msgstr "Ajouter un appareil"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "Code de récupération envoyé "
 
 msgid "device_added"
 msgstr "L’appareil a été ajouté"
 
 msgid "device_added_message"
 msgstr ""
+"Votre appareil a été ajouté avec succès. Si vous ne voyez pas l'appareil "
+"connecté, veuillez redémarrer l'application sur les deux appareils "
 
 msgid "search_apps"
-msgstr ""
+msgstr "Rechercher des applications "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "Impossible de se connecter "
 
 msgid "invalid_verification_code"
 msgstr "Code de vérification invalide"
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "Code de revendeur incorrect. Veuillez vérifier et réessayer. "
 
 msgid "follow_us"
-msgstr ""
+msgstr "Suivez-nous "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "Suivez-nous sur Telegram "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "Suivez-nous sur Telegram "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "Suivez-nous sur Telegram "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "Suivez-nous sur X "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "Nous rencontrons des difficultés techniques. Réessayez plus tard. "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "Nous rencontrons des difficultés techniques. Réessayez plus tard. "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "Une erreur temporaire est survenue "
 
 msgid "sorry_we_are_unable_to_load_that_page"
 msgstr ""
+"Désolé, nous ne pouvons pas charger cette page pour le moment, veuillez "
+"appuyer sur « Actualiser » pour réessayer. "
 
 msgid "refresh"
 msgstr "Actualiser"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "Vérifiez votre connexion Internet "
 
 msgid "please_try"
-msgstr ""
+msgstr "Veuillez essayer "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "Veuillez essayer "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "Activer les données mobiles ou le wifi "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "Vérifiez le signal dans votre région "
 
 msgid "got_it"
 msgstr "D’accord"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "Chargement de la configuration "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "Établir la connexion au serveur "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "Limite atteinte "
 
 msgid "file_size_limit_description"
-msgstr ""
+msgstr "Les tailles des pièces jointes doivent être inférieures à 100 Mo"

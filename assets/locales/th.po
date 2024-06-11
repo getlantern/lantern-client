@@ -6,10 +6,11 @@
 # Acclaro Thailand <bkk-project@acclaro.com>, 2024
 # Amazing Nev <nev@nevagency.com>, 2024
 # Thai Localization, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Thai Localization, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Thai (https://app.transifex.com/lantern-1/teams/94371/th/)\n"
 "Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -79,7 +80,7 @@ msgid "Go Pro Title"
 msgstr "สมัคร Pro!"
 
 msgid "Go Pro Description"
-msgstr ""
+msgstr "ปลดล็อคความเร็วที่สูงขึ้น ประสบการณ์ไม่มีโฆษณา และข้อมูลไม่จำกัด! "
 
 msgid "Server Location"
 msgstr "ตำแหน่งที่ตั้งของเซิร์ฟเวอร์"
@@ -189,7 +190,7 @@ msgid "select_an_issue"
 msgstr "โปรดเลือกปัญหา"
 
 msgid "enter_description"
-msgstr ""
+msgstr "กรุณาอธิบายปัญหาของคุณ "
 
 msgid "cannot_access_blocked_sites"
 msgstr "ไม่สามารถเข้าถึงไซต์ที่ถูกปิดกั้น"
@@ -198,7 +199,7 @@ msgid "cannot_complete_purchase"
 msgstr "ไม่สามารถดำเนินการซื้อได้เสร็จสิ้น"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "การค้นหาไม่ทำงาน "
 
 msgid "cannot_sign_in"
 msgstr "ไม่สามารถเข้าสู่ระบบ"
@@ -216,7 +217,7 @@ msgid "wrong_device_linking_code"
 msgstr "รหัสเชื่อมโยงอุปกรณ์ที่ไม่ถูกต้องหรือไม่มีอยู่"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "ไม่สามารถลบอุปกรณ์ได้ "
 
 msgid "application_crashes"
 msgstr "แอปพลิเคชันขัดข้อง"
@@ -225,7 +226,7 @@ msgid "other"
 msgstr "อื่นๆ"
 
 msgid "issue_description"
-msgstr ""
+msgstr "อธิบายปัญหาของคุณ "
 
 msgid "check_for_updates"
 msgstr "ตรวจสอบการอัพเดต"
@@ -267,10 +268,10 @@ msgid "device_linking_pin"
 msgstr "พินเชื่อมโยงอุปกรณ์"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "เปิดเมนู 'เพิ่มอุปกรณ์' ในอุปกรณ์ Pro ของคุณ "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "ป้อน PIN การเชื่อมโยงอุปกรณ์และคลิกส่ง "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr "*ตรวจสอบให้แน่ใจว่าอุปกรณ์ทั้งสองใช้ Lantern เวอร์ชันล่าสุด"
@@ -297,7 +298,7 @@ msgid "report_description"
 msgstr "คำอธิบายปัญหา"
 
 msgid "report_issue"
-msgstr ""
+msgstr "รายงานปัญหา "
 
 msgid "report_an_issue"
 msgstr "รายงานปัญหา"
@@ -317,7 +318,7 @@ msgstr ""
 "ได้ที่ลิงก์ด้านบน"
 
 msgid "share_link"
-msgstr ""
+msgstr "แชร์ลิงก์ "
 
 msgid "share_title"
 msgstr "แชร์ลิงก์ดาวน์โหลด Lantern"
@@ -353,7 +354,7 @@ msgid "enter_email"
 msgstr "ป้อนอีเมล"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "ป้อนอีเมลเพื่อทำการซื้อให้เสร็จสมบูรณ์ "
 
 msgid "error_fetching_plans"
 msgstr "เกิดข้อผิดพลาดในการดึงแผน โปรดรีสตาร์ท Lantern และลองอีกครั้ง"
@@ -383,10 +384,12 @@ msgid "referral_code"
 msgstr "รหัสแนะนำ"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "แชร์รหัสแนะนำ "
 
 msgid "share_message_referral_code"
 msgstr ""
+"สำหรับเดือนฟรีของ Lantern Pro ใช้รหัสแนะนำนี้: %s ; "
+"คุณสามารถดาวน์โหลดได้ที่นี่: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "เพิ่มรหัสแนะนำ"
@@ -505,16 +508,16 @@ msgid "No"
 msgstr "ไม่"
 
 msgid "exit"
-msgstr ""
+msgstr "ออก"
 
 msgid "show"
-msgstr ""
+msgstr "แสดง"
 
 msgid "status_on"
-msgstr ""
+msgstr "สถานะ: เปิด "
 
 msgid "status_off"
-msgstr ""
+msgstr "สถานะ: ปิด "
 
 msgid "Enter or paste linking code"
 msgstr "ป้อนหรือวางรหัสการเชื่อมโยง"
@@ -555,7 +558,7 @@ msgid "confirm_remove_device"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการเลิกเชื่อมโยงอุปกรณ์นี้จากบัญชี Pro ของคุณ"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "คุณแน่ใจหรือว่าต้องการปิด Lantern? "
 
 msgid "unlimited_data"
 msgstr "ข้อมูลไม่จำกัด"
@@ -570,7 +573,7 @@ msgid "choose_plan"
 msgstr "เลือกแผน"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "เรียกเก็บเงินครั้งเดียว "
 
 msgid "connect_up_to_3_devices"
 msgstr "เชื่อมต่ออุปกรณ์ได้สูงสุด 3 เครื่อง"
@@ -1570,82 +1573,86 @@ msgid "add_device"
 msgstr "เพิ่มอุปกรณ์"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "ส่งรหัสการกู้คืนแล้ว "
 
 msgid "device_added"
 msgstr "เพิ่มอุปกรณ์แล้ว"
 
 msgid "device_added_message"
 msgstr ""
+"อุปกรณ์ของคุณถูกเพิ่มเรียบร้อยแล้ว หากคุณไม่เห็นอุปกรณ์เชื่อมต่อ "
+"โปรดรีสตาร์ทแอปบนทั้งสองอุปกรณ์ "
 
 msgid "search_apps"
-msgstr ""
+msgstr "ค้นหาแอป "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "ไม่สามารถเข้าสู่ระบบได้ "
 
 msgid "invalid_verification_code"
 msgstr "รหัสตรวจสอบไม่ถูกต้อง"
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "รหัสผู้ขายไม่ถูกต้อง กรุณาตรวจสอบและลองอีกครั้ง "
 
 msgid "follow_us"
-msgstr ""
+msgstr "ติดตามเรา "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "ติดตามเราบน Telegram "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "ติดตามเราบน Instagram "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "ติดตามเราบน Facebook "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "ติดตามเราบน X "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "เรากำลังพบปัญหาทางเทคนิค กรุณาลองใหม่ภายหลัง "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "เรากำลังพบปัญหาทางเทคนิค กรุณาลองใหม่ภายหลัง "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดชั่วคราว "
 
 msgid "sorry_we_are_unable_to_load_that_page"
 msgstr ""
+"ขออภัย เราไม่สามารถโหลดหน้านั้นได้ในขณะนี้ กรุณากด 'รีเฟรช' "
+"เพื่อลองใหม่อีกครั้ง "
 
 msgid "refresh"
-msgstr ""
+msgstr "รีเฟรช"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ "
 
 msgid "please_try"
-msgstr ""
+msgstr "กรุณาลองใหม่ "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "ปิดโหมดเครื่องบิน "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "เปิดข้อมูลมือถือหรือ wifi "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "ตรวจสอบสัญญาณในพื้นที่ของคุณ "
 
 msgid "got_it"
 msgstr "เข้าใจแล้ว"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "กำลังดึงข้อมูลการกำหนดค่า "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "เชื่อมต่อกับเซิร์ฟเวอร์ "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "ถึงขีดจำกัดแล้ว "
 
 msgid "file_size_limit_description"
-msgstr ""
+msgstr "ขนาดไฟล์แนบต้องต่ำกว่า 100 MB"

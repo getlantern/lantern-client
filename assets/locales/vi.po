@@ -7,10 +7,11 @@
 # Nathan Tran, 2024
 # Yen Le Van <yenlevanbk@gmail.com>, 2024
 # Ngoc Hoang <ngocit09@gmail.com>, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Ngoc Hoang <ngocit09@gmail.com>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -82,6 +83,8 @@ msgstr "Lên Pro!"
 
 msgid "Go Pro Description"
 msgstr ""
+"Mở khóa tốc độ nhanh hơn, trải nghiệm không quảng cáo và dữ liệu không giới "
+"hạn! "
 
 msgid "Server Location"
 msgstr "Địa chỉ Server"
@@ -192,7 +195,7 @@ msgid "select_an_issue"
 msgstr "Hãy chọn 1 vấn đề"
 
 msgid "enter_description"
-msgstr ""
+msgstr "Vui lòng mô tả vấn đề của bạn "
 
 msgid "cannot_access_blocked_sites"
 msgstr "Không thể truy cập các trang bị chặn"
@@ -201,7 +204,7 @@ msgid "cannot_complete_purchase"
 msgstr "Không thể hoàn tất việc mua"
 
 msgid "discover_not_working"
-msgstr ""
+msgstr "Tính năng khám phá không hoạt động "
 
 msgid "cannot_sign_in"
 msgstr "Không thể đăng nhập"
@@ -219,7 +222,7 @@ msgid "wrong_device_linking_code"
 msgstr "Mã số kết nối máy sai hoặc không hợp lệ"
 
 msgid "cannot_remove_device"
-msgstr ""
+msgstr "Không thể gỡ bỏ thiết bị "
 
 msgid "application_crashes"
 msgstr "Ứng dụng bị treo"
@@ -228,7 +231,7 @@ msgid "other"
 msgstr "Khác"
 
 msgid "issue_description"
-msgstr ""
+msgstr "Mô tả vấn đề của bạn "
 
 msgid "check_for_updates"
 msgstr "Kiểm tra bản cập nhật"
@@ -269,10 +272,10 @@ msgid "device_linking_pin"
 msgstr "Ghim liên kết thiết bị"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "Mở mục menu 'Thêm thiết bị' trên thiết bị Pro của bạn. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "Nhập mã PIN liên kết thiết bị và nhấp vào gửi "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr "* Đảm bảo cả hai thiết bị đang chạy phiên bản Lantern mới nhất"
@@ -299,7 +302,7 @@ msgid "report_description"
 msgstr "Mô tả vấn đề"
 
 msgid "report_issue"
-msgstr ""
+msgstr "Báo cáo vấn đề "
 
 msgid "report_an_issue"
 msgstr "Báo cáo vấn đề"
@@ -321,7 +324,7 @@ msgstr ""
 "và tất cả các nền tảng khác tại liên kết ở trên."
 
 msgid "share_link"
-msgstr ""
+msgstr "Chia sẻ liên kết "
 
 msgid "share_title"
 msgstr "Chia sẻ liên kết tải xuống Lantern"
@@ -357,7 +360,7 @@ msgid "enter_email"
 msgstr "Nhập Email"
 
 msgid "enter_email_to_complete_purchase"
-msgstr ""
+msgstr "Nhập email để hoàn tất mua hàng "
 
 msgid "error_fetching_plans"
 msgstr "Lỗi khi tìm nạp gói, vui lòng khởi động lại Lantern và thử lại."
@@ -387,10 +390,12 @@ msgid "referral_code"
 msgstr "Mã giới thiệu"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "Chia sẻ mã giới thiệu "
 
 msgid "share_message_referral_code"
 msgstr ""
+"Để có một tháng miễn phí Lantern Pro, sử dụng mã giới thiệu này: %s; Bạn có "
+"thể tải xuống từ đây: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "Thêm mã giới thiệu"
@@ -512,16 +517,16 @@ msgid "No"
 msgstr "Không"
 
 msgid "exit"
-msgstr ""
+msgstr "Thoát"
 
 msgid "show"
-msgstr ""
+msgstr "Hiển thị "
 
 msgid "status_on"
-msgstr ""
+msgstr "Trạng thái: Bật "
 
 msgid "status_off"
-msgstr ""
+msgstr "Trạng thái: Tắt "
 
 msgid "Enter or paste linking code"
 msgstr "Nhập hoặc dán mã liên kết"
@@ -561,7 +566,7 @@ msgid "confirm_remove_device"
 msgstr "Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?"
 
 msgid "confirm_close_window"
-msgstr ""
+msgstr "Bạn có chắc chắn muốn đóng Lantern không? "
 
 msgid "unlimited_data"
 msgstr "Dung Lượng Không Giới Hạn"
@@ -576,7 +581,7 @@ msgid "choose_plan"
 msgstr "Chọn gói"
 
 msgid "billed_one_time"
-msgstr ""
+msgstr "tính phí một lần "
 
 msgid "connect_up_to_3_devices"
 msgstr "Kết nối tối đa 3 thiết bị"
@@ -1588,82 +1593,84 @@ msgid "add_device"
 msgstr "Thêm Máy"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "Mã khôi phục đã được gửi "
 
 msgid "device_added"
 msgstr "Đã thêm thiết bị"
 
 msgid "device_added_message"
 msgstr ""
+"Thiết bị của bạn đã được thêm thành công. Nếu bạn không thấy thiết bị được "
+"kết nối, vui lòng khởi động lại ứng dụng trên cả hai thiết bị "
 
 msgid "search_apps"
-msgstr ""
+msgstr "Tìm kiếm ứng dụng "
 
 msgid "cannot_login"
-msgstr ""
+msgstr "Không thể đăng nhập "
 
 msgid "invalid_verification_code"
 msgstr "Mã số kiểm chứng không hợp lệ"
 
 msgid "wrong_seller_code"
-msgstr ""
+msgstr "Mã người bán lại không chính xác. Vui lòng kiểm tra và thử lại. "
 
 msgid "follow_us"
-msgstr ""
+msgstr "Theo dõi chúng tôi "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "Theo dõi chúng tôi "
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "Theo dõi chúng tôi trên Instagram "
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "Theo dõi chúng tôi trên Facebook "
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "Theo dõi chúng tôi trên X "
 
 msgid "report_issue_error"
-msgstr ""
+msgstr "Chúng tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau. "
 
 msgid "we_are_experiencing_technical_difficulties"
-msgstr ""
+msgstr "Chúng tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau. "
 
 msgid "a_temporary_error_occurred"
-msgstr ""
+msgstr "Đã xảy ra lỗi tạm thời "
 
 msgid "sorry_we_are_unable_to_load_that_page"
-msgstr ""
+msgstr "Đã xảy ra lỗi tạm thời "
 
 msgid "refresh"
 msgstr "Làm mới"
 
 msgid "check_your_internet_connection"
-msgstr ""
+msgstr "Kiểm tra kết nối internet của bạn "
 
 msgid "please_try"
-msgstr ""
+msgstr "Kiểm tra kết nối internet của bạn "
 
 msgid "turning_off_airplane_mode"
-msgstr ""
+msgstr "Tắt chế độ máy bay "
 
 msgid "turning_on_mobile_data_or_wifi"
-msgstr ""
+msgstr "Bật dữ liệu di động hoặc wifi "
 
 msgid "check_the_signal_in_your_area"
-msgstr ""
+msgstr "Kiểm tra tín hiệu trong khu vực của bạn "
 
 msgid "got_it"
 msgstr "Đã nhận được"
 
 msgid "fetching_configuration"
-msgstr ""
+msgstr "Đang lấy cấu hình "
 
 msgid "establish_connection_to_server"
-msgstr ""
+msgstr "Thiết lập kết nối với máy chủ "
 
 msgid "file_size_limit_title"
-msgstr ""
+msgstr "Đã đạt giới hạn "
 
 msgid "file_size_limit_description"
-msgstr ""
+msgstr "Kích thước tệp đính kèm phải dưới 100 MB"
