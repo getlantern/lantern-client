@@ -18,6 +18,7 @@ class LanguageHelper {
             "vi_VN",
             "th_TH",
             "es_ES",
+            "es_CU",
             "fr_FR",
             "bn_BD",
         )

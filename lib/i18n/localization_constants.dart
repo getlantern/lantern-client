@@ -19,7 +19,7 @@ const languages = [
 ];
 
 String checkSupportedLanguages(String language){
-  if(languages.contains(language)){
+  if(languages.contains(language)) {
     return language;
   }
   return 'en_Us';
