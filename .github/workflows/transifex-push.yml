@@ -12,12 +12,12 @@ jobs:
     name: push-strings-to-transifex
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: "Push main translations file"
         env:
           TX_TOKEN: ${{ secrets.TX_TOKEN }}
         run: |
           curl -o- https://raw.githubusercontent.com/transifex/cli/master/install.sh | bash
           source /home/runner/.bashrc
-          export PATH="/home/runner/work/android-lantern/android-lantern:$PATH"
+          export PATH="/home/runner/work/lantern-client/lantern-client:$PATH"
           tx push -s
