@@ -17,10 +17,9 @@ on:
       prefix:
         type: string
         required: true
-
-    env:
-      GOPRIVATE: github.com/getlantern
-      S3_BUCKET: lantern
+env:
+  GOPRIVATE: github.com/getlantern
+  S3_BUCKET: lantern
 jobs:
   build-ios:
     runs-on: ${{ inputs.macos_version }}
