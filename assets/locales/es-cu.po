@@ -1,12 +1,16 @@
 # 
 # Translators:
 # Adriano Gomes, 2024
-# Aimara pena, 2024
 # Katherine Mojena, 2024
+# e2f <projects@e2f.com>, 2024
+# e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
+# Aimara pena, 2024
+# strel, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Katherine Mojena, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Spanish (Cuba) (https://app.transifex.com/lantern-1/teams/94371/es_CU/)\n"
 "Language: es_CU\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -36,6 +40,12 @@ msgstr "Uso de datos diario"
 
 msgid "is"
 msgstr "está"
+
+msgid "connect"
+msgstr "Conectar"
+
+msgid "disconnect"
+msgstr "Desconectar"
 
 msgid "connected"
 msgstr "Conectado"
@@ -192,11 +202,29 @@ msgstr "No se puede acceder a sitios bloqueados"
 msgid "cannot_complete_purchase"
 msgstr "No se puede realizar la compra"
 
+msgid "discover_not_working"
+msgstr "Descubrir no funciona"
+
 msgid "cannot_sign_in"
 msgstr "No se pudo iniciar sesión"
 
 msgid "spinner_loads_endlessly"
 msgstr "El Spinner carga infinitamente"
+
+msgid "slow"
+msgstr "Lento"
+
+msgid "cannot_link_devices"
+msgstr "No se pueden vincular dispositivos"
+
+msgid "wrong_device_linking_code"
+msgstr "Código de vinculación de dispositivo erróneo o no válido"
+
+msgid "cannot_remove_device"
+msgstr "No se puede eliminar el dispositivo"
+
+msgid "application_crashes"
+msgstr "La aplicación se cuelga"
 
 msgid "other"
 msgstr "Otro"
@@ -274,6 +302,9 @@ msgstr "Correo electrónico de Lantern Pro"
 msgid "lantern_desktop"
 msgstr "Lantern de Escritorio"
 
+msgid "report_description"
+msgstr "Descripción del problema"
+
 msgid "report_issue"
 msgstr "Informar un problema"
 
@@ -333,6 +364,9 @@ msgstr "meses"
 
 msgid "enter_email"
 msgstr "Introducir correo electrónico"
+
+msgid "enter_email_to_complete_purchase"
+msgstr "Introduce el correo electrónico para completar la compra"
 
 msgid "error_fetching_plans"
 msgstr "Error al obtener los planes, reinicia Lantern e inténtalo de nuevo."
@@ -484,6 +518,18 @@ msgstr "Sí"
 msgid "No"
 msgstr "No"
 
+msgid "exit"
+msgstr "Salir"
+
+msgid "show"
+msgstr "Mostrar"
+
+msgid "status_on"
+msgstr "Estado: Encendido"
+
+msgid "status_off"
+msgstr "Estado: Apagado"
+
 msgid "Enter or paste linking code"
 msgstr "Introduzca o pegue el código de vinculación"
 
@@ -523,6 +569,9 @@ msgid "confirm_remove_device"
 msgstr ""
 "¿Estás seguro de que quieres desvincular este dispositivo de tu cuenta Pro?"
 
+msgid "confirm_close_window"
+msgstr "¿Estás seguro de que quieres cerrar Lantern?"
+
 msgid "unlimited_data"
 msgstr "Datos ilimitados"
 
@@ -534,6 +583,9 @@ msgstr "Sin publicidad"
 
 msgid "choose_plan"
 msgstr "Elegir plan"
+
+msgid "billed_one_time"
+msgstr "facturado una vez"
 
 msgid "connect_up_to_3_devices"
 msgstr "Conecta hasta 3 dispositivos"
@@ -1558,3 +1610,91 @@ msgstr "Preguntas Frecuentes"
 
 msgid "add_device"
 msgstr "Agregar dispositivo"
+
+msgid "recovery_code_sent"
+msgstr "Código de recuperación enviado"
+
+msgid "device_added"
+msgstr "Dispositivo añadido"
+
+msgid "device_added_message"
+msgstr ""
+"Tu dispositivo se ha añadido correctamente. Si no ves el dispositivo "
+"conectado, reinicia la aplicación en ambos dispositivos."
+
+msgid "search_apps"
+msgstr "Buscar aplicaciones"
+
+msgid "cannot_login"
+msgstr "No puedo iniciar sesión"
+
+msgid "invalid_verification_code"
+msgstr "Código de verificación no válido"
+
+msgid "wrong_seller_code"
+msgstr ""
+"Código de revendedor incorrecto. Por favor verifica y vuelve a intentarlo."
+
+msgid "follow_us"
+msgstr "Síguenos"
+
+msgid "follow_us_telegram"
+msgstr "Síguenos en Telegram"
+
+msgid "follow_us_instagram"
+msgstr "Síguenos en Telegram"
+
+msgid "follow_us_facebook"
+msgstr "Síguenos en Facebook"
+
+msgid "follow_us_x"
+msgstr "Síguenos en X"
+
+msgid "report_issue_error"
+msgstr ""
+"Estamos experimentando dificultades técnicas. Intenta de nuevo más tarde."
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr ""
+"Estamos experimentando dificultades técnicas. Intenta de nuevo más tarde."
+
+msgid "a_temporary_error_occurred"
+msgstr "Ocurrió un error temporal"
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+"Lo sentimos, no podemos cargar esa página en este momento, por favor pulsa "
+"'Actualizar' para intentarlo de nuevo."
+
+msgid "refresh"
+msgstr "Refrescar"
+
+msgid "check_your_internet_connection"
+msgstr "Revisa tu conexión a internet"
+
+msgid "please_try"
+msgstr "Por favor intenta"
+
+msgid "turning_off_airplane_mode"
+msgstr "Desactivar el modo avión"
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr "Activar datos móviles o wifi"
+
+msgid "check_the_signal_in_your_area"
+msgstr "Verifica la señal en tu área"
+
+msgid "got_it"
+msgstr "Lo tengo"
+
+msgid "fetching_configuration"
+msgstr "Cargando configuración"
+
+msgid "establish_connection_to_server"
+msgstr "Establecer conexión con el servidor"
+
+msgid "file_size_limit_title"
+msgstr "Límite alcanzado"
+
+msgid "file_size_limit_description"
+msgstr "Los tamaños de los archivos adjuntos deben ser menores de 100 MB"
