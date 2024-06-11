@@ -111,8 +111,9 @@ jobs:
           echo "Android_interstitialAd=$ANDROID_INTERSTITIAL_AD_ID" > app.env
           echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
 
-      - name: Pod install
+      - name: Get dependencies
         run: |
+          flutter pub get
           cd ios
           pod install
           cd ..
