@@ -137,7 +137,7 @@ jobs:
 
 
       - name : Build iOS app Framework
-        run: make build-framework-ios
+        run: make build-framework
 
       - name: Build iOS app
         uses: yukiarrr/ios-build-action@v1.12.0
