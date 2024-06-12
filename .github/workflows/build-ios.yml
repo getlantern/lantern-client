@@ -40,7 +40,13 @@ jobs:
           name: iOS
           path: ${{ github.workspace }}/build/ios/ipa/
           retention-days: 1
-      
+
+      - name: List Client directory contents
+        run: ls -la ${{ github.workspace }}
+
+      - name: List IPA directory contents
+        run: ls -la ${{ github.workspace }}/build/ios/ipa/
+
       - uses: actions/checkout@v3
         with:
           lfs: true
@@ -160,7 +166,7 @@ jobs:
       - name: 'Upload Lantern to TestFlight'
         uses: apple-actions/upload-testflight-build@v1
         with:
-          app-path: $GITHUB_WORKSPACE/build/ios/ipa/Lantern.ipa
+          app-path: ${{ github.workspace }}/build/ios/ipa/Lantern.ipa
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
