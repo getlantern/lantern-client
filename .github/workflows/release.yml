@@ -301,7 +301,7 @@ jobs:
     steps:
 
       - name: Testing Dev
-        if: needs.determine-platform.outputs.platform == 'all'
+        if: steps.determine-platform.outputs.platform == 'all'
         run: |
           echo "Testing Dev"
 
