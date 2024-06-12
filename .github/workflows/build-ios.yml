@@ -118,9 +118,10 @@ jobs:
       - name: Setup profiles
         uses: yukiarrr/ios-build-action@v1.12.0
         with:
+          p12-base64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
           mobileprovision-base64: |
             ${{ secrets.IOS_PROVISION_PROFILE_BASE6 }}
-        
+
       - name: Generate FFI bindings
         run: make ffigen
 
