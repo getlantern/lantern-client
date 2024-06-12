@@ -301,7 +301,7 @@ jobs:
     steps:
 
       - name: Testing Dev
-        if: needs.set-version.outputs.prefix == 'lantern-installer-dev' &&  needs.determine-platform.outputs.platform == 'all'
+        if: needs.determine-platform.outputs.platform == 'all'
         run: |
           echo "Testing Dev"
 
