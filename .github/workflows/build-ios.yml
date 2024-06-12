@@ -119,6 +119,8 @@ jobs:
         uses: yukiarrr/ios-build-action@v1.12.0
         with:
           p12-base64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
+          certificate-password: ${{ secrets.IOS_CERTIFICATE_P12_PASS }}
+          workspace-path: ios/Runner.xcworkspace
           mobileprovision-base64: |
             ${{ secrets.IOS_PROVISION_PROFILE_BASE6 }}
 
