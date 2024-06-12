@@ -37,7 +37,7 @@ jobs:
       - name: Working directory
         run: |
           echo ${{ github.workspace }}
-          echo $GITHUB_WORKSPACE
+          echo $GITHUB_WORKSPACE/build/ios/ipa/
 
       - uses: actions/checkout@v3
         with:
