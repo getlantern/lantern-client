@@ -1,10 +1,10 @@
 name: Prerelease Notification
 
-on:
-  workflow_dispatch:
-  push:
-    tags:
-      - 'lantern-[0-9]+.[0-9]+.[0-9]+-**'
+#on:
+#  workflow_dispatch:
+#  push:
+#    tags:
+#      - 'lantern-[0-9]+.[0-9]+.[0-9]+-**'
 
 jobs:
   create-release:
