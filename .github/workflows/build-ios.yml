@@ -34,6 +34,13 @@ jobs:
       AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
 
     steps:
+      - name: Upload application
+        uses: actions/upload-artifact@v3
+        with:
+          name: iOS
+          path: ${{ github.workspace }}/build/ios/ipa/
+          retention-days: 1
+      
       - uses: actions/checkout@v3
         with:
           lfs: true
@@ -147,7 +154,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: iOS
-          path: ${GITHUB_WORKSPACE}/build/ios/ipa/
+          path: ${{ github.workspace }}/build/ios/ipa/
           retention-days: 1
 
       - name: 'Upload Lantern to TestFlight'
