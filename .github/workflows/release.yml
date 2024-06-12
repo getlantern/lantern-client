@@ -42,6 +42,7 @@ jobs:
           else
            echo "Not a tag reference, defaulting to all platforms"
            echo "platform=ios" >> "$GITHUB_OUTPUT"
+           echo "platform=all" >> $GITHUB_ENV
 
           fi
 
@@ -310,6 +311,7 @@ jobs:
           echo "Version: ${{ needs.set-version.outputs.version }}"
           echo "Platform: ${{ needs.determine-platform.outputs.platform }}"
           echo "Platform: ${{ steps.determine-platform.outputs.platform }}"
+          echo "Platform: ${{ env.platform }}"
 
       - name: Upload IPA to TestFlight
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
