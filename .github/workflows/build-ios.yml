@@ -61,7 +61,7 @@ jobs:
           version: latest
           token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
           organization: getlantern
-          project: android
+          project: lantern-ios
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
@@ -113,7 +113,6 @@ jobs:
            # Create ExportOptions.plist
           echo "$EXPORT_OPTIONS" | base64 --decode > "$EXPORT_OPTIONS_PATH"
 
-
       - name: Generate FFI bindings
         run: |
           make darwin
@@ -136,6 +135,10 @@ jobs:
           cd ..
 
       - name: Build iOS app
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: getlantern
+          SENTRY_PROJECT: lantern-ios
         run: make ios-release
 
       - name: Upload application
@@ -144,3 +147,11 @@ jobs:
           name: Lantern-iOS
           path: $GITHUB_WORKSPACE/build/ios/ipa/
           retention-days: 1
+
+      - name: 'Upload Lantern to TestFlight'
+        uses: apple-actions/upload-testflight-build@v1
+        with:
+          app-path: $GITHUB_WORKSPACE/build/ios/ipa/Lantern.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}

@@ -117,22 +117,10 @@ GOMOBILE_EXTRA_BUILD_FLAGS :=
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
-## secrets Keys
-INTERSTITIAL_AD_UNIT=ca-app-pub-2685698271254859/9922829329
-## vault secrets
-VAULT_ADS_SECRETS_PATH ?= secret/googleAds
-
-## vault keys
-INTERSTITIAL_AD_UNIT_ID= INTERSTITIAL_AD_UNIT_ID
 
 S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
-
-# Sentry properties
-SENTRY_AUTH_TOKEN=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
-SENTRY_ORG=getlantern
-SENTRY_PROJECT_IOS=lantern-ios
 
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/Release-prod-iphoneos/Runner.app.dSYM
 INFO_PLIST := ios/Runner/Info.plist
@@ -278,7 +266,7 @@ define osxcodesign
 endef
 
 guard-%:
-	 @ if [ -z '${${*}}' ]; then echo 'Environment variable $* not set' && exit 1; fi
+	 @ if [ -z '${${*}}' ]; then echo 'Environment  $* variable not set' && exit 1; fi
 
 .PHONY: require-app
 require-app: guard-APP
@@ -473,13 +461,12 @@ set-version:
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
 
 
-ios-release:set-version build-framework
+ios-release:set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS build-framework
 	@echo "Creating the Flutter iOS build..."
-	flutter build ipa --flavor prod --release -v --export-options-plist ./ExportOptions.plist
-	flutter build ipa --flavor prod --release -v
+	flutter build ipa --flavor prod --release --export-options-plist ./ExportOptions.plist
 	@echo "Uploading debug symbols to Sentry..."
 	export SENTRY_LOG_LEVEL=info
-	#sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_IOS) $(DWARF_DSYM_FOLDER_PATH)
+	sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_IOS) $(DWARF_DSYM_FOLDER_PATH)
 	@IPA_PATH=$(shell pwd)/build/ios/ipa; \
 	echo "iOS IPA generated under: $$IPA_PATH"; \
 	open "$$IPA_PATH"
