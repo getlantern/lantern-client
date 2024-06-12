@@ -618,10 +618,10 @@ class SessionModel extends Model {
   }
 
   Future<void> trackUserAction(
-    String name, {
+    String name, [
     String url = '',
     String title = '',
-  }) async {
+  ]) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
         'name': name,
