@@ -136,24 +136,24 @@ jobs:
       #          cd ..
 
 
-      - name : Build iOS app Framework
-        run: make build-framework
+#      - name : Build iOS app
+#        run: flutter build ios --release --no-codesign
+#
+#      - name: Build iOS app
+#        uses: yukiarrr/ios-build-action@v1.12.0
+#        with:
+#          p12-base64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
+#          certificate-password: ${{ secrets.IOS_CERTIFICATE_P12_PASS }}
+#          project-path: ios/Runner.xcodeproj
+#          workspace-path: ios/Runner.xcworkspace
+#          scheme: prod
+#          configuration: Release-prod
+#          output-path: Lantern.ipa
+#          mobileprovision-base64: |
+#            ${{ secrets.IOS_PROVISION_PROFILE_BASE6 }}
 
       - name: Build iOS app
-        uses: yukiarrr/ios-build-action@v1.12.0
-        with:
-          p12-base64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
-          certificate-password: ${{ secrets.IOS_CERTIFICATE_P12_PASS }}
-          project-path: ios/Runner.xcodeproj
-          workspace-path: ios/Runner.xcworkspace
-          scheme: prod
-          configuration: Release-prod
-          output-path: Lantern.ipa
-          mobileprovision-base64: |
-            ${{ secrets.IOS_PROVISION_PROFILE_BASE6 }}
-
-#      - name: Build iOS app
-#        run: make ios-release
+        run: make ios-release
 
       - name: Upload application
         uses: actions/upload-artifact@v3
