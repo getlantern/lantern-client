@@ -69,10 +69,8 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
 
-
-
-  ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue){
-   return singleValueNotifier(path, defaultValue);
+  ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue) {
+    return singleValueNotifier(path, defaultValue);
   }
 
   // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
@@ -620,10 +618,10 @@ class SessionModel extends Model {
   }
 
   Future<void> trackUserAction(
-    String name,
-    String url,
-    String title,
-  ) async {
+    String name, {
+    String url = '',
+    String title = '',
+  }) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
         'name': name,
