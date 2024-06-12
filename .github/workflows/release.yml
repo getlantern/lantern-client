@@ -42,7 +42,13 @@ jobs:
           else
            echo "Not a tag reference, defaulting to all platforms"
            echo "::set-output name=platform::all"
+          
+
           fi
+
+      - name: Verify Platform Output
+        run: |
+          echo "Platform output: ${{ steps.set-platform.outputs.platform }}"    
 
   set-version:
     needs: determine-platform
@@ -302,11 +308,8 @@ jobs:
 
       - name: Testing Dev
         run: |
-          echo "Testing Dev"
           echo "Version: ${{ needs.set-version.outputs.version }}"
           echo "Platform: ${{ needs.determine-platform.outputs.platform }}"
-          echo "Version: ${{ steps.set-version.outputs.version }}"
-          echo "Platform: ${{ steps.determine-platform.outputs.platform }}"
 
       - name: Upload IPA to TestFlight
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
