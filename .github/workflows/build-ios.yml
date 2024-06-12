@@ -72,9 +72,7 @@ jobs:
       - name: Install the Apple certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
-          #          BUILD_TUNNEL_CERTIFICATE_BASE64: ${{ secrets.IOS_TUNNEL_CERTIFICATE_P12_BASE64 }}
           P12_PASSWORD: ${{ secrets.IOS_CERTIFICATE_P12_PASS }}
-          #          P12_TUNNEL_PASSWORD: ${{ secrets.IOS_TUNNEL_CERTIFICATE_P12_PASS }}
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE6 }}
           BUILD_TUNNEL_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_TUNNEL_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
@@ -136,23 +134,6 @@ jobs:
           cd ios
           pod install
           cd ..
-      
-
-      #      - name : Build iOS app
-      #        run: flutter build ios --release --no-codesign
-      #
-      #      - name: Build iOS app
-      #        uses: yukiarrr/ios-build-action@v1.12.0
-      #        with:
-      #          p12-base64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
-      #          certificate-password: ${{ secrets.IOS_CERTIFICATE_P12_PASS }}
-      #          project-path: ios/Runner.xcodeproj
-      #          workspace-path: ios/Runner.xcworkspace
-      #          scheme: prod
-      #          configuration: Release-prod
-      #          output-path: Lantern.ipa
-      #          mobileprovision-base64: |
-      #            ${{ secrets.IOS_PROVISION_PROFILE_BASE6 }}
 
       - name: Build iOS app
         run: make ios-release
@@ -160,8 +141,6 @@ jobs:
       - name: Upload application
         uses: actions/upload-artifact@v3
         with:
-          name: app
-          path: $GITHUB_WORKSPACE /build/ios/ipa
-          # you can also archive the entire directory
-          # path: ${{ runner.temp }}/build
+          name: Lantern-iOS
+          path: $GITHUB_WORKSPACE/build/ios/ipa/
           retention-days: 1
