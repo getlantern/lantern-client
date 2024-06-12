@@ -22,18 +22,25 @@ jobs:
         id: set-platform
         shell: bash
         run: |
+          echo "GITHUB_REF is: $GITHUB_REF"
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
            TAG=${GITHUB_REF#refs/tags/}
+           echo "Tag is: $TAG"
            if [[ $TAG == ios-* ]]; then
+             echo "Platform determined: ios"
              echo "::set-output name=platform::ios"
            elif [[ $TAG == android-* ]]; then
+             echo "Platform determined: android"
              echo "::set-output name=platform::android"
-           elif [[ $TAG == desktop-* ]]; then
-             echo "::set-output name=platform::desktop"
+           elif [[ $TAG == macos-* ]]; then
+             echo "Platform determined: macos"
+             echo "::set-output name=platform::macos"
            else
+             echo "Platform determined: all (tag did not match specific platforms)"
              echo "::set-output name=platform::all"
            fi
           else
+           echo "Not a tag reference, defaulting to all platforms"
            echo "::set-output name=platform::all"
           fi
 
