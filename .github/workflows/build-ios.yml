@@ -32,7 +32,13 @@ jobs:
       prefix: ${{ inputs.prefix }}
       AC_USERNAME: accounts@getlantern.org
       AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
+
     steps:
+      - name: Working directory
+        run: |
+          echo ${{ github.workspace }}
+          echo $GITHUB_WORKSPACE
+
       - uses: actions/checkout@v3
         with:
           lfs: true
@@ -85,6 +91,7 @@ jobs:
           TPP_PATH=$RUNNER_TEMP/build_tpp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
           EXPORT_OPTIONS_PATH=$GITHUB_WORKSPACE/ExportOptions.plist
+
 
           # import certificate from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
@@ -144,14 +151,14 @@ jobs:
       - name: Upload application
         uses: actions/upload-artifact@v3
         with:
-          name: Lantern-iOS
+          name: iOS
           path: $GITHUB_WORKSPACE/build/ios/ipa/
           retention-days: 1
 
       - name: 'Upload Lantern to TestFlight'
         uses: apple-actions/upload-testflight-build@v1
         with:
-          app-path: $GITHUB_WORKSPACE/build/ios/ipa/Lantern.ipa
+          app-path: ./build/ios/ipa/Lantern.ipa
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
