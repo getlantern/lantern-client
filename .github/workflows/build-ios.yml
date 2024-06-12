@@ -84,7 +84,7 @@ jobs:
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
-          TPP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          TPP_PATH=$RUNNER_TEMP/build_tpp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
           EXPORT_OPTIONS_PATH=$GITHUB_WORKSPACE/ExportOptions.plist
 
