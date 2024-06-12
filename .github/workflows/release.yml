@@ -301,9 +301,12 @@ jobs:
     steps:
 
       - name: Testing Dev
-        if: steps.determine-platform.outputs.platform == 'all'
         run: |
           echo "Testing Dev"
+          echo "Version: ${{ needs.set-version.outputs.version }}"
+          echo "Platform: ${{ needs.determine-platform.outputs.platform }}"
+          echo "Version: ${{ steps.set-version.outputs.version }}"
+          echo "Platform: ${{ steps.determine-platform.outputs.platform }}"
 
       - name: Upload IPA to TestFlight
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
