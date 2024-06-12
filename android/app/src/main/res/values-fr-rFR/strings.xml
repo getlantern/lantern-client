@@ -491,4 +491,7 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="call_notifications_channel">Appels</string>
   <string name="lantern_service">Service Lantern</string>
   <string name="replica_download">Téléchargement de la réplique</string>
+  <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <!--Host for plausible backend. Defaults to plausible.io.-->
+  <!--Default domain to send events for. E.g. yourapp.com.-->
 </resources>

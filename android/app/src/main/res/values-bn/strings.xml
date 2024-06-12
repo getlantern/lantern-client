@@ -501,4 +501,7 @@
   <string name="call_notifications_channel">কলসমূহ</string>
   <string name="lantern_service">Lantern পরিষেবা</string>
   <string name="replica_download">রিপ্লিকা ডাউনলোড</string>
+  <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <!--Host for plausible backend. Defaults to plausible.io.-->
+  <!--Default domain to send events for. E.g. yourapp.com.-->
 </resources>

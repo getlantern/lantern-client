@@ -1,22 +1,25 @@
 # 
 # Translators:
-# Derek F <derek@getlantern.org>, 2022
-# e2f_fr r9 <tx_e2f_fr_r9@ate2f.com>, 2022
-# e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2023
+# Lantern, 2023
+# Nyderalith <nyderalith@yggdrassil.org>, 2023
+# todd <todd@getlantern.org>, 2023
 # fffw <fffw@getlantern.org>, 2023
-# e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2023
-# e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2023
-# AO <ao@localizationlab.org>, 2023
+# e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2024
+# e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2024
+# e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024
+# axel <axel+transifex@axelsimon.net>, 2024
+# AO <ao@localizationlab.org>, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: AO <ao@localizationlab.org>, 2023\n"
-"Language-Team: French (https://app.transifex.com/lantern-1/teams/94371/fr/)\n"
-"Language: fr\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
+"Language-Team: French (France) (https://app.transifex.com/lantern-1/teams/94371/fr_FR/)\n"
+"Language: fr_FR\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 msgid "app_name"
-msgstr "Lantern"
+msgstr "Lanterne"
 
 msgid "introducing"
 msgstr "Nous présentons le Dialogue en ligne"
@@ -42,8 +45,14 @@ msgstr "Données quotidiennes utilisées "
 msgid "is"
 msgstr "est"
 
+msgid "connect"
+msgstr "Se connecter"
+
+msgid "disconnect"
+msgstr "Se déconnecter"
+
 msgid "connected"
-msgstr "Connectée"
+msgstr "Connecté"
 
 msgid "Disconnected"
 msgstr "Déconnecté"
@@ -52,7 +61,7 @@ msgid "Disconnecting"
 msgstr "Déconnexion en cours…"
 
 msgid "Connecting"
-msgstr "Connexion…"
+msgstr "Connexion en cours…"
 
 msgid "no_network_connection"
 msgstr "Aucune connexion réseau"
@@ -73,22 +82,23 @@ msgid "Calling"
 msgstr "Appel en cours…"
 
 msgid "Go Pro Title"
-msgstr "Passez à la version Pro !"
+msgstr "Passez au compte Pro !"
 
 msgid "Go Pro Description"
 msgstr ""
+"Débloquez des vitesses plus rapides, une expérience sans publicité et des "
+"données illimitées! "
 
 msgid "Server Location"
 msgstr "Emplacement du serveur"
 
 msgid "Server Location Info"
 msgstr ""
-"Lantern utilise un système de sélection intelligente des serveurs afin de "
-"vous connecter automatiquement à nos meilleurs centres de traitement de "
-"données."
+"Lantern utilise un outil de sélection de serveurs intelligent pour vous "
+"connecter à nos meilleurs centres de données."
 
 msgid "OK"
-msgstr "Valider"
+msgstr "OK"
 
 msgid "Done"
 msgstr "Terminé"
@@ -109,13 +119,13 @@ msgid "delete_chat_data_confirmation"
 msgstr "Je confirme que je veux supprimer les données de ma conversation"
 
 msgid "Pro Account Management"
-msgstr "Gestion du compte Pro"
+msgstr "Gestion du compte Pro"
 
 msgid "Link Device"
 msgstr "Relier un appareil"
 
 msgid "Upgrade to Lantern Pro"
-msgstr "Passez à Lantern Pro"
+msgstr "Passer à Lantern Pro"
 
 msgid "Invite Friends"
 msgstr "Inviter des amis"
@@ -160,7 +170,7 @@ msgid "general"
 msgstr "Général"
 
 msgid "about"
-msgstr "À propos de Lantern"
+msgstr "À propos"
 
 msgid "privacy_policy"
 msgstr "Politique de confidentialité "
@@ -169,7 +179,7 @@ msgid "terms_of_service"
 msgstr "Conditions générales d’utilisation"
 
 msgid "proxy_all"
-msgstr "Tout relayer par le mandataire"
+msgstr "Relayer tout le trafic"
 
 msgid "proxy_everything_is"
 msgstr "Tout relayer est %s"
@@ -190,7 +200,7 @@ msgid "select_an_issue"
 msgstr "Veuillez choisir un problème"
 
 msgid "enter_description"
-msgstr ""
+msgstr "Veuillez décrire votre problème "
 
 msgid "cannot_access_blocked_sites"
 msgstr "Impossible d’accéder à des sites bloqués"
@@ -198,17 +208,35 @@ msgstr "Impossible d’accéder à des sites bloqués"
 msgid "cannot_complete_purchase"
 msgstr "Impossible de terminer l’achat"
 
+msgid "discover_not_working"
+msgstr "Découverte ne fonctionne pas "
+
 msgid "cannot_sign_in"
 msgstr "Impossible de se connecter"
 
 msgid "spinner_loads_endlessly"
 msgstr "L’indicateur de chargement tourne sans fin"
 
+msgid "slow"
+msgstr "Lent"
+
+msgid "cannot_link_devices"
+msgstr "Impossible de relier des appareils"
+
+msgid "wrong_device_linking_code"
+msgstr "Code de liaison d’appareil erroné ou invalide"
+
+msgid "cannot_remove_device"
+msgstr "Impossible de supprimer l'appareil "
+
+msgid "application_crashes"
+msgstr "L’application plante"
+
 msgid "other"
 msgstr "Autre"
 
 msgid "issue_description"
-msgstr "Description du problème"
+msgstr "Décrivez votre problème "
 
 msgid "check_for_updates"
 msgstr "Rechercher des mises à jour"
@@ -218,21 +246,21 @@ msgstr "Utilisateurs bloqués"
 
 msgid "description_proxy_all_dialog"
 msgstr ""
-"Si cette option est activée, tout le trafic transitera par Lantern (option "
-"la plus sécurisée). Si elle est désactivée, seul le trafic bloqué transitera"
-" par Lantern (option la plus rapide)."
+"Si cette option est activée, tout le trafic sera envoyé par l'intermédiaire "
+"de Lantern (plus sûr). Si elle est désactivée, seul le trafic bloqué sera "
+"envoyé par l'intermédiaire de Lanter (plus rapide)."
 
 msgid "Account"
 msgstr "Compte"
 
 msgid "VPN Status"
-msgstr "État du VPN"
+msgstr "État VPN"
 
 msgid "VPN"
 msgstr "VPN"
 
 msgid "Authorize Device for Pro"
-msgstr "Autoriser l’appareil à la version Pro"
+msgstr "Autoriser l'appareil pour Pro"
 
 msgid "Authorize with Device Linking Pin"
 msgstr "Autoriser avec un code de liaison d’appareil"
@@ -251,9 +279,10 @@ msgstr "Code de liaison d’appareil"
 
 msgid "link_device_step_one"
 msgstr ""
+"Ouvrez l'élément de menu 'Ajouter un appareil' sur votre appareil Pro. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "Entrez le code PIN de liaison de l'appareil et cliquez sur soumettre "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr ""
@@ -279,8 +308,11 @@ msgstr "Adresse courriel de Lantern Pro"
 msgid "lantern_desktop"
 msgstr "Lantern pour ordinateur"
 
+msgid "report_description"
+msgstr "Description du problème"
+
 msgid "report_issue"
-msgstr ""
+msgstr "Signaler un problème "
 
 msgid "report_an_issue"
 msgstr "Signaler un problème"
@@ -303,7 +335,7 @@ msgstr ""
 "formes sont accessibles à partir du lien ci-dessus."
 
 msgid "share_link"
-msgstr ""
+msgstr "Partager le lien "
 
 msgid "share_title"
 msgstr "Partager le lien de téléchargement de Lantern"
@@ -338,6 +370,9 @@ msgstr "mois"
 msgid "enter_email"
 msgstr "Saisissez votre adresse courriel"
 
+msgid "enter_email_to_complete_purchase"
+msgstr "Entrez l'email pour compléter l'achat "
+
 msgid "error_fetching_plans"
 msgstr ""
 "Erreur lors de la récupération des abonnements. Veuillez redémarrer Lantern "
@@ -362,16 +397,18 @@ msgid "plan_discount"
 msgstr "Économisez %d %%"
 
 msgid "enter_email_and_activation_code"
-msgstr "Saisissez l’adresse courriel et le code d’activation"
+msgstr "Saisissez l'adresse courriel et le code d’activation"
 
 msgid "referral_code"
 msgstr "Code de parrainage"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "Partager le code de parrainage "
 
 msgid "share_message_referral_code"
 msgstr ""
+"Pour un mois gratuit de Lantern Pro, utilisez ce code de parrainage :%s; "
+"Vous pouvez le télécharger ici : https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "Ajouter un code de parrainage"
@@ -496,6 +533,18 @@ msgstr "Oui"
 msgid "No"
 msgstr "Non"
 
+msgid "exit"
+msgstr "Quitter"
+
+msgid "show"
+msgstr "Afficher "
+
+msgid "status_on"
+msgstr "Statut : Activé "
+
+msgid "status_off"
+msgstr "Statut : Désactivé "
+
 msgid "Enter or paste linking code"
 msgstr "Saisissez ou collez un code de liaison d’appareil"
 
@@ -518,7 +567,7 @@ msgid "approve_device_step_2"
 msgstr "Saisissez le code de liaison obtenu à l’étape 1"
 
 msgid "Pro Account Expiration"
-msgstr "Expiration du compte Pro"
+msgstr "Expiration du compte Pro"
 
 msgid "Renew"
 msgstr "Renouveller"
@@ -533,7 +582,10 @@ msgid "Log Out"
 msgstr "Déconnexion"
 
 msgid "confirm_remove_device"
-msgstr "Voulez-vous vraiment dissocier cet appareil de votre compte Pro ?"
+msgstr "Voulez-vous vraiment dissocier cet appareil de votre compte Pro ?"
+
+msgid "confirm_close_window"
+msgstr "Êtes-vous sûr de vouloir fermer Lantern ? "
 
 msgid "unlimited_data"
 msgstr "Données illimitées"
@@ -546,6 +598,9 @@ msgstr "Sans publicité"
 
 msgid "choose_plan"
 msgstr "Choisissez un abonnement"
+
+msgid "billed_one_time"
+msgstr "facturé une fois "
 
 msgid "connect_up_to_3_devices"
 msgstr "Connectez jusqu’à trois appareils"
@@ -569,10 +624,10 @@ msgid "lantern_pro_checkout"
 msgstr "Paiement de Lantern Pro"
 
 msgid "1y_pricing"
-msgstr "Tarif pour 1 an"
+msgstr "Tarif pour un an"
 
 msgid "2y_pricing"
-msgstr "Tarif pour 2 ans"
+msgstr "Tarif pour deux ans"
 
 msgid "plan_type"
 msgstr "Type d’abonnement"
@@ -739,7 +794,7 @@ msgstr ""
 
 msgid "applied_next_time"
 msgstr ""
-"Les nouveaux paramètres de tunnellisation partagée seront appliqués la "
+"Les nouveaux paramètres de tunnellisation partagées seront appliqués la "
 "prochaine fois que vous vous reconnecterez."
 
 msgid "message_disappearing"
@@ -761,7 +816,7 @@ msgid "on"
 msgstr "Activée"
 
 msgid "continue"
-msgstr "Poursuivre"
+msgstr "Continuer"
 
 msgid "continue_to_pro"
 msgstr "Poursuivre vers la version Pro"
@@ -1192,7 +1247,7 @@ msgid "copy_recovery_key"
 msgstr "Copier la clé de récupération"
 
 msgid "search"
-msgstr "Recherche"
+msgstr "Chercher"
 
 msgid "account_management"
 msgstr "Gestion du compte"
@@ -1580,3 +1635,88 @@ msgstr "FAQ"
 
 msgid "add_device"
 msgstr "Ajouter un appareil"
+
+msgid "recovery_code_sent"
+msgstr "Code de récupération envoyé "
+
+msgid "device_added"
+msgstr "L’appareil a été ajouté"
+
+msgid "device_added_message"
+msgstr ""
+"Votre appareil a été ajouté avec succès. Si vous ne voyez pas l'appareil "
+"connecté, veuillez redémarrer l'application sur les deux appareils "
+
+msgid "search_apps"
+msgstr "Rechercher des applications "
+
+msgid "cannot_login"
+msgstr "Impossible de se connecter "
+
+msgid "invalid_verification_code"
+msgstr "Code de vérification invalide"
+
+msgid "wrong_seller_code"
+msgstr "Code de revendeur incorrect. Veuillez vérifier et réessayer. "
+
+msgid "follow_us"
+msgstr "Suivez-nous "
+
+msgid "follow_us_telegram"
+msgstr "Suivez-nous sur Telegram "
+
+msgid "follow_us_instagram"
+msgstr "Suivez-nous sur Telegram "
+
+msgid "follow_us_facebook"
+msgstr "Suivez-nous sur Telegram "
+
+msgid "follow_us_x"
+msgstr "Suivez-nous sur X "
+
+msgid "report_issue_error"
+msgstr "Nous rencontrons des difficultés techniques. Réessayez plus tard. "
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr "Nous rencontrons des difficultés techniques. Réessayez plus tard. "
+
+msgid "a_temporary_error_occurred"
+msgstr "Une erreur temporaire est survenue "
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+"Désolé, nous ne pouvons pas charger cette page pour le moment, veuillez "
+"appuyer sur « Actualiser » pour réessayer. "
+
+msgid "refresh"
+msgstr "Rafraîchir"
+
+msgid "check_your_internet_connection"
+msgstr "Vérifiez votre connexion Internet "
+
+msgid "please_try"
+msgstr "Veuillez essayer "
+
+msgid "turning_off_airplane_mode"
+msgstr "Veuillez essayer "
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr "Activer les données mobiles ou le wifi "
+
+msgid "check_the_signal_in_your_area"
+msgstr "Vérifiez le signal dans votre région "
+
+msgid "got_it"
+msgstr "D’accord"
+
+msgid "fetching_configuration"
+msgstr "Chargement de la configuration "
+
+msgid "establish_connection_to_server"
+msgstr "Établir la connexion au serveur "
+
+msgid "file_size_limit_title"
+msgstr "Limite atteinte "
+
+msgid "file_size_limit_description"
+msgstr "Les tailles des pièces jointes doivent être inférieures à 100 Mo"
