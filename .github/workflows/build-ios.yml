@@ -38,6 +38,7 @@ jobs:
         run: |
           echo ${{ github.workspace }}
           echo $GITHUB_WORKSPACE/build/ios/ipa/
+          echo ./build/ios/ipa/Lantern.ipa
 
       - uses: actions/checkout@v3
         with:
