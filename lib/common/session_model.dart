@@ -618,8 +618,8 @@ class SessionModel extends Model {
   }
 
   Future<void> trackUserAction(
-    String name, [
-    String url = '',
+    String name,
+    String url, [
     String title = '',
   ]) async {
     if (isMobile()) {

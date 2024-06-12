@@ -54,7 +54,7 @@ class Welcome extends StatelessWidget {
                   text: 'get_started'.i18n,
                   onPressed: () async {
                     await messagingModel.start();
-                    await sessionModel.trackUserAction('Started using Lantern Chat');
+                    await sessionModel.trackUserAction('User started using Lantern Chat', '/chat');
                     await context.router.push(const ChatNumberMessaging());
                   },
                 ),
