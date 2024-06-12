@@ -40,18 +40,18 @@ jobs:
       - name: Pull LFS objects
         run: git lfs pull
 
-      - name: Upload application
-        uses: actions/upload-artifact@v3
-        with:
-          name: iOS
-          path: ${{ github.workspace }}/build/ios/ipa/
-          retention-days: 1
-
-      - name: List Client directory contents
-        run: ls -la ${{ github.workspace }}
-
-      - name: List IPA directory contents
-        run: ls -la ${{ github.workspace }}/build/ios/ipa/
+#      - name: Upload application
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: iOS
+#          path: ${{ github.workspace }}/build/ios/ipa/
+#          retention-days: 1
+#
+#      - name: List Client directory contents
+#        run: ls -la ${{ github.workspace }}
+#
+#      - name: List IPA directory contents
+#        run: ls -la ${{ github.workspace }}/build/ios/ipa/
 
 
       - name: Setup Go
