@@ -34,12 +34,6 @@ jobs:
       AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
 
     steps:
-      - name: Working directory
-        run: |
-          echo ${{ github.workspace }}
-          echo $GITHUB_WORKSPACE/build/ios/ipa/
-          echo ./build/ios/ipa/Lantern.ipa
-
       - uses: actions/checkout@v3
         with:
           lfs: true
@@ -153,13 +147,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: iOS
-          path: $GITHUB_WORKSPACE/build/ios/ipa/
+          path: ${GITHUB_WORKSPACE}/build/ios/ipa/
           retention-days: 1
 
       - name: 'Upload Lantern to TestFlight'
         uses: apple-actions/upload-testflight-build@v1
         with:
-          app-path: ./build/ios/ipa/Lantern.ipa
+          app-path: $GITHUB_WORKSPACE/build/ios/ipa/Lantern.ipa
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
