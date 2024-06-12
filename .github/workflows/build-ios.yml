@@ -161,7 +161,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app
-          path: ${{ $GITHUB_WORKSPACE }}/build/ios/ipa
+          path: $GITHUB_WORKSPACE /build/ios/ipa
           # you can also archive the entire directory
           # path: ${{ runner.temp }}/build
           retention-days: 1
