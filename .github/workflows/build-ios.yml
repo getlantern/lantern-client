@@ -138,7 +138,7 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: getlantern
-          SENTRY_PROJECT: lantern-ios
+          SENTRY_PROJECT_IOS: lantern-ios
         run: make ios-release
 
       - name: Upload application
