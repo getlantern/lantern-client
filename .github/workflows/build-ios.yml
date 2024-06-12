@@ -78,6 +78,7 @@ jobs:
           BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE6 }}
           BUILD_TUNNEL_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_TUNNEL_PROVISION_PROFILE_BASE64 }}
           KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          EXPORT_OPTIONS: ${{ secrets.EXPORT_OPTION_PLIST }}
         run: |
           set -x
           # create variables
@@ -85,6 +86,8 @@ jobs:
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           TPP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          EXPORT_OPTIONS_PATH=$RUNNER_TEMP/ExportOptions.plist
+          
           
           # import certificate from secrets
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
@@ -99,23 +102,19 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-           # apply main provisioning profile
           PROVISIONING_PROFILES_DIR=~/Library/MobileDevice/Provisioning\ Profiles
           mkdir -p "$PROVISIONING_PROFILES_DIR"
-          
+           
+           # apply main provisioning profile
           echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
           
-          # Verify main provisioning profile
-            if [ -f "$PROVISIONING_PROFILES_DIR/$(basename $PP_PATH)" ]; then
-            echo "Main provisioning profile installed successfully."
-          else
-            echo "Error: Main provisioning profile was not installed."
-            exit 1
-          fi
           # apply tunnel provisioning profile
           echo -n "$BUILD_TUNNEL_PROVISION_PROFILE_BASE64" | base64 --decode -o $TPP_PATH
           cp $TPP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          
+           # Create ExportOptions.plist
+          echo "$EXPORT_OPTIONS" | base64 --decode > "$EXPORT_OPTIONS_PATH"
 
       - name: Generate FFI bindings
         run: make ffigen

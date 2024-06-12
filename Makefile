@@ -475,10 +475,11 @@ set-version:
 
 ios-release:set-version build-framework
 	@echo "Creating the Flutter iOS build..."
+	flutter build ipa --flavor prod --release -v --export-options-plist ./ExportOptions.plist
 	flutter build ipa --flavor prod --release -v
 	@echo "Uploading debug symbols to Sentry..."
 	export SENTRY_LOG_LEVEL=info
-	sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_IOS) $(DWARF_DSYM_FOLDER_PATH)
+	#sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_IOS) $(DWARF_DSYM_FOLDER_PATH)
 	@IPA_PATH=$(shell pwd)/build/ios/ipa; \
 	echo "iOS IPA generated under: $$IPA_PATH"; \
 	open "$$IPA_PATH"
