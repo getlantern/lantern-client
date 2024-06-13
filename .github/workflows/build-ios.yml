@@ -40,18 +40,18 @@ jobs:
       - name: Pull LFS objects
         run: git lfs pull
 
-#      - name: Upload application
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: iOS
-#          path: ${{ github.workspace }}/build/ios/ipa/
-#          retention-days: 1
-#
-#      - name: List Client directory contents
-#        run: ls -la ${{ github.workspace }}
-#
-#      - name: List IPA directory contents
-#        run: ls -la ${{ github.workspace }}/build/ios/ipa/
+      #      - name: Upload application
+      #        uses: actions/upload-artifact@v3
+      #        with:
+      #          name: iOS
+      #          path: ${{ github.workspace }}/build/ios/ipa/
+      #          retention-days: 1
+      #
+      #      - name: List Client directory contents
+      #        run: ls -la ${{ github.workspace }}
+      #
+      #      - name: List IPA directory contents
+      #        run: ls -la ${{ github.workspace }}/build/ios/ipa/
 
 
       - name: Setup Go
@@ -163,3 +163,38 @@ jobs:
           name: Lantern.ipa
           path: ${{ github.workspace }}/build/ios/ipa/Lantern.ipa
           retention-days: 2
+
+      - name: Compress artifacts using bzip2
+        run: |
+          cd ${{ github.workspace }}/build/ios/ipa/
+          bzip2 -zk Lantern.ipa
+
+      - name: Copy .ipa and .bz2 to root
+        run: |
+          cp ${{ github.workspace }}/build/ios/ipa/Lantern.ipa ${{ github.workspace }}/myapp.ipa
+          cp ${{ github.workspace }}/build/ios/ipa/Lantern.ipa.bz2 ${{ github.workspace }}/myapp.ipa.bz2
+
+      - name: Install s3cmd
+        run: pip install s3cmd
+
+      - name: Set s3cmd permissions
+        run: |
+          echo "[default]" > "$HOME/.s3cfg"
+          echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
+          echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
+
+      - name: Push binaries to s3
+        env:
+          VERSION: "${{ env.version }}"
+          IPA: "${{ env.prefix }}-${{ env.version }}.ipa"
+          update: "lantern_update_ios-${{inputs.version}}.bz2"
+          update_source: Lantern.ipa.bz2
+        run: |
+          mv ${{ env.update_source }} ${{ env.update }}
+          mv Lantern.ipa "$IPA"
+          cp "$IPA" ${{ env.prefix }}.ipa
+          echo ${{ env.version }} > ${{ env.version_file }}
+          shasum -a 256 "$IPA" | cut -d " " -f 1 > "$IPA".sha256
+          shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
+          cp "$IPA".sha256 ${{ env.prefix }}.ipa.sha256
+          s3cmd put --acl-public "$IPA" "$IPA".sha256 ${{ env.update }} ${{ env.update }}.sha256 ${{ env.version_file }} ${{ env.prefix }}.ipa.sha256 ${{ env.prefix }}.ipa "s3://lantern"    
