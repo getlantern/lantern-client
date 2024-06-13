@@ -160,14 +160,6 @@ jobs:
       - name: Upload application
         uses: actions/upload-artifact@v3
         with:
-          name: Lantern-IOS
+          name: Lantern.ipa
           path: ${{ github.workspace }}/build/ios/ipa/Lantern.ipa
           retention-days: 2
-
-#      - name: 'Upload Lantern to TestFlight'
-#        uses: apple-actions/upload-testflight-build@v1
-#        with:
-#          app-path: ${{ github.workspace }}/build/ios/ipa/Lantern.ipa
-#          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-#          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-#          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
