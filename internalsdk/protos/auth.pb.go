@@ -1001,6 +1001,78 @@ func (x *ValidateRecoveryCodeResponse) GetValid() bool {
 	return false
 }
 
+// POST /users/logout
+type LogoutRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Email        string `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
+	DeviceId     string `protobuf:"bytes,2,opt,name=deviceId,proto3" json:"deviceId,omitempty"`
+	LegacyUserID int64  `protobuf:"varint,3,opt,name=legacyUserID,proto3" json:"legacyUserID,omitempty"`
+	LegacyToken  string `protobuf:"bytes,4,opt,name=legacyToken,proto3" json:"legacyToken,omitempty"`
+}
+
+func (x *LogoutRequest) Reset() {
+	*x = LogoutRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protos_shared_auth_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LogoutRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LogoutRequest) ProtoMessage() {}
+
+func (x *LogoutRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_shared_auth_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LogoutRequest.ProtoReflect.Descriptor instead.
+func (*LogoutRequest) Descriptor() ([]byte, []int) {
+	return file_protos_shared_auth_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *LogoutRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *LogoutRequest) GetDeviceId() string {
+	if x != nil {
+		return x.DeviceId
+	}
+	return ""
+}
+
+func (x *LogoutRequest) GetLegacyUserID() int64 {
+	if x != nil {
+		return x.LegacyUserID
+	}
+	return 0
+}
+
+func (x *LogoutRequest) GetLegacyToken() string {
+	if x != nil {
+		return x.LegacyToken
+	}
+	return ""
+}
+
 type LoginResponse_Device struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -1014,7 +1086,7 @@ type LoginResponse_Device struct {
 func (x *LoginResponse_Device) Reset() {
 	*x = LoginResponse_Device{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_shared_auth_proto_msgTypes[16]
+		mi := &file_protos_shared_auth_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1027,7 +1099,7 @@ func (x *LoginResponse_Device) String() string {
 func (*LoginResponse_Device) ProtoMessage() {}
 
 func (x *LoginResponse_Device) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_shared_auth_proto_msgTypes[16]
+	mi := &file_protos_shared_auth_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1093,7 +1165,7 @@ type LoginResponse_UserData struct {
 func (x *LoginResponse_UserData) Reset() {
 	*x = LoginResponse_UserData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_protos_shared_auth_proto_msgTypes[17]
+		mi := &file_protos_shared_auth_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1106,7 +1178,7 @@ func (x *LoginResponse_UserData) String() string {
 func (*LoginResponse_UserData) ProtoMessage() {}
 
 func (x *LoginResponse_UserData) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_shared_auth_proto_msgTypes[17]
+	mi := &file_protos_shared_auth_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1394,8 +1466,17 @@ var file_protos_shared_auth_proto_rawDesc = []byte{
 	0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x22, 0x34, 0x0a, 0x1c, 0x56, 0x61, 0x6c, 0x69, 0x64, 0x61,
 	0x74, 0x65, 0x52, 0x65, 0x63, 0x6f, 0x76, 0x65, 0x72, 0x79, 0x43, 0x6f, 0x64, 0x65, 0x52, 0x65,
 	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x42, 0x09, 0x5a, 0x07,
-	0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x22, 0x87, 0x01, 0x0a,
+	0x0d, 0x4c, 0x6f, 0x67, 0x6f, 0x75, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x14,
+	0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65,
+	0x6d, 0x61, 0x69, 0x6c, 0x12, 0x1a, 0x0a, 0x08, 0x64, 0x65, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x65, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64,
+	0x12, 0x22, 0x0a, 0x0c, 0x6c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x55, 0x73, 0x65, 0x72, 0x49, 0x44,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0c, 0x6c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x55, 0x73,
+	0x65, 0x72, 0x49, 0x44, 0x12, 0x20, 0x0a, 0x0b, 0x6c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x54, 0x6f,
+	0x6b, 0x65, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6c, 0x65, 0x67, 0x61, 0x63,
+	0x79, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x09, 0x5a, 0x07, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1410,7 +1491,7 @@ func file_protos_shared_auth_proto_rawDescGZIP() []byte {
 	return file_protos_shared_auth_proto_rawDescData
 }
 
-var file_protos_shared_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_protos_shared_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_protos_shared_auth_proto_goTypes = []interface{}{
 	(*SignupRequest)(nil),                  // 0: SignupRequest
 	(*EmptyResponse)(nil),                  // 1: EmptyResponse
@@ -1428,13 +1509,14 @@ var file_protos_shared_auth_proto_goTypes = []interface{}{
 	(*DeleteUserRequest)(nil),              // 13: DeleteUserRequest
 	(*ValidateRecoveryCodeRequest)(nil),    // 14: ValidateRecoveryCodeRequest
 	(*ValidateRecoveryCodeResponse)(nil),   // 15: ValidateRecoveryCodeResponse
-	(*LoginResponse_Device)(nil),           // 16: LoginResponse.Device
-	(*LoginResponse_UserData)(nil),         // 17: LoginResponse.UserData
+	(*LogoutRequest)(nil),                  // 16: LogoutRequest
+	(*LoginResponse_Device)(nil),           // 17: LoginResponse.Device
+	(*LoginResponse_UserData)(nil),         // 18: LoginResponse.UserData
 }
 var file_protos_shared_auth_proto_depIdxs = []int32{
-	17, // 0: LoginResponse.legacyUserData:type_name -> LoginResponse.UserData
-	16, // 1: LoginResponse.devices:type_name -> LoginResponse.Device
-	16, // 2: LoginResponse.UserData.devices:type_name -> LoginResponse.Device
+	18, // 0: LoginResponse.legacyUserData:type_name -> LoginResponse.UserData
+	17, // 1: LoginResponse.devices:type_name -> LoginResponse.Device
+	17, // 2: LoginResponse.UserData.devices:type_name -> LoginResponse.Device
 	3,  // [3:3] is the sub-list for method output_type
 	3,  // [3:3] is the sub-list for method input_type
 	3,  // [3:3] is the sub-list for extension type_name
@@ -1641,7 +1723,7 @@ func file_protos_shared_auth_proto_init() {
 			}
 		}
 		file_protos_shared_auth_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*LoginResponse_Device); i {
+			switch v := v.(*LogoutRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1653,6 +1735,18 @@ func file_protos_shared_auth_proto_init() {
 			}
 		}
 		file_protos_shared_auth_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*LoginResponse_Device); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protos_shared_auth_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*LoginResponse_UserData); i {
 			case 0:
 				return &v.state
@@ -1671,7 +1765,7 @@ func file_protos_shared_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_protos_shared_auth_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

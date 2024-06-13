@@ -27,7 +27,7 @@ class AccountMenu extends StatelessWidget {
       await sessionModel.signOut();
       context.loaderOverlay.hide();
     } catch (e) {
-      print(e);
+      mainLogger.e('Error signing out', error: e);
       context.loaderOverlay.hide();
     }
   }

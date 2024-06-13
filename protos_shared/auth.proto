@@ -134,3 +134,12 @@ message ValidateRecoveryCodeRequest {
 message ValidateRecoveryCodeResponse {
   bool valid = 1;
 }
+
+
+// POST /users/logout
+message LogoutRequest {
+  string email = 1;
+  string deviceId = 2;
+  int64 legacyUserID = 3;
+  string legacyToken = 4;
+}

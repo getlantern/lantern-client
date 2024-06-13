@@ -1592,7 +1592,7 @@ msgid "sign_out"
 msgstr "Sign out"
 
 msgid "sign_out_message"
-msgstr "Are you sure you want to sign out?"
+msgstr "Logging out will switch Lantern to the free version. To access your account again, you will need to sign back in."
 
 msgid "change_password"
 msgstr "Change Password"

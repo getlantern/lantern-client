@@ -1558,6 +1558,44 @@ func completeChangeEmail(session SessionModel, email string, newEmail string, pa
 
 // Clear slat and change accoutn state
 func signOut(session SessionModel) error {
+	email, err := session.Email()
+	if err != nil {
+		return log.Errorf("Email not found %v", err)
+	}
+
+	deviceId, err := session.GetDeviceID()
+	if err != nil {
+		return log.Errorf("deviceId not found %v", err)
+	}
+
+	token, err := session.GetToken()
+	if err != nil {
+		return log.Errorf("token not found %v", err)
+	}
+
+	userId, err := session.GetUserID()
+	if err != nil {
+		return log.Errorf("userid not found %v", err)
+	}
+
+	signoutData := &protos.LogoutRequest{
+		Email:        email,
+		DeviceId:     deviceId,
+		LegacyToken:  token,
+		LegacyUserID: userId,
+	}
+
+	log.Debugf("Sign out request %+v", signoutData)
+
+	loggedOut, logoutErr := session.authClient.SignOut(context.Background(), signoutData)
+	if err != nil {
+		return log.Errorf("Error while signing out %v", logoutErr)
+	}
+
+	if !loggedOut {
+		return log.Errorf("Error while signing out %v", logoutErr)
+	}
+
 	err1 := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:     nil,

@@ -77,6 +77,9 @@ type AuthClient interface {
 	// Complete change email methods
 	CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error)
 	DeleteAccount(ctc context.Context, loginData *protos.DeleteUserRequest) (bool, error)
+
+	//Logout
+	SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error)
 }
 
 // NewClient creates a new instance of ProClient
@@ -496,6 +499,17 @@ func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.C
 func (c *proClient) DeleteAccount(ctx context.Context, accountData *protos.DeleteUserRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/delete", nil, accountData, &resp, nil)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+// DeleteAccount is used to delete the account of a user
+// Once account is delete make sure to create new account
+func (c *proClient) SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error) {
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/users/logout", nil, logoutData, &resp, nil)
 	if err != nil {
 		return false, err
 	}
