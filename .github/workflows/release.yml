@@ -297,116 +297,116 @@ jobs:
 #          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$AAB"
 #          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
 
-  push-binaries:
-    runs-on: ubuntu-latest
-    needs: [ set-version, build-android, build-ios, build-darwin, build-linux, build-windows-x64 ]
-    env:
-      version: ${{ needs.set-version.outputs.version }}
-      prefix: ${{ needs.set-version.outputs.prefix }}
-    steps:
-      - name: Download the mac build output
-        uses: actions/download-artifact@v4
-        with:
-          name: osx-build
-      - name: Download the linux build output
-        uses: actions/download-artifact@v4
-        with:
-          name: linux-build
-
-      - name: Download the windows64 build output
-        uses: actions/download-artifact@v4
-        with:
-          name: windows64-installer-signed
-
-      - name: Download the apk build output
-        uses: actions/download-artifact@v3
-        with:
-          name: android-apk-build
-
-      - name: Download the aab build output
-        uses: actions/download-artifact@v3
-        with:
-          name: android-aab-build
-
-      - name: Download the IPA
-        uses: actions/download-artifact@v3
-        with:
-          name: Lantern.ipa
-
-      #      - name: Upload Lantern to TestFlight
-      #        uses: apple-actions/upload-testflight-build@v1
-      #        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
-      #        with:
-      #          app-path: Lantern.ipa
-      #          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-      #          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-      #          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
-
-      - name: Upload Lantern to TestFlight
-        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
-        run:
-          echo "Uploading Lantern to TestFlight"
-
-      #      - name: Upload Android App bundle to Play Store (beta)
-      #        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-      #        uses: r0adkll/upload-google-play@v1
-      #        with:
-      #          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-      #          packageName: org.getlantern.lantern
-      #          releaseFiles: lantern-installer.aab
-      #          track: beta
-
-      - name: Upload Android App bundle to Play Store (beta)
-        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-        run:
-          echo "Uploading Lantern to Play Store"
-
-
-      #      - name: Upload Android App bundle to Play Store (production)
-      #        if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-      #        uses: r0adkll/upload-google-play@v1
-      #        with:
-      #          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-      #          packageName: org.getlantern.lantern
-      #          releaseFiles: lantern-installer.aab
-      #          track: production
-
-      - name: Upload Android App bundle to Play Store (production)
-        if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-        run:
-          echo "Uploading Lantern to Play Store"
-
-      - name: Grant private modules access
-        run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
-      - name: Clone binaries repo
-        run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
-
-      - name: Rename builds
-        run: |
-          diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
-          diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
-          mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
-          mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
-          diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
-          mv -f Lantern.ipa ${{ env.prefix }}.ipa
-
-      - name: Prepare sha256 sums
-        run: |
-          shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
-          shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
-          shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
-          shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
-          shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
-          shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
-          shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
-
-      - name: Commit
-        run: |
-          mv lantern-installer* ./lantern-binaries/
-          cd lantern-binaries
-          git config user.email "admin@getlantern.org"
-          git config user.name "Lantern Bot"
-          git add .
-          git commit -m "Lantern binaries for version ${{ env.version }}"
-          git push origin main
+#  push-binaries:
+#    runs-on: ubuntu-latest
+#    needs: [ set-version, build-android, build-ios, build-darwin, build-linux, build-windows-x64 ]
+#    env:
+#      version: ${{ needs.set-version.outputs.version }}
+#      prefix: ${{ needs.set-version.outputs.prefix }}
+#    steps:
+#      - name: Download the mac build output
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: osx-build
+#      - name: Download the linux build output
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: linux-build
+#
+#      - name: Download the windows64 build output
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: windows64-installer-signed
+#
+#      - name: Download the apk build output
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: android-apk-build
+#
+#      - name: Download the aab build output
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: android-aab-build
+#
+#      - name: Download the IPA
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: Lantern.ipa
+#
+#      #      - name: Upload Lantern to TestFlight
+#      #        uses: apple-actions/upload-testflight-build@v1
+#      #        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+#      #        with:
+#      #          app-path: Lantern.ipa
+#      #          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+#      #          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+#      #          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+#
+#      - name: Upload Lantern to TestFlight
+#        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+#        run:
+#          echo "Uploading Lantern to TestFlight"
+#
+#      #      - name: Upload Android App bundle to Play Store (beta)
+#      #        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+#      #        uses: r0adkll/upload-google-play@v1
+#      #        with:
+#      #          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+#      #          packageName: org.getlantern.lantern
+#      #          releaseFiles: lantern-installer.aab
+#      #          track: beta
+#
+#      - name: Upload Android App bundle to Play Store (beta)
+#        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+#        run:
+#          echo "Uploading Lantern to Play Store"
+#
+#
+#      #      - name: Upload Android App bundle to Play Store (production)
+#      #        if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+#      #        uses: r0adkll/upload-google-play@v1
+#      #        with:
+#      #          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+#      #          packageName: org.getlantern.lantern
+#      #          releaseFiles: lantern-installer.aab
+#      #          track: production
+#
+#      - name: Upload Android App bundle to Play Store (production)
+#        if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+#        run:
+#          echo "Uploading Lantern to Play Store"
+#
+#      - name: Grant private modules access
+#        run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+#
+#      - name: Clone binaries repo
+#        run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
+#
+#      - name: Rename builds
+#        run: |
+#          diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
+#          diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
+#          mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
+#          mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
+#          diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
+#          mv -f Lantern.ipa ${{ env.prefix }}.ipa
+#
+#      - name: Prepare sha256 sums
+#        run: |
+#          shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
+#          shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
+#          shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
+#          shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
+#          shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
+#          shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
+#          shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
+#
+#      - name: Commit
+#        run: |
+#          mv lantern-installer* ./lantern-binaries/
+#          cd lantern-binaries
+#          git config user.email "admin@getlantern.org"
+#          git config user.name "Lantern Bot"
+#          git add .
+#          git commit -m "Lantern binaries for version ${{ env.version }}"
+#          git push origin main
