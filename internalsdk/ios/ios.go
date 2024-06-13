@@ -131,7 +131,9 @@ func (c *cw) Reconfigure() {
 		panic(log.Errorf("Unable to load dialers on reconfigure: %v", err))
 	}
 
-	c.dialer, err = bandit.New(dialers)
+	c.dialer, err = bandit.New(bandit.Options{
+		Dialers: dialers,
+	})
 	if err != nil {
 		log.Errorf("Unable to create dialer on reconfigure: %v", err)
 	}
@@ -205,7 +207,10 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, errors.New("No dialers found")
 	}
 	tracker := stats.NewTracker()
-	dialer, err := bandit.NewWithStats(dialers, tracker)
+	dialer, err := bandit.New(bandit.Options{
+		Dialers:      dialers,
+		StatsTracker: tracker,
+	})
 	if err != nil {
 		return nil, err
 	}

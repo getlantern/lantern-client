@@ -63,6 +63,9 @@ const (
 	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
 	pathShouldShowGoogleAds    = "shouldShowGoogleAds"
 	currentTermsVersion        = 1
+	pathHasConfig              = "hasConfigFetched"
+	pathHasProxy               = "hasProxyFetched"
+	pathHasonSuccess           = "hasOnSuccess"
 )
 
 type SessionModelOpts struct {
@@ -557,6 +560,23 @@ func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 	// Return static for now
 	// Todo implement this method
 	return "", nil
+}
+
+func (m *SessionModel) SetHasConfigFetched(fetached bool) {
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathHasConfig, fetached, "")
+	}))
+}
+
+func (m *SessionModel) SetHasProxyFetched(fetached bool) {
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathHasProxy, fetached, "")
+	}))
+}
+func (m *SessionModel) SetOnSuccess(fetached bool) {
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathHasonSuccess, fetached, "")
+	}))
 }
 
 func acceptTerms(m *baseModel) error {

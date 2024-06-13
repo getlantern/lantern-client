@@ -1,29 +1,29 @@
 # 
 # Translators:
-# Derek F <derek@getlantern.org>, 2021
 # b0b47d46632b78a09a40de799fda9a65, 2022
-# Evan <alireza.firoozi68@gmail.com>, 2022
-# Mary Sol <salar.adlparvar@gmail.com>, 2022
 # Amir Moezzi <amirreza.mz@yahoo.com>, 2022
 # Mokah <unfilternet@getlantern.org>, 2022
 # Chip Stehr <chip@getlantern.org>, 2022
 # Jigar, 2023
 # 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
-# Vaseto Nora <n.nouri67@gmail.com>, 2023
 # Sina <sina@asl19.org>, 2023
 # Pedram Azizallahi <pedram672004@yahoo.com>, 2023
 # zar24 <zarghamjan@yahoo.com>, 2023
-# NoProfile, 2023
 # Lantern, 2023
 # Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2023
-# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2023
-# ali jafarizadeh <ebrahimigv@gmail.com>, 2023
-# Mersen M, 2023
-# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2023
+# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2024
+# ali jafarizadeh <ebrahimigv@gmail.com>, 2024
+# Vaseto Nora <n.nouri67@gmail.com>, 2024
+# Evan <alireza.firoozi68@gmail.com>, 2024
+# Mary Sol <salar.adlparvar@gmail.com>, 2024
+# NoProfile, 2024
+# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024
+# Mersen M, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2023\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -53,6 +53,12 @@ msgstr "میزان مصرف داده روزانه"
 
 msgid "is"
 msgstr "وضعیت:"
+
+msgid "connect"
+msgstr "متصل"
+
+msgid "disconnect"
+msgstr "قطع شدن"
 
 msgid "connected"
 msgstr "متصل شد"
@@ -87,7 +93,7 @@ msgid "Go Pro Title"
 msgstr "به نسخه حرفه‌ای بروید!"
 
 msgid "Go Pro Description"
-msgstr ""
+msgstr "سرعت‌های بیشتر، تجربه بدون تبلیغات و داده‌های نامحدود را باز کنید! "
 
 msgid "Server Location"
 msgstr "موقعیت سرور"
@@ -196,7 +202,7 @@ msgid "select_an_issue"
 msgstr "لطفاً یک مشکل را انتخاب کنید"
 
 msgid "enter_description"
-msgstr ""
+msgstr "لطفاً مشکل خود را توضیح دهید "
 
 msgid "cannot_access_blocked_sites"
 msgstr "عدم امکان دسترسی به سایت های بسته شده"
@@ -204,17 +210,35 @@ msgstr "عدم امکان دسترسی به سایت های بسته شده"
 msgid "cannot_complete_purchase"
 msgstr "خرید تکمیل نشد"
 
+msgid "discover_not_working"
+msgstr "عملکرد Discover کار نمی‌کند "
+
 msgid "cannot_sign_in"
 msgstr "ورود انجام نشد"
 
 msgid "spinner_loads_endlessly"
 msgstr "اندیکاتور بی‌پایان بارگذاری می‌کند"
 
+msgid "slow"
+msgstr "آهسته"
+
+msgid "cannot_link_devices"
+msgstr "عدم امکان ارتباط دستگاه ها"
+
+msgid "wrong_device_linking_code"
+msgstr "کد اتصال  نادرست یا نامعتبر"
+
+msgid "cannot_remove_device"
+msgstr "عملکرد Discover کار نمی‌کند "
+
+msgid "application_crashes"
+msgstr "اپلیکیشن با مشکل مواجه است"
+
 msgid "other"
 msgstr "غیره"
 
 msgid "issue_description"
-msgstr "شرح مشکل"
+msgstr "مشکل خود را توضیح دهید "
 
 msgid "check_for_updates"
 msgstr "بررسی وجود به‌روزرسانی‌ها"
@@ -256,10 +280,10 @@ msgid "device_linking_pin"
 msgstr "پین اتصال دستگاه"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "گزینه «افزودن دستگاه» را در دستگاه Pro خود باز کنید. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "کد PIN اتصال دستگاه را وارد کرده و روی ارسال کلیک کنید "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr "*مطمئن شوید که هر دو دستگاه دارای آخرین نسخه Lantern هستند"
@@ -283,8 +307,11 @@ msgstr "ایمیل Lantern Pro"
 msgid "lantern_desktop"
 msgstr "فانوس رایانه"
 
+msgid "report_description"
+msgstr "شرح مشکل"
+
 msgid "report_issue"
-msgstr ""
+msgstr "گزارش مشکل "
 
 msgid "report_an_issue"
 msgstr "گزارش یک مشکل"
@@ -306,7 +333,7 @@ msgstr ""
 "می‌توانید در لینک بالا پیدا کنید."
 
 msgid "share_link"
-msgstr ""
+msgstr "اشتراک‌گذاری لینک "
 
 msgid "share_title"
 msgstr "لینک دانلود Lantern را به اشتراک بگذارید"
@@ -341,6 +368,9 @@ msgstr "ماه‌ها"
 msgid "enter_email"
 msgstr "وارد کردن ایمیل"
 
+msgid "enter_email_to_complete_purchase"
+msgstr "برای تکمیل خرید، ایمیل را وارد کنید "
+
 msgid "error_fetching_plans"
 msgstr ""
 "خطا در دریافت طرح‌ها، لطفا لنترن را مجددا راه‌اندازی و دوباره امتحان کنید."
@@ -370,10 +400,12 @@ msgid "referral_code"
 msgstr "کد ارجاع"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "اشتراک‌گذاری کد معرف "
 
 msgid "share_message_referral_code"
 msgstr ""
+"برای یک ماه رایگان Lantern Pro، از این کد معرف استفاده کنید: %s؛ شما "
+"می‌توانید آن را از اینجا دانلود کنید: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "کد معرف را وارد کنید"
@@ -491,6 +523,18 @@ msgstr "بله"
 msgid "No"
 msgstr "خیر"
 
+msgid "exit"
+msgstr "خروج "
+
+msgid "show"
+msgstr "نمایش "
+
+msgid "status_on"
+msgstr "وضعیت: روشن "
+
+msgid "status_off"
+msgstr "وضعیت: خاموش "
+
 msgid "Enter or paste linking code"
 msgstr "کد پیوند دهنده را وارد کنید یا بچسبانید"
 
@@ -529,6 +573,9 @@ msgid "confirm_remove_device"
 msgstr ""
 "آیا مطمئن هستید که میخواهید این دستگاه را از حساب Pro خود قطع اتصال کنید؟ "
 
+msgid "confirm_close_window"
+msgstr "آیا مطمئن هستید که می‌خواهید Lantern را ببندید؟ "
+
 msgid "unlimited_data"
 msgstr "ترافیک نامحدود"
 
@@ -540,6 +587,9 @@ msgstr "بدون تبلیغ"
 
 msgid "choose_plan"
 msgstr "انتخاب طرح"
+
+msgid "billed_one_time"
+msgstr "یک بار صورتحساب شده "
 
 msgid "connect_up_to_3_devices"
 msgstr "اتصال تا حداکثر 3 دستگاه"
@@ -1541,3 +1591,86 @@ msgstr "‫سوالات متداول"
 
 msgid "add_device"
 msgstr "افزودن دستگاه جدید"
+
+msgid "recovery_code_sent"
+msgstr "کد بازیابی ارسال شد "
+
+msgid "device_added"
+msgstr "دستگاه اضافه شد"
+
+msgid "device_added_message"
+msgstr ""
+"دستگاه شما با موفقیت اضافه شد. اگر دستگاه متصل را نمی‌بینید، لطفاً برنامه را"
+" در هر دو دستگاه مجدداً راه‌اندازی کنید "
+
+msgid "search_apps"
+msgstr "جستجوی برنامه‌ها "
+
+msgid "cannot_login"
+msgstr "نمی‌توان وارد سیستم شد "
+
+msgid "invalid_verification_code"
+msgstr "کد تأیید نامعتبر"
+
+msgid "wrong_seller_code"
+msgstr "کد فروشنده نادرست است. لطفاً بررسی کرده و دوباره تلاش کنید. "
+
+msgid "follow_us"
+msgstr "ما را دنبال کنید "
+
+msgid "follow_us_telegram"
+msgstr "ما را در Telegram دنبال کنید "
+
+msgid "follow_us_instagram"
+msgstr "ما را در Instagram دنبال کنید "
+
+msgid "follow_us_facebook"
+msgstr "ما را در Facebook دنبال کنید "
+
+msgid "follow_us_x"
+msgstr "ما را در X دنبال کنید "
+
+msgid "report_issue_error"
+msgstr "ما با مشکلات فنی مواجه هستیم. لطفاً بعداً دوباره تلاش کنید. "
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr "ما با مشکلات فنی مواجه هستیم. لطفاً بعداً دوباره تلاش کنید. "
+
+msgid "a_temporary_error_occurred"
+msgstr "ما با مشکلات فنی مواجه هستیم. لطفاً بعداً دوباره تلاش کنید. "
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr "ما با مشکلات فنی مواجه هستیم. لطفاً بعداً دوباره تلاش کنید. "
+
+msgid "refresh"
+msgstr "ریفرش"
+
+msgid "check_your_internet_connection"
+msgstr "اتصال اینترنت خود را بررسی کنید "
+
+msgid "please_try"
+msgstr "لطفاً دوباره تلاش کنید "
+
+msgid "turning_off_airplane_mode"
+msgstr "حالت هواپیما را خاموش کنید "
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr "داده تلفن همراه یا وای‌فای را روشن کنید "
+
+msgid "check_the_signal_in_your_area"
+msgstr "سیگنال در منطقه خود را بررسی کنید "
+
+msgid "got_it"
+msgstr "فهمیدم/گرفتم"
+
+msgid "fetching_configuration"
+msgstr "دریافت پیکربندی "
+
+msgid "establish_connection_to_server"
+msgstr "ایجاد اتصال به سرور "
+
+msgid "file_size_limit_title"
+msgstr "محدودیت رسیده است "
+
+msgid "file_size_limit_description"
+msgstr "اندازه پیوست‌ها باید کمتر از 100 مگابایت باشد"

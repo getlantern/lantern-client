@@ -1,7 +1,11 @@
+import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:lantern/ad_helper.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/vpn/vpn_notifier.dart';
+
+import '../common/ui/custom/internet_checker.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -10,6 +14,8 @@ class VPNSwitch extends StatefulWidget {
   State<VPNSwitch> createState() => _VPNSwitchState();
 }
 
+//implement this switch with loading implementation
+//https://pub.dev/packages/animated_toggle_switch
 class _VPNSwitchState extends State<VPNSwitch> {
   final adHelper = AdHelper();
   String vpnStatus = 'disconnected';
@@ -56,19 +62,30 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   @override
   Widget build(BuildContext context) {
+
+    final internetStatusProvider = context.watch<InternetStatusProvider>();
+    final vpnNotifier = context.watch<VPNChangeNotifier>();
     if (isMobile()) {
       return sessionModel
           .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
         adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
         return Transform.scale(
-            scale: 2,
+            scale: 2.5,
             child: vpnModel.vpnStatus(
                 (BuildContext context, String vpnStatus, Widget? child) {
-              return FlutterSwitch(
-                value: vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+              return AdvancedSwitch(
+                width: 60,
+                disabledOpacity: 1,
+                enabled: (internetStatusProvider.isConnected &&
+                    !vpnNotifier.isFlashlightInitializedFailed),
+                initialValue:
+                    vpnStatus == 'connected' || vpnStatus == 'disconnecting',
                 activeColor: onSwitchColor,
-                inactiveColor: offSwitchColor,
-                onToggle: (bool newValue) =>
+                inactiveColor: (internetStatusProvider.isConnected &&
+                    !vpnNotifier.isFlashlightInitializedFailed)
+                    ?offSwitchColor
+                    : grey3,
+                onChanged: (newValue) =>
                     vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
               );
             }));
@@ -76,17 +93,24 @@ class _VPNSwitchState extends State<VPNSwitch> {
     } else {
       // This ui for desktop
       return Transform.scale(
-        scale: 2,
+        scale: 2.5,
         child: vpnModel
             .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
           this.vpnStatus = vpnStatus;
-          return FlutterSwitch(
-            value: this.vpnStatus == 'connected' ||
+          return AdvancedSwitch(
+            width: 60,
+            disabledOpacity: 1,
+            enabled: (internetStatusProvider.isConnected &&
+                !vpnNotifier.isFlashlightInitializedFailed),
+            initialValue: this.vpnStatus == 'connected' ||
                 this.vpnStatus == 'disconnecting',
-            //value: true,
             activeColor: onSwitchColor,
-            inactiveColor: offSwitchColor,
-            onToggle: (bool newValue) {
+            inactiveColor: (internetStatusProvider.isConnected &&
+                    !vpnNotifier.isFlashlightInitializedFailed)
+                ?offSwitchColor
+                : grey3,
+
+            onChanged: (newValue) {
               vpnProcessForDesktop();
               setState(() {
                 this.vpnStatus = newValue ? 'connected' : 'disconnected';

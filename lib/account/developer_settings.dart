@@ -1,3 +1,4 @@
+import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/replica/common.dart';
 
@@ -29,17 +30,14 @@ class DeveloperSettingsTab extends StatelessWidget {
               trailingArray: [
                 sessionModel.paymentTestMode(
                     (BuildContext context, bool value, Widget? child) {
-                  return FlutterSwitch(
+                  return AdvancedSwitch(
                     key: AppKeys.payment_mode_switch,
                     width: 44.0,
                     height: 24.0,
-                    valueFontSize: 12.0,
-                    padding: 2,
-                    toggleSize: 18.0,
-                    value: value,
-                    onToggle: (bool newValue) {
+                    onChanged: ( newValue) {
                       sessionModel.setPaymentTestMode(newValue);
                     },
+                    initialValue: value,
                   );
                 })
               ],
@@ -49,14 +47,14 @@ class DeveloperSettingsTab extends StatelessWidget {
               trailingArray: [
                 sessionModel.playVersion(
                     (BuildContext context, bool value, Widget? child) {
-                  return FlutterSwitch(
+                  return AdvancedSwitch(
                     width: 44.0,
                     height: 24.0,
-                    valueFontSize: 12.0,
-                    padding: 2,
-                    toggleSize: 18.0,
-                    value: value,
-                    onToggle: (bool newValue) {
+                    // valueFontSize: 12.0,
+                    // padding: 2,
+                    // toggleSize: 18.0,
+                    initialValue: value,
+                    onChanged: ( newValue) {
                       sessionModel.setPlayVersion(newValue);
                     },
                   );

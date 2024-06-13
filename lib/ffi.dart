@@ -9,6 +9,10 @@ extension StringEx on String {
   Pointer<Char> toPointerChar() {
     return this.toNativeUtf8().cast<Char>();
   }
+
+  bool toBool() {
+    return this == 'true';
+  }
 }
 
 void sysProxyOn() => _bindings.sysProxyOn();
@@ -48,6 +52,14 @@ Future<User> ffiUserData() async {
   // the User protobuf message or JSON decoding fails because of an "unknown field name" error:
   // Protobuf JSON decoding failed at: root["telephone"]. Unknown field name 'telephone'
   return User.create()..mergeFromProto3Json(jsonDecode(res));
+}
+
+(bool, bool, bool) startUpInitCallBacks() {
+  final proxy = _bindings.hasProxyFected().cast<Utf8>().toDartString();
+  final config = _bindings.hasConfigFected().cast<Utf8>().toDartString();
+  final success = _bindings.onSuccess().cast<Utf8>().toDartString();
+  print("startup status proxy $proxy config $config success $success");
+  return (proxy.toBool(), config.toBool(), success.toBool());
 }
 
 // checkAPIError throws a PlatformException if the API response contains an error

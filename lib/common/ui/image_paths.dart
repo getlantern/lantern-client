@@ -148,6 +148,7 @@ class ImagePaths {
   static const empty_search = 'assets/images/empty_search.svg';
   static const lantern_logotype = 'assets/images/lantern_logotype.svg';
   static const lantern_pro_logotype = 'assets/images/lantern_pro_logotype.svg';
+  static const cloudOff = 'assets/images/cloud_off.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';

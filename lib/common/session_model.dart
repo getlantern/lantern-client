@@ -22,18 +22,6 @@ class SessionModel extends Model {
   SessionModel() : super('session') {
     if (isMobile()) {
       eventManager = EventManager('lantern_event_channel');
-      eventManager.subscribe(Event.All, (eventType, map) {
-        switch (eventType) {
-          case Event.NoNetworkAvailable:
-            networkAvailable.value = false;
-            break;
-          case Event.NetworkAvailable:
-            networkAvailable.value = true;
-            break;
-          default:
-            break;
-        }
-      });
 
       isStoreVersion = singleValueNotifier(
         'storeVersion',
@@ -75,11 +63,15 @@ class SessionModel extends Model {
     }
   }
 
-  ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  // ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> isPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
+
+  ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue) {
+    return singleValueNotifier(path, defaultValue);
+  }
 
   // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
   // the onMessage callback is triggered with the given property value
@@ -627,9 +619,9 @@ class SessionModel extends Model {
 
   Future<void> trackUserAction(
     String name,
-    String url,
-    String title,
-  ) async {
+    String url, [
+    String title = '',
+  ]) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
         'name': name,
