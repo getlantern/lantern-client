@@ -44,10 +44,6 @@ jobs:
            echo "platform=all" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Verify Platform Output
-        run: |
-          echo "Platform output: ${{ steps.set-platform.outputs.platform }}"    
-
   set-version:
     needs: determine-platform
     runs-on: ubuntu-latest
@@ -62,7 +58,7 @@ jobs:
           import sys, os
           ref = os.environ.get("GITHUB_REF","")
           if "refs/tags/lantern" not in ref:
-            li = 'lantern-installer-dev'
+            li = 'lantern-installer-preview'
             vf = 'version-android-dev.txt'
             version = '9999.99.99-dev'
           else:
@@ -307,8 +303,8 @@ jobs:
       - name: Testing Dev
         run: |
           echo "Version: ${{ needs.set-version.outputs.version }}"
+          echo "Prefix: ${{ needs.set-version.outputs.prefix }}"
           echo "Platform: ${{ needs.determine-platform.outputs.platform }}"
-          
 
       - name: Upload IPA to TestFlight
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
