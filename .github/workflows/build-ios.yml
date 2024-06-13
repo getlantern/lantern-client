@@ -171,8 +171,9 @@ jobs:
 
       - name: Copy .ipa and .bz2 to root
         run: |
-          cp ${{ github.workspace }}/build/ios/ipa/Lantern.ipa ${{ github.workspace }}/myapp.ipa
-          cp ${{ github.workspace }}/build/ios/ipa/Lantern.ipa.bz2 ${{ github.workspace }}/myapp.ipa.bz2
+          cp ${{ github.workspace }}/build/ios/ipa/Lantern.ipa ${{ github.workspace }}/Lantern.ipa
+          cp ${{ github.workspace }}/build/ios/ipa/Lantern.ipa.bz2 ${{ github.workspace }}/Lantern.ipa.bz2
+          ls -la ${{ github.workspace }}
 
       - name: Install s3cmd
         run: pip install s3cmd
