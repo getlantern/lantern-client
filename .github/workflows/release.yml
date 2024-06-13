@@ -17,10 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       platform: ${{ steps.set-platform.outputs.platform }}
+
     steps:
       - name: Determine Platform
         id: set-platform
-        shell: bash
         run: |
           echo "GITHUB_REF is: $GITHUB_REF"
           if [[ "$GITHUB_REF" == refs/tags/* ]]; then
@@ -28,22 +28,20 @@ jobs:
            echo "Tag is: $TAG"
            if [[ $TAG == ios-* ]]; then
              echo "Platform determined: ios"
-             echo "::set-output name=platform::ios"
+             echo "platform=ios" >> "$GITHUB_OUTPUT"
            elif [[ $TAG == android-* ]]; then
              echo "Platform determined: android"
-             echo "::set-output name=platform::android"
-           elif [[ $TAG == macos-* ]]; then
+             echo "platform=android" >> "$GITHUB_OUTPUT"
+           elif [[ $TAG == desktop-* ]]; then
              echo "Platform determined: macos"
-             echo "::set-output name=platform::macos"
-           else
+             echo "platform=desktop" >> "$GITHUB_OUTPUT"
+          else
              echo "Platform determined: all (tag did not match specific platforms)"
-             echo "::set-output name=platform::all"
+             echo "platform=all" >> "$GITHUB_OUTPUT"
            fi
           else
            echo "Not a tag reference, defaulting to all platforms"
-           echo "platform=ios" >> "$GITHUB_OUTPUT"
-           echo "platform=all" >> $GITHUB_ENV
-
+           echo "platform=all" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Verify Platform Output
@@ -300,7 +298,7 @@ jobs:
   push-binaries:
     runs-on: ubuntu-latest
     #    needs: [ set-version, build-android,build-ios, build-darwin, build-linux, build-windows-x64 ]
-    needs: [ set-version ]
+    needs: [ determine-platform, set-version ]
     env:
       version: ${{ needs.set-version.outputs.version }}
       prefix: ${{ needs.set-version.outputs.prefix }}
@@ -310,8 +308,7 @@ jobs:
         run: |
           echo "Version: ${{ needs.set-version.outputs.version }}"
           echo "Platform: ${{ needs.determine-platform.outputs.platform }}"
-          echo "Platform: ${{ steps.determine-platform.outputs.platform }}"
-          echo "Platform: ${{ env.platform }}"
+          
 
       - name: Upload IPA to TestFlight
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
