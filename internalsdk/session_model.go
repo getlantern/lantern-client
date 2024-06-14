@@ -667,6 +667,10 @@ func (m *SessionModel) Locale() (string, error) {
 	return pathdb.Get[string](m.baseModel.db, pathLang)
 }
 
+func (m *SessionModel) isUserLoggedIn() (bool, error) {
+	return pathdb.Get[bool](m.baseModel.db, pathIsUserLoggedIn)
+}
+
 func setLanguage(m *SessionModel, lang string) error {
 	go func() {
 		err := m.paymentMethods()
@@ -681,6 +685,10 @@ func setLanguage(m *SessionModel, lang string) error {
 }
 
 func setDevices(m *baseModel, devices []*protos.Device) error {
+	if len(devices) == 0 {
+		log.Debugf("No devices to found")
+		return nil
+	}
 	log.Debugf("Device list %v", devices)
 	var protoDevices []*protos.Device
 	for _, device := range devices {
@@ -960,9 +968,46 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	if resp.User == nil {
 		return errors.New("User data not found")
 	}
-	log.Debugf("User detail: %+v", resp.User)
-
 	userDetail := resp.User
+	log.Debugf("User detail: %+v", userDetail)
+
+	logged, err := session.isUserLoggedIn()
+	if err != nil {
+		log.Errorf("Error while checking user login status %v", err)
+	}
+	// This because we do not want to store email in cache when user is logged in
+	// Legacy user can overide there new email
+	if logged {
+		userDetail.Email = ""
+	}
+	err = cacheUserDetail(session, userDetail)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
+	if userDetail.Email != "" {
+		setEmail(session.baseModel, userDetail.Email)
+	}
+	//Save user refferal code
+	if userDetail.Referral != "" {
+		err := setReferalCode(session.baseModel, userDetail.Referral)
+		if err != nil {
+			return err
+		}
+	}
+
+	err := setUserLevel(session.baseModel, userDetail.UserLevel)
+	if err != nil {
+		return err
+	}
+
+	err = setExpiration(session.baseModel, userDetail.Expiration)
+	if err != nil {
+		return err
+	}
 
 	currentDevice, err := session.GetDeviceID()
 	if err != nil {
@@ -970,17 +1015,17 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	}
 	// Check if devuce id is connect to same device if not create new user
 	// this is for the case when user removed device from other device
-	found := false
+	deviceFound := false
 	if userDetail.Devices != nil {
 		for _, device := range userDetail.Devices {
 			if device.Id == currentDevice {
-				found = true
+				deviceFound = true
 				break
 			}
 		}
 	}
-	log.Debugf("Device found %v", found)
-	if !found {
+	log.Debugf("Device found %v", deviceFound)
+	if !deviceFound {
 		// Device has not found in the list
 		// Switch to free user
 		signOut(*session)
@@ -992,47 +1037,19 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 		return nil
 	}
 
-	log.Debugf("User detail: %+v", userDetail)
-	err = cacheUserDetail(session.baseModel, userDetail)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func cacheUserDetail(m *baseModel, userDetail *protos.User) error {
-	if userDetail.Email != "" {
-		setEmail(m, userDetail.Email)
-	}
-	//Save user refferal code
-	if userDetail.Referral != "" {
-		err := setReferalCode(m, userDetail.Referral)
-		if err != nil {
-			return err
-		}
-	}
-	if userDetail.UserLevel == "pro" {
-		setProUser(m, true)
+	if userDetail.UserLevel == "pro" && deviceFound {
+		setProUser(session.baseModel, true)
 	} else {
-		setProUser(m, false)
-	}
-	err := setUserLevel(m, userDetail.UserLevel)
-	if err != nil {
-		return err
-	}
-
-	err = setExpiration(m, userDetail.Expiration)
-	if err != nil {
-		return err
+		setProUser(session.baseModel, false)
 	}
 
 	//Store all device
-	err = setDevices(m, userDetail.Devices)
+	err = setDevices(session.baseModel, userDetail.Devices)
 	if err != nil {
 		return err
 	}
 	log.Debugf("User caching successful: %+v", userDetail)
-	return setUserIdAndToken(m, int64(userDetail.UserId), userDetail.Token)
+	return setUserIdAndToken(session.baseModel, int64(userDetail.UserId), userDetail.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
@@ -1335,15 +1352,16 @@ func login(session *SessionModel, email string, password string) error {
 
 	//Store all the user details
 	userData := ConvertToUserDetailsResponse(login)
-	err = cacheUserDetail(session.baseModel, userData)
+	// once login is successfull save user details
+	// but overide there email with login email
+	userData.Email = email
+	err = cacheUserDetail(session, userData)
 	if err != nil {
 		log.Errorf("Error while caching user details %v", err)
 		return err
 	}
 	end := time.Now()
-	go func() {
-		deviceAdd(session, deviceId)
-	}()
+
 	log.Debugf("Login took %v", end.Sub(start))
 	return nil
 }
@@ -1368,7 +1386,6 @@ func deviceLimitFlow(session *SessionModel, login *protos.LoginResponse) error {
 	// User has reached device limit
 	// Save latest device
 	var protoDevices []*protos.Device
-
 	for _, device := range login.Devices {
 		protoDevice := &protos.Device{
 			Id:      device.Id,
