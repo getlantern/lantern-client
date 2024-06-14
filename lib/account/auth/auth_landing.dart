@@ -10,11 +10,13 @@ class AuthLanding extends StatelessWidget {
   Widget build(BuildContext context) {
     return BaseScreen(
       showAppBar: false,
-      body: _buildBody(context),
+      body: sessionModel.proUser((context, proUser, child) {
+        return _buildBody(context, proUser);
+      }),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context, bool proUser) {
     return SafeArea(
       child: Center(
         child: Column(
@@ -27,36 +29,37 @@ class AuthLanding extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: Button(
-                text: 'sign_in'.i18n,
-                onPressed: () => openSignIn(context),
+                text: proUser ? 'update_pro_account'.i18n : 'sign_in'.i18n,
+                onPressed: () => openSignIn(context, proUser),
               ),
             ),
             const SizedBox(height: 24.0),
             SizedBox(
               width: double.infinity,
               child: Button(
-                text: 'get_lantern_pro'.i18n,
+                text: proUser ? 'sign_in'.i18n : 'get_lantern_pro'.i18n,
                 secondary: true,
-                onPressed: () => openPlans(context),
+                onPressed: () => openPlans(context, proUser),
               ),
             ),
             const SizedBox(height: 32.0),
-            RichText(
-              text: TextSpan(
-                text: 'try_lantern_pro'.i18n,
-                style:
-                    tsBody1.copyWith(fontWeight: FontWeight.w400, color: grey5),
-                children: [
-                  TextSpan(
-                    text: "continue_for_free".i18n.toUpperCase(),
-                    style: tsBody1.copyWith(
-                        fontWeight: FontWeight.w500, color: pink5),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => openHomePage(context),
-                  ),
-                ],
+            if (!proUser)
+              RichText(
+                text: TextSpan(
+                  text: 'try_lantern_pro'.i18n,
+                  style: tsBody1.copyWith(
+                      fontWeight: FontWeight.w400, color: grey5),
+                  children: [
+                    TextSpan(
+                      text: "continue_for_free".i18n.toUpperCase(),
+                      style: tsBody1.copyWith(
+                          fontWeight: FontWeight.w500, color: pink5),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => openHomePage(context),
+                    ),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -64,14 +67,22 @@ class AuthLanding extends StatelessWidget {
   }
 
   void openHomePage(BuildContext context) {
-    context.router.pop();
+    context.router.maybePop();
   }
 
-  void openSignIn(BuildContext context) {
-    context.router.popAndPush(SignIn(authFlow: AuthFlow.signIn));
+  void openSignIn(BuildContext context, bool proUser) {
+    if (proUser) {
+      context.router.popAndPush(SignIn(authFlow: AuthFlow.updateAccount));
+    } else {
+      context.router.popAndPush(SignIn(authFlow: AuthFlow.signIn));
+    }
   }
 
-  void openPlans(BuildContext context) {
-    context.router.popAndPush(const PlansPage());
+  void openPlans(BuildContext context, bool proUser) {
+    if (proUser) {
+      context.router.popAndPush(SignIn(authFlow: AuthFlow.signIn));
+    } else {
+      context.router.popAndPush(const PlansPage());
+    }
   }
 }
