@@ -227,9 +227,13 @@ Do this to make a release build:
 - Run `VERSION=<version here> make android-release ANDROID_ARCH=all`
   - Or, `DEVELOPMENT_MODE=true make android-release ANDROID_ARCH=all` to enable "Development Mode" which has extra dev features like taking screenshots and dev settings.
 
-### Building release packages
+### 📦 Building Release Packages and Distributing the App
 
-Lantern Android release packages are built in CI. You can build installers for beta, for production, or for internal testing by varying the tag syntax. To build for production, you simply tag the current version on `main` with, for example:
+Lantern-client release and beta packages are built using Continuous Integration (CI). You can create installers for beta, production, or internal testing by adjusting the tag syntax. 
+
+#### Production Release for All Platforms 🌍
+
+To release the production version for all platforms (including Android, iOS, and macOS), use the following command:
 
 `git tag -a "lantern-7.0.0" -f -m "Tagging production release"`
 
@@ -241,9 +245,26 @@ Finally, to create an internal build, use "internal", as in:
 
 `git tag -a "lantern-7.0.0-internal" -f -m "Tagging internal release"`
 
-For all of the above, don't forget to push the tags:
 
-`git push --tags -f`
+#### Platform-Specific Releases 📱💻
+
+For releasing to specific platforms, use the appropriate prefix:
+
+* iOS: ios-
+* Android: android-
+* Desktop (Windows, macOS, Linux): desktop-
+
+Example command for releasing a beta version for Android:
+
+`git tag -a "android-lantern-7.0.0" -f -m "Tagging production release"`
+
+This command will build and release the beta version for Android.
+
+#### Pushing Tags to GitHub 🛠️
+
+After creating a tag, push it to GitHub to trigger the CI/CD pipeline:
+
+`git push origin [TAG-NAME]`or `git push origin lantern-7.0.0`
 
 You can then find all built binaries in the [lantern-binaries repository](https://github.com/getlantern/lantern-binaries).
 
