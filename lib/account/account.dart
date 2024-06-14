@@ -3,9 +3,14 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
 @RoutePage<void>(name: 'Account')
-class AccountMenu extends StatelessWidget {
+class AccountMenu extends StatefulWidget {
   const AccountMenu({Key? key}) : super(key: key);
 
+  @override
+  State<AccountMenu> createState() => _AccountMenuState();
+}
+
+class _AccountMenuState extends State<AccountMenu> {
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());
 
@@ -21,7 +26,7 @@ class AccountMenu extends StatelessWidget {
     context.pushRoute(const Support());
   }
 
-  Future<void> onSignOut(BuildContext context) async {
+  Future<void> onSignOut() async {
     try {
       context.loaderOverlay.show();
       await sessionModel.signOut();
@@ -44,7 +49,7 @@ class AccountMenu extends StatelessWidget {
       dismissText: "not_now".i18n,
       includeCancel: true,
       agreeAction: () async {
-        onSignOut(context);
+        onSignOut();
         return true;
       },
       dismissAction: () async {},

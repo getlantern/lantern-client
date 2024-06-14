@@ -168,6 +168,7 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
 		return nil, errors.New("error received from server: %v", resp.BaseResponse.Error)
 	}
+
 	// process plans for currency
 	for i, plan := range resp.Plans {
 		parts := strings.Split(plan.Id, "-")
@@ -182,10 +183,11 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 		yearlyPrice := plan.Price[strings.ToLower(cur)]
 
 		amount := decimal.NewFromInt(monthlyPrice).Div(decimal.NewFromInt(100))
-		yearAmount := decimal.NewFromInt(yearlyPrice)
+		yearAmount := decimal.NewFromInt(yearlyPrice).Div(decimal.NewFromInt(100))
 		resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
 		resp.Plans[i].TotalCost = ac.FormatMoneyDecimal(yearAmount)
 		resp.Plans[i].TotalCostBilledOneTime = fmt.Sprintf("%v billed one time", ac.FormatMoneyDecimal(yearAmount))
+		log.Debugf("Plan %v, %v, %v", resp.Plans[i].OneMonthCost, resp.Plans[i].TotalCost, resp.Plans[i].TotalCostBilledOneTime)
 	}
 	return &resp, nil
 }

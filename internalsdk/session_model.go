@@ -1627,6 +1627,14 @@ func signOut(session SessionModel) error {
 		return log.Errorf("Error while signing out %v", logoutErr)
 	}
 
+	err = clearLocalUserData(session)
+	if err != nil {
+		return log.Errorf("Error while clearing local data %v", err)
+	}
+	return session.userCreate(context.Background())
+}
+
+func clearLocalUserData(session SessionModel) error {
 	err1 := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:     nil,
@@ -1731,7 +1739,7 @@ func deleteAccount(session SessionModel, password string) error {
 	if err != nil {
 		return err
 	}
-	err = signOut(session)
+	err = clearLocalUserData(session)
 	if err != nil {
 		return err
 	}

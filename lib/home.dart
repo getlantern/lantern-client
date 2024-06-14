@@ -27,6 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with WindowListener {
   Function()? _cancelEventSubscription;
+  Function userNew = once<void>();
 
   @override
   void initState() {
@@ -38,7 +39,6 @@ class _HomePageState extends State<HomePage> with WindowListener {
     if (isMobile()) {
       // This is a mobile device
       channelListener();
-      _checkForFirstTimeVisit();
     } else {
       // This is a desktop device
       setupTrayManager();
@@ -105,6 +105,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
 
   Future<void> _checkForFirstTimeVisit() async {
     if (!Platform.isIOS) return;
+
     checkForFirstTimeVisit() async {
       if (sessionModel.proUserNotifier.value == null) {
         return;
@@ -214,6 +215,10 @@ class _HomePageState extends State<HomePage> with WindowListener {
               // not already been accepted
               return const PrivacyDisclosure();
             }
+            userNew(() {
+              print("called user new function");
+              _checkForFirstTimeVisit();
+            });
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
               return Scaffold(
