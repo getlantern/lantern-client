@@ -106,6 +106,9 @@ class _HomePageState extends State<HomePage> with WindowListener {
   Future<void> _checkForFirstTimeVisit() async {
     if (!Platform.isIOS) return;
     checkForFirstTimeVisit() async {
+      if (sessionModel.proUserNotifier.value == null) {
+        return;
+      }
       if (sessionModel.proUserNotifier.value!) {
         sessionModel.setFirstTimeVisit();
         if (sessionModel.proUserNotifier.hasListeners) {

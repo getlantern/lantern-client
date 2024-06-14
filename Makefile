@@ -459,7 +459,7 @@ ios-release:set-version build-release-framework
 	@echo "Flutter Pub get..."
 	flutter pub get
 	@echo "Creating the Flutter iOS build..."
-	flutter build ipa --flavor prod --release
+	flutter build ipa --flavor prod --release --export-options-plist ./ExportOptions.plist
 	@echo "Uploading debug symbols to Sentry..."
 	export SENTRY_LOG_LEVEL=info
 	sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_IOS) $(DWARF_DSYM_FOLDER_PATH)
