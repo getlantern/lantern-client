@@ -486,14 +486,13 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	}
 	log.Debugf("UserId is %v", userId)
 	if userId == 0 {
+		// Create user
+		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathIsFirstTime, true, "")
+		})
+		err = m.userCreate(ctx)
 		if err != nil {
 			log.Error(err)
-		} else {
-			// Create user
-			err = m.userCreate(ctx)
-			if err != nil {
-				log.Error(err)
-			}
 		}
 	}
 
@@ -892,9 +891,11 @@ func checkFirstTimeVisit(m *baseModel) (bool, error) {
 	log.Debugf("First time visit %v", firsttime)
 	return firsttime, nil
 }
+
 func isShowFirstTimeUserVisit(m *baseModel) error {
+	log.Debugf("Setting first time visit to false")
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathIsFirstTime, true, "")
+		return pathdb.Put(tx, pathIsFirstTime, false, "")
 	})
 }
 
@@ -980,6 +981,7 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	if logged {
 		userDetail.Email = ""
 	}
+	log.Debugf("User detail: %+v", userDetail)
 	err = cacheUserDetail(session, userDetail)
 	if err != nil {
 		return err
@@ -1025,21 +1027,33 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 		}
 	}
 	log.Debugf("Device found %v", deviceFound)
-	if !deviceFound {
-		// Device has not found in the list
-		// Switch to free user
-		signOut(*session)
-		log.Debugf("Device has not found in the list creating new user")
-		err = session.userCreate(context.Background())
-		if err != nil {
-			return err
-		}
-		return nil
-	}
+	// if !deviceFound {
+	// 	// Device has not found in the list
+	// 	// Switch to free user
+	// 	signOut(*session)
+	// 	log.Debugf("Device has not found in the list creating new user")
+	// 	err = session.userCreate(context.Background())
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// 	return nil
+	// }
 
-	if userDetail.UserLevel == "pro" && deviceFound {
+	/// Check if user has installed app first time
+	firstTime, err := checkFirstTimeVisit(session.baseModel)
+	if err != nil {
+		log.Debugf("Error while checking first time visit %v", err)
+	}
+	log.Debugf("First time visit %v", firstTime)
+
+	if userDetail.UserLevel == "pro" && firstTime {
+		log.Debugf("User is pro and first time")
+		setProUser(session.baseModel, true)
+	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
+		log.Debugf("User is pro and not first time")
 		setProUser(session.baseModel, true)
 	} else {
+		log.Debugf("User is not pro")
 		setProUser(session.baseModel, false)
 	}
 
@@ -1622,8 +1636,13 @@ func signOut(session SessionModel) error {
 	if err1 != nil {
 		return err1
 	}
-	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+	_ = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put[bool](tx, pathIsUserLoggedIn, false, "")
+	})
+
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put[bool](tx, pathProUser, false, "")
+
 	})
 }
 

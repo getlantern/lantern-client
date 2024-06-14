@@ -79,6 +79,7 @@ class _LanternAppState extends State<LanternApp>
             Localization.locale = lang.startsWith('en') ? 'en_us' : lang;
             return GlobalLoaderOverlay(
               useDefaultLoading: false,
+              disableBackButton: true,
               overlayColor: Colors.black.withOpacity(0.5),
               overlayWidget: Center(
                 child: AnimatedLoadingBorder(

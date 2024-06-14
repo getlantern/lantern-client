@@ -419,7 +419,7 @@ class SessionModel extends Model {
     final firsTime = await methodChannel
         .invokeMethod<bool>('isUserFirstTimeVisit', <String, dynamic>{});
     print("firsTime $firsTime");
-    return !(firsTime ?? false);
+    return firsTime??false;
   }
 
   Future<void> setFirstTimeVisit() async {

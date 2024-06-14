@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
       }
     }
 
-    if (sessionModel.proUserNotifier.value == null) {
+    if (sessionModel.proUserNotifier.value != null) {
       checkForFirstTimeVisit();
     } else {
       sessionModel.proUserNotifier.addListener(() async {

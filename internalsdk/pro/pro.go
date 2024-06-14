@@ -109,7 +109,7 @@ func (c *proClient) defaultHeader() map[string]string {
 	if deviceID := uc.GetDeviceID(); deviceID != "" {
 		params[common.DeviceIdHeader] = deviceID
 	}
-	if userID := strconv.FormatInt(uc.GetUserID(), 10); userID != "" {
+	if userID := strconv.FormatInt(uc.GetUserID(), 10); userID != "" && userID != "0" {
 		params[common.UserIdHeader] = userID
 	}
 	if token := uc.GetToken(); token != "" {
