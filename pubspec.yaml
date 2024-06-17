@@ -37,7 +37,7 @@ dependencies:
   sliver_tools: ^0.2.12
 
   # UI Enhancements & User Input
-  flutter_switch: ^0.3.2
+  flutter_advanced_switch: ^3.1.0
   flag: ^7.0.0
 
   #Loogs and crash reporting
@@ -67,6 +67,7 @@ dependencies:
   # Networking
   cached_network_image: ^3.3.1
   dio: ^5.3.2
+  internet_connection_checker_plus: ^2.2.0
 
   # caching
   flutter_cache_manager: ^3.3.1
@@ -137,9 +138,11 @@ dependencies:
   # Deeplink handling
   app_links: ^3.5.1
 
-
   # Service Locator
   get_it: ^7.6.4
+  #Loading
+  animated_loading_border: ^0.0.2
+  shimmer: ^3.0.0
 
 
 # wakelock ^0.6.2 requires win32 ^2.0.0 or ^3.0.0

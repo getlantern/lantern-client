@@ -76,6 +76,110 @@ class CDialog extends StatefulWidget {
     ).show(context);
   }
 
+  static void showInternetUnavailableDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 16),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Center(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.only(bottom: 16),
+                  child: CAssetImage(
+                      path: ImagePaths.cloudOff, color: Colors.black),
+                ),
+              ),
+              Center(child: CText('check_your_internet_connection'.i18n, style: tsSubtitle1)),
+              const SizedBox(height: 10),
+              CText('please_try'.i18n, style: tsSubtitle2),
+              RichText(
+                  text: TextSpan(
+                children: [
+                  TextSpan(text: '1.', style: tsSubtitle2),
+                  const WidgetSpan(
+                      child: SizedBox(
+                    width: 5,
+                  )),
+                  TextSpan(
+                      text: 'turning_off_airplane_mode'.i18n, style: tsBody1)
+                ],
+              )),
+              RichText(
+                  text: TextSpan(
+                children: [
+                  TextSpan(text: '2.', style: tsSubtitle2),
+                  const WidgetSpan(
+                      child: SizedBox(
+                    width: 5,
+                  )),
+                  TextSpan(
+                      text: 'turning_on_mobile_data_or_wifi'.i18n,
+                      style: tsBody1)
+                ],
+              )),
+              RichText(
+                  text: TextSpan(
+                children: [
+                  TextSpan(text: '3.', style: tsSubtitle2),
+                  const WidgetSpan(
+                      child: SizedBox(
+                    width: 5,
+                  )),
+                  TextSpan(
+                      text: 'check_the_signal_in_your_area'.i18n,
+                      style: tsBody1)
+                ],
+              )),
+              const SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: CText('got_it'.i18n.toUpperCase(), style: tsButtonPink),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    // CDialog(
+    //   icon: const CAssetImage(path: ImagePaths.cloudOff, color: Colors.grey),
+    //   title: 'Check your internet connection'.i18n,
+    //   agreeText: 'Got it',
+    //   // crossAxisAlignment: CrossAxisAlignment.start,
+    //   description: Column(
+    //     // mainAxisSize: MainAxisSize.max,
+    //     // crossAxisAlignment: CrossAxisAlignment.start,
+    //     mainAxisAlignment: MainAxisAlignment.start,
+    //     children: <Widget>[
+    //       Container(
+    //           color: Colors.amber,
+    //           child: CText('Please try',
+    //               style: tsBody1, textAlign: TextAlign.start)),
+    //       RichText(
+    //           text: TextSpan(children: [
+    //         TextSpan(text: '1. ', style: tsBody1),
+    //       ]))
+    //     ],
+    //   ),
+    // ).show(context);
+  }
+
   CDialog({
     this.iconPath,
     this.icon,

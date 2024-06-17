@@ -1,25 +1,22 @@
 # 
 # Translators:
-# Lantern, 2023
-# Nyderalith <nyderalith@yggdrassil.org>, 2023
 # todd <todd@getlantern.org>, 2023
 # fffw <fffw@getlantern.org>, 2023
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2024
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2024
 # e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024
-# axel <axel+transifex@axelsimon.net>, 2024
 # AO <ao@localizationlab.org>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
 "Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
-"Language-Team: French (France) (https://app.transifex.com/lantern-1/teams/94371/fr_FR/)\n"
-"Language: fr_FR\n"
+"Language-Team: French (Canada) (https://app.transifex.com/lantern-1/teams/94371/fr_CA/)\n"
+"Language: fr_CA\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 msgid "app_name"
-msgstr "Lanterne"
+msgstr "Lantern"
 
 msgid "introducing"
 msgstr "Nous présentons le Dialogue en ligne"
@@ -61,7 +58,7 @@ msgid "Disconnecting"
 msgstr "Déconnexion en cours…"
 
 msgid "Connecting"
-msgstr "Connexion en cours…"
+msgstr "Connexion…"
 
 msgid "no_network_connection"
 msgstr "Aucune connexion réseau"
@@ -170,7 +167,7 @@ msgid "general"
 msgstr "Général"
 
 msgid "about"
-msgstr "À propos"
+msgstr "À propos de Lantern"
 
 msgid "privacy_policy"
 msgstr "Politique de confidentialité "

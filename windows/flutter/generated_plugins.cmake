@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   app_links
   audioplayers_windows
+  connectivity_plus
   emoji_picker_flutter
   flutter_windows_webview
   permission_handler_windows

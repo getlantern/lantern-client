@@ -263,6 +263,24 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getString(PROVIDER, "")
     }
 
+    override fun setHasConfigFetched(hasConfig: Boolean) {
+        db.mutate {
+            it.put(PATH_HAS_CONFIG, hasConfig)
+        }
+    }
+
+    override fun setHasProxyFetched(hasProxy: Boolean) {
+        db.mutate {
+            it.put(PATH_HAS_PROXY, hasProxy)
+        }
+    }
+
+    override fun setOnSuccess(hasConnection: Boolean) {
+        db.mutate {
+            it.put(PATH_HAS_ONSUCESS, hasConnection)
+        }
+    }
+
     fun setReferral(referralCode: String?) {
         referral = referralCode
     }
@@ -436,6 +454,10 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val RENEWAL_LAST_SEEN = "renewalseen"
         private const val PROVIDER = "provider"
         private const val RESELLER_CODE = "resellercode"
+        private const val PATH_HAS_CONFIG = "hasConfigFetched"
+        private const val PATH_HAS_PROXY = "hasProxyFetched"
+        private const val PATH_HAS_ONSUCESS = "hasOnSuccess"
+
 
         // other constants
         private const val DEFAULT_ONE_YEAR_COST: Long = 3200

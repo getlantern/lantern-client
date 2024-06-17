@@ -46,7 +46,10 @@ TEST ?= *_test
 # integration-test:
 # 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
-TAG ?= $$VERSION
+APP ?= lantern
+CAPITALIZED_APP := Lantern
+
+TAG ?= $(APP)-$$VERSION
 TAG_HEAD := $(shell git rev-parse HEAD)
 INSTALLER_NAME ?= lantern-installer
 CHANGELOG_NAME ?= CHANGELOG.md
@@ -55,6 +58,11 @@ CHANGELOG_MIN_VERSION ?= 5.0.0
 PACKAGE_MAINTAINER := Lantern Team <team@getlantern.org>
 PACKAGE_VENDOR := Brave New Software Project, Inc
 PACKAGE_URL := https://lantern.io
+
+GH_USER ?= getlantern
+GH_RELEASE_REPOSITORY ?= lantern
+BINARIES_PATH ?= ../lantern-binaries
+BINARIES_BRANCH ?= main
 
 APP_DESCRIPTION := Censorship circumvention tool
 APP_EXTENDED_DESCRIPTION := Lantern allows you to access sites blocked by internet censorship.\nWhen you run it, Lantern reroutes traffic to selected domains through servers located where such domains are uncensored.
@@ -66,6 +74,7 @@ NODE      := $(call get-command,node)
 NPM       := $(call get-command,npm)
 GULP      := $(call get-command,gulp)
 AWSCLI    := $(call get-command,aws)
+S3CMD     := $(call get-command,s3cmd)
 CHANGE    := $(call get-command,git-chglog)
 PIP       := $(call get-command,pip)
 WGET      := $(call get-command,wget)
@@ -108,9 +117,6 @@ LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDa
 # DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
 GOMOBILE_EXTRA_BUILD_FLAGS :=
 
-BINARIES_PATH ?= ../lantern-binaries
-BINARIES_BRANCH ?= main
-
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
@@ -134,8 +140,6 @@ SENTRY_PROJECT_IOS=lantern-ios
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/archive/Runner.xcarchive/dSYMs/
 INFO_PLIST := ios/Runner/Info.plist
 
-APP ?= lantern
-CAPITALIZED_APP := Lantern
 DESKTOP_LIB_NAME ?= liblantern
 DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
 DARWIN_LIB_AMD64 ?= $(DESKTOP_LIB_NAME)_amd64.dylib
@@ -311,7 +315,10 @@ require-awscli:
 
 .PHONY: require-s3cmd
 require-s3cmd:
-	@if [[ -z "s3cmd" ]]; then echo 'Missing "s3cmd" command. Use "brew install s3cmd" or see https://github.com/s3tools/s3cmd/blob/master/INSTALL'; exit 1; fi
+	@if [[ -z "$(S3CMD)" ]]; then echo 'Missing "s3cmd" command. Use "brew install s3cmd" or see https://github.com/s3tools/s3cmd/blob/master/INSTALL.md'; exit 1; fi
+
+.PHONY: require-gh-token
+require-gh-token: guard-GH_TOKEN
 
 .PHONY: require-changelog
 require-changelog:
@@ -345,9 +352,25 @@ require-appdmg:
 require-retry:
 	@if [[ -z "$(RETRY)" ]]; then echo 'Missing retry command. Try go install github.com/joshdk/retry'; exit 1; fi
 
-release-autoupdate: require-version
-	@curl https://s3.amazonaws.com/lantern/lantern-installer.apk | bzip2 > update_android_arm.bz2 && \
-	$(RUBY) ./create_or_update_release.rb getlantern lantern $$VERSION update_android_arm.bz2
+.PHONY: require-ruby
+require-ruby:
+	@if [[ -z "$(RUBY)" ]]; then echo 'Missing "ruby" command.'; exit 1; fi
+
+.PHONY: auto-updates
+auto-updates: require-version require-s3cmd require-gh-token require-ruby
+	@TAG_COMMIT=$$(git rev-list --abbrev-commit -1 $(TAG)) && \
+	if [[ -z "$$TAG_COMMIT" ]]; then \
+		echo "Could not find given tag $(TAG)."; \
+	fi && \
+	for URL in $$($(S3CMD) ls s3://$(S3_BUCKET)/ | grep -v "sha256" | grep $(APP)_update_ | grep -F "$$VERSION." | awk '{print $$4}'); do \
+		NAME=$$(basename $$URL) && \
+		STRIPPED_NAME=$$(echo "$$NAME" | cut -d - -f 1 | sed s/$(APP)_//).bz2 && \
+		$(S3CMD) get --force s3://$(S3_BUCKET)/$$NAME $$STRIPPED_NAME && \
+		ALL="$$ALL $$STRIPPED_NAME"; \
+	done && \
+	ALL=`echo $$ALL | xargs` && \
+	echo "Uploading $$ALL for auto-updates" && \
+	echo $$ALL | xargs $(RUBY) ./$(INSTALLER_RESOURCES)/tools/create_or_update_release.rb $(GH_USER) $(GH_RELEASE_REPOSITORY) $$VERSION
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
@@ -582,6 +605,8 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/Frameworks/liblantern.dylib) && \
 		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/MacOS/Lantern) && \
 		$(call osxcodesign,$$DARWIN_APP_NAME) && \
+		cat $(DARWIN_APP_NAME)/Contents/MacOS/$(APP) | bzip2 > $(APP)_update_darwin.bz2 && \
+		ls -l $(APP)_update_darwin.bz2 && \
 		rm -rf $(INSTALLER_NAME).dmg && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
 		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \

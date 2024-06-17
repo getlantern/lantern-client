@@ -1,7 +1,13 @@
 import 'package:animated_loading_border/animated_loading_border.dart';
+import 'package:app_links/app_links.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/vpn/vpn_notifier.dart';
+
+import 'common/ui/custom/internet_checker.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 final globalRouter = AppRouter();
@@ -31,32 +37,63 @@ class _LanternAppState extends State<LanternApp>
   late final AnimationController networkWarningAnimationController;
   late final Animation networkWarningAnimation;
 
-  @override
+   @override
   void initState() {
+    _animateNetworkWarning();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initDeepLinks();
+    });
     super.initState();
-    sessionModel.networkAvailable
-        .addListener(toggleConnectivityWarningIfNecessary);
-    sessionModel.proxyAvailable
-        .addListener(toggleConnectivityWarningIfNecessary);
-    networkWarningAnimationController = AnimationController(
-      duration: shortAnimationDuration,
-      vsync: this,
-    );
-    networkWarningAnimation = Tween(begin: 0.0, end: 1.0)
-        .animate(networkWarningAnimationController)
-      ..addListener(networkWarningAnimationChanged);
-    toggleConnectivityWarningIfNecessary();
+  }
+
+  void _animateNetworkWarning() {
+    if (isMobile()) {
+      sessionModel.proxyAvailable
+          .addListener(toggleConnectivityWarningIfNecessary);
+      networkWarningAnimationController = AnimationController(
+        duration: shortAnimationDuration,
+        vsync: _TickerProviderImpl(),
+      );
+      networkWarningAnimation = Tween(begin: 0.0, end: 1.0)
+          .animate(networkWarningAnimationController)
+        ..addListener(networkWarningAnimationChanged);
+      toggleConnectivityWarningIfNecessary();
+    }
+  }
+
+  Future<void> initDeepLinks() async {
+    final appLinks = AppLinks();
+    // Handle link when app is in warm state (front or background)
+    appLinks.uriLinkStream.listen((Uri uri) {
+      if (context.mounted) {
+        if (uri.path.startsWith('/report-issue')) {
+          final pathUrl = uri.toString();
+          final segment = pathUrl.split('#');
+          if (segment.length >= 2) {
+            globalRouter.push(ReportIssue(description: '#${segment[1]}'));
+          } else {
+            globalRouter.push(ReportIssue());
+          }
+        }
+      }
+    });
   }
 
   void networkWarningAnimationChanged() {
     networkWarningBarHeightRatio.value = networkWarningAnimation.value;
   }
 
-  void toggleConnectivityWarningIfNecessary() {
+  Future<void> toggleConnectivityWarningIfNecessary() async {
+    final hasConnection = await InternetConnection().hasInternetAccess;
+    //Check if the device has internet connection
+    //if not then proxy will not be available
+    //We already showing on internet connection error
+    if (!hasConnection) {
+      return;
+    }
     final shouldShowConnectivityWarning =
-        !sessionModel.networkAvailable.value ||
-            (sessionModel.proxyAvailable.value != null &&
-                sessionModel.proxyAvailable.value == false);
+        (sessionModel.proxyAvailable.value != null &&
+            sessionModel.proxyAvailable.value == false);
     if (shouldShowConnectivityWarning != showConnectivityWarning) {
       showConnectivityWarning = shouldShowConnectivityWarning;
       if (showConnectivityWarning) {
@@ -72,74 +109,87 @@ class _LanternAppState extends State<LanternApp>
   Widget build(BuildContext context) {
     final currentLocal = View.of(context).platformDispatcher.locale;
     print('selected local: ${currentLocal.languageCode}');
-    return ChangeNotifierProvider(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => BottomBarChangeNotifier()),
+        ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
+        ChangeNotifierProvider(create: (context) => InternetStatusProvider())
+      ],
+      child: ChangeNotifierProvider(
         create: (context) => BottomBarChangeNotifier(),
-        child: sessionModel.language(
-          (context, lang, child) {
-            Localization.locale = lang.startsWith('en') ? 'en_us' : lang;
-            return GlobalLoaderOverlay(
-              useDefaultLoading: false,
-              disableBackButton: true,
-              overlayColor: Colors.black.withOpacity(0.5),
-              overlayWidget: Center(
-                child: AnimatedLoadingBorder(
-                  borderWidth: 5,
-                  borderColor: yellow3,
-                  cornerRadius: 100,
-                  child: SvgPicture.asset(
-                    ImagePaths.lantern_logo,
-                  ),
-                ),
-              ),
-              child: I18n(
-                initialLocale: currentLocale(lang),
-                child: MaterialApp.router(
-                  locale: currentLocale(lang),
-                  debugShowCheckedModeBanner: false,
-                  theme: ThemeData(
-                    useMaterial3: false,
-                    fontFamily: _getLocaleBasedFont(currentLocal),
-                    brightness: Brightness.light,
-                    primarySwatch: Colors.grey,
-                    appBarTheme: const AppBarTheme(
-                      systemOverlayStyle: SystemUiOverlayStyle.dark,
+        child: FutureBuilder(
+          future: translations,
+          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
+            return sessionModel.language(
+              (context, lang, child) {
+                Localization.locale = lang;
+                return GlobalLoaderOverlay(
+                  useDefaultLoading: false,
+                  overlayColor: Colors.black.withOpacity(0.5),
+                  overlayWidget: Center(
+                    child: AnimatedLoadingBorder(
+                      borderWidth: 5,
+                      borderColor: yellow3,
+                      cornerRadius: 100,
+                      child: SvgPicture.asset(
+                        ImagePaths.lantern_logo,
+                      ),
                     ),
-                    colorScheme: ColorScheme.fromSwatch()
-                        .copyWith(secondary: Colors.black),
                   ),
-                  title: 'app_name'.i18n,
-                  localizationsDelegates: const [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  routerConfig: globalRouter.config(
-                    deepLinkBuilder: navigateToDeepLink,
+                  child: I18n(
+                    initialLocale: currentLocale(lang),
+                    child: MaterialApp.router(
+                      locale: currentLocale(lang),
+                      debugShowCheckedModeBanner: false,
+                      theme: ThemeData(
+                        useMaterial3: false,
+                        fontFamily: _getLocaleBasedFont(currentLocal),
+                        brightness: Brightness.light,
+                        primarySwatch: Colors.grey,
+                        appBarTheme: const AppBarTheme(
+                          systemOverlayStyle: SystemUiOverlayStyle.dark,
+                        ),
+                        colorScheme: ColorScheme.fromSwatch()
+                            .copyWith(secondary: Colors.black),
+                      ),
+                      title: 'app_name'.i18n,
+                      localizationsDelegates: const [
+                        GlobalMaterialLocalizations.delegate,
+                        GlobalWidgetsLocalizations.delegate,
+                        GlobalCupertinoLocalizations.delegate,
+                      ],
+                      routerConfig: globalRouter.config(
+                        deepLinkBuilder: navigateToDeepLink,
+                      ),
+                      supportedLocales: const [
+                        Locale('ar', 'EG'),
+                        Locale('fr', 'FR'),
+                        Locale('en', 'US'),
+                        Locale('fa', 'IR'),
+                        Locale('th', 'TH'),
+                        Locale('ms', 'MY'),
+                        Locale('ru', 'RU'),
+                        Locale('ur', 'IN'),
+                        Locale('zh', 'CN'),
+                        Locale('zh', 'HK'),
+                        Locale('es', 'ES'),
+                        Locale('es', 'CU'),
+                        Locale('tr', 'TR'),
+                        Locale('vi', 'VN'),
+                        Locale('my', 'MM'),
+                      ],
+                    ),
                   ),
-                  supportedLocales: const [
-                    Locale('ar', 'EG'),
-                    Locale('fr', 'FR'),
-                    Locale('en', 'US'),
-                    Locale('fa', 'IR'),
-                    Locale('th', 'TH'),
-                    Locale('ms', 'MY'),
-                    Locale('ru', 'RU'),
-                    Locale('ur', 'IN'),
-                    Locale('zh', 'CN'),
-                    Locale('zh', 'HK'),
-                    Locale('es', 'ES'),
-                    Locale('es', 'CU'),
-                    Locale('tr', 'TR'),
-                    Locale('vi', 'VN'),
-                    Locale('my', 'MM'),
-                    Locale('hi', 'IN'),
-                    Locale('bn', 'BD'),
-                  ],
-                ),
-              ),
+                );
+              },
             );
           },
-        ));
+        ),
+      ),
+    );
   }
 
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {

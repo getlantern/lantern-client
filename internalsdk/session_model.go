@@ -91,7 +91,10 @@ const (
 	pathDeviceLinkingCode = "devicelinkingcode"
 	pathDeviceCodeExp     = "devicecodeexp"
 
-	group = srp.RFC5054Group3072
+	group            = srp.RFC5054Group3072
+	pathHasConfig    = "hasConfigFetched"
+	pathHasProxy     = "hasProxyFetched"
+	pathHasonSuccess = "hasOnSuccess"
 )
 
 type SessionModelOpts struct {
@@ -873,6 +876,22 @@ func saveUserSalt(m *baseModel, salt []byte) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put[[]byte](tx, pathUserSalt, salt, "")
 	})
+}
+func (m *SessionModel) SetHasConfigFetched(fetached bool) {
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathHasConfig, fetached, "")
+	}))
+}
+
+func (m *SessionModel) SetHasProxyFetched(fetached bool) {
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathHasProxy, fetached, "")
+	}))
+}
+func (m *SessionModel) SetOnSuccess(fetached bool) {
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathHasonSuccess, fetached, "")
+	}))
 }
 
 func acceptTerms(m *baseModel) error {

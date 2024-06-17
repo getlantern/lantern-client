@@ -78,9 +78,9 @@ class _FollowUsState extends State<FollowUs> {
     'ua': {
       _Social.facebook:
           'https://www.facebook.com/profile.php?id=61554740875416',
-      _Social.x: ' https://twitter.com/LanternUA',
+      _Social.x: 'https://twitter.com/LanternUA',
       _Social.instagram: 'https://www.instagram.com/getlantern_ua/',
-      _Social.telegram: ' https://t.me/lanternukraine',
+      _Social.telegram: 'https://t.me/lanternukraine',
     },
     //Belarus
     'by': {
@@ -94,7 +94,7 @@ class _FollowUsState extends State<FollowUs> {
     'uae': {
       _Social.facebook:
           'https://www.facebook.com/profile.php?id=61554655199439',
-      _Social.x: ' https://twitter.com/getlantern_UAE',
+      _Social.x: 'https://twitter.com/getlantern_UAE',
       _Social.instagram: 'https://www.instagram.com/lanternio_uae/',
       _Social.telegram: 'https://t.me/lantern_uae',
     },
@@ -104,10 +104,10 @@ class _FollowUsState extends State<FollowUs> {
           'https://www.facebook.com/profile.php?id=61554620251833',
       _Social.x: 'https://twitter.com/getlantern_gu',
       _Social.instagram: 'https://www.instagram.com/lanternio_guinea/',
-      _Social.telegram: ': https://t.me/LanternGuinea',
+      _Social.telegram: 'https://t.me/LanternGuinea',
     },
     'all': {
-      _Social.facebook: ' https://www.facebook.com/getlantern',
+      _Social.facebook: 'https://www.facebook.com/getlantern',
       _Social.x: 'https://twitter.com/getlantern',
       _Social.instagram: 'https://www.instagram.com/getlantern/',
       _Social.telegram: '',

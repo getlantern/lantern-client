@@ -55,6 +55,7 @@ var (
 func init() {
 	autoupdate.Version = common.ApplicationVersion
 	autoupdate.PublicKey = []byte(packagePublicKey)
+
 }
 
 // App is the core of the Lantern desktop application, in the form of a library.
@@ -62,6 +63,7 @@ type App struct {
 	hasExited            int64
 	fetchedGlobalConfig  int32
 	fetchedProxiesConfig int32
+	hasSucceedingProxy   int32
 
 	Flags            flashlight.Flags
 	configDir        string
@@ -99,6 +101,7 @@ type App struct {
 func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, settings *settings.Settings) *App {
 	analyticsSession := newAnalyticsSession(settings)
 	app := &App{
+		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
 		proClient:                 proClient,
@@ -186,15 +189,6 @@ func (app *App) Run(isMain bool) {
 			}()
 		}
 
-		if app.Flags.Initialize {
-			app.statsTracker.AddListener(func(newStats stats.Stats) {
-				if newStats.HasSucceedingProxy {
-					log.Debug("Finished initialization")
-					app.Exit(nil)
-				}
-			})
-		}
-
 		cacheDir, err := os.UserCacheDir()
 		if err != nil {
 			cacheDir = os.TempDir()
@@ -213,14 +207,22 @@ func (app *App) Run(isMain bool) {
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
 			app.Flags.AsMap(),
-			app.onConfigUpdate,
-			app.onProxiesUpdate,
 			app.settings,
 			app.statsTracker,
 			app.IsPro,
 			app.settings.GetLanguage,
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
 			app.analyticsSession.EventWithLabel,
+			flashlight.WithOnConfig(app.onConfigUpdate),
+			flashlight.WithOnProxies(app.onProxiesUpdate),
+			flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
+				if err != nil && !hasSucceeding {
+					app.onSucceedingProxy(hasSucceeding)
+				}
+			}),
+			flashlight.WithOnSucceedingProxy(func() {
+				app.onSucceedingProxy(true)
+			}),
 		)
 		if err != nil {
 			app.Exit(err)
@@ -239,6 +241,7 @@ func (app *App) Run(isMain bool) {
 		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
 
 		notifyConfigSaveErrorOnce := new(sync.Once)
+
 		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
 			switch t {
 			case flashlight.ErrorTypeProxySaveFailure, flashlight.ErrorTypeConfigSaveFailure:
@@ -353,20 +356,6 @@ func (app *App) beforeStart(listenAddr string) {
 	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
-// Connect turns on proxying
-func (app *App) Connect() {
-	app.analyticsSession.Event("systray-menu", "connect")
-	ops.Begin("connect").End()
-	app.settings.SetDisconnected(false)
-}
-
-// Disconnect turns off proxying
-func (app *App) Disconnect() {
-	app.analyticsSession.Event("systray-menu", "disconnect")
-	ops.Begin("disconnect").End()
-	app.settings.SetDisconnected(true)
-}
-
 // GetLanguage returns the user language
 func (app *App) GetLanguage() string {
 	return app.settings.GetLanguage()
@@ -428,9 +417,8 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
-	if src == config.Fetched {
-		atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
-	}
+	log.Debugf("[Startup Desktop] Got config update from %v", src)
+	atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
 	autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
 		return "/img/lantern_logo.png"
 	})
@@ -446,9 +434,36 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
-	if src == config.Fetched {
-		atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
+	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
+	atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
+}
+
+func (app *App) onSucceedingProxy(succeeding bool) {
+	hasSucceedingProxy := int32(0)
+	if succeeding {
+		hasSucceedingProxy = 1
 	}
+	atomic.StoreInt32(&app.hasSucceedingProxy, hasSucceedingProxy)
+	log.Debugf("[Startup Desktop] onSucceedingProxy %v", succeeding)
+}
+
+// HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
+func (app *App) HasSucceedingProxy() bool {
+	return atomic.LoadInt32(&app.hasSucceedingProxy) == 1
+}
+
+func (app *App) GetHasConfigFetched() bool {
+
+	log.Debugf("Global config fetched: %v, Proxies config fetched: %v")
+	return atomic.LoadInt32(&app.fetchedGlobalConfig) == 1
+}
+
+func (app *App) GetHasProxyFetched() bool {
+	return atomic.LoadInt32(&app.fetchedProxiesConfig) == 1
+}
+
+func (app *App) GetOnSuccess() bool {
+	return app.HasSucceedingProxy()
 }
 
 // AddExitFunc adds a function to be called before the application exits.

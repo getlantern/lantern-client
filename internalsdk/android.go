@@ -18,6 +18,7 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
@@ -89,10 +90,20 @@ type Session interface {
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
 	SetShowInterstitialAdsEnabled(bool)
+	SetHasConfigFetched(bool)
+	SetHasProxyFetched(bool)
+	SetOnSuccess(bool)
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() (string, error)
+}
+
+// Callback that updates ui
+type InitCallback struct {
+	hasConfigFected bool
+	hasProxyFected  bool
+	onSuccess       bool
 }
 
 // PanickingSession wraps the Session interface but panics instead of returning errors
@@ -123,6 +134,9 @@ type PanickingSession interface {
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() string
+	SetHasConfigFetched(bool)
+	SetHasProxyFetched(bool)
+	SetOnSuccess(bool)
 
 	Wrapped() Session
 }
@@ -276,6 +290,18 @@ func (s *panickingSessionImpl) SerializedInternalHeaders() string {
 	result, err := s.wrapped.SerializedInternalHeaders()
 	panicIfNecessary(err)
 	return result
+}
+
+func (s *panickingSessionImpl) SetHasConfigFetched(fetached bool) {
+	s.wrapped.SetHasConfigFetched(fetached)
+}
+
+func (s *panickingSessionImpl) SetHasProxyFetched(fetached bool) {
+	s.wrapped.SetHasProxyFetched(fetached)
+}
+
+func (s *panickingSessionImpl) SetOnSuccess(fetached bool) {
+	s.wrapped.SetOnSuccess(fetached)
 }
 
 type UserConfig struct {
@@ -542,29 +568,28 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		func() bool { return false }, // always connected
 		func() bool { return true },
 		func() bool { return false }, // do not proxy private hosts on Android
-		// TODO: allow configuring whether or not to enable reporting (just like we
-		// already have in desktop)
-		func() bool { return true }, // auto report
+		func() bool { return true },  // auto report
 		flags,
-		func(cfg *config.Global, src config.Source) {
-			session.UpdateAdSettings(&adSettings{cfg.AdSettings})
-			if session.IsStoreVersion() {
-				runner.EnableNamedDomainRules("google_play") // for google play build we want to make sure that Google Play domains are not being proxied
-			}
-			select {
-			case globalConfigChanged <- nil:
-				// okay
-			default:
-				// don't block
-			}
-		}, // onConfigUpdate
-		nil, // onProxiesUpdate
 		userConfig,
 		NewStatsTracker(session),
 		session.IsProUser,
 		func() string { return "" }, // only used for desktop
 		ReverseDns(grabber),
 		func(category, action, label string) {},
+		flashlight.WithOnConfig(func(g *config.Global, s config.Source) {
+			session.SetHasConfigFetched(true)
+		}),
+		flashlight.WithOnProxies(func(d []bandit.Dialer, s config.Source) {
+			session.SetHasProxyFetched(true)
+		}),
+		flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
+			if err != nil && !hasSucceeding {
+				session.SetOnSuccess(false)
+			}
+		}),
+		flashlight.WithOnSucceedingProxy(func() {
+			session.SetOnSuccess(true)
+		}),
 	)
 	if err != nil {
 		log.Fatalf("failed to start flashlight: %v", err)

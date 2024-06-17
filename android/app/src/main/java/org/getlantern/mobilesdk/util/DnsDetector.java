@@ -61,14 +61,12 @@ public class DnsDetector {
                     public void onAvailable(@NonNull Network network) {
                         Logger.debug(TAG, "Adding available network");
                         allNetworks.put(network, "");
-                        EventBus.getDefault().postSticky(Event.NetworkAvailable);
                     }
 
                     @Override
                     public void onLost(@NonNull Network network) {
                         Logger.debug(TAG, "Removing lost network");
                         allNetworks.remove(network);
-                        publishNetworkAvailability();
                     }
                 }
         );
