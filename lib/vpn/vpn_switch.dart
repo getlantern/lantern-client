@@ -1,4 +1,3 @@
-import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:lantern/ad_helper.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
@@ -62,13 +61,16 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   @override
   Widget build(BuildContext context) {
-
     final internetStatusProvider = context.watch<InternetStatusProvider>();
     final vpnNotifier = context.watch<VPNChangeNotifier>();
     if (isMobile()) {
       return sessionModel
           .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
-        adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
+        //Since we don't have feature flag on ios at the moment
+        // disable ads'
+        if (Platform.isAndroid) {
+          adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
+        }
         return Transform.scale(
             scale: 2.5,
             child: vpnModel.vpnStatus(
@@ -82,8 +84,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
                     vpnStatus == 'connected' || vpnStatus == 'disconnecting',
                 activeColor: onSwitchColor,
                 inactiveColor: (internetStatusProvider.isConnected &&
-                    !vpnNotifier.isFlashlightInitializedFailed)
-                    ?offSwitchColor
+                        !vpnNotifier.isFlashlightInitializedFailed)
+                    ? offSwitchColor
                     : grey3,
                 onChanged: (newValue) =>
                     vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
@@ -107,9 +109,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
             activeColor: onSwitchColor,
             inactiveColor: (internetStatusProvider.isConnected &&
                     !vpnNotifier.isFlashlightInitializedFailed)
-                ?offSwitchColor
+                ? offSwitchColor
                 : grey3,
-
             onChanged: (newValue) {
               vpnProcessForDesktop();
               setState(() {
