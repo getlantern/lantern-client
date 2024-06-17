@@ -12,11 +12,9 @@ on:
         type: string
         required: true
 
-
 env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
-
 
 jobs:
   build-android:
