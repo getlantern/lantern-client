@@ -128,7 +128,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
               Column(
                 children: [
                   const TOS(),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   // * resellerCodeCheckout
                   Button(
                     disabled: emailController.value.text.isEmpty ||

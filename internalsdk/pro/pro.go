@@ -124,6 +124,17 @@ func (c *proClient) defaultHeader() map[string]string {
 	return params
 }
 
+func (c *proClient) internalHeader() map[string]string {
+	uc := c.userConfig()
+	params := map[string]string{}
+
+	// Import all the internal headers
+	for k, v := range uc.GetInternalHeaders() {
+		params[k] = v
+	}
+	return params
+}
+
 // EmailExists is used to check if an email address belongs to an existing Pro account
 // XXX Deprecated: See https://github.com/getlantern/lantern-internal/issues/4377
 func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error) {
@@ -406,7 +417,7 @@ func (c *proClient) SignUp(ctx context.Context, signupData *protos.SignupRequest
 // Params: ctx context.Context, data *protos.SignupEmailResendRequest
 func (c *proClient) SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/signup/resend/email", nil, data, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/signup/resend/email", nil, data, &resp, c.internalHeader())
 	if err != nil {
 		return false, err
 	}
@@ -417,7 +428,7 @@ func (c *proClient) SignupEmailResendCode(ctx context.Context, data *protos.Sign
 // Params: ctx context.Context, data *protos.ConfirmSignupRequest
 func (c *proClient) SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/signup/complete/email", nil, data, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/signup/complete/email", nil, data, &resp, c.internalHeader())
 	if err != nil {
 		return false, err
 	}
@@ -427,7 +438,7 @@ func (c *proClient) SignupEmailConfirmation(ctx context.Context, data *protos.Co
 // LoginPrepare does the initial login preparation with come make sure the user exists and match user salt
 func (c *proClient) LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error) {
 	var model protos.PrepareResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/prepare", nil, loginData, &model, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/prepare", nil, loginData, &model, c.internalHeader())
 	if err != nil {
 		// Send custom error to show error on client side
 		return nil, log.Errorf("user_not_found %v", err)
@@ -438,7 +449,7 @@ func (c *proClient) LoginPrepare(ctx context.Context, loginData *protos.PrepareR
 // Login is used to login a user with the LoginRequest
 func (c *proClient) Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
 	var resp protos.LoginResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/login", nil, loginData, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/login", nil, loginData, &resp, c.internalHeader())
 	if err != nil {
 		return nil, err
 	}
@@ -449,7 +460,7 @@ func (c *proClient) Login(ctx context.Context, loginData *protos.LoginRequest) (
 // StartRecoveryByEmail is used to start the recovery process by sending a recovery code to the user's email
 func (c *proClient) StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/recovery/start/email", nil, loginData, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/recovery/start/email", nil, loginData, &resp, c.internalHeader())
 	if err != nil {
 		return false, err
 	}
@@ -459,7 +470,7 @@ func (c *proClient) StartRecoveryByEmail(ctx context.Context, loginData *protos.
 // CompleteRecoveryByEmail is used to complete the recovery process by validating the recovery code
 func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/recovery/complete/email", nil, loginData, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/recovery/complete/email", nil, loginData, &resp, c.internalHeader())
 	if err != nil {
 		return false, err
 	}
@@ -470,7 +481,7 @@ func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *prot
 func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, recoveryData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error) {
 	var resp protos.ValidateRecoveryCodeResponse
 	log.Debugf("ValidateEmailRecoveryCode request is %v", recoveryData)
-	err := c.webclient.PostPROTOC(ctx, "/users/recovery/validate/email", nil, recoveryData, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/recovery/validate/email", nil, recoveryData, &resp, c.internalHeader())
 	if err != nil {
 		return nil, err
 	}
@@ -483,7 +494,7 @@ func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, recoveryData 
 // ChangeEmail is used to change the email address of a user
 func (c *proClient) ChangeEmail(ctx context.Context, loginData *protos.ChangeEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/change_email", nil, loginData, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/change_email", nil, loginData, &resp, c.internalHeader())
 	if err != nil {
 		return false, err
 	}
@@ -493,7 +504,7 @@ func (c *proClient) ChangeEmail(ctx context.Context, loginData *protos.ChangeEma
 // CompleteChangeEmail is used to complete the email change process
 func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/change_email/complete/email", nil, loginData, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/change_email/complete/email", nil, loginData, &resp, c.internalHeader())
 	if err != nil {
 		return false, err
 	}
@@ -504,7 +515,7 @@ func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.C
 // Once account is delete make sure to create new account
 func (c *proClient) DeleteAccount(ctx context.Context, accountData *protos.DeleteUserRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/delete", nil, accountData, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/delete", nil, accountData, &resp, c.internalHeader())
 	if err != nil {
 		return false, err
 	}
@@ -515,7 +526,7 @@ func (c *proClient) DeleteAccount(ctx context.Context, accountData *protos.Delet
 // Once account is delete make sure to create new account
 func (c *proClient) SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error) {
 	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/logout", nil, logoutData, &resp, nil)
+	err := c.webclient.PostPROTOC(ctx, "/users/logout", nil, logoutData, &resp, c.internalHeader())
 	if err != nil {
 		return false, err
 	}

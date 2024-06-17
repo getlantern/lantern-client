@@ -3,7 +3,7 @@ import 'package:i18n_extension_importer/src/io/import.dart';
 import 'package:lantern/common/common.dart';
 
 extension Localization on String {
-  static String defaultLocale = 'en';
+  static String defaultLocale = 'en_us';
   static String locale = defaultLocale;
 
   static Translations translations =
