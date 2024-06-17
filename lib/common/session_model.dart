@@ -28,7 +28,6 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
-  late ValueNotifier<String?> deviceIdNotifier;
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -48,6 +47,18 @@ class SessionModel extends Model {
       */
       proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
       country =  singleValueNotifier('geo_country_code', 'US');
+
+      /// This warning is not needed for the Non pro user
+      /// This flow is not needed anymore
+      /// We don't user create account if email address is not verified
+      hasAccountVerified = ValueNotifier(true);
+      hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
+      proUserNotifier = singleValueNotifier('prouser', false);
+
+      userEmail = singleValueNotifier(
+        'emailAddress',
+        "",
+      );
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
       isPlayVersion = ffiValueNotifier(
@@ -66,37 +77,15 @@ class SessionModel extends Model {
         false,
       );
     }
-    userEmail = singleValueNotifier(
-      'emailAddress',
-      "",
-    );
+
 
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
       // if user goes to chat then screenshot will be disabled
       enableScreenShot();
     }
-
-    /*Note
-    * Make proxyAvailable default value to true on IOS it take some to get data from go side
-    * So show banner only if proxyAvailable is false
-    */
-    proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
-    country = singleValueNotifier('geo_country_code', 'US');
-
-    /// This warning is not needed for the Non pro user
-    /// This flow is not needed anymore
-    /// We don't user create account if email address is not verified
-    hasAccountVerified = ValueNotifier(true);
-    hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
-    proUserNotifier = singleValueNotifier('prouser', false);
-    deviceIdNotifier = singleValueNotifier('deviceid', "");
   }
-  // ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  late ValueNotifier<bool?> isPlayVersion;
-  late ValueNotifier<bool?> isStoreVersion;
-  late ValueNotifier<bool?> proxyAvailable;
-  late ValueNotifier<String?> country;
+
 
   ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue) {
     return singleValueNotifier(path, defaultValue);

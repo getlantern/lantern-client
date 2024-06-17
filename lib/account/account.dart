@@ -58,12 +58,16 @@ class _AccountMenuState extends State<AccountMenu> {
 
   void onAccountManagementTap(
       BuildContext context, bool isProUser, bool hasUserLoggedIn) {
-    if (hasUserLoggedIn) {
-      // User has gone through onboarding
-      context.pushRoute(AccountManagement(isPro: isProUser));
+    if (Platform.isIOS) {
+      if (hasUserLoggedIn) {
+        // User has gone through onboarding
+        context.pushRoute(AccountManagement(isPro: isProUser));
+      } else {
+        // Ask user to update their email and password
+        showProUserDialog(context);
+      }
     } else {
-      // Ask user to update their email and password
-      showProUserDialog(context);
+      context.pushRoute(AccountManagement(isPro: isProUser));
     }
   }
 
@@ -86,6 +90,7 @@ class _AccountMenuState extends State<AccountMenu> {
 
   List<Widget> freeItems(BuildContext context, bool hasUserLoggedIn) {
     return [
+      if(Platform.isIOS)
       if (!hasUserLoggedIn)
         ListItemFactory.settingsItem(
           icon: ImagePaths.signIn,
@@ -136,7 +141,7 @@ class _AccountMenuState extends State<AccountMenu> {
         content: 'Authorize Device for Pro'.i18n,
         onTap: () => authorizeDeviceForPro(context),
       ),
-      ...commonItems(context)
+      ...commonItems(context, hasUserLoggedIn)
     ];
   }
 
@@ -172,11 +177,11 @@ class _AccountMenuState extends State<AccountMenu> {
         content: 'add_device'.i18n,
         onTap: () async => await context.pushRoute(ApproveDevice()),
       ),
-      ...commonItems(context)
+      ...commonItems(context, hasUserLoggedIn)
     ];
   }
 
-  List<Widget> commonItems(BuildContext context) {
+  List<Widget> commonItems(BuildContext context, bool hasUserLoggedIn) {
     return [
       if (isMobile())
         ListItemFactory.settingsItem(
@@ -208,18 +213,13 @@ class _AccountMenuState extends State<AccountMenu> {
           openSettings(context);
         },
       ),
-
-      /// Still needs to figure out what to do when user signout
-      /// or even if want to provide this signout option functionality
-      sessionModel.isUserSignedIn((context, hasSignedIn, child) {
-        return hasSignedIn
-            ? ListItemFactory.settingsItem(
-                icon: ImagePaths.signOut,
-                content: 'sign_out'.i18n,
-                onTap: () => showSingOutDialog(context),
-              )
-            : const SizedBox.shrink();
-      })
+      if (Platform.isIOS)
+        if (hasUserLoggedIn)
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.signOut,
+            content: 'sign_out'.i18n,
+            onTap: () => showSingOutDialog(context),
+          )
     ];
   }
 
@@ -230,13 +230,21 @@ class _AccountMenuState extends State<AccountMenu> {
       automaticallyImplyLeading: false,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
-          return ListView(
-            children: proUser
-                ? proItems(sessionContext, hasUserLoggedIn)
-                : freeItems(sessionContext, hasUserLoggedIn),
-          );
-        });
+        if (Platform.isIOS) {
+          return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
+            return ListView(
+              children: proUser
+                  ? proItems(sessionContext, hasUserLoggedIn)
+                  : freeItems(sessionContext, hasUserLoggedIn),
+            );
+          });
+        }
+
+        return ListView(
+          children: proUser
+              ? proItems(sessionContext, false)
+              : freeItems(sessionContext, false),
+        );
       }),
     );
   }

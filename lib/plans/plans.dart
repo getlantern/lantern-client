@@ -97,6 +97,8 @@ class PlansPage extends StatelessWidget {
                     ],
                   ),
                 ),
+                // todo need to enable this for other platform soon
+                if(Platform.isIOS)
                 _buildFooter(context, proUser),
               ],
             );

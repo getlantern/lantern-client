@@ -1,6 +1,5 @@
 import 'package:animated_loading_border/animated_loading_border.dart';
 import 'package:app_links/app_links.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/custom_bottom_bar.dart';
@@ -37,7 +36,7 @@ class _LanternAppState extends State<LanternApp>
   late final AnimationController networkWarningAnimationController;
   late final Animation networkWarningAnimation;
 
-   @override
+  @override
   void initState() {
     _animateNetworkWarning();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -52,7 +51,7 @@ class _LanternAppState extends State<LanternApp>
           .addListener(toggleConnectivityWarningIfNecessary);
       networkWarningAnimationController = AnimationController(
         duration: shortAnimationDuration,
-        vsync: _TickerProviderImpl(),
+        vsync: this,
       );
       networkWarningAnimation = Tween(begin: 0.0, end: 1.0)
           .animate(networkWarningAnimationController)
@@ -117,74 +116,66 @@ class _LanternAppState extends State<LanternApp>
       ],
       child: ChangeNotifierProvider(
         create: (context) => BottomBarChangeNotifier(),
-        child: FutureBuilder(
-          future: translations,
-          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-            if (!snapshot.hasData) {
-              return Container();
-            }
-            return sessionModel.language(
-              (context, lang, child) {
-                Localization.locale = lang;
-                return GlobalLoaderOverlay(
-                  useDefaultLoading: false,
-                  overlayColor: Colors.black.withOpacity(0.5),
-                  overlayWidget: Center(
-                    child: AnimatedLoadingBorder(
-                      borderWidth: 5,
-                      borderColor: yellow3,
-                      cornerRadius: 100,
-                      child: SvgPicture.asset(
-                        ImagePaths.lantern_logo,
-                      ),
-                    ),
+        child: sessionModel.language(
+          (context, lang, child) {
+            Localization.locale = lang;
+            return GlobalLoaderOverlay(
+              useDefaultLoading: false,
+              overlayColor: Colors.black.withOpacity(0.5),
+              overlayWidget: Center(
+                child: AnimatedLoadingBorder(
+                  borderWidth: 5,
+                  borderColor: yellow3,
+                  cornerRadius: 100,
+                  child: SvgPicture.asset(
+                    ImagePaths.lantern_logo,
                   ),
-                  child: I18n(
-                    initialLocale: currentLocale(lang),
-                    child: MaterialApp.router(
-                      locale: currentLocale(lang),
-                      debugShowCheckedModeBanner: false,
-                      theme: ThemeData(
-                        useMaterial3: false,
-                        fontFamily: _getLocaleBasedFont(currentLocal),
-                        brightness: Brightness.light,
-                        primarySwatch: Colors.grey,
-                        appBarTheme: const AppBarTheme(
-                          systemOverlayStyle: SystemUiOverlayStyle.dark,
-                        ),
-                        colorScheme: ColorScheme.fromSwatch()
-                            .copyWith(secondary: Colors.black),
-                      ),
-                      title: 'app_name'.i18n,
-                      localizationsDelegates: const [
-                        GlobalMaterialLocalizations.delegate,
-                        GlobalWidgetsLocalizations.delegate,
-                        GlobalCupertinoLocalizations.delegate,
-                      ],
-                      routerConfig: globalRouter.config(
-                        deepLinkBuilder: navigateToDeepLink,
-                      ),
-                      supportedLocales: const [
-                        Locale('ar', 'EG'),
-                        Locale('fr', 'FR'),
-                        Locale('en', 'US'),
-                        Locale('fa', 'IR'),
-                        Locale('th', 'TH'),
-                        Locale('ms', 'MY'),
-                        Locale('ru', 'RU'),
-                        Locale('ur', 'IN'),
-                        Locale('zh', 'CN'),
-                        Locale('zh', 'HK'),
-                        Locale('es', 'ES'),
-                        Locale('es', 'CU'),
-                        Locale('tr', 'TR'),
-                        Locale('vi', 'VN'),
-                        Locale('my', 'MM'),
-                      ],
+                ),
+              ),
+              child: I18n(
+                initialLocale: currentLocale(lang),
+                child: MaterialApp.router(
+                  locale: currentLocale(lang),
+                  debugShowCheckedModeBanner: false,
+                  theme: ThemeData(
+                    useMaterial3: false,
+                    fontFamily: _getLocaleBasedFont(currentLocal),
+                    brightness: Brightness.light,
+                    primarySwatch: Colors.grey,
+                    appBarTheme: const AppBarTheme(
+                      systemOverlayStyle: SystemUiOverlayStyle.dark,
                     ),
+                    colorScheme: ColorScheme.fromSwatch()
+                        .copyWith(secondary: Colors.black),
                   ),
-                );
-              },
+                  title: 'app_name'.i18n,
+                  localizationsDelegates: const [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  routerConfig: globalRouter.config(
+                    deepLinkBuilder: navigateToDeepLink,
+                  ),
+                  supportedLocales: const [
+                    Locale('ar', 'EG'),
+                    Locale('fr', 'FR'),
+                    Locale('en', 'US'),
+                    Locale('fa', 'IR'),
+                    Locale('th', 'TH'),
+                    Locale('ms', 'MY'),
+                    Locale('ru', 'RU'),
+                    Locale('ur', 'IN'),
+                    Locale('zh', 'CN'),
+                    Locale('zh', 'HK'),
+                    Locale('es', 'ES'),
+                    Locale('es', 'CU'),
+                    Locale('tr', 'TR'),
+                    Locale('vi', 'VN'),
+                    Locale('my', 'MM'),
+                  ],
+                ),
+              ),
             );
           },
         ),

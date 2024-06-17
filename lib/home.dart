@@ -1,4 +1,3 @@
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/account/privacy_disclosure.dart';
@@ -93,8 +92,6 @@ class _HomePageState extends State<HomePage> with WindowListener {
       }
     });
   }
-
-
 
   void _initWindowManager() async {
     windowManager.addListener(this);
@@ -218,10 +215,13 @@ class _HomePageState extends State<HomePage> with WindowListener {
               // not already been accepted
               return const PrivacyDisclosure();
             }
-            userNew(() {
-              print("called user new function");
-              _checkForFirstTimeVisit();
-            });
+            if (Platform.isIOS) {
+              userNew(() {
+                print("called user new function");
+                _checkForFirstTimeVisit();
+              });
+            }
+
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
               return Scaffold(

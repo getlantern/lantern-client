@@ -58,15 +58,10 @@ class BaseScreen extends StatelessWidget {
 
   Widget doBuild(BuildContext context, double networkWarningBarHeightRatio) {
     bool canPop = Navigator.of(context).canPop();
-
     final screenInfo = MediaQuery.of(context);
     var verticalCorrection =
         (screenInfo.viewInsets.top + screenInfo.padding.top) *
-            ((sessionModel.hasAccountVerified.value == false &&
-                    sessionModel.hasUserSignedInNotifier.value == true &&
-                    sessionModel.proUserNotifier.value == true)
-                ? 1
-                : networkWarningBarHeightRatio);
+            networkWarningBarHeightRatio;
 
     return testRTL(
       Scaffold(
@@ -87,8 +82,7 @@ class BaseScreen extends StatelessWidget {
                       AppBar(
                         automaticallyImplyLeading: automaticallyImplyLeading,
                         leading: automaticallyImplyLeading && canPop
-                            ?
-                          IconButton(
+                            ? IconButton(
                                 icon: const Icon(Icons.arrow_back,
                                     color: Colors.black),
                                 onPressed: () {
@@ -144,7 +138,6 @@ class BaseScreen extends StatelessWidget {
           );
   }
 }
-
 class ConnectivityWarning extends StatelessWidget {
   const ConnectivityWarning({
     Key? key,
@@ -156,7 +149,18 @@ class ConnectivityWarning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _onWarrningTap(context),
+      onTap: sessionModel.proxyAvailable.value != true
+          ? () => CDialog(
+        title: 'connection_error'.i18n,
+        description: 'connection_error_des'.i18n,
+        agreeText: 'connection_error_button'.i18n,
+        agreeAction: () async {
+          context.popRoute();
+          await context.pushRoute(ReportIssue());
+          return true;
+        },
+      ).show(context)
+          : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 600),
         width: MediaQuery.of(context).size.width,
@@ -166,21 +170,10 @@ class ConnectivityWarning extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (sessionModel.hasAccountVerified.value != true)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(end: 10),
-                child: CAssetImage(
-                  path: ImagePaths.info,
-                  color: white,
-                ),
-              ),
             CText(
               (sessionModel.proxyAvailable.value != true
-                      ? 'connection_error'
-                      : (sessionModel.hasAccountVerified.value == false &&
-                              sessionModel.proUserNotifier.value == true)
-                          ? 'confirm_email_error'.i18n
-                          : 'no_network_connection')
+                  ? 'connection_error'
+                  : 'no_network_connection')
                   .i18n
                   .toUpperCase(),
               style: tsBody2.copiedWith(
@@ -201,32 +194,5 @@ class ConnectivityWarning extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _onWarrningTap(BuildContext context) {
-    if (sessionModel.proxyAvailable.value != true) {
-      CDialog(
-        title: 'connection_error'.i18n,
-        description: 'connection_error_des'.i18n,
-        agreeText: 'connection_error_button'.i18n,
-        agreeAction: () async {
-          context.popRoute();
-          await context.pushRoute(ReportIssue());
-          return true;
-        },
-      ).show(context);
-    }
-
-    if (sessionModel.hasAccountVerified.value != true) {
-      // User has completed the signin process
-      // User does not have account verified
-      // Before sending user to screen send OTP again
-      final email = sessionModel.userEmail.value.validateEmail;
-      if (email.isEmpty) return;
-      sessionModel.signUpEmailResendCode(email);
-      context.pushRoute(
-          Verification(email: email, authFlow: AuthFlow.verifyEmail));
-      return;
-    }
   }
 }
