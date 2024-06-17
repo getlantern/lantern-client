@@ -22,8 +22,6 @@ replace git.apache.org/thrift.git => github.com/apache/thrift v0.0.0-20180902110
 
 replace github.com/keighl/mandrill => github.com/getlantern/mandrill v0.0.0-20221004112352-e7c04248adcb
 
-replace github.com/Jigsaw-Code/outline-ss-server => github.com/getlantern/lantern-shadowsocks v1.3.6-0.20230301223223-150b18ac427d
-
 replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-20220824143118-037ff0cd9c33
 
 replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93
@@ -42,7 +40,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.84
+	github.com/getlantern/flashlight/v7 v7.6.86
 	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
@@ -83,8 +81,8 @@ require (
 require (
 	filippo.io/edwards25519 v1.0.0 // indirect
 	git.torproject.org/pluggable-transports/goptlib.git v1.2.0 // indirect
-	github.com/Jigsaw-Code/outline-sdk v0.0.12 // indirect
-	github.com/Jigsaw-Code/outline-ss-server v1.4.0 // indirect
+	github.com/Jigsaw-Code/outline-sdk v0.0.16 // indirect
+	github.com/Jigsaw-Code/outline-ss-server v1.5.0 // indirect
 	github.com/OperatorFoundation/Replicant-go/Replicant/v3 v3.0.23 // indirect
 	github.com/OperatorFoundation/Starbridge-go/Starbridge/v3 v3.0.17 // indirect
 	github.com/OperatorFoundation/ghostwriter-go v1.0.6 // indirect
@@ -166,7 +164,7 @@ require (
 	github.com/getlantern/hellosplitter v0.1.1 // indirect
 	github.com/getlantern/hex v0.0.0-20220104173244-ad7e4b9194dc // indirect
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770 // indirect
-	github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240425212327-7a15939111d8 // indirect
+	github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240614175233-0df4a97b806e // indirect
 	github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca // indirect
 	github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 // indirect
 	github.com/getlantern/kcp-go/v5 v5.0.0-20220503142114-f0c1cd6e1b54 // indirect
@@ -231,7 +229,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lib/pq v1.10.6 // indirect
 	github.com/libp2p/go-buffer-pool v0.1.0 // indirect
-	github.com/mattn/go-isatty v0.0.17 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-sqlite3 v2.0.2+incompatible // indirect
 	github.com/mdlayher/netlink v1.1.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.1 // indirect
@@ -269,9 +267,9 @@ require (
 	github.com/pion/webrtc/v3 v3.2.26 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v1.18.0 // indirect
+	github.com/prometheus/client_golang v1.19.1 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect
-	github.com/prometheus/common v0.46.0 // indirect
+	github.com/prometheus/common v0.48.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/quic-go/quic-go v0.42.0 // indirect
 	github.com/refraction-networking/utls v1.3.3 // indirect
@@ -297,7 +295,7 @@ require (
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
 	github.com/tkuchiki/go-timezone v0.2.2 // indirect
-	github.com/ulikunitz/xz v0.5.10 // indirect
+	github.com/ulikunitz/xz v0.5.11 // indirect
 	github.com/vishvananda/netns v0.0.0-20211101163701-50045581ed74 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xjasonlyu/tun2socks/v2 v2.5.2 // indirect
@@ -322,7 +320,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/crypto v0.22.0 // indirect
-	golang.org/x/exp v0.0.0-20240103183307-be819d1f06fc // indirect
+	golang.org/x/exp v0.0.0-20240110193028-0dcbfd608b1e // indirect
 	golang.org/x/mod v0.17.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
