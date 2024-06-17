@@ -157,6 +157,12 @@ class AppRouter extends $AppRouter {
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute(
+        page: ResellerCodeCheckoutLegacy.page,
+        path: '/resellerCodeCheckoutLegacy',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute(
         page: StripeCheckout.page,
         path: '/stripeCheckout',
         transitionsBuilder: defaultTransition,
