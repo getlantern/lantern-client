@@ -131,12 +131,16 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		userID, _ := m.GetUserID()
 		token, _ := m.GetToken()
 		lang, _ := m.Locale()
+		internalHeaders := map[string]string{
+			common.PlatformHeader:   opts.Platform,
+			common.AppVersionHeader: common.ApplicationVersion,
+		}
 		return common.NewUserConfig(
 			common.DefaultAppName,
 			deviceID,
 			userID,
 			token,
-			nil,
+			internalHeaders,
 			lang,
 		)
 	}

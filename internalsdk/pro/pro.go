@@ -116,6 +116,11 @@ func (c *proClient) defaultHeader() map[string]string {
 		params[common.ProTokenHeader] = token
 	}
 	params[common.ContentType] = "application/json"
+
+	// Import all the internal headers
+	for k, v := range uc.GetInternalHeaders() {
+		params[k] = v
+	}
 	return params
 }
 
@@ -187,7 +192,6 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 		resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
 		resp.Plans[i].TotalCost = ac.FormatMoneyDecimal(yearAmount)
 		resp.Plans[i].TotalCostBilledOneTime = fmt.Sprintf("%v billed one time", ac.FormatMoneyDecimal(yearAmount))
-		log.Debugf("Plan %v, %v, %v", resp.Plans[i].OneMonthCost, resp.Plans[i].TotalCost, resp.Plans[i].TotalCostBilledOneTime)
 	}
 	return &resp, nil
 }
