@@ -337,9 +337,6 @@ msgstr "Requires access to the email you used to buy Lantern Pro"
 msgid "Link via Email"
 msgstr "Link via Email"
 
-msgid "lantern_pro_email"
-msgstr "Lantern Pro Email"
-
 msgid "lantern_desktop"
 msgstr "Lantern Desktop"
 
@@ -396,9 +393,6 @@ msgstr "month"
 
 msgid "months"
 msgstr "months"
-
-msgid "enter_email"
-msgstr "Enter Email"
 
 msgid "enter_email_to_complete_purchase"
 msgstr "Enter email to complete purchase"
@@ -786,9 +780,6 @@ msgstr "All messages will not disappear for you and %s."
 
 msgid "message_disappearing_description"
 msgstr "All messages will disappear after %s for you and %s."
-
-msgid "delete"
-msgstr "Delete"
 
 msgid "view_contact_info"
 msgstr "View Contact Info"
@@ -1663,9 +1654,6 @@ msgstr "The code you entered is incorrect. Please check and try again."
 msgid "recovery_code_sent"
 msgstr "Recovery code has been sent"
 
-msgid "device_added"
-msgstr "Device has been Linked"
-
 
 msgid "device_added_msg"
 msgstr "This device has been Linked to %s"
@@ -1775,7 +1763,6 @@ msgstr "Fetching Configuration"
 
 msgid "establish_connection_to_server"
 msgstr "Establish connection to server"
-
 
 msgid "file_size_limit_title"
 msgstr "Limit Reached"
