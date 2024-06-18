@@ -1088,7 +1088,7 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
 	// Check if email is there is yes then store it
 	if email != "" {
-		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 			return pathdb.Put(tx, pathEmailAddress, email, "")
 		})
 	}
@@ -1638,7 +1638,7 @@ func signOut(session SessionModel) error {
 	log.Debugf("Sign out request %+v", signoutData)
 
 	loggedOut, logoutErr := session.authClient.SignOut(context.Background(), signoutData)
-	if err != nil {
+	if logoutErr != nil {
 		return log.Errorf("Error while signing out %v", logoutErr)
 	}
 

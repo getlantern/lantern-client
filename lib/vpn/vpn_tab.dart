@@ -79,7 +79,7 @@ class VPNTab extends StatelessWidget {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (!proUser && !Platform.isIOS)
+                  if (!proUser )
                     const ProBanner()
                   else
                     const SizedBox(height: 10),

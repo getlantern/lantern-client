@@ -63,6 +63,12 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 		uc := client.userConfig()
 		req.Header.Set(common.Referer, "http://localhost:37457/")
 		common.AddCommonUserHeaders(uc, req.RawRequest)
+		headers := map[string]string{}
+		// Import all the internal headers
+		for k, v := range uc.GetInternalHeaders() {
+			headers[k] = v
+		}
+		req.SetHeaders(headers)
 		return nil
 	}, nil))
 	return client

@@ -211,11 +211,6 @@ msgstr "General"
 msgid "about"
 msgstr "About"
 
-msgid "privacy_policy"
-msgstr "Privacy Policy"
-
-msgid "terms_of_service"
-msgstr "Terms of Service"
 
 msgid "proxy_all"
 msgstr "Proxy everything"
@@ -337,9 +332,6 @@ msgstr "Requires access to the email you used to buy Lantern Pro"
 msgid "Link via Email"
 msgstr "Link via Email"
 
-msgid "lantern_pro_email"
-msgstr "Lantern Pro Email"
-
 msgid "lantern_desktop"
 msgstr "Lantern Desktop"
 
@@ -396,9 +388,6 @@ msgstr "month"
 
 msgid "months"
 msgstr "months"
-
-msgid "enter_email"
-msgstr "Enter Email"
 
 msgid "enter_email_to_complete_purchase"
 msgstr "Enter email to complete purchase"
@@ -786,9 +775,6 @@ msgstr "All messages will not disappear for you and %s."
 
 msgid "message_disappearing_description"
 msgstr "All messages will disappear after %s for you and %s."
-
-msgid "delete"
-msgstr "Delete"
 
 msgid "view_contact_info"
 msgstr "View Contact Info"
@@ -1555,15 +1541,6 @@ msgstr "FAQ"
 msgid "add_device"
 msgstr "Add Device"
 
-msgid "recovery_code_sent"
-msgstr "Recovery Code Sent"
-
-msgid "device_added"
-msgstr "Device Added"
-
-msgid "device_added_message"
-msgstr "Your device has been successfully added. If you do not see the device connected, please restart the app on both devices"
-
 msgid "search_apps"
 msgstr "Search Apps"
 
@@ -1663,9 +1640,6 @@ msgstr "The code you entered is incorrect. Please check and try again."
 msgid "recovery_code_sent"
 msgstr "Recovery code has been sent"
 
-msgid "device_added"
-msgstr "Device has been Linked"
-
 
 msgid "device_added_msg"
 msgstr "This device has been Linked to %s"
@@ -1700,12 +1674,8 @@ msgstr "Check Your Email Address"
 msgid "please_verify_email"
 msgstr "Please verify that the email address you entered is correct."
 
-msgid "change_email"
-msgstr "Change Email"
-
 msgid "verify"
 msgstr "Verify"
-
 
 msgid "cannot_login"
 msgstr "Cannot login"
@@ -1775,7 +1745,6 @@ msgstr "Fetching Configuration"
 
 msgid "establish_connection_to_server"
 msgstr "Establish connection to server"
-
 
 msgid "file_size_limit_title"
 msgstr "Limit Reached"
