@@ -1640,7 +1640,7 @@ func signOut(session SessionModel) error {
 	log.Debugf("Sign out request %+v", signoutData)
 
 	loggedOut, logoutErr := session.authClient.SignOut(context.Background(), signoutData)
-	if err != nil {
+	if logoutErr != nil {
 		return log.Errorf("Error while signing out %v", logoutErr)
 	}
 
