@@ -7,9 +7,9 @@ import (
 
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
-	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
-	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
+	"github.com/getlantern/lantern-client/internalsdk/webclient/defaultwebclient"
 	"github.com/go-resty/resty/v2"
 )
 
