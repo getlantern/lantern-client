@@ -211,11 +211,6 @@ msgstr "General"
 msgid "about"
 msgstr "About"
 
-msgid "privacy_policy"
-msgstr "Privacy Policy"
-
-msgid "terms_of_service"
-msgstr "Terms of Service"
 
 msgid "proxy_all"
 msgstr "Proxy everything"
@@ -1546,15 +1541,6 @@ msgstr "FAQ"
 msgid "add_device"
 msgstr "Add Device"
 
-msgid "recovery_code_sent"
-msgstr "Recovery Code Sent"
-
-msgid "device_added"
-msgstr "Device Added"
-
-msgid "device_added_message"
-msgstr "Your device has been successfully added. If you do not see the device connected, please restart the app on both devices"
-
 msgid "search_apps"
 msgstr "Search Apps"
 
@@ -1688,12 +1674,8 @@ msgstr "Check Your Email Address"
 msgid "please_verify_email"
 msgstr "Please verify that the email address you entered is correct."
 
-msgid "change_email"
-msgstr "Change Email"
-
 msgid "verify"
 msgstr "Verify"
-
 
 msgid "cannot_login"
 msgstr "Cannot login"
