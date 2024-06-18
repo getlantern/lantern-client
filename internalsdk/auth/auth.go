@@ -51,14 +51,15 @@ func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	if httpClient == nil {
 		httpClient = &http.Client{}
 	}
-	webclient := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(client *resty.Client, req *http.Request) error {
-		req.Header.Set(common.ContentType, "application/x-protobuf")
+	webclient := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(client *resty.Client, req *resty.Request) error {
+		req.SetHeader(common.ContentType, "application/x-protobuf")
 		uc := opts.UserConfig()
-		if req.URL != nil && strings.HasPrefix(req.URL.Path, "/users/signup") {
+		if req.URL != "" && strings.HasPrefix(req.URL, "/users/signup") {
 			// for the /users/signup endpoint, we do need to pass all default headers
-			common.AddCommonUserHeaders(uc, req)
+			webclient.AddCommonUserHeaders(uc, req)
+		} else {
+			webclient.AddInternalHeaders(uc, req)
 		}
-		common.AddInternalHeaders(uc, req)
 		return nil
 	}, nil))
 

@@ -59,11 +59,11 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(rc *resty.Client, req *http.Request) error {
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(rc *resty.Client, req *resty.Request) error {
 		uc := opts.UserConfig()
-		req.Header.Set(common.Referer, "http://localhost:37457/")
-		common.AddCommonUserHeaders(uc, req)
-		common.AddInternalHeaders(uc, req)
+		req.SetHeader(common.Referer, "http://localhost:37457/")
+		req.SetHeader(common.ContentType, "application/json")
+		webclient.AddCommonUserHeaders(uc, req)
 		return nil
 	}, nil))
 	return client

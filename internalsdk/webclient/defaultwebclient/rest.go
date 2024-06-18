@@ -19,10 +19,10 @@ var (
 
 // Create function that sends requests to the given URL, optionally sending them through a proxy,
 // optionally processing requests with the given beforeRequest middleware and/or responses with the given afterResponse middleware.
-func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.PreRequestHook, afterResponse resty.ResponseMiddleware) webclient.SendRequest {
+func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.RequestMiddleware, afterResponse resty.ResponseMiddleware) webclient.SendRequest {
 	c := resty.NewWithClient(httpClient)
 	if beforeRequest != nil {
-		c.SetPreRequestHook(beforeRequest)
+		c.OnBeforeRequest(beforeRequest)
 	}
 	if afterResponse != nil {
 		c.OnAfterResponse(afterResponse)

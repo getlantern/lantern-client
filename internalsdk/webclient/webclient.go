@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/getlantern/golog"
-	"github.com/getlantern/lantern-client/internalsdk/common"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -30,14 +29,6 @@ type RESTClient interface {
 
 	// PostPROTOC sends a POST request with protoc file and parse the response to protoc file
 	PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error
-}
-
-// Opts are common Opts that instances of RESTClient may be configured with
-type Opts struct {
-	// HttpClient represents an http.Client that should be used by the resty client
-	HttpClient *http.Client
-	// UserConfig is a function that returns the user config associated with a Lantern user
-	UserConfig func() common.UserConfig
 }
 
 // A function that can send RESTful requests and receive response bodies.
