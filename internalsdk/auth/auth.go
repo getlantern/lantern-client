@@ -56,7 +56,9 @@ func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 		req.SetHeader(common.ContentType, "application/x-protobuf")
 		headers := map[string]string{}
 		uc := opts.UserConfig()
-		if req.RawRequest.URL != nil && strings.HasPrefix(req.RawRequest.URL.Path, "/users/signup") {
+		log.Debugf("RawRequest is %v", req.URL)
+		log.Debugf("RawRequest is %+v", req)
+		if req.URL != "" && strings.HasPrefix(req.URL, "/users/signup") {
 			// for the /users/signup endpoint, we do need to pass all default headers
 			headers[common.DeviceIdHeader] = uc.GetDeviceID()
 			headers[common.UserIdHeader] = strconv.FormatInt(uc.GetUserID(), 10)

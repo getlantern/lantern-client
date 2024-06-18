@@ -68,7 +68,7 @@ func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Reque
 	return func(client *resty.Client, req *resty.Request) error {
 
 		uc := c.userConfig()
-		req.Header.Set("Referer", "http://localhost:37457/")
+
 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 			common.DeviceIdHeader,
 			common.ProTokenHeader,
@@ -92,7 +92,12 @@ func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Reque
 				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
 			}
 		}
-
+		headers := map[string]string{}
+		// Import all the internal headers
+		for k, v := range uc.GetInternalHeaders() {
+			headers[k] = v
+		}
+		req.SetHeaders(headers)
 		return nil
 	}
 }
