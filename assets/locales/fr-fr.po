@@ -8,6 +8,7 @@
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2024
 # e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024
 # axel <axel+transifex@axelsimon.net>, 2024
+# lamine Kacimi <k_lamine27@yahoo.fr>, 2024
 # AO <ao@localizationlab.org>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # 
@@ -35,6 +36,99 @@ msgstr "Peut-être plus tard"
 
 msgid "try"
 msgstr "Essayez-la"
+
+msgid "sign_in"
+msgstr "S'identifier"
+
+msgid "enter_email"
+msgstr "Saisissez votre adresse courriel"
+
+msgid "enter_password"
+msgstr "Entrez le mot de passe "
+
+msgid "forgot_password"
+msgstr "Mot de passe oublié "
+
+msgid "forgot_your_password"
+msgstr "Vous avez oublié votre mot de passe ? "
+
+msgid "click_here"
+msgstr "Cliquez ici "
+
+msgid "reset_password"
+msgstr "Réinitialiser le mot de passe"
+
+msgid "lantern_pro_email"
+msgstr "Email Lantern Pro "
+
+msgid "return_to_sign_in"
+msgstr "Retour à la connexion "
+
+msgid "enter_confirmation_code"
+msgstr "Entrez le code de confirmation "
+
+msgid "confirmation_code_msg"
+msgstr ""
+"Un code de confirmation a été envoyé à XX. Entrez-le ici pour sécuriser "
+"votre compte et activer la récupération de mot de passe. "
+
+msgid "resend_confirmation_code"
+msgstr "Renvoyer l'email de confirmation "
+
+msgid "email_already_exists"
+msgstr "L'email existe déjà "
+
+msgid "email_already_exists_msg"
+msgstr ""
+"Cet email est déjà pris, si vous avez déjà un compte avec cet email, vous "
+"pouvez le récupérer. Sinon, veuillez revenir en arrière et sélectionner une "
+"autre adresse email. "
+
+msgid "recover_account"
+msgstr "Récupérer le compte "
+
+msgid "back"
+msgstr "retour"
+
+msgid "change_email"
+msgstr "Changer l'email "
+
+msgid "new_password"
+msgstr "Nouveau mot de passe"
+
+msgid "confirm_new_password"
+msgstr "Confirmer le nouveau mot de passe"
+
+msgid "already_have_an_account"
+msgstr "Vous avez déjà un compte ? "
+
+msgid "create_account"
+msgstr "Créer un compte"
+
+msgid "create_password"
+msgstr "Créez un mot de passe"
+
+msgid "by_creating_an_account"
+msgstr "Vous avez déjà un compte ? "
+
+msgid "confirm_email"
+msgstr "Confirmer l’adresse courriel"
+
+msgid "update_pro_account"
+msgstr "Mettre à jour le compte Pro "
+
+msgid "update_pro_account_message"
+msgstr ""
+"Des changements arrivent à Lantern Pro ! Désormais, vous aurez besoin d'un "
+"email et d'un mot de passe pour vous connecter sur tous les appareils et "
+"accéder à la gestion de compte. Veuillez prendre quelques instants pour "
+"ajouter ces identifiants à votre compte. "
+
+msgid "not_now"
+msgstr "Pas maintenant"
+
+msgid "update_account"
+msgstr "Mettre à jour le compte "
 
 msgid "new"
 msgstr "Nouveau"
@@ -121,7 +215,7 @@ msgstr "Je confirme que je veux supprimer les données de ma conversation"
 msgid "Pro Account Management"
 msgstr "Gestion du compte Pro"
 
-msgid "Link Device"
+msgid "link_device"
 msgstr "Relier un appareil"
 
 msgid "Upgrade to Lantern Pro"
@@ -171,12 +265,6 @@ msgstr "Général"
 
 msgid "about"
 msgstr "À propos"
-
-msgid "privacy_policy"
-msgstr "Politique de confidentialité "
-
-msgid "terms_of_service"
-msgstr "Conditions générales d’utilisation"
 
 msgid "proxy_all"
 msgstr "Relayer tout le trafic"
@@ -302,9 +390,6 @@ msgstr ""
 msgid "Link via Email"
 msgstr "Relier par courriel"
 
-msgid "lantern_pro_email"
-msgstr "Adresse courriel de Lantern Pro"
-
 msgid "lantern_desktop"
 msgstr "Lantern pour ordinateur"
 
@@ -366,9 +451,6 @@ msgstr "mois"
 
 msgid "months"
 msgstr "mois"
-
-msgid "enter_email"
-msgstr "Saisissez votre adresse courriel"
 
 msgid "enter_email_to_complete_purchase"
 msgstr "Entrez l'email pour compléter l'achat "
@@ -483,7 +565,7 @@ msgstr ""
 "votre compte."
 
 msgid "by_clicking_tos"
-msgstr "En cliquant sur %s, vous acceptez nos"
+msgstr "En cliquant sur %s, vous acceptez notre "
 
 msgid "tos"
 msgstr "Conditions générales d’utilisation"
@@ -802,9 +884,6 @@ msgstr "Certains messages resteront visibles pour vous et %s."
 
 msgid "message_disappearing_description"
 msgstr "Tous les messages disparaîtront après %s pour vous et %s."
-
-msgid "delete"
-msgstr "Supprimer"
 
 msgid "view_contact_info"
 msgstr "Afficher les coordonnées"
@@ -1636,22 +1715,154 @@ msgstr "FAQ"
 msgid "add_device"
 msgstr "Ajouter un appareil"
 
-msgid "recovery_code_sent"
-msgstr "Code de récupération envoyé "
+msgid "search_apps"
+msgstr "Rechercher des applications "
+
+msgid "user_not_found"
+msgstr ""
+"Utilisateur non reconnu. Veuillez vérifier vos identifiants et réessayer. Si"
+" vous continuez à rencontrer des problèmes, veuillez contacter notre équipe "
+"de support pour obtenir de l'aide. "
+
+msgid "email_resend_message"
+msgstr ""
+
+msgid "signup_error"
+msgstr ""
+
+msgid "signup_error_user_exists"
+msgstr ""
+
+msgid "confirm_email_error"
+msgstr ""
+
+msgid "password_cannot_be_empty"
+msgstr ""
+
+msgid "password_must_be_at_least_8_characters"
+msgstr ""
+
+msgid "sign_out"
+msgstr ""
+
+msgid "sign_out_message"
+msgstr ""
+
+msgid "change_password"
+msgstr "Changer le mot de passe"
+
+msgid "password"
+msgstr "Mot de passe"
+
+msgid "new_email"
+msgstr ""
+
+msgid "new_email_same_as_old_email"
+msgstr ""
+
+msgid "danger_zone"
+msgstr ""
+
+msgid "delete_account"
+msgstr ""
+
+msgid "delete"
+msgstr "Supprimer"
+
+msgid "delete_account_message"
+msgstr ""
+
+msgid "delete_your_account"
+msgstr ""
+
+msgid "confirm_deletion"
+msgstr ""
+
+msgid "account_deleted"
+msgstr ""
+
+msgid "account_deleted_message"
+msgstr ""
+
+msgid "password_has_been_updated"
+msgstr ""
+
+msgid "password_has_been_updated_message"
+msgstr ""
+
+msgid "invalid_code"
+msgstr ""
+
+msgid "get_lantern_pro"
+msgstr "Obtenir Lantern Pro"
+
+msgid "try_lantern_pro"
+msgstr ""
+
+msgid "continue_for_free"
+msgstr ""
+
+msgid "recovery_not_found"
+msgstr "L’appareil n’est pas associé à cet utilisateur"
 
 msgid "device_added"
-msgstr "L’appareil a été ajouté"
+msgstr "L’appareil n’est pas associé à cet utilisateur"
 
 msgid "device_added_message"
 msgstr ""
 "Votre appareil a été ajouté avec succès. Si vous ne voyez pas l'appareil "
 "connecté, veuillez redémarrer l'application sur les deux appareils "
 
-msgid "search_apps"
-msgstr "Rechercher des applications "
+msgid "wrong_link_code"
+msgstr ""
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added_msg"
+msgstr ""
+
+msgid "new_to_lantern"
+msgstr ""
+
+msgid "email_has_been_updated"
+msgstr ""
+
+msgid "email_has_been_updated_message"
+msgstr ""
+
+msgid "email_has_been_verified"
+msgstr ""
+
+msgid "email_has_been_verified_message"
+msgstr ""
+
+msgid "device_limit_reached"
+msgstr ""
+
+msgid "device_limit_reached_message"
+msgstr ""
+
+msgid "enter_activation_code"
+msgstr ""
+
+msgid "check_your_email"
+msgstr ""
+
+msgid "please_verify_email"
+msgstr ""
+
+msgid "verify"
+msgstr ""
 
 msgid "cannot_login"
 msgstr "Impossible de se connecter "
+
+msgid "privacy_policy"
+msgstr "Politique de confidentialité "
+
+msgid "terms_of_service"
+msgstr "Conditions générales d’utilisation"
 
 msgid "invalid_verification_code"
 msgstr "Code de vérification invalide"

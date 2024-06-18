@@ -1,32 +1,33 @@
 # 
 # Translators:
 # Tony T <tony@tonytan.io>, 2021
-# 5ffb0e30c16f79bca37af5baff50ee52_58bd05a <18e9486319e95596cee4e2007f6eede0_4750>, 2021
 # 77b9f6bcdc842b5b17effe4ccdba1839, 2022
 # Tony Lin, 2022
 # Ox Cart <ox@getlantern.org>, 2022
 # Li Ma <i@sagiri.pw>, 2022
 # e2f <projects@e2f.com>, 2023
-# Rockman Lau <im@rockman.us>, 2023
 # Chi-Hsun Tsai, 2023
 # 刘位, 2023
 # wwj402 <wwj402@gmail.com>, 2023
-# 474874f569f96a33809d02f1de71479e_77020aa, 2023
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
 # Aki, 2024
-# Lantern, 2024
 # Mingye Wang <arthur200126@gmail.com>, 2024
 # todd <todd@getlantern.org>, 2024
 # Lafrenze Laurant, 2024
 # fffw <fffw@getlantern.org>, 2024
-# YFdyh000 <yfdyh000@gmail.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
+# 474874f569f96a33809d02f1de71479e_77020aa, 2024
+# Rockman Lau <im@rockman.us>, 2024
+# 苏培 喻 <ysp90@hotmail.com>, 2024
+# 5ffb0e30c16f79bca37af5baff50ee52_58bd05a <18e9486319e95596cee4e2007f6eede0_4750>, 2024
+# YFdyh000 <yfdyh000@gmail.com>, 2024
+# Lantern, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
+"Last-Translator: Lantern, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/lantern-1/teams/94371/zh_CN/)\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -45,6 +46,90 @@ msgstr "以後再說"
 
 msgid "try"
 msgstr "试试"
+
+msgid "sign_in"
+msgstr "登录"
+
+msgid "enter_email"
+msgstr "输入邮箱"
+
+msgid "enter_password"
+msgstr ""
+
+msgid "forgot_password"
+msgstr ""
+
+msgid "forgot_your_password"
+msgstr ""
+
+msgid "click_here"
+msgstr ""
+
+msgid "reset_password"
+msgstr "重设密码"
+
+msgid "lantern_pro_email"
+msgstr ""
+
+msgid "return_to_sign_in"
+msgstr ""
+
+msgid "enter_confirmation_code"
+msgstr ""
+
+msgid "confirmation_code_msg"
+msgstr ""
+
+msgid "resend_confirmation_code"
+msgstr ""
+
+msgid "email_already_exists"
+msgstr ""
+
+msgid "email_already_exists_msg"
+msgstr ""
+
+msgid "recover_account"
+msgstr ""
+
+msgid "back"
+msgstr ""
+
+msgid "change_email"
+msgstr ""
+
+msgid "new_password"
+msgstr "新密码"
+
+msgid "confirm_new_password"
+msgstr "确认新密码"
+
+msgid "already_have_an_account"
+msgstr ""
+
+msgid "create_account"
+msgstr "创建账号"
+
+msgid "create_password"
+msgstr "创建密码"
+
+msgid "by_creating_an_account"
+msgstr ""
+
+msgid "confirm_email"
+msgstr "确认电子邮箱"
+
+msgid "update_pro_account"
+msgstr ""
+
+msgid "update_pro_account_message"
+msgstr ""
+
+msgid "not_now"
+msgstr "暂时不"
+
+msgid "update_account"
+msgstr ""
 
 msgid "new"
 msgstr "全新"
@@ -121,7 +206,7 @@ msgstr "我確認要刪除交談資料"
 msgid "Pro Account Management"
 msgstr "专业版账户管理"
 
-msgid "Link Device"
+msgid "link_device"
 msgstr "授权设备"
 
 msgid "Upgrade to Lantern Pro"
@@ -155,12 +240,6 @@ msgstr "通用"
 
 msgid "about"
 msgstr "关于"
-
-msgid "privacy_policy"
-msgstr "私隐政策"
-
-msgid "terms_of_service"
-msgstr "服務條款"
 
 msgid "proxy_all"
 msgstr "全部代理"
@@ -279,9 +358,6 @@ msgstr "需要您有注册蓝灯的email"
 msgid "Link via Email"
 msgstr "透過電子郵件來連結"
 
-msgid "lantern_pro_email"
-msgstr "蓝灯专业版电子邮件"
-
 msgid "lantern_desktop"
 msgstr "蓝灯桌面版"
 
@@ -338,9 +414,6 @@ msgstr "月"
 
 msgid "months"
 msgstr "月"
-
-msgid "enter_email"
-msgstr "输入邮箱"
 
 msgid "enter_email_to_complete_purchase"
 msgstr "输入电子邮件以完成购买 "
@@ -436,7 +509,7 @@ msgid "pro_purchase_success_descripion"
 msgstr "现在起，蓝灯最高速的数据中心和专线将开始为您提供无限量上网服务。您最多可同时接入三台设备。"
 
 msgid "by_clicking_tos"
-msgstr "点击 %s，即为您已同意我们的"
+msgstr ""
 
 msgid "tos"
 msgstr "服務條款"
@@ -730,9 +803,6 @@ msgstr "您和 %s 之間傳送的所有訊息都不會消失。"
 
 msgid "message_disappearing_description"
 msgstr "%s後，您和 %s 之間傳送的所有訊息就會消失。"
-
-msgid "delete"
-msgstr "删除"
 
 msgid "view_contact_info"
 msgstr "查看聯絡資訊"
@@ -1512,20 +1582,149 @@ msgstr "蓝灯论坛"
 msgid "add_device"
 msgstr "授权其他设备使用专业版"
 
-msgid "recovery_code_sent"
-msgstr "恢复代码已发送 "
+msgid "search_apps"
+msgstr "搜索应用程序 "
+
+msgid "user_not_found"
+msgstr ""
+
+msgid "email_resend_message"
+msgstr ""
+
+msgid "signup_error"
+msgstr ""
+
+msgid "signup_error_user_exists"
+msgstr ""
+
+msgid "confirm_email_error"
+msgstr ""
+
+msgid "password_cannot_be_empty"
+msgstr ""
+
+msgid "password_must_be_at_least_8_characters"
+msgstr ""
+
+msgid "sign_out"
+msgstr ""
+
+msgid "sign_out_message"
+msgstr ""
+
+msgid "change_password"
+msgstr "修改密码"
+
+msgid "password"
+msgstr "密码"
+
+msgid "new_email"
+msgstr ""
+
+msgid "new_email_same_as_old_email"
+msgstr ""
+
+msgid "danger_zone"
+msgstr ""
+
+msgid "delete_account"
+msgstr ""
+
+msgid "delete"
+msgstr "删除"
+
+msgid "delete_account_message"
+msgstr ""
+
+msgid "delete_your_account"
+msgstr ""
+
+msgid "confirm_deletion"
+msgstr ""
+
+msgid "account_deleted"
+msgstr ""
+
+msgid "account_deleted_message"
+msgstr ""
+
+msgid "password_has_been_updated"
+msgstr ""
+
+msgid "password_has_been_updated_message"
+msgstr ""
+
+msgid "invalid_code"
+msgstr ""
+
+msgid "get_lantern_pro"
+msgstr "购买蓝灯专业版"
+
+msgid "try_lantern_pro"
+msgstr ""
+
+msgid "continue_for_free"
+msgstr ""
+
+msgid "recovery_not_found"
+msgstr "设备未关联此用户"
 
 msgid "device_added"
-msgstr "设备已授权"
+msgstr "设备未关联此用户"
 
 msgid "device_added_message"
 msgstr "您的设备已成功添加。如果您没有看到设备连接，请重新启动两个设备上的应用程序 "
 
-msgid "search_apps"
-msgstr "搜索应用程序 "
+msgid "wrong_link_code"
+msgstr ""
+
+msgid "recovery_code_sent"
+msgstr ""
+
+msgid "device_added_msg"
+msgstr ""
+
+msgid "new_to_lantern"
+msgstr ""
+
+msgid "email_has_been_updated"
+msgstr ""
+
+msgid "email_has_been_updated_message"
+msgstr ""
+
+msgid "email_has_been_verified"
+msgstr ""
+
+msgid "email_has_been_verified_message"
+msgstr ""
+
+msgid "device_limit_reached"
+msgstr ""
+
+msgid "device_limit_reached_message"
+msgstr ""
+
+msgid "enter_activation_code"
+msgstr ""
+
+msgid "check_your_email"
+msgstr ""
+
+msgid "please_verify_email"
+msgstr ""
+
+msgid "verify"
+msgstr ""
 
 msgid "cannot_login"
 msgstr "无法登录 "
+
+msgid "privacy_policy"
+msgstr "私隐政策"
+
+msgid "terms_of_service"
+msgstr "服務條款"
 
 msgid "invalid_verification_code"
 msgstr "无效的验证码"
