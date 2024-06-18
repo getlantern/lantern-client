@@ -11,6 +11,8 @@ import (
 
 	"github.com/1Password/srp"
 	"github.com/getlantern/errors"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
+	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -25,8 +27,8 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
+	authClient auth.AuthClient
 	proClient  pro.ProClient
-	authClient pro.ProClient
 }
 
 // Expose payment providers
@@ -148,21 +150,18 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		)
 	}
 
-	// Use proxied.Fronted for IOS client since ChainedThenFronted it does not work with ios due to (chained proxy unavailable)
-	// because we are not using the flashlight on ios
-	// We need to figure out where to put proxied SetProxyAddr
-	httpClient := &http.Client{
-		Transport: proxied.Fronted(dialTimeout),
-		Timeout:   dialTimeout,
+	webclientOpts := &webclient.Opts{
+		// Use proxied.Fronted for IOS client since ChainedThenFronted it does not work with ios due to (chained proxy unavailable)
+		// because we are not using the flashlight on ios
+		// We need to figure out where to put proxied SetProxyAddr
+		HttpClient: &http.Client{
+			Transport: proxied.Fronted(dialTimeout),
+			Timeout:   dialTimeout,
+		},
+		UserConfig: userConfig,
 	}
-	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
-		HttpClient: httpClient,
-		UserConfig: userConfig,
-	})
-	m.authClient = pro.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), &pro.Opts{
-		HttpClient: httpClient,
-		UserConfig: userConfig,
-	})
+	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	go m.initSessionModel(context.Background(), opts)
@@ -1572,7 +1571,7 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 		Proof:    clientProof,
 	}
 
-	isEmailChanged, err := session.proClient.ChangeEmail(context.Background(), changeEmailRequestBody)
+	isEmailChanged, err := session.authClient.ChangeEmail(context.Background(), changeEmailRequestBody)
 	if err != nil {
 		return err
 	}

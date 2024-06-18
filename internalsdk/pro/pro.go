@@ -14,6 +14,7 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/go-resty/resty/v2"
 
 	"github.com/leekchan/accounting"
 	"github.com/shopspring/decimal"
@@ -21,7 +22,7 @@ import (
 )
 
 var (
-	log                  = golog.LoggerFor("webclient")
+	log                  = golog.LoggerFor("proclient")
 	errMissingDeviceName = errors.New("Missing device name")
 )
 
@@ -30,15 +31,7 @@ type proClient struct {
 	webclient  webclient.RESTClient
 }
 
-type Opts struct {
-	// HttpClient represents an http.Client that should be used by the resty client
-	HttpClient *http.Client
-	// UserConfig is a function that returns the user config associated with the Lantern user
-	UserConfig func() common.UserConfig
-}
-
 type ProClient interface {
-	AuthClient
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
@@ -58,41 +51,50 @@ type ProClient interface {
 	DeviceAdd(ctx context.Context, deviceName string) (bool, error)
 }
 
-type AuthClient interface {
-	//Sign up methods
-	SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error)
-	SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error)
-	SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error)
-
-	//Login methods
-	GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error)
-	LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error)
-	Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error)
-	// Recovery methods
-	StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error)
-	CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error)
-	ValidateEmailRecoveryCode(ctx context.Context, loginData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error)
-	// Change email methods
-	ChangeEmail(ctx context.Context, loginData *protos.ChangeEmailRequest) (bool, error)
-	// Complete change email methods
-	CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error)
-	DeleteAccount(ctc context.Context, loginData *protos.DeleteUserRequest) (bool, error)
-
-	//Logout
-	SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error)
-}
-
 // NewClient creates a new instance of ProClient
-func NewClient(baseURL string, opts *Opts) ProClient {
-	httpClient := opts.HttpClient
-	if httpClient == nil {
-		httpClient = &http.Client{}
+func NewClient(baseURL string, opts *webclient.Opts) ProClient {
+	if opts.HttpClient == nil {
+		opts.HttpClient = &http.Client{}
 	}
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, nil, nil))
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(opts.HttpClient, baseURL, client.setUserHeaders(), nil))
 	return client
+}
+
+func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Request) error {
+	return func(client *resty.Client, req *resty.Request) error {
+
+		uc := c.userConfig()
+		req.Header.Set(common.ContentType, "application/json")
+		req.Header.Set("Referer", "http://localhost:37457/")
+		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
+			common.DeviceIdHeader,
+			common.ProTokenHeader,
+			common.UserIdHeader,
+		}, ", "))
+		req.Header.Set(common.LocaleHeader, uc.GetLanguage())
+
+		if req.Header.Get(common.DeviceIdHeader) == "" {
+			if deviceID := uc.GetDeviceID(); deviceID != "" {
+				req.Header.Set(common.DeviceIdHeader, deviceID)
+			}
+		}
+
+		if req.Header.Get(common.ProTokenHeader) == "" {
+			if token := uc.GetToken(); token != "" {
+				req.Header.Set(common.ProTokenHeader, token)
+			}
+		}
+		if req.Header.Get(common.UserIdHeader) == "" {
+			if userID := uc.GetUserID(); userID != 0 {
+				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
+			}
+		}
+
+		return nil
+	}
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {
@@ -103,45 +105,13 @@ func (c *proClient) defaultParams() map[string]interface{} {
 	return params
 }
 
-func (c *proClient) defaultHeader() map[string]string {
-	uc := c.userConfig()
-	params := map[string]string{}
-	if deviceID := uc.GetDeviceID(); deviceID != "" {
-		params[common.DeviceIdHeader] = deviceID
-	}
-	if userID := strconv.FormatInt(uc.GetUserID(), 10); userID != "" && userID != "0" {
-		params[common.UserIdHeader] = userID
-	}
-	if token := uc.GetToken(); token != "" {
-		params[common.ProTokenHeader] = token
-	}
-	params[common.ContentType] = "application/json"
-
-	// Import all the internal headers
-	for k, v := range uc.GetInternalHeaders() {
-		params[k] = v
-	}
-	return params
-}
-
-func (c *proClient) internalHeader() map[string]string {
-	uc := c.userConfig()
-	params := map[string]string{}
-
-	// Import all the internal headers
-	for k, v := range uc.GetInternalHeaders() {
-		params[k] = v
-	}
-	return params
-}
-
 // EmailExists is used to check if an email address belongs to an existing Pro account
 // XXX Deprecated: See https://github.com/getlantern/lantern-internal/issues/4377
 func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error) {
 	var resp protos.BaseResponse
 	err := c.webclient.GetJSON(ctx, "/email-exists", map[string]interface{}{
 		"email": email,
-	}, &resp, c.defaultHeader())
+	}, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +126,7 @@ func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedi
 	b, _ := protojson.Marshal(req)
 	params := make(map[string]interface{})
 	json.Unmarshal(b, &params)
-	err := c.webclient.GetJSON(ctx, "/payment-redirect", params, &resp, c.defaultHeader())
+	err := c.webclient.GetJSON(ctx, "/payment-redirect", params, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +137,7 @@ func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedi
 // This methods has been deparacted in flavor of PaymentMethodsV4
 func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error) {
 	var resp PaymentMethodsResponse
-	err := c.webclient.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp, c.defaultHeader())
+	err := c.webclient.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -177,7 +147,7 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 // PaymentMethods returns a list of plans, payment providers and logo available payment methods
 func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error) {
 	var resp PaymentMethodsResponse
-	err := c.webclient.GetJSON(ctx, "/plans-v4", c.defaultParams(), &resp, c.defaultHeader())
+	err := c.webclient.GetJSON(ctx, "/plans-v4", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -210,7 +180,7 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 // Plans is used to hit the legacy /plans endpoint. Deprecated.
 func (c *proClient) Plans(ctx context.Context) (*PlansResponse, error) {
 	var resp PlansResponse
-	err := c.webclient.GetJSON(ctx, "/plans", c.defaultParams(), &resp, c.defaultHeader())
+	err := c.webclient.GetJSON(ctx, "/plans", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -234,8 +204,8 @@ func (c *proClient) Plans(ctx context.Context) (*PlansResponse, error) {
 // UserCreate creates a new user
 func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
-	log.Debugf("UserCreate header is %v", c.defaultHeader())
-	err := c.webclient.PostFormReadingJSON(ctx, "/user-create", nil, &resp, c.defaultHeader())
+	log.Debugf("UserCreate header is %v")
+	err := c.webclient.PostFormReadingJSON(ctx, "/user-create", nil, &resp)
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
 	}
@@ -249,7 +219,7 @@ func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 // UserData returns data associated with a user
 func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
-	err := c.webclient.GetJSON(ctx, "/user-data", nil, &resp, c.defaultHeader())
+	err := c.webclient.GetJSON(ctx, "/user-data", nil, &resp)
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
 	}
@@ -259,7 +229,7 @@ func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 // RedeemResellerCode redeems a reseller code for the given user
 func (c *proClient) RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error) {
 	var resp protos.BaseResponse
-	if err := c.webclient.PostFormReadingJSON(ctx, "/purchase", req, &resp, c.defaultHeader()); err != nil {
+	if err := c.webclient.PostFormReadingJSON(ctx, "/purchase", req, &resp); err != nil {
 		log.Errorf("Failed to redeem reseller code: %v", err)
 		return nil, err
 	}
@@ -274,7 +244,7 @@ func (c *proClient) DeviceRemove(ctx context.Context, deviceId string) (*LinkRes
 	var resp LinkResponse
 	params := c.defaultParams()
 	params["deviceID"] = deviceId
-	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-remove", params, nil, &resp, c.defaultHeader())
+	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-remove", params, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -287,7 +257,7 @@ func (c *proClient) DeviceAdd(ctx context.Context, deviceName string) (bool, err
 	var resp protos.BaseResponse
 	params := c.defaultParams()
 	params["deviceName"] = deviceName
-	err := c.webclient.PostJSONReadingJSON(ctx, "/device-add", params, nil, &resp, c.defaultHeader())
+	err := c.webclient.PostJSONReadingJSON(ctx, "/device-add", params, nil, &resp)
 	if err != nil {
 		return false, err
 	}
@@ -302,7 +272,7 @@ func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.B
 	var resp protos.BaseResponse
 	params := c.defaultParams()
 	params["code"] = code
-	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-approve", params, nil, &resp, c.defaultHeader())
+	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-approve", params, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -323,7 +293,7 @@ func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*Li
 	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-request", map[string]interface{}{
 		"deviceName": deviceName,
 		"locale":     uc.GetLanguage(),
-	}, nil, &resp, c.defaultHeader())
+	}, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -336,7 +306,7 @@ func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, devic
 	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-redeem", map[string]interface{}{
 		"deviceName": deviceName,
 		"code":       deviceCode,
-	}, nil, &resp, c.defaultHeader())
+	}, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -356,7 +326,7 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string) (b
 	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
 		"deviceName": deviceId,
 		"locale":     uc.GetLanguage(),
-	}, nil, &resp, c.defaultHeader())
+	}, nil, &resp)
 	if err != nil {
 		return false, err
 	}
@@ -371,7 +341,7 @@ func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRec
 	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-validate", map[string]interface{}{
 		"code":   code,
 		"locale": uc.GetLanguage(),
-	}, nil, &resp, c.defaultHeader())
+	}, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -382,153 +352,9 @@ func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRec
 // PurchaseRequest is used to request a purchase of a Pro plan is will be used for all most all the payment providers
 func (c *proClient) PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error) {
 	var resp PurchaseResponse
-	err := c.webclient.PostJSONReadingJSON(ctx, "/purchase", data, nil, &resp, c.defaultHeader())
+	err := c.webclient.PostJSONReadingJSON(ctx, "/purchase", data, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
 	return &resp, nil
-}
-
-// Auth APIS
-// GetSalt is used to get the salt for a given email address
-func (c *proClient) GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error) {
-	var resp protos.GetSaltResponse
-	err := c.webclient.GetPROTOC(ctx, "/users/salt", map[string]interface{}{
-		"email": email,
-	}, &resp, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &resp, nil
-}
-
-// Sign up API
-// SignUp is used to sign up a new user with the SignupRequest
-func (c *proClient) SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp, c.defaultHeader())
-	if err != nil {
-		return false, log.Errorf("error while sign up %v", err)
-	}
-	return true, nil
-}
-
-// SignupEmailResendCode is used to resend the email confirmation code
-// Params: ctx context.Context, data *protos.SignupEmailResendRequest
-func (c *proClient) SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/signup/resend/email", nil, data, &resp, c.internalHeader())
-	if err != nil {
-		return false, err
-	}
-	return true, nil
-}
-
-// SignupEmailConfirmation is used to confirm the email address once user enter code
-// Params: ctx context.Context, data *protos.ConfirmSignupRequest
-func (c *proClient) SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/signup/complete/email", nil, data, &resp, c.internalHeader())
-	if err != nil {
-		return false, err
-	}
-	return true, nil
-}
-
-// LoginPrepare does the initial login preparation with come make sure the user exists and match user salt
-func (c *proClient) LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error) {
-	var model protos.PrepareResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/prepare", nil, loginData, &model, c.internalHeader())
-	if err != nil {
-		// Send custom error to show error on client side
-		return nil, log.Errorf("user_not_found %v", err)
-	}
-	return &model, nil
-}
-
-// Login is used to login a user with the LoginRequest
-func (c *proClient) Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
-	var resp protos.LoginResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/login", nil, loginData, &resp, c.internalHeader())
-	if err != nil {
-		return nil, err
-	}
-
-	return &resp, nil
-}
-
-// StartRecoveryByEmail is used to start the recovery process by sending a recovery code to the user's email
-func (c *proClient) StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/recovery/start/email", nil, loginData, &resp, c.internalHeader())
-	if err != nil {
-		return false, err
-	}
-	return true, nil
-}
-
-// CompleteRecoveryByEmail is used to complete the recovery process by validating the recovery code
-func (c *proClient) CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/recovery/complete/email", nil, loginData, &resp, c.internalHeader())
-	if err != nil {
-		return false, err
-	}
-	return true, nil
-}
-
-// // ValidateEmailRecoveryCode is used to validate the recovery code
-func (c *proClient) ValidateEmailRecoveryCode(ctx context.Context, recoveryData *protos.ValidateRecoveryCodeRequest) (*protos.ValidateRecoveryCodeResponse, error) {
-	var resp protos.ValidateRecoveryCodeResponse
-	log.Debugf("ValidateEmailRecoveryCode request is %v", recoveryData)
-	err := c.webclient.PostPROTOC(ctx, "/users/recovery/validate/email", nil, recoveryData, &resp, c.internalHeader())
-	if err != nil {
-		return nil, err
-	}
-	if !resp.Valid {
-		return nil, log.Errorf("invalid_code Error decoding response body: %v", err)
-	}
-	return &resp, nil
-}
-
-// ChangeEmail is used to change the email address of a user
-func (c *proClient) ChangeEmail(ctx context.Context, loginData *protos.ChangeEmailRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/change_email", nil, loginData, &resp, c.internalHeader())
-	if err != nil {
-		return false, err
-	}
-	return true, nil
-}
-
-// CompleteChangeEmail is used to complete the email change process
-func (c *proClient) CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/change_email/complete/email", nil, loginData, &resp, c.internalHeader())
-	if err != nil {
-		return false, err
-	}
-	return true, nil
-}
-
-// DeleteAccount is used to delete the account of a user
-// Once account is delete make sure to create new account
-func (c *proClient) DeleteAccount(ctx context.Context, accountData *protos.DeleteUserRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/delete", nil, accountData, &resp, c.internalHeader())
-	if err != nil {
-		return false, err
-	}
-	return true, nil
-}
-
-// DeleteAccount is used to delete the account of a user
-// Once account is delete make sure to create new account
-func (c *proClient) SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/logout", nil, logoutData, &resp, c.internalHeader())
-	if err != nil {
-		return false, err
-	}
-	return true, nil
 }

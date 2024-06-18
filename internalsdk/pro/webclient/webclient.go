@@ -6,6 +6,9 @@ import (
 	"net/http"
 
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/internalsdk/common"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 var (
@@ -21,6 +24,20 @@ type RESTClient interface {
 
 	// Post the given body as JSON with the given querystring parameters and reads the result JSON into target.
 	PostJSONReadingJSON(ctx context.Context, path string, params, body, target any) error
+
+	// Get data from server and parse to protoc file
+	GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error
+
+	// PostPROTOC sends a POST request with protoc file and parse the response to protoc file
+	PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error
+}
+
+// Opts are common Opts that are used for configuring new instances of RESTClient
+type Opts struct {
+	// HttpClient represents an http.Client that should be used by the resty client
+	HttpClient *http.Client
+	// UserConfig is a function that returns the user config associated with the Lantern user
+	UserConfig func() common.UserConfig
 }
 
 // A function that can send RESTful requests and receive response bodies.
@@ -35,9 +52,7 @@ type restClient struct {
 
 // Construct a REST client using the given SendRequest function
 func NewRESTClient(send SendRequest) RESTClient {
-	return &restClient{
-		send: send,
-	}
+	return &restClient{send}
 }
 
 func (c *restClient) GetJSON(ctx context.Context, path string, params, target any) error {
@@ -46,6 +61,19 @@ func (c *restClient) GetJSON(ctx context.Context, path string, params, target an
 		return err
 	}
 	return unmarshalJSON(path, b, target)
+}
+
+func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error {
+	body, err := c.send(ctx, http.MethodGet, path, params, nil)
+	if err != nil {
+		return err
+	}
+	err1 := proto.Unmarshal(body, target)
+	if err1 != nil {
+		return err1
+	}
+	return nil
+
 }
 
 func (c *restClient) PostFormReadingJSON(ctx context.Context, path string, params, target any) error {
@@ -66,6 +94,23 @@ func (c *restClient) PostJSONReadingJSON(ctx context.Context, path string, param
 		return err
 	}
 	return unmarshalJSON(path, b, target)
+}
+
+func (c *restClient) PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error {
+	bodyBytes, err := proto.Marshal(body)
+	if err != nil {
+		return err
+	}
+	bo, err := c.send(ctx, http.MethodPost, path, params, bodyBytes)
+	if err != nil {
+		log.Debugf("Error in sending request: %v", err)
+		return err
+	}
+	err1 := proto.Unmarshal(bo, target)
+	if err1 != nil {
+		return err1
+	}
+	return nil
 }
 
 func unmarshalJSON(path string, b []byte, target any) error {
