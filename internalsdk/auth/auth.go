@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/getlantern/golog"
@@ -52,22 +51,15 @@ func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	if httpClient == nil {
 		httpClient = &http.Client{}
 	}
-	webclient := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(client *resty.Client, req *resty.Request) error {
-		req.SetHeader(common.ContentType, "application/x-protobuf")
-		headers := map[string]string{}
+	webclient := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(client *resty.Client, restyReq *resty.Request) error {
+		restyReq.SetHeader(common.ContentType, "application/x-protobuf")
 		uc := opts.UserConfig()
-		if req.URL != "" && strings.HasPrefix(req.URL, "/users/signup") {
+		if restyReq.URL != "" && strings.HasPrefix(restyReq.URL, "/users/signup") {
 			// for the /users/signup endpoint, we do need to pass all default headers
-			headers[common.DeviceIdHeader] = uc.GetDeviceID()
-			headers[common.UserIdHeader] = strconv.FormatInt(uc.GetUserID(), 10)
-			headers[common.ProTokenHeader] = uc.GetToken()
+			req := restyReq.RawRequest
+			common.AddCommonUserHeaders(uc, req)
+			common.AddInternalHeaders(uc, req)
 		}
-
-		// Import all the internal headers
-		for k, v := range uc.GetInternalHeaders() {
-			headers[k] = v
-		}
-		req.SetHeaders(headers)
 		return nil
 	}, nil))
 
