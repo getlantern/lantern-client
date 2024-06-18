@@ -94,8 +94,7 @@ func AddCommonUserHeaders(uc UserConfig, req *http.Request) {
 	req.Header.Set(LocaleHeader, uc.GetLanguage())
 }
 
-// AddCommonHeaders sets standard http headers on a request
-// bound for an internal service, representing auth and other
+// AddCommonHeaders sets standard http headers on a request bound for an internal service, representing auth and other
 // configuration metadata.
 func AddCommonHeaders(uc UserConfig, req *http.Request) {
 	AddCommonNonUserHeaders(uc, req)
