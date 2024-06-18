@@ -67,7 +67,6 @@ func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Reque
 	return func(client *resty.Client, req *resty.Request) error {
 
 		uc := c.userConfig()
-		req.Header.Set(common.ContentType, "application/json")
 		req.Header.Set("Referer", "http://localhost:37457/")
 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 			common.DeviceIdHeader,
