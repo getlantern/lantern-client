@@ -28,9 +28,12 @@ func AddCommonUserHeaders(uc common.UserConfig, req *resty.Request) {
 	if token := uc.GetToken(); token != "" {
 		params[common.ProTokenHeader] = token
 	}
-	params[common.ContentType] = "application/json"
 	// Include all the internal headers
-	AddInternalHeaders(uc, req)
+	for k, v := range uc.GetInternalHeaders() {
+		if v != "" {
+			params[k] = v
+		}
+	}
 	req.SetHeaders(params)
 }
 
