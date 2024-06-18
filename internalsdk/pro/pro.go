@@ -53,13 +53,14 @@ type ProClient interface {
 
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
-	if opts.HttpClient == nil {
-		opts.HttpClient = &http.Client{}
+	httpClient := opts.HttpClient
+	if httpClient == nil {
+		httpClient = &http.Client{}
 	}
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(opts.HttpClient, baseURL, client.setUserHeaders(), nil))
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, client.setUserHeaders(), nil))
 	return client
 }
 
