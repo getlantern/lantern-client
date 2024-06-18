@@ -7,7 +7,7 @@ import (
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/moul/http2curl"
 
 	"github.com/go-resty/resty/v2"
