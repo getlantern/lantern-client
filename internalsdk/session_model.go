@@ -10,15 +10,14 @@ import (
 	"time"
 
 	"github.com/1Password/srp"
-	"github.com/getlantern/errors"
-	"github.com/getlantern/lantern-client/internalsdk/auth"
-	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
 
+	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/proxied"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
