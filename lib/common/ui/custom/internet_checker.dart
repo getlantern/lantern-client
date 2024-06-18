@@ -12,7 +12,7 @@ class InternetChecker extends StatelessWidget {
         CDialog.showInternetUnavailableDialog(context);
       },
       child: Container(
-        padding: const EdgeInsets.only(top: 5,bottom: 8),
+        padding: const EdgeInsets.only(top: 5, bottom: 8),
         alignment: Alignment.center,
         decoration: ShapeDecoration(
           color: const Color(0xFFFFF9DB),
@@ -25,7 +25,7 @@ class InternetChecker extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SvgPicture.asset(ImagePaths.cloudOff,height: 25),
+            SvgPicture.asset(ImagePaths.cloudOff, height: 25),
             const SizedBox(width: 10),
             CText(
               "No internet connection detected",

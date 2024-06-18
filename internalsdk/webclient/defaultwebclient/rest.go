@@ -7,8 +7,7 @@ import (
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
-
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/moul/http2curl"
 
 	"github.com/go-resty/resty/v2"
@@ -30,7 +29,7 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 	}
 	c.SetBaseURL(baseURL)
 
-	return func(ctx context.Context, method string, path string, reqParams any, header map[string]string, body []byte) ([]byte, error) {
+	return func(ctx context.Context, method string, path string, reqParams any, body []byte) ([]byte, error) {
 		req := c.R().SetContext(ctx)
 		if reqParams != nil {
 			switch reqParams.(type) {
@@ -52,10 +51,6 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 			req.Body = body
 		}
 
-		if header != nil {
-			req.SetHeaders(header)
-		}
-
 		resp, err := req.Execute(method, path)
 		if err != nil {
 			return nil, err
@@ -67,7 +62,7 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.Requ
 		log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
 
 		if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
-			// log.Errorf("Unexpected status code %d response body%v", resp.StatusCode(), string(responseBody))
+			log.Errorf("Unexpected status code %d\n\n%v", resp.StatusCode(), string(responseBody))
 			return nil, errors.New("Unexpected status code %d", resp.StatusCode())
 		}
 		return responseBody, nil

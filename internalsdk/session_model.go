@@ -10,13 +10,14 @@ import (
 	"time"
 
 	"github.com/1Password/srp"
-	"github.com/getlantern/errors"
 
+	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/proxied"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
@@ -25,8 +26,8 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
+	authClient auth.AuthClient
 	proClient  pro.ProClient
-	authClient pro.ProClient
 }
 
 // Expose payment providers
@@ -129,40 +130,35 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m := &SessionModel{baseModel: base}
 
-	userConfig := func() common.UserConfig {
-		deviceID, _ := m.GetDeviceID()
-		userID, _ := m.GetUserID()
-		token, _ := m.GetToken()
-		lang, _ := m.Locale()
-		internalHeaders := map[string]string{
-			common.PlatformHeader:   opts.Platform,
-			common.AppVersionHeader: common.ApplicationVersion,
-		}
-		return common.NewUserConfig(
-			common.DefaultAppName,
-			deviceID,
-			userID,
-			token,
-			internalHeaders,
-			lang,
-		)
+	webclientOpts := &webclient.Opts{
+		// Use proxied.Fronted for IOS client since ChainedThenFronted it does not work with ios due to (chained proxy unavailable)
+		// because we are not using the flashlight on ios
+		// We need to figure out where to put proxied SetProxyAddr
+		HttpClient: &http.Client{
+			Transport: proxied.Fronted(dialTimeout),
+			Timeout:   dialTimeout,
+		},
+		UserConfig: func() common.UserConfig {
+			deviceID, _ := m.GetDeviceID()
+			userID, _ := m.GetUserID()
+			token, _ := m.GetToken()
+			lang, _ := m.Locale()
+			internalHeaders := map[string]string{
+				common.PlatformHeader:   opts.Platform,
+				common.AppVersionHeader: common.ApplicationVersion,
+			}
+			return common.NewUserConfig(
+				common.DefaultAppName,
+				deviceID,
+				userID,
+				token,
+				internalHeaders,
+				lang,
+			)
+		},
 	}
-
-	// Use proxied.Fronted for IOS client since ChainedThenFronted it does not work with ios due to (chained proxy unavailable)
-	// because we are not using the flashlight on ios
-	// We need to figure out where to put proxied SetProxyAddr
-	httpClient := &http.Client{
-		Transport: proxied.Fronted(dialTimeout),
-		Timeout:   dialTimeout,
-	}
-	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
-		HttpClient: httpClient,
-		UserConfig: userConfig,
-	})
-	m.authClient = pro.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), &pro.Opts{
-		HttpClient: httpClient,
-		UserConfig: userConfig,
-	})
+	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	go m.initSessionModel(context.Background(), opts)
@@ -1092,7 +1088,7 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
 	// Check if email is there is yes then store it
 	if email != "" {
-		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 			return pathdb.Put(tx, pathEmailAddress, email, "")
 		})
 	}
@@ -1572,7 +1568,7 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 		Proof:    clientProof,
 	}
 
-	isEmailChanged, err := session.proClient.ChangeEmail(context.Background(), changeEmailRequestBody)
+	isEmailChanged, err := session.authClient.ChangeEmail(context.Background(), changeEmailRequestBody)
 	if err != nil {
 		return err
 	}
