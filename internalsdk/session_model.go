@@ -130,25 +130,6 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m := &SessionModel{baseModel: base}
 
-	userConfig := func() common.UserConfig {
-		deviceID, _ := m.GetDeviceID()
-		userID, _ := m.GetUserID()
-		token, _ := m.GetToken()
-		lang, _ := m.Locale()
-		internalHeaders := map[string]string{
-			common.PlatformHeader:   opts.Platform,
-			common.AppVersionHeader: common.ApplicationVersion,
-		}
-		return common.NewUserConfig(
-			common.DefaultAppName,
-			deviceID,
-			userID,
-			token,
-			internalHeaders,
-			lang,
-		)
-	}
-
 	webclientOpts := &webclient.Opts{
 		// Use proxied.Fronted for IOS client since ChainedThenFronted it does not work with ios due to (chained proxy unavailable)
 		// because we are not using the flashlight on ios
@@ -157,7 +138,24 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 			Transport: proxied.Fronted(dialTimeout),
 			Timeout:   dialTimeout,
 		},
-		UserConfig: userConfig,
+		UserConfig: func() common.UserConfig {
+			deviceID, _ := m.GetDeviceID()
+			userID, _ := m.GetUserID()
+			token, _ := m.GetToken()
+			lang, _ := m.Locale()
+			internalHeaders := map[string]string{
+				common.PlatformHeader:   opts.Platform,
+				common.AppVersionHeader: common.ApplicationVersion,
+			}
+			return common.NewUserConfig(
+				common.DefaultAppName,
+				deviceID,
+				userID,
+				token,
+				internalHeaders,
+				lang,
+			)
+		},
 	}
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
 	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)

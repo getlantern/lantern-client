@@ -34,6 +34,7 @@ const (
 	RandomNoiseHeader                   = "X-Lantern-Rand"
 	SleepHeader                         = "X-Lantern-Sleep"
 	LocaleHeader                        = "X-Lantern-Locale"
+	Referer                             = "Referer"
 	XBQHeader                           = "XBQ"
 	XBQHeaderv2                         = "XBQv2"
 	ContentType                         = "Content-Type"
@@ -44,8 +45,7 @@ var (
 	corsAllowedMethods = []string{http.MethodGet, http.MethodPost, http.MethodOptions}
 )
 
-// AddCommonNonUserHeaders adds all common headers that are not
-// user or device specific.
+// AddCommonNonUserHeaders adds all common headers that are not user or device specific.
 func AddCommonNonUserHeaders(uc UserConfig, req *http.Request) {
 	req.Header.Set(AppVersionHeader, ApplicationVersion)
 	req.Header.Set(LibraryVersionHeader, LibraryVersion)
@@ -74,24 +74,19 @@ func AddCommonNonUserHeaders(uc UserConfig, req *http.Request) {
 	req.Header.Add(RandomNoiseHeader, randomizedString())
 }
 
-// AddCommonHeadersWithOptions sets standard http headers on a request bound
-// for an internal service, representing auth and other configuration
-// metadata.  The caller may specify overwriteAuth=false to prevent overwriting
-// any of the common 'auth' headers (DeviceIdHeader, ProTokenHeader, UserIdHeader)
-// that are already present in the given request.
-func AddCommonHeadersWithOptions(uc UserConfig, req *http.Request, overwriteAuth bool) {
-	AddCommonNonUserHeaders(uc, req)
-	if overwriteAuth || req.Header.Get(DeviceIdHeader) == "" {
+// AddCommonUserHeaders adds common headers that are user or device specific.
+func AddCommonUserHeaders(uc UserConfig, req *http.Request) {
+	if req.Header.Get(DeviceIdHeader) == "" {
 		if deviceID := uc.GetDeviceID(); deviceID != "" {
 			req.Header.Set(DeviceIdHeader, deviceID)
 		}
 	}
-	if overwriteAuth || req.Header.Get(ProTokenHeader) == "" {
+	if req.Header.Get(ProTokenHeader) == "" {
 		if token := uc.GetToken(); token != "" {
 			req.Header.Set(ProTokenHeader, token)
 		}
 	}
-	if overwriteAuth || req.Header.Get(UserIdHeader) == "" {
+	if req.Header.Get(UserIdHeader) == "" {
 		if userID := uc.GetUserID(); userID != 0 {
 			req.Header.Set(UserIdHeader, strconv.FormatInt(userID, 10))
 		}
@@ -103,7 +98,8 @@ func AddCommonHeadersWithOptions(uc UserConfig, req *http.Request, overwriteAuth
 // bound for an internal service, representing auth and other
 // configuration metadata.
 func AddCommonHeaders(uc UserConfig, req *http.Request) {
-	AddCommonHeadersWithOptions(uc, req, true)
+	AddCommonNonUserHeaders(uc, req)
+	AddCommonUserHeaders(uc, req)
 }
 
 // isOriginAllowed checks if the origin is authorized

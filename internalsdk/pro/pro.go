@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/getlantern/errors"
@@ -60,41 +59,13 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, client.setUserHeaders(), nil))
-	return client
-}
-
-func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Request) error {
-	return func(client *resty.Client, req *resty.Request) error {
-
-		uc := c.userConfig()
-		req.Header.Set("Referer", "http://localhost:37457/")
-		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
-			common.DeviceIdHeader,
-			common.ProTokenHeader,
-			common.UserIdHeader,
-		}, ", "))
-		req.Header.Set(common.LocaleHeader, uc.GetLanguage())
-
-		if req.Header.Get(common.DeviceIdHeader) == "" {
-			if deviceID := uc.GetDeviceID(); deviceID != "" {
-				req.Header.Set(common.DeviceIdHeader, deviceID)
-			}
-		}
-
-		if req.Header.Get(common.ProTokenHeader) == "" {
-			if token := uc.GetToken(); token != "" {
-				req.Header.Set(common.ProTokenHeader, token)
-			}
-		}
-		if req.Header.Get(common.UserIdHeader) == "" {
-			if userID := uc.GetUserID(); userID != 0 {
-				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
-			}
-		}
-
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(rc *resty.Client, req *resty.Request) error {
+		uc := client.userConfig()
+		req.Header.Set(common.Referer, "http://localhost:37457/")
+		common.AddCommonUserHeaders(uc, req.RawRequest)
 		return nil
-	}
+	}, nil))
+	return client
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {
