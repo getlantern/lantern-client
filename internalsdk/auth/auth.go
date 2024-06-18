@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/getlantern/golog"
@@ -53,12 +54,15 @@ func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	}
 	webclient := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(client *resty.Client, req *resty.Request) error {
 		req.SetHeader(common.ContentType, "application/x-protobuf")
-		if req.RawRequest.URL != nil && strings.HasPrefix(req.RawRequest.URL.Path, "/users/salt") {
-			// for the /users/salt endpoint, we do not need to set any headers so return right away
-			return nil
-		}
 		headers := map[string]string{}
 		uc := opts.UserConfig()
+		if req.RawRequest.URL != nil && strings.HasPrefix(req.RawRequest.URL.Path, "/users/signup") {
+			// for the /users/signup endpoint, we do need to pass all default headers
+			headers[common.DeviceIdHeader] = uc.GetDeviceID()
+			headers[common.UserIdHeader] = strconv.FormatInt(uc.GetUserID(), 10)
+			headers[common.ProTokenHeader] = uc.GetToken()
+		}
+
 		// Import all the internal headers
 		for k, v := range uc.GetInternalHeaders() {
 			headers[k] = v
@@ -66,6 +70,7 @@ func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 		req.SetHeaders(headers)
 		return nil
 	}, nil))
+
 	return &authClient{webclient}
 }
 
