@@ -54,7 +54,7 @@ func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	webclient := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(client *resty.Client, req *resty.Request) error {
 		req.SetHeader(common.ContentType, "application/x-protobuf")
 		if req.RawRequest.URL != nil && strings.HasPrefix(req.RawRequest.URL.Path, "/users/salt") {
-			// for the /users/salt, we do not need to set any headers so return right away
+			// for the /users/salt endpoint, we do not need to set any headers so return right away
 			return nil
 		}
 		headers := map[string]string{}

@@ -32,11 +32,11 @@ type RESTClient interface {
 	PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error
 }
 
-// Opts are common Opts that are used for configuring new instances of RESTClient
+// Opts are common Opts that instances of RESTClient may be configured with
 type Opts struct {
 	// HttpClient represents an http.Client that should be used by the resty client
 	HttpClient *http.Client
-	// UserConfig is a function that returns the user config associated with the Lantern user
+	// UserConfig is a function that returns the user config associated with a Lantern user
 	UserConfig func() common.UserConfig
 }
 
