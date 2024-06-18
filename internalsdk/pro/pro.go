@@ -59,16 +59,12 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(rc *resty.Client, req *resty.Request) error {
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(rc *resty.Client, restyReq *resty.Request) error {
 		uc := client.userConfig()
+		req := restyReq.RawRequest
 		req.Header.Set(common.Referer, "http://localhost:37457/")
-		common.AddCommonUserHeaders(uc, req.RawRequest)
-		headers := map[string]string{}
-		// Import all the internal headers
-		for k, v := range uc.GetInternalHeaders() {
-			headers[k] = v
-		}
-		req.SetHeaders(headers)
+		common.AddCommonUserHeaders(uc, req)
+		common.AddInternalHeaders(uc, req)
 		return nil
 	}, nil))
 	return client

@@ -49,11 +49,7 @@ var (
 func AddCommonNonUserHeaders(uc UserConfig, req *http.Request) {
 	req.Header.Set(AppVersionHeader, ApplicationVersion)
 	req.Header.Set(LibraryVersionHeader, LibraryVersion)
-	for k, v := range uc.GetInternalHeaders() {
-		if v != "" {
-			req.Header.Set(k, v)
-		}
-	}
+	AddInternalHeaders(uc, req)
 	if len(uc.GetEnabledExperiments()) > 0 {
 		req.Header.Set("x-lantern-dev-experiments", strings.Join(uc.GetEnabledExperiments(), ","))
 	}
@@ -72,6 +68,15 @@ func AddCommonNonUserHeaders(uc UserConfig, req *http.Request) {
 	// We include a random length string here to make it harder for censors to identify lantern
 	// based on consistent packet lengths.
 	req.Header.Add(RandomNoiseHeader, randomizedString())
+}
+
+// AddInternalHeaders adds the internal headers from the user config to the headers of the given http.Request
+func AddInternalHeaders(uc UserConfig, req *http.Request) {
+	for k, v := range uc.GetInternalHeaders() {
+		if v != "" {
+			req.Header.Set(k, v)
+		}
+	}
 }
 
 // AddCommonUserHeaders adds common headers that are user or device specific.
