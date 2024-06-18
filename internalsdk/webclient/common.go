@@ -34,6 +34,7 @@ func AddCommonUserHeaders(uc common.UserConfig, req *resty.Request) {
 	req.SetHeaders(params)
 }
 
+// AddInternalHeaders adds the common.UserConfig internal headers to the given request
 func AddInternalHeaders(uc common.UserConfig, req *resty.Request) {
 	for k, v := range uc.GetInternalHeaders() {
 		if v != "" {
