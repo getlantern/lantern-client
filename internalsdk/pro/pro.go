@@ -60,7 +60,7 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 		userConfig: opts.UserConfig,
 	}
 	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(rc *resty.Client, req *http.Request) error {
-		uc := client.userConfig()
+		uc := opts.UserConfig()
 		req.Header.Set(common.Referer, "http://localhost:37457/")
 		common.AddCommonUserHeaders(uc, req)
 		common.AddInternalHeaders(uc, req)
