@@ -48,7 +48,7 @@ import UIKit
   // Init all the models
   private func setupModels() throws {
     logger.log("setupModels method called")
-    sessionModel = try SessionModel(flutterBinary: flutterbinaryMessenger)
+    sessionModel = try SessionModel(constants: Constants(process: .app), flutterBinary: flutterbinaryMessenger)
     lanternModel = LanternModel(flutterBinary: flutterbinaryMessenger)
     vpnModel = try VpnModel(
       flutterBinary: flutterbinaryMessenger, vpnBase: VPNManager.appDefault,

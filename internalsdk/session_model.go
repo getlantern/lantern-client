@@ -7,10 +7,12 @@ import (
 	"time"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/proxied"
 
 	//"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/ios"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
@@ -69,6 +71,7 @@ const (
 )
 
 type SessionModelOpts struct {
+	ConfigPath      string
 	DevelopmentMode bool
 	ProUser         bool
 	DeviceID        string
@@ -84,6 +87,9 @@ type SessionModelOpts struct {
 
 // NewSessionModel initializes a new SessionModel instance.
 func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, error) {
+	if opts.ConfigPath == "" {
+		return nil, errors.New("Missing config path")
+	}
 	base, err := newModel("session", mdb)
 	if err != nil {
 		return nil, err
@@ -95,12 +101,29 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(2000, &protos.Devices{})
 	}
 	m := &SessionModel{baseModel: base}
+	deviceID, _ := m.GetDeviceID()
+	userID, _ := m.GetUserID()
+	token, _ := m.GetToken()
+	countryCode, _ := m.GetCountryCode()
+
+	cf := ios.NewConfigurer(opts.ConfigPath, int(userID), token, deviceID, "")
+	global, _, _, err := cf.OpenGlobal()
+	if err != nil {
+		log.Errorf("Unable to open global config: %v", err)
+	} else {
+		log.Debugf("Auth feature enabled? %t", global.FeatureEnabled(
+			config.FeatureAuth,
+			common.Platform,
+			common.DefaultAppName,
+			"",
+			userID,
+			token != "",
+			countryCode))
+	}
+
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &pro.Opts{
 		HttpClient: proxied.DirectThenFrontedClient(dialTimeout),
 		UserConfig: func() common.UserConfig {
-			deviceID, _ := m.GetDeviceID()
-			userID, _ := m.GetUserID()
-			token, _ := m.GetToken()
 			lang, _ := m.Locale()
 			return common.NewUserConfig(
 				common.DefaultAppName,
