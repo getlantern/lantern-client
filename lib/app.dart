@@ -90,14 +90,22 @@ class _LanternAppState extends State<LanternApp>
     if (!hasConnection) {
       return;
     }
+   final vpnConnected = await vpnModel.isVpnConnected();
+
+    /// If vpn is not connected then we should not show the connectivity warning
+    if(!vpnConnected){
+      return;
+    }
     final shouldShowConnectivityWarning =
         (sessionModel.proxyAvailable.value != null &&
             sessionModel.proxyAvailable.value == false);
+
     if (shouldShowConnectivityWarning != showConnectivityWarning) {
       showConnectivityWarning = shouldShowConnectivityWarning;
       if (showConnectivityWarning) {
         networkWarningAnimationController.forward();
       } else {
+        print("networkWarningAnimationController reverse");
         networkWarningAnimationController.reverse();
       }
       // Update the state after running the animations.
