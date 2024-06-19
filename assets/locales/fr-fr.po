@@ -1725,28 +1725,35 @@ msgstr ""
 "de support pour obtenir de l'aide. "
 
 msgid "email_resend_message"
-msgstr ""
+msgstr "Votre nouveau code de confirmation a été envoyé "
 
 msgid "signup_error"
 msgstr ""
+"Il semble qu'il y ait eu un problème avec l'inscription. Veuillez réessayer,"
+" et si le problème persiste, contactez notre équipe de support. "
 
 msgid "signup_error_user_exists"
 msgstr ""
+"Il semble qu'il y ait eu un problème avec l'inscription. Veuillez essayer de"
+" réinitialiser votre mot de passe, et si le problème persiste, contactez "
+"notre équipe de support. "
 
 msgid "confirm_email_error"
-msgstr ""
+msgstr "Veuillez confirmer votre email "
 
 msgid "password_cannot_be_empty"
-msgstr ""
+msgstr "Le mot de passe ne peut pas être vide "
 
 msgid "password_must_be_at_least_8_characters"
-msgstr ""
+msgstr "Le mot de passe doit contenir au moins 8 caractères ou plus "
 
 msgid "sign_out"
-msgstr ""
+msgstr "Déconnexion"
 
 msgid "sign_out_message"
 msgstr ""
+"La déconnexion passera Lantern à la version gratuite. Pour accéder à nouveau"
+" à votre compte, vous devrez vous reconnecter. "
 
 msgid "change_password"
 msgstr "Changer le mot de passe"
@@ -1755,52 +1762,59 @@ msgid "password"
 msgstr "Mot de passe"
 
 msgid "new_email"
-msgstr ""
+msgstr "Nouvelle adresse email "
 
 msgid "new_email_same_as_old_email"
 msgstr ""
+"La nouvelle adresse email ne peut pas être la même que votre ancienne "
+"adresse email "
 
 msgid "danger_zone"
-msgstr ""
+msgstr "Zone dangereuse "
 
 msgid "delete_account"
-msgstr ""
+msgstr "Supprimer le compte "
 
 msgid "delete"
 msgstr "Supprimer"
 
 msgid "delete_account_message"
 msgstr ""
+"La suppression de votre compte ne peut pas être annulée. Vous perdrez "
+"l'accès à tous les appareils et renoncerez à tout temps de compte Pro sans "
+"remboursement. "
 
 msgid "delete_your_account"
-msgstr ""
+msgstr "Supprimer votre compte ? "
 
 msgid "confirm_deletion"
-msgstr ""
+msgstr "Confirmer la suppression "
 
 msgid "account_deleted"
-msgstr ""
+msgstr "Compte supprimé "
 
 msgid "account_deleted_message"
-msgstr ""
+msgstr "Votre compte a été supprimé de façon permanente. "
 
 msgid "password_has_been_updated"
-msgstr ""
+msgstr "Le mot de passe a été mis à jour "
 
 msgid "password_has_been_updated_message"
-msgstr ""
+msgstr "Votre mot de passe a été réinitialisé avec succès "
 
 msgid "invalid_code"
 msgstr ""
+"Code incorrect ou il a peut-être expiré. Veuillez essayer de renvoyer à "
+"nouveau "
 
 msgid "get_lantern_pro"
 msgstr "Obtenir Lantern Pro"
 
 msgid "try_lantern_pro"
-msgstr ""
+msgstr "Essayez Lantern gratuitement ! "
 
 msgid "continue_for_free"
-msgstr ""
+msgstr "Continuer gratuitement "
 
 msgid "recovery_not_found"
 msgstr "L’appareil n’est pas associé à cet utilisateur"
@@ -1815,45 +1829,50 @@ msgstr ""
 
 msgid "wrong_link_code"
 msgstr ""
+"Le code que vous avez entré est incorrect. Veuillez vérifier et réessayer. "
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "Le code de récupération a été envoyé "
 
 msgid "device_added_msg"
-msgstr ""
+msgstr "Cet appareil a été lié à %s "
 
 msgid "new_to_lantern"
-msgstr ""
+msgstr "Nouveau sur Lantern ? "
 
 msgid "email_has_been_updated"
-msgstr ""
+msgstr "L'email a été mis à jour "
 
 msgid "email_has_been_updated_message"
-msgstr ""
+msgstr "Votre email a été changé avec succès "
 
 msgid "email_has_been_verified"
-msgstr ""
+msgstr "L'email a été vérifié "
 
 msgid "email_has_been_verified_message"
-msgstr ""
+msgstr "Votre email a été vérifié avec succès "
 
 msgid "device_limit_reached"
-msgstr ""
+msgstr "Limite d'appareils atteinte "
 
 msgid "device_limit_reached_message"
 msgstr ""
+"Vous êtes actuellement connecté au nombre maximum d'appareils (3). Pour vous"
+" connecter sur cet appareil, veuillez sélectionner et supprimer un de vos "
+"autres appareils ci-dessous. "
 
 msgid "enter_activation_code"
-msgstr ""
+msgstr "Entrez le code d'activation "
 
 msgid "check_your_email"
-msgstr ""
+msgstr "Vérifiez votre adresse email "
 
 msgid "please_verify_email"
 msgstr ""
+"Veuillez vérifier que l'adresse email que vous avez entrée est correcte. "
 
 msgid "verify"
-msgstr ""
+msgstr "Vérifier"
 
 msgid "cannot_login"
 msgstr "Impossible de se connecter "
