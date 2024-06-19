@@ -17,51 +17,6 @@ class VPNTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vpnNotifier = context.watch<VPNChangeNotifier>();
-    // return sessionModel
-    //     .proUser((BuildContext context, bool proUser, Widget? child) {
-    //   return sessionModel.isUserSignedIn(
-    //     (context, hasUserSignedIn, child) => BaseScreen(
-    //       automaticallyImplyLeading: false,
-    //       title: SvgPicture.asset(
-    //         proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
-    //         height: 16,
-    //         fit: BoxFit.contain,
-    //       ),
-    //       padVertical: true,
-    //       body: Column(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         children: [
-    //           proUser ? const SizedBox() : const ProBanner(),
-    //           const VPNSwitch(),
-    //           Container(
-    //             padding: const EdgeInsetsDirectional.all(16),
-    //             decoration: BoxDecoration(
-    //               border: Border.all(
-    //                 color: borderColor,
-    //                 width: 1,
-    //               ),
-    //               borderRadius: const BorderRadius.all(
-    //                 Radius.circular(borderRadius),
-    //               ),
-    //             ),
-    //             child: Column(
-    //               mainAxisSize: MainAxisSize.min,
-    //               children: [
-    //                 VPNStatus(),
-    //                 const CDivider(height: 32.0),
-    //                 const ServerLocationWidget(),
-    //                 if (Platform.isAndroid) ...{
-    //                   const CDivider(height: 32.0),
-    //                   SplitTunnelingWidget(),
-    //                   // Not sure about this
-    //                   if (!proUser) const VPNBandwidth(),
-    //                 }
-    //               ],
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     ));
     return sessionModel.proUser(
       (context, proUser, child) => BaseScreen(
         title: SvgPicture.asset(
