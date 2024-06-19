@@ -10,7 +10,6 @@
 # 刘位, 2023
 # wwj402 <wwj402@gmail.com>, 2023
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
-# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
 # Aki, 2024
 # Mingye Wang <arthur200126@gmail.com>, 2024
@@ -24,10 +23,11 @@
 # 5ffb0e30c16f79bca37af5baff50ee52_58bd05a <18e9486319e95596cee4e2007f6eede0_4750>, 2024
 # YFdyh000 <yfdyh000@gmail.com>, 2024
 # Lantern, 2024
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2024\n"
+"Last-Translator: e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/lantern-1/teams/94371/zh_CN/)\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -54,28 +54,28 @@ msgid "enter_email"
 msgstr "输入邮箱"
 
 msgid "enter_password"
-msgstr ""
+msgstr "输入密码"
 
 msgid "forgot_password"
-msgstr ""
+msgstr "忘记密码"
 
 msgid "forgot_your_password"
-msgstr ""
+msgstr "忘记密码？"
 
 msgid "click_here"
-msgstr ""
+msgstr "点击此处"
 
 msgid "reset_password"
 msgstr "重设密码"
 
 msgid "lantern_pro_email"
-msgstr ""
+msgstr "蓝灯专业版电子邮件"
 
 msgid "return_to_sign_in"
-msgstr ""
+msgstr "返回登录"
 
 msgid "enter_confirmation_code"
-msgstr ""
+msgstr "输入确认码"
 
 msgid "confirmation_code_msg"
 msgstr ""
