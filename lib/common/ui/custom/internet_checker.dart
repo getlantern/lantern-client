@@ -45,7 +45,7 @@ class InternetStatusProvider extends ChangeNotifier {
   bool _isDisconnected = false;
 
   /// Using debounce to avoid flickering when the connection is unstable
-  final _debounceDuration = const Duration(seconds: 2);
+  final _debounceDuration = Duration(seconds: Platform.isIOS ? 4 : 2);
   Timer? _debounceTimer;
 
   InternetStatusProvider() {
