@@ -27,6 +27,7 @@ import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
 import okhttp3.Response
 import org.getlantern.lantern.activity.WebViewActivity_
+import org.getlantern.lantern.event.AppEvent
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
@@ -53,9 +54,6 @@ import org.getlantern.mobilesdk.model.Event
 import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
 import org.getlantern.mobilesdk.model.Survey
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import java.util.concurrent.*
 
@@ -99,7 +97,16 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 LanternApp.getSession().dnsDetector.publishNetworkAvailability()
             }
         }
-
+        eventManager.subscribeAppEvent { appEvent ->
+            if (appEvent is AppEvent.StatsEvent) {
+                val stats = appEvent.stats
+                Logger.debug("Stats updated", stats.toString())
+                sessionModel.saveServerInfo(
+                    Vpn.ServerInfo.newBuilder().setCity(stats.city).setCountry(stats.country)
+                        .setCountryCode(stats.countryCode).build(),
+                )
+            }
+        }
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "lantern_method_channel",
@@ -131,10 +138,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         super.onCreate(savedInstanceState)
 
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
-        Logger.debug(TAG, "EventBus.register finished at ${System.currentTimeMillis() - start}")
 
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
@@ -198,7 +201,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
-        EventBus.getDefault().unregister(this)
     }
 
     override fun onMethodCall(
@@ -223,7 +225,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         fetch { loconf -> runOnUiThread { processLoconf(loconf) } }
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    //@Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onInitializingAccount(status: AccountInitializationStatus) {
         val appName = getString(R.string.app_name)
 
@@ -237,7 +239,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
                 tvMessage.text = getString(R.string.init_account, appName)
                 dialogView.findViewById<View>(R.id.btnCancel).setOnClickListener {
-                    EventBus.getDefault().removeStickyEvent(status)
                     accountInitDialog?.dismiss()
                     finish()
                 }
@@ -245,12 +246,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             }
 
             AccountInitializationStatus.Status.SUCCESS -> {
-                EventBus.getDefault().removeStickyEvent(status)
                 accountInitDialog?.let { it.dismiss() }
             }
 
             AccountInitializationStatus.Status.FAILURE -> {
-                EventBus.getDefault().removeStickyEvent(status)
                 accountInitDialog?.let { it.dismiss() }
 
                 Utils.showAlertDialog(
@@ -266,33 +265,24 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    //@Subscribe(threadMode = ThreadMode.MAIN)
     fun vpnStateChanged(state: VpnState) {
         updateStatus(state.useVpn)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    //@Subscribe(threadMode = ThreadMode.MAIN)
     fun lanternStarted(status: LanternStatus) {
         updateUserData()
         updatePaymentMethods()
         updateCurrencyList();
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    //@Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onEvent(event: Event) {
         eventManager.onNewEvent(event = event)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun statsUpdated(stats: Stats) {
-        Logger.debug("Stats updated", stats.toString())
-        sessionModel.saveServerInfo(
-            Vpn.ServerInfo.newBuilder().setCity(stats.city).setCountry(stats.country)
-                .setCountryCode(stats.countryCode).build(),
-        )
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    //@Subscribe(threadMode = ThreadMode.MAIN)
     fun bandwidthUpdated(bandwidth: Bandwidth) {
         Logger.debug("bandwidth updated", bandwidth.toString())
         vpnModel.updateBandwidth(bandwidth)
@@ -373,7 +363,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    //@Subscribe(threadMode = ThreadMode.MAIN)
     fun processLoconf(loconf: LoConf) {
         doProcessLoconf(loconf)
     }
@@ -651,7 +641,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     }
 
     // Recreate the activity when the language changes
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    // @Subscribe(threadMode = ThreadMode.MAIN)
     fun languageChanged(locale: Locale) {
         recreate()
     }

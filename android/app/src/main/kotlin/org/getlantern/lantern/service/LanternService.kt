@@ -27,7 +27,6 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConfCallback
-import org.greenrobot.eventbus.EventBus
 import java.util.Random
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -104,9 +103,9 @@ open class LanternService : Service(), Runnable {
     private fun afterStart() {
         if (LanternApp.getSession().userId().toInt() == 0) {
             // create a user if no user id is stored
-            EventBus.getDefault().post(
+            /*EventBus.getDefault().post(
                 AccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING),
-            )
+            )*/
             createUser(0)
         }
 
@@ -115,12 +114,12 @@ open class LanternService : Service(), Runnable {
             autoUpdater.checkForUpdates()
         }
 
-        EventBus.getDefault().postSticky(LanternStatus(Status.ON))
+        //EventBus.getDefault().postSticky(LanternStatus(Status.ON))
 
         // fetch latest loconf
         LoConf.Companion.fetch(object : LoConfCallback {
             override fun onSuccess(loconf: LoConf) {
-                EventBus.getDefault().post(loconf)
+                //EventBus.getDefault().post(loconf)
             }
         })
     }
@@ -147,9 +146,9 @@ open class LanternService : Service(), Runnable {
         override fun onFailure(@Nullable throwable: Throwable?, @Nullable error: ProError?) {
             if (attempts >= MAX_CREATE_USER_TRIES) {
                 Logger.error(TAG, "Max. number of tries made to create Pro user")
-                EventBus.getDefault().postSticky(
+                /*EventBus.getDefault().postSticky(
                     AccountInitializationStatus(AccountInitializationStatus.Status.FAILURE),
-                )
+                )*/
                 return
             }
             attempts++
@@ -169,10 +168,10 @@ open class LanternService : Service(), Runnable {
             if (!referral.isEmpty()) {
                 LanternApp.getSession().setCode(referral)
             }
-            EventBus.getDefault().postSticky(LanternStatus(Status.ON))
+            /*EventBus.getDefault().postSticky(LanternStatus(Status.ON))
             EventBus.getDefault().postSticky(
                 AccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS),
-            )
+            )*/
         }
     }
 

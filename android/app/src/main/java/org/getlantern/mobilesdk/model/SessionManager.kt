@@ -32,7 +32,6 @@ import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.util.DnsDetector
 import org.getlantern.mobilesdk.util.LanguageHelper
-import org.greenrobot.eventbus.EventBus
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.lang.reflect.InvocationTargetException
@@ -136,7 +135,7 @@ abstract class SessionManager(application: Application) : Session {
             val oldLocale = prefs.getString(LANG, "")
             prefs.edit().putString(LANG, locale.toString()).apply()
             if (locale.language != oldLocale) {
-                EventBus.getDefault().post(locale)
+                //EventBus.getDefault().post(locale)
             }
         }
     }
@@ -183,7 +182,7 @@ abstract class SessionManager(application: Application) : Session {
         }
 
     override fun updateAdSettings(adSettings: AdSettings) {
-        EventBus.getDefault().post(adSettings)
+        //EventBus.getDefault().post(adSettings)
     }
 
     /**
@@ -356,7 +355,7 @@ abstract class SessionManager(application: Application) : Session {
         val b = Bandwidth(percent, remaining, allowed, ttlSeconds)
         Logger.debug("bandwidth", b.toString())
         saveLatestBandwidth(b)
-        EventBus.getDefault().postSticky(b)
+        //EventBus.getDefault().postSticky(b)
     }
 
     fun setSurveyLinkOpened(url: String?) {
@@ -401,7 +400,7 @@ abstract class SessionManager(application: Application) : Session {
         }
 
         val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked, hasSucceedingProxy)
-        EventBus.getDefault().postSticky(st)
+        //EventBus.getDefault().postSticky(st)
 
         // save last location received
         prefs.edit().putString(SERVER_COUNTRY, country)

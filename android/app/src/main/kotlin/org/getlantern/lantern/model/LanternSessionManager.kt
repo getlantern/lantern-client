@@ -8,7 +8,6 @@ import io.lantern.model.Vpn
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
-import org.greenrobot.eventbus.EventBus
 import org.joda.time.LocalDateTime
 import java.text.SimpleDateFormat
 import java.util.Currency
@@ -336,7 +335,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         }
 
         if (user.isProUser) {
-            EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
+            //EventBus.getDefault().post(UserStatus(user.isActive, user.monthsLeft().toLong()))
             prefs.edit().putInt(PRO_MONTHS_LEFT, user.monthsLeft())
                 .putInt(PRO_DAYS_LEFT, user.daysLeft())
                 .apply()

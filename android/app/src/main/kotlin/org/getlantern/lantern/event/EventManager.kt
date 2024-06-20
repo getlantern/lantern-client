@@ -2,12 +2,20 @@ package org.getlantern.lantern.event
 
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.LifecycleOwner
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
 import org.getlantern.mobilesdk.model.Event
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.util.EnumMap
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
+import org.getlantern.mobilesdk.Logger
+import org.getlantern.lantern.model.Stats
 
 abstract class EventManager(
     private val name: String,
@@ -49,6 +57,20 @@ abstract class EventManager(
                     activeSink.get()?.success(params)
                 }
             }
+        }
+    }
+
+    suspend fun postStatsEvent(stats: Stats) {
+        CoroutineScope(Dispatchers.IO).launch {
+            EventBus.publish(AppEvent.StatsEvent(stats))
+        }
+    }
+
+    fun subscribeAppEvent(onEvent: (AppEvent) -> Unit) {
+        CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
+          EventBus.subscribe<AppEvent> { appEvent ->
+            onEvent(appEvent)
+          }
         }
     }
 

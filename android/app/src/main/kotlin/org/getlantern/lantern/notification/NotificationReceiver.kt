@@ -8,8 +8,6 @@ import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
-import org.greenrobot.eventbus.EventBus
-
 
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -21,7 +19,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 LanternVpnService::class.java,
             )
         ) {
-            EventBus.getDefault().post(VpnState(false))
+            //EventBus.getDefault().post(VpnState(false))
             context.startService(
                 Intent(
                     context,

@@ -384,16 +384,6 @@ dependencies {
     // Google Play libraries
     implementation 'com.android.billingclient:billing:6.2.0'
 
-    // lib that simplifies event bus communication between activities, fragments, threads, services, etc
-    implementation 'org.greenrobot:eventbus:3.3.1'
-
-    // https://mvnrepository.com/artifact/net.jodah/expiringmap
-//    implementation group: 'net.jodah', name: 'expiringmap', version: '0.5.9'
-//    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
-//    implementation group: 'commons-codec', name: 'commons-codec', version: '1.12'
-//     https://mvnrepository.com/artifact/javax.mail/mail
-//    implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
-
     implementation 'com.stripe:stripe-android:20.17.0'
     annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
     implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
@@ -421,6 +411,10 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.mockk:mockk:1.13.5"
+}
+
+kapt {
+    correctErrorTypes true
 }
 
 apply plugin: 'com.google.gms.google-services'

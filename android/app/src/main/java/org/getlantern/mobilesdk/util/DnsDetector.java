@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 
 import org.getlantern.mobilesdk.Logger;
 import org.getlantern.mobilesdk.model.Event;
-import org.greenrobot.eventbus.EventBus;
 
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -114,7 +113,6 @@ public class DnsDetector {
     public void publishNetworkAvailability() {
         if (findActiveNetwork() == null) {
             Logger.debug(TAG, "No network available");
-            EventBus.getDefault().postSticky(Event.NoNetworkAvailable);
         }
     }
 
