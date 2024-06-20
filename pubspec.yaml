@@ -41,6 +41,7 @@ dependencies:
 
   #Loogs and crash reporting
   catcher_2: ^1.2.4
+  sentry_flutter: ^8.3.0
 
   badges: ^3.1.1
   dotted_border: ^2.0.0+3

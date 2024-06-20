@@ -1,6 +1,6 @@
 import 'dart:io';
 
-/*import 'package:catcher_2/catcher_2.dart';
+import 'package:catcher_2/catcher_2.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -57,4 +57,4 @@ Catcher2 setupCatcherAndRun(Widget root) {
     debugConfig: debugOption,
     releaseConfig: releaseOption,
   );
-}*/
+}

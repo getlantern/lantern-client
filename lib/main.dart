@@ -56,7 +56,7 @@ Future<void> main() async {
   }
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(LanternApp());
+  setupCatcherAndRun(LanternApp());
 }
 
 Future<void> _initGoogleMobileAds() async {
