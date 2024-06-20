@@ -71,18 +71,18 @@ msgid "return_to_sign_in"
 msgstr "Назад к входу"
 
 msgid "enter_confirmation_code"
-msgstr "Введите код подтверждения"
+msgstr "Ввести код подтверждения"
 
 msgid "confirmation_code_msg"
 msgstr ""
 "Код подтверждения отправлен на адрес XX. Введите его для дополнительной "
-"защиты аккаунта и функции восстановления пароля."
+"защиты аккаунта и возможности восстановления пароля."
 
 msgid "resend_confirmation_code"
 msgstr "Отправить код подтверждения повторно"
 
 msgid "email_already_exists"
-msgstr "Адрес электронной почты уже зарегистрирован."
+msgstr "Ошибка — адрес электронной почты занят"
 
 msgid "email_already_exists_msg"
 msgstr ""
@@ -120,19 +120,19 @@ msgid "confirm_email"
 msgstr "Подтвердите адрес электронный адрес"
 
 msgid "update_pro_account"
-msgstr "Обновить аккаунт Pro"
+msgstr "Обновление аккаунта Pro"
 
 msgid "update_pro_account_message"
 msgstr ""
-"Теперь, чтобы войти в аккаунт Lantern Pro с любого устройства или перейти к "
-"управлению им, необходимо добавить и подтвердить адрес электронной почты и "
+"Теперь, чтобы входить в аккаунт Lantern Pro и управлять им с любого "
+"устройства, необходимо добавить и подтвердить адрес электронной почты и "
 "пароль."
 
 msgid "not_now"
 msgstr "Не сейчас"
 
 msgid "update_account"
-msgstr "Обновить аккаунт"
+msgstr "Обновление аккаунта"
 
 msgid "new"
 msgstr "Создать"
@@ -1737,7 +1737,7 @@ msgid "danger_zone"
 msgstr "Зона опасности"
 
 msgid "delete_account"
-msgstr "Удалить аккаунт"
+msgstr "Удаление аккаунта"
 
 msgid "delete"
 msgstr "Удалить"
@@ -1754,16 +1754,16 @@ msgid "confirm_deletion"
 msgstr "Подтвердить удаление"
 
 msgid "account_deleted"
-msgstr "Аккаунт удален"
+msgstr "Удаление аккаунта"
 
 msgid "account_deleted_message"
 msgstr "Аккаунт удален навсегда."
 
 msgid "password_has_been_updated"
-msgstr "Пароль обновлен"
+msgstr "Изменение пароля"
 
 msgid "password_has_been_updated_message"
-msgstr "Пароль сброшен"
+msgstr "Пароль сброшен."
 
 msgid "invalid_code"
 msgstr "Неверный или недействительный код. Повторите попытку."
@@ -1795,25 +1795,25 @@ msgid "recovery_code_sent"
 msgstr "Код восстановления отправлен"
 
 msgid "device_added_msg"
-msgstr "Устройство подключено к %s"
+msgstr "Устройство подключено к %s."
 
 msgid "new_to_lantern"
 msgstr "Нужна помощь?"
 
 msgid "email_has_been_updated"
-msgstr "Адрес электронной почты обновлен"
+msgstr "Обновление адреса электронной почты"
 
 msgid "email_has_been_updated_message"
-msgstr "Адрес электронной почты изменен"
+msgstr "Адрес электронной почты изменен."
 
 msgid "email_has_been_verified"
-msgstr "Адрес электронной почты подтвержден"
+msgstr "Подтверждение адреса электронной почты"
 
 msgid "email_has_been_verified_message"
-msgstr "Адрес электронной почты подтвержден"
+msgstr "Адрес электронной почты подтвержден."
 
 msgid "device_limit_reached"
-msgstr "Достигнут лимит устройств"
+msgstr "Превышение лимита устройств"
 
 msgid "device_limit_reached_message"
 msgstr ""
@@ -1827,7 +1827,7 @@ msgid "check_your_email"
 msgstr "Проверьте вашу электронную почту"
 
 msgid "please_verify_email"
-msgstr "Убедитесь в правильности указанного адреса электронной почты"
+msgstr "Убедитесь в правильности указанного адреса электронной почты."
 
 msgid "verify"
 msgstr "Подтвердить"
