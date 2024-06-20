@@ -7,7 +7,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   emoji_picker_flutter
   gtk
   screen_retriever
-  sentry_flutter
   tray_manager
   url_launcher_linux
   window_manager

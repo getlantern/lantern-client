@@ -10,7 +10,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_windows_webview
   permission_handler_windows
   screen_retriever
-  sentry_flutter
   share_plus
   tray_manager
   url_launcher_windows
