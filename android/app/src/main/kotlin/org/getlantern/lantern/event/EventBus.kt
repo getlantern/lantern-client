@@ -1,10 +1,14 @@
 package org.getlantern.lantern.event
 
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.launch
 import org.getlantern.lantern.model.Stats
 import kotlin.coroutines.coroutineContext
 
@@ -23,6 +27,23 @@ object EventBus {
                 coroutineContext.ensureActive()
                 onEvent(event)
             }
+    }
+}
+
+// EventHandler is used to publish app events that subscribers can listen to from anywhere
+internal object EventHandler {
+    suspend fun postStatsEvent(stats: Stats) {
+        CoroutineScope(Dispatchers.IO).launch {
+            EventBus.publish(AppEvent.StatsEvent(stats))
+        }
+    }
+
+    fun subscribeAppEvent(onEvent: (AppEvent) -> Unit) {
+        CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
+            EventBus.subscribe<AppEvent> { appEvent ->
+                onEvent(appEvent)
+            }
+        }
     }
 }
 

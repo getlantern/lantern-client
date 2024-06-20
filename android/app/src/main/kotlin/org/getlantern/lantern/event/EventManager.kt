@@ -4,12 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import org.getlantern.lantern.model.Stats
 import org.getlantern.mobilesdk.model.Event
 import java.util.EnumMap
 import java.util.concurrent.ConcurrentSkipListSet
@@ -17,8 +11,9 @@ import java.util.concurrent.atomic.AtomicReference
 
 abstract class EventManager(
     private val name: String,
-    flutterEngine: FlutterEngine? = null,
+    flutterEngine: FlutterEngine? = null
 ) : EventChannel.StreamHandler {
+
     private val activeSubscribers: EnumMap<Event, ConcurrentSkipListSet<Int>> =
         EnumMap(Event::class.java)
 
@@ -30,15 +25,12 @@ abstract class EventManager(
         flutterEngine?.let {
             EventChannel(
                 flutterEngine.dartExecutor,
-                name,
+                name
             ).setStreamHandler(this)
         }
     }
 
-    fun onNewEvent(
-        event: Event,
-        params: MutableMap<String, Any?> = mutableMapOf(),
-    ) {
+    fun onNewEvent(event: Event, params: MutableMap<String, Any?> = mutableMapOf()) {
         handler.post {
             synchronized(this@EventManager) {
                 params["eventName"] = event.name
@@ -60,25 +52,8 @@ abstract class EventManager(
         }
     }
 
-    suspend fun postStatsEvent(stats: Stats) {
-        CoroutineScope(Dispatchers.IO).launch {
-            EventBus.publish(AppEvent.StatsEvent(stats))
-        }
-    }
-
-    fun subscribeAppEvent(onEvent: (AppEvent) -> Unit) {
-        CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
-            EventBus.subscribe<AppEvent> { appEvent ->
-                onEvent(appEvent)
-            }
-        }
-    }
-
     @Synchronized
-    override fun onListen(
-        arguments: Any?,
-        events: EventChannel.EventSink?,
-    ) {
+    override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         activeSink.set(events)
         val args = arguments as Map<String, Any>
         val subscriberID = args["subscriberID"] as Int

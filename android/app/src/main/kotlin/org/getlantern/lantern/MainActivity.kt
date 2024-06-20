@@ -28,6 +28,7 @@ import kotlinx.coroutines.*
 import okhttp3.Response
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.AppEvent
+import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
@@ -97,7 +98,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 LanternApp.getSession().dnsDetector.publishNetworkAvailability()
             }
         }
-        eventManager.subscribeAppEvent { appEvent ->
+        EventHandler.subscribeAppEvent { appEvent ->
             if (appEvent is AppEvent.StatsEvent) {
                 val stats = appEvent.stats
                 Logger.debug("Stats updated", stats.toString())
