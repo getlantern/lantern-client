@@ -1,7 +1,6 @@
 # 
 # Translators:
 # Vitaliy Grishenko, 2022
-# IvanLykov <chabib@list.ru>, 2022
 # Lowrider <pams@imail.ru>, 2022
 # Николай Кочкин <urfiner@gmail.com>, 2022
 # Helen R <helen.russel88@gmail.com>, 2022
@@ -9,19 +8,20 @@
 # e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023
 # Serg <sergkoshkin@yandex.ru>, 2023
 # e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2023
-# Tina T, 2023
 # e2f_ru r1 <tx_e2f_ru_r1@ate2f.com>, 2023
 # Deanna D, 2024
-# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2024
 # Anna Evdokimova <anna.evdokimova@yahoo.com>, 2024
 # Helen Russel <coo@workogram.com>, 2024
-# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024
+# Tina T, 2024
 # sayanvd <sayanvd@yandex.ru>, 2024
+# IvanLykov <chabib@list.ru>, 2024
 # Derek F <derek@getlantern.org>, 2024
+# tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2024
+# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
+"Last-Translator: e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -42,6 +42,97 @@ msgstr "Позже"
 
 msgid "try"
 msgstr "Попробовать"
+
+msgid "sign_in"
+msgstr "Вход"
+
+msgid "enter_email"
+msgstr "Введите электронную почту"
+
+msgid "enter_password"
+msgstr "Введите пароль"
+
+msgid "forgot_password"
+msgstr "Забыли пароль?"
+
+msgid "forgot_your_password"
+msgstr "Забыли пароль?"
+
+msgid "click_here"
+msgstr "Нажмите здесь"
+
+msgid "reset_password"
+msgstr "Сброс пароля"
+
+msgid "lantern_pro_email"
+msgstr "Адрес электронной почты Lantern Pro"
+
+msgid "return_to_sign_in"
+msgstr "Назад на страницу входа"
+
+msgid "enter_confirmation_code"
+msgstr "Введите код подтверждения"
+
+msgid "confirmation_code_msg"
+msgstr ""
+"Укажите код, отправленный на адрес XX. Это поможет защитить аккаунт и при "
+"необходимости восстановить пароль."
+
+msgid "resend_confirmation_code"
+msgstr "Отправить код повторно"
+
+msgid "email_already_exists"
+msgstr "Адрес электронной почты уже зарегистрирован."
+
+msgid "email_already_exists_msg"
+msgstr ""
+"Этот адрес электронной почты уже используется. Восстановите доступ к "
+"привязанному аккаунту или создайте новый, указав другой адрес."
+
+msgid "recover_account"
+msgstr "Восстановить аккаунт"
+
+msgid "back"
+msgstr "назад"
+
+msgid "change_email"
+msgstr "Изменить адрес электронной почты"
+
+msgid "new_password"
+msgstr "Новый пароль"
+
+msgid "confirm_new_password"
+msgstr "Подтвердите новый пароль"
+
+msgid "already_have_an_account"
+msgstr "Уже есть аккаунт?"
+
+msgid "create_account"
+msgstr "Создать аккаунт"
+
+msgid "create_password"
+msgstr "Создать пароль"
+
+msgid "by_creating_an_account"
+msgstr "Создавая аккаунт, вы принимаете наши"
+
+msgid "confirm_email"
+msgstr "Подтвердите адрес электронный адрес"
+
+msgid "update_pro_account"
+msgstr "Обновление аккаунта Pro"
+
+msgid "update_pro_account_message"
+msgstr ""
+"Теперь, чтобы входить в аккаунт Lantern Pro и управлять им с любого "
+"устройства, необходимо добавить и подтвердить адрес электронной почты и "
+"пароль."
+
+msgid "not_now"
+msgstr "Не сейчас"
+
+msgid "update_account"
+msgstr "Обновить аккаунт"
 
 msgid "new"
 msgstr "Создать"
@@ -126,7 +217,7 @@ msgstr "Я хочу удалить данные чата"
 msgid "Pro Account Management"
 msgstr "Управление аккаунтом Pro"
 
-msgid "Link Device"
+msgid "link_device"
 msgstr "Привязать устройство"
 
 msgid "Upgrade to Lantern Pro"
@@ -172,12 +263,6 @@ msgstr "Основное"
 
 msgid "about"
 msgstr "О программе"
-
-msgid "privacy_policy"
-msgstr "Политика конфиденциальности "
-
-msgid "terms_of_service"
-msgstr "Условия использования"
 
 msgid "proxy_all"
 msgstr "Проксировать весь трафик"
@@ -302,9 +387,6 @@ msgstr ""
 msgid "Link via Email"
 msgstr "Ссылка по электронной почте"
 
-msgid "lantern_pro_email"
-msgstr "Адрес эл. почты аккаунта Lantern Pro"
-
 msgid "lantern_desktop"
 msgstr "Версия Lantern для ПК"
 
@@ -366,9 +448,6 @@ msgstr "месяц"
 
 msgid "months"
 msgstr "месяцы"
-
-msgid "enter_email"
-msgstr "Введите электронную почту"
 
 msgid "enter_email_to_complete_purchase"
 msgstr "Введите адрес электронной почты для завершения покупки "
@@ -479,9 +558,7 @@ msgstr ""
 "данных. Вы можете подключить до трех устройств к вашему аккаунту."
 
 msgid "by_clicking_tos"
-msgstr ""
-"Нажимая %s, вы соглашаетесь с нашими\n"
-" "
+msgstr "Нажимая %s, вы принимаете наши "
 
 msgid "tos"
 msgstr "Условия использования"
@@ -796,9 +873,6 @@ msgstr "Для вас и пользователя %s сообщения не б�
 
 msgid "message_disappearing_description"
 msgstr "Для вас и пользователя %s все сообщения будут пропадать через %s."
-
-msgid "delete"
-msgstr "Удалить"
 
 msgid "view_contact_info"
 msgstr "Посмотреть контактную информацию"
@@ -1609,22 +1683,163 @@ msgstr "ЧаВо"
 msgid "add_device"
 msgstr "Добавить устройство"
 
-msgid "recovery_code_sent"
-msgstr "Код восстановления отправлен "
+msgid "search_apps"
+msgstr "Поиск приложений "
+
+msgid "user_not_found"
+msgstr ""
+"Пользователь не найден. Проверьте учетные данные и повторите попытку. Если "
+"проблема не решится, свяжитесь с нашей службой поддержки."
+
+msgid "email_resend_message"
+msgstr "Код подтверждения отправлен повторно"
+
+msgid "signup_error"
+msgstr ""
+"Не удалось зарегистрироваться. Повторите попытку. Если проблема не решится, "
+"свяжитесь с нашей службой поддержки."
+
+msgid "signup_error_user_exists"
+msgstr ""
+"Не удалось войти в аккаунт. Попробуйте сбросить пароль. Если это не поможет,"
+" свяжитесь с нашей службой поддержки."
+
+msgid "confirm_email_error"
+msgstr "Подтвердите адрес электронной почты."
+
+msgid "password_cannot_be_empty"
+msgstr "Укажите пароль."
+
+msgid "password_must_be_at_least_8_characters"
+msgstr "Пароль должен содержать минимум 8 символов."
+
+msgid "sign_out"
+msgstr "Выход из аккаунта"
+
+msgid "sign_out_message"
+msgstr ""
+"Если вы выйдете из аккаунта, функции Lantern Pro будут недоступны. Чтобы "
+"использовать их, вам потребуется войти снова."
+
+msgid "change_password"
+msgstr "Изменить пароль"
+
+msgid "password"
+msgstr "Пароль"
+
+msgid "new_email"
+msgstr "Новый адрес электронной почты"
+
+msgid "new_email_same_as_old_email"
+msgstr "Новый адрес электронной почты не может совпадать со старым."
+
+msgid "danger_zone"
+msgstr "Зона опасности"
+
+msgid "delete_account"
+msgstr "Удаление аккаунта"
+
+msgid "delete"
+msgstr "Удалить"
+
+msgid "delete_account_message"
+msgstr ""
+"Это действие нельзя отменить. Доступ ко всем устройствам будет закрыт, а "
+"оставшееся время подписки Pro аннулировано без возврата средств."
+
+msgid "delete_your_account"
+msgstr "Удалить аккаунт?"
+
+msgid "confirm_deletion"
+msgstr "Удалить"
+
+msgid "account_deleted"
+msgstr "Аккаунт удален"
+
+msgid "account_deleted_message"
+msgstr "Вы не сможете его восстановить."
+
+msgid "password_has_been_updated"
+msgstr "Изменение пароля"
+
+msgid "password_has_been_updated_message"
+msgstr "Пароль сброшен."
+
+msgid "invalid_code"
+msgstr "Вы указали неверный или недействительный код. Повторите попытку."
+
+msgid "get_lantern_pro"
+msgstr "Получить Lantern Pro"
+
+msgid "try_lantern_pro"
+msgstr "Попробуйте Lantern бесплатно"
+
+msgid "continue_for_free"
+msgstr "Продолжить бесплатно"
+
+msgid "recovery_not_found"
+msgstr "Устройство не связано с этим пользователем"
 
 msgid "device_added"
-msgstr "Устройство добавлено"
+msgstr "Устройство не связано с этим пользователем"
 
 msgid "device_added_message"
 msgstr ""
 "Ваше устройство успешно добавлено. Если вы не видите подключенное "
 "устройство, пожалуйста, перезапустите приложение на обоих устройствах "
 
-msgid "search_apps"
-msgstr "Поиск приложений "
+msgid "wrong_link_code"
+msgstr "Вы указали неверный код. Проверьте его и повторите попытку."
+
+msgid "recovery_code_sent"
+msgstr "Код восстановления отправлен"
+
+msgid "device_added_msg"
+msgstr "Устройство подключено к %s."
+
+msgid "new_to_lantern"
+msgstr "Нужна помощь?"
+
+msgid "email_has_been_updated"
+msgstr "Обновление адреса электронной почты"
+
+msgid "email_has_been_updated_message"
+msgstr "Адрес электронной почты изменен."
+
+msgid "email_has_been_verified"
+msgstr "Подтверждение адреса электронной почты"
+
+msgid "email_has_been_verified_message"
+msgstr "Адрес электронной почты подтвержден."
+
+msgid "device_limit_reached"
+msgstr "Достигнут лимит устройств"
+
+msgid "device_limit_reached_message"
+msgstr ""
+"Вы не можете войти в аккаунт, так как подключили максимальное количество "
+"устройств (3). Удалите хотя бы одно из списка ниже."
+
+msgid "enter_activation_code"
+msgstr "Ввести код активации"
+
+msgid "check_your_email"
+msgstr "Проверьте электронную почту"
+
+msgid "please_verify_email"
+msgstr "Убедитесь, что ее адрес указан верно."
+
+msgid "verify"
+msgstr "Подтвердить"
 
 msgid "cannot_login"
 msgstr "Не удается войти в систему "
+
+msgid "privacy_policy"
+msgstr "Политика конфиденциальности "
+
+msgid "terms_of_service"
+msgstr "Условия использования"
 
 msgid "invalid_verification_code"
 msgstr "Неверный код подтверждения"

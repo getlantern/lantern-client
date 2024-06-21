@@ -21,6 +21,7 @@ class CDialog extends StatefulWidget {
       description: description,
       iconPath: ImagePaths.alert,
       barrierDismissible: false,
+      agreeText: 'OK'.i18n,
     ).show(context);
   }
 
