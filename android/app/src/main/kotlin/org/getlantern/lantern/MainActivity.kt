@@ -107,7 +107,7 @@ class MainActivity :
                     vpnModel.updateBandwidth(event.bandwidth)
                 }
                 is AppEvent.LoConfEvent -> {
-                    doProcessLoconf(appEvent.loConf)
+                    doProcessLoconf(appEvent.loconf)
                 }
                 is AppEvent.LocaleEvent -> {
                     // Recreate the activity when the language changes
@@ -254,7 +254,7 @@ class MainActivity :
      * settings
      */
     private fun fetchLoConf() {
-        fetch { loconf -> runOnUiThread { processLoconf(loconf) } }
+        fetch { loconf -> runOnUiThread { doProcessLoconf(loconf) } }
     }
 
     fun onInitializingAccount(status: AccountInitializationStatus.Status) {

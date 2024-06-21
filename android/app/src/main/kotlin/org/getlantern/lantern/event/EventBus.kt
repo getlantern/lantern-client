@@ -1,10 +1,9 @@
 package org.getlantern.lantern.event
 
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlin.coroutines.coroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -17,6 +16,8 @@ import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.mobilesdk.model.LoConf
+import kotlin.coroutines.coroutineContext
+import java.util.Locale
 
 object EventBus {
     private val _events = MutableSharedFlow<Any>()
@@ -83,11 +84,11 @@ internal object EventHandler {
 
 sealed class AppEvent {
     data class AccountInitializationEvent(
-        val status: AccountInitializationStatus.Status
+        val status: AccountInitializationStatus.Status,
     ) : AppEvent()
 
     data class BandwidthEvent(
-        val bandwidth: Bandwidth
+        val bandwidth: Bandwidth,
     ) : AppEvent()
 
     data class LocaleEvent(

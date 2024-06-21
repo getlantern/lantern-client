@@ -135,6 +135,9 @@ abstract class SessionManager(application: Application) : Session {
         if (locale != null) {
             val oldLocale = prefs.getString(LANG, "")
             prefs.edit().putString(LANG, locale.toString()).apply()
+            if (locale.language != oldLocale) {
+                EventHandler.postLocaleEvent(locale)
+            }
         }
     }
 
