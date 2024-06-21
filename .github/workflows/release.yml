@@ -188,7 +188,7 @@ jobs:
 
       - name: Upload Lantern to TestFlight
         uses: apple-actions/upload-testflight-build@v1
-        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+        if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
         with:
           app-path: Lantern.ipa
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
