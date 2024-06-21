@@ -28,6 +28,7 @@ import kotlinx.coroutines.*
 import okhttp3.Response
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.AppEvent
+import org.getlantern.lantern.event.AppEvent.*
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
@@ -98,14 +99,32 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 LanternApp.getSession().dnsDetector.publishNetworkAvailability()
             }
         }
-        EventHandler.subscribeAppEvent { appEvent ->
-            if (appEvent is AppEvent.StatsEvent) {
-                val stats = appEvent.stats
-                Logger.debug("Stats updated", stats.toString())
-                sessionModel.saveServerInfo(
-                    Vpn.ServerInfo.newBuilder().setCity(stats.city).setCountry(stats.country)
-                        .setCountryCode(stats.countryCode).build(),
-                )
+        EventHandler.subscribeAppEvents { appEvent ->
+            when (appEvent) {
+                is AppEvent.BandwidthEvent -> {
+                    val event = appEvent as AppEvent.BandwidthEvent
+                    Logger.debug("bandwidth updated", event.bandwidth.toString())
+                    vpnModel.updateBandwidth(event.bandwidth)
+                }
+                is AppEvent.StatsEvent -> {
+                    val stats = appEvent.stats
+                    Logger.debug("Stats updated", stats.toString())
+                    sessionModel.saveServerInfo(
+                        Vpn.ServerInfo.newBuilder().setCity(stats.city).setCountry(stats.country)
+                            .setCountryCode(stats.countryCode).build(),
+                    )
+                }
+                is AppEvent.StatusEvent -> {
+                    updateUserData()
+                    updatePaymentMethods()
+                    updateCurrencyList()
+                }
+                is AppEvent.VpnStateEvent -> {
+                    updateStatus(appEvent.vpnState.useVpn)
+                }
+                else -> {
+                    Logger.debug(TAG, "Unknown app event " + appEvent)
+                }
             }
         }
         MethodChannel(
@@ -266,28 +285,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         }
     }
 
-    //@Subscribe(threadMode = ThreadMode.MAIN)
-    fun vpnStateChanged(state: VpnState) {
-        updateStatus(state.useVpn)
-    }
-
-    //@Subscribe(threadMode = ThreadMode.MAIN)
-    fun lanternStarted(status: LanternStatus) {
-        updateUserData()
-        updatePaymentMethods()
-        updateCurrencyList();
-    }
-
-    //@Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun onEvent(event: Event) {
-        eventManager.onNewEvent(event = event)
-    }
-
-    //@Subscribe(threadMode = ThreadMode.MAIN)
-    fun bandwidthUpdated(bandwidth: Bandwidth) {
-        Logger.debug("bandwidth updated", bandwidth.toString())
-        vpnModel.updateBandwidth(bandwidth)
-    }
 
     private fun updateUserData() {
         lanternClient.userData(

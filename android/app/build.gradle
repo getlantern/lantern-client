@@ -413,10 +413,6 @@ dependencies {
     testImplementation "io.mockk:mockk:1.13.5"
 }
 
-kapt {
-    correctErrorTypes true
-}
-
 apply plugin: 'com.google.gms.google-services'
 
 sentry {

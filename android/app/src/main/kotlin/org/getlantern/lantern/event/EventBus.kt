@@ -4,13 +4,19 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
+import org.getlantern.lantern.model.AccountInitializationStatus
+import org.getlantern.lantern.model.Bandwidth
+import org.getlantern.lantern.model.LanternStatus
+import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.model.Stats
-import kotlin.coroutines.coroutineContext
+import org.getlantern.lantern.model.VpnState
+import org.getlantern.mobilesdk.model.LoConf
 
 object EventBus {
     private val _events = MutableSharedFlow<Any>()
@@ -32,13 +38,37 @@ object EventBus {
 
 // EventHandler is used to publish app events that subscribers can listen to from anywhere
 internal object EventHandler {
-    suspend fun postStatsEvent(stats: Stats) {
+    fun postAccountInitializationStatus(status: AccountInitializationStatus.Status) {
+        postAppEvent(AppEvent.AccountInitializationEvent(status))
+    }
+
+    fun postBandwidthEvent(bandwidth: Bandwidth) {
+        postAppEvent(AppEvent.BandwidthEvent(bandwidth))
+    }
+
+    fun postLoConfEvent(loconf: LoConf) {
+        postAppEvent(AppEvent.LoConfEvent(loconf))
+    }
+
+    fun postStatsEvent(stats: Stats) {
+        postAppEvent(AppEvent.StatsEvent(stats))
+    }
+
+    fun postStatusEvent(status: LanternStatus) {
+        postAppEvent(AppEvent.StatusEvent(status))
+    }
+
+    fun postVpnStateEvent(vpnState: VpnState) {
+        postAppEvent(AppEvent.VpnStateEvent(vpnState))
+    }
+
+    fun postAppEvent(appEvent: AppEvent) {
         CoroutineScope(Dispatchers.IO).launch {
-            EventBus.publish(AppEvent.StatsEvent(stats))
+            EventBus.publish(appEvent)
         }
     }
 
-    fun subscribeAppEvent(onEvent: (AppEvent) -> Unit) {
+    fun subscribeAppEvents(onEvent: (AppEvent) -> Unit) {
         CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
             EventBus.subscribe<AppEvent> { appEvent ->
                 onEvent(appEvent)
@@ -48,7 +78,27 @@ internal object EventHandler {
 }
 
 sealed class AppEvent {
+    data class AccountInitializationEvent(
+        val status: AccountInitializationStatus.Status
+    ) : AppEvent()
+
+    data class BandwidthEvent(
+        val bandwidth: Bandwidth
+    ) : AppEvent()
+
+    data class LoConfEvent(
+        val loconf: LoConf,
+    ) : AppEvent()
+
     data class StatsEvent(
         val stats: Stats,
+    ) : AppEvent()
+
+    data class StatusEvent(
+        val status: LanternStatus,
+    ) : AppEvent()
+
+    data class VpnStateEvent(
+        val vpnState: VpnState,
     ) : AppEvent()
 }
