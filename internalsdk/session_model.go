@@ -86,7 +86,6 @@ const (
 	pathExpirydate   = "expirydate"
 	pathExpirystr    = "expirydatestr"
 
-	pathIsAccountVerified = "isAccountVerified"
 	pathIsUserLoggedIn    = "IsUserLoggedIn"
 	pathIsFirstTime       = "isFirstTime"
 	pathDeviceLinkingCode = "devicelinkingcode"
@@ -1238,9 +1237,8 @@ func signup(session *SessionModel, email string, password string) error {
 	//Request successfull then save salt
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
-			pathUserSalt:          salt,
-			pathIsAccountVerified: false,
-			pathEmailAddress:      lowerCaseEmail,
+			pathUserSalt:     salt,
+			pathEmailAddress: lowerCaseEmail,
 		})
 	})
 	if err != nil {
@@ -1283,9 +1281,7 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 	}
 	log.Debugf("Signup verfication response %v", signupEmailResendResponse)
 	//Chaneg account status
-	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.Put[bool](tx, pathIsAccountVerified, true, "")
-	})
+	return nil
 }
 
 // Todo find way to optimize this method
@@ -1364,13 +1360,6 @@ func login(session *SessionModel, email string, password string) error {
 		return log.Errorf("too-many-devices %v", err)
 	}
 	log.Debugf("Login response %+v", login)
-
-	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.Put[bool](tx, pathIsAccountVerified, login.EmailConfirmed, "")
-	})
-	if err != nil {
-		log.Errorf("Error while saving user status %v", err)
-	}
 
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
@@ -1749,10 +1738,9 @@ func deleteAccount(session SessionModel, password string) error {
 	// Clear Local DB
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
-			pathIsAccountVerified: false,
-			pathEmailAddress:      "",
-			pathUserID:            0,
-			pathProUser:           false,
+			pathEmailAddress: "",
+			pathUserID:       0,
+			pathProUser:      false,
 		})
 	})
 	if err != nil {
