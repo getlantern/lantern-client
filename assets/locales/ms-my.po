@@ -2,16 +2,17 @@
 # Translators:
 # abuyop <abuyop@gmail.com>, 2022
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2023
-# Lantern, 2023
-# e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2023
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2023
-# e2f <projects@e2f.com>, 2023
-# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2023
-# Alyssa Chung <lisiachung7@gmail.com>, 2023
+# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2024
+# Alyssa Chung <lisiachung7@gmail.com>, 2024
+# Lantern, 2024
+# e2f <projects@e2f.com>, 2024
+# e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2024
+# Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Alyssa Chung <lisiachung7@gmail.com>, 2023\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
 "Language-Team: Malay (https://app.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -34,6 +35,99 @@ msgstr "Mungkin Kemudian"
 msgid "try"
 msgstr "Cubalah"
 
+msgid "sign_in"
+msgstr "Sign In"
+
+msgid "enter_email"
+msgstr "Masukkan E-mel"
+
+msgid "enter_password"
+msgstr ""
+
+msgid "forgot_password"
+msgstr "Terlupa Kata Laluan "
+
+msgid "forgot_your_password"
+msgstr "Terlupa kata laluan anda? "
+
+msgid "click_here"
+msgstr "Klik di sini "
+
+msgid "reset_password"
+msgstr "Tetapkan Semula Kata Laluan"
+
+msgid "lantern_pro_email"
+msgstr "Email Lantern Pro "
+
+msgid "return_to_sign_in"
+msgstr "Kembali ke Log Masuk "
+
+msgid "enter_confirmation_code"
+msgstr "Masukkan Kod Pengesahan "
+
+msgid "confirmation_code_msg"
+msgstr ""
+"Kod pengesahan telah dihantar ke XX. Masukkan di sini untuk mengamankan "
+"akaun anda dan mengaktifkan pemulihan kata laluan. "
+
+msgid "resend_confirmation_code"
+msgstr "Hantar Semula Email Pengesahan "
+
+msgid "email_already_exists"
+msgstr "Email Sudah Wujud "
+
+msgid "email_already_exists_msg"
+msgstr ""
+"Email ini telah diambil, jika anda sudah mempunyai akaun dengan email ini, "
+"anda boleh memulihkannya. Jika tidak, sila kembali dan pilih alamat email "
+"yang berbeza. "
+
+msgid "recover_account"
+msgstr "Pulihkan Akaun "
+
+msgid "back"
+msgstr "kembali "
+
+msgid "change_email"
+msgstr "Tukar Email "
+
+msgid "new_password"
+msgstr "Kata Laluan Baharu"
+
+msgid "confirm_new_password"
+msgstr "Sahkan Kata Laluan Baharu"
+
+msgid "already_have_an_account"
+msgstr "Sudah mempunyai akaun? "
+
+msgid "create_account"
+msgstr "Cipta Akaun"
+
+msgid "create_password"
+msgstr "Buat Kata Laluan "
+
+msgid "by_creating_an_account"
+msgstr "Dengan Membuat Akaun, anda bersetuju dengan "
+
+msgid "confirm_email"
+msgstr "Sahkan Emel"
+
+msgid "update_pro_account"
+msgstr "Kemas Kini Akaun Pro "
+
+msgid "update_pro_account_message"
+msgstr ""
+"Perubahan akan datang ke Lantern Pro! Sekarang, anda memerlukan email dan "
+"kata laluan untuk log masuk pada semua peranti, dan untuk mengakses "
+"Pengurusan Akaun. Sila luangkan beberapa saat untuk menambah maklumat ini ke"
+" akaun anda. "
+
+msgid "not_now"
+msgstr "Tidak sekarang "
+
+msgid "update_account"
+msgstr "Kemas Kini Akaun "
+
 msgid "new"
 msgstr "Baharu"
 
@@ -42,6 +136,12 @@ msgstr "Penggunaan Data Harian"
 
 msgid "is"
 msgstr "is"
+
+msgid "connect"
+msgstr "Sambuungan"
+
+msgid "disconnect"
+msgstr "Putuskan sambungan"
 
 msgid "connected"
 msgstr "Telah disambungkan"
@@ -77,6 +177,8 @@ msgstr "Go Pro!"
 
 msgid "Go Pro Description"
 msgstr ""
+"Buka kelajuan yang lebih pantas, pengalaman tanpa iklan, dan data tanpa had!"
+" "
 
 msgid "Server Location"
 msgstr "Lokasi Server"
@@ -110,7 +212,7 @@ msgstr "Saya mengesahkan bahawa saya ingin memadamkan data sembang saya"
 msgid "Pro Account Management"
 msgstr "Akaun Pengurusan Pro"
 
-msgid "Link Device"
+msgid "link_device"
 msgstr "Pautkan Peranti"
 
 msgid "Upgrade to Lantern Pro"
@@ -159,12 +261,6 @@ msgstr "Am"
 msgid "about"
 msgstr "Mengenai"
 
-msgid "privacy_policy"
-msgstr "Polisi Privasi"
-
-msgid "terms_of_service"
-msgstr "Terma Perkhidmatan"
-
 msgid "proxy_all"
 msgstr "Proksi semua"
 
@@ -187,7 +283,7 @@ msgid "select_an_issue"
 msgstr "Sila Pilih satu Isu"
 
 msgid "enter_description"
-msgstr ""
+msgstr "Sila jelaskan masalah anda "
 
 msgid "cannot_access_blocked_sites"
 msgstr "Tidak boleh akses laman-laman disekat"
@@ -195,17 +291,35 @@ msgstr "Tidak boleh akses laman-laman disekat"
 msgid "cannot_complete_purchase"
 msgstr "Tidak dapat melengkapkan pembelian"
 
+msgid "discover_not_working"
+msgstr "Fungsi 'Discover' tidak berfungsi "
+
 msgid "cannot_sign_in"
 msgstr "Tidak boleh mendaftar masuk"
 
 msgid "spinner_loads_endlessly"
 msgstr "Pemutar dimuatkan tanpa henti"
 
+msgid "slow"
+msgstr "Lambat"
+
+msgid "cannot_link_devices"
+msgstr "Tidak boleh pautkan peranti"
+
+msgid "wrong_device_linking_code"
+msgstr "Kod pautan alatan salah atau tidak sah "
+
+msgid "cannot_remove_device"
+msgstr "Tidak boleh mengeluarkan peranti "
+
+msgid "application_crashes"
+msgstr "Aplikasi ranap"
+
 msgid "other"
 msgstr "Lain-lain"
 
 msgid "issue_description"
-msgstr "Penerangan Isu"
+msgstr "Jelaskan masalah anda "
 
 msgid "check_for_updates"
 msgstr "Semak kemas kini"
@@ -247,10 +361,10 @@ msgid "device_linking_pin"
 msgstr "Pin pemautan peranti"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "Buka item menu 'Tambah Peranti' pada peranti Pro anda. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "Masukkan PIN pautan peranti dan klik hantar "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr "* Pastikan kedua-dua peranti menjalankan versi terbaru Lantern"
@@ -268,14 +382,14 @@ msgstr ""
 msgid "Link via Email"
 msgstr "Pautkan melalui E-mel"
 
-msgid "lantern_pro_email"
-msgstr "E-mel Pro Lantern"
-
 msgid "lantern_desktop"
 msgstr "Desktop Lantern"
 
+msgid "report_description"
+msgstr "Penerangan Isu"
+
 msgid "report_issue"
-msgstr ""
+msgstr "Lapor Masalah "
 
 msgid "report_an_issue"
 msgstr "Melapor suatu Isu"
@@ -297,7 +411,7 @@ msgstr ""
 "didapati di pautan di atas."
 
 msgid "share_link"
-msgstr ""
+msgstr "Kongsi Pautan "
 
 msgid "share_title"
 msgstr "Kongsikan pautan muat turun Lantern"
@@ -329,8 +443,8 @@ msgstr "bulan"
 msgid "months"
 msgstr "bulan"
 
-msgid "enter_email"
-msgstr "Masukkan E-mel"
+msgid "enter_email_to_complete_purchase"
+msgstr "Masukkan e-mel untuk melengkapkan pembelian "
 
 msgid "error_fetching_plans"
 msgstr "Ralat mendapatkan pelan, sila mulakan semula Lantern dan cuba lagi."
@@ -360,10 +474,12 @@ msgid "referral_code"
 msgstr "Kod rujukan"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "Kongsi Kod Rujukan "
 
 msgid "share_message_referral_code"
 msgstr ""
+"Untuk sebulan percuma Lantern Pro, gunakan kod rujukan ini: %s ; Anda boleh "
+"memuat turunnya di sini: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "Tambah kod Rujukan"
@@ -433,7 +549,7 @@ msgstr ""
 "Maksimum tiga peranti boleh disambungkan dengan akaun anda."
 
 msgid "by_clicking_tos"
-msgstr "Dengan mengklik %s, anda bersetuju dengan"
+msgstr "Dengan mengklik %s, anda bersetuju dengan "
 
 msgid "tos"
 msgstr "Terma Perkhidmatan"
@@ -483,6 +599,18 @@ msgstr "Ya"
 msgid "No"
 msgstr "Tidak"
 
+msgid "exit"
+msgstr "Keluar "
+
+msgid "show"
+msgstr "Keluar "
+
+msgid "status_on"
+msgstr "Status: Hidup "
+
+msgid "status_off"
+msgstr "Status: Mati "
+
 msgid "Enter or paste linking code"
 msgstr "Masukkan atau tampal kod pemautan"
 
@@ -522,6 +650,9 @@ msgid "confirm_remove_device"
 msgstr ""
 "Adakah anda pasti ingin mengeluarkan pautan peranti dari account Pro anda?"
 
+msgid "confirm_close_window"
+msgstr "Adakah anda pasti mahu menutup Lantern? "
+
 msgid "unlimited_data"
 msgstr "Data Tidak Terbatas"
 
@@ -533,6 +664,9 @@ msgstr "Tiada Iklan"
 
 msgid "choose_plan"
 msgstr "Pilih Pelan"
+
+msgid "billed_one_time"
+msgstr "dibilkan sekali sahaja "
 
 msgid "connect_up_to_3_devices"
 msgstr "Sambungkan sehingga 3 peranti"
@@ -734,9 +868,6 @@ msgstr "Semua mesej tidak akan hilang untuk anda dan %s."
 
 msgid "message_disappearing_description"
 msgstr "Semua mesej akan hilang selepas %s untuk anda dan %s."
-
-msgid "delete"
-msgstr "Padam"
 
 msgid "view_contact_info"
 msgstr "Lihat Maklumat Kenalan"
@@ -1553,3 +1684,232 @@ msgstr "FAQ"
 
 msgid "add_device"
 msgstr "Tambah Peranti"
+
+msgid "search_apps"
+msgstr "Cari Apl "
+
+msgid "user_not_found"
+msgstr ""
+"Pengguna tidak dikenali. Sila semak maklumat anda dan cuba lagi. Jika anda "
+"terus mengalami masalah, sila hubungi pasukan sokongan kami untuk bantuan. "
+
+msgid "email_resend_message"
+msgstr "Kod pengesahan baru anda telah dihantar "
+
+msgid "signup_error"
+msgstr ""
+"Nampaknya ada sesuatu yang tidak kena dengan pendaftaran. Sila cuba lagi, "
+"dan jika masalah berterusan, hubungi pasukan sokongan kami. "
+
+msgid "signup_error_user_exists"
+msgstr ""
+"Nampaknya ada sesuatu yang tidak kena dengan pendaftaran. Sila cuba "
+"menetapkan semula kata laluan anda, dan jika masalah berterusan, hubungi "
+"pasukan sokongan kami. "
+
+msgid "confirm_email_error"
+msgstr "Sila sahkan email anda "
+
+msgid "password_cannot_be_empty"
+msgstr "Kata laluan tidak boleh kosong "
+
+msgid "password_must_be_at_least_8_characters"
+msgstr "Kata laluan mesti sekurang-kurangnya 8 atau lebih aksara "
+
+msgid "sign_out"
+msgstr "Log keluar "
+
+msgid "sign_out_message"
+msgstr ""
+"Log keluar akan menukar Lantern ke versi percuma. Untuk mengakses akaun anda"
+" lagi, anda perlu log masuk semula. "
+
+msgid "change_password"
+msgstr "Ubah Kata Laluan"
+
+msgid "password"
+msgstr "Kata Laluan"
+
+msgid "new_email"
+msgstr "Alamat Email Baru "
+
+msgid "new_email_same_as_old_email"
+msgstr "Alamat email baru tidak boleh sama dengan alamat email lama anda "
+
+msgid "danger_zone"
+msgstr "Zon bahaya "
+
+msgid "delete_account"
+msgstr "Padam Akaun "
+
+msgid "delete"
+msgstr "Padam"
+
+msgid "delete_account_message"
+msgstr ""
+"Memadam akaun anda tidak boleh dibatalkan. Anda akan kehilangan semua akses "
+"peranti dan melepaskan sebarang masa akaun Pro tanpa bayaran balik. "
+
+msgid "delete_your_account"
+msgstr "Padam akaun anda? "
+
+msgid "confirm_deletion"
+msgstr "Sahkan Pemadaman "
+
+msgid "account_deleted"
+msgstr "Akaun Dipadamkan "
+
+msgid "account_deleted_message"
+msgstr "Akaun anda telah dipadamkan secara kekal. "
+
+msgid "password_has_been_updated"
+msgstr "Kata laluan telah dikemas kini "
+
+msgid "password_has_been_updated_message"
+msgstr "Kata laluan anda telah berjaya ditetapkan semula "
+
+msgid "invalid_code"
+msgstr ""
+"Kod salah atau mungkin telah tamat tempoh. Sila cuba hantar semula lagi "
+
+msgid "get_lantern_pro"
+msgstr "Dapatkan Lantern Pro"
+
+msgid "try_lantern_pro"
+msgstr "Cuba Lantern secara percuma! "
+
+msgid "continue_for_free"
+msgstr "Teruskan secara Percuma "
+
+msgid "recovery_not_found"
+msgstr "Peranti tidak dikaitkan dengan pengguna ini"
+
+msgid "device_added"
+msgstr "Peranti tidak dikaitkan dengan pengguna ini"
+
+msgid "device_added_message"
+msgstr ""
+"Peranti anda telah berjaya ditambah. Jika anda tidak melihat peranti yang "
+"disambungkan, sila mulakan semula aplikasi pada kedua-dua peranti "
+
+msgid "wrong_link_code"
+msgstr ""
+
+msgid "recovery_code_sent"
+msgstr "Kod pemulihan telah dihantar "
+
+msgid "device_added_msg"
+msgstr "Peranti ini telah Dipautkan ke %s "
+
+msgid "new_to_lantern"
+msgstr "Baru dengan Lantern? "
+
+msgid "email_has_been_updated"
+msgstr "Email telah dikemas kini "
+
+msgid "email_has_been_updated_message"
+msgstr "Email anda telah berjaya diubah "
+
+msgid "email_has_been_verified"
+msgstr "Email telah disahkan "
+
+msgid "email_has_been_verified_message"
+msgstr "Email anda telah disahkan berjaya "
+
+msgid "device_limit_reached"
+msgstr "Had Peranti Dicapai "
+
+msgid "device_limit_reached_message"
+msgstr ""
+"Anda kini log masuk pada bilangan maksimum peranti (3). Untuk log masuk pada"
+" peranti ini, sila pilih dan keluarkan salah satu peranti lain anda di "
+"bawah. "
+
+msgid "enter_activation_code"
+msgstr "Masukkan Kod Pengaktifan "
+
+msgid "check_your_email"
+msgstr "Semak Alamat Email Anda "
+
+msgid "please_verify_email"
+msgstr "Sila sahkan bahawa alamat email yang anda masukkan adalah betul. "
+
+msgid "verify"
+msgstr "Sahkan"
+
+msgid "cannot_login"
+msgstr "Tidak boleh log masuk "
+
+msgid "privacy_policy"
+msgstr "Polisi Privasi"
+
+msgid "terms_of_service"
+msgstr "Terma Perkhidmatan"
+
+msgid "invalid_verification_code"
+msgstr "Kod pengessahan yang tidah sah"
+
+msgid "wrong_seller_code"
+msgstr "Kod penjual semula tidak betul. Sila sahkan dan cuba lagi. "
+
+msgid "follow_us"
+msgstr "Ikuti Kami "
+
+msgid "follow_us_telegram"
+msgstr "Ikuti kami di Telegram "
+
+msgid "follow_us_instagram"
+msgstr "Ikuti kami di Instagram "
+
+msgid "follow_us_facebook"
+msgstr "Ikuti kami di Facebook "
+
+msgid "follow_us_x"
+msgstr "Ikuti kami di X "
+
+msgid "report_issue_error"
+msgstr "Kami mengalami kesukaran teknikal. Cuba lagi nanti. "
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr "Kami mengalami kesukaran teknikal. Cuba lagi nanti. "
+
+msgid "a_temporary_error_occurred"
+msgstr "Ralat sementara berlaku "
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+"Maaf, kami tidak dapat memuatkan halaman itu pada masa ini, sila tekan "
+"'Refresh' untuk mencuba lagi. "
+
+msgid "refresh"
+msgstr "Muat semula"
+
+msgid "check_your_internet_connection"
+msgstr "Semak sambungan internet anda "
+
+msgid "please_try"
+msgstr "Sila cuba "
+
+msgid "turning_off_airplane_mode"
+msgstr "Matikan mod kapal terbang "
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr "Hidupkan data mudah alih atau wifi "
+
+msgid "check_the_signal_in_your_area"
+msgstr "Semak isyarat di kawasan anda "
+
+msgid "got_it"
+msgstr "Faham"
+
+msgid "fetching_configuration"
+msgstr "Mengambil Konfigurasi "
+
+msgid "establish_connection_to_server"
+msgstr "Menjalin sambungan ke pelayan "
+
+msgid "file_size_limit_title"
+msgstr "Had Tercapai "
+
+msgid "file_size_limit_description"
+msgstr "Saiz lampiran hendaklah di bawah 100 MB"
