@@ -46,6 +46,10 @@ internal object EventHandler {
         postAppEvent(AppEvent.BandwidthEvent(bandwidth))
     }
 
+    fun postLocaleEvent(locale: Locale) {
+        postAppEvent(AppEvent.LocaleEvent(locale))
+    }
+
     fun postLoConfEvent(loconf: LoConf) {
         postAppEvent(AppEvent.LoConfEvent(loconf))
     }
@@ -84,6 +88,10 @@ sealed class AppEvent {
 
     data class BandwidthEvent(
         val bandwidth: Bandwidth
+    ) : AppEvent()
+
+    data class LocaleEvent(
+        val locale: Locale,
     ) : AppEvent()
 
     data class LoConfEvent(
