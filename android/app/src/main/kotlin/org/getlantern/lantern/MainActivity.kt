@@ -101,6 +101,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         }
         EventHandler.subscribeAppEvents { appEvent ->
             when (appEvent) {
+                is AppEvent.AccountInitializationEvent -> onInitializingAccount(appEvent.status)
                 is AppEvent.BandwidthEvent -> {
                     val event = appEvent as AppEvent.BandwidthEvent
                     Logger.debug("bandwidth updated", event.bandwidth.toString())
@@ -245,7 +246,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         fetch { loconf -> runOnUiThread { processLoconf(loconf) } }
     }
 
-    //@Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun onInitializingAccount(status: AccountInitializationStatus) {
         val appName = getString(R.string.app_name)
 
