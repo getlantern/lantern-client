@@ -246,10 +246,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         fetch { loconf -> runOnUiThread { processLoconf(loconf) } }
     }
 
-    fun onInitializingAccount(status: AccountInitializationStatus) {
+    fun onInitializingAccount(status: AccountInitializationStatus.Status) {
         val appName = getString(R.string.app_name)
 
-        when (status.status) {
+        when (status) {
             AccountInitializationStatus.Status.PROCESSING -> {
                 accountInitDialog = AlertDialog.Builder(this).create()
                 accountInitDialog?.setCancelable(false)
