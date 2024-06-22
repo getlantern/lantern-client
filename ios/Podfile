@@ -38,6 +38,7 @@ target 'Runner' do
 #    pod 'SQLite.swift', '~> 0.12.2'
    pod 'Toast-Swift', '~> 5.0.1'
    pod 'CleverAdsSolutions-Base', $casVersion
+   pod 'Sentry/HybridSDK', '~> 8.29.0'
 end
 
 # target 'LanternTests' do
