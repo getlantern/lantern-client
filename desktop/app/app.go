@@ -120,6 +120,9 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 	onProStatusChange(func(isPro bool) {
 		app.statsTracker.SetIsPro(isPro)
 	})
+	datacap.AddDataCapListener(func(hitDataCap bool) {
+		app.statsTracker.SetHitDataCap(hitDataCap)
+	})
 
 	log.Debugf("Using configdir: %v", configDir)
 
