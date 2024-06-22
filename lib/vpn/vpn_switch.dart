@@ -71,26 +71,27 @@ class _VPNSwitchState extends State<VPNSwitch> {
         if (Platform.isAndroid) {
           adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
         }
-        return Transform.scale(
-            scale: 2.5,
-            child: vpnModel.vpnStatus(
-                (BuildContext context, String vpnStatus, Widget? child) {
-              return AdvancedSwitch(
-                width: 60,
-                disabledOpacity: 1,
-                enabled: (internetStatusProvider.isConnected &&
-                    !vpnNotifier.isFlashlightInitializedFailed),
-                initialValue:
-                    vpnStatus == 'connected' || vpnStatus == 'disconnecting',
-                activeColor: onSwitchColor,
-                inactiveColor: (internetStatusProvider.isConnected &&
-                        !vpnNotifier.isFlashlightInitializedFailed)
-                    ? offSwitchColor
-                    : grey3,
-                onChanged: (newValue) =>
-                    vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
-              );
-            }));
+        return vpnModel
+            .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+          // Changes scale on mobile due to hit target
+          return AdvancedSwitch(
+            width: 150,
+            height: 70,
+            borderRadius: BorderRadius.circular(40),
+            disabledOpacity: 1,
+            enabled: (internetStatusProvider.isConnected &&
+                !vpnNotifier.isFlashlightInitializedFailed),
+            initialValue:
+                vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+            activeColor: onSwitchColor,
+            inactiveColor: (internetStatusProvider.isConnected &&
+                    !vpnNotifier.isFlashlightInitializedFailed)
+                ? offSwitchColor
+                : grey3,
+            onChanged: (newValue) =>
+                vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
+          );
+        });
       });
     } else {
       // This ui for desktop

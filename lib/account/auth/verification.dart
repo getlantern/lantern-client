@@ -182,7 +182,6 @@ class _VerificationState extends State<Verification> {
     try {
       context.loaderOverlay.show();
       await sessionModel.validateRecoveryCode(widget.email, code);
-      sessionModel.hasAccountVerified.value = true;
       context.loaderOverlay.hide();
       resolveRoute(code);
     } catch (e) {

@@ -29,7 +29,7 @@ extension Localization on String {
   String doLocalize() => localize(this, translations, locale: locale);
 
   String get i18n => localize(this, translations, locale: locale.replaceFirst('_', '-').toLowerCase());
-  // String get i18n => localize(this, translations, locale: 'hi');
+
 
   String fill(List<Object> params) => localizeFill(this, params);
 }

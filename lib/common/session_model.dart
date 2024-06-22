@@ -23,7 +23,6 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> isPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
-  late ValueNotifier<bool?> hasAccountVerified;
   late ValueNotifier<bool?> proUserNotifier;
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> userEmail;
@@ -51,7 +50,6 @@ class SessionModel extends Model {
       /// This warning is not needed for the Non pro user
       /// This flow is not needed anymore
       /// We don't user create account if email address is not verified
-      hasAccountVerified = ValueNotifier(true);
       hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
       proUserNotifier = singleValueNotifier('prouser', false);
 
