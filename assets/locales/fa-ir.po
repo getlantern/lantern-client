@@ -13,7 +13,6 @@
 # Mary Sol <salar.adlparvar@gmail.com>, 2024
 # Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024
 # Mersen M, 2024
-# Derek F <derek@getlantern.org>, 2024
 # NoProfile, 2024
 # Lantern, 2024
 # Vaseto Nora <n.nouri67@gmail.com>, 2024
@@ -21,10 +20,12 @@
 # Mokah <unfilternet@getlantern.org>, 2024
 # Chip Stehr <chip@getlantern.org>, 2024
 # e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2024
+# Derek F <derek@getlantern.org>, 2024
+# AHMAD MASOUD BARAKZAI, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2024\n"
+"Last-Translator: AHMAD MASOUD BARAKZAI, 2024\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -53,49 +54,53 @@ msgid "enter_email"
 msgstr "وارد کردن ایمیل"
 
 msgid "enter_password"
-msgstr ""
+msgstr "رمز عبور را وارد کنید"
 
 msgid "forgot_password"
-msgstr ""
+msgstr "رمز عبور خود را فراموش کرده‌اید؟"
 
 msgid "forgot_your_password"
-msgstr ""
+msgstr "رمز عبور خود را فراموش کرده‌اید؟"
 
 msgid "click_here"
-msgstr ""
+msgstr "اینجا کلیک کنید"
 
 msgid "reset_password"
 msgstr "بازنشانی گذرواژه"
 
 msgid "lantern_pro_email"
-msgstr ""
+msgstr "ایمیل Lantern Pro"
 
 msgid "return_to_sign_in"
-msgstr ""
+msgstr "بازگشت به ورود"
 
 msgid "enter_confirmation_code"
-msgstr ""
+msgstr "کد تأیید را وارد کنید"
 
 msgid "confirmation_code_msg"
 msgstr ""
+"کد تأییدی به XX ارسال شده است. آن را اینجا وارد کنید تا حساب خود را ایمن و "
+"بازیابی رمز عبور را فعال کنید."
 
 msgid "resend_confirmation_code"
-msgstr ""
+msgstr "ارسال مجدد ایمیل تأیید"
 
 msgid "email_already_exists"
-msgstr ""
+msgstr "این ایمیل قبلاً وجود دارد"
 
 msgid "email_already_exists_msg"
 msgstr ""
+"این ایمیل گرفته شده است، اگر قبلاً با این ایمیل حساب دارید می‌توانید بازیابی"
+" کنید. اگر نه، لطفاً بازگشته و آدرس ایمیل دیگری را انتخاب کنید."
 
 msgid "recover_account"
-msgstr ""
+msgstr "بازیابی حساب"
 
 msgid "back"
-msgstr ""
+msgstr "بازگشت"
 
 msgid "change_email"
-msgstr ""
+msgstr "تغییر ایمیل"
 
 msgid "new_password"
 msgstr "گذرواژه جدید"
@@ -104,7 +109,7 @@ msgid "confirm_new_password"
 msgstr "تأیید گذرواژه جدید"
 
 msgid "already_have_an_account"
-msgstr ""
+msgstr "از قبل حساب کاربری دارید؟"
 
 msgid "create_account"
 msgstr "ایجاد حساب"
@@ -113,22 +118,25 @@ msgid "create_password"
 msgstr "ساختن رمزعبور"
 
 msgid "by_creating_an_account"
-msgstr ""
+msgstr "با ایجاد حساب، شما با شرایط ما موافقت می‌کنید"
 
 msgid "confirm_email"
 msgstr "ایمیل تایید شد"
 
 msgid "update_pro_account"
-msgstr ""
+msgstr "به روز رسانی حساب حرفه ای"
 
 msgid "update_pro_account_message"
 msgstr ""
+"تغییراتی در Lantern Pro در حال آمدن است! اکنون شما به یک ایمیل و رمز عبور "
+"برای ورود در همه دستگاه‌ها و دسترسی به مدیریت حساب نیاز دارید. لطفاً چند "
+"لحظه‌ای برای افزودن این مدارک به حساب خود صرف کنید."
 
 msgid "not_now"
 msgstr "الان نه"
 
 msgid "update_account"
-msgstr ""
+msgstr "به‌روزرسانی حساب"
 
 msgid "new"
 msgstr "جدید"
@@ -546,7 +554,7 @@ msgstr ""
 "به این اکانت وصل کنید."
 
 msgid "by_clicking_tos"
-msgstr ""
+msgstr "با کلیک بر روی %s، شما با شرایط ما موافقت می‌کنید"
 
 msgid "tos"
 msgstr "شرایط استفاده از خدمات"
@@ -1667,30 +1675,38 @@ msgstr "جستجوی برنامه‌ها "
 
 msgid "user_not_found"
 msgstr ""
+"کاربر شناسایی نشد. لطفاً مدارک خود را بررسی کرده و دوباره تلاش کنید. اگر "
+"همچنان با مشکل مواجه شدید، لطفاً با تیم پشتیبانی ما تماس بگیرید."
 
 msgid "email_resend_message"
-msgstr ""
+msgstr "کد تأیید جدید شما ارسال شده است"
 
 msgid "signup_error"
 msgstr ""
+"به نظر می‌رسد چیزی در ثبت‌نام اشتباه شده است. لطفاً دوباره تلاش کنید، و اگر "
+"مشکل ادامه داشت، با تیم پشتیبانی ما تماس بگیرید."
 
 msgid "signup_error_user_exists"
 msgstr ""
+"- به نظر می‌رسد چیزی در ثبت‌نام اشتباه شده است. لطفاً رمز عبور خود را "
+"بازنشانی کنید، و اگر مشکل ادامه داشت، با تیم پشتیبانی ما تماس بگیرید."
 
 msgid "confirm_email_error"
-msgstr ""
+msgstr "لطفاً ایمیل خود را تأیید کنید"
 
 msgid "password_cannot_be_empty"
-msgstr ""
+msgstr "رمز عبور نمی‌تواند خالی باشد"
 
 msgid "password_must_be_at_least_8_characters"
-msgstr ""
+msgstr "رمز عبور باید حداقل 8 کاراکتر یا بیشتر باشد"
 
 msgid "sign_out"
-msgstr ""
+msgstr "خروج از حساب"
 
 msgid "sign_out_message"
 msgstr ""
+"خروج از حساب، Lantern را به نسخه رایگان تغییر می‌دهد. برای دسترسی مجدد به "
+"حساب خود، باید دوباره وارد شوید."
 
 msgid "change_password"
 msgstr "تغییر گذرواژه"
@@ -1699,52 +1715,54 @@ msgid "password"
 msgstr "رمز ورود"
 
 msgid "new_email"
-msgstr ""
+msgstr "آدرس ایمیل جدید"
 
 msgid "new_email_same_as_old_email"
-msgstr ""
+msgstr "آدرس ایمیل جدید نمی تواند با آدرس ایمیل قبلی شما یکسان باشد."
 
 msgid "danger_zone"
-msgstr ""
+msgstr "منطقه خطر"
 
 msgid "delete_account"
-msgstr ""
+msgstr "حذف حساب"
 
 msgid "delete"
 msgstr "حذف"
 
 msgid "delete_account_message"
 msgstr ""
+"حذف حساب شما قابل بازگشت نیست. شما دسترسی به همه دستگاه‌ها را از دست خواهید "
+"داد و هرگونه زمان حساب Pro را بدون بازپرداخت از دست خواهید داد."
 
 msgid "delete_your_account"
-msgstr ""
+msgstr "حساب خود را حذف کنید؟"
 
 msgid "confirm_deletion"
-msgstr ""
+msgstr "تأیید حذف"
 
 msgid "account_deleted"
-msgstr ""
+msgstr "حساب حذف شد"
 
 msgid "account_deleted_message"
-msgstr ""
+msgstr "حساب شما به طور دائمی حذف شده است."
 
 msgid "password_has_been_updated"
-msgstr ""
+msgstr "رمز عبور به‌روزرسانی شده است"
 
 msgid "password_has_been_updated_message"
-msgstr ""
+msgstr "رمز عبور شما با موفقیت بازنشانی شد"
 
 msgid "invalid_code"
-msgstr ""
+msgstr "کد نادرست است یا ممکن است منقضی شده باشد. لطفاً دوباره ارسال کنید"
 
 msgid "get_lantern_pro"
 msgstr "دریافت فانوس حرفه ای"
 
 msgid "try_lantern_pro"
-msgstr ""
+msgstr "Lantern را به صورت رایگان امتحان کنید!"
 
 msgid "continue_for_free"
-msgstr ""
+msgstr "ادامه به صورت رایگان"
 
 msgid "recovery_not_found"
 msgstr "دستگاه به این کاربر وابسته نیست"
@@ -1758,46 +1776,48 @@ msgstr ""
 " در هر دو دستگاه مجدداً راه‌اندازی کنید "
 
 msgid "wrong_link_code"
-msgstr ""
+msgstr "کدی که وارد کرده‌اید نادرست است. لطفاً بررسی کرده و دوباره تلاش کنید."
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "کد بازیابی ارسال شده است"
 
 msgid "device_added_msg"
-msgstr ""
+msgstr "این دستگاه به %s متصل شده است"
 
 msgid "new_to_lantern"
-msgstr ""
+msgstr "تازه به Lantern پیوستید؟"
 
 msgid "email_has_been_updated"
-msgstr ""
+msgstr "ایمیل به‌روزرسانی شده است"
 
 msgid "email_has_been_updated_message"
-msgstr ""
+msgstr "ایمیل شما با موفقیت تغییر کرده است"
 
 msgid "email_has_been_verified"
-msgstr ""
+msgstr "ایمیل تأیید شده است"
 
 msgid "email_has_been_verified_message"
-msgstr ""
+msgstr "ایمیل شما با موفقیت تأیید شده است"
 
 msgid "device_limit_reached"
-msgstr ""
+msgstr "به حد مجاز دستگاه‌ها رسیدید"
 
 msgid "device_limit_reached_message"
 msgstr ""
+"شما در حال حاضر در حداکثر تعداد دستگاه‌ها (3) وارد شده‌اید. برای ورود به این"
+" دستگاه، لطفاً یکی از دستگاه‌های دیگر خود را در زیر انتخاب کرده و حذف کنید."
 
 msgid "enter_activation_code"
-msgstr ""
+msgstr "کد فعال‌سازی را وارد کنید"
 
 msgid "check_your_email"
-msgstr ""
+msgstr "آدرس ایمیل خود را بررسی کنید"
 
 msgid "please_verify_email"
-msgstr ""
+msgstr "لطفاً تأیید کنید که آدرس ایمیلی که وارد کرده‌اید صحیح است."
 
 msgid "verify"
-msgstr ""
+msgstr "تأیید"
 
 msgid "cannot_login"
 msgstr "نمی‌توان وارد سیستم شد "

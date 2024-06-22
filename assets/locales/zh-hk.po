@@ -2,7 +2,6 @@
 # Translators:
 # e2f <projects@e2f.com>, 2023
 # 474874f569f96a33809d02f1de71479e_77020aa, 2024
-# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
 # Po-Chun Huang <aphroteus@gmail.com>, 2024
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2024
@@ -14,10 +13,11 @@
 # YFdyh000 <yfdyh000@gmail.com>, 2024
 # Lantern, 2024
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
+# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024\n"
+"Last-Translator: TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/lantern-1/teams/94371/zh_HK/)\n"
 "Language: zh_HK\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -68,25 +68,25 @@ msgid "enter_confirmation_code"
 msgstr "输入确认码"
 
 msgid "confirmation_code_msg"
-msgstr ""
+msgstr "確認碼已傳送至 XX。在此輸入以保護您的帳戶並啟用重設密碼。"
 
 msgid "resend_confirmation_code"
-msgstr ""
+msgstr "重新傳送確認碼"
 
 msgid "email_already_exists"
-msgstr ""
+msgstr "電子郵件已存在"
 
 msgid "email_already_exists_msg"
-msgstr ""
+msgstr "此电子邮件已被占用，如果您已经拥有使用此电子邮件的帐户，则可以恢复。如果没有，请返回并选择不同的电子邮件地址。"
 
 msgid "recover_account"
-msgstr ""
+msgstr "回复账户"
 
 msgid "back"
-msgstr ""
+msgstr "返回"
 
 msgid "change_email"
-msgstr ""
+msgstr "更改电子邮件"
 
 msgid "new_password"
 msgstr "New Password"
@@ -95,7 +95,7 @@ msgid "confirm_new_password"
 msgstr "Confirm New Password"
 
 msgid "already_have_an_account"
-msgstr ""
+msgstr "已经有账户？"
 
 msgid "create_account"
 msgstr "Create Account"
@@ -104,22 +104,22 @@ msgid "create_password"
 msgstr "创建密码"
 
 msgid "by_creating_an_account"
-msgstr ""
+msgstr "创建账户即表示您同意我们的"
 
 msgid "confirm_email"
 msgstr "確認電子郵件"
 
 msgid "update_pro_account"
-msgstr ""
+msgstr "更新专业版账户"
 
 msgid "update_pro_account_message"
-msgstr ""
+msgstr "蓝灯专业版即将发生变化！现在，您需要使用电子邮件和密码登录所有设备，并访问账户管理。 请花一点时间将这些证书添加到您的账户中。"
 
 msgid "not_now"
 msgstr "暂时不"
 
 msgid "update_account"
-msgstr ""
+msgstr "更新账户"
 
 msgid "new"
 msgstr "全新"
@@ -505,7 +505,7 @@ msgid "pro_purchase_success_descripion"
 msgstr "现在起，蓝灯最高速的数据中心和专线将开始为您提供无限量上网服务。您最多可同时接入三台设备。"
 
 msgid "by_clicking_tos"
-msgstr ""
+msgstr "点击 %s，即表示您已同意我们的"
 
 msgid "tos"
 msgstr "服務條款"
@@ -1582,31 +1582,31 @@ msgid "search_apps"
 msgstr "搜索应用程序 "
 
 msgid "user_not_found"
-msgstr ""
+msgstr "無法辨識使用者。請檢查您的憑證並重試。如果問題仍持續發生，請聯絡我們的支援團隊尋求協助。"
 
 msgid "email_resend_message"
-msgstr ""
+msgstr "您的新確認碼已傳送"
 
 msgid "signup_error"
-msgstr ""
+msgstr "註冊似乎出現問題。請重試，如果問題持續存在，請聯絡我們的支援團隊"
 
 msgid "signup_error_user_exists"
-msgstr ""
+msgstr "註冊時似乎出現問題。請嘗試重設您的密碼，如果問題持續存在，請聯絡我們的支援團隊"
 
 msgid "confirm_email_error"
-msgstr ""
+msgstr "請確認您的電子郵件"
 
 msgid "password_cannot_be_empty"
-msgstr ""
+msgstr "密碼不可為空"
 
 msgid "password_must_be_at_least_8_characters"
-msgstr ""
+msgstr "密碼必須為至少 8 個或以上的字元"
 
 msgid "sign_out"
-msgstr ""
+msgstr "登出"
 
 msgid "sign_out_message"
-msgstr ""
+msgstr "登出會將藍燈切換到免費版本。需要重新登入才能再次存取您的帳戶。"
 
 msgid "change_password"
 msgstr "Change Password"
@@ -1615,52 +1615,52 @@ msgid "password"
 msgstr "Password"
 
 msgid "new_email"
-msgstr ""
+msgstr "新電子郵件地址"
 
 msgid "new_email_same_as_old_email"
-msgstr ""
+msgstr "您的新電子郵件地址不能與舊電子郵件地址相同"
 
 msgid "danger_zone"
-msgstr ""
+msgstr "危險區"
 
 msgid "delete_account"
-msgstr ""
+msgstr "刪除帳戶"
 
 msgid "delete"
 msgstr "刪除"
 
 msgid "delete_account_message"
-msgstr ""
+msgstr "刪除帳戶後無法復原。您將失去所有裝置的存取權限，並且將不退還任何專業帳戶的剩餘時間。"
 
 msgid "delete_your_account"
-msgstr ""
+msgstr "要刪除您的帳戶嗎？"
 
 msgid "confirm_deletion"
-msgstr ""
+msgstr "確認刪除"
 
 msgid "account_deleted"
-msgstr ""
+msgstr "帳戶已刪除"
 
 msgid "account_deleted_message"
-msgstr ""
+msgstr "您的帳戶已永久刪除。"
 
 msgid "password_has_been_updated"
-msgstr ""
+msgstr "密碼已更新"
 
 msgid "password_has_been_updated_message"
-msgstr ""
+msgstr "您的密碼已成功重設"
 
 msgid "invalid_code"
-msgstr ""
+msgstr "代碼不正確或可能已過期。請嘗試再次傳送"
 
 msgid "get_lantern_pro"
 msgstr "取得Lantern 付費專業版"
 
 msgid "try_lantern_pro"
-msgstr ""
+msgstr "免費試用藍燈！"
 
 msgid "continue_for_free"
-msgstr ""
+msgstr "繼續免費使用"
 
 msgid "recovery_not_found"
 msgstr "设备未与此用户关联"
@@ -1672,46 +1672,46 @@ msgid "device_added_message"
 msgstr "您的设备已成功添加。如果您没有看到设备连接，请重新启动两个设备上的应用程序 "
 
 msgid "wrong_link_code"
-msgstr ""
+msgstr "您輸入的代碼不正確。請檢查並重試。"
 
 msgid "recovery_code_sent"
-msgstr ""
+msgstr "復原碼已傳送"
 
 msgid "device_added_msg"
-msgstr ""
+msgstr "此裝置已連結至%s"
 
 msgid "new_to_lantern"
-msgstr ""
+msgstr "初次使用藍燈嗎？"
 
 msgid "email_has_been_updated"
-msgstr ""
+msgstr "電子郵件已更新"
 
 msgid "email_has_been_updated_message"
-msgstr ""
+msgstr "已成功變更您的電子郵件"
 
 msgid "email_has_been_verified"
-msgstr ""
+msgstr "電子郵件已驗證"
 
 msgid "email_has_been_verified_message"
-msgstr ""
+msgstr "已成功驗證您的電子郵件"
 
 msgid "device_limit_reached"
-msgstr ""
+msgstr "已達到裝置限制"
 
 msgid "device_limit_reached_message"
-msgstr ""
+msgstr "您目前登入的裝置數量已達到上限 (3)。 若要在此裝置上登入，請選擇並移除下方的一個其他裝置。"
 
 msgid "enter_activation_code"
-msgstr ""
+msgstr "輸入啟用碼"
 
 msgid "check_your_email"
-msgstr ""
+msgstr "檢查您的電子郵件地址"
 
 msgid "please_verify_email"
-msgstr ""
+msgstr "請確認您輸入的電子郵件地址正確。"
 
 msgid "verify"
-msgstr ""
+msgstr "驗證"
 
 msgid "cannot_login"
 msgstr "无法登录 "
