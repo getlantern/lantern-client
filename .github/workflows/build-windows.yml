@@ -38,7 +38,7 @@ jobs:
       prefix: ${{ inputs.prefix }}
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: true
 
@@ -46,7 +46,7 @@ jobs:
         run: git lfs pull
 
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version-file: "go.mod"
 
@@ -61,7 +61,7 @@ jobs:
           chmod 600 /tmp/cache/.netrc
 
       - name: Setup Sentry CLI
-        uses: mathieu-bour/setup-sentry-cli@v1
+        uses: mathieu-bour/setup-sentry-cli@v2
         with:
           version: latest
           token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
@@ -126,7 +126,7 @@ jobs:
       prefix: ${{ inputs.prefix }}
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: true
       # Install Flutter
@@ -211,7 +211,7 @@ jobs:
         run: |
           sudo apt-get install -y file build-essential pkg-config
           sudo apt-get install -y mingw-w64 nsis
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: windows${{inputs.build-suffix}}-build
