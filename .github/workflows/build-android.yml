@@ -12,11 +12,9 @@ on:
         type: string
         required: true
 
-
 env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
-
 
 jobs:
   build-android:
@@ -40,7 +38,7 @@ jobs:
           flutter-version-file: pubspec.yaml
 
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version-file: "go.mod"
 
@@ -52,7 +50,7 @@ jobs:
           git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
       - name: Setup Sentry CLI
-        uses: mathieu-bour/setup-sentry-cli@v1
+        uses: mathieu-bour/setup-sentry-cli@v2
         with:
           version: latest
           token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
@@ -112,14 +110,14 @@ jobs:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: android-apk-build
           retention-days: 2
           path: |
             lantern-installer.apk
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: android-aab-build
           retention-days: 2
