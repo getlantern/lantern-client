@@ -69,7 +69,8 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
   - Google Play Services
   - Intel x86 Emulator Accelerator (HAXM installer)
 * Click on Apply and accept the Terms and Conditions.
-* If you are opening Xcode first time open Xcode and install necessary components
+* Open Xcode first time open Xcode and install necessary components
+* Download Certificate and provisioning profile from 1Pass [Search [IOS Certificates and profiles](https://my.1password.com/vaults/all/allitems)]
 * Lastly `Flutter Doctor` to confirm that your setup is correct and ready!
 
 ### 🤖 Running the project on Android
