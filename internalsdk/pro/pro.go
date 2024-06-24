@@ -63,6 +63,7 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 	return client
 }
 
+// prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
 func prepareProRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
 	return func(client *resty.Client, req *http.Request) error {
 		uc := userConfig()
