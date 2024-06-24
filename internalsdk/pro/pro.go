@@ -59,13 +59,13 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, client.setUserHeaders(), nil))
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareProRequest(opts.UserConfig), nil))
 	return client
 }
 
-func (c *proClient) setUserHeaders() func(client *resty.Client, req *http.Request) error {
+func prepareProRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
 	return func(client *resty.Client, req *http.Request) error {
-		uc := c.userConfig()
+		uc := userConfig()
 		req.Header.Set("Referer", "http://localhost:37457/")
 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 			common.DeviceIdHeader,
