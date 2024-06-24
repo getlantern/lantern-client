@@ -1,10 +1,9 @@
 name: Publish releases
 
-#on:
-#  push:
-#    branches: [ main ]
-#    tags:
-#      - '*'
+on:
+  push:
+    branches: [ jigar/ios-ci ]
+  workflow_dispatch:
 
 permissions:
   contents: "read"
@@ -14,13 +13,44 @@ env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
 jobs:
-    set-version:
-      runs-on: ubuntu-latest
-      outputs:
-        version: ${{ steps.set-version.outputs.version }}
-        prefix: ${{ steps.set-version.outputs.prefix }}
-        version_file: ${{ steps.set-version.outputs.version_file }}
-      steps:
+  determine-platform:
+    runs-on: ubuntu-latest
+    outputs:
+      platform: ${{ steps.set-platform.outputs.platform }}
+    steps:
+      - name: Determine Platform
+        id: set-platform
+        run: |
+          echo "GITHUB_REF is: $GITHUB_REF"
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+           TAG=${GITHUB_REF#refs/tags/}
+           echo "Tag is: $TAG"
+           if [[ $TAG == ios-* ]]; then
+             echo "Platform determined: ios"
+             echo "platform=ios" >> "$GITHUB_OUTPUT"
+           elif [[ $TAG == android-* ]]; then
+             echo "Platform determined: android"
+             echo "platform=android" >> "$GITHUB_OUTPUT"
+           elif [[ $TAG == desktop-* ]]; then
+             echo "Platform determined: macos"
+             echo "platform=desktop" >> "$GITHUB_OUTPUT"
+          else
+             echo "Platform determined: all (tag did not match specific platforms)"
+             echo "platform=all" >> "$GITHUB_OUTPUT"
+           fi
+          else
+           echo "Not a tag reference, defaulting to all platforms"
+           echo "platform=all" >> "$GITHUB_OUTPUT"
+          fi
+
+  set-version:
+    needs: determine-platform
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set-version.outputs.version }}
+      prefix: ${{ steps.set-version.outputs.prefix }}
+      version_file: ${{ steps.set-version.outputs.version_file }}
+    steps:
       - id: set-version
         shell: python
         run: |
@@ -55,268 +85,165 @@ jobs:
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
 
-    build-linux:
-      uses: ./.github/workflows/build-linux.yml
-      secrets: inherit
-      needs: set-version
-      with:
-        version: ${{ needs.set-version.outputs.version }}
-        prefix: ${{ needs.set-version.outputs.prefix }}
-        dist-suffix: x64
+  build-linux:
+    uses: ./.github/workflows/build-linux.yml
+    secrets: inherit
+    needs: set-version
+    with:
+      version: ${{ needs.set-version.outputs.version }}
+      prefix: ${{ needs.set-version.outputs.prefix }}
+      dist-suffix: x64
 
-#    build-windows-x32:
-#      uses: ./.github/workflows/build-windows.yml
-#      secrets: inherit
-#      needs: set-version
-#      with:
-#        version: ${{ needs.set-version.outputs.version }}
-#        prefix: ${{ needs.set-version.outputs.prefix }}
-#        dist-suffix: 32-bit
-#        installer-suffix: -x32
-#        update-suffix: 386
-#        arch: x32
+  #    build-windows-x32:
+  #      uses: ./.github/workflows/build-windows.yml
+  #      secrets: inherit
+  #      needs: set-version
+  #      with:
+  #        version: ${{ needs.set-version.outputs.version }}
+  #        prefix: ${{ needs.set-version.outputs.prefix }}
+  #        dist-suffix: 32-bit
+  #        installer-suffix: -x32
+  #        update-suffix: 386
+  #        arch: x32
 
-    build-windows-x64:
-      uses: ./.github/workflows/build-windows.yml
-      secrets: inherit
-      needs: set-version
-      with:
-        version: ${{ needs.set-version.outputs.version }}
-        prefix: ${{ needs.set-version.outputs.prefix }}
-        build-suffix: 64
-        dist-suffix: 64-bit
-        update-suffix: x64
-        installer-suffix: -x64
-        arch: x64
+  build-windows-x64:
+    uses: ./.github/workflows/build-windows.yml
+    secrets: inherit
+    needs: set-version
+    with:
+      version: ${{ needs.set-version.outputs.version }}
+      prefix: ${{ needs.set-version.outputs.prefix }}
+      build-suffix: 64
+      dist-suffix: 64-bit
+      update-suffix: x64
+      installer-suffix: -x64
+      arch: x64
 
-    build-darwin:
-      uses: ./.github/workflows/build-darwin.yml
-      secrets: inherit
-      needs: set-version
-      with:
-        macos_version: macos-14
-        xcode_version: latest-stable
-        version: ${{ needs.set-version.outputs.version }}
-        version_file: ${{ needs.set-version.outputs.version_file }}
-        prefix: ${{ needs.set-version.outputs.prefix }}
+  build-darwin:
+    uses: ./.github/workflows/build-darwin.yml
+    secrets: inherit
+    needs: set-version
+    with:
+      macos_version: macos-14
+      xcode_version: latest-stable
+      version: ${{ needs.set-version.outputs.version }}
+      version_file: ${{ needs.set-version.outputs.version_file }}
+      prefix: ${{ needs.set-version.outputs.prefix }}
 
-    build-android:
-      needs: set-version
-      env:
-        version: ${{ needs.set-version.outputs.version }}
-        version_file: ${{ needs.set-version.outputs.version_file }}
-        prefix: ${{ needs.set-version.outputs.prefix }}
-      runs-on: macos-latest-xlarge
-      steps:
-      - uses: actions/checkout@v4
+  build-ios:
+    uses: ./.github/workflows/build-ios.yml
+    secrets: inherit
+    needs: set-version
+    with:
+      macos_version: macos-14
+      xcode_version: latest-stable
+      version: ${{ needs.set-version.outputs.version }}
+      version_file: ${{ needs.set-version.outputs.version_file }}
+      prefix: ${{ needs.set-version.outputs.prefix }}
+
+  build-android:
+    uses: ./.github/workflows/build-android.yml
+    secrets: inherit
+    needs: set-version
+    with:
+      version: ${{ needs.set-version.outputs.version }}
+      version_file: ${{ needs.set-version.outputs.version_file }}
+      prefix: ${{ needs.set-version.outputs.prefix }}
+
+  push-binaries:
+    runs-on: ubuntu-latest
+    needs: [ set-version, build-android, build-ios, build-darwin, build-linux, build-windows-x64 ]
+    env:
+      version: ${{ needs.set-version.outputs.version }}
+      prefix: ${{ needs.set-version.outputs.prefix }}
+    steps:
+      - name: Download the mac build output
+        uses: actions/download-artifact@v4
         with:
-          lfs: true
-
-      - name: Pull LFS objects
-        run: git lfs pull
-
-      # Install Flutter
-      - uses: subosito/flutter-action@v2
+          name: osx-build
+      - name: Download the linux build output
+        uses: actions/download-artifact@v4
         with:
-          channel: "stable"
-          flutter-version-file: pubspec.yaml
+          name: linux-build
 
-      - run: flutter --version
-
-      - name: Setup Go
-        uses: actions/setup-go@v4
+      - name: Download the windows64 build output
+        uses: actions/download-artifact@v4
         with:
-          go-version-file: "go.mod"
+          name: windows64-installer-signed
 
-      - name: Install latest protoc-gen-go
-        run: go install github.com/golang/protobuf/protoc-gen-go@latest
-
-      - name: Granting private modules access
-        run: |
-          git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
-      - name: Setup Sentry CLI
-        uses: mathieu-bour/setup-sentry-cli@v1
-        with:
-          version: latest
-          token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
-          organization: getlantern
-          project: android
-
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Generate ffi bindings
-        run: |
-          make darwin
-          make ffigen
-
-      - name: Setup protoc
-        uses: arduino/setup-protoc@v2
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Activate protoc-gen-dart plugin
-        run: |
-          echo "${HOME}/.pub-cache/bin" >> $GITHUB_PATH
-          dart pub global activate protoc_plugin
-
-      - name: Set gradle properties
-        env:
-          GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
-        run: |
-          mkdir -p ~/.gradle/
-          echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
-          echo "${GRADLE_PROPERTIES}" > ~/.gradle/gradle.properties
-
-      - name: Decode Keystore
-        id: write_file
-        uses: timheuer/base64-to-file@v1.2
-        with:
-          fileName: 'keystore.release.jks'
-          fileDir: './android/app'
-          encodedString: ${{ secrets.KEYSTORE }}
-
-      - name: Generate app.env
-        env:
-          ANDROID_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID }}
-          IOS_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID_IOS }}
-        run: |
-          touch app.env
-          echo "Android_interstitialAd=$ANDROID_INTERSTITIAL_AD_ID" > app.env
-          echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
-
-      - name: Build Android installers
-        run: make package-android
-        env:
-          INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
-          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
-          VERSION: "${{ env.version }}"
-
-      - uses: actions/upload-artifact@v3
+      - name: Download the apk build output
+        uses: actions/download-artifact@v4
         with:
           name: android-apk-build
-          retention-days: 2
-          path: |
-            lantern-installer.apk
 
-      - uses: actions/upload-artifact@v3
+      - name: Download the aab build output
+        uses: actions/download-artifact@v4
         with:
           name: android-aab-build
-          retention-days: 2
-          path: |
-            lantern-installer.aab
 
-      - uses: actions/setup-python@v5
+      - name: Download the IPA
+        uses: actions/download-artifact@v4
         with:
-          python-version: '3.12'
+          name: Lantern.ipa
 
-      - name: Install s3cmd
-        run: pip install s3cmd
+      - name: Upload Lantern to TestFlight
+        uses: apple-actions/upload-testflight-build@v1
+        if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+        with:
+          app-path: Lantern.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
-      - name: Set s3cmd permissions
+      - name: Upload Android App bundle to Play Store (beta)
+        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: org.getlantern.lantern
+          releaseFiles: lantern-installer.aab
+          track: beta
+
+      - name: Upload Android App bundle to Play Store (production)
+        if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: org.getlantern.lantern
+          releaseFiles: lantern-installer.aab
+          track: production
+
+      - name: Grant private modules access
+        run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Clone binaries repo
+        run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
+
+      - name: Rename builds
         run: |
-          echo "[default]" > "$HOME/.s3cfg"
-          echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
-          echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
+          diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
+          diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
+          mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
+          mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
+          diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
+          mv -f Lantern.ipa ${{ env.prefix }}.ipa
 
-      - name: Push binaries to s3
-        env:
-          VERSION: "${{ env.version }}"
-          APK: "${{ env.prefix }}-${{ env.version }}.apk"
-          AAB: "${{ env.prefix }}-${{ env.version }}.aab"
-          update: "lantern_update_android_arm-${{inputs.version}}.bz2"
-          update_source: lantern_update_android_arm.bz2
+      - name: Prepare sha256 sums
         run: |
-          mv ${{ env.update_source }} ${{ env.update }}
-          mv lantern-installer.apk "$APK"
-          mv lantern-installer.aab "$AAB"
-          cp "$APK" ${{ env.prefix }}.apk
-          cp "$AAB" ${{ env.prefix }}.aab
-          echo ${{ env.version }} > ${{ env.version_file }}
-          shasum -a 256 "$APK" | cut -d " " -f 1 > "$APK".sha256
-          shasum -a 256 "$AAB" | cut -d " " -f 1 > "$AAB".sha256
-          shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
-          cp "$APK".sha256 ${{ env.prefix }}.apk.sha256
-          cp "$AAB".sha256 ${{ env.prefix }}.aab.sha256
-          s3cmd put --acl-public "$APK" "$APK".sha256 ${{ env.update }} ${{ env.update }}.sha256 ${{ env.version_file }} ${{ env.prefix }}.apk.sha256 ${{ env.prefix }}.apk "s3://$S3_BUCKET"
-          s3cmd put --acl-public "$AAB" "$AAB".sha256 ${{ env.prefix }}.aab.sha256 ${{ env.prefix }}.aab "s3://$S3_BUCKET"
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$APK"
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.apk"
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$AAB"
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
+          shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
+          shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
+          shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
+          shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
+          shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
+          shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
+          shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
 
-    push-binaries:
-      runs-on: ubuntu-latest
-      needs: [ set-version, build-android, build-darwin, build-linux, build-windows-x64 ]
-      env:
-        version: ${{ needs.set-version.outputs.version }}
-        prefix: ${{ needs.set-version.outputs.prefix }}
-      steps:
-        - name: Download the mac build output
-          uses: actions/download-artifact@v4
-          with:
-            name: osx-build
-        - name: Download the linux build output
-          uses: actions/download-artifact@v4
-          with:
-            name: linux-build
-        - name: Download the windows64 build output
-          uses: actions/download-artifact@v4
-          with:
-            name: windows64-installer-signed
-        - name: Download the apk build output
-          uses: actions/download-artifact@v3
-          with:
-            name: android-apk-build
-        - name: Download the aab build output
-          uses: actions/download-artifact@v3
-          with:
-            name: android-aab-build
-        - name: Upload Android App bundle to Play Store (beta)
-          if: needs.set-version.outputs.prefix == 'lantern-installer-preview'
-          uses: r0adkll/upload-google-play@v1
-          with:
-           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-           packageName: org.getlantern.lantern
-           releaseFiles: lantern-installer.aab
-           track: beta
-        - name: Upload Android App bundle to Play Store (production)
-          if: needs.set-version.outputs.prefix == 'lantern-installer'
-          uses: r0adkll/upload-google-play@v1
-          with:
-           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-           packageName: org.getlantern.lantern
-           releaseFiles: lantern-installer.aab
-           track: production
-        - name: Grant private modules access
-          run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-        - name: Clone binaries repo
-          run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
-        - name: Rename builds
-          run: |
-            diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
-            diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
-            mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
-            mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
-            diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
-        - name: Prepare sha256 sums
-          run: |
-            shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
-            shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
-            shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
-            shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
-            shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
-            shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
-        - name: Commit
-          run: |
-            mv lantern-installer* ./lantern-binaries/
-            cd lantern-binaries
-            git config user.email "admin@getlantern.org"
-            git config user.name "Lantern Bot"
-            git add .
-            git commit -m "Lantern binaries for version ${{ env.version }}"
-            git push origin main
+      - name: Commit
+        run: |
+          mv lantern-installer* ./lantern-binaries/
+          cd lantern-binaries
+          git config user.email "admin@getlantern.org"
+          git config user.name "Lantern Bot"
+          git add .
+          git commit -m "Lantern binaries for version ${{ env.version }}"
+          git push origin main

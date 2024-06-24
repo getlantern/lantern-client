@@ -27,20 +27,19 @@ import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
 import okhttp3.Response
 import org.getlantern.lantern.activity.WebViewActivity_
+import org.getlantern.lantern.event.AppEvent
+import org.getlantern.lantern.event.AppEvent.*
+import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
 import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
-import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
-import org.getlantern.lantern.model.VpnState
 import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
@@ -53,13 +52,12 @@ import org.getlantern.mobilesdk.model.Event
 import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
 import org.getlantern.mobilesdk.model.Survey
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 import java.util.concurrent.*
 
-class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
+class MainActivity :
+    FlutterActivity(),
+    MethodChannel.MethodCallHandler,
     CoroutineScope by MainScope() {
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
@@ -84,31 +82,72 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)
-        eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
-            override fun onListen(event: Event) {
-                if (LanternApp.getSession().lanternDidStart()) {
-                    Plausible.init(applicationContext)
-                    Logger.debug(TAG, "Plausible initialized")
-                    Plausible.enable(true)
-                    fetchLoConf()
-                    Logger.debug(
-                        TAG,
-                        "fetchLoConf() finished at ${System.currentTimeMillis() - start}",
+        eventManager =
+            object : EventManager("lantern_event_channel", flutterEngine) {
+                override fun onListen(event: Event) {
+                    if (LanternApp.getSession().lanternDidStart()) {
+                        Plausible.init(applicationContext)
+                        Logger.debug(TAG, "Plausible initialized")
+                        Plausible.enable(true)
+                        fetchLoConf()
+                        Logger.debug(
+                            TAG,
+                            "fetchLoConf() finished at ${System.currentTimeMillis() - start}",
+                        )
+                    }
+                    LanternApp.getSession().dnsDetector.publishNetworkAvailability()
+                }
+            }
+        EventHandler.subscribeAppEvents { appEvent ->
+            when (appEvent) {
+                is AppEvent.AccountInitializationEvent -> onInitializingAccount(appEvent.status)
+                is AppEvent.BandwidthEvent -> {
+                    val event = appEvent as AppEvent.BandwidthEvent
+                    Logger.debug("bandwidth updated", event.bandwidth.toString())
+                    vpnModel.updateBandwidth(event.bandwidth)
+                }
+                is AppEvent.LoConfEvent -> {
+                    doProcessLoconf(appEvent.loconf)
+                }
+                is AppEvent.LocaleEvent -> {
+                    // Recreate the activity when the language changes
+                    recreate()
+                }
+                is AppEvent.StatsEvent -> {
+                    val stats = appEvent.stats
+                    Logger.debug("Stats updated", stats.toString())
+                    sessionModel.saveServerInfo(
+                        Vpn.ServerInfo
+                            .newBuilder()
+                            .setCity(stats.city)
+                            .setCountry(stats.country)
+                            .setCountryCode(stats.countryCode)
+                            .build(),
                     )
                 }
-                LanternApp.getSession().dnsDetector.publishNetworkAvailability()
+                is AppEvent.StatusEvent -> {
+                    updateUserData()
+                    updatePaymentMethods()
+                    updateCurrencyList()
+                }
+                is AppEvent.VpnStateEvent -> {
+                    updateStatus(appEvent.vpnState.useVpn)
+                }
+                else -> {
+                    Logger.debug(TAG, "Unknown app event " + appEvent)
+                }
             }
         }
-
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "lantern_method_channel",
         ).setMethodCallHandler(this)
 
-        flutterNavigation = MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "navigation",
-        )
+        flutterNavigation =
+            MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "navigation",
+            )
 
         flutterNavigation.setMethodCallHandler { call, _ ->
             if (call.method == "ready") {
@@ -131,10 +170,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         super.onCreate(savedInstanceState)
 
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
-        Logger.debug(TAG, "EventBus.register finished at ${System.currentTimeMillis() - start}")
 
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
@@ -198,7 +233,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
-        EventBus.getDefault().unregister(this)
     }
 
     override fun onMethodCall(
@@ -220,14 +254,13 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
      * settings
      */
     private fun fetchLoConf() {
-        fetch { loconf -> runOnUiThread { processLoconf(loconf) } }
+        fetch { loconf -> runOnUiThread { doProcessLoconf(loconf) } }
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun onInitializingAccount(status: AccountInitializationStatus) {
+    fun onInitializingAccount(status: AccountInitializationStatus.Status) {
         val appName = getString(R.string.app_name)
 
-        when (status.status) {
+        when (status) {
             AccountInitializationStatus.Status.PROCESSING -> {
                 accountInitDialog = AlertDialog.Builder(this).create()
                 accountInitDialog?.setCancelable(false)
@@ -237,7 +270,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 val tvMessage: TextView = dialogView.findViewById(R.id.tvMessage)
                 tvMessage.text = getString(R.string.init_account, appName)
                 dialogView.findViewById<View>(R.id.btnCancel).setOnClickListener {
-                    EventBus.getDefault().removeStickyEvent(status)
                     accountInitDialog?.dismiss()
                     finish()
                 }
@@ -245,12 +277,10 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             }
 
             AccountInitializationStatus.Status.SUCCESS -> {
-                EventBus.getDefault().removeStickyEvent(status)
                 accountInitDialog?.let { it.dismiss() }
             }
 
             AccountInitializationStatus.Status.FAILURE -> {
-                EventBus.getDefault().removeStickyEvent(status)
                 accountInitDialog?.let { it.dismiss() }
 
                 Utils.showAlertDialog(
@@ -264,38 +294,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 )
             }
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun vpnStateChanged(state: VpnState) {
-        updateStatus(state.useVpn)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun lanternStarted(status: LanternStatus) {
-        updateUserData()
-        updatePaymentMethods()
-        updateCurrencyList();
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun onEvent(event: Event) {
-        eventManager.onNewEvent(event = event)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun statsUpdated(stats: Stats) {
-        Logger.debug("Stats updated", stats.toString())
-        sessionModel.saveServerInfo(
-            Vpn.ServerInfo.newBuilder().setCity(stats.city).setCountry(stats.country)
-                .setCountryCode(stats.countryCode).build(),
-        )
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun bandwidthUpdated(bandwidth: Bandwidth) {
-        Logger.debug("bandwidth updated", bandwidth.toString())
-        vpnModel.updateBandwidth(bandwidth)
     }
 
     private fun updateUserData() {
@@ -332,50 +330,51 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                 override fun onSuccess(
                     proPlans: Map<String, ProPlan>,
                     paymentMethods: List<PaymentMethods>,
-
-                    ) {
+                ) {
                     Logger.debug(
                         TAG,
-                        "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans"
+                        "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans",
                     )
                     sessionModel.processPaymentMethods(proPlans, paymentMethods)
                 }
-            }
+            },
         )
     }
 
     private fun updateCurrencyList() {
         val url = LanternHttpClient.createProUrl("/supported-currencies")
-        lanternClient.get(url, object : LanternHttpClient.ProCallback {
-            override fun onFailure(throwable: Throwable?, error: ProError?) {
-                Logger.error(TAG, "Unable to fetch currency list: $error", throwable)
+        lanternClient.get(
+            url,
+            object : LanternHttpClient.ProCallback {
+                override fun onFailure(
+                    throwable: Throwable?,
+                    error: ProError?,
+                ) {
+                    Logger.error(TAG, "Unable to fetch currency list: $error", throwable)
                 /*
                 retry to fetch currency list again
                 fetch until we get the currency list
                 retry after 5 seconds
-                */
-                CoroutineScope(Dispatchers.IO).launch {
-                    delay(5000)
-                    updateCurrencyList()
+                 */
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(5000)
+                        updateCurrencyList()
+                    }
                 }
-            }
 
-            override fun onSuccess(response: Response?, result: JsonObject?) {
-                val currencies = result?.getAsJsonArray("supported-currencies")
-                val currencyList = mutableListOf<String>()
-                currencies?.forEach {
-                    currencyList.add(it.asString.lowercase())
+                override fun onSuccess(
+                    response: Response?,
+                    result: JsonObject?,
+                ) {
+                    val currencies = result?.getAsJsonArray("supported-currencies")
+                    val currencyList = mutableListOf<String>()
+                    currencies?.forEach {
+                        currencyList.add(it.asString.lowercase())
+                    }
+                    LanternApp.getSession().setCurrencyList(currencyList)
                 }
-                LanternApp.getSession().setCurrencyList(currencyList)
-            }
-
-        })
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun processLoconf(loconf: LoConf) {
-        doProcessLoconf(loconf)
+            },
+        )
     }
 
     private fun doProcessLoconf(loconf: LoConf) {
@@ -498,13 +497,14 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
                         msg.append("&nbsp;")
                         var description = "..."
                         try {
-                            description = getString(
-                                resources.getIdentifier(
-                                    permission,
-                                    "string",
-                                    "org.getlantern.lantern",
-                                ),
-                            )
+                            description =
+                                getString(
+                                    resources.getIdentifier(
+                                        permission,
+                                        "string",
+                                        "org.getlantern.lantern",
+                                    ),
+                                )
                         } catch (t: Throwable) {
                             Logger.warn(
                                 PERMISSIONS_TAG,
@@ -563,7 +563,7 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
             }
         } else {
             sendBroadcast(notifications.disconnectIntent())
-            //Update VPN status
+            // Update VPN status
             vpnModel.updateStatus(false)
         }
     }
@@ -632,12 +632,13 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
     }
 
     private fun startVpnService() {
-        val intent: Intent = Intent(
-            this,
-            LanternVpnService::class.java,
-        ).apply {
-            action = LanternVpnService.ACTION_CONNECT
-        }
+        val intent: Intent =
+            Intent(
+                this,
+                LanternVpnService::class.java,
+            ).apply {
+                action = LanternVpnService.ACTION_CONNECT
+            }
 
         startService(intent)
         notifications.vpnConnectedNotification()
@@ -648,12 +649,6 @@ class MainActivity : FlutterActivity(), MethodChannel.MethodCallHandler,
         LanternApp.getSession().updateVpnPreference(useVpn)
         LanternApp.getSession().updateBootUpVpnPreference(useVpn)
         vpnModel.updateStatus(useVpn)
-    }
-
-    // Recreate the activity when the language changes
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun languageChanged(locale: Locale) {
-        recreate()
     }
 
     companion object {
