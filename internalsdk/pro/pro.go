@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"strconv"
+	"net/http/httputil"
 	"strings"
 
 	"github.com/getlantern/errors"
@@ -64,36 +64,20 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 	return client
 }
 
-func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Request) error {
-	return func(client *resty.Client, req *resty.Request) error {
-
+func (c *proClient) setUserHeaders() func(client *resty.Client, req *http.Request) error {
+	return func(client *resty.Client, req *http.Request) error {
 		uc := c.userConfig()
-
 		req.Header.Set("Referer", "http://localhost:37457/")
 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 			common.DeviceIdHeader,
 			common.ProTokenHeader,
 			common.UserIdHeader,
 		}, ", "))
-		req.Header.Set(common.LocaleHeader, uc.GetLanguage())
-
-		if req.Header.Get(common.DeviceIdHeader) == "" {
-			if deviceID := uc.GetDeviceID(); deviceID != "" {
-				req.Header.Set(common.DeviceIdHeader, deviceID)
-			}
-		}
-
-		if req.Header.Get(common.ProTokenHeader) == "" {
-			if token := uc.GetToken(); token != "" {
-				req.Header.Set(common.ProTokenHeader, token)
-			}
-		}
-		if req.Header.Get(common.UserIdHeader) == "" {
-			if userID := uc.GetUserID(); userID != 0 {
-				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
-			}
-		}
-
+		// Add auth headers only if not present, to avoid race conditions when creating new user or switching user, i.e., linking device
+		// to a new account.
+		common.AddCommonHeadersWithOptions(uc, req, false)
+		d, _ := httputil.DumpRequest(req, false)
+		log.Debugf("Dump is %s", string(d))
 		return nil
 	}
 }
