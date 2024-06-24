@@ -67,7 +67,6 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 func prepareProRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
 	return func(client *resty.Client, req *http.Request) error {
 		uc := userConfig()
-		req.Header.Set("Referer", "http://localhost:37457/")
 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 			common.DeviceIdHeader,
 			common.ProTokenHeader,
