@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"strconv"
 	"strings"
 
 	"github.com/getlantern/errors"
@@ -60,40 +59,20 @@ func NewClient(baseURL string, opts *Opts) ProClient {
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, client.setUserHeaders(), nil))
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareProRequest(opts.UserConfig), nil))
 	return client
 }
 
-func (c *proClient) setUserHeaders() func(client *resty.Client, req *resty.Request) error {
-	return func(client *resty.Client, req *resty.Request) error {
-
-		uc := c.userConfig()
-
-		req.Header.Set("Referer", "http://localhost:37457/")
+// prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
+func prepareProRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
+	return func(client *resty.Client, req *http.Request) error {
+		uc := userConfig()
 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 			common.DeviceIdHeader,
 			common.ProTokenHeader,
 			common.UserIdHeader,
 		}, ", "))
-		req.Header.Set(common.LocaleHeader, uc.GetLanguage())
-
-		if req.Header.Get(common.DeviceIdHeader) == "" {
-			if deviceID := uc.GetDeviceID(); deviceID != "" {
-				req.Header.Set(common.DeviceIdHeader, deviceID)
-			}
-		}
-
-		if req.Header.Get(common.ProTokenHeader) == "" {
-			if token := uc.GetToken(); token != "" {
-				req.Header.Set(common.ProTokenHeader, token)
-			}
-		}
-		if req.Header.Get(common.UserIdHeader) == "" {
-			if userID := uc.GetUserID(); userID != 0 {
-				req.Header.Set(common.UserIdHeader, strconv.FormatInt(userID, 10))
-			}
-		}
-
+		common.AddCommonHeadersWithOptions(uc, req, false)
 		return nil
 	}
 }
