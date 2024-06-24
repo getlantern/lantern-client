@@ -2,8 +2,9 @@ name: Publish releases
 
 on:
   push:
-    branches: [ jigar/ios-ci ]
-  workflow_dispatch:
+    branches: [ main ]
+    tags:
+      - '*'
 
 permissions:
   contents: "read"
