@@ -9,6 +9,7 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
+
 	"github.com/getlantern/lantern-client/internalsdk/webclient/defaultwebclient"
 	"github.com/go-resty/resty/v2"
 )
@@ -18,7 +19,8 @@ var (
 )
 
 type authClient struct {
-	webclient webclient.RESTClient
+	webclient  webclient.RESTClient
+	userConfig func() common.UserConfig
 }
 
 type AuthClient interface {
@@ -51,19 +53,30 @@ func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	if httpClient == nil {
 		httpClient = &http.Client{}
 	}
-	webclient := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(client *resty.Client, req *resty.Request) error {
-		req.SetHeader(common.ContentType, "application/x-protobuf")
-		uc := opts.UserConfig()
-		if req.URL != "" && strings.HasPrefix(req.URL, "/users/signup") {
+	authClient := &authClient{
+		userConfig: opts.UserConfig,
+	}
+	authClient.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareUserRequest(opts.UserConfig), nil))
+	return authClient
+}
+
+func prepareUserRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
+	return func(client *resty.Client, req *http.Request) error {
+		req.Header.Set(common.ContentType, "application/x-protobuf")
+		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
+			common.DeviceIdHeader,
+			common.ProTokenHeader,
+			common.UserIdHeader,
+		}, ", "))
+		uc := userConfig()
+		if req.URL != nil && strings.HasSuffix(req.URL.Path, "/users/signup") {
 			// for the /users/signup endpoint, we do need to pass all default headers
-			webclient.AddCommonUserHeaders(uc, req)
+			common.AddCommonHeadersWithOptions(uc, req, false)
 		} else {
-			webclient.AddInternalHeaders(uc, req)
+			common.AddCommonNonUserHeaders(uc, req)
 		}
 		return nil
-	}, nil))
-
-	return &authClient{webclient}
+	}
 }
 
 // Auth APIS

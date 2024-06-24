@@ -184,7 +184,6 @@ func (c *proClient) Plans(ctx context.Context) (*PlansResponse, error) {
 // UserCreate creates a new user
 func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
-	log.Debugf("UserCreate header is %v")
 	err := c.webclient.PostFormReadingJSON(ctx, "/user-create", nil, &resp)
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
