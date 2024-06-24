@@ -23,14 +23,14 @@ type authClient struct {
 
 type AuthClient interface {
 	//Sign up methods
-	SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error)
+	SignUp(email string, password string) ([]byte, error)
 	SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error)
 	SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error)
 
 	//Login methods
 	GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error)
 	LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error)
-	Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error)
+	Login(uc common.UserConfig, email string, password string) (*protos.LoginResponse, []byte, error)
 	// Recovery methods
 	StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error)
 	CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error)
@@ -42,7 +42,7 @@ type AuthClient interface {
 	DeleteAccount(ctc context.Context, loginData *protos.DeleteUserRequest) (bool, error)
 
 	//Logout
-	SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error)
+	SignOut(ctx context.Context, uc common.UserConfig) (bool, error)
 }
 
 // NewClient creates a new instance of AuthClient
@@ -80,8 +80,8 @@ func (c *authClient) GetSalt(ctx context.Context, email string) (*protos.GetSalt
 }
 
 // Sign up API
-// SignUp is used to sign up a new user with the SignupRequest
-func (c *authClient) SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error) {
+// signUp is used to sign up a new user with the SignupRequest
+func (c *authClient) signUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp)
 	if err != nil {
@@ -124,7 +124,7 @@ func (c *authClient) LoginPrepare(ctx context.Context, loginData *protos.Prepare
 }
 
 // Login is used to login a user with the LoginRequest
-func (c *authClient) Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
+func (c *authClient) login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
 	var resp protos.LoginResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/login", nil, loginData, &resp)
 	if err != nil {
@@ -201,11 +201,19 @@ func (c *authClient) DeleteAccount(ctx context.Context, accountData *protos.Dele
 
 // DeleteAccount is used to delete the account of a user
 // Once account is delete make sure to create new account
-func (c *authClient) SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error) {
-	var resp protos.EmptyResponse
-	err := c.webclient.PostPROTOC(ctx, "/users/logout", nil, logoutData, &resp)
-	if err != nil {
-		return false, err
+func (c *authClient) SignOut(ctx context.Context, uc common.UserConfig) (bool, error) {
+	email := uc.GetEmail()
+	deviceId := uc.GetDeviceID()
+	token := uc.GetToken()
+	userId := uc.GetUserID()
+	signoutData := &protos.LogoutRequest{
+		Email:        email,
+		DeviceId:     deviceId,
+		LegacyToken:  token,
+		LegacyUserID: userId,
 	}
-	return true, nil
+	log.Debugf("Sign out request %+v", signoutData)
+	var resp protos.EmptyResponse
+	err := c.webclient.PostPROTOC(ctx, "/users/logout", nil, signoutData, &resp)
+	return err == nil, err
 }

@@ -36,14 +36,13 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.87
+	github.com/getlantern/flashlight/v7 v7.6.90
 	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
 	github.com/getlantern/ipproxy v0.0.0-20240305190756-6b5b6347158b
 	github.com/getlantern/jibber_jabber v0.0.0-20210901195950-68955124cc42
-	github.com/getlantern/lantern-client v0.0.0-20240529061800-bef437cdab3e
 	github.com/getlantern/launcher v0.0.0-20230622120034-fe87f9bff286
 	github.com/getlantern/memhelper v0.0.0-20220104170102-df557102babd
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7

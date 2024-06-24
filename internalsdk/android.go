@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
 	"path/filepath"
 	"sync"
@@ -25,9 +26,12 @@ import (
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/analytics"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/mtime"
 
 	// import gomobile just to make sure it stays in go.mod
@@ -49,6 +53,14 @@ var (
 	dnsGrabEventual          = eventual.NewValue()
 	dnsGrabAddrEventual      = eventual.NewValue()
 	errNoAdProviderAvailable = errors.New("no ad provider available")
+	dialTimeout              = 30 * time.Second
+	authClient               = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), &webclient.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.Fronted(dialTimeout),
+			Timeout:   dialTimeout,
+		},
+	})
+	userConfig *UserConfig
 )
 
 type Settings interface {
@@ -81,7 +93,7 @@ type Session interface {
 	GetDNSServer() (string, error)
 	Provider() (string, error)
 	IsStoreVersion() (bool, error)
-	Email() (string, error)
+	GetEmail() (string, error)
 	Currency() (string, error)
 	DeviceOS() (string, error)
 	IsProUser() (bool, error)
@@ -118,11 +130,11 @@ type PanickingSession interface {
 	GetTimeZone() string
 	Code() string
 	GetCountryCode() string
+	GetEmail() string
 	GetForcedCountryCode() string
 	GetDNSServer() string
 	Provider() string
 	IsStoreVersion() bool
-	Email() string
 	Currency() string
 	DeviceOS() string
 	IsProUser() bool
@@ -156,6 +168,12 @@ func (s *panickingSessionImpl) Wrapped() Session {
 
 func (s *panickingSessionImpl) GetAppName() string {
 	return s.wrapped.GetAppName()
+}
+
+func (s *panickingSessionImpl) GetEmail() string {
+	result, err := s.wrapped.GetEmail()
+	panicIfNecessary(err)
+	return result
 }
 
 func (s *panickingSessionImpl) GetDeviceID() string {
@@ -254,12 +272,6 @@ func (s *panickingSessionImpl) IsStoreVersion() bool {
 	return result
 }
 
-func (s *panickingSessionImpl) Email() string {
-	result, err := s.wrapped.Email()
-	panicIfNecessary(err)
-	return result
-}
-
 func (s *panickingSessionImpl) Currency() string {
 	result, err := s.wrapped.Currency()
 	panicIfNecessary(err)
@@ -310,6 +322,7 @@ type UserConfig struct {
 
 func (uc *UserConfig) GetAppName() string              { return common.DefaultAppName }
 func (uc *UserConfig) GetDeviceID() string             { return uc.session.GetDeviceID() }
+func (uc *UserConfig) GetEmail() string                { return uc.session.GetEmail() }
 func (uc *UserConfig) GetUserID() int64                { return uc.session.GetUserID() }
 func (uc *UserConfig) GetToken() string                { return uc.session.GetToken() }
 func (uc *UserConfig) GetEnabledExperiments() []string { return nil }
@@ -513,6 +526,16 @@ func ReverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 	}
 }
 
+func logIn(email, password string) {
+	log.Debug("Received sign in request")
+	authClient.Login(userConfig, email, password)
+}
+
+func logOut() {
+	log.Debug("Received sign out request")
+	authClient.SignOut(context.Background(), userConfig)
+}
+
 func run(configDir, locale string, settings Settings, session PanickingSession) {
 
 	appdir.SetHomeDir(configDir)
@@ -554,7 +577,8 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		config.ForceCountry(forcedCountryCode)
 	}
 
-	userConfig := NewUserConfig(session)
+	userConfig = NewUserConfig(session)
+
 	globalConfigChanged := make(chan interface{})
 	geoRefreshed := geolookup.OnRefresh()
 

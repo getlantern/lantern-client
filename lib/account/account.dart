@@ -37,7 +37,7 @@ class _AccountMenuState extends State<AccountMenu> {
     }
   }
 
-  void showSingOutDialog(BuildContext context) {
+  void showSignOutDialog(BuildContext context) {
     CDialog(
       title: 'sign_out'.i18n,
       description: "sign_out_message".i18n,
@@ -213,12 +213,12 @@ class _AccountMenuState extends State<AccountMenu> {
           openSettings(context);
         },
       ),
-      if (Platform.isIOS)
+      if (Platform.isMobile)
         if (hasUserLoggedIn)
           ListItemFactory.settingsItem(
             icon: ImagePaths.signOut,
             content: 'sign_out'.i18n,
-            onTap: () => showSingOutDialog(context),
+            onTap: () => showSignOutDialog(context),
           )
     ];
   }

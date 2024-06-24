@@ -205,7 +205,14 @@ class SessionModel(
                 } else {
                     throw IllegalArgumentException("No URL provided for webview")
                 }
+            }
 
+            "login" -> {
+                Internalsdk.login(call.argument("email")!!, url = call.argument("password")!!)
+            }
+
+            "signOut" -> {
+                Internalsdk.logOut()
             }
 
             "trackUserAction" -> {
