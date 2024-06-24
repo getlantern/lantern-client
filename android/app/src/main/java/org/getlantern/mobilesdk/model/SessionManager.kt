@@ -25,6 +25,7 @@ import io.lantern.model.Vpn
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.model.Bandwidth
+import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.Utils
 import org.getlantern.mobilesdk.Logger
@@ -32,7 +33,6 @@ import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.util.DnsDetector
 import org.getlantern.mobilesdk.util.LanguageHelper
-import org.greenrobot.eventbus.EventBus
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.lang.reflect.InvocationTargetException
@@ -136,7 +136,7 @@ abstract class SessionManager(application: Application) : Session {
             val oldLocale = prefs.getString(LANG, "")
             prefs.edit().putString(LANG, locale.toString()).apply()
             if (locale.language != oldLocale) {
-                EventBus.getDefault().post(locale)
+                EventHandler.postLocaleEvent(locale)
             }
         }
     }
@@ -183,7 +183,7 @@ abstract class SessionManager(application: Application) : Session {
         }
 
     override fun updateAdSettings(adSettings: AdSettings) {
-        EventBus.getDefault().post(adSettings)
+
     }
 
     /**
@@ -356,7 +356,7 @@ abstract class SessionManager(application: Application) : Session {
         val b = Bandwidth(percent, remaining, allowed, ttlSeconds)
         Logger.debug("bandwidth", b.toString())
         saveLatestBandwidth(b)
-        EventBus.getDefault().postSticky(b)
+        EventHandler.postBandwidthEvent(b)
     }
 
     fun setSurveyLinkOpened(url: String?) {
@@ -401,7 +401,7 @@ abstract class SessionManager(application: Application) : Session {
         }
 
         val st = Stats(city, country, countryCode, httpsUpgrades, adsBlocked, hasSucceedingProxy)
-        EventBus.getDefault().postSticky(st)
+        EventHandler.postStatsEvent(st)
 
         // save last location received
         prefs.edit().putString(SERVER_COUNTRY, country)

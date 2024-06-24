@@ -13,6 +13,7 @@ import org.androidannotations.annotations.EService
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
+import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternStatus
@@ -27,7 +28,6 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConfCallback
-import org.greenrobot.eventbus.EventBus
 import java.util.Random
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -104,9 +104,7 @@ open class LanternService : Service(), Runnable {
     private fun afterStart() {
         if (LanternApp.getSession().userId().toInt() == 0) {
             // create a user if no user id is stored
-            EventBus.getDefault().post(
-                AccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING),
-            )
+            EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING)
             createUser(0)
         }
 
@@ -114,13 +112,12 @@ open class LanternService : Service(), Runnable {
             // check if an update is available
             autoUpdater.checkForUpdates()
         }
-
-        EventBus.getDefault().postSticky(LanternStatus(Status.ON))
+        EventHandler.postStatusEvent(LanternStatus(Status.ON))
 
         // fetch latest loconf
         LoConf.Companion.fetch(object : LoConfCallback {
             override fun onSuccess(loconf: LoConf) {
-                EventBus.getDefault().post(loconf)
+                EventHandler.postLoConfEvent(loconf)
             }
         })
     }
@@ -147,9 +144,7 @@ open class LanternService : Service(), Runnable {
         override fun onFailure(@Nullable throwable: Throwable?, @Nullable error: ProError?) {
             if (attempts >= MAX_CREATE_USER_TRIES) {
                 Logger.error(TAG, "Max. number of tries made to create Pro user")
-                EventBus.getDefault().postSticky(
-                    AccountInitializationStatus(AccountInitializationStatus.Status.FAILURE),
-                )
+                EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
                 return
             }
             attempts++
@@ -169,10 +164,8 @@ open class LanternService : Service(), Runnable {
             if (!referral.isEmpty()) {
                 LanternApp.getSession().setCode(referral)
             }
-            EventBus.getDefault().postSticky(LanternStatus(Status.ON))
-            EventBus.getDefault().postSticky(
-                AccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS),
-            )
+            EventHandler.postStatusEvent(LanternStatus(Status.ON))
+            EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
         }
     }
 
