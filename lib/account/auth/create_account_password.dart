@@ -14,7 +14,7 @@ class CreateAccountPassword extends StatefulWidget {
   const CreateAccountPassword({
     super.key,
     required this.email,
-    required this.code,
+    required this.code
   });
 
   @override
