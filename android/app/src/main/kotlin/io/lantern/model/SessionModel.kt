@@ -6,6 +6,7 @@ import android.view.WindowManager
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
 import internalsdk.Internalsdk
+import internalsdk.Internalsdk.AuthClient
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -54,6 +55,8 @@ class SessionModel(
     private val lanternClient = LanternApp.getLanternHttpClient()
     private val autoUpdater = AutoUpdater(activity, activity)
     private val paymentsUtil = PaymentsUtil(activity)
+
+    private val authClient = Internalsdk.NewAuthClient(this)
 
     companion object {
         private const val TAG = "SessionModel"
@@ -208,11 +211,11 @@ class SessionModel(
             }
 
             "login" -> {
-                Internalsdk.login(call.argument("email")!!, url = call.argument("password")!!)
+                authClient.login(call.argument("email")!!, url = call.argument("password")!!)
             }
 
             "signOut" -> {
-                Internalsdk.logOut()
+                authClient.signOut()
             }
 
             "trackUserAction" -> {

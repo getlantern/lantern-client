@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"net/http"
 	"os"
 	"path/filepath"
 	"sync"
@@ -26,12 +25,9 @@ import (
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/analytics"
-	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
-	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/mtime"
 
 	// import gomobile just to make sure it stays in go.mod
@@ -54,13 +50,7 @@ var (
 	dnsGrabAddrEventual      = eventual.NewValue()
 	errNoAdProviderAvailable = errors.New("no ad provider available")
 	dialTimeout              = 30 * time.Second
-	authClient               = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), &webclient.Opts{
-		HttpClient: &http.Client{
-			Transport: proxied.Fronted(dialTimeout),
-			Timeout:   dialTimeout,
-		},
-	})
-	userConfig *UserConfig
+	userConfig               *UserConfig
 )
 
 type Settings interface {
@@ -524,16 +514,6 @@ func ReverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 		}
 		return fmt.Sprintf("%v:%v", updatedHost, port), nil
 	}
-}
-
-func logIn(email, password string) {
-	log.Debug("Received sign in request")
-	authClient.Login(userConfig, email, password)
-}
-
-func logOut() {
-	log.Debug("Received sign out request")
-	authClient.SignOut(context.Background(), userConfig)
 }
 
 func run(configDir, locale string, settings Settings, session PanickingSession) {
