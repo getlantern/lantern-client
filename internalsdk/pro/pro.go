@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"net/http/httputil"
 	"strings"
 
 	"github.com/getlantern/errors"
@@ -73,11 +72,7 @@ func (c *proClient) setUserHeaders() func(client *resty.Client, req *http.Reques
 			common.ProTokenHeader,
 			common.UserIdHeader,
 		}, ", "))
-		// Add auth headers only if not present, to avoid race conditions when creating new user or switching user, i.e., linking device
-		// to a new account.
 		common.AddCommonHeadersWithOptions(uc, req, false)
-		d, _ := httputil.DumpRequest(req, false)
-		log.Debugf("Dump is %s", string(d))
 		return nil
 	}
 }
