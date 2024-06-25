@@ -6,8 +6,6 @@ toolchain go1.22.4
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
 
-replace github.com/getlantern/lantern-client => ../lantern-client
-
 // replace github.com/getlantern/fronted => ../fronted
 // replace github.com/getlantern/pathdb => ../pathDb/pathDb
 

@@ -90,7 +90,6 @@ class _AccountMenuState extends State<AccountMenu> {
 
   List<Widget> freeItems(BuildContext context, bool hasUserLoggedIn) {
     return [
-      if(Platform.isIOS)
       if (!hasUserLoggedIn)
         ListItemFactory.settingsItem(
           icon: ImagePaths.signIn,
