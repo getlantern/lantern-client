@@ -74,6 +74,8 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
+      hasUserSignedInNotifier = ffiValueNotifier(ffiUserSignedIn, 'IsUserLoggedIn', false);
+      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', '');
     }
 
 

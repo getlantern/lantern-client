@@ -107,6 +107,15 @@ func AddCommonHeaders(uc UserConfig, req *http.Request) {
 	AddCommonHeadersWithOptions(uc, req, true)
 }
 
+// AddInternalHeaders adds the common.UserConfig internal headers to the given request
+func AddInternalHeaders(uc UserConfig, req *http.Request) {
+	for k, v := range uc.GetInternalHeaders() {
+		if v != "" {
+			req.Header.Set(k, v)
+		}
+	}
+}
+
 // isOriginAllowed checks if the origin is authorized
 // for CORS requests. The origin can have include arbitrary
 // ports, so we just make sure it's on localhost.

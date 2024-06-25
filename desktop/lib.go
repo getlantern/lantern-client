@@ -28,6 +28,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/settings"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -45,9 +46,10 @@ const (
 )
 
 var (
-	log       = golog.LoggerFor("lantern-desktop.main")
-	a         *app.App
-	proClient proclient.ProClient
+	log        = golog.LoggerFor("lantern-desktop.main")
+	a          *app.App
+	authClient auth.AuthClient
+	proClient  proclient.ProClient
 )
 
 var issueMap = map[string]string{
@@ -80,7 +82,8 @@ func start() {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
+
+	webclientOpts := &webclient.Opts{
 		HttpClient: &http.Client{
 			Transport: proxied.ParallelForIdempotent(),
 			Timeout:   30 * time.Second,
@@ -88,7 +91,10 @@ func start() {
 		UserConfig: func() common.UserConfig {
 			return userConfig(settings)
 		},
-	})
+	}
+
+	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
 
 	a = app.NewApp(flags, cdir, proClient, settings)
 	go func() {
@@ -461,6 +467,11 @@ func playVersion() *C.char {
 
 //export storeVersion
 func storeVersion() *C.char {
+	return C.CString("false")
+}
+
+//export userSignedIn
+func userSignedIn() *C.char {
 	return C.CString("false")
 }
 

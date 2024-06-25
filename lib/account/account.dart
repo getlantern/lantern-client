@@ -212,13 +212,12 @@ class _AccountMenuState extends State<AccountMenu> {
           openSettings(context);
         },
       ),
-      if (Platform.isMobile)
-        if (hasUserLoggedIn)
-          ListItemFactory.settingsItem(
-            icon: ImagePaths.signOut,
-            content: 'sign_out'.i18n,
-            onTap: () => showSignOutDialog(context),
-          )
+      if (hasUserLoggedIn)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.signOut,
+          content: 'sign_out'.i18n,
+          onTap: () => showSignOutDialog(context),
+        )
     ];
   }
 

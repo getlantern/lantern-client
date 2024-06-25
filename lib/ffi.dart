@@ -40,6 +40,8 @@ Pointer<Utf8> ffiProxyAll() => _bindings.proxyAll().cast<Utf8>();
 
 Pointer<Utf8> ffiStoreVersion() => _bindings.storeVersion().cast<Utf8>();
 
+Pointer<Utf8> ffiUserSignedIn() => _bindings.userSignedIn().cast<Utf8>();
+
 Pointer<Utf8> ffiHasSucceedingProxy() =>
     _bindings.hasSucceedingProxy().cast<Utf8>();
 

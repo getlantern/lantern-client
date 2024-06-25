@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -36,6 +37,14 @@ type RESTClient interface {
 // If specified, the body bytes should be sent as the body for POST and PUT requests.
 // Returns the response body as bytes.
 type SendRequest func(ctx context.Context, method string, path string, params any, body []byte) ([]byte, error)
+
+// Opts are common Opts that instances of RESTClient may be configured with
+type Opts struct {
+	// HttpClient represents an http.Client that should be used by the resty client
+	HttpClient *http.Client
+	// UserConfig is a function that returns the user config associated with a Lantern user
+	UserConfig func() common.UserConfig
+}
 
 type restClient struct {
 	send SendRequest
