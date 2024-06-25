@@ -41,6 +41,7 @@
   <string name="submit_code">تأكيد الرمز</string>
   <string name="on_text">تشغيل</string>
   <string name="off_text">اغلاق</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">لانترن لا يعمل. الرجاء نقر الزر للنفاذ الى المواقع و الخدمات المحجوبة! </string>
   <string name="lantern_on">لانترن يعمل. يمكنك الآن النفاذ الى المواقع و الخدمات المحجوبة</string>
   <string name="on_desc">يمكنك الآن الوصول\r\nالمواقع و الخدمات المحجوبة</string>
@@ -308,6 +309,7 @@
   <string name="earn_free_month">إحصل على شهر مجاني من لانترن برو مع كل إشتراك لصديق</string>
   <string name="credits_applied">سيتم إضافة رصيدك إلى حسابك في فترة الفوترة القادمة. </string>
   <string name="pro_invitation_subject">دعوة للإنضمام إلى لانترن برو</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">أقرأ عن \"%1$s\" عبر %2$sلانترن. إستعمل لانترن للوصول إلى الصفحات والخدمات المحجوبة. يمكنك تنزيله للأندرويد هنا: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">هل أنت متأكد؟ لا يمكن إلغاء هذه العملية! يمكنك الإشتراك في برو عندما تشاء!</string>
   <string name="unauthorize_confirmation">هل أنت متأكد من أنك تريد فك ربط هذا الجهاز مع حساب برو؟</string>
@@ -498,6 +500,9 @@
   <string name="lantern_service">خدمة</string>
   <string name="replica_download">تنزيل النسخة المتماثلة</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

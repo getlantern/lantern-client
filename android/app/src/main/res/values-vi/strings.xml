@@ -41,6 +41,7 @@
   <string name="submit_code">Mã Số Xác Nhận</string>
   <string name="on_text">BẬT</string>
   <string name="off_text">TẮT</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">Lantern đang TẮT. Bật lên để truy cập các trang và dịch vụ bị chặn!</string>
   <string name="lantern_on">Lantern đang BẬT. Bạn có thể truy cập các trang và dịch vụ bị chặn.</string>
   <string name="on_desc">Bạn có thể truy cập\r\ncác trang và dịch vụ bị chặn</string>
@@ -308,6 +309,7 @@
   <string name="earn_free_month">Được một tháng miễn phí cho mỗi người đăng ký</string>
   <string name="credits_applied">Điểm của bạn sẽ được tính vào tài khoản trong chu kỳ tính tiền kế tiếp.</string>
   <string name="pro_invitation_subject">Mời Dùng Lantern Pro</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">Tôi đang xem \"%1$s\" at %2$s bằng Lantern. Dùng Lantern để truy cập các trang và dịch vụ bị chặn. Bạn có thể tải phiên bản cho Android ở đây: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Bạn có chắc không? Thao tác này không hủy bỏ được! Bạn có thể đăng ký lại bản Pro bất cứ lúc nào.</string>
   <string name="unauthorize_confirmation">Bạn có chắc là muốn gỡ kết nối máy này ra khỏi tài khoản Pro?</string>
@@ -498,6 +500,9 @@
   <string name="lantern_service">Dịch vụ Lantern</string>
   <string name="replica_download">Tải xuống bản sao</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

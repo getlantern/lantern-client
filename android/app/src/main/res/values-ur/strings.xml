@@ -41,6 +41,7 @@
   <string name="submit_code">کوڈ کی تصدیق کیجئے</string>
   <string name="on_text">آن</string>
   <string name="off_text">آف</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">لینٹرن آف ہے۔ بلاک ہوئی سائٹس اور سروسز تک رسائی کے لئے سوِچ کو پلٹیے!</string>
   <string name="lantern_on">لینٹرن آن ہے ۔ اب آپ بلاک سائٹس اور سروسز تک رسائی حاصل کر سکتے ۔ </string>
   <string name="on_desc">  اب آپ r\n\بلاک سائٹس اور سروس تک رسائی  حاصل کر سکتےہیں</string>
@@ -308,6 +309,7 @@
   <string name="earn_free_month">ہر ایک دوست کے سائن اَپ کرنے پر ایک مفت ماہ حاصل کیجئے </string>
   <string name="credits_applied">اگلے بلنگ سائیکل پر آپ کے کریڈٹس آپ کے اکاؤنٹ پر لاگو کر دیے جائیں گے۔ </string>
   <string name="pro_invitation_subject">لینٹرن پرو جوائن کرنے کی دعوت</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">میں لینٹرن کے ذریعے%1$s پر %2$s کے متعلق پڑھ رہا/رہی ہوں۔بلاک سائٹس اور سروس تک رسائی کے لئے لینٹرن کا استعمال کیجئے۔ آپ اسے اینڈروائڈ کے لئے یہاں سے ڈاؤن لوڈ کر سکتے ہیں : https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">کیا آپ پُر یقین ہیں؟ یہ عمل واپس نہیں ہو سکے گا! آپ دوبارہ پرو کے لئے کسی بھی وقت سائن اَپ کر سکتے ہیں ۔ </string>
   <string name="unauthorize_confirmation">کیا آپ واقعی اس ڈیوائس کو اپنے پرو اکاؤنٹ سے منقطع کرنا چاہتے ہیں ؟</string>
@@ -498,6 +500,9 @@
   <string name="lantern_service">Lantern سروس</string>
   <string name="replica_download">ریپلیکا ڈاؤن لوڈ</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>
