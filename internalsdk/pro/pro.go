@@ -59,13 +59,22 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, func(rc *resty.Client, req *resty.Request) error {
-		uc := opts.UserConfig()
-		req.SetHeader(common.Referer, "http://localhost:37457/")
-		webclient.AddCommonUserHeaders(uc, req)
-		return nil
-	}, nil))
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareProRequest(opts.UserConfig), nil))
 	return client
+}
+
+// prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
+func prepareProRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
+	return func(client *resty.Client, req *http.Request) error {
+		uc := userConfig()
+		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
+			common.DeviceIdHeader,
+			common.ProTokenHeader,
+			common.UserIdHeader,
+		}, ", "))
+		common.AddCommonHeadersWithOptions(uc, req, false)
+		return nil
+	}
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {
