@@ -33,7 +33,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
 	"github.com/joho/godotenv"
-
 	"google.golang.org/protobuf/encoding/protojson"
 )
 

@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/getsentry/sentry-go"
+	"google.golang.org/protobuf/encoding/protojson"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
@@ -44,6 +45,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
 var (
@@ -70,7 +72,7 @@ type App struct {
 	exited           eventual.Value
 	analyticsSession analytics.Session
 	settings         *settings.Settings
-	statsTracker     *statsTracker
+	statsTracker     stats.Tracker
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
@@ -112,7 +114,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
-	app.statsTracker = NewStatsTracker(app)
+	app.statsTracker = stats.NewTracker()
 	app.serveWebsocket()
 	golog.OnFatal(app.exitOnFatal)
 
@@ -411,12 +413,51 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
+	if err := app.serveStats(app.ws); err != nil {
+		log.Errorf("Unable to serve stats to UI: %v", err)
+	}
 	if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
 	}
 	if err := app.serveConnectionStatus(app.ws); err != nil {
 		log.Errorf("Unable to serve connection status: %v", err)
 	}
+}
+
+func (app *App) serveStats(channel ws.UIChannel) error {
+	helloFn := func(write func(interface{})) {
+		log.Debugf("Sending Lantern stats to new client")
+	}
+
+	service, err := channel.Register("stats", helloFn)
+	if err == nil {
+		app.statsTracker.AddListener(func(stats stats.Stats) {
+			app.SetStats(&stats)
+			serverInfo := &protos.ServerInfo{
+				City:        stats.City,
+				Country:     stats.Country,
+				CountryCode: stats.CountryCode,
+			}
+			b, _ := protojson.Marshal(serverInfo)
+			log.Debugf("Stats2 updated: %v", string(b))
+			service.Out <- map[string]interface{}{
+				"city":        stats.City,
+				"country":     stats.Country,
+				"countryCode": stats.CountryCode,
+			}
+		})
+	}
+	return err
+}
+
+func (app *App) SetStats(st *stats.Stats) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.stats = st
+}
+
+func (app *App) Stats() *stats.Stats {
+	return app.stats
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {

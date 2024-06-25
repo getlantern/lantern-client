@@ -617,6 +617,7 @@ class SessionModel extends Model {
     );
   }
 
+
   Future<void> trackUserAction(
     String name,
     String url, [

@@ -57,6 +57,9 @@ func (app *App) onConnectionStatus(cb func(isConnected bool)) {
 // serveConnectionStatus registers a websocket channel for communicating connection status changes
 func (app *App) serveConnectionStatus(channel ws.UIChannel) error {
 	service, err := channel.Register("vpnstatus", nil)
+	if err != nil {
+		return err
+	}
 	app.onConnectionStatus(func(isConnected bool) {
 		log.Debugf("Sending updated connection status to all clients: %v", isConnected)
 		service.Out <- map[string]interface{}{
