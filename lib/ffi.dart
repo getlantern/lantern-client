@@ -100,6 +100,30 @@ Future<void> ffiRemoveDevice(String deviceId) async {
   return;
 }
 
+Future<void> ffiLogin(List<String> list) async {
+  final email = list[0].toPointerChar();
+  final password = list[1].toPointerChar();
+  final json = await _bindings
+      .login(email, password)
+      .cast<Utf8>()
+      .toDartString();
+  //final result = LoginResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  // checkAPIError(result, 'cannot_remove_device'.i18n);
+  return;
+}
+
+Future<void> ffiSignUp(List<String> list) async {
+  final email = list[0].toPointerChar();
+  final password = list[1].toPointerChar();
+  final json = await _bindings
+      .signUp(email, password)
+      .cast<Utf8>()
+      .toDartString();
+  //final result = LoginResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  // checkAPIError(result, 'cannot_remove_device'.i18n);
+  return;
+}
+
 FutureOr<bool> ffiHasPlanUpdateOrBuy(dynamic context) {
   final json = _bindings.hasPlanUpdatedOrBuy().cast<Utf8>().toDartString();
   return json == 'true' ? true : throw NoPlansUpdate("No Plans update");

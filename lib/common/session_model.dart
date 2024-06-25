@@ -320,11 +320,14 @@ class SessionModel extends Model {
 
   /// Auth Method channel
 
-  Future<void> signUp(String email, String password) {
-    return methodChannel.invokeMethod('signup', <String, dynamic>{
-      'email': email,
-      'password': password,
-    });
+  Future<void> signUp(String email, String password) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('signup', <String, dynamic>{
+        'email': email,
+        'password': password,
+      });
+    }
+    return await compute(ffiSignUp, [email, password]);
   }
 
   Future<void> signUpEmailResendCode(String email) {
@@ -342,11 +345,14 @@ class SessionModel extends Model {
     });
   }
 
-  Future<void> login(String email, String password) {
-    return methodChannel.invokeMethod('login', <String, dynamic>{
-      'email': email,
-      'password': password,
-    });
+  Future<void> login(String email, String password) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('login', <String, dynamic>{
+        'email': email,
+        'password': password,
+      });
+    }
+    return await compute(ffiLogin, [email, password]);
   }
 
   Future<void> startRecoveryByEmail(String email) {

@@ -658,6 +658,27 @@ func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 	return C.CString("true"), nil
 }
 
+// AUTH-RELATED
+
+//export login
+func login(email, password *C.char) *C.char {
+	uc := userConfig(a.Settings())
+	resp, _, err := authClient.Login(uc, C.GoString(email), C.GoString(password))
+	if err != nil {
+		return sendError(err)
+	}
+	return sendJson(resp)
+}
+
+//export signUp
+func signUp(email, password *C.char) *C.char {
+	resp, err := authClient.SignUp(C.GoString(email), C.GoString(password))
+	if err != nil {
+		return sendError(err)
+	}
+	return sendJson(resp)
+}
+
 //export checkUpdates
 func checkUpdates() *C.char {
 	log.Debug("Checking for updates")
@@ -719,28 +740,6 @@ func useOSLocale() (string, error) {
 	a.SetLanguage(userLocale)
 	return userLocale, nil
 }
-
-//Do not need to call this function
-// Since localisation is happing on client side
-// func i18nInit(a *app.App) {
-// 	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
-// 		return a.GetTranslations(filename)
-// 	})
-// 	locale := a.GetLanguage()
-// 	log.Debugf("Using locale: %v", locale)
-// 	if _, err := i18n.SetLocale(locale); err != nil {
-// 		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
-
-// 		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
-// 		// populated.
-// 		if locale, err := useOSLocale(); err != nil {
-// 			log.Debugf("i18n.UseOSLocale: %q", err)
-// 			a.SetLanguage(defaultLocale)
-// 		} else {
-// 			a.SetLanguage(locale)
-// 		}
-// 	}
-// }
 
 // Handle system signals for clean exit
 func handleSignals(a *app.App) {
