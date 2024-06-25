@@ -127,10 +127,12 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
 
   Future<void> onRegisterPro() async {
     try {
+      FocusManager.instance.primaryFocus?.unfocus();
       context.loaderOverlay.show();
       Locale locale = Localizations.localeOf(context);
       final format = NumberFormat.simpleCurrency(locale: locale.toString());
       final currencyName = format.currencyName ?? "USD";
+
       await sessionModel.redeemResellerCode(
         widget.email,
         currencyName,
@@ -138,7 +140,13 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
         resellerCodeController.text,
       );
       context.loaderOverlay.hide();
-      showSuccessDialog(context, widget.isPro, isReseller: true);
+      if (!widget.isPro) {
+        // it mean user is coming from signup flow
+        openPassword();
+      } else {
+        showSuccessDialog(context, widget.isPro,
+            isReseller: true, barrierDismissible: false);
+      }
     } catch (error, stackTrace) {
       print(stackTrace);
       appLogger.e(error, stackTrace: stackTrace);

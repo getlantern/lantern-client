@@ -292,7 +292,7 @@ class _VerificationState extends State<Verification> {
 
   Future<void> onBackPressed() async {
     if (widget.authFlow == AuthFlow.createAccount ||
-        widget.authFlow == AuthFlow.updateAccount) {
+        widget.authFlow == AuthFlow.updateAccount||widget.authFlow == AuthFlow.proCodeActivation) {
       assert(widget.tempPassword != null, 'Temp password is null');
       // if user press back button while creating account
       // we need to delete that temp account

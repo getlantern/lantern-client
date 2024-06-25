@@ -310,30 +310,10 @@ class _AccountManagementState extends State<AccountManagement>
             icon: ImagePaths.email,
             content: emailAddress,
             trailingArray: [
-              // sessionModel.hasAccountVerified.value == true
-              //     ? Padding(
-              //         padding: const EdgeInsetsDirectional.only(start: 16.0),
-              //         child: TextButton(
-              //           onPressed: () => openChangeEmail(emailAddress),
-              //           child: CText(
-              //             'change_email'.i18n.toUpperCase(),
-              //             style: tsButtonPink,
-              //           ),
-              //         ),
-              //       )
-              //     : Padding(
-              //         padding: const EdgeInsetsDirectional.only(start: 16.0),
-              //         child: TextButton(
-              //           onPressed: () => openEmailVerification(emailAddress),
-              //           child: CText(
-              //             'confirm'.i18n.toUpperCase(),
-              //             style: tsButtonPink,
-              //           ),
-              //         ),
-              //       )
             ],
           );
         }),
+        if(Platform.isIOS)
         ListItemFactory.settingsItem(
           header: 'password'.i18n,
           icon: ImagePaths.lockFiled,
@@ -359,6 +339,7 @@ class _AccountManagementState extends State<AccountManagement>
         }),
         //Disable device linking in IOS
         const UserDevices(),
+        if(Platform.isIOS)
         ListItemFactory.settingsItem(
           header: 'danger_zone'.i18n,
           icon: ImagePaths.alert,

@@ -50,8 +50,10 @@ class InternetStatusProvider extends ChangeNotifier {
 
   InternetStatusProvider() {
     // Listen for connection status changes
-    _connectionSubscription =
-        InternetConnection().onStatusChange.listen((status) {
+    _connectionSubscription = InternetConnection.createInstance(
+            checkInterval: const Duration(seconds: 10))
+        .onStatusChange
+        .listen((status) {
       if (status == InternetStatus.connected) {
         _handleConnected();
       } else {

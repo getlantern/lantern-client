@@ -465,6 +465,10 @@ set-version:
 
 
 ios-release:set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS build-framework
+	@echo "Flutter Clean"
+	flutter clean
+	@echo "Flutter pub get"
+	flutter pub get
 	@echo "Creating the Flutter iOS build..."
 	flutter build ipa --flavor prod --release --export-options-plist ./ExportOptions.plist
 	@echo "Uploading debug symbols to Sentry..."
