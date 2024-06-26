@@ -603,20 +603,21 @@ class SessionModel extends Model {
         },
       );
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<ServerInfo>(
       'serverInfo',
       ffiServerInfo,
       builder: builder,
-      fromJsonModel: (dynamic json) {
-        final res = jsonEncode(json);
-        return ServerInfo.create()..mergeFromProto3Json(jsonDecode(res));
-      },
-      deserialize: (Uint8List serialized) {
-        return ServerInfo.fromBuffer(serialized);
-      },
+      defaultValue: null,
+      onChanges: (setValue) => listenWebsocket(websocket, "stats", null, (value) {
+        if (value != null) {
+          final Map res = jsonDecode(jsonEncode(value));
+          setValue(ServerInfo.create()
+            ..mergeFromProto3Json(res));
+        }
+      }),
     );
   }
-
 
   Future<void> trackUserAction(
     String name,

@@ -111,10 +111,10 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
+		statsTracker:              stats.NewTracker(),
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
-	app.statsTracker = stats.NewTracker()
 	app.serveWebsocket()
 	golog.OnFatal(app.exitOnFatal)
 
@@ -445,12 +445,8 @@ func (app *App) serveStats(channel ws.UIChannel) error {
 			CountryCode: stats.CountryCode,
 		}
 		b, _ := protojson.Marshal(serverInfo)
-		log.Debugf("Stats updated: %v", string(b))
-		service.Out <- map[string]interface{}{
-			"city":        stats.City,
-			"country":     stats.Country,
-			"countryCode": stats.CountryCode,
-		}
+		log.Debugf("Stats updated, new server info: %v", string(b))
+		service.Out <- serverInfo
 	})
 	return nil
 }
