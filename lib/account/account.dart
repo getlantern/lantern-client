@@ -58,16 +58,12 @@ class _AccountMenuState extends State<AccountMenu> {
 
   void onAccountManagementTap(
       BuildContext context, bool isProUser, bool hasUserLoggedIn) {
-    if (Platform.isIOS) {
-      if (hasUserLoggedIn) {
-        // User has gone through onboarding
-        context.pushRoute(AccountManagement(isPro: isProUser));
-      } else {
-        // Ask user to update their email and password
-        showProUserDialog(context);
-      }
-    } else {
+    if (hasUserLoggedIn) {
+      // User has gone through onboarding
       context.pushRoute(AccountManagement(isPro: isProUser));
+    } else {
+      // Ask user to update their email and password
+      showProUserDialog(context);
     }
   }
 
@@ -90,7 +86,6 @@ class _AccountMenuState extends State<AccountMenu> {
 
   List<Widget> freeItems(BuildContext context, bool hasUserLoggedIn) {
     return [
-      if(Platform.isIOS)
       if (!hasUserLoggedIn)
         ListItemFactory.settingsItem(
           icon: ImagePaths.signIn,
@@ -213,13 +208,12 @@ class _AccountMenuState extends State<AccountMenu> {
           openSettings(context);
         },
       ),
-      if (Platform.isIOS)
-        if (hasUserLoggedIn)
-          ListItemFactory.settingsItem(
-            icon: ImagePaths.signOut,
-            content: 'sign_out'.i18n,
-            onTap: () => showSingOutDialog(context),
-          )
+      if (hasUserLoggedIn)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.signOut,
+          content: 'sign_out'.i18n,
+          onTap: () => showSingOutDialog(context),
+        )
     ];
   }
 
@@ -230,21 +224,21 @@ class _AccountMenuState extends State<AccountMenu> {
       automaticallyImplyLeading: false,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        if (Platform.isIOS) {
-          return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
-            return ListView(
-              children: proUser
-                  ? proItems(sessionContext, hasUserLoggedIn)
-                  : freeItems(sessionContext, hasUserLoggedIn),
-            );
-          });
-        }
+        // if (Platform.isIOS) {
+        return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
+          return ListView(
+            children: proUser
+                ? proItems(sessionContext, hasUserLoggedIn)
+                : freeItems(sessionContext, hasUserLoggedIn),
+          );
+        });
+        // }
 
-        return ListView(
-          children: proUser
-              ? proItems(sessionContext, false)
-              : freeItems(sessionContext, false),
-        );
+        // return ListView(
+        //   children: proUser
+        //       ? proItems(sessionContext, false)
+        //       : freeItems(sessionContext, false),
+        // );
       }),
     );
   }

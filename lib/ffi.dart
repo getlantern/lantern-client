@@ -219,6 +219,8 @@ Future<bool> ffiUserFirstVisit() {
   return Future.value(result == 'true');
 }
 
+Pointer<Utf8> ffiIsUserLoggedIn() => _bindings.isUserLoggedIn().cast<Utf8>();
+
 void setUserFirstTimeVisit() => _bindings.setFirstTimeVisit();
 
 //Custom exception for handling error

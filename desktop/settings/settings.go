@@ -42,6 +42,7 @@ const (
 	SNEmailAddress              SettingName = "emailAddress"
 	SNUserID                    SettingName = "userID"
 	SNUserToken                 SettingName = "userToken"
+	SNUserPro                   SettingName = "userPro"
 	SNMigratedDeviceIDForUserID SettingName = "migratedDeviceIDForUserID"
 	SNTakenSurveys              SettingName = "takenSurveys"
 	SNPastAnnouncements         SettingName = "pastAnnouncements"
@@ -58,6 +59,8 @@ const (
 	SNPaymentMethods SettingName = "paymentMethods"
 	// Auth methods
 	SNUserFirstVisit SettingName = "userFirstVisit"
+	SNExpiryDate     SettingName = "expirydate"
+	SNUserLoggedIn   SettingName = "userLoggedIn"
 )
 
 type settingType byte
@@ -720,6 +723,10 @@ func (s *Settings) onChange(attr SettingName, value interface{}) {
 	}
 }
 
+func (s *Settings) SetProUser(value bool) {
+	s.setVal(SNUserPro, value)
+}
+
 // Auth methods
 // SetUserFirstVisit sets the user's first visit flag
 func (s *Settings) SetUserFirstVisit(value bool) {
@@ -729,4 +736,15 @@ func (s *Settings) SetUserFirstVisit(value bool) {
 // GetUserFirstVisit returns the user's first visit flag
 func (s *Settings) GetUserFirstVisit() bool {
 	return s.getBool(SNUserFirstVisit)
+}
+
+func (s *Settings) SetExpirationDate(date string) {
+	s.setVal(SNExpiryDate, date)
+}
+
+func (s *Settings) IsUserLoggedIn() bool {
+	return s.getBool(SNUserLoggedIn)
+}
+func (s *Settings) SetUserLoggedIn(value bool) {
+	s.setVal(SNUserLoggedIn, value)
 }

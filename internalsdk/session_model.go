@@ -1045,17 +1045,6 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 		}
 	}
 	log.Debugf("Device found %v", deviceFound)
-	// if !deviceFound {
-	// 	// Device has not found in the list
-	// 	// Switch to free user
-	// 	signOut(*session)
-	// 	log.Debugf("Device has not found in the list creating new user")
-	// 	err = session.userCreate(context.Background())
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	return nil
-	// }
 
 	/// Check if user has installed app first time
 	firstTime, err := checkFirstTimeVisit(session.baseModel)
@@ -1063,7 +1052,6 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 		log.Debugf("Error while checking first time visit %v", err)
 	}
 	log.Debugf("First time visit %v", firstTime)
-
 	if userDetail.UserLevel == "pro" && firstTime {
 		log.Debugf("User is pro and first time")
 		setProUser(session.baseModel, true)

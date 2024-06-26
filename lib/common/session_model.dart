@@ -76,8 +76,8 @@ class SessionModel extends Model {
       );
       userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
       proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
+      hasUserSignedInNotifier = ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
     }
-
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
       // if user goes to chat then screenshot will be disabled
@@ -312,6 +312,14 @@ class SessionModel extends Model {
   ///Auth Widgets
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
+    if (isDesktop()) {
+      return ffiValueBuilder<bool>(
+        'IsUserLoggedIn',
+        ffiIsUserLoggedIn,
+        defaultValue: false,
+        builder: builder,
+      );
+    }
     return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
         builder: builder, defaultValue: false);
   }

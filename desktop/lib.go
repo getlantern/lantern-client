@@ -99,6 +99,13 @@ func start() {
 	}()
 
 	go func() {
+		err = fetchUserData()
+		if err != nil {
+			log.Errorf("error while fetching user data: %v", err)
+		}
+	}()
+
+	go func() {
 		err := fetchPayentMethodV4()
 		if err != nil {
 			log.Error(err)
@@ -137,6 +144,90 @@ func start() {
 		log.Debug("Lantern stopped")
 		os.Exit(0)
 	}()
+}
+
+func fetchUserData() error {
+	user, err := getUserData()
+	if err != nil {
+		return log.Errorf("error while fetching user data: %v", err)
+	}
+	return cacheUserDetail(user)
+}
+
+func cacheUserDetail(userDetail *protos.User) error {
+	if userDetail.Email != "" {
+		a.Settings().SetEmailAddress(userDetail.Email)
+	}
+	//Save user refferal code
+	if userDetail.Referral != "" {
+		a.SetReferralCode(userDetail.Referral)
+	}
+	// err := setUserLevel(session.baseModel, userDetail.UserLevel)
+	// if err != nil {
+	// 	return err
+	// }
+
+	err := setExpiration(userDetail.Expiration)
+	if err != nil {
+		return err
+	}
+	currentDevice := getDeviceID()
+
+	// Check if device id is connect to same device if not create new user
+	// this is for the case when user removed device from other device
+	deviceFound := false
+	if userDetail.Devices != nil {
+		for _, device := range userDetail.Devices {
+			if device.Id == currentDevice {
+				deviceFound = true
+				break
+			}
+		}
+	}
+	log.Debugf("Device found %v", deviceFound)
+	/// Check if user has installed app first time
+	firstTime := a.Settings().GetUserFirstVisit()
+	log.Debugf("First time visit %v", firstTime)
+	if userDetail.UserLevel == "pro" && firstTime {
+		log.Debugf("User is pro and first time")
+		setProUser(true)
+	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
+		log.Debugf("User is pro and not first time")
+		setProUser(true)
+	} else {
+		log.Debugf("User is not pro")
+		setProUser(false)
+	}
+
+	//Store all device
+	// err = setDevices(session.baseModel, userDetail.Devices)
+	// if err != nil {
+	// 	return err
+	// }
+
+	a.Settings().SetUserIDAndToken(userDetail.UserId, userDetail.Token)
+	log.Debugf("User caching successful: %+v", userDetail)
+	return nil
+}
+
+func getDeviceID() string {
+	return a.Settings().GetDeviceID()
+}
+
+func setExpiration(expiration int64) error {
+	if expiration == 0 {
+		return log.Errorf("Expiration date is 0")
+	}
+	expiry := time.Unix(0, expiration*int64(time.Second))
+	dateFormat := "01/02/2006"
+	dateStr := expiry.Format(dateFormat)
+	a.Settings().SetExpirationDate(dateStr)
+	return nil
+}
+
+func setProUser(isPro bool) {
+	a.Settings().SetProUser(isPro)
+
 }
 
 //export hasProxyFected
@@ -271,9 +362,9 @@ func getUserData() (*protos.User, error) {
 		return nil, err
 	}
 	user := resp.User
-	if user != nil && user.Email != "" {
-		a.Settings().SetEmailAddress(user.Email)
-	}
+	// if user != nil && user.Email != "" {
+	// 	a.Settings().SetEmailAddress(user.Email)
+	// }
 	return user, nil
 }
 
@@ -760,6 +851,13 @@ func isUserFirstTime() *C.char {
 //export setFirstTimeVisit
 func setFirstTimeVisit() {
 	a.Settings().SetUserFirstVisit(false)
+}
+
+//export isUserLoggedIn
+func isUserLoggedIn() *C.char {
+	loggedIn := a.Settings().IsUserLoggedIn()
+	stringValue := fmt.Sprintf("%t", loggedIn)
+	return C.CString(stringValue)
 }
 
 func main() {}
