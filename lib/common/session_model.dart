@@ -19,6 +19,15 @@ const TAB_DEVELOPER = 'developer';
 class SessionModel extends Model {
   late final EventManager eventManager;
 
+  ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  late ValueNotifier<bool?> isPlayVersion;
+  late ValueNotifier<bool?> isStoreVersion;
+  late ValueNotifier<bool?> proxyAvailable;
+  late ValueNotifier<bool?> proUserNotifier;
+  late ValueNotifier<String?> country;
+  late ValueNotifier<String?> userEmail;
+  late ValueNotifier<bool?> hasUserSignedInNotifier;
+
   SessionModel() : super('session') {
     if (isMobile()) {
       eventManager = EventManager('lantern_event_channel');
@@ -37,6 +46,17 @@ class SessionModel extends Model {
       */
       proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
       country = singleValueNotifier('geo_country_code', 'US');
+
+      /// This warning is not needed for the Non pro user
+      /// This flow is not needed anymore
+      /// We don't user create account if email address is not verified
+      hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
+      proUserNotifier = singleValueNotifier('prouser', false);
+
+      userEmail = singleValueNotifier(
+        'emailAddress',
+        "",
+      );
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
       isPlayVersion = ffiValueNotifier(
@@ -54,6 +74,8 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
+      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress',"");
+      proUserNotifier = ffiValueNotifier(ffiProUser,'prouser', false);
     }
 
     if (Platform.isAndroid) {
@@ -62,12 +84,6 @@ class SessionModel extends Model {
       enableScreenShot();
     }
   }
-
-  // ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  late ValueNotifier<bool?> isPlayVersion;
-  late ValueNotifier<bool?> isStoreVersion;
-  late ValueNotifier<bool?> proxyAvailable;
-  late ValueNotifier<String?> country;
 
   ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue) {
     return singleValueNotifier(path, defaultValue);
@@ -293,6 +309,108 @@ class SessionModel extends Model {
     );
   }
 
+  ///Auth Widgets
+
+  Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
+        builder: builder, defaultValue: false);
+  }
+
+  /// Auth Method channel
+
+  Future<void> signUp(String email, String password) {
+    return methodChannel.invokeMethod('signup', <String, dynamic>{
+      'email': email,
+      'password': password,
+    });
+  }
+
+  Future<void> signUpEmailResendCode(String email) {
+    return methodChannel
+        .invokeMethod('signupEmailResendCode', <String, dynamic>{
+      'email': email,
+    });
+  }
+
+  Future<void> signupEmailConfirmation(String email, String code) {
+    return methodChannel
+        .invokeMethod('signupEmailConfirmation', <String, dynamic>{
+      'email': email,
+      'code': code,
+    });
+  }
+
+  Future<void> login(String email, String password) {
+    return methodChannel.invokeMethod('login', <String, dynamic>{
+      'email': email,
+      'password': password,
+    });
+  }
+
+  Future<void> startRecoveryByEmail(String email) {
+    return methodChannel.invokeMethod('startRecoveryByEmail', <String, dynamic>{
+      'email': email,
+    });
+  }
+
+  Future<void> completeRecoveryByEmail(
+      String email, String password, String code) {
+    return methodChannel
+        .invokeMethod('completeRecoveryByEmail', <String, dynamic>{
+      'email': email,
+      'password': password,
+      'code': code,
+    });
+  }
+
+  Future<void> validateRecoveryCode(String email, String code) {
+    return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
+      'email': email,
+      'code': code,
+    });
+  }
+
+  Future<void> startChangeEmail(
+      String email, String newEmail, String password) {
+    return methodChannel.invokeMethod('startChangeEmail', <String, dynamic>{
+      'email': email,
+      'newEmail': newEmail,
+      'password': password,
+    });
+  }
+
+  Future<void> completeChangeEmail(
+      String email, String newEmail, String password, String code) {
+    return methodChannel.invokeMethod('completeChangeEmail', <String, dynamic>{
+      'email': email,
+      'newEmail': newEmail,
+      'password': password,
+      'code': code,
+    });
+  }
+
+  Future<void> signOut() {
+    return methodChannel.invokeMethod('signOut', <String, dynamic>{});
+  }
+
+  Future<void> deleteAccount(String password) {
+    return methodChannel.invokeMethod('deleteAccount', <String, dynamic>{
+      'password': password,
+    });
+  }
+
+  Future<bool> isUserFirstTimeVisit() async {
+    final firsTime = await methodChannel
+        .invokeMethod<bool>('isUserFirstTimeVisit', <String, dynamic>{});
+    print("firsTime $firsTime");
+    return firsTime ?? false;
+  }
+
+  Future<void> setFirstTimeVisit() async {
+    return methodChannel
+        .invokeMethod<void>('setFirstTimeVisit', <String, dynamic>{});
+  }
+
   Future<void> setProxyAll<T>(bool isOn) async {
     if (isDesktop()) {
       return await compute(ffiSetProxyAll, isOn ? 'true' : 'false');
@@ -300,6 +418,7 @@ class SessionModel extends Model {
     throw Exception("Not supported on mobile");
   }
 
+  /// Auth API end
   Future<String> getCountryCode() async {
     return await methodChannel
         .invokeMethod('getCountryCode', <String, dynamic>{});
@@ -318,23 +437,24 @@ class SessionModel extends Model {
     return Future(() => null);
   }
 
-  Future<String> authorizeViaEmail(String emailAddress) {
+  Future<void> authorizeViaEmail(String emailAddress) {
     return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
       'emailAddress': emailAddress,
-    }).then((value) => value as String);
+    }).then((value) => value.toString());
   }
 
-  Future<String> validateRecoveryCode(String code) {
-    return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
+  Future<String> validateDeviceRecoveryCode(String code) async {
+    return await methodChannel
+        .invokeMethod('validateDeviceRecoveryCode', <String, dynamic>{
       'code': code,
-    }).then((value) => value as String);
+    }).then((value) => value.toString());
   }
 
-  Future<String> approveDevice(String code) async {
+  Future<void> approveDevice(String code) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('approveDevice', <String, dynamic>{
         'code': code,
-      }).then((value) => value as String);
+      });
     }
     return await compute(ffiApproveDevice, code);
   }
@@ -622,7 +742,7 @@ class SessionModel extends Model {
     String url, [
     String title = '',
   ]) async {
-    if (isMobile()) {
+    if (Platform.isAndroid) {
       return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
         'name': name,
         'url': url,
@@ -717,6 +837,16 @@ class SessionModel extends Model {
     final currencyName = format.currencyName ?? "USD";
     return await compute(
         ffiPaymentRedirect, [planID, currencyName, provider.name, email, os]);
+  }
+
+  Future<void> submitApplePlay(
+      String email, String planID, String purchaseToken) async {
+    return methodChannel
+        .invokeMethod('submitApplePayPayment', <String, dynamic>{
+      'planID': planID,
+      'purchaseId': purchaseToken,
+      'email': email,
+    });
   }
 
   Future<void> submitStripePayment(

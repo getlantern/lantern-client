@@ -3,7 +3,7 @@ import 'package:i18n_extension_importer/src/io/import.dart';
 import 'package:lantern/common/common.dart';
 
 extension Localization on String {
-  static String defaultLocale = 'en';
+  static String defaultLocale = 'en_us';
   static String locale = defaultLocale;
 
   static Translations translations =
@@ -29,7 +29,7 @@ extension Localization on String {
   String doLocalize() => localize(this, translations, locale: locale);
 
   String get i18n => localize(this, translations, locale: locale.replaceFirst('_', '-').toLowerCase());
-  // String get i18n => localize(this, translations, locale: 'hi');
+
 
   String fill(List<Object> params) => localizeFill(this, params);
 }

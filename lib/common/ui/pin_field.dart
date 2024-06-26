@@ -18,42 +18,7 @@ class PinField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () {
-        Clipboard.getData('text/plain').then((valueFromClipboard) {
-          if (valueFromClipboard != null &&
-              valueFromClipboard.text!.length == length) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: CText('Paste from clipboard?'.i18n, style: tsBody1),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: CText(
-                        'No'.i18n,
-                        style: tsButtonGrey,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        controller.text = valueFromClipboard.text!;
-                        Navigator.pop(context);
-                      },
-                      child: CText(
-                        'Yes'.i18n,
-                        style: tsButtonPink,
-                      ),
-                    ),
-                  ],
-                );
-              },
-            );
-          }
-        });
-      },
+      onLongPress: () => getClipboardData(context),
       child: PinCodeTextField(
         maxLength: length,
         keyboardType: keyboardType,
@@ -84,5 +49,43 @@ class PinField extends StatelessWidget {
         highlightAnimationEndColor: Colors.white12,
       ),
     );
+  }
+
+  Future<void> getClipboardData(BuildContext context) async {
+    final copiedData = await Clipboard.getData('text/plain');
+    if (copiedData?.text != null) {
+      final code = copiedData!.text;
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: CText('Paste from clipboard?'.i18n, style: tsBody1),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: CText(
+                  'No'.i18n,
+                  style: tsButtonGrey,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  controller.text = code!;
+                  Navigator.pop(context);
+                  onDone?.call(controller.text);
+                },
+                child: CText(
+                  'Yes'.i18n,
+                  style: tsButtonPink,
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

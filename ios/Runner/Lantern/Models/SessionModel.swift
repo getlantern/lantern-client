@@ -19,20 +19,21 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   private let sessionAsyncHandler = DispatchQueue.global(qos: .background)
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
+    logger.log("Initializing SessionModel")
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current
-    let deviceId = device.identifierForVendor!.uuidString
-    let deviceModel = device.model
-    let systemName = device.systemName
+    let deviceId = DeviceIdentifier.getUDID()
+    let modelName = UIDevice.modelName
     let systemVersion = device.systemVersion
+    let systemName = device.systemName
     opts.deviceID = deviceId
     opts.lang = Locale.current.identifier
-    opts.developmentMode = false
-    opts.proUser = false
+    opts.developmentMode = !isRunningFromAppStore() && !isRunningInTestFlightEnvironment()
     opts.playVersion = (isRunningFromAppStore() || isRunningInTestFlightEnvironment())
+
     opts.timeZone = TimeZone.current.identifier
-    opts.device = systemName  // IOS does not provide Device name directly
-    opts.model = deviceModel
+    opts.device = modelName
+    opts.model = modelName
     opts.osVersion = systemVersion
     opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
     opts.platform = "ios"
@@ -89,7 +90,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
             Constants.appGroupDefaults.set(proToken, forKey: Constants.proToken)
             logger.log("Sucessfully got protoken \(proToken)")
           } else {
-            logger.log("Failed to get user id")
+            logger.log("Failed to get protoken")
           }
         }
       } catch {

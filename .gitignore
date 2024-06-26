@@ -85,3 +85,4 @@ liblantern_amd64.dylib
 lib/generated_bindings.dart
 
 *.env
+ExportOptions.plist

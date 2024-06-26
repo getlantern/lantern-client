@@ -17,7 +17,7 @@ class _LinkDeviceState extends State<LinkDevice> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) {
+    if (isMobile()) {
       requestLinkCode();
     }
   }
@@ -28,7 +28,15 @@ class _LinkDeviceState extends State<LinkDevice> {
       // We need to call redeemLinkCode multiple times when user enter code we redeem it
       // then it will show on the device list
       retry(
-        () => {sessionModel.redeemLinkCode()},
+        () async {
+         return sessionModel.redeemLinkCode().then((value) {
+            if (context.mounted) {
+              context.router.popUntilRoot();
+            }
+          });
+        },
+        delayFactor: const Duration(seconds: 1),
+        retryIf: (e) => e is PlatformException,
       );
     } catch (e) {
       appLogger.e("error while requesting link code: $e", error: e);

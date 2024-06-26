@@ -14,6 +14,8 @@ class ImagePaths {
   static const devices = 'assets/images/devices.svg';
   static const star = 'assets/images/star.svg';
   static const desktop = 'assets/images/desktop.svg';
+  static const signIn = 'assets/images/sign_in.svg';
+  static const signOut = 'assets/images/sign_out.svg';
   static const settings = 'assets/images/settings.svg';
   static const support = 'assets/images/support.svg';
   static const qr_code = 'assets/images/qr_code.svg';
@@ -33,6 +35,9 @@ class ImagePaths {
   static const credit_card = 'assets/images/credit_card.svg';
   static const calendar = 'assets/images/calendar.svg';
   static const lock = 'assets/images/lock.svg';
+  static const lockFiled = 'assets/images/lock_filled.svg';
+  static const eye = 'assets/images/eye.svg';
+  static const eyeCross = 'assets/images/eye_cross.svg';
   static const split_tunneling = 'assets/images/split_tunneling.svg';
   static const forum = 'assets/images/forum.svg';
   static const webMoney = 'assets/images/webmoney.svg';
@@ -131,6 +136,8 @@ class ImagePaths {
   static const verified_user = 'assets/images/verified_user.svg';
   static const user = 'assets/images/user.svg';
   static const image_inactive = 'assets/images/image_inactive.svg';
+  static const warning = 'assets/images/warning.svg';
+  static const emptyCheck = 'assets/images/empty_check.svg';
 
 
   // illustrations
@@ -148,6 +155,7 @@ class ImagePaths {
   static const empty_search = 'assets/images/empty_search.svg';
   static const lantern_logotype = 'assets/images/lantern_logotype.svg';
   static const lantern_pro_logotype = 'assets/images/lantern_pro_logotype.svg';
+  static const addAccountIllustration = 'assets/images/add_account_ illustration.svg';
   static const cloudOff = 'assets/images/cloud_off.svg';
 
   static String countdownPath(int index) =>

@@ -12,9 +12,8 @@ lang_map     = zh-Hant: zh-rHK, bn_IN: bn-rIN, bg_BG: bg-rBG, ku_IQ: ku-rIQ, pl_
 
 [o:lantern-1:p:lantern:r:lantern-flutter]
 file_filter  = assets/locales/<lang>.po
-source_file  = assets/locales/en.po
+source_file  = assets/locales/en-us.po
 source_lang  = en_US
 type         = PO
 minimum_perc = 80
-lang_map     = hi_IN: hi-in, zh_CN: zh-cn, zh_HK: zh-hk, ru_RU: ru-ru, fa_IR: fa-ir, es_CU: es-cu, es_EU: es-es, fr_FR: fr-fr, fr_CA: fr-ca
-
+lang_map     = hi_IN: hi-in, zh_CN: zh-cn, zh_HK: zh-hk, ru_RU: ru-ru, fa_IR: fa-ir, es_CU: es-cu, es: es-es, fr_FR: fr-fr, fr_CA: fr-ca, ar: ar-eg, ur: ur-in, vi: vi-vn, tr: tr-tr, th: th-th, bn: bn-bd, my: my-mm, ms: ms-my
