@@ -45,7 +45,7 @@ class SessionModel extends Model {
       * So show banner only if proxyAvailable is false
       */
       proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
-      country =  singleValueNotifier('geo_country_code', 'US');
+      country = singleValueNotifier('geo_country_code', 'US');
 
       /// This warning is not needed for the Non pro user
       /// This flow is not needed anymore
@@ -74,8 +74,9 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
+      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress',"");
+      proUserNotifier = ffiValueNotifier(ffiProUser,'prouser', false);
     }
-
 
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -83,7 +84,6 @@ class SessionModel extends Model {
       enableScreenShot();
     }
   }
-
 
   ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue) {
     return singleValueNotifier(path, defaultValue);
@@ -403,7 +403,7 @@ class SessionModel extends Model {
     final firsTime = await methodChannel
         .invokeMethod<bool>('isUserFirstTimeVisit', <String, dynamic>{});
     print("firsTime $firsTime");
-    return firsTime??false;
+    return firsTime ?? false;
   }
 
   Future<void> setFirstTimeVisit() async {
