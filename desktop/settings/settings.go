@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"reflect"
 	"strings"
@@ -61,6 +62,7 @@ const (
 	SNUserFirstVisit SettingName = "userFirstVisit"
 	SNExpiryDate     SettingName = "expirydate"
 	SNUserLoggedIn   SettingName = "userLoggedIn"
+	SNSalt           SettingName = "salt"
 )
 
 type settingType byte
@@ -746,5 +748,14 @@ func (s *Settings) IsUserLoggedIn() bool {
 	return s.getBool(SNUserLoggedIn)
 }
 func (s *Settings) SetUserLoggedIn(value bool) {
-	s.setVal(SNUserLoggedIn, value)
+	log.Println("Setting user logged in to ", value)
+	s.setBool(SNUserLoggedIn, value)
+}
+
+func (s *Settings) GetSalt() []byte {
+	return s.getbytes(SNPaymentMethods)
+}
+
+func (s *Settings) SaveSalt(salt []byte) {
+	s.setVal(SNSalt, salt)
 }

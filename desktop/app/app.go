@@ -376,6 +376,23 @@ func (app *App) SetLanguage(lang string) {
 	}
 }
 
+func (app *App) SetUserLoggedIn(value bool) {
+	app.settings.SetUserLoggedIn(value)
+	if app.ws != nil {
+		app.ws.SendMessage("pro", map[string]interface{}{
+			"type":  "pro",
+			"login": value,
+		})
+	}
+}
+
+// Create func that send message to UI
+func (app *App) SendMessageToUI(service string, message interface{}) {
+	if app.ws != nil {
+		app.ws.SendMessage(service, message)
+	}
+}
+
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
 func (app *App) OnSettingChange(attr settings.SettingName, cb func(interface{})) {

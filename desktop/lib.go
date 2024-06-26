@@ -28,6 +28,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/settings"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -45,9 +46,10 @@ const (
 )
 
 var (
-	log       = golog.LoggerFor("lantern-desktop.main")
-	a         *app.App
-	proClient proclient.ProClient
+	log        = golog.LoggerFor("lantern-desktop.main")
+	a          *app.App
+	proClient  proclient.ProClient
+	authClient auth.AuthClient
 )
 
 var issueMap = map[string]string{
@@ -80,15 +82,17 @@ func start() {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
+	webclientOpts := &webclient.Opts{
 		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
+			Transport: proxied.Fronted(30 * time.Second),
 			Timeout:   30 * time.Second,
 		},
 		UserConfig: func() common.UserConfig {
 			return userConfig(settings)
 		},
-	})
+	}
+	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
 
 	a = app.NewApp(flags, cdir, proClient, settings)
 	go func() {
@@ -254,21 +258,29 @@ func onSuccess() *C.char {
 	return C.CString(string("false"))
 }
 
+func userCreate() error {
+	// User is new
+	a.Settings().SetUserFirstVisit(true)
+	user, err := proClient.UserCreate(context.Background())
+	if err != nil {
+		return errors.New("Could not create new Pro user: %v", err)
+	}
+	log.Debugf("DEBUG: User created: %v", user)
+	if user.BaseResponse != nil && user.BaseResponse.Error != "" {
+		return errors.New("Could not create new Pro user: %v", err)
+	}
+	a.Settings().SetUserIDAndToken(user.UserId, user.Token)
+	return nil
+}
+
 func fetchOrCreate() error {
 	settings := a.Settings()
 	userID := settings.GetUserID()
 	if userID == 0 {
-		// User is new
-		a.Settings().SetUserFirstVisit(true)
-		user, err := proClient.UserCreate(context.Background())
+		err := userCreate()
 		if err != nil {
-			return errors.New("Could not create new Pro user: %v", err)
+			return err
 		}
-		log.Debugf("DEBUG: User created: %v", user)
-		if user.BaseResponse != nil && user.BaseResponse.Error != "" {
-			return errors.New("Could not create new Pro user: %v", err)
-		}
-		settings.SetUserIDAndToken(user.UserId, user.Token)
 		// if the user is new mean we need to fetch the payment methods
 		fetchPayentMethodV4()
 	}
@@ -857,7 +869,98 @@ func setFirstTimeVisit() {
 func isUserLoggedIn() *C.char {
 	loggedIn := a.Settings().IsUserLoggedIn()
 	stringValue := fmt.Sprintf("%t", loggedIn)
+	log.Debugf("User logged in %v", stringValue)
 	return C.CString(stringValue)
+}
+
+// Authenticates the user with the given email and password.
+//
+//	Note-: On Sign up Client needed to generate 16 byte slat
+//	Then use that salt, password and email generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
+//	Then use srpClient.Verifier() to generate verifierKey
+
+//export signup
+func signup(email *C.char, password *C.char) *C.char {
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+
+	salt, err := authClient.SignUp(lowerCaseEmail, C.GoString(password))
+	if err != nil {
+		return sendError(err)
+	}
+	// save salt and email in settings
+	setting := a.Settings()
+	setting.SaveSalt(salt)
+	setting.SetEmailAddress(C.GoString(email))
+	setting.SetUserLoggedIn(true)
+	return C.CString("true")
+}
+
+//export login
+func login(email *C.char, password *C.char) *C.char {
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+	user, salt, err := authClient.Login(lowerCaseEmail, C.GoString(password), getDeviceID())
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("User login successfull %+v", user)
+	// save salt and email in settings
+	setting := a.Settings()
+	setting.SaveSalt(salt)
+	a.SetUserLoggedIn(true)
+	userData := auth.ConvertToUserDetailsResponse(user)
+	// once login is successfull save user details
+	// but overide there email with login email
+	// old email might be differnt but we want to show latets email
+	userData.Email = C.GoString(email)
+	err = cacheUserDetail(userData)
+	if err != nil {
+		return sendError(err)
+	}
+	a.SendMessageToUI("login", nil)
+	return C.CString("true")
+}
+
+//export logout
+func logout() *C.char {
+	email := a.Settings().GetEmailAddress()
+	deviceId := getDeviceID()
+	token := a.Settings().GetToken()
+	userId := a.Settings().GetUserID()
+
+	signoutData := &protos.LogoutRequest{
+		Email:        email,
+		DeviceId:     deviceId,
+		LegacyToken:  token,
+		LegacyUserID: userId,
+	}
+
+	log.Debugf("Sign out request %+v", signoutData)
+
+	loggedOut, logoutErr := authClient.SignOut(context.Background(), signoutData)
+	if logoutErr != nil {
+		return sendError(log.Errorf("Error while signing out %v", logoutErr))
+	}
+
+	if !loggedOut {
+		return sendError(log.Errorf("Error while signing out %v", logoutErr))
+	}
+
+	clearLocalUserData()
+	// Create new user
+	err := userCreate()
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString("true")
+}
+
+// clearLocalUserData clears the local user data from the settings
+func clearLocalUserData() {
+	setting := a.Settings()
+	setting.SaveSalt(nil)
+	setting.SetEmailAddress("")
+	a.SetUserLoggedIn(false)
+	setting.SetProUser(false)
 }
 
 func main() {}

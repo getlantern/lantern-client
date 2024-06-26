@@ -64,10 +64,14 @@ Future<User> ffiUserData() async {
 
 // checkAPIError throws a PlatformException if the API response contains an error
 void checkAPIError(result, errorMessage) {
+  print(result);
   if (result is String) {
     final errorMessageMap = jsonDecode(result);
-    throw PlatformException(
-        code: errorMessageMap.toString(), message: errorMessage);
+    if (errorMessageMap.containsKey('error')){
+      throw PlatformException(
+          code: errorMessageMap['error'], message: errorMessage);
+    }
+    return;
   }
   if (result.error != "") {
     throw PlatformException(code: result.error, message: errorMessage);
@@ -214,17 +218,50 @@ void loadLibrary() {
 
 /// Auth methods for desktop
 
+/// FFI pointer to the native function
+Pointer<Utf8> ffiIsUserLoggedIn() {
+  final result =_bindings.isUserLoggedIn().cast<Utf8>();
+  print(result.toDartString());
+  return result;
+}
+
+/// FFI function
 Future<bool> ffiUserFirstVisit() {
   final result = _bindings.isUserFirstTime().cast<Utf8>().toDartString();
   return Future.value(result == 'true');
 }
 
-Pointer<Utf8> ffiIsUserLoggedIn() => _bindings.isUserLoggedIn().cast<Utf8>();
-
 void setUserFirstTimeVisit() => _bindings.setFirstTimeVisit();
 
-//Custom exception for handling error
+///signup
+Future<void> ffiSignUp(List<String> params) {
+  final email = params[0].toPointerChar();
+  final password = params[1].toPointerChar();
+  final result = _bindings.signup(email, password).cast<Utf8>().toDartString();
+  return Future.value(result.toBool());
+}
 
+/// login
+Future<void> ffiLogin(List<String> params) {
+  final email = params[0].toPointerChar();
+  final password = params[1].toPointerChar();
+  final result = _bindings
+      .login(email, password)
+      .cast<Utf8>()
+      .toDartString();
+  print("login result $result");
+  // checkAPIError(result, "errorMessage");
+  return Future.value(result.toBool());
+}
+
+/// logout
+
+Future<void> ffiLogout(dynamic context) {
+  final result = _bindings.logout().cast<Utf8>().toDartString();
+  return Future.value(result.toBool());
+}
+
+//Custom exception for handling error
 class NoPlansUpdate implements Exception {
   String message;
 

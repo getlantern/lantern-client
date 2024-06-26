@@ -76,7 +76,8 @@ class SessionModel extends Model {
       );
       userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
       proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
-      hasUserSignedInNotifier = ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
+      hasUserSignedInNotifier =
+          ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -312,12 +313,19 @@ class SessionModel extends Model {
   ///Auth Widgets
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
+    final websocket = WebsocketImpl.instance();
+
     if (isDesktop()) {
       return ffiValueBuilder<bool>(
         'IsUserLoggedIn',
         ffiIsUserLoggedIn,
         defaultValue: false,
         builder: builder,
+        onChanges: (setValue) {
+          listenWebsocket(websocket, 'pro', 'login', (p0) {
+            setValue(p0 as bool);
+          });
+        },
       );
     }
     return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
@@ -327,6 +335,9 @@ class SessionModel extends Model {
   /// Auth Method channel
 
   Future<void> signUp(String email, String password) {
+    if (isDesktop()) {
+      return compute(ffiSignUp, [email, password]);
+    }
     return methodChannel.invokeMethod('signup', <String, dynamic>{
       'email': email,
       'password': password,
@@ -349,6 +360,9 @@ class SessionModel extends Model {
   }
 
   Future<void> login(String email, String password) {
+    if (isDesktop()) {
+      return compute(ffiLogin, [email, password]);
+    }
     return methodChannel.invokeMethod('login', <String, dynamic>{
       'email': email,
       'password': password,
@@ -398,6 +412,9 @@ class SessionModel extends Model {
   }
 
   Future<void> signOut() {
+    if (isDesktop()) {
+      return compute(ffiLogout, '');
+    }
     return methodChannel.invokeMethod('signOut', <String, dynamic>{});
   }
 

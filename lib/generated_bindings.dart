@@ -552,6 +552,51 @@ class NativeLibrary {
           'isUserLoggedIn');
   late final _isUserLoggedIn =
       _isUserLoggedInPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> signup(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> password,
+  ) {
+    return _signup(
+      email,
+      password,
+    );
+  }
+
+  late final _signupPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('signup');
+  late final _signup = _signupPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  ffi.Pointer<ffi.Char> login(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> password,
+  ) {
+    return _login(
+      email,
+      password,
+    );
+  }
+
+  late final _loginPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('login');
+  late final _login = _loginPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  ffi.Pointer<ffi.Char> logout() {
+    return _logout();
+  }
+
+  late final _logoutPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('logout');
+  late final _logout =
+      _logoutPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 }
 
 /// mbstate_t is an opaque object to keep conversion state, during multibyte
