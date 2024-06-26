@@ -41,6 +41,7 @@
   <string name="submit_code">Kodu Onayla</string>
   <string name="on_text">AÇIK</string>
   <string name="off_text">KAPALI</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">Lantern Kapalı. Engelli sitelere ve hizmetlere ulaşmak için düğmeye basınız!</string>
   <string name="lantern_on">Lantern Açık. Şimdi engelli sitelere ve hizmetlere ulaşabilirsiniz!</string>
   <string name="on_desc">Şimdi engelli\r\nsitelere ve hizmetlere ulaşabilirsiniz.</string>
@@ -308,6 +309,7 @@
   <string name="earn_free_month">Kayıt olan her arkadaşınız için bir ay ücretsiz Pro kazanın</string>
   <string name="credits_applied">Sıradaki ödeme döneminde kredileriniz hesabınıza eklenecek.</string>
   <string name="pro_invitation_subject">Lantern Pro\'ya katılma daveti</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">Lantern sayesinde \"%1$s\" hakkında %2$s okuyorum. Lantern kullanarak engelli sitelere ve hizmetlere erişebilirsiniz. Android için buradan indirebilirsiniz: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Emin misiniz? Bu işlem geri alınamaz. Dilediğiniz zaman yeniden Pro hesabına kayıt olabilirsiniz.</string>
   <string name="unauthorize_confirmation">Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?</string>
@@ -498,6 +500,9 @@
   <string name="lantern_service">Lantern Hizmeti</string>
   <string name="replica_download">Çoğaltma İndirme</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

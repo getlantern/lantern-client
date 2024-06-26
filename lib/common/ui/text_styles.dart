@@ -53,7 +53,7 @@ CTextStyle tsSubtitle4 = CTextStyle(
   fontWeight: FontWeight.w500,
 );
 
-CTextStyle tsBody1 = CTextStyle(fontSize: 14, lineHeight: 23);
+CTextStyle tsBody1 = CTextStyle(fontSize: 14, lineHeight: 23,);
 
 CTextStyle tsBody1Short = CTextStyle(fontSize: 14, lineHeight: 18);
 

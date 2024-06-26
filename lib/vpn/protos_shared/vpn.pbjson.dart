@@ -89,6 +89,18 @@ const Devices$json = {
 final $typed_data.Uint8List devicesDescriptor = $convert.base64Decode(
     'CgdEZXZpY2VzEiEKB2RldmljZXMYASADKAsyBy5EZXZpY2VSB2RldmljZXM=');
 
+@$core.Deprecated('Use plansDescriptor instead')
+const Plans$json = {
+  '1': 'Plans',
+  '2': [
+    {'1': 'plan', '3': 1, '4': 3, '5': 11, '6': '.Plan', '10': 'plan'},
+  ],
+};
+
+/// Descriptor for `Plans`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List plansDescriptor = $convert.base64Decode(
+    'CgVQbGFucxIZCgRwbGFuGAEgAygLMgUuUGxhblIEcGxhbg==');
+
 @$core.Deprecated('Use planDescriptor instead')
 const Plan$json = {
   '1': 'Plan',
@@ -104,8 +116,9 @@ const Plan$json = {
     {'1': 'totalCost', '3': 9, '4': 1, '5': 9, '10': 'totalCost'},
     {'1': 'formattedBonus', '3': 10, '4': 1, '5': 9, '10': 'formattedBonus'},
     {'1': 'renewalText', '3': 11, '4': 1, '5': 9, '10': 'renewalText'},
+    {'1': 'renewalBonusExpected', '3': 13, '4': 3, '5': 11, '6': '.Plan.RenewalBonusExpectedEntry', '10': 'renewalBonusExpected'},
   ],
-  '3': [Plan_PriceEntry$json, Plan_ExpectedMonthlyPriceEntry$json],
+  '3': [Plan_PriceEntry$json, Plan_ExpectedMonthlyPriceEntry$json, Plan_RenewalBonusExpectedEntry$json],
 };
 
 @$core.Deprecated('Use planDescriptor instead')
@@ -128,6 +141,16 @@ const Plan_ExpectedMonthlyPriceEntry$json = {
   '7': {'7': true},
 };
 
+@$core.Deprecated('Use planDescriptor instead')
+const Plan_RenewalBonusExpectedEntry$json = {
+  '1': 'RenewalBonusExpectedEntry',
+  '2': [
+    {'1': 'key', '3': 1, '4': 1, '5': 9, '10': 'key'},
+    {'1': 'value', '3': 2, '4': 1, '5': 3, '10': 'value'},
+  ],
+  '7': {'7': true},
+};
+
 /// Descriptor for `Plan`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List planDescriptor = $convert.base64Decode(
     'CgRQbGFuEg4KAmlkGAEgASgJUgJpZBIgCgtkZXNjcmlwdGlvbhgCIAEoCVILZGVzY3JpcHRpb2'
@@ -137,10 +160,13 @@ final $typed_data.Uint8List planDescriptor = $convert.base64Decode(
     'ZWN0ZWRNb250aGx5UHJpY2USNgoWdG90YWxDb3N0QmlsbGVkT25lVGltZRgHIAEoCVIWdG90YW'
     'xDb3N0QmlsbGVkT25lVGltZRIiCgxvbmVNb250aENvc3QYCCABKAlSDG9uZU1vbnRoQ29zdBIc'
     'Cgl0b3RhbENvc3QYCSABKAlSCXRvdGFsQ29zdBImCg5mb3JtYXR0ZWRCb251cxgKIAEoCVIOZm'
-    '9ybWF0dGVkQm9udXMSIAoLcmVuZXdhbFRleHQYCyABKAlSC3JlbmV3YWxUZXh0GjgKClByaWNl'
-    'RW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKANSBXZhbHVlOgI4ARpHChlFeH'
-    'BlY3RlZE1vbnRobHlQcmljZUVudHJ5EhAKA2tleRgBIAEoCVIDa2V5EhQKBXZhbHVlGAIgASgD'
-    'UgV2YWx1ZToCOAE=');
+    '9ybWF0dGVkQm9udXMSIAoLcmVuZXdhbFRleHQYCyABKAlSC3JlbmV3YWxUZXh0ElMKFHJlbmV3'
+    'YWxCb251c0V4cGVjdGVkGA0gAygLMh8uUGxhbi5SZW5ld2FsQm9udXNFeHBlY3RlZEVudHJ5Uh'
+    'RyZW5ld2FsQm9udXNFeHBlY3RlZBo4CgpQcmljZUVudHJ5EhAKA2tleRgBIAEoCVIDa2V5EhQK'
+    'BXZhbHVlGAIgASgDUgV2YWx1ZToCOAEaRwoZRXhwZWN0ZWRNb250aGx5UHJpY2VFbnRyeRIQCg'
+    'NrZXkYASABKAlSA2tleRIUCgV2YWx1ZRgCIAEoA1IFdmFsdWU6AjgBGkcKGVJlbmV3YWxCb251'
+    'c0V4cGVjdGVkRW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKANSBXZhbHVlOg'
+    'I4AQ==');
 
 @$core.Deprecated('Use paymentProvidersDescriptor instead')
 const PaymentProviders$json = {
@@ -187,6 +213,9 @@ const User$json = {
     {'1': 'referral', '3': 11, '4': 1, '5': 9, '10': 'referral'},
     {'1': 'token', '3': 12, '4': 1, '5': 9, '10': 'token'},
     {'1': 'yinbiEnabled', '3': 13, '4': 1, '5': 8, '10': 'yinbiEnabled'},
+    {'1': 'inviters', '3': 14, '4': 3, '5': 9, '10': 'inviters'},
+    {'1': 'invitees', '3': 15, '4': 3, '5': 9, '10': 'invitees'},
+    {'1': 'purchases', '3': 16, '4': 3, '5': 11, '6': '.Purchase', '10': 'purchases'},
   ],
 };
 
@@ -198,7 +227,21 @@ final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
     'xlEh4KCmV4cGlyYXRpb24YByABKANSCmV4cGlyYXRpb24SIQoHZGV2aWNlcxgIIAMoCzIHLkRl'
     'dmljZVIHZGV2aWNlcxISCgRjb2RlGAkgASgJUgRjb2RlEhoKCGV4cGlyZUF0GAogASgDUghleH'
     'BpcmVBdBIaCghyZWZlcnJhbBgLIAEoCVIIcmVmZXJyYWwSFAoFdG9rZW4YDCABKAlSBXRva2Vu'
-    'EiIKDHlpbmJpRW5hYmxlZBgNIAEoCFIMeWluYmlFbmFibGVk');
+    'EiIKDHlpbmJpRW5hYmxlZBgNIAEoCFIMeWluYmlFbmFibGVkEhoKCGludml0ZXJzGA4gAygJUg'
+    'hpbnZpdGVycxIaCghpbnZpdGVlcxgPIAMoCVIIaW52aXRlZXMSJwoJcHVyY2hhc2VzGBAgAygL'
+    'MgkuUHVyY2hhc2VSCXB1cmNoYXNlcw==');
+
+@$core.Deprecated('Use purchaseDescriptor instead')
+const Purchase$json = {
+  '1': 'Purchase',
+  '2': [
+    {'1': 'plan', '3': 1, '4': 1, '5': 9, '10': 'plan'},
+  ],
+};
+
+/// Descriptor for `Purchase`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List purchaseDescriptor = $convert.base64Decode(
+    'CghQdXJjaGFzZRISCgRwbGFuGAEgASgJUgRwbGFu');
 
 @$core.Deprecated('Use baseResponseDescriptor instead')
 const BaseResponse$json = {

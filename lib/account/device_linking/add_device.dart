@@ -4,8 +4,8 @@ import 'package:lantern/plans/utils.dart';
 import 'explanation_step.dart';
 
 @RoutePage<void>(name: 'ApproveDevice')
-class ApproveDevice extends StatelessWidget {
-  ApproveDevice({Key? key}) : super(key: key);
+class AddDevice extends StatelessWidget {
+  AddDevice({Key? key}) : super(key: key);
 
   final pinCodeController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -78,7 +78,11 @@ class ApproveDevice extends StatelessWidget {
       appLogger.e("Error while approving device", error: e);
       context.loaderOverlay.hide();
       pinCodeController.clear();
-      showError(context, error: e);
+      CDialog.showError(
+        context,
+        description: e.localizedDescription,
+      );
+
     }
   }
 }

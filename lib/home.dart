@@ -1,4 +1,3 @@
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/account/privacy_disclosure.dart';
@@ -26,8 +25,9 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
+class _HomePageState extends State<HomePage> with WindowListener {
   Function()? _cancelEventSubscription;
+  Function userNew = once<void>();
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   void channelListener() {
-    if(Platform.isIOS) return;
+    if (Platform.isIOS) return;
 
     const mainMethodChannel = MethodChannel('lantern_method_channel');
     const navigationChannel = MethodChannel('navigation');
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               .then((shouldShowModal) async {
             if (shouldShowModal) {
               // open VPN tab
-               sessionModel.setSelectedTab(context,TAB_VPN);
+              sessionModel.setSelectedTab(context, TAB_VPN);
               // show Try Lantern Chat dialog
               await context.router
                   .push(FullScreenDialogPage(widget: TryLanternChat()));
@@ -93,17 +93,47 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     });
   }
 
-
-
   void _initWindowManager() async {
     windowManager.addListener(this);
-    // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
     setState(() {});
   }
 
   void setupTrayManager() async {
     trayManager.addListener(TrayHandler.instance);
+  }
+
+  Future<void> _checkForFirstTimeVisit() async {
+    if (!Platform.isIOS) return;
+
+    checkForFirstTimeVisit() async {
+      if (sessionModel.proUserNotifier.value == null) {
+        return;
+      }
+      if (sessionModel.proUserNotifier.value!) {
+        sessionModel.setFirstTimeVisit();
+        if (sessionModel.proUserNotifier.hasListeners) {
+          sessionModel.proUserNotifier.removeListener(() {});
+        }
+        return;
+      }
+      final isFirstTime = await sessionModel.isUserFirstTimeVisit();
+      if (isFirstTime) {
+        context.router.push(const AuthLanding());
+        sessionModel.setFirstTimeVisit();
+        if (sessionModel.proUserNotifier.hasListeners) {
+          sessionModel.proUserNotifier.removeListener(() {});
+        }
+      }
+    }
+
+    if (sessionModel.proUserNotifier.value != null) {
+      checkForFirstTimeVisit();
+    } else {
+      sessionModel.proUserNotifier.addListener(() async {
+        checkForFirstTimeVisit();
+      });
+    }
   }
 
   @override
@@ -185,20 +215,20 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               // not already been accepted
               return const PrivacyDisclosure();
             }
-            return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-              final isTesting = const String.fromEnvironment(
-                    'driver',
-                    defaultValue: 'false',
-                  ).toLowerCase() ==
-                  'true';
+            if (Platform.isIOS) {
+              userNew(() {
+                print("called user new function");
+                _checkForFirstTimeVisit();
+              });
+            }
 
+            return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
               return Scaffold(
                 body: buildBody(tab, isOnboarded),
                 bottomNavigationBar: CustomBottomBar(
                   selectedTab: tab,
                   isDevelop: developmentMode,
-                  isTesting: isTesting,
                 ),
               );
             });

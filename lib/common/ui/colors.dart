@@ -17,6 +17,7 @@ Color yellow6 = HexColor('#957000');
 Color pink1 = HexColor('#FFF4F8');
 Color pink3 = HexColor('#FF4081');
 Color pink4 = HexColor('#DB0A5B');
+Color pink5 = HexColor('#C20850');
 
 // Grey scale
 Color white = HexColor('#FFFFFF');
@@ -27,6 +28,10 @@ Color grey4 = HexColor('#BFBFBF');
 Color grey5 = HexColor('#707070');
 Color scrimGrey = HexColor('#C4C4C4');
 Color black = HexColor('#000000');
+
+Color red = HexColor('#D5001F');
+
+
 Color videoControlsGrey = black.withOpacity(0.1);
 
 // Avatars

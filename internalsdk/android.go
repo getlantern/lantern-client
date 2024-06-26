@@ -640,6 +640,7 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 			checkFeatures()
 		}
 	}()
+
 	replicaServer.CheckEnabled()
 
 	go runner.Run(

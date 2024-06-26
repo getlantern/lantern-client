@@ -41,6 +41,7 @@
   <string name="submit_code">کد تایید</string>
   <string name="on_text">روشن</string>
   <string name="off_text">خاموش</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">فانوس خاموش است، کلید را بچرخوانید تا به سایت ها و خدمات بسته شده دسترسی پیدا کنید!</string>
   <string name="lantern_on">فانوس روشن است. اکنون شما می توانید به سایت ها و خدمات بسته شده دسترسی پیدا کنید!</string>
   <string name="on_desc">اکنون شما می توانید/n/r به سایت ها و خدمات بسته شده دسترسی پیدا کنید</string>
@@ -306,6 +307,7 @@
   <string name="earn_free_month">یک ماه عضویت رایگان برای هر دوستی که ثبت نام کنید را کسب کنید</string>
   <string name="credits_applied">اعتبارات شما در چرخه صدور صورتحساب بعدی به حساب شما اعمال خواهد شد.</string>
   <string name="pro_invitation_subject">دعوت به عضویت فانوس pro</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">من از طریق فانوس در باره ی  %1$s در %2$s  می خوانم. برای دسترسی به سایت ها و خدمات مسدود شده از فانوس استفاده کنید. شما می توانید آن را بر روی Android از لینک زیر دانلود کنید.
 https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">آیا مطمئن هستید؟ این عمل قابل لغو نیست! شما میتوانید در هر زمان برای حساب pro دوباره ثبت نام کنید.</string>
@@ -498,6 +500,9 @@ https://bit.ly/lanternapk</string>
   <string name="lantern_service">سرویس</string>
   <string name="replica_download">دانلود Replica</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

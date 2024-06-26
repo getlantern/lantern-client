@@ -41,6 +41,7 @@
   <string name="submit_code">पुष्टि संहिता</string>
   <string name="on_text">चालू</string>
   <string name="off_text">बंद</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">लालटेन बंद है। पहुँच अवरुद्ध साइटों और सेवाओं के लिए स्विच फ्लिप!</string>
   <string name="lantern_on">लालटेन पर है। आप अवरुद्ध साइटों का उपयोग कर सकते हैं।</string>
   <string name="on_desc">अब आप\r\nसाइटों और सेवाओं तक पहुँच प्राप्त कर सकते हैं</string>
@@ -308,6 +309,7 @@
   <string name="earn_free_month">प्रत्येक दोस्त के साइन अप करने पर एक निःशुल्क महीना पाएँ</string>
   <string name="credits_applied">आपके क्रेडिट अगले बिलिंग चक्र पर आपके खाते पर लागू होंगे।</string>
   <string name="pro_invitation_subject">Lantern Pro में शामिल होने का निमंत्रण</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">मैं Lantern के माध्यम से %2$s पर \"%1$s\" के बारे में पढ़ रहा हूँ। अवरुद्ध साइटों और सेवाओं तक पहुँच प्राप्त करने के लिए Lantern का उपयोग करें। आप Android के लिए इसे यहाँ से डाउनलोड कर सकते हैं: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">क्या आप सुनिश्चित है? यह कार्य दोबारा से नहीं हो सकता! आप किसी भी समय फिर से Pro के लिए साइन अप कर सकते हैं।</string>
   <string name="unauthorize_confirmation">क्या आप वाकई इस डिवाइस को अपने Pro खाते से अनलिंक करना चाहते हैं?</string>
@@ -498,6 +500,9 @@
   <string name="lantern_service">Lantern सर्विस</string>
   <string name="replica_download">रेप्लिका डाउनलोड</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

@@ -57,6 +57,7 @@ class BaseScreen extends StatelessWidget {
   }
 
   Widget doBuild(BuildContext context, double networkWarningBarHeightRatio) {
+    bool canPop = Navigator.of(context).canPop();
     final screenInfo = MediaQuery.of(context);
     var verticalCorrection =
         (screenInfo.viewInsets.top + screenInfo.padding.top) *
@@ -80,7 +81,7 @@ class BaseScreen extends StatelessWidget {
                       ),
                       AppBar(
                         automaticallyImplyLeading: automaticallyImplyLeading,
-                        leading: automaticallyImplyLeading
+                        leading: automaticallyImplyLeading && canPop
                             ? IconButton(
                                 icon: const Icon(Icons.arrow_back,
                                     color: Colors.black),
@@ -137,7 +138,6 @@ class BaseScreen extends StatelessWidget {
           );
   }
 }
-
 class ConnectivityWarning extends StatelessWidget {
   const ConnectivityWarning({
     Key? key,
@@ -151,15 +151,15 @@ class ConnectivityWarning extends StatelessWidget {
     return GestureDetector(
       onTap: sessionModel.proxyAvailable.value != true
           ? () => CDialog(
-                title: 'connection_error'.i18n,
-                description: 'connection_error_des'.i18n,
-                agreeText: 'connection_error_button'.i18n,
-                agreeAction: () async {
-                  context.popRoute();
-                  await context.pushRoute(ReportIssue());
-                  return true;
-                },
-              ).show(context)
+        title: 'connection_error'.i18n,
+        description: 'connection_error_des'.i18n,
+        agreeText: 'connection_error_button'.i18n,
+        agreeAction: () async {
+          context.popRoute();
+          await context.pushRoute(ReportIssue());
+          return true;
+        },
+      ).show(context)
           : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 600),
@@ -172,8 +172,8 @@ class ConnectivityWarning extends StatelessWidget {
           children: [
             CText(
               (sessionModel.proxyAvailable.value != true
-                      ? 'connection_error'
-                      : 'no_network_connection')
+                  ? 'connection_error'
+                  : 'no_network_connection')
                   .i18n
                   .toUpperCase(),
               style: tsBody2.copiedWith(

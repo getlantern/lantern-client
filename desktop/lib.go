@@ -31,6 +31,7 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/osversion"
 	"github.com/joho/godotenv"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -78,7 +79,7 @@ func start() {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &proclient.Opts{
+	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
 		HttpClient: &http.Client{
 			Transport: proxied.ParallelForIdempotent(),
 			Timeout:   30 * time.Second,

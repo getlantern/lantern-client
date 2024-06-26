@@ -64,6 +64,7 @@ struct Constants {
     process: Process,
     sharedContainerURL: URL = Constants.appGroupContainerURL
   ) {
+
     self.sharedContainerURL = sharedContainerURL
     self.configDirectoryURL = sharedContainerURL.appendingPathComponent("config", isDirectory: true)
 
