@@ -39,6 +39,7 @@ class ServerLocationWidget extends StatelessWidget {
               (BuildContext context, String vpnStatus, Widget? child) {
             return sessionModel.serverInfo(
                 (BuildContext context, ServerInfo serverInfo, Widget? child) {
+              print("serverInfo is $serverInfo");
               if (vpnStatus == 'connected' || vpnStatus == 'disconnecting') {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -18,6 +18,7 @@ const TAB_DEVELOPER = 'developer';
 
 class SessionModel extends Model {
   late final EventManager eventManager;
+  late final WebsocketImpl? websocket;
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -39,6 +40,7 @@ class SessionModel extends Model {
       country = singleValueNotifier('geo_country_code', 'US');
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
+      websocket = WebsocketImpl.instance();
       isPlayVersion = ffiValueNotifier(
         ffiPlayVersion,
         'isPlayVersion',
@@ -73,37 +75,22 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
-  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
-  // the onMessage callback is triggered with the given property value
-  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
-      String? property, void Function(T?) onMessage) {
-    if (websocket == null) return;
-    websocket.messageStream.listen(
-      (json) {
-        if (json["type"] == messageType) {
-          if (property != null) {
-            onMessage(json["message"][property]);
-          } else {
-            onMessage(json["message"]);
-          }
-        }
-      },
-      onError: (error) => appLogger.i("websocket error: ${error.description}"),
-    );
-  }
-
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
-    final websocket = WebsocketImpl.instance();
+    var setValue = (value) => {
+
+    };
+    websocket?.addMessageCallback("pro", (_, json) {
+      if (json["pro"] != null && json["pro"]["userStatus"] != null) {
+        var value = json["pro"]["userStatus"];
+        if (value != null && value.toString() == "active") setValue(true);
+      }
+    });
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
-      onChanges: (setValue) =>
-          listenWebsocket(websocket, "pro", "userStatus", (value) {
-        if (value != null && value.toString() == "active") setValue(true);
-      }),
       ffiProUser,
       builder: builder,
     );
@@ -190,15 +177,17 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
-    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<String>(
       'lang',
       defaultValue: 'en',
-      onChanges: (setValue) =>
-          listenWebsocket(websocket, "pro", "language", (value) {
-        if (value != null && value.toString() != "") setValue(value.toString());
-      }),
       ffiLang,
+      onChanges: (setValue) => {
+        websocket?.addMessageCallback("pro", (_, json) {
+          if (json["pro"] != null && json["pro"]["language"] != null) {
+            var value = json["pro"]["language"];
+            if (value != null && value.toString() != "") setValue(value.toString());
+          }
+        })},
       builder: builder,
     );
   }
@@ -611,12 +600,12 @@ class SessionModel extends Model {
         final res = jsonEncode(json);
         return ServerInfo.create()..mergeFromProto3Json(jsonDecode(res));
       },
-      deserialize: (Uint8List serialized) {
-        return ServerInfo.fromBuffer(serialized);
+      defaultValue: null,
+      onChanges: (setValue) {
+
       },
     );
   }
-
 
   Future<void> trackUserAction(
     String name,
@@ -786,14 +775,16 @@ class SessionModel extends Model {
   }
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
-    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<bool>(
       'proxyAll',
       defaultValue: false,
-      onChanges: (setValue) =>
-          listenWebsocket(websocket, "settings", "proxyAll", (value) {
-        if (value != null) setValue(value as bool);
-      }),
+      onChanges: (setValue) => {
+      websocket?.addMessageCallback("pro", (_, json) {
+          if (json["pro"] != null && json["pro"]["userStatus"] != null) {
+            var value = json["pro"]["userStatus"];
+            if (value != null && value.toString() == "active") setValue(true);
+          }
+        })},
       ffiProxyAll,
       builder: builder,
     );

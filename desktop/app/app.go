@@ -389,6 +389,10 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 	app.statsTracker.AddListener(fn)
 }
 
+func (app *App) StatsTracker() stats.Tracker {
+	return app.statsTracker
+}
+
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
@@ -430,34 +434,25 @@ func (app *App) serveStats(channel ws.UIChannel) error {
 	}
 
 	service, err := channel.Register("stats", helloFn)
-	if err == nil {
-		app.statsTracker.AddListener(func(stats stats.Stats) {
-			app.SetStats(&stats)
-			serverInfo := &protos.ServerInfo{
-				City:        stats.City,
-				Country:     stats.Country,
-				CountryCode: stats.CountryCode,
-			}
-			b, _ := protojson.Marshal(serverInfo)
-			log.Debugf("Stats2 updated: %v", string(b))
-			service.Out <- map[string]interface{}{
-				"city":        stats.City,
-				"country":     stats.Country,
-				"countryCode": stats.CountryCode,
-			}
-		})
+	if err != nil {
+		return err
 	}
-	return err
-}
 
-func (app *App) SetStats(st *stats.Stats) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.stats = st
-}
-
-func (app *App) Stats() *stats.Stats {
-	return app.stats
+	app.statsTracker.AddListener(func(stats stats.Stats) {
+		serverInfo := &protos.ServerInfo{
+			City:        stats.City,
+			Country:     stats.Country,
+			CountryCode: stats.CountryCode,
+		}
+		b, _ := protojson.Marshal(serverInfo)
+		log.Debugf("Stats updated: %v", string(b))
+		service.Out <- map[string]interface{}{
+			"city":        stats.City,
+			"country":     stats.Country,
+			"countryCode": stats.CountryCode,
+		}
+	})
+	return nil
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {

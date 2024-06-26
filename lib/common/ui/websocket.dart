@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:lantern/common/common_desktop.dart';
 
@@ -9,8 +11,13 @@ abstract class WebsocketService {
   void send(String event, Map<String, dynamic> data);
 }
 
+typedef void MsgCallBack(String action, dynamic data);
+
 class WebsocketImpl implements WebsocketService {
   static WebsocketImpl? _websocket;
+
+  Map<String, List<MsgCallBack>> callbacks = Map();
+
   WebsocketImpl._internal();
 
   // the maximum number of times we attempt to reconnect
@@ -79,6 +86,15 @@ class WebsocketImpl implements WebsocketService {
     }
   }
 
+  void addMessageCallback(String action, MsgCallBack msgCallBack) {
+    List<MsgCallBack>? callback = callbacks[action];
+    if (callback == null) {
+      callback = [];
+      callbacks[action] = callback;
+    }
+    callback.add(msgCallBack);
+  }
+
   // Close sink for sending values and websocket connection
   @override
   Future<void> close() async {
@@ -91,7 +107,12 @@ class WebsocketImpl implements WebsocketService {
 
   Future<void> _handleMessage(message) async {
     final Map<String, dynamic> json = jsonDecode(message ?? {});
-    streamController.add(json);
+    String? messageType = json["type"];
+    if (messageType == null) return;
+    callbacks[messageType]?.forEach((callback) {
+      callback(messageType, json);
+    });
+    //streamController.add(json);
   }
 
   Future<void> reconnect(Uri uri) async {

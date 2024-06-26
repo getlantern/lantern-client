@@ -31,11 +31,14 @@ class VpnModel extends Model {
     return ffiValueBuilder<String>(
       'vpnStatus',
       defaultValue: '',
-      onChanges: (setValue) => sessionModel
-          .listenWebsocket(websocket, "vpnstatus", "connected", (value) {
-        final isConnected = value != null && value.toString() == "true";
-        setValue(isConnected ? "connected" : "disconnected");
-      }),
+      onChanges: (setValue) => {
+      websocket?.addMessageCallback("pro", (_, json) {
+          if (json["pro"] != null && json["vpnstatus"]["connected"] != null) {
+            var value = json["pro"]["userStatus"];
+            final isConnected = value != null && value.toString() == "true";
+            if (value != null && value.toString() == "true") setValue(isConnected ? "connected" : "disconnected");
+          }
+        })},
       ffiVpnStatus,
       builder: builder,
     );
@@ -60,17 +63,16 @@ class VpnModel extends Model {
     return ffiValueBuilder<Bandwidth>(
       'bandwidth',
       defaultValue: null,
-      onChanges: (setValue) =>
-          sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
-        if (value != null) {
-          final Map res = jsonDecode(jsonEncode(value));
-          setValue(Bandwidth.create()
-            ..mergeFromProto3Json({
-              'allowed': res['mibAllowed'],
-              'remaining': res['mibUsed'],
-            }));
-        }
-      }),
+      onChanges: (setValue) {
+          websocket?.addMessageCallback("bandwidth", (_, json) {
+            final Map res = jsonDecode(jsonEncode(json));
+            setValue(Bandwidth.create()
+              ..mergeFromProto3Json({
+                'allowed': res['mibAllowed'],
+                'remaining': res['mibUsed'],
+              }));
+          });
+      },
       null,
       builder: builder,
     );
