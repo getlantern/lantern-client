@@ -7,6 +7,7 @@ import (
 
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )

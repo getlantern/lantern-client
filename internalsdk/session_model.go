@@ -1434,7 +1434,6 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 
 	// Prepare login request body
 	client := srp.NewSRPClient(srp.KnownGroups[group], auth.GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
-
 	//Send this key to client
 	A := client.EphemeralPublic()
 
@@ -1520,7 +1519,8 @@ func completeChangeEmail(session SessionModel, email string, newEmail string, pa
 // Clear slat and change accoutn state
 func signOut(session *SessionModel) error {
 	uc := NewUserConfig(NewPanickingSession(session))
-	loggedOut, logoutErr := session.authClient.SignOut(context.Background(), uc)
+	ctx := context.Background()
+	loggedOut, logoutErr := session.authClient.SignOut(ctx, uc)
 	if logoutErr != nil {
 		return log.Errorf("Error while signing out %v", logoutErr)
 	}
@@ -1528,10 +1528,10 @@ func signOut(session *SessionModel) error {
 	if !loggedOut {
 		return log.Errorf("Error while signing out %v", logoutErr)
 	}
-	if err := clearLocalUserData(*session); err != nil {
+	if err := clearLocalUserData(session); err != nil {
 		return log.Errorf("Error while clearing local data %v", err)
 	}
-	return session.userCreate(context.Background())
+	return session.userCreate(ctx)
 }
 
 func clearLocalUserData(session SessionModel) error {

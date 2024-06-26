@@ -33,11 +33,15 @@
   <string name="common_issue_list_2">လက်မှတ်ထိုးမရနိုင် </string>
   <string name="common_issue_list_3">အဆုံးမရှိသော လည်ပတ်ခြင်း </string>
   <string name="common_issue_list_4">နှေးနှေး</string>
+  <string name="common_issue_list_5"></string>
+  <string name="common_issue_list_6"></string>
+  <string name="common_issue_list_7"></string>
   <string name="common_issue_list_8">အပလီကေးရှင်းမကြာခဏကျွေး </string>
   <string name="common_issue_list_9">အခြား</string>
   <string name="submit_code">ကုဒ်အတည်ပြုပါ</string>
   <string name="on_text">ဖွင့်</string>
   <string name="off_text">ပိတ်</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">Lantern ကို ပိတ်ထားသည်။ ပိတ်ထားသောဆိုဒ်များနှင့် ဝန်ဆောင်မှုများကိုရယူရန် ခလုတ်ကိုလှန်လိုက်ပါ။</string>
   <string name="lantern_on">မီးအိမ်သည် Lantern ကို ယခုဖွင့်လိုက်ပြီ။ ယခုသင်သည် ပိတ်ဆို့ထားသောဆိုဒ်များနှင့် ဝန်ဆောင်မှုများကို ဝင်ရောက်ကြည့်ရှုနိုင်ပြီဖြစ်သည်။</string>
   <string name="on_desc">ယခုသင် \r\ nပိတ်ဆို့ထားသော ဆိုဒ်များနှင့် ဝန်ဆောင်မှုများကို ကြည့်ရှုနိုင်သည်</string>
@@ -53,6 +57,7 @@
   <string name="error_making_purchase">ဝယ်ယူရန်ကြိုးစားနေသည့်အမှား</string>
   <string name="have_latest_version">%1$s%2$sမှာ ရရှိနိုင်သည့် နောက်ဆုံးပေါ်ဗားရှင်းဖြစ်ပါသည်။</string>
   <string name="updating_lantern">%1$s ကို မွမ်းမံနေသည်</string>
+  <string name="update_lantern"></string>
   <string name="cancel">ပယ်ဖျက်ပါ</string>
   <string name="newsfeed_option">Lanten သတင်းစဉ်ကို စမ်းသုံးပါ</string>
   <string name="newsfeed_off_option">သတင်းစဉ်ကို ပိတ်ပါ</string>
@@ -100,6 +105,7 @@
   <string name="error_update">အပ်ဒိတ်ကို ဒေါင်းလုပ်ဆွဲယူခြင်းအမှား</string>
   <string name="error_install_update">အပ်ဒိတ် ထည့်သွင်းရာတွင် မှားယွင်းမှု</string>
   <string name="loading">တင်နေသည် ..</string>
+  <string name="manual_update"></string>
   <string name="pro_welcome_text">Lantern Pro မှကြိုဆိုပါသည်။</string>
   <string name="happy_anniversary">ပျော်ရွှင်စရာ LANTERN နှစ်ပတ်လည်</string>
   <string name="welcome_greeting">Lantern မှကြိုဆိုပါတယ်</string>
@@ -127,6 +133,7 @@
   <string name="share_friends_text">အခမဲ့လများရရှိရန် မိတ်ဆွေသူငယ်ချင်းများနှင့် မျှဝေပါ။</string>
   <string name="email_address">အီးမေးလိပ်စာ</string>
   <string name="switch_to_alipay">Alipay သို့ပြောင်းပါ</string>
+  <string name="switch_to_stripe"></string>
   <string name="switch_to_credit_card">Credit Card Payment ကိုပြောင်းပါ</string>
   <string name="continue_to_pro">PRO ကိုဆက်သွားပါ</string>
   <string name="continue_to_basic">Basic ဗားရှင်းကိုဆက်သွားပါ</string>
@@ -300,6 +307,7 @@
   <string name="earn_free_month">sign up လုပ်သောသူငယ်ချင်းတိုင်းအတွက်အခမဲ့တစ်လ ရယူပါ</string>
   <string name="credits_applied">သင်၏ခရက်ဒစ်များကိုသင်၏အကောင့်သို့လာမည့်ငွေတောင်းခံသံသရာတွင်လျှောက်လိမ့်မည်</string>
   <string name="pro_invitation_subject">Lantern Pro သို့ဆက်သွယ်ရန်ဖိတ်ကြားခြင်း</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">ငါ \" %1$s\" အကြောင်းကို %2$s မှာ Lantern က တစ်ဆင့် ဖတ်နေတာ။ ပိတ်ဆို့ထားသောဆိုဒ်များနှင့်ဝန်ဆောင်မှုများကို ရယူရန် Lantern ကိုအသုံးပြုပါ။ ဤနေရာတွင် Android အတွက် ရယူနိုင်သည် -  https://bit.ly/lanternapk </string>
   <string name="cancel_pro_confirmation">သေချာလား? ဒီလုပ်ဆောင်ချက်ကိုဖျက်သိမ်းလို့မရပါ။ သင်မည်သည့်အချိန်တွင်မဆို Pro အတွက်ထပ်မံစာရင်းသွင်းနိုင်သည်။</string>
   <string name="unauthorize_confirmation">ဤပစ္စည်းအားသင်၏ Pro အကောင့်မှသင်ပြန်ဖွင့်လိုသည်မှာသေချာပါသလား။</string>
@@ -462,6 +470,7 @@
   <string name="device_authorized_pro">သင်၏ကိရိယာအသစ်ကို သင်၏ Pro အကောင့်ကိုအသုံးပြုရန် ယခုတရားဝင်ခွင့်ပြုထားသည်။ အပြောင်းအလဲများအကျိုးသက်ရောက်ရန် မိနစ်အနည်းငယ်စောင့်ပါ။</string>
   <string name="report_sent">ပို့ပြီးပါပြီ</string>
   <string name="thank_you_for_reporting_your_issue">သင့်ပြဿနာကို တင်ပြသည့်အတွက် ကျေးဇူးတင်ပါသည်။ အရေအတွက်ကြောင့် ကျွန်ုပ်တို့သည် ပြဿနာအများစုကို အကြောင်းမပြန်နိုင်သော်လည်း သင်၏တင်ပြမှုများကို အခြေခံ၍ ကျွန်ုပ်တို့သည် Lantern ကို မြှင့်တင်ရန် အလွန်ကြိုးစားနေသည်ဟု အခိုင်အမာပြောလိုပါသည်။</string>
+  <string name="unable_to_submit_issue"></string>
   <string name="have_a_lantern_pro_activation_code_click_here">Lantern Pro activation ကုဒ် ရှိသလား။ ဤနေရာကို ကလစ်နှိပ်ပါ</string>
   <string name="enter_email_and_activation_code">အီးမေးလ်နှင့် အသက်သွင်းကုဒ်ကို ထည့်သွင်းပါ</string>
   <string name="activation_code">Activation ကုဒ်</string>
@@ -489,6 +498,9 @@
   <string name="lantern_service">Lantern ဝန်ဆောင်မှု</string>
   <string name="replica_download">Lantern ဝန်ဆောင်မှု</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

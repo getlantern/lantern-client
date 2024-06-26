@@ -2,7 +2,9 @@ package internalsdk
 
 import (
 	"bytes"
+	"crypto/rand"
 	cryptoRand "crypto/rand"
+	"crypto/sha256"
 	"encoding/binary"
 	"fmt"
 	"math"
@@ -14,6 +16,7 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
+	"golang.org/x/crypto/pbkdf2"
 )
 
 func BytesToFloat64LittleEndian(b []byte) (float64, error) {
@@ -99,6 +102,15 @@ func GenerateRandomString(length int) string {
 	}
 	return random
 }
+func GenerateSalt() ([]byte, error) {
+	salt := make([]byte, 16)
+	if n, err := rand.Read(salt); err != nil {
+		return nil, err
+	} else if n != 16 {
+		return nil, errors.New("failed to generate 16 byte salt")
+	}
+	return salt, nil
+}
 
 func ToString(value int64) string {
 	return fmt.Sprintf("%d", value)
@@ -152,4 +164,13 @@ func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) *protos.Us
 	}
 
 	return &userData
+}
+
+// Takes password and email, salt and returns encrypted key
+func GenerateEncryptedKey(password string, email string, salt []byte) *big.Int {
+	lowerCaseEmail := strings.ToLower(email)
+	combinedInput := password + lowerCaseEmail
+	encryptedKey := pbkdf2.Key([]byte(combinedInput), salt, 4096, 32, sha256.New)
+	encryptedKeyBigInt := big.NewInt(0).SetBytes(encryptedKey)
+	return encryptedKeyBigInt
 }

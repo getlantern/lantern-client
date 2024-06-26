@@ -41,6 +41,7 @@
   <string name="submit_code">Mengesahkan Kod</string>
   <string name="on_text">BUKA</string>
   <string name="off_text">TUTUP</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">Lantern Tutup.  Buka suis untuk akses laman-laman dan perkhimatan yang disekat! </string>
   <string name="lantern_on">Lantern Buka.  Anda boleh akses laman-laman dan perkhidmatan!</string>
   <string name="on_desc">Anda kini boleh akses\r\nlaman-laman dan perkhidmatan yang disekat</string>
@@ -309,6 +310,7 @@
   <string name="earn_free_month">Dapatkan satu bulan percuma bagi setiap rakan yang mendaftar</string>
   <string name="credits_applied">Kredit-kredit anda akan dimasukkan ke dalam akaun anda pada kitaran pengebilan yang seterusnya.</string>
   <string name="pro_invitation_subject">Jemputan untuk menyertai Lantern Pro</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">Saya membaca mengenai \"%1$s\" at %2$s melalui Lantern. Guna Lantern untuk akses laman-laman dan perkhidmatan yang telah disekat. Anda boleh muat turun Android dari sini: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Adakah anda pasti?  Tindakan ini tidak boleh dibatalkan!  Anda boleh mendaftar untuk Pro bila-bila masa lagi.</string>
   <string name="unauthorize_confirmation">Adakah anda pasti ingin mengeluarkan pautan peranti dari account Pro anda?</string>
@@ -499,6 +501,9 @@
   <string name="lantern_service">Perkhidmatan Lantern</string>
   <string name="replica_download">Muat Turun Replika</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

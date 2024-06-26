@@ -41,6 +41,7 @@
   <string name="submit_code">কোড নিশ্চত করুন</string>
   <string name="on_text">চালু</string>
   <string name="off_text">বন্ধ</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">Lantern বন্ধ। ব্লক সাইট এবং সেবা অ্যাক্সেস করতে সুইচ ফ্লিপ করুন!</string>
   <string name="lantern_on">Lantern চালু। আপনি এখন ব্লক সাইট এবং সেবা অ্যাক্সেস করতে পারেন!</string>
   <string name="on_desc">Lanternআপনি এখন ব্লক সাইট এবং সেবা অ্যাক্সেস করতে পারেন!</string>
@@ -502,6 +503,9 @@
   <string name="lantern_service">Lantern পরিষেবা</string>
   <string name="replica_download">রিপ্লিকা ডাউনলোড</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

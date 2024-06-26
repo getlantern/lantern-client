@@ -315,6 +315,7 @@ class NativeLibrary {
   late final _storeVersion =
       _storeVersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
+<<<<<<< HEAD
   ffi.Pointer<ffi.Char> userSignedIn() {
     return _userSignedIn();
   }
@@ -325,6 +326,8 @@ class NativeLibrary {
   late final _userSignedIn =
       _userSignedInPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
+=======
+>>>>>>> origin/main
   ffi.Pointer<ffi.Char> lang() {
     return _lang();
   }
@@ -524,6 +527,7 @@ class NativeLibrary {
       reportIssue_return Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>)>();
 
+<<<<<<< HEAD
   ffi.Pointer<ffi.Char> login(
     ffi.Pointer<ffi.Char> email,
     ffi.Pointer<ffi.Char> password,
@@ -560,6 +564,8 @@ class NativeLibrary {
       ffi.Pointer<ffi.Char> Function(
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
+=======
+>>>>>>> origin/main
   ffi.Pointer<ffi.Char> checkUpdates() {
     return _checkUpdates();
   }
