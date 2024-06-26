@@ -315,19 +315,6 @@ class NativeLibrary {
   late final _storeVersion =
       _storeVersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-<<<<<<< HEAD
-  ffi.Pointer<ffi.Char> userSignedIn() {
-    return _userSignedIn();
-  }
-
-  late final _userSignedInPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'userSignedIn');
-  late final _userSignedIn =
-      _userSignedInPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-=======
->>>>>>> origin/main
   ffi.Pointer<ffi.Char> lang() {
     return _lang();
   }
@@ -527,45 +514,6 @@ class NativeLibrary {
       reportIssue_return Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>)>();
 
-<<<<<<< HEAD
-  ffi.Pointer<ffi.Char> login(
-    ffi.Pointer<ffi.Char> email,
-    ffi.Pointer<ffi.Char> password,
-  ) {
-    return _login(
-      email,
-      password,
-    );
-  }
-
-  late final _loginPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<ffi.Char> Function(
-              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('login');
-  late final _login = _loginPtr.asFunction<
-      ffi.Pointer<ffi.Char> Function(
-          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
-
-  ffi.Pointer<ffi.Char> signUp(
-    ffi.Pointer<ffi.Char> email,
-    ffi.Pointer<ffi.Char> password,
-  ) {
-    return _signUp(
-      email,
-      password,
-    );
-  }
-
-  late final _signUpPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<ffi.Char> Function(
-              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('signUp');
-  late final _signUp = _signUpPtr.asFunction<
-      ffi.Pointer<ffi.Char> Function(
-          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
-
-=======
->>>>>>> origin/main
   ffi.Pointer<ffi.Char> checkUpdates() {
     return _checkUpdates();
   }
