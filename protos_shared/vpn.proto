@@ -28,8 +28,6 @@ message Device {
   int64 created = 3;
 }
 
-
-
 message Devices {
   repeated Device devices = 1;
 }
@@ -80,19 +78,11 @@ message User {
   repeated string inviters = 14;
   repeated string invitees = 15;
   repeated Purchase purchases = 16;
-<<<<<<< HEAD
 }
 
-message Purchase  {
-  string plan = 1;
-=======
->>>>>>> origin/main
-}
-
-message Purchase  {
+message Purchase {
   string plan = 1;
 }
-
 
 
 // API
