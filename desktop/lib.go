@@ -384,8 +384,8 @@ func userData() *C.char {
 
 //export serverInfo
 func serverInfo() *C.char {
-	stats := a.Stats()
-	if stats == nil {
+	stats := a.StatsTracker().Latest()
+	if stats.CountryCode == "" {
 		return C.CString("")
 	}
 	serverInfo := &protos.ServerInfo{
