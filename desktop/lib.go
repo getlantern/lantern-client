@@ -167,6 +167,8 @@ func fetchOrCreate() error {
 	settings := a.Settings()
 	userID := settings.GetUserID()
 	if userID == 0 {
+		// User is new
+		a.Settings().SetUserFirstVisit(true)
 		user, err := proClient.UserCreate(context.Background())
 		if err != nil {
 			return errors.New("Could not create new Pro user: %v", err)
@@ -744,6 +746,20 @@ func handleSignals(a *app.App) {
 		log.Debugf("Got signal \"%s\", exiting...", s)
 		a.Exit(nil)
 	}()
+}
+
+// Auth Methods
+
+//export isUserFirstTime
+func isUserFirstTime() *C.char {
+	firstVist := a.Settings().GetUserFirstVisit()
+	stringValue := fmt.Sprintf("%t", firstVist)
+	return C.CString(stringValue)
+}
+
+//export setFirstTimeVisit
+func setFirstTimeVisit() {
+	a.Settings().SetUserFirstVisit(false)
 }
 
 func main() {}

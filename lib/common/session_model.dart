@@ -74,8 +74,8 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
-      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress',"");
-      proUserNotifier = ffiValueNotifier(ffiProUser,'prouser', false);
+      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
+      proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
     }
 
     if (Platform.isAndroid) {
@@ -400,13 +400,18 @@ class SessionModel extends Model {
   }
 
   Future<bool> isUserFirstTimeVisit() async {
+    if (isDesktop()) {
+      return await ffiUserFirstVisit();
+    }
     final firsTime = await methodChannel
         .invokeMethod<bool>('isUserFirstTimeVisit', <String, dynamic>{});
-    print("firsTime $firsTime");
     return firsTime ?? false;
   }
 
   Future<void> setFirstTimeVisit() async {
+    if (isDesktop()) {
+      return setUserFirstTimeVisit();
+    }
     return methodChannel
         .invokeMethod<void>('setFirstTimeVisit', <String, dynamic>{});
   }

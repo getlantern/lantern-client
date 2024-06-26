@@ -523,6 +523,25 @@ class NativeLibrary {
           'checkUpdates');
   late final _checkUpdates =
       _checkUpdatesPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> isUserFirstTime() {
+    return _isUserFirstTime();
+  }
+
+  late final _isUserFirstTimePtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'isUserFirstTime');
+  late final _isUserFirstTime =
+      _isUserFirstTimePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  void setFirstTimeVisit() {
+    return _setFirstTimeVisit();
+  }
+
+  late final _setFirstTimeVisitPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('setFirstTimeVisit');
+  late final _setFirstTimeVisit =
+      _setFirstTimeVisitPtr.asFunction<void Function()>();
 }
 
 /// mbstate_t is an opaque object to keep conversion state, during multibyte

@@ -56,6 +56,8 @@ const (
 	SNEnabledExperiments SettingName = "enabledExperiments"
 
 	SNPaymentMethods SettingName = "paymentMethods"
+	// Auth methods
+	SNUserFirstVisit SettingName = "userFirstVisit"
 )
 
 type settingType byte
@@ -716,4 +718,15 @@ func (s *Settings) onChange(attr SettingName, value interface{}) {
 		// notify UI of changed settings
 		wsOut <- s.uiMap()
 	}
+}
+
+// Auth methods
+// SetUserFirstVisit sets the user's first visit flag
+func (s *Settings) SetUserFirstVisit(value bool) {
+	s.setVal(SNUserFirstVisit, value)
+}
+
+// GetUserFirstVisit returns the user's first visit flag
+func (s *Settings) GetUserFirstVisit() bool {
+	return s.getBool(SNUserFirstVisit)
 }

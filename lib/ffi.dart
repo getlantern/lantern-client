@@ -212,6 +212,15 @@ void loadLibrary() {
   _bindings.start();
 }
 
+/// Auth methods for desktop
+
+Future<bool> ffiUserFirstVisit() {
+  final result = _bindings.isUserFirstTime().cast<Utf8>().toDartString();
+  return Future.value(result == 'true');
+}
+
+void setUserFirstTimeVisit() => _bindings.setFirstTimeVisit();
+
 //Custom exception for handling error
 
 class NoPlansUpdate implements Exception {
