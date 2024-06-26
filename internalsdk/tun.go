@@ -20,8 +20,8 @@ import (
 
 var (
 	currentDeviceMx sync.Mutex
-	currentDevice   io.ReadWriteCloser
-	currentIPP      ipproxy.Proxy
+	// currentDevice   io.ReadWriteCloser
+	currentIPP ipproxy.Proxy
 )
 
 // Tun2Socks wraps the TUN device identified by fd with an ipproxy server that
@@ -30,7 +30,6 @@ var (
 // 1. dns packets (any UDP packets to port 53) are routed to dnsGrabAddr
 // 2. All other udp packets are routed directly to their destination
 // 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
-//
 func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Session) error {
 	runtime.LockOSThread()
 
@@ -47,7 +46,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 		DeviceName:          fmt.Sprintf("fd://%d", fd),
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
-		DisableIPv6: 		 true,
+		DisableIPv6:         true,
 		MTU:                 mtu,
 		OutboundBufferDepth: 10000,
 		TCPConnectBacklog:   100,
@@ -101,6 +100,7 @@ func StopTun2Socks() {
 
 	currentDeviceMx.Lock()
 	ipp := currentIPP
+
 	currentIPP = nil
 	currentDeviceMx.Unlock()
 	if ipp != nil {

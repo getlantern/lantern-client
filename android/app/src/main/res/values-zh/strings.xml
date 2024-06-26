@@ -41,6 +41,7 @@
   <string name="submit_code">確認代碼</string>
   <string name="on_text">開啟</string>
   <string name="off_text">关闭</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">Lantern 已關閉。扳動開關以存取被封鎖的網站和服務！</string>
   <string name="lantern_on">Lantern 已開啟。您現在可以存取封鎖的網站和服務！</string>
   <string name="on_desc">您現在可以存取\r\n封鎖的網站和服務</string>
@@ -308,6 +309,7 @@
   <string name="earn_free_month">每個註冊的朋友都可以獲得一個月免費</string>
   <string name="credits_applied">您的點數會在下一個帳單週期中套用至您的帳號。</string>
   <string name="pro_invitation_subject">邀请他人加入蓝灯专业版</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">我正透過 Lantern 閱讀 %2$s 的「%1$s」。透過 Lantern 存取封鎖的網站和服務。您可以在此下載 Android 版：https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">您是否確定？此動作無法復原！您可以隨時重新註冊 Pro 版服務。</string>
   <string name="unauthorize_confirmation">您是否确定要从您的专业版账户中取消链接此设备？</string>
@@ -498,6 +500,9 @@
   <string name="lantern_service">Lantern 服務</string>
   <string name="replica_download">複本下載</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

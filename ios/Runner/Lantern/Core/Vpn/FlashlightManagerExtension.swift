@@ -15,7 +15,7 @@ extension FlashlightManager {
   ) {
     var configError: NSError?
     let configDirectory = constants.configDirectoryURL.path
-    let deviceID = UIDevice.current.identifierForVendor!.uuidString
+    let deviceID = DeviceIdentifier.getUDID()
 
     let workItem = DispatchWorkItem {
       logger.debug("Calling IosConfigure")

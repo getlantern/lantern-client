@@ -23,7 +23,12 @@ extension FileManager {
 
   @discardableResult func ensureFilesExist(at urls: [URL]) -> Bool {
     var overallSuccess = true
+    //    // Make sure ICloud does not backdup all file
+    //    var values = URLResourceValues()
+    //    values.isExcludedFromBackup = true
+
     urls.forEach { url in
+      //      url.setResourceValues(values)
       let path = url.path
       if !fileExists(atPath: path) {
         // posix permission 666 is `rw-rw-rw` aka read/write for all

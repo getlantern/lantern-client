@@ -41,6 +41,7 @@
   <string name="submit_code">รหัสยืนยัน</string>
   <string name="on_text">เปิด</string>
   <string name="off_text">ปิด</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">ปิดใช้งาน Lantern อยู่ เปิดสวิตซ์เพื่อสามารถเข้าชมเว็บไซต์ที่ถูกบล๊อกและบริการต่างๆ</string>
   <string name="lantern_on">Lantern เปิดอยู่ คุณสามารคเข้าชมเว็บไซต์ที่ถูกบล๊อกและบริการต่างๆ</string>
   <string name="on_desc">ตอนนี้คุณสามารถเข้าชมเว็บไซต์ที่ถูกบล๊อกและบริการต่างๆ</string>
@@ -308,6 +309,7 @@
   <string name="earn_free_month">รับฟรี 1 เดือนสำหรับเพื่อนทุกคนที่ลงทะเบียน</string>
   <string name="credits_applied">เครดิตของคุณจะถูกนำไปใช้กับบัญชีของคุณในรอบบิลถัดไป</string>
   <string name="pro_invitation_subject">คำเชิญเข้าร่วม Lantern Pro</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">ฉันกำลังอ่านเรื่อง \"%1$s\" ที่ %2$s ผ่าน Lantern ใช้ Lantern เพื่อเข้าถึงเว็บไซต์และบริการที่ถูกบล็อก คุณสามารถดาวน์โหลดแอปสำหรับแอนดรอยด์ได้ที่นี่: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">คุณแน่ใจหรือไม่ การกระทำนี้ไม่สามารถยกเลิกได้! คุณสามารถสมัครใช้ Pro อีกครั้งได้ตลอดเวลา</string>
   <string name="unauthorize_confirmation">คุณแน่ใจหรือไม่ว่าต้องการเลิกเชื่อมโยงอุปกรณ์นี้จากบัญชี Pro ของคุณ</string>
@@ -498,6 +500,9 @@
   <string name="lantern_service">บริการ Lantern</string>
   <string name="replica_download">สำเนาดาวน์โหลด</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

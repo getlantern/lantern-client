@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 
+import 'package:flutter/gestures.dart';
 import 'package:lantern/common/common.dart';
 
 /// CDialog incorporates the standard dialog styling and behavior as defined
@@ -20,6 +21,32 @@ class CDialog extends StatefulWidget {
       description: description,
       iconPath: ImagePaths.alert,
       barrierDismissible: false,
+      agreeText: 'OK'.i18n,
+    ).show(context);
+  }
+
+  static void successDialog(
+      {required BuildContext context,
+      required String title,
+      required String description,
+      String? agreeText,
+      VoidCallback? successCallback}) {
+    CDialog(
+      iconPath: ImagePaths.check_green_large,
+      title: title,
+      description: description,
+      barrierDismissible: false,
+      agreeText: agreeText ?? "continue".i18n,
+      includeCancel: false,
+      agreeAction: () async {
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (successCallback != null) {
+            successCallback.call();
+            return true;
+          }
+        });
+        return true;
+      },
     ).show(context);
   }
 
@@ -31,6 +58,8 @@ class CDialog extends StatefulWidget {
     double? size,
     required String title,
     required String description,
+    bool barrierDismissible = true,
+    bool autoCloseOnDismiss = true,
     String? actionLabel,
     Future<bool> Function()? agreeAction,
     Future<bool> Function()? dismissAction,
@@ -44,6 +73,7 @@ class CDialog extends StatefulWidget {
       description: description,
       agreeAction: agreeAction,
       dismissAction: dismissAction,
+      barrierDismissible: barrierDismissible,
     ).show(context);
   }
 
@@ -167,6 +197,7 @@ class CDialog extends StatefulWidget {
     this.maybeAgreeAction,
     this.dismissAction,
     this.includeCancel = true,
+    this.autoCloseOnDismiss = true,
   }) : super();
 
   final String? iconPath;
@@ -185,6 +216,7 @@ class CDialog extends StatefulWidget {
   final Future<void> Function()? dismissAction;
   final closeOnce = once();
   final bool includeCancel;
+  final bool autoCloseOnDismiss;
 
   void Function() show(BuildContext context) {
     showDialog(
@@ -239,8 +271,7 @@ class CDialogState extends State<CDialog> {
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment:
-            hasIcon ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        // crossAxisAlignment: hasIcon ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
           if (hasIcon)
             Padding(
@@ -326,6 +357,9 @@ class CDialogState extends State<CDialog> {
                       // See https://dart.dev/tools/linter-rules/use_build_context_synchronously
                       if (!context.mounted) return;
                       widget.close(context);
+                      if (widget.autoCloseOnDismiss) {
+                        widget.close(context);
+                      }
                     },
                     child: CText(
                       (widget.dismissText ?? 'cancel'.i18n).toUpperCase(),
@@ -369,4 +403,96 @@ class CDialogState extends State<CDialog> {
       ),
     );
   }
+}
+
+void showEmailExistsDialog(
+    {required BuildContext context, required VoidCallback recoverTap}) {
+  CDialog(
+    title: 'email_already_exists'.i18n,
+    icon: const CAssetImage(
+      path: ImagePaths.warning,
+    ),
+    agreeText: "recover_account".i18n,
+    dismissText: "back".i18n,
+    includeCancel: true,
+    agreeAction: () async {
+      recoverTap.call();
+      return true;
+    },
+    dismissAction: () async {
+      print("Go back");
+    },
+    description: "email_already_exists_msg".i18n,
+  ).show(context);
+}
+
+void showProUserDialog(BuildContext context, {VoidCallback? onSuccess}) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        title: const CAssetImage(
+          path: ImagePaths.addAccountIllustration,
+          height: 110,
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CText(
+              'update_pro_account'.i18n,
+              textAlign: TextAlign.center,
+              style: tsSubtitle1Short,
+            ),
+            const SizedBox(height: 16),
+            CText(
+              'update_pro_account_message'.i18n,
+              style: tsBody1.copiedWith(
+                color: grey5,
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Button(
+                text: "update_account".i18n,
+                onPressed: () {
+                  if (onSuccess != null) {
+                    onSuccess.call();
+                    return;
+                  }
+                  context.maybePop();
+                  context.pushRoute(SignIn(authFlow: AuthFlow.updateAccount));
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
+            RichText(
+              text: TextSpan(
+                text: 'already_have_an_account'.i18n,
+                style:
+                    tsBody1.copyWith(fontWeight: FontWeight.w400, color: grey5),
+                children: [
+                  TextSpan(
+                    text: "sign_in".i18n.toUpperCase(),
+                    style: tsBody1.copyWith(
+                        fontWeight: FontWeight.w500, color: pink5),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        context.maybePop();
+                        context.pushRoute(SignIn(authFlow: AuthFlow.signIn));
+                      },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }

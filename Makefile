@@ -29,6 +29,9 @@ internalsdk/protos/%.pb.go: protos_shared/%.proto
 internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
 	@protoc --go_out=internalsdk protos_shared/vpn.proto
 
+internalsdk/protos/auth.pb.go: protos_shared/auth.proto
+	@protoc --go_out=internalsdk protos_shared/auth.proto
+
 # Compiles autorouter routes
 routes: lib/core/router/router.gr.dart
 
@@ -462,6 +465,10 @@ set-version:
 
 
 ios-release:set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS build-framework
+	@echo "Flutter Clean"
+	flutter clean
+	@echo "Flutter pub get"
+	flutter pub get
 	@echo "Creating the Flutter iOS build..."
 	flutter build ipa --flavor prod --release --export-options-plist ./ExportOptions.plist
 	@echo "Uploading debug symbols to Sentry..."
@@ -684,6 +691,21 @@ build-framework: assert-go-version install-gomobile
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
+	-tags='headless lantern ios netgo' \
+	-ldflags="$(LDFLAGS)"  \
+    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+    		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
+	@echo "moving framework"
+	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
+	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+
+build-release-framework: assert-go-version install-gomobile
+	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
+	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
+	@echo "generating Ios.xcFramework"
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	gomobile init && \
+	gomobile bind -target=ios \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \

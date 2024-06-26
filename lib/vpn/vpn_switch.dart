@@ -1,4 +1,3 @@
-import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:lantern/ad_helper.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
@@ -62,33 +61,37 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   @override
   Widget build(BuildContext context) {
-
     final internetStatusProvider = context.watch<InternetStatusProvider>();
     final vpnNotifier = context.watch<VPNChangeNotifier>();
     if (isMobile()) {
       return sessionModel
           .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
-        adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
-        return Transform.scale(
-            scale: 2.5,
-            child: vpnModel.vpnStatus(
-                (BuildContext context, String vpnStatus, Widget? child) {
-              return AdvancedSwitch(
-                width: 60,
-                disabledOpacity: 1,
-                enabled: (internetStatusProvider.isConnected &&
-                    !vpnNotifier.isFlashlightInitializedFailed),
-                initialValue:
-                    vpnStatus == 'connected' || vpnStatus == 'disconnecting',
-                activeColor: onSwitchColor,
-                inactiveColor: (internetStatusProvider.isConnected &&
+        //Since we don't have feature flag on ios at the moment
+        // disable ads'
+        if (Platform.isAndroid) {
+          adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
+        }
+        return vpnModel
+            .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+          // Changes scale on mobile due to hit target
+          return AdvancedSwitch(
+            width: 150,
+            height: 70,
+            borderRadius: BorderRadius.circular(40),
+            disabledOpacity: 1,
+            enabled: (internetStatusProvider.isConnected &&
+                !vpnNotifier.isFlashlightInitializedFailed),
+            initialValue:
+                vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+            activeColor: onSwitchColor,
+            inactiveColor: (internetStatusProvider.isConnected &&
                     !vpnNotifier.isFlashlightInitializedFailed)
-                    ?offSwitchColor
-                    : grey3,
-                onChanged: (newValue) =>
-                    vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
-              );
-            }));
+                ? offSwitchColor
+                : grey3,
+            onChanged: (newValue) =>
+                vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
+          );
+        });
       });
     } else {
       // This ui for desktop
@@ -107,9 +110,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
             activeColor: onSwitchColor,
             inactiveColor: (internetStatusProvider.isConnected &&
                     !vpnNotifier.isFlashlightInitializedFailed)
-                ?offSwitchColor
+                ? offSwitchColor
                 : grey3,
-
             onChanged: (newValue) {
               vpnProcessForDesktop();
               setState(() {

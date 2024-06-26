@@ -2,23 +2,23 @@
 # Translators:
 # Kudret <kudretemre@hotmail.com.tr>, 2022
 # Zeynel Cebeci <cebeciz@gmail.com>, 2022
-# Aşkın Özgür <askin@askin.ws>, 2022
-# Derek F <derek@getlantern.org>, 2023
 # M. Utkun Uyar, 2023
 # Emre Deniz, 2023
-# Volkan Gezer <volkangezer@gmail.com>, 2023
 # Alexander B. <road2monstercat@gmail.com>, 2023
 # fffw <fffw@getlantern.org>, 2023
 # Gökhan Kalayci <gkmediagokhan@gmail.com>, 2023
 # Lantern, 2023
-# efe kerem sözeri <eksozeri@hotmail.com>, 2023
-# e2f <projects@e2f.com>, 2023
-# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2023
-# Teo Westbrook, 2023
+# Teo Westbrook, 2024
+# efe kerem sözeri <eksozeri@hotmail.com>, 2024
+# Volkan Gezer <volkangezer@gmail.com>, 2024
+# Aşkın Özgür <askin@askin.ws>, 2024
+# Derek F <derek@getlantern.org>, 2024
+# e2f <projects@e2f.com>, 2024
+# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Teo Westbrook, 2023\n"
+"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2024\n"
 "Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -41,6 +41,98 @@ msgstr "Belki Daha Sonra"
 msgid "try"
 msgstr "Bunu deneyin"
 
+msgid "sign_in"
+msgstr "Giriş"
+
+msgid "enter_email"
+msgstr "E-posta Gir"
+
+msgid "enter_password"
+msgstr "Parolayı Girin"
+
+msgid "forgot_password"
+msgstr "Parolamı Unuttum"
+
+msgid "forgot_your_password"
+msgstr "Parolanızı mı unuttunuz?"
+
+msgid "click_here"
+msgstr "Buraya tıklayın"
+
+msgid "reset_password"
+msgstr "Parolayı Sıfırla"
+
+msgid "lantern_pro_email"
+msgstr "Lantern Pro E-postası "
+
+msgid "return_to_sign_in"
+msgstr "Girişe Geri Dön"
+
+msgid "enter_confirmation_code"
+msgstr "Onay Kodunu Girin"
+
+msgid "confirmation_code_msg"
+msgstr ""
+"XX adresine onay kodu gönderildi. Hesabınızın güvenliğini sağlamak ve parola"
+" kurtarma işlevini etkinleştirmek için kodu buraya girin."
+
+msgid "resend_confirmation_code"
+msgstr "Onay E-postasını Yeniden Gönder"
+
+msgid "email_already_exists"
+msgstr "E-posta Zaten Kullanılıyor"
+
+msgid "email_already_exists_msg"
+msgstr ""
+"Bu e-posta zaten alınmış, bu e-postayla önceden hesap açmışsanız bu hesabı "
+"kurtarabilirsiniz. Bu e-postayla hesap açmadıysanız lütfen geri dönüp farklı"
+" bir e-posta adresi seçin."
+
+msgid "recover_account"
+msgstr "Hesabı Kurtar"
+
+msgid "back"
+msgstr "geri"
+
+msgid "change_email"
+msgstr "E-postayı Değiştir"
+
+msgid "new_password"
+msgstr "Yeni Parola"
+
+msgid "confirm_new_password"
+msgstr "Yeni Parolayı Onayla"
+
+msgid "already_have_an_account"
+msgstr "Zaten hesabınız var mı?"
+
+msgid "create_account"
+msgstr "Hesap Oluştur"
+
+msgid "create_password"
+msgstr "Parola Oluştur"
+
+msgid "by_creating_an_account"
+msgstr "Hesap Oluşturduğunuzda şunu kabul etmiş olursunuz:"
+
+msgid "confirm_email"
+msgstr "E-posta Adresini Doğrulayın"
+
+msgid "update_pro_account"
+msgstr "Pro Hesabını Güncelle"
+
+msgid "update_pro_account_message"
+msgstr ""
+"Lantern Pro'da değişiklikler yapıyoruz! Artık tüm cihazlardan giriş yapmak "
+"ve Hesap Yönetimine erişmek için bir e-posta ve parolaya ihtiyacınız olacak."
+" Lütfen biraz zaman ayırıp bu kimlik bilgilerini hesabınıza ekleyin. "
+
+msgid "not_now"
+msgstr "Şimdi değil"
+
+msgid "update_account"
+msgstr "Hesabı Güncelle"
+
 msgid "new"
 msgstr "Yeni"
 
@@ -49,6 +141,12 @@ msgstr "Günlük Veri Kullanımı"
 
 msgid "is"
 msgstr ":"
+
+msgid "connect"
+msgstr "Bağlan"
+
+msgid "disconnect"
+msgstr "Bağlantıyı kes"
 
 msgid "connected"
 msgstr "Bağlandı"
@@ -84,6 +182,7 @@ msgstr "Pro'ya Yükseltin!"
 
 msgid "Go Pro Description"
 msgstr ""
+"Daha hızlı hızların, reklamsız deneyimin ve sınırsız verinin kilidini açın! "
 
 msgid "Server Location"
 msgstr "Sunucu Konumu"
@@ -117,7 +216,7 @@ msgstr "Sohbet verilerimi silmek istediğimi onaylıyorum"
 msgid "Pro Account Management"
 msgstr "Pro Hesap Yönetimi"
 
-msgid "Link Device"
+msgid "link_device"
 msgstr "Cihaz Bağla"
 
 msgid "Upgrade to Lantern Pro"
@@ -166,12 +265,6 @@ msgstr "Genel"
 msgid "about"
 msgstr "Hakkında"
 
-msgid "privacy_policy"
-msgstr "Gizlilik Politikası"
-
-msgid "terms_of_service"
-msgstr "Hizmet Şartları"
-
 msgid "proxy_all"
 msgstr "Her şeyi proxy'le"
 
@@ -194,7 +287,7 @@ msgid "select_an_issue"
 msgstr "Bir hata seçiniz"
 
 msgid "enter_description"
-msgstr ""
+msgstr "Lütfen sorununuzu açıklayın "
 
 msgid "cannot_access_blocked_sites"
 msgstr "Engellenen sitelere erişilemiyor"
@@ -202,17 +295,35 @@ msgstr "Engellenen sitelere erişilemiyor"
 msgid "cannot_complete_purchase"
 msgstr "Satın alma tamamlanamıyor"
 
+msgid "discover_not_working"
+msgstr "Keşfet çalışmıyor "
+
 msgid "cannot_sign_in"
 msgstr "Giriş yapılamadı"
 
 msgid "spinner_loads_endlessly"
 msgstr "Yükleme ekranı sürekli dönüyor"
 
+msgid "slow"
+msgstr "Yavaş"
+
+msgid "cannot_link_devices"
+msgstr "Cihazlar ilişkilendirilemiyor"
+
+msgid "wrong_device_linking_code"
+msgstr "Yanlış veya geçersiz cihaz bağlama kodu"
+
+msgid "cannot_remove_device"
+msgstr "Cihaz kaldırılamıyor "
+
+msgid "application_crashes"
+msgstr "Uygulama çökmeleri"
+
 msgid "other"
 msgstr "Diğer"
 
 msgid "issue_description"
-msgstr "Sorun Açıklaması"
+msgstr "Sorununuzu açıklayın "
 
 msgid "check_for_updates"
 msgstr "Güncellemeleri Kontrol Et"
@@ -254,10 +365,10 @@ msgid "device_linking_pin"
 msgstr "Cihaz bağlama pini"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "Pro cihazınızda 'Cihaz Ekle' menü öğesini açın. "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "Cihaz bağlantı PIN kodunu girin ve gönder'e tıklayın "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr ""
@@ -276,14 +387,14 @@ msgstr ""
 msgid "Link via Email"
 msgstr "E-Posta Aracılığıyla Bağla"
 
-msgid "lantern_pro_email"
-msgstr "Lantern Pro E-Postası"
-
 msgid "lantern_desktop"
 msgstr "Lantern Masaüstü"
 
+msgid "report_description"
+msgstr "Sorun Açıklaması"
+
 msgid "report_issue"
-msgstr ""
+msgstr "Sorunu Bildir "
 
 msgid "report_an_issue"
 msgstr "Hata Bildir"
@@ -305,7 +416,7 @@ msgstr ""
 "yukarıdaki bağlantıda bulunabilir."
 
 msgid "share_link"
-msgstr ""
+msgstr "Bağlantıyı Paylaş "
 
 msgid "share_title"
 msgstr "Lantern indirme bağlantısı paylaş"
@@ -337,8 +448,8 @@ msgstr "ay"
 msgid "months"
 msgstr "ay"
 
-msgid "enter_email"
-msgstr "E-posta Gir"
+msgid "enter_email_to_complete_purchase"
+msgstr "Satın almayı tamamlamak için e-posta girin "
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -370,10 +481,12 @@ msgid "referral_code"
 msgstr "Referans kodu"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "Referans Kodunu Paylaş "
 
 msgid "share_message_referral_code"
 msgstr ""
+"Bir ay ücretsiz Lantern Pro için, bu referans kodunu kullanın: %s ; Buradan "
+"indirebilirsiniz: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "Referans kodu ekleyin"
@@ -442,7 +555,7 @@ msgstr ""
 "sahipsiniz. Hesabınıza en fazla üç cihaz bağlanabilir."
 
 msgid "by_clicking_tos"
-msgstr "%s ögesine tıklayarak şunu kabul etmiş olursunuz:"
+msgstr "%s ögesine tıklayarak şunu kabul etmiş olursunuz: "
 
 msgid "tos"
 msgstr "Hizmet Şartları"
@@ -492,6 +605,18 @@ msgstr "Evet"
 msgid "No"
 msgstr "Hayır"
 
+msgid "exit"
+msgstr "Çıkış "
+
+msgid "show"
+msgstr "Göster "
+
+msgid "status_on"
+msgstr "Durum: Açık "
+
+msgid "status_off"
+msgstr "Durum: Kapalı "
+
 msgid "Enter or paste linking code"
 msgstr "Bağlama kodunu girin veya yapıştırın"
 
@@ -529,6 +654,9 @@ msgstr "Oturumu Kapat"
 msgid "confirm_remove_device"
 msgstr "Bu cihazı Pro hesabınızdan çıkartmak istediğinize emin misiniz?"
 
+msgid "confirm_close_window"
+msgstr "Lantern'ı kapatmak istediğinizden emin misiniz? "
+
 msgid "unlimited_data"
 msgstr "Sınırsız Veri"
 
@@ -540,6 +668,9 @@ msgstr "Reklamsız"
 
 msgid "choose_plan"
 msgstr "Plan Seç"
+
+msgid "billed_one_time"
+msgstr "bir kerelik faturalandırma "
 
 msgid "connect_up_to_3_devices"
 msgstr "3 cihaza kadar bağlayın"
@@ -739,9 +870,6 @@ msgstr "Siz ve %s için tüm mesajlar kaybolmayacaktır."
 
 msgid "message_disappearing_description"
 msgstr "%s sonrasında siz ve %s için tüm mesajlar kaybolacaktır."
-
-msgid "delete"
-msgstr "Sil"
 
 msgid "view_contact_info"
 msgstr "İletişim Bilgilerini Görüntüle"
@@ -1547,3 +1675,236 @@ msgstr "SSS"
 
 msgid "add_device"
 msgstr "Hesap Ekle"
+
+msgid "search_apps"
+msgstr "Uygulamaları Ara "
+
+msgid "user_not_found"
+msgstr ""
+"Kullanıcı tanınmıyor. Lütfen kimlik bilgilerinizi kontrol edip tekrar "
+"deneyin. Sorun yaşamaya devam ederseniz yardım için lütfen destek ekibimize "
+"ulaşın."
+
+msgid "email_resend_message"
+msgstr "Yeni onay kodunuz gönderildi"
+
+msgid "signup_error"
+msgstr ""
+"Kayıt sırasında bir sorun oluşmuş gibi görünüyor. Lütfen tekrar deneyin ve "
+"sorun devam ederse destek ekibimize ulaşın"
+
+msgid "signup_error_user_exists"
+msgstr ""
+"Kayıt sırasında bir sorun oluşmuş gibi görünüyor. Lütfen parolanızı "
+"sıfırlamayı deneyin ve sorun devam ederse destek ekibimize ulaşın"
+
+msgid "confirm_email_error"
+msgstr "Lütfen e-postanızı onaylayın"
+
+msgid "password_cannot_be_empty"
+msgstr "Parola boş bırakılamaz"
+
+msgid "password_must_be_at_least_8_characters"
+msgstr "Parola en az 8 karakter uzunluğunda olmalıdır"
+
+msgid "sign_out"
+msgstr "Çıkış yap"
+
+msgid "sign_out_message"
+msgstr ""
+"Oturumunuzu kapattığınızda Lantern ücretsiz sürüme geçer. Hesabınıza tekrar "
+"erişmek için yeniden giriş yapmanız gerekir."
+
+msgid "change_password"
+msgstr "Parolayı Değiştir"
+
+msgid "password"
+msgstr "Şifre"
+
+msgid "new_email"
+msgstr "Yeni E-posta Adresi"
+
+msgid "new_email_same_as_old_email"
+msgstr "Yeni e-posta adresi, eski e-posta adresinizin aynısı olamaz"
+
+msgid "danger_zone"
+msgstr "Tehlikeli bölge"
+
+msgid "delete_account"
+msgstr "Hesabı Sil"
+
+msgid "delete"
+msgstr "Sil"
+
+msgid "delete_account_message"
+msgstr ""
+"Hesabı silme işlemi geri alınamaz. Tüm cihazlarınızdaki erişimi kaybeder ve "
+"Pro hesabınızın daha kullanım süresi varsa herhangi bir ücret iadesi olmadan"
+" bu süreden feragat etmiş olursunuz."
+
+msgid "delete_your_account"
+msgstr "Hesabınız silinsin mi?"
+
+msgid "confirm_deletion"
+msgstr "Silme İşlemini Onayla"
+
+msgid "account_deleted"
+msgstr "Hesap Silindi"
+
+msgid "account_deleted_message"
+msgstr "Hesabınız kalıcı olarak silindi."
+
+msgid "password_has_been_updated"
+msgstr "Parola güncellendi"
+
+msgid "password_has_been_updated_message"
+msgstr "Parolanız başarıyla sıfırlandı"
+
+msgid "invalid_code"
+msgstr "Kod yanlış ya da süresi geçmiş. Lütfen yeniden göndermeyi deneyin"
+
+msgid "get_lantern_pro"
+msgstr "Lantern Pro'ya Geçin"
+
+msgid "try_lantern_pro"
+msgstr "Lantern'i ücretsiz deneyin! "
+
+msgid "continue_for_free"
+msgstr "Ücretsiz Olarak Devam Et"
+
+msgid "recovery_not_found"
+msgstr "Cihaz bu kullancı ile ilişkilendirilmemiş"
+
+msgid "device_added"
+msgstr "Cihaz bu kullancı ile ilişkilendirilmemiş"
+
+msgid "device_added_message"
+msgstr ""
+"Cihazınız başarıyla eklendi. Bağlı cihazı görmüyorsanız, lütfen her iki "
+"cihazda uygulamayı yeniden başlatın "
+
+msgid "wrong_link_code"
+msgstr "Girdiğiniz kod yanlış. Lütfen kontrol edip tekrar deneyin."
+
+msgid "recovery_code_sent"
+msgstr "Kurtarma kodu gönderildi"
+
+msgid "device_added_msg"
+msgstr "Bu cihaz şuna Bağlandı: %s"
+
+msgid "new_to_lantern"
+msgstr "Lantern'de yeni misiniz? "
+
+msgid "email_has_been_updated"
+msgstr "E-posta güncellendi"
+
+msgid "email_has_been_updated_message"
+msgstr "E-postanız başarıyla değiştirildi"
+
+msgid "email_has_been_verified"
+msgstr "E-posta doğrulandı"
+
+msgid "email_has_been_verified_message"
+msgstr "E-postanız başarıyla doğrulandı"
+
+msgid "device_limit_reached"
+msgstr "Cihaz Sınırına Ulaşıldı"
+
+msgid "device_limit_reached_message"
+msgstr ""
+"Şu anda mümkün olan en fazla sayıda cihazdan (3) giriş yapmış durumdasınız. "
+"Bu cihazdan giriş yapmak için lütfen aşağıda görülen diğer cihazlarınızdan "
+"birini seçip kaldırın."
+
+msgid "enter_activation_code"
+msgstr "Aktivasyon Kodunu Girin"
+
+msgid "check_your_email"
+msgstr "E-posta Adresinizi Kontrol Edin"
+
+msgid "please_verify_email"
+msgstr "Girdiğiniz e-posta adresinin doğru olduğunu lütfen onaylayın."
+
+msgid "verify"
+msgstr "Doğrula"
+
+msgid "cannot_login"
+msgstr "Giriş yapılamıyor "
+
+msgid "privacy_policy"
+msgstr "Gizlilik Politikası"
+
+msgid "terms_of_service"
+msgstr "Hizmet Şartları"
+
+msgid "invalid_verification_code"
+msgstr "Geçersiz doğrulama kodu"
+
+msgid "wrong_seller_code"
+msgstr "Yanlış satıcı kodu. Lütfen doğrulayın ve tekrar deneyin. "
+
+msgid "follow_us"
+msgstr "Bizi Takip Edin "
+
+msgid "follow_us_telegram"
+msgstr "Telegram'da bizi takip edin "
+
+msgid "follow_us_instagram"
+msgstr "Instagram'da bizi takip edin "
+
+msgid "follow_us_facebook"
+msgstr "Facebook'ta bizi takip edin "
+
+msgid "follow_us_x"
+msgstr "X'te bizi takip edin "
+
+msgid "report_issue_error"
+msgstr "Teknik zorluklar yaşıyoruz. Daha sonra tekrar deneyin. "
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr "Teknik zorluklar yaşıyoruz. Daha sonra tekrar deneyin. "
+
+msgid "a_temporary_error_occurred"
+msgstr "Geçici bir hata oluştu "
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+"Üzgünüz, şu anda o sayfayı yükleyemiyoruz, lütfen tekrar denemek için "
+"'Yenile'ye dokunun. "
+
+msgid "refresh"
+msgstr "Yenile"
+
+msgid "check_your_internet_connection"
+msgstr "İnternet bağlantınızı kontrol edin "
+
+msgid "please_try"
+msgstr "Lütfen deneyin "
+
+msgid "turning_off_airplane_mode"
+msgstr "Uçak modunu kapatma "
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr "Mobil veri veya wifi açma "
+
+msgid "check_the_signal_in_your_area"
+msgstr "Bölgenizdeki sinyali kontrol etme "
+
+msgid "got_it"
+msgstr "Tamam"
+
+msgid "fetching_configuration"
+msgstr "Yapılandırma Alınıyor "
+
+msgid "establish_connection_to_server"
+msgstr "Sunucuya bağlantı kuruluyor "
+
+msgid "file_size_limit_title"
+msgstr "Limit Aşıldı "
+
+msgid "file_size_limit_description"
+msgstr ""
+"Ek boyutları 100 MB'dan küçük olmalıdır\n"
+"\n"
+" \n"
+" "

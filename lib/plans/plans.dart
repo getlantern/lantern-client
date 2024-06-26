@@ -1,5 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/plans/feature_list.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
@@ -15,11 +16,9 @@ class PlansPage extends StatelessWidget {
       widget: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return sessionModel.plans(
-          builder: (
-            context,
-            Iterable<PathAndValue<Plan>> plans,
-            Widget? child,
-          ) {
+          builder: (context,
+              Iterable<PathAndValue<Plan>> plans,
+              Widget? child,) {
             if (plans.isEmpty) {
               // show user option to retry
               return RetryWidget(onRetryTap: () => onRetryTap(context));
@@ -81,8 +80,12 @@ class PlansPage extends StatelessWidget {
                         ),
                       ),
                       // * Card
-                      ...plans.toList().reversed.map(
-                            (plan) => Container(
+                      ...plans
+                          .toList()
+                          .reversed
+                          .map(
+                            (plan) =>
+                            Container(
                               color: white,
                               padding: const EdgeInsetsDirectional.only(
                                 start: 32.0,
@@ -93,10 +96,12 @@ class PlansPage extends StatelessWidget {
                                 isPro: proUser,
                               ),
                             ),
-                          ),
+                      ),
                     ],
                   ),
                 ),
+                // todo need to enable this for other platform soon
+
                 _buildFooter(context, proUser),
               ],
             );
@@ -104,6 +109,23 @@ class PlansPage extends StatelessWidget {
         );
       }),
     );
+  }
+
+  ///If the user is already so not ask for email
+  ///f the user is not pro, ask for email
+  void _onPromoCodeTap(BuildContext context, bool proUser) {
+    if (!Platform.isIOS) {
+      context.pushRoute(ResellerCodeCheckoutLegacy(isPro: true));
+      return;
+    }
+    if (proUser) {
+      context.pushRoute(
+        ResellerCodeCheckout(isPro: true, email: sessionModel.userEmail.value!),
+      );
+    } else {
+      context
+          .pushRoute(CreateAccountEmail(authFlow: AuthFlow.proCodeActivation));
+    }
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -148,9 +170,7 @@ class PlansPage extends StatelessWidget {
         color: grey1,
       ),
       child: GestureDetector(
-        onTap: () async => await context.pushRoute(
-          ResellerCodeCheckout(isPro: proUser),
-        ),
+        onTap: () => _onPromoCodeTap(context, proUser),
         child: Text(
           'Have a Lantern Pro activation code? Click here.',
           style: tsBody1.copiedWith(color: grey5),

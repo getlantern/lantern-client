@@ -45,11 +45,15 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
 
   internal static func getDatabasePath() -> String {
     let fileManager = FileManager.default
-    let dbDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-      .appendingPathComponent("masterDBv2")
+
+    var dbDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+      .appendingPathComponent("masterDBv3")
+    var values = URLResourceValues()
+    values.isExcludedFromBackup = true
     do {
       try fileManager.createDirectory(at: dbDir, withIntermediateDirectories: true, attributes: nil)
       let dbLocation = dbDir.appendingPathComponent("db").path
+      try dbDir.setResourceValues(values)
       logger.log("DB location \(dbLocation)")
       return dbLocation
     } catch {
@@ -148,9 +152,9 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
 
   internal func doOnMethodCall(call: FlutterMethodCall, result: @escaping FlutterResult) {
     do {
+      let arguments = call.arguments != nil ? try Arguments(call.arguments!) : nil
       let invocationResult = try model.invokeMethod(
-        call.method, arguments: Arguments(call.arguments))
-
+        call.method, arguments: arguments)
       if let originalValue = ValueUtil.convertFromMinisqlValue(
         from: invocationResult as! MinisqlValue)
       {
@@ -175,8 +179,11 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
       // Handle all other errors
       else {
         result(
-          FlutterError(code: "UNKNOWN_ERROR", message: error.localizedDescription, details: nil))
+          FlutterError(code: String(error.code), message: error.localizedDescription, details: nil))
       }
+    } catch let error as NSException {
+      result(
+        FlutterError(code: error.name.rawValue, message: error.reason, details: nil))
     }
   }
 

@@ -4,14 +4,14 @@
 # e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
 # Emerson Castaneda, 2023
 # fffw <fffw@getlantern.org>, 2023
-# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2023
 # Lantern, 2023
-# tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2023
 # e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2023
 # Aimara pena, 2024
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
 # e2f <projects@e2f.com>, 2024
+# tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2024
 # strel, 2024
+# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # 
 msgid ""
@@ -37,6 +37,100 @@ msgstr "Mejor en otro momento"
 
 msgid "try"
 msgstr "Probar"
+
+msgid "sign_in"
+msgstr "Iniciar sesión"
+
+msgid "enter_email"
+msgstr "Introducir correo electrónico"
+
+msgid "enter_password"
+msgstr "Ingrese la Contraseña"
+
+msgid "forgot_password"
+msgstr "¿Olvidó la Contraseña?"
+
+msgid "forgot_your_password"
+msgstr "¿Olvidaste tu contraseña?"
+
+msgid "click_here"
+msgstr "Haga clic aquí"
+
+msgid "reset_password"
+msgstr "Restablecer contraseña"
+
+msgid "lantern_pro_email"
+msgstr "Correo Electrónico de Lantern Pro"
+
+msgid "return_to_sign_in"
+msgstr "Volver a Iniciar Sesión"
+
+msgid "enter_confirmation_code"
+msgstr "Ingrese el Código de Confirmación"
+
+msgid "confirmation_code_msg"
+msgstr ""
+"Este correo está tomado, si ya tienes una cuenta con este correo, puedes "
+"recuperarla. Si no, por favor regresa y selecciona una dirección de correo "
+"diferente. "
+
+msgid "resend_confirmation_code"
+msgstr "Recuperar Cuenta"
+
+msgid "email_already_exists"
+msgstr "El Correo Electrónico Ya Existe"
+
+msgid "email_already_exists_msg"
+msgstr ""
+"Este correo está tomado, si ya tienes una cuenta con este correo, puedes "
+"recuperarla. Si no, por favor regresa y selecciona una dirección de correo "
+"diferente. "
+
+msgid "recover_account"
+msgstr "Recuperar Cuenta "
+
+msgid "back"
+msgstr "volver"
+
+msgid "change_email"
+msgstr "Cambiar Correo Electrónico "
+
+msgid "new_password"
+msgstr "Nueva contraseña"
+
+msgid "confirm_new_password"
+msgstr "Confirmar nueva contraseña"
+
+msgid "already_have_an_account"
+msgstr "¿Ya tienes una cuenta? "
+
+msgid "create_account"
+msgstr "Crear cuenta"
+
+msgid "create_password"
+msgstr "Crear contraseña"
+
+msgid "by_creating_an_account"
+msgstr "Al Crear una Cuenta, aceptas nuestros "
+
+msgid "confirm_email"
+msgstr "Correo de confirmación"
+
+msgid "update_pro_account"
+msgstr "Actualizar Cuenta Pro "
+
+msgid "update_pro_account_message"
+msgstr ""
+"¡Se avecinan cambios a Lantern Pro! Ahora, necesitarás un correo electrónico"
+" y contraseña para iniciar sesión en todos los dispositivos y acceder a la "
+"Gestión de la Cuenta. Por favor, toma unos momentos para agregar estas "
+"credenciales a tu cuenta. "
+
+msgid "not_now"
+msgstr "Ahora no"
+
+msgid "update_account"
+msgstr "Actualizar Cuenta "
 
 msgid "new"
 msgstr "Novedad"
@@ -121,7 +215,7 @@ msgstr "Confirmo que deseo eliminar mis datos de chat"
 msgid "Pro Account Management"
 msgstr "Gestión de cuenta Pro"
 
-msgid "Link Device"
+msgid "link_device"
 msgstr "Vincular dispositivo"
 
 msgid "Upgrade to Lantern Pro"
@@ -171,12 +265,6 @@ msgstr "General"
 
 msgid "about"
 msgstr "Acerca de"
-
-msgid "privacy_policy"
-msgstr "Política de privacidad"
-
-msgid "terms_of_service"
-msgstr "Condiciones del servicio"
 
 msgid "proxy_all"
 msgstr "Proxyficar todo"
@@ -302,9 +390,6 @@ msgstr ""
 msgid "Link via Email"
 msgstr "Vincular con correo electrónico"
 
-msgid "lantern_pro_email"
-msgstr "Correo electrónico de Lantern Pro"
-
 msgid "lantern_desktop"
 msgstr "Lantern de Escritorio"
 
@@ -365,9 +450,6 @@ msgstr "mes"
 
 msgid "months"
 msgstr "meses"
-
-msgid "enter_email"
-msgstr "Introducir correo electrónico"
 
 msgid "enter_email_to_complete_purchase"
 msgstr "Introduce el correo electrónico para completar la compra"
@@ -472,7 +554,7 @@ msgstr ""
 " Puede vincular hasta tres dispositivos a su cuenta."
 
 msgid "by_clicking_tos"
-msgstr "Al hacer clic en %s, acepta nuestras"
+msgstr "Al hacer clic en %s, aceptas nuestros "
 
 msgid "tos"
 msgstr "Condiciones del servicio"
@@ -790,9 +872,6 @@ msgstr "No desaparecerán todos los mensajes entre usted y %s."
 
 msgid "message_disappearing_description"
 msgstr "Todos los mensajes entre usted y %s desaparecerán al cabo de %s."
-
-msgid "delete"
-msgstr "Borrar"
 
 msgid "view_contact_info"
 msgstr "Ver información de contacto"
@@ -1615,22 +1694,174 @@ msgstr "Preguntas frecuentes (FAQ)"
 msgid "add_device"
 msgstr "Añadir dispositivo"
 
-msgid "recovery_code_sent"
-msgstr "Código de recuperación enviado"
+msgid "search_apps"
+msgstr "Buscar aplicaciones"
+
+msgid "user_not_found"
+msgstr ""
+"Usuario no reconocido. Por favor, revisa tus credenciales e inténtalo de "
+"nuevo. Si continúas experimentando problemas, comunícate con nuestro equipo "
+"de soporte para obtener ayuda. "
+
+msgid "email_resend_message"
+msgstr "Tu nuevo código de confirmación ha sido enviado "
+
+msgid "signup_error"
+msgstr ""
+"Parece que algo salió mal con el registro. Por favor, inténtalo de nuevo, y "
+"si el problema persiste, comunícate con nuestro equipo de soporte. "
+
+msgid "signup_error_user_exists"
+msgstr ""
+"Parece que algo salió mal con el registro. Por favor, intenta restablecer tu"
+" contraseña, y si el problema persiste, comunícate con nuestro equipo de "
+"soporte. "
+
+msgid "confirm_email_error"
+msgstr "Por favor, confirma tu correo electrónico "
+
+msgid "password_cannot_be_empty"
+msgstr "La contraseña no puede estar vacía "
+
+msgid "password_must_be_at_least_8_characters"
+msgstr "La contraseña debe tener al menos 8 caracteres o más "
+
+msgid "sign_out"
+msgstr "Cerrar sesión "
+
+msgid "sign_out_message"
+msgstr ""
+"Cerrar sesión cambiará Lantern a la versión gratuita. Para acceder a tu "
+"cuenta nuevamente, deberás iniciar sesión de nuevo. "
+
+msgid "change_password"
+msgstr "Cambiar contraseña"
+
+msgid "password"
+msgstr "Contraseña"
+
+msgid "new_email"
+msgstr "Nueva Dirección de Correo Electrónico "
+
+msgid "new_email_same_as_old_email"
+msgstr ""
+"La nueva dirección de correo electrónico no puede ser la misma que tu "
+"antigua dirección de correo electrónico "
+
+msgid "danger_zone"
+msgstr "Zona de peligro "
+
+msgid "delete_account"
+msgstr "Eliminar Cuenta "
+
+msgid "delete"
+msgstr "Borrar"
+
+msgid "delete_account_message"
+msgstr ""
+"Eliminar tu cuenta no se puede deshacer. Perderás el acceso a todos los "
+"dispositivos y renunciarás a cualquier tiempo de cuenta Pro sin reembolso. "
+
+msgid "delete_your_account"
+msgstr "¿Eliminar tu cuenta? "
+
+msgid "confirm_deletion"
+msgstr "Confirmar Eliminación "
+
+msgid "account_deleted"
+msgstr "Cuenta Eliminada "
+
+msgid "account_deleted_message"
+msgstr "Tu cuenta ha sido eliminada permanentemente. "
+
+msgid "password_has_been_updated"
+msgstr "La contraseña ha sido actualizada "
+
+msgid "password_has_been_updated_message"
+msgstr "Tu contraseña ha sido restablecida exitosamente "
+
+msgid "invalid_code"
+msgstr ""
+"Código incorrecto o puede haber expirado. Por favor, intenta reenviar "
+"nuevamente "
+
+msgid "get_lantern_pro"
+msgstr "Consiga Lantern Pro"
+
+msgid "try_lantern_pro"
+msgstr "¡Prueba Lantern gratis! "
+
+msgid "continue_for_free"
+msgstr "Continuar Gratis "
+
+msgid "recovery_not_found"
+msgstr "Dispositivo no asociado a este usuario"
 
 msgid "device_added"
-msgstr "Dispositivo añadido"
+msgstr "Dispositivo no asociado a este usuario"
 
 msgid "device_added_message"
 msgstr ""
 "Tu dispositivo se ha añadido correctamente. Si no ves el dispositivo "
 "conectado, reinicia la aplicación en ambos dispositivos."
 
-msgid "search_apps"
-msgstr "Buscar aplicaciones"
+msgid "wrong_link_code"
+msgstr ""
+"El código que ingresaste es incorrecto. Por favor, revisa e inténtalo de "
+"nuevo. "
+
+msgid "recovery_code_sent"
+msgstr "El código de recuperación ha sido enviado "
+
+msgid "device_added_msg"
+msgstr "Este dispositivo ha sido Vinculado a %s "
+
+msgid "new_to_lantern"
+msgstr "¿Nuevo en Lantern? "
+
+msgid "email_has_been_updated"
+msgstr "El correo electrónico ha sido actualizado "
+
+msgid "email_has_been_updated_message"
+msgstr "Tu correo electrónico ha sido cambiado exitosamente "
+
+msgid "email_has_been_verified"
+msgstr "El correo electrónico ha sido verificado "
+
+msgid "email_has_been_verified_message"
+msgstr "Tu correo electrónico ha sido verificado exitosamente "
+
+msgid "device_limit_reached"
+msgstr "Límite de Dispositivos Alcanzado "
+
+msgid "device_limit_reached_message"
+msgstr ""
+"Actualmente has iniciado sesión en el número máximo de dispositivos (3). "
+"Para iniciar sesión en este dispositivo, por favor selecciona y elimina uno "
+"de tus otros dispositivos a continuación. "
+
+msgid "enter_activation_code"
+msgstr "Ingrese el Código de Activación "
+
+msgid "check_your_email"
+msgstr "Revisa tu Dirección de Correo Electrónico "
+
+msgid "please_verify_email"
+msgstr ""
+"Por favor, verifica que la dirección de correo electrónico que ingresaste "
+"sea correcta. "
+
+msgid "verify"
+msgstr "Verificar"
 
 msgid "cannot_login"
 msgstr "No puedo iniciar sesión"
+
+msgid "privacy_policy"
+msgstr "Política de privacidad"
+
+msgid "terms_of_service"
+msgstr "Condiciones del servicio"
 
 msgid "invalid_verification_code"
 msgstr "Código de verificación no válido"

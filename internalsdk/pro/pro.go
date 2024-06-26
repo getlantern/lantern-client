@@ -3,24 +3,25 @@ package pro
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
-	"github.com/getlantern/lantern-client/internalsdk/pro/webclient"
-	"github.com/getlantern/lantern-client/internalsdk/pro/webclient/defaultwebclient"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
+	"github.com/getlantern/lantern-client/internalsdk/webclient/defaultwebclient"
 	"github.com/go-resty/resty/v2"
+
 	"github.com/leekchan/accounting"
 	"github.com/shopspring/decimal"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
 var (
-	log                  = golog.LoggerFor("webclient")
+	log                  = golog.LoggerFor("proclient")
 	errMissingDeviceName = errors.New("Missing device name")
 )
 
@@ -29,18 +30,8 @@ type proClient struct {
 	webclient  webclient.RESTClient
 }
 
-type Opts struct {
-	// HttpClient represents an http.Client that should be used by the resty client
-	HttpClient *http.Client
-	// UserConfig is a function that returns the user config associated with the Lantern user
-	UserConfig func() common.UserConfig
-}
-
 type ProClient interface {
-	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
-	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
-	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
@@ -48,10 +39,19 @@ type ProClient interface {
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
+	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
+	//Device Linking
+	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
+	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
+	LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error)
+	UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error)
+	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
+	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
+	DeviceAdd(ctx context.Context, deviceName string) (bool, error)
 }
 
 // NewClient creates a new instance of ProClient
-func NewClient(baseURL string, opts *Opts) ProClient {
+func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	httpClient := opts.HttpClient
 	if httpClient == nil {
 		httpClient = &http.Client{}
@@ -121,8 +121,6 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 	if err != nil {
 		return nil, err
 	}
-	b, _ := json.Marshal(resp)
-	log.Debugf("PaymentMethods response is %v", string(b))
 	return &resp, nil
 }
 
@@ -136,20 +134,25 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
 		return nil, errors.New("error received from server: %v", resp.BaseResponse.Error)
 	}
-	log.Debugf("PaymentMethods-V4 plans is %v", resp.Plans)
+
+	// process plans for currency
 	for i, plan := range resp.Plans {
 		parts := strings.Split(plan.Id, "-")
 		if len(parts) != 3 {
 			continue
 		}
 		cur := parts[1]
-		if currency, ok := accounting.LocaleInfo[strings.ToUpper(cur)]; ok {
-			if oneMonthCost, ok2 := plan.ExpectedMonthlyPrice[strings.ToLower(cur)]; ok2 {
-				ac := accounting.Accounting{Symbol: currency.ComSymbol, Precision: 2}
-				amount := decimal.NewFromInt(oneMonthCost).Div(decimal.NewFromInt(100))
-				resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
-			}
-		}
+
+		currency1 := accounting.LocaleInfo[strings.ToUpper(cur)]
+		ac := accounting.Accounting{Symbol: currency1.ComSymbol, Precision: 2}
+		monthlyPrice := plan.ExpectedMonthlyPrice[strings.ToLower(cur)]
+		yearlyPrice := plan.Price[strings.ToLower(cur)]
+
+		amount := decimal.NewFromInt(monthlyPrice).Div(decimal.NewFromInt(100))
+		yearAmount := decimal.NewFromInt(yearlyPrice).Div(decimal.NewFromInt(100))
+		resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
+		resp.Plans[i].TotalCost = ac.FormatMoneyDecimal(yearAmount)
+		resp.Plans[i].TotalCostBilledOneTime = fmt.Sprintf("%v billed one time", ac.FormatMoneyDecimal(yearAmount))
 	}
 	return &resp, nil
 }
@@ -185,6 +188,9 @@ func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
 	}
+	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
+		return nil, errors.New("error received: %v", resp.BaseResponse.Error)
+	}
 	log.Debugf("UserCreate response is %v", resp)
 	return &resp, nil
 }
@@ -206,7 +212,9 @@ func (c *proClient) RedeemResellerCode(ctx context.Context, req *protos.RedeemRe
 		log.Errorf("Failed to redeem reseller code: %v", err)
 		return nil, err
 	}
-
+	if resp.Error != "" {
+		return nil, errors.New("error redeeming reseller code: %v", resp.Error)
+	}
 	return &resp, nil
 }
 
@@ -222,6 +230,22 @@ func (c *proClient) DeviceRemove(ctx context.Context, deviceId string) (*LinkRes
 	return &resp, nil
 }
 
+// DeviceAdd adds a device with the given name to a user's Pro account
+// This get calles when user login to attech device
+func (c *proClient) DeviceAdd(ctx context.Context, deviceName string) (bool, error) {
+	var resp protos.BaseResponse
+	params := c.defaultParams()
+	params["deviceName"] = deviceName
+	err := c.webclient.PostJSONReadingJSON(ctx, "/device-add", params, nil, &resp)
+	if err != nil {
+		return false, err
+	}
+	if resp.Error != "" && resp.Status != "ok" {
+		return false, errors.New("%v adding device: %v", resp.ErrorId, resp.Error)
+	}
+	return true, nil
+}
+
 // LinkCodeApprove is used to approve a code to link a device to an existing Pro account
 func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error) {
 	var resp protos.BaseResponse
@@ -231,6 +255,10 @@ func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.B
 	if err != nil {
 		return nil, err
 	}
+	if resp.Error != "" && resp.Status != "ok" {
+		return nil, errors.New("%v approving link code: %v", resp.ErrorId, resp.Error)
+	}
+
 	return &resp, nil
 }
 
@@ -248,7 +276,64 @@ func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*Li
 	if err != nil {
 		return nil, err
 	}
-	b, _ := json.Marshal(resp)
-	log.Debugf("LinkCodeResponse is %s", string(b))
+	return &resp, nil
+}
+
+// LinkCodeRequest returns a code that can be used to link a device to an existing Pro account
+func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error) {
+	var resp LinkCodeRedeemResponse
+	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-redeem", map[string]interface{}{
+		"deviceName": deviceName,
+		"code":       deviceCode,
+	}, nil, &resp)
+	if err != nil {
+		return nil, err
+	}
+	if resp.BaseResponse != nil && resp.Status != "ok" {
+		return nil, errors.New("%v redeeming link code: %v", resp.ErrorId, resp.Error)
+	}
+	return &resp, nil
+}
+
+// UserLinkCodeRequest returns a code to email register pro account email that can be used to link device to an existing Pro account
+func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error) {
+	if deviceId == "" {
+		return false, errMissingDeviceName
+	}
+	var resp LinkCodeResponse
+	uc := c.userConfig()
+	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
+		"deviceName": deviceId,
+		"locale":     uc.GetLanguage(),
+	}, nil, &resp)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+// UserLinkCodeRequest returns a code to email register pro account email that can be used to link device to an existing Pro account
+func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error) {
+	var resp UserRecovery
+	uc := c.userConfig()
+	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-validate", map[string]interface{}{
+		"code":   code,
+		"locale": uc.GetLanguage(),
+	}, nil, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return &resp, nil
+}
+
+// PurchaseRequest is used to request a purchase of a Pro plan is will be used for all most all the payment providers
+func (c *proClient) PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error) {
+	var resp PurchaseResponse
+	err := c.webclient.PostJSONReadingJSON(ctx, "/purchase", data, nil, &resp)
+	if err != nil {
+		return nil, err
+	}
 	return &resp, nil
 }

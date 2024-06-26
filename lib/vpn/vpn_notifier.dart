@@ -47,6 +47,15 @@ class VPNChangeNotifier extends ChangeNotifier {
   }
 
   void initCallbackForMobile() {
+    //Since IOS config is fetched from the on native side
+    // We just need to make true for all
+    if(Platform.isIOS){
+      isFlashlightInitialized = true;
+      isFlashlightInitializedFailed = false;
+      notifyListeners();
+      return;
+    }
+
     if (timer != null) {
       return;
     }

@@ -3,9 +3,14 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
 @RoutePage<void>(name: 'Account')
-class AccountMenu extends StatelessWidget {
+class AccountMenu extends StatefulWidget {
   const AccountMenu({Key? key}) : super(key: key);
 
+  @override
+  State<AccountMenu> createState() => _AccountMenuState();
+}
+
+class _AccountMenuState extends State<AccountMenu> {
   Future<void> authorizeDeviceForPro(BuildContext context) async =>
       await context.pushRoute(AuthorizePro());
 
@@ -20,6 +25,53 @@ class AccountMenu extends StatelessWidget {
   void openSupport(BuildContext context) {
     context.pushRoute(const Support());
   }
+
+  Future<void> onSignOut() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.signOut();
+      context.loaderOverlay.hide();
+    } catch (e) {
+      mainLogger.e('Error signing out', error: e);
+      context.loaderOverlay.hide();
+    }
+  }
+
+  void showSingOutDialog(BuildContext context) {
+    CDialog(
+      title: 'sign_out'.i18n,
+      description: "sign_out_message".i18n,
+      icon: const CAssetImage(
+        path: ImagePaths.signOut,
+        height: 40,
+      ),
+      agreeText: "sign_out".i18n,
+      dismissText: "not_now".i18n,
+      includeCancel: true,
+      agreeAction: () async {
+        onSignOut();
+        return true;
+      },
+      dismissAction: () async {},
+    ).show(context);
+  }
+
+  void onAccountManagementTap(
+      BuildContext context, bool isProUser, bool hasUserLoggedIn) {
+    if (Platform.isIOS) {
+      if (hasUserLoggedIn) {
+        // User has gone through onboarding
+        context.pushRoute(AccountManagement(isPro: isProUser));
+      } else {
+        // Ask user to update their email and password
+        showProUserDialog(context);
+      }
+    } else {
+      context.pushRoute(AccountManagement(isPro: isProUser));
+    }
+  }
+
+  void openSignIn(BuildContext context) => context.pushRoute(SignIn());
 
   void upgradeToLanternPro(BuildContext context) async =>
       await context.pushRoute(const PlansPage());
@@ -36,8 +88,15 @@ class AccountMenu extends StatelessWidget {
     );
   }
 
-  List<Widget> freeItems(BuildContext context, SessionModel sessionModel) {
+  List<Widget> freeItems(BuildContext context, bool hasUserLoggedIn) {
     return [
+      if(Platform.isIOS)
+      if (!hasUserLoggedIn)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.signIn,
+          content: 'sign_in'.i18n,
+          onTap: () => openSignIn(context),
+        ),
       if (Platform.isAndroid)
         messagingModel.getOnBoardingStatus(
           (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
@@ -80,15 +139,13 @@ class AccountMenu extends StatelessWidget {
       ListItemFactory.settingsItem(
         icon: ImagePaths.devices,
         content: 'Authorize Device for Pro'.i18n,
-        onTap: () {
-          authorizeDeviceForPro(context);
-        },
+        onTap: () => authorizeDeviceForPro(context),
       ),
-      ...commonItems(context)
+      ...commonItems(context, hasUserLoggedIn)
     ];
   }
 
-  List<Widget> proItems(BuildContext context) {
+  List<Widget> proItems(BuildContext context, bool hasUserLoggedIn) {
     return [
       messagingModel.getOnBoardingStatus(
         (context, hasBeenOnboarded, child) =>
@@ -98,8 +155,8 @@ class AccountMenu extends StatelessWidget {
                   key: AppKeys.account_management,
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
-                  onTap: () async =>
-                      await context.pushRoute(AccountManagement(isPro: true)),
+                  onTap: () =>
+                      onAccountManagementTap(context, true, hasUserLoggedIn),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
                       const CAssetImage(
@@ -115,17 +172,16 @@ class AccountMenu extends StatelessWidget {
           inviteFriends(context);
         },
       ),
-
       ListItemFactory.settingsItem(
-          icon: ImagePaths.devices,
-          content: 'add_device'.i18n,
-          onTap: () async => await context.pushRoute(ApproveDevice()),
-        ),
-      ...commonItems(context)
+        icon: ImagePaths.devices,
+        content: 'add_device'.i18n,
+        onTap: () async => await context.pushRoute(ApproveDevice()),
+      ),
+      ...commonItems(context, hasUserLoggedIn)
     ];
   }
 
-  List<Widget> commonItems(BuildContext context) {
+  List<Widget> commonItems(BuildContext context, bool hasUserLoggedIn) {
     return [
       if (isMobile())
         ListItemFactory.settingsItem(
@@ -157,6 +213,13 @@ class AccountMenu extends StatelessWidget {
           openSettings(context);
         },
       ),
+      if (Platform.isIOS)
+        if (hasUserLoggedIn)
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.signOut,
+            content: 'sign_out'.i18n,
+            onTap: () => showSingOutDialog(context),
+          )
     ];
   }
 
@@ -167,10 +230,20 @@ class AccountMenu extends StatelessWidget {
       automaticallyImplyLeading: false,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
+        if (Platform.isIOS) {
+          return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
+            return ListView(
+              children: proUser
+                  ? proItems(sessionContext, hasUserLoggedIn)
+                  : freeItems(sessionContext, hasUserLoggedIn),
+            );
+          });
+        }
+
         return ListView(
           children: proUser
-              ? proItems(sessionContext)
-              : freeItems(sessionContext, sessionModel),
+              ? proItems(sessionContext, false)
+              : freeItems(sessionContext, false),
         );
       }),
     );

@@ -5,7 +5,6 @@ import 'package:lantern/vpn/vpn_notifier.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../common/ui/custom/internet_checker.dart';
-
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
@@ -18,9 +17,8 @@ class VPNTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vpnNotifier = context.watch<VPNChangeNotifier>();
-    return sessionModel
-        .proUser((BuildContext context, bool proUser, Widget? child) {
-      return BaseScreen(
+    return sessionModel.proUser(
+      (context, proUser, child) => BaseScreen(
         title: SvgPicture.asset(
           proUser ? ImagePaths.pro_logo : ImagePaths.free_logo,
           height: 16,
@@ -34,68 +32,77 @@ class VPNTab extends StatelessWidget {
                 isProUser: proUser,
               )
             : Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (!proUser && !Platform.isIOS)
+                  if (!proUser)
                     const ProBanner()
                   else
-                    const SizedBox(height: 50),
-                  const SizedBox(height: 100),
-                  const VPNSwitch(),
-                  const SizedBox(height: 40),
-                  if (vpnNotifier.isFlashlightInitializedFailed)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        CText(vpnNotifier.flashlightState, style: tsSubtitle2),
-                        const SizedBox(width: 10),
-                        SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: grey5,
-                          ),
-                        )
-                      ],
-                    ),
-                  const SizedBox(height: 50),
-                  Consumer<InternetStatusProvider>(
-                    builder: (context, provider, _) {
-                      return provider.isConnected
-                          ? const SizedBox()
-                          : const InternetChecker();
-                    },
+                    const SizedBox(height: 10),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const VPNSwitch(),
+                      const SizedBox(height: 40),
+                      if (vpnNotifier.isFlashlightInitializedFailed)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            CText(vpnNotifier.flashlightState,
+                                style: tsSubtitle2),
+                            const SizedBox(width: 10),
+                            SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: grey5,
+                              ),
+                            )
+                          ],
+                        ),
+                    ],
                   ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsetsDirectional.all(16),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: borderColor,
-                        width: 1,
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(borderRadius),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        VPNStatus(),
-                        const CDivider(height: 32.0),
-                        ServerLocationWidget(),
-                        if (Platform.isAndroid) ...{
-                          const CDivider(height: 32.0),
-                          SplitTunnelingWidget(),
+                  Column(
+                    children: [
+                      Consumer<InternetStatusProvider>(
+                        builder: (context, provider, _) {
+                          return provider.isConnected
+                              ? const SizedBox()
+                              : const InternetChecker();
                         },
-                        if (!proUser) const VPNBandwidth(),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        padding: const EdgeInsetsDirectional.all(16),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: borderColor,
+                            width: 1,
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(borderRadius),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            VPNStatus(),
+                            const CDivider(height: 32.0),
+                            ServerLocationWidget(),
+                            if (Platform.isAndroid) ...{
+                              const CDivider(height: 32.0),
+                              SplitTunnelingWidget(),
+                            },
+                            if (!proUser && !Platform.isIOS)
+                              const VPNBandwidth(),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-      );
-    });
+      ),
+    );
   }
 }
 

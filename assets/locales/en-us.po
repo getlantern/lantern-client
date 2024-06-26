@@ -18,6 +18,91 @@ msgstr "Maybe Later"
 msgid "try"
 msgstr "Try it out"
 
+msgid "sign_in"
+msgstr "Sign In"
+
+msgid "enter_email"
+msgstr "Enter Email"
+
+msgid "enter_password"
+msgstr "Enter Password"
+
+msgid "forgot_password"
+msgstr "Forgot Password"
+
+msgid "forgot_your_password"
+msgstr "Forgot your password? "
+
+msgid "click_here"
+msgstr "Click here"
+
+msgid "reset_password"
+msgstr "Reset Password"
+
+msgid "lantern_pro_email"
+msgstr "Lantern Pro Email "
+
+msgid "return_to_sign_in"
+msgstr "Return to Sign in"
+
+msgid "enter_confirmation_code"
+msgstr "Enter Confirmation Code"
+
+msgid "confirmation_code_msg"
+msgstr "A confirmation code has been sent to XX. Enter it here to secure your account and enable password recovery."
+
+msgid "resend_confirmation_code"
+msgstr "Resend Confirmation Email"
+
+msgid "email_already_exists"
+msgstr "Email Already Exists"
+
+msgid "email_already_exists_msg"
+msgstr "This email is taken, if you already have an account with this email you can recover.  If not please go back and select a different email address."
+
+msgid "recover_account"
+msgstr "Recover Account"
+
+msgid "back"
+msgstr "back"
+
+msgid "change_email"
+msgstr "Change Email"
+
+msgid "new_password"
+msgstr "New Password"
+
+msgid "confirm_new_password"
+msgstr "Confirm New Password"
+
+msgid "already_have_an_account"
+msgstr "Already have an account? "
+
+msgid "create_account"
+msgstr "Create Account"
+
+msgid "create_password"
+msgstr "Create Password"
+
+msgid "by_creating_an_account"
+msgstr "By Creating an Account, you agree to our"
+
+msgid "confirm_email"
+msgstr "Confirm Email"
+
+msgid "update_pro_account"
+msgstr "Update Pro Account"
+
+msgid "update_pro_account_message"
+msgstr "Changes are coming to Lantern Pro! Now, you will need an email and password to log in on all devices, and to accesss Account Management.  Please take a few moments to add these credentials to your account. "
+
+msgid "not_now"
+msgstr "Not now"
+
+msgid "update_account"
+msgstr "Update Account"
+
+
 msgid "new"
 msgstr "New"
 
@@ -93,7 +178,7 @@ msgstr "I confirm that I want to delete my chat data"
 msgid "Pro Account Management"
 msgstr "Pro Account Management"
 
-msgid "Link Device"
+msgid "link_device"
 msgstr "Link Device"
 
 msgid "Upgrade to Lantern Pro"
@@ -126,11 +211,6 @@ msgstr "General"
 msgid "about"
 msgstr "About"
 
-msgid "privacy_policy"
-msgstr "Privacy Policy"
-
-msgid "terms_of_service"
-msgstr "Terms of Service"
 
 msgid "proxy_all"
 msgstr "Proxy everything"
@@ -252,9 +332,6 @@ msgstr "Requires access to the email you used to buy Lantern Pro"
 msgid "Link via Email"
 msgstr "Link via Email"
 
-msgid "lantern_pro_email"
-msgstr "Lantern Pro Email"
-
 msgid "lantern_desktop"
 msgstr "Lantern Desktop"
 
@@ -311,9 +388,6 @@ msgstr "month"
 
 msgid "months"
 msgstr "months"
-
-msgid "enter_email"
-msgstr "Enter Email"
 
 msgid "enter_email_to_complete_purchase"
 msgstr "Enter email to complete purchase"
@@ -409,7 +483,7 @@ msgid "pro_purchase_success_descripion"
 msgstr "You now have unlimited access using our fastest data centers.  Up to three devices can be connected to your account."
 
 msgid "by_clicking_tos"
-msgstr "By clicking %s, you agree to our"
+msgstr "By clicking %s, you agree to our "
 
 msgid "tos"
 msgstr "Terms of Service"
@@ -701,9 +775,6 @@ msgstr "All messages will not disappear for you and %s."
 
 msgid "message_disappearing_description"
 msgstr "All messages will disappear after %s for you and %s."
-
-msgid "delete"
-msgstr "Delete"
 
 msgid "view_contact_info"
 msgstr "View Contact Info"
@@ -1470,17 +1541,141 @@ msgstr "FAQ"
 msgid "add_device"
 msgstr "Add Device"
 
-msgid "recovery_code_sent"
-msgstr "Recovery Code Sent"
+msgid "search_apps"
+msgstr "Search Apps"
+
+msgid "user_not_found"
+msgstr "User not recognized. Please check your credentials and try again. If you continue to experience issues, please reach out to our support team for assistance."
+
+msgid "email_resend_message"
+msgstr "Your new confirmation code has been sent"
+
+msgid "signup_error"
+msgstr "It looks like something went wrong with the sign-up. Please try again, and if the issue continues, reach out to our support team"
+
+msgid "signup_error_user_exists"
+msgstr "It looks like something went wrong with the sign-up. Please try resetting your password, and if the issue continues, reach out to our support team"
+
+msgid "confirm_email_error"
+msgstr "Please confirm your email"
+
+msgid "password_cannot_be_empty"
+msgstr "Password cannot be empty"
+
+msgid "password_must_be_at_least_8_characters"
+msgstr "Password must be at least 8 or more characters"
+
+msgid "sign_out"
+msgstr "Sign out"
+
+msgid "sign_out_message"
+msgstr "Logging out will switch Lantern to the free version. To access your account again, you will need to sign back in."
+
+msgid "change_password"
+msgstr "Change Password"
+
+msgid "password"
+msgstr "Password"
+
+msgid "new_email"
+msgstr "New Email Address"
+
+msgid "new_email_same_as_old_email"
+msgstr "New email address cannot be the same as your old email address"
+
+msgid "danger_zone"
+msgstr "Danger zone"
+
+msgid "delete_account"
+msgstr "Delete Account"
+
+msgid "delete"
+msgstr "Delete"
+
+msgid "delete_account_message"
+msgstr "Deleting your account cannot be undone. You'll lose all device access and forfeit any Pro account time without refund."
+
+msgid "delete_your_account"
+msgstr "Delete your account?"
+
+msgid "confirm_deletion"
+msgstr "Confirm Deletion"
+
+msgid "account_deleted"
+msgstr "Account Deleted"
+
+msgid "account_deleted_message"
+msgstr "Your account has been permanently deleted."
+
+msgid "password_has_been_updated"
+msgstr "Password has been updated"
+
+msgid "password_has_been_updated_message"
+msgstr "Your password has been reset successfully"
+
+msgid "invalid_code"
+msgstr "Incorrect code or it might have expired. Please try resending again"
+
+msgid "get_lantern_pro"
+msgstr "Get Lantern Pro"
+
+msgid "try_lantern_pro"
+msgstr "Try Lantern for free! "
+
+msgid "continue_for_free"
+msgstr "Continue for Free "
+
+msgid "recovery_not_found"
+msgstr "Device not associated to this user"
 
 msgid "device_added"
-msgstr "Device Added"
+msgstr "Device not associated to this user"
 
 msgid "device_added_message"
 msgstr "Your device has been successfully added. If you do not see the device connected, please restart the app on both devices"
 
-msgid "search_apps"
-msgstr "Search Apps"
+msgid "wrong_link_code"
+msgstr "The code you entered is incorrect. Please check and try again."
+
+msgid "recovery_code_sent"
+msgstr "Recovery code has been sent"
+
+
+msgid "device_added_msg"
+msgstr "This device has been Linked to %s"
+
+msgid "new_to_lantern"
+msgstr "New to Lantern? "
+
+msgid "email_has_been_updated"
+msgstr "Email has been updated"
+
+msgid "email_has_been_updated_message"
+msgstr "Your Email has been changed successfully"
+
+msgid "email_has_been_verified"
+msgstr "Email has been verified"
+
+msgid "email_has_been_verified_message"
+msgstr "Your Email has been verified successfully"
+
+msgid "device_limit_reached"
+msgstr "Device Limit Reached"
+
+msgid "device_limit_reached_message"
+msgstr "You are currently signed in on the maximum number of devices (3). To sign in on this device, please select and remove one of your other devices below."
+
+msgid "enter_activation_code"
+msgstr "Enter Activation Code"
+
+msgid "check_your_email"
+msgstr "Check Your Email Address"
+
+msgid "please_verify_email"
+msgstr "Please verify that the email address you entered is correct."
+
+msgid "verify"
+msgstr "Verify"
 
 msgid "cannot_login"
 msgstr "Cannot login"
@@ -1550,7 +1745,6 @@ msgstr "Fetching Configuration"
 
 msgid "establish_connection_to_server"
 msgstr "Establish connection to server"
-
 
 msgid "file_size_limit_title"
 msgstr "Limit Reached"

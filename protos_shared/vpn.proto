@@ -28,8 +28,14 @@ message Device {
   int64 created = 3;
 }
 
+
+
 message Devices {
   repeated Device devices = 1;
+}
+
+message Plans {
+  repeated Plan plan = 1;
 }
 
 message Plan {
@@ -44,6 +50,7 @@ message Plan {
   string totalCost = 9;
   string formattedBonus = 10;
   string renewalText = 11;
+  map<string, int64> renewalBonusExpected = 13;
 }
 
 message PaymentProviders {
@@ -70,7 +77,16 @@ message User {
   string referral = 11;
   string token = 12;
   bool yinbiEnabled = 13;
+  repeated string inviters = 14;
+  repeated string invitees = 15;
+  repeated Purchase purchases = 16;
 }
+
+message Purchase  {
+  string plan = 1;
+}
+
+
 
 // API
 message BaseResponse {
@@ -80,13 +96,13 @@ message BaseResponse {
 }
 
 message PaymentRedirectRequest {
-    string plan = 1;
-    string provider = 2;
-    string currency = 3;
-    string email = 4;
-    string deviceName = 5;
-    string countryCode = 6;
-    string locale = 7;
+  string plan = 1;
+  string provider = 2;
+  string currency = 3;
+  string email = 4;
+  string deviceName = 5;
+  string countryCode = 6;
+  string locale = 7;
 }
 
 message RedeemResellerCodeRequest {

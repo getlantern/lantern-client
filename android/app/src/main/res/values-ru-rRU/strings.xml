@@ -41,6 +41,7 @@
   <string name="submit_code">Подтвердить код</string>
   <string name="on_text">ВКЛ</string>
   <string name="off_text">ВЫКЛ</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">Lantern выключен. Передвиньте переключатель для доступа к заблокированным сайтам и сервисам!</string>
   <string name="lantern_on">Lantern включен. Теперь вы можете получить доступ к заблокированным сайтам и сервисам!</string>
   <string name="on_desc">Теперь вы можете получить доступ к заблокированным на данный момент сайтам и сервисам</string>
@@ -308,6 +309,7 @@
   <string name="earn_free_month">Получи бесплатный месяц за каждого зарегистрированного друга </string>
   <string name="credits_applied">Ваши кредиты будут применены к вашей учетной записи на следующий платежный цикл.</string>
   <string name="pro_invitation_subject">Приглашение присоединиться к Lantern Pro</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">Я читаю о \"%1$s\" на %2$s через Lantern. Используйте Lantern, чтобы получить доступ к заблокированным сайтам и услугам. Вы можете скачать версию для Android здесь: https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Вы уверены? Это действие не может быть отменено! Вы можете подписаться на Pro снова в любое время.</string>
   <string name="unauthorize_confirmation">Вы уверены, что хотите отвязать это устройство от аккаунта Pro?</string>
@@ -499,6 +501,9 @@
   <string name="lantern_service">Сервис Lantern</string>
   <string name="replica_download">Загрузка файла </string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

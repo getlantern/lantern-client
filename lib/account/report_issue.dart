@@ -16,6 +16,7 @@ class ReportIssue extends StatefulWidget {
 class _ReportIssueState extends State<ReportIssue> {
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
+    text: sessionModel.userEmail.value,
     formKey: emailFieldKey,
     validator: (value) {
       if (value == null || value.isEmpty) {
@@ -26,6 +27,7 @@ class _ReportIssueState extends State<ReportIssue> {
           : 'please_enter_a_valid_email_address'.i18n;
     },
   );
+
   final issueFieldKey = GlobalKey<FormState>();
   late final issueController = CustomTextEditingController(
     formKey: issueFieldKey,
@@ -48,144 +50,136 @@ class _ReportIssueState extends State<ReportIssue> {
         return null;
       });
 
-
-
   @override
   Widget build(BuildContext context) {
-    return sessionModel.emailAddress((
-      BuildContext context,
-      String emailAddress,
-      Widget? child,
-    ) {
-      return BaseScreen(
-        title: 'report_an_issue'.i18n,
-        resizeToAvoidBottomInset: false,
-        body: Padding(
-          padding: const EdgeInsetsDirectional.only(
-            start: 20,
-            end: 20,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // * Email field
-              Container(
-                margin: const EdgeInsetsDirectional.only(
-                  top: 24,
-                  bottom: 8,
-                ),
-                child: Form(
-                  key: emailFieldKey,
-                  child: CTextField(
-                    initialValue: emailAddress,
-                    controller: emailController,
-                    autovalidateMode: AutovalidateMode.disabled,
-                    label: 'email'.i18n,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: const CAssetImage(path: ImagePaths.email),
-                  ),
-                ),
+    return BaseScreen(
+      title: 'report_an_issue'.i18n,
+      resizeToAvoidBottomInset: false,
+      body: Padding(
+        padding: const EdgeInsetsDirectional.only(
+          start: 20,
+          end: 20,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // * Email field
+            Container(
+              margin: const EdgeInsetsDirectional.only(
+                top: 24,
+                bottom: 8,
               ),
-              Container(
-                  margin: const EdgeInsetsDirectional.only(
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  child: Form(
-                      key: issueFieldKey,
-                      child: DropdownButtonFormField(
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: grey3,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: blue4,
-                              ),
-                            ),
-                            prefixIcon: Transform.scale(
-                                scale: 0.4,
-                                child:
-                                    const CAssetImage(path: ImagePaths.alert))),
-                        hint: CText('select_an_issue'.i18n, style: tsBody1),
-                        value: issueController.text != ''
-                            ? issueController.text
-                            : null,
-                        icon: const CAssetImage(path: ImagePaths.arrow_down),
-                        //iconSize: iconSize,
-                        elevation: 16,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            issueController.text = newValue!;
-                          });
-                        },
-                        padding: isDesktop()
-                            ? const EdgeInsetsDirectional.only(
-                                top: 8,
-                                bottom: 8,
-                              )
-                            : const EdgeInsetsDirectional.all(0),
-                        items: <String>[
-                          'cannot_access_blocked_sites'.i18n,
-                          'cannot_complete_purchase'.i18n,
-                          'cannot_sign_in'.i18n,
-                          'discover_not_working'.i18n,
-                          'spinner_loads_endlessly'.i18n,
-                          'slow'.i18n,
-                          'cannot_link_devices'.i18n,
-                          'application_crashes'.i18n,
-                          'other'.i18n
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: CText(value, style: tsBody1),
-                          );
-                        }).toList(),
-                      ))),
-              const SizedBox(height: 8),
-              Form(
-                key: descFieldKey,
+              child: Form(
+                key: emailFieldKey,
                 child: CTextField(
-                  tooltipMessage: 'report_description'.i18n,
-                  controller: descController,
-                  contentPadding: isDesktop()
-                      ? const EdgeInsetsDirectional.all(16.0)
-                      : const EdgeInsetsDirectional.all(8.0),
-                  hintText: 'issue_description'.i18n,
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  controller: emailController,
                   autovalidateMode: AutovalidateMode.disabled,
-                  maxLines: 8,
-                  keyboardType: TextInputType.multiline,
+                  label: 'email'.i18n,
                   onChanged: (value) {
                     setState(() {});
                   },
+                  keyboardType: TextInputType.emailAddress,
+                  prefixIcon: const CAssetImage(path: ImagePaths.email),
                 ),
               ),
-              const Spacer(),
-              Tooltip(
-                  message: isDesktop() ? '' : AppKeys.sendReport,
-                  child: Button(
-                    width: 200,
-                    disabled: isButtonDisabled(),
-                    text: 'send_report'.i18n,
-                    onPressed: onSendReportTap,
-                  )),
-              const SizedBox(
-                height: 56.0,
+            ),
+            Container(
+                margin: const EdgeInsetsDirectional.only(
+                  top: 8,
+                  bottom: 8,
+                ),
+                child: Form(
+                    key: issueFieldKey,
+                    child: DropdownButtonFormField(
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: grey3,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 2,
+                              color: blue4,
+                            ),
+                          ),
+                          prefixIcon: Transform.scale(
+                              scale: 0.4,
+                              child:
+                              const CAssetImage(path: ImagePaths.alert))),
+                      hint: CText('select_an_issue'.i18n, style: tsBody1),
+                      value: issueController.text != ''
+                          ? issueController.text
+                          : null,
+                      icon: const CAssetImage(path: ImagePaths.arrow_down),
+                      //iconSize: iconSize,
+                      elevation: 16,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          issueController.text = newValue!;
+                        });
+                      },
+                      padding: isDesktop()
+                          ? const EdgeInsetsDirectional.only(
+                        top: 8,
+                        bottom: 8,
+                      )
+                          : const EdgeInsetsDirectional.all(0),
+                      items: <String>[
+                        'cannot_access_blocked_sites'.i18n,
+                        'cannot_complete_purchase'.i18n,
+                        'cannot_sign_in'.i18n,
+                        'discover_not_working'.i18n,
+                        'spinner_loads_endlessly'.i18n,
+                        'slow'.i18n,
+                        'cannot_link_devices'.i18n,
+                        'application_crashes'.i18n,
+                        'other'.i18n
+                      ].map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: CText(value, style: tsBody1),
+                        );
+                      }).toList(),
+                    ))),
+            const SizedBox(height: 8),
+            Form(
+              key: descFieldKey,
+              child: CTextField(
+                tooltipMessage: 'report_description'.i18n,
+                controller: descController,
+                contentPadding: isDesktop()
+                    ? const EdgeInsetsDirectional.all(16.0)
+                    : const EdgeInsetsDirectional.all(8.0),
+                hintText: 'issue_description'.i18n,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                autovalidateMode: AutovalidateMode.disabled,
+                maxLines: 8,
+                keyboardType: TextInputType.multiline,
+                textInputAction: TextInputAction.done,
+                onChanged: (value) {
+                  setState(() {});
+                },
               ),
-            ],
-          ),
+            ),
+            const Spacer(),
+            Tooltip(
+                message: isDesktop() ? '' : AppKeys.sendReport,
+                child: Button(
+                  width: 200,
+                  disabled: isButtonDisabled(),
+                  text: 'send_report'.i18n,
+                  onPressed: onSendReportTap,
+                )),
+            const SizedBox(
+              height: 56.0,
+            ),
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 
   bool isButtonDisabled() {

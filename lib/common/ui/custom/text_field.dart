@@ -33,6 +33,7 @@ class CTextField extends StatefulWidget {
   late final bool? autofocus;
   late final void Function(String value)? onChanged;
   String? tooltipMessage;
+  final bool obscureText;
 
   CTextField({
     required this.controller,
@@ -63,6 +64,7 @@ class CTextField extends StatefulWidget {
     this.autofocus = false,
     this.onChanged,
     this.tooltipMessage,
+    this.obscureText = false,
   }) {
     if (initialValue != null && initialValue != '') {
       controller.text = initialValue!;
@@ -113,102 +115,87 @@ class _CTextFieldState extends State<CTextField> {
       children: [
         Container(
           padding: const EdgeInsetsDirectional.only(top: 7),
-          child: Scrollbar(
-            controller: scrollController,
-            interactive: true,
-            // TODO: this generates an annoying error https://github.com/flutter/flutter/issues/97873
-            // thumbVisibility: true,
-            trackVisibility: true,
-            child: Tooltip(
-              message: isDesktop() ? '' : (widget.tooltipMessage ?? ''),
-              child: TextFormField(
-                key: fieldKey,
-                autofocus: widget.autofocus!,
-                enabled: widget.enabled,
-                controller: widget.controller,
-                scrollPhysics: defaultScrollPhysics,
-                autovalidateMode: widget.autovalidateMode,
-                focusNode: widget.controller.focusNode,
-                keyboardType: widget.keyboardType,
-                maxLength: widget.maxLength,
-                validator: (value) {
-                  // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
-                  var result = widget.controller.validate(value);
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    setState(() {});
-                  });
-                  return result;
-                },
-                onTap: widget.onTap,
-                onChanged: (value) {
-                  if (widget.onChanged != null) {
-                    widget.onChanged!(value);
-                  }
-                  fieldKey.currentState!.validate();
-                },
-                onFieldSubmitted: widget.onFieldSubmitted,
-                textInputAction: widget.textInputAction,
-                minLines: widget.minLines,
-                maxLines: widget.maxLines,
-                style: widget.style,
-                inputFormatters: widget.inputFormatters,
-                textCapitalization:
-                    widget.textCapitalization ?? TextCapitalization.none,
-                decoration: InputDecoration(
-                  contentPadding: widget.contentPadding ??
-                      (isDesktop()
-                          ? const EdgeInsetsDirectional.only(
-                              top: 24,
-                              bottom: 24,
-                            )
-                          : const EdgeInsetsDirectional.only(
-                              top: 8,
-                              bottom: 8,
-                            )),
-                  isDense: true,
-                  floatingLabelBehavior: widget.floatingLabelBehavior ?? FloatingLabelBehavior.never,
-                  // we handle floating labels using our custom method below
-                  labelText: (widget.label is String) ? widget.label : '',
-                  helperText: widget.helperText,
-                  hintText: widget.hintText,
-                  helperMaxLines: 2,
-                  focusedBorder: !widget.removeBorder
-                      ? OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: blue4,
-                          ),
-                        )
-                      : noBorder,
-                  errorBorder: !widget.removeBorder
-                      ? OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 2,
-                            color: indicatorRed,
-                          ),
-                        )
-                      : noBorder,
-                  border: !widget.removeBorder
-                      ? OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: grey3,
-                          ),
-                        )
-                      : noBorder,
-                  prefixIcon:
-                      // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
-                      widget.prefixIcon != null
-                          ? Transform.scale(
-                              scale: 0.5, child: widget.prefixIcon)
-                          : null,
-                  suffixIcon: renderSuffixRow(),
-                  // forcibly remove if removeBorder == true
-                  // otherwise, it will show up if we have a maxLength set
-                  counterText: (widget.removeCounterText || widget.removeBorder)
-                      ? ''
-                      : null,
-                ),
+          child: Tooltip(
+            message: widget.tooltipMessage ?? '',
+            child: TextFormField(
+              key: fieldKey,
+              autofocus: widget.autofocus!,
+              enabled: widget.enabled,
+              controller: widget.controller,
+              scrollPhysics: defaultScrollPhysics,
+              obscureText: widget.obscureText,
+              autovalidateMode: widget.autovalidateMode,
+              focusNode: widget.controller.focusNode,
+              keyboardType: widget.keyboardType,
+              maxLength: widget.maxLength,
+              validator: (value) {
+                // this was raising a stubborn error, fixed by this https://stackoverflow.com/a/59478165
+                var result = widget.controller.validate(value);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  setState(() {});
+                });
+                return result;
+              },
+              onTap: widget.onTap,
+              onChanged: (value) {
+                if (widget.onChanged != null) {
+                  widget.onChanged!(value);
+                }
+                fieldKey.currentState!.validate();
+              },
+              onFieldSubmitted: widget.onFieldSubmitted,
+              textInputAction: widget.textInputAction,
+              minLines: widget.minLines,
+              maxLines: widget.maxLines,
+              style: widget.style,
+              inputFormatters: widget.inputFormatters,
+              textCapitalization:
+                  widget.textCapitalization ?? TextCapitalization.none,
+              decoration: InputDecoration(
+                contentPadding:
+                    widget.contentPadding ?? const EdgeInsetsDirectional.all(10),
+                isDense: true,
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                // we handle floating labels using our custom method below
+                labelText: (widget.label is String) ? widget.label : '',
+                helperText: widget.helperText,
+                hintText: widget.hintText,
+                helperMaxLines: 2,
+                focusedBorder: !widget.removeBorder
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: blue4,
+                        ),
+                      )
+                    : noBorder,
+                errorBorder: !widget.removeBorder
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: indicatorRed,
+                        ),
+                      )
+                    : noBorder,
+                border: !widget.removeBorder
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1,
+                          color: grey3,
+                        ),
+                      )
+                    : noBorder,
+                prefixIcon:
+                    // There seems to be a problem with TextField and custom SVGs sizing so I had to size down manually
+                    widget.prefixIcon != null
+                        ? Transform.scale(scale: 0.4, child: widget.prefixIcon)
+                        : null,
+                suffixIcon: renderSuffixRow(),
+                // forcibly remove if removeBorder == true
+                // otherwise, it will show up if we have a maxLength set
+                counterText: (widget.removeCounterText || widget.removeBorder)
+                    ? ''
+                    : null,
               ),
             ),
           ),
@@ -262,9 +249,7 @@ class _CTextFieldState extends State<CTextField> {
   Widget? renderSuffix() {
     final hasError = fieldKey.currentState?.mounted == true &&
         fieldKey.currentState?.hasError == true;
-    final isEmpty = fieldKey.currentState?.mounted == true &&
-        fieldKey.currentState?.value == '';
-    if (isEmpty) return null;
+
     return hasError
         ? Transform.scale(
             scale: 0.4,
@@ -274,7 +259,7 @@ class _CTextFieldState extends State<CTextField> {
             ),
           )
         : widget.suffixIcon != null
-            ? Transform.scale(scale: 0.4, child: widget.suffixIcon)
+            ? Transform.scale(scale: 0.5, child: widget.suffixIcon)
             : null;
   }
 
@@ -349,5 +334,85 @@ class CustomTextEditingController extends TextEditingController {
   set error(String? error) {
     _error = error;
     formKey.currentState?.validate();
+  }
+}
+
+class CPasswordTextFiled extends StatefulWidget {
+  final GlobalKey<FormState> passwordFormKey;
+  final CustomTextEditingController passwordCustomTextEditingController;
+  final String label;
+  final Function(String vaule)? onChanged;
+
+  const CPasswordTextFiled({
+    super.key,
+    required this.label,
+    required this.passwordFormKey,
+    required this.passwordCustomTextEditingController,
+    this.onChanged,
+  });
+
+  @override
+  State<CPasswordTextFiled> createState() => _CPasswordTextFiledState();
+}
+
+class _CPasswordTextFiledState extends State<CPasswordTextFiled> {
+  bool obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: widget.passwordFormKey,
+      child: CTextField(
+        controller: widget.passwordCustomTextEditingController,
+        label: widget.label,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        textInputAction: TextInputAction.done,
+        keyboardType: TextInputType.visiblePassword,
+        obscureText: obscureText,
+        maxLines: 1,
+        prefixIcon: SvgPicture.asset(ImagePaths.lockFiled),
+        suffixIcon: GestureDetector(
+            onTap: () {
+              setState(() {
+                obscureText = !obscureText;
+              });
+            },
+            child: !obscureText
+                ? SvgPicture.asset(ImagePaths.eyeCross)
+                : SvgPicture.asset(ImagePaths.eye)),
+        // suffix: SvgPicture.asset(ImagePaths.eye),
+        onChanged: widget.onChanged ??
+            (value) {
+              setState(() {});
+            },
+      ),
+    );
+  }
+}
+
+
+/// TextInputFormatter formatter
+
+class EmojiFilteringTextInputFormatter extends TextInputFormatter {
+  final RegExp _emojiRegex = RegExp(r'(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])');
+
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final newText = newValue.text;
+    final replacements = _emojiRegex.allMatches(newText).toList().reversed;
+    if (replacements.isNotEmpty) {
+      int offsetDelta = 0; // Keep track of offset change due to emoji removal
+      final String withoutEmoji = replacements.fold(newText, (text, match) {
+        final int removedLength = match.end - match.start;
+        offsetDelta += removedLength; // Update offsetDelta
+        return text.replaceRange(match.start, match.end, "");
+      });
+      // Adjust selection based on offset delta
+      final newSelection = TextSelection(
+          baseOffset: newValue.selection.baseOffset - offsetDelta,
+          extentOffset: newValue.selection.extentOffset - offsetDelta);
+      return TextEditingValue(text: withoutEmoji, selection: newSelection);
+    }
+    return newValue;
   }
 }

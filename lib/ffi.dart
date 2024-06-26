@@ -100,7 +100,6 @@ Future<void> ffiRemoveDevice(String deviceId) async {
 
 FutureOr<bool> ffiHasPlanUpdateOrBuy(dynamic context) {
   final json = _bindings.hasPlanUpdatedOrBuy().cast<Utf8>().toDartString();
-  print('Result of hasPlanUpdatedOrBuy: $json');
   return json == 'true' ? true : throw NoPlansUpdate("No Plans update");
 }
 

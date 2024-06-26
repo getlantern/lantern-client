@@ -10,7 +10,7 @@ class AppWebView extends StatefulWidget {
   const AppWebView({
     super.key,
     required this.url,
-    required this.title,
+     this.title= "",
   });
 
   @override

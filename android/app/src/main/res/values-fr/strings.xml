@@ -41,6 +41,7 @@
   <string name="submit_code">Confirmer le code</string>
   <string name="on_text">I</string>
   <string name="off_text">O</string>
+  <string name="unknown_error"></string>
   <string name="lantern_off">Lantern est désactivée. Basculez l’interrupteur pour accéder à des sites et à des services bloqués.</string>
   <string name="lantern_on">Lantern est activée. Vous pouvez maintenant accéder à des sites et à des services bloqués.</string>
   <string name="on_desc">Vous pouvez maintenant accéder\r\nà des sites et à des services bloqués</string>
@@ -305,6 +306,7 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="earn_free_month">Gagnez un mois gratuit pour chaque ami qui s’inscrit</string>
   <string name="credits_applied">Vos crédits seront imputés à votre compte lors du prochain cycle de facturation.</string>
   <string name="pro_invitation_subject">Invitation à rejoindre Lantern Pro</string>
+  <string name="receive_free_month"></string>
   <string name="share_feed_item">Je lis à propos de « %1$s » sur %2$s avec Lantern. Utilisez Lantern pour accéder à des sites et des services bloqués. Vous pouvez télécharger la version pour Android ici : https://bit.ly/lanternapk</string>
   <string name="cancel_pro_confirmation">Êtes-vous certain ? Cette action ne peut pas être annulée. Vous pouvez vous réinscrire à Pro n’importe quand.</string>
   <string name="unauthorize_confirmation">Voulez-vous vraiment dissocier cet appareil de votre compte Pro ?</string>
@@ -495,6 +497,9 @@ Télécharger Lantern https://bit.ly/lanternapk</string>
   <string name="lantern_service">Service Lantern</string>
   <string name="replica_download">Téléchargement de la réplique</string>
   <!--`true` to automatically enable plausible on app startup or `false` to prevent sending events.-->
+  <string name="plausible_enable_startup"></string>
   <!--Host for plausible backend. Defaults to plausible.io.-->
+  <string name="plausible_host"></string>
   <!--Default domain to send events for. E.g. yourapp.com.-->
+  <string name="plausible_domain"></string>
 </resources>

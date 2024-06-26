@@ -29,8 +29,12 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
               margin: const EdgeInsetsDirectional.only(top: 32),
               child: CTextField(
                 controller: emailController,
-                autovalidateMode: AutovalidateMode.disabled,
                 //TODO: this throws an error when we set it to AutovalidateMode.onUserInteraction
+                contentPadding: const EdgeInsetsDirectional.only(
+                  top: 8.0,
+                  bottom: 8.0,
+                ),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 label: 'Email'.i18n,
                 helperText: 'auth_email_helper_text'.i18n,
                 keyboardType: TextInputType.emailAddress,
@@ -52,16 +56,22 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
   }
 
   Future<void> onSubmit(BuildContext context) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
     try {
-      if (!formKey.currentState!.validate()) {
-        return;
-      }
-      context.loaderOverlay.show(widget: spinner);
-      await sessionModel.authorizeViaEmail(emailController.value.text);
+      context.loaderOverlay.show();
+      await sessionModel
+          .authorizeViaEmail(emailController.value.text.validateEmail);
       context.loaderOverlay.hide();
-      context.pushRoute(AuthorizeDeviceEmailPin(email: emailController.value.text));
+      context.pushRoute(
+        AuthorizeDeviceEmailPin(
+            email: emailController.value.text.validateEmail),
+      );
     } catch (e) {
       context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
     }
   }
 }

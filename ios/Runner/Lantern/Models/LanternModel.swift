@@ -20,6 +20,8 @@ class LanternModel: NSObject, FlutterStreamHandler {
   var flutterbinaryMessenger: FlutterBinaryMessenger
 
   init(flutterBinary: FlutterBinaryMessenger) {
+    logger.log("Initializing LanternModel")
+
     self.flutterbinaryMessenger = flutterBinary
     super.init()
 

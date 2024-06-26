@@ -1,13 +1,14 @@
 # 
 # Translators:
 # tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2023
-# e2f <projects@e2f.com>, 2023
-# tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2023
-# Diversity83 83, 2023
+# Derek F <derek@getlantern.org>, 2024
+# Diversity83 83, 2024
+# e2f <projects@e2f.com>, 2024
+# tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Diversity83 83, 2023\n"
+"Last-Translator: tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2024\n"
 "Language-Team: Urdu (https://app.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -29,6 +30,98 @@ msgstr "شاید بعد میں"
 msgid "try"
 msgstr "اسے آزمائیں"
 
+msgid "sign_in"
+msgstr "سائن ان کریں"
+
+msgid "enter_email"
+msgstr "ای میل درج کریں"
+
+msgid "enter_password"
+msgstr "پاس ورڈ درج کریں"
+
+msgid "forgot_password"
+msgstr "پاس ورڈ بھول گئے"
+
+msgid "forgot_your_password"
+msgstr "اپنا پاس ورڈ بھول گئے؟ "
+
+msgid "click_here"
+msgstr "یہاں کلک کریں"
+
+msgid "reset_password"
+msgstr "پاس ورڈ ری سیٹ کریں"
+
+msgid "lantern_pro_email"
+msgstr "Lantern Pro ای میل "
+
+msgid "return_to_sign_in"
+msgstr "سائن ان پر واپس جائیں"
+
+msgid "enter_confirmation_code"
+msgstr "تصدیقی کوڈ درج کریں"
+
+msgid "confirmation_code_msg"
+msgstr ""
+"تصدیقی کوڈ XX پر بھیج دیا گیا ہے۔ اپنا اکاؤنٹ محفوظ کرنے اور پاس ورڈ کی "
+"بحالی فعال کرنے کے لیے اسے یہاں درج کریں۔"
+
+msgid "resend_confirmation_code"
+msgstr "تصدیقی ای میل دوبارہ بھیجیں"
+
+msgid "email_already_exists"
+msgstr "ای میل پہلے سے موجود ہے"
+
+msgid "email_already_exists_msg"
+msgstr ""
+"یہ ای میل لے لی گئی، اگر آپ کے پاس پہلے سے اس ای میل کے ساتھ اکاؤںٹ موجود ہے"
+" تو آپ بحال کر سکتے ہیں۔  اگر نہیں تو براہ کرم واپس جائیں اور مختلف ای میل "
+"ایڈریس منتخب کریں۔"
+
+msgid "recover_account"
+msgstr "اکاؤنٹ بحال کریں"
+
+msgid "back"
+msgstr "واپس جائیں"
+
+msgid "change_email"
+msgstr "ای میل تبدیل کریں"
+
+msgid "new_password"
+msgstr "نیا پاس ورڈ"
+
+msgid "confirm_new_password"
+msgstr "نئے پاس ورڈ کی تصدیق کریں"
+
+msgid "already_have_an_account"
+msgstr "پہلے سے اکاؤنٹ موجود ہے؟ "
+
+msgid "create_account"
+msgstr "اکاؤنٹ تخلیق کریں"
+
+msgid "create_password"
+msgstr "پاس ورڈ تخلیق کریں"
+
+msgid "by_creating_an_account"
+msgstr "اکاؤنٹ تخلیق کر کے، آپ ہماری سے متفق ہوتے ہیں"
+
+msgid "confirm_email"
+msgstr "ای میل کی تصدیق کیجئے"
+
+msgid "update_pro_account"
+msgstr "Pro اکاؤنٹ اپ ڈیٹ کریں"
+
+msgid "update_pro_account_message"
+msgstr ""
+"Lantern Pro میں تبدیلیاں آ رہی ہیں! اب، آپ کو تمام ڈیوائسز میں لاگ ان کرنے، "
+"اور اکاؤنٹ مینیجمنٹ تک رسائی حاصل کرنے کے لیے ای میل اور پاس ورڈ درکار ہو "
+"گا۔  براہ کرم اپنے اکاؤنٹ میں ان اسناد کو شامل کرنے کے لیے چند لمحے دیں۔ "
+
+msgid "not_now"
+msgstr "ابھی نہیں"
+
+msgid "update_account"
+msgstr "اکاؤنٹ اپ ڈیٹ کریں"
+
 msgid "new"
 msgstr "نیا"
 
@@ -37,6 +130,12 @@ msgstr "ڈیٹا کا روزانہ کا استعمال "
 
 msgid "is"
 msgstr "ہے"
+
+msgid "connect"
+msgstr "کنیکٹ"
+
+msgid "disconnect"
+msgstr "منقطع"
 
 msgid "connected"
 msgstr "کنیکٹ ہو چکا ہے"
@@ -72,7 +171,7 @@ msgid "Go Pro Title"
 msgstr "پرو اپنائیں!"
 
 msgid "Go Pro Description"
-msgstr ""
+msgstr "تیز رفتار، اشتہار سے پاک تجربہ، اور لا محدود ڈیٹا کو ان لاک کریں! "
 
 msgid "Server Location"
 msgstr "سرور لوکیشن"
@@ -107,7 +206,7 @@ msgstr ""
 msgid "Pro Account Management"
 msgstr "پرو اکاؤنٹ مینجمنٹ"
 
-msgid "Link Device"
+msgid "link_device"
 msgstr "ڈیوائس لنک کریں"
 
 msgid "Upgrade to Lantern Pro"
@@ -155,12 +254,6 @@ msgstr "جنرل"
 msgid "about"
 msgstr "متعلق"
 
-msgid "privacy_policy"
-msgstr "پرائیوسی پالیسی"
-
-msgid "terms_of_service"
-msgstr "سروس کی شرائط"
-
 msgid "proxy_all"
 msgstr "پراکسی سب کُجھ"
 
@@ -183,7 +276,7 @@ msgid "select_an_issue"
 msgstr "برائے مہربانی ایک مسئلے کا انتخاب کیجئے"
 
 msgid "enter_description"
-msgstr ""
+msgstr "براہ کرم اپنی مسئلہ کی وضاحت کریں "
 
 msgid "cannot_access_blocked_sites"
 msgstr "بلاک سائٹس تک رسائی ممکن نہیں "
@@ -191,17 +284,35 @@ msgstr "بلاک سائٹس تک رسائی ممکن نہیں "
 msgid "cannot_complete_purchase"
 msgstr "خریداری مکمل نہیں کر سکتے"
 
+msgid "discover_not_working"
+msgstr "دریافت کام نہیں کر رہا "
+
 msgid "cannot_sign_in"
 msgstr "سائن ان نہیں کر سکتے"
 
 msgid "spinner_loads_endlessly"
 msgstr "اسپنر لا محدود طور پر لوڈ کرتا ہے"
 
+msgid "slow"
+msgstr "آہستہ"
+
+msgid "cannot_link_devices"
+msgstr "ڈیوائس منسلک نہیں ہو سکتی"
+
+msgid "wrong_device_linking_code"
+msgstr "غیر درست ڈیوائس منسلک کوڈ"
+
+msgid "cannot_remove_device"
+msgstr "ڈیوائس کو ہٹایا نہیں جا سکتا "
+
+msgid "application_crashes"
+msgstr "اپیلیکیشن کریش ہوتی ہے"
+
 msgid "other"
 msgstr "دوسرے"
 
 msgid "issue_description"
-msgstr "مسئلہ کی تفصیل"
+msgstr "اپنی مسئلہ کی وضاحت کریں "
 
 msgid "check_for_updates"
 msgstr "اپ ڈیٹس کے لیے پڑتال کریں"
@@ -242,10 +353,10 @@ msgid "device_linking_pin"
 msgstr "ڈیوائس لنکنگ پن"
 
 msgid "link_device_step_one"
-msgstr ""
+msgstr "اپنے پرو ڈیوائس پر 'ڈیوائس شامل کریں' مینو آئٹم کو کھولیں۔ "
 
 msgid "link_device_step_two"
-msgstr ""
+msgstr "ڈیوائس لنکنگ PIN درج کریں اور جمع کرائیں "
 
 msgid "ensure_most_recent_version_lantern"
 msgstr ""
@@ -265,14 +376,14 @@ msgstr ""
 msgid "Link via Email"
 msgstr "ای میل کے ذریعہ لنک"
 
-msgid "lantern_pro_email"
-msgstr "Lantern پرو ای میل"
-
 msgid "lantern_desktop"
 msgstr "لینٹرن ڈیسک ٹاپ"
 
+msgid "report_description"
+msgstr "مسئلہ کی تفصیل"
+
 msgid "report_issue"
-msgstr ""
+msgstr "مسئلہ رپورٹ کریں "
 
 msgid "report_an_issue"
 msgstr "مسئلہ رپورٹ کیجئے"
@@ -295,7 +406,7 @@ msgstr ""
 "پر مل سکتی ہیں۔"
 
 msgid "share_link"
-msgstr ""
+msgstr "لنک شیئر کریں "
 
 msgid "share_title"
 msgstr "لینٹرن ڈاؤن لوڈ کا لنک شیئر کریں"
@@ -327,8 +438,8 @@ msgstr "ماہ"
 msgid "months"
 msgstr "مہینے"
 
-msgid "enter_email"
-msgstr "ای میل درج کریں"
+msgid "enter_email_to_complete_purchase"
+msgstr "خریداری مکمل کرنے کے لیے ای میل درج کریں "
 
 msgid "error_fetching_plans"
 msgstr ""
@@ -360,10 +471,12 @@ msgid "referral_code"
 msgstr "حوالہ کوڈ"
 
 msgid "share_referral_code"
-msgstr ""
+msgstr "ریفرل کوڈ شیئر کریں "
 
 msgid "share_message_referral_code"
 msgstr ""
+"ایک مہینے کے مفت Lantern Pro کے لیے، یہ ریفرل کوڈ استعمال کریں: %s ; آپ اسے "
+"یہاں سے ڈاؤن لوڈ کر سکتے ہیں: https://lantern.io/download "
 
 msgid "add_referral_code"
 msgstr "ریفرل کوڈ شامل کریں"
@@ -432,7 +545,7 @@ msgstr ""
 " کے اکاؤنٹ سے تین تک ڈیوائسز مربوط ہو سکتی ہیں۔"
 
 msgid "by_clicking_tos"
-msgstr "%s پر کلک کر کے، آپ ہمارے درج ذیل سے متفق ہیں"
+msgstr "%s پر کلک کر کے، آپ ہماری سے متفق ہوتے ہیں "
 
 msgid "tos"
 msgstr "سروس کی شرائط"
@@ -482,6 +595,18 @@ msgstr "جی ہاں"
 msgid "No"
 msgstr "نہیں"
 
+msgid "exit"
+msgstr "خروج "
+
+msgid "show"
+msgstr "دکھائیں "
+
+msgid "status_on"
+msgstr "حالت: چل رہا ہے "
+
+msgid "status_off"
+msgstr "حالت: بند ہے "
+
 msgid "Enter or paste linking code"
 msgstr "لنکنگ کوڈ درج یا پیسٹ کریں"
 
@@ -519,6 +644,9 @@ msgstr "لاگ آؤٹ کریں"
 msgid "confirm_remove_device"
 msgstr "کیا آپ واقعی اس ڈیوائس کو اپنے پرو اکاؤنٹ سے منقطع کرنا چاہتے ہیں ؟"
 
+msgid "confirm_close_window"
+msgstr "کیا آپ یقیناً Lantern کو بند کرنا چاہتے ہیں؟ "
+
 msgid "unlimited_data"
 msgstr "لامحدود ڈیٹا"
 
@@ -530,6 +658,9 @@ msgstr "کوئی اشتہار نہیں"
 
 msgid "choose_plan"
 msgstr "پلان چنیں"
+
+msgid "billed_one_time"
+msgstr "ایک بار بل کیا گیا "
 
 msgid "connect_up_to_3_devices"
 msgstr "3 تک آلات کو جوڑیں"
@@ -730,9 +861,6 @@ msgstr "آپ اور %s کے لیے تمام پیغامات غائب نہیں ہ�
 
 msgid "message_disappearing_description"
 msgstr "%s کے بعد تمام پیغامات آپ اور %s کے لیے غائب ہو جائیں گے۔"
-
-msgid "delete"
-msgstr "حذف کریں"
 
 msgid "view_contact_info"
 msgstr "رابطے کی معلومات دیکھیں"
@@ -1544,3 +1672,238 @@ msgstr "اکثر پوچھے جانے والے سوالات"
 
 msgid "add_device"
 msgstr "ڈیوائس شامل کیجئے"
+
+msgid "search_apps"
+msgstr "ایپس تلاش کریں "
+
+msgid "user_not_found"
+msgstr ""
+"صارف کی شناخت نہیں ہوئی۔ براہ کرم اپنی اسناد کی پڑتال کریں اور دوبارہ کوشش "
+"کریں۔ اگر آپ کو مسائل کا سامنا کرنا جاری رہتا ہے، تو براہ کرم معاونت کے لیے "
+"ہماری معاونتی ٹیم سے رابطہ کریں۔"
+
+msgid "email_resend_message"
+msgstr "آپ کا نیا تصدیقی کوڈ بھیج دیا گیا ہے"
+
+msgid "signup_error"
+msgstr ""
+"ایسا لگتا ہے کہ سائن اپ کے ساتھ کچھ غلط ہو گیا تھا۔ براہ کرم دوبارہ کوشش "
+"کریں، اور اگر مسئلہ جاری رہتا ہے، تو ہماری معاونتی ٹیم سے رابطہ کریں"
+
+msgid "signup_error_user_exists"
+msgstr ""
+"ایسا لگتا ہے کہ سائن اپ کے ساتھ کچھ غلط ہو گیا تھا۔ براہ کرم اپنا پاس ورڈ ری"
+" سیٹ کرنے کی کوشش کریں، اور اگر مسئلہ جاری رہتا ہے، تو ہماری معاونتی ٹیم سے "
+"رابطہ کریں"
+
+msgid "confirm_email_error"
+msgstr "براہ کرم اپنی ای میل کی تصدیق کریں"
+
+msgid "password_cannot_be_empty"
+msgstr "پاس ورڈ خالی نہیں ہو سکتا"
+
+msgid "password_must_be_at_least_8_characters"
+msgstr "پاس ورڈ میں کم از کم 8 یا زائد حروف ہونے چاہیئے"
+
+msgid "sign_out"
+msgstr "سائن آؤٹ کریں"
+
+msgid "sign_out_message"
+msgstr ""
+"لاگ آؤٹ کرنے سے Lantern مفت ورژن پر سوئچ ہو جائے گا۔ اپنے اکاؤنٹ تک دوبارہ "
+"رسائی حاصل کرنے کے لیے، آپ کو واپس سائن ان کرنے کی ضرورت ہو گی۔"
+
+msgid "change_password"
+msgstr "پاس ورڈ تبدیل کریں"
+
+msgid "password"
+msgstr "پاس ورڈ"
+
+msgid "new_email"
+msgstr "نیا ای میل ایڈریس"
+
+msgid "new_email_same_as_old_email"
+msgstr "نیا ای میل ایڈریس آپ کے پرانے ای میل ایڈریس سے یکساں نہیں ہو سکتا"
+
+msgid "danger_zone"
+msgstr "خطرے کا علاقہ"
+
+msgid "delete_account"
+msgstr "اکاؤنٹ حذف کریں"
+
+msgid "delete"
+msgstr "حذف کریں"
+
+msgid "delete_account_message"
+msgstr ""
+"آپ کے اکاؤنٹ کو حذف کرنا کالعدم نہیں کیا جا سکتا۔ آپ تمام ڈیوائس تک رسائی سے"
+" محروم ہو جائیں گے اور ریفنڈ کے بغیر کسی بھی Pro اکاؤنٹ کا وقت ضائع کریں گے۔"
+
+msgid "delete_your_account"
+msgstr "آپ کا اکاؤنٹ حذف کریں؟"
+
+msgid "confirm_deletion"
+msgstr "حذف کاری کی تصدیق کریں"
+
+msgid "account_deleted"
+msgstr "اکاؤنٹ حذف ہو گیا"
+
+msgid "account_deleted_message"
+msgstr "آپ کا اکاؤنٹ مستقل طور پر حذف کر دیا گیا ہے۔"
+
+msgid "password_has_been_updated"
+msgstr "پاس ورڈ اپ ڈیٹ کر دیا گیا ہے"
+
+msgid "password_has_been_updated_message"
+msgstr "آپ کا پاس ورڈ کامیابی سے ری سیٹ کر دیا گیا ہے"
+
+msgid "invalid_code"
+msgstr ""
+"کوڈ غلط ہے یا شاید یہ زائد المیعاد ہو گیا ہے۔ براہ کرم دوبارہ بھیجنے کی کوشش"
+" کریں"
+
+msgid "get_lantern_pro"
+msgstr "لینٹرن پرو حاصل کیجئے"
+
+msgid "try_lantern_pro"
+msgstr "Lantern مفت آزمائیں! "
+
+msgid "continue_for_free"
+msgstr "مفت جاری رکھیں "
+
+msgid "recovery_not_found"
+msgstr "ڈیوائس اس یوزر سے منسلک نہیں "
+
+msgid "device_added"
+msgstr "ڈیوائس اس یوزر سے منسلک نہیں "
+
+msgid "device_added_message"
+msgstr ""
+"آپ کا ڈیوائس کامیابی سے شامل کر دیا گیا ہے۔ اگر آپ ڈیوائس کو منسلک نہیں "
+"دیکھتے ہیں، تو براہ کرم دونوں ڈیوائسز پر ایپ کو دوبارہ شروع کریں "
+
+msgid "wrong_link_code"
+msgstr "آپ کا درج کردہ کوڈ غلط ہے۔ براہ کرم پڑتال کریں اور دوبارہ کوشش کریں۔"
+
+msgid "recovery_code_sent"
+msgstr "بحالی کا کوڈ بھیج دیا گیا ہے"
+
+msgid "device_added_msg"
+msgstr "یہ ڈیوائس %s سے لنک کر دی گئی ہے"
+
+msgid "new_to_lantern"
+msgstr "Lantern پر نئے ہیں؟ "
+
+msgid "email_has_been_updated"
+msgstr "ای میل اپ ڈیٹ کر دی گئی ہے"
+
+msgid "email_has_been_updated_message"
+msgstr "آپ کی ای میل کامیابی سے تبدیل کر دی گئی ہے"
+
+msgid "email_has_been_verified"
+msgstr "ای میل کی تصدیق ہو گئی ہے"
+
+msgid "email_has_been_verified_message"
+msgstr "آپ کی ای میل کی کامیابی سے تصدیق کر دی گئی ہے"
+
+msgid "device_limit_reached"
+msgstr "ڈیوائس کی حد تک پہنچ گئے"
+
+msgid "device_limit_reached_message"
+msgstr ""
+"آپ حالیہ طور پر ڈیوائسز کی زیادہ سے زیادہ تعداد (3) پر سائن ان ہو گئے ہیں۔ "
+"اس ڈیوائس پر سائن ان کرنے کے لیے، براہ کرم ذیل میں موجود اپنی دیگر ڈیوائسز "
+"میں سے ایک منتخب کریں اور ہٹائیں۔"
+
+msgid "enter_activation_code"
+msgstr "فعالیت کا کوڈ درج کریں"
+
+msgid "check_your_email"
+msgstr "اپنے ای میل ایڈریس کی پڑتال کریں"
+
+msgid "please_verify_email"
+msgstr "براہ کرم تصدیق کریں کہ آپ کا درج کردہ ای میل ایڈریس درست ہے۔"
+
+msgid "verify"
+msgstr "تصدیق کریں"
+
+msgid "cannot_login"
+msgstr "لاگ ان نہیں ہو سکتا "
+
+msgid "privacy_policy"
+msgstr "پرائیوسی پالیسی"
+
+msgid "terms_of_service"
+msgstr "سروس کی شرائط"
+
+msgid "invalid_verification_code"
+msgstr "غیر درست تصدیقی کوڈ"
+
+msgid "wrong_seller_code"
+msgstr "غلط ری سیلر کوڈ۔ براہ کرم تصدیق کریں اور دوبارہ کوشش کریں۔ "
+
+msgid "follow_us"
+msgstr "ہمیں فالو کریں "
+
+msgid "follow_us_telegram"
+msgstr "ہمیں فالو کریں Telegram پر "
+
+msgid "follow_us_instagram"
+msgstr "ہمیں فالو کریں Instagram پر "
+
+msgid "follow_us_facebook"
+msgstr "ہمیں فالو کریں Facebook پر "
+
+msgid "follow_us_x"
+msgstr "ہمیں فالو کریں X پر "
+
+msgid "report_issue_error"
+msgstr "ہمیں تکنیکی مشکلات کا سامنا ہے۔ بعد میں دوبارہ کوشش کریں۔ "
+
+msgid "we_are_experiencing_technical_difficulties"
+msgstr "ہمیں تکنیکی مشکلات کا سامنا ہے۔ بعد میں دوبارہ کوشش کریں۔ "
+
+msgid "a_temporary_error_occurred"
+msgstr "ایک عارضی غلطی واقع ہوئی "
+
+msgid "sorry_we_are_unable_to_load_that_page"
+msgstr ""
+"معذرت، ہم اس وقت اس صفحے کو لوڈ نہیں کر سکتے، براہ کرم دوبارہ کوشش کرنے کے "
+"لیے 'ریفریش' پر کلک کریں۔ "
+
+msgid "refresh"
+msgstr "ریفریش"
+
+msgid "check_your_internet_connection"
+msgstr "اپنے انٹرنیٹ کنکشن کی جانچ کریں "
+
+msgid "please_try"
+msgstr "براہ کرم کوشش کریں "
+
+msgid "turning_off_airplane_mode"
+msgstr "ایئرپلین موڈ بند کریں "
+
+msgid "turning_on_mobile_data_or_wifi"
+msgstr "موبائل ڈیٹا یا وائی فائی کو آن کریں "
+
+msgid "check_the_signal_in_your_area"
+msgstr "اپنے علاقے میں سگنل چیک کریں "
+
+msgid "got_it"
+msgstr "سمجھ گئے"
+
+msgid "fetching_configuration"
+msgstr "تشکیل حاصل کی جا رہی ہے "
+
+msgid "establish_connection_to_server"
+msgstr "سرور سے کنکشن قائم کریں "
+
+msgid "file_size_limit_title"
+msgstr "حد پوری ہو گئی "
+
+msgid "file_size_limit_description"
+msgstr ""
+"منسلکات کا سائز 100 MB سے کم ہونا چاہئے\n"
+"\n"
+" \n"
+" "

@@ -286,7 +286,7 @@ abstract class SubscribedNotifier<T> extends ValueNotifier<T> {
     super.removeListener(listener);
     if (refCount == 0) {
       removeFromCache();
-      cancel();
+      // cancel();
     }
   }
 }

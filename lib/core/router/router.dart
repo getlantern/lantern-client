@@ -8,7 +8,10 @@ class AppRouter extends $AppRouter {
   RouteType get defaultRouteType => const RouteType.adaptive();
   @override
   final List<AutoRoute> routes = [
-    AutoRoute(path: '/', page: Home.page),
+    AutoRoute(
+      path: '/',
+      page: Home.page,
+    ),
     CustomRoute(
         page: FullScreenDialogPage.page,
         path: '/fullScreenDialogPage',
@@ -154,6 +157,12 @@ class AppRouter extends $AppRouter {
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute(
+        page: ResellerCodeCheckoutLegacy.page,
+        path: '/resellerCodeCheckoutLegacy',
+        transitionsBuilder: defaultTransition,
+        durationInMilliseconds: defaultTransitionMillis,
+        reverseDurationInMilliseconds: defaultTransitionMillis),
+    CustomRoute(
         page: StripeCheckout.page,
         path: '/stripeCheckout',
         transitionsBuilder: defaultTransition,
@@ -254,5 +263,75 @@ class AppRouter extends $AppRouter {
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
+    CustomRoute(
+      page: SignIn.page,
+      path: '/sign_in',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: SignInPassword.page,
+      path: '/sign_in_password',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: ConfirmEmail.page,
+      path: '/confirm_email',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: ResetPassword.page,
+      path: '/reset_password',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: Verification.page,
+      path: '/verification',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: CreateAccountEmail.page,
+      path: '/create_account_email',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: CreateAccountPassword.page,
+      path: '/create_account_password',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: ChangeEmail.page,
+      path: '/change_email',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: AuthLanding.page,
+      path: '/auth_landing',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: DeviceLimit.page,
+      path: '/device_limit',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
+    )
   ];
 }

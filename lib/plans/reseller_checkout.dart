@@ -1,7 +1,7 @@
-import 'package:email_validator/email_validator.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/tos.dart';
 import 'package:lantern/plans/utils.dart';
 
@@ -36,9 +36,17 @@ class ResellerCodeFormatter extends TextInputFormatter {
 @RoutePage(name: "ResellerCodeCheckout")
 class ResellerCodeCheckout extends StatefulWidget {
   final bool isPro;
+  final String email;
 
-  ResellerCodeCheckout({
+  ///This otp is needed to while resting password
+  /// If otp is null it means user is pro
+  /// if otp is not null it means user is not pro send them to password screen
+  final String? otp;
+
+  const ResellerCodeCheckout({
     required this.isPro,
+    required this.email,
+    this.otp,
     Key? key,
   }) : super(key: key);
 
@@ -47,14 +55,6 @@ class ResellerCodeCheckout extends StatefulWidget {
 }
 
 class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
-  final emailFieldKey = GlobalKey<FormState>();
-  late final emailController = CustomTextEditingController(
-    formKey: emailFieldKey,
-    validator: (value) => EmailValidator.validate(value ?? '')
-        ? null
-        : 'please_enter_a_valid_email_address'.i18n,
-  );
-
   final resellerCodeFieldKey = GlobalKey<FormState>();
   late final resellerCodeController = CustomTextEditingController(
     formKey: resellerCodeFieldKey,
@@ -68,124 +68,85 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
   );
 
   @override
-  void initState() {
-    WidgetsFlutterBinding.ensureInitialized();
-    super.initState();
-  }
-
-  @override
   void dispose() {
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final copy = 'register_for_pro'.i18n;
-    return sessionModel.emailAddress((
-      BuildContext context,
-      String emailAddress,
-      Widget? child,
-    ) {
-      return BaseScreen(
-        resizeToAvoidBottomInset: false,
-        title: 'lantern_pro_checkout'.i18n,
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsetsDirectional.only(
-            start: 16,
-            end: 16,
-            top: 24,
-            bottom: 24,
-          ),
+    return BaseScreen(
+      resizeToAvoidBottomInset: false,
+      title: const AppBarProHeader(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0),
+        child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // * Step 2
-              PlanStep(
-                stepNum: '2',
-                description: 'enter_email_and_activation_code'.i18n,
+              const SizedBox(height: 24),
+              HeadingText(
+                title: 'enter_activation_code'.i18n,
               ),
-              // * Email field
-              Container(
-                padding: const EdgeInsetsDirectional.only(
-                  top: 8,
-                  bottom: 8,
-                ),
-                child: Form(
-                  key: emailFieldKey,
-                  child: CTextField(
-                    initialValue: widget.isPro ? emailAddress : '',
-                    controller: emailController,
-                    autovalidateMode: AutovalidateMode.disabled,
-                    label: 'Email'.i18n,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: const CAssetImage(path: ImagePaths.email),
-                  ),
+              const SizedBox(height: 24),
+              _buildEmail(),
+              const SizedBox(height: 24),
+              Form(
+                key: resellerCodeFieldKey,
+                child: CTextField(
+                  maxLength: 25 + 4,
+                  //accounting for dashes
+                  controller: resellerCodeController,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  inputFormatters: [ResellerCodeFormatter()],
+                  label: 'Activation Code'.i18n,
+                  keyboardType: TextInputType.text,
+                  prefixIcon: const CAssetImage(path: ImagePaths.dots),
+                  textCapitalization: TextCapitalization.characters,
                 ),
               ),
-              // * Activation code field
-              Container(
-                padding: const EdgeInsetsDirectional.only(
-                  top: 8,
-                  bottom: 8,
-                ),
-                child: Form(
-                  key: resellerCodeFieldKey,
-                  child: CTextField(
-                    maxLength: 25 + 4,
-                    //accounting for dashes
-                    controller: resellerCodeController,
-                    autovalidateMode: AutovalidateMode.disabled,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    inputFormatters: [ResellerCodeFormatter()],
-                    label: 'Activation Code'.i18n,
-                    keyboardType: TextInputType.text,
-                    prefixIcon: const CAssetImage(path: ImagePaths.dots),
-                    textCapitalization: TextCapitalization.characters,
-                  ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: Button(
+                  primary: true,
+                  disabled:
+                      resellerCodeFieldKey.currentState?.validate() == false,
+                  text: 'continue'.i18n,
+                  onPressed: onRegisterPro,
                 ),
               ),
-              const Spacer(),
-              Column(
-                children: [
-                  TOS(copy: copy),
-                  // * resellerCodeCheckout
-                  Button(
-                    disabled: emailController.value.text.isEmpty ||
-                        emailFieldKey.currentState?.validate() == false ||
-                        resellerCodeFieldKey.currentState?.validate() == false,
-                    text: copy,
-                    onPressed: onRegisterPro,
-                  ),
-                ],
-              )
+              const SizedBox(height: 24),
+              const TOS(),
             ],
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 
   Future<void> onRegisterPro() async {
     try {
+      FocusManager.instance.primaryFocus?.unfocus();
       context.loaderOverlay.show();
       Locale locale = Localizations.localeOf(context);
       final format = NumberFormat.simpleCurrency(locale: locale.toString());
       final currencyName = format.currencyName ?? "USD";
+
       await sessionModel.redeemResellerCode(
-        emailController.text,
+        widget.email,
         currencyName,
         Platform.operatingSystem,
         resellerCodeController.text,
       );
       context.loaderOverlay.hide();
-      showSuccessDialog(context, widget.isPro, true);
+      if (!widget.isPro) {
+        // it mean user is coming from signup flow
+        openPassword();
+      } else {
+        showSuccessDialog(context, widget.isPro,
+            isReseller: true, barrierDismissible: false);
+      }
     } catch (error, stackTrace) {
       print(stackTrace);
       appLogger.e(error, stackTrace: stackTrace);
@@ -199,5 +160,42 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
             .toString(), // This is coming localized
       );
     }
+  }
+
+  Widget _buildEmail() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: grey1,
+        border: Border.all(
+          width: 1,
+          color: grey3,
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SvgPicture.asset(
+            ImagePaths.email,
+          ),
+          const SizedBox(width: 8),
+          CText(widget.email,
+              textAlign: TextAlign.center,
+              style: tsBody1!.copiedWith(
+                leadingDistribution: TextLeadingDistribution.even,
+              ))
+        ],
+      ),
+    );
+  }
+
+  void openPassword() {
+    context.pushRoute(CreateAccountPassword(
+      email: widget.email.validateEmail,
+      code: widget.otp!,
+    ));
   }
 }

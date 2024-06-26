@@ -11,9 +11,6 @@ const googleAttributes = {
   'provider': "Google",
 };
 
-const casAttributes = {
-  'provider': "CAS",
-};
 
 var logger = Logger(printer: PrettyPrinter(), level: Level.debug);
 
@@ -26,14 +23,14 @@ class AdHelper {
     return _instance;
   }
 
-  AdType? _currentAdType;
+
   InterstitialAd? _interstitialAd;
   int _failedLoadAttempts = 0;
 
   //If ads are getting failed to load we want to make lot of calls
   // Just try 5 times
   final int _maxFailAttempts = 5;
-
+  bool isAdsLoading = false;
   //Google Test ID if needed to test
   // return 'ca-app-pub-3940256099942544/1033173712';
   String get interstitialAdUnitId {
@@ -49,7 +46,6 @@ class AdHelper {
     checkForConsent();
     logger.d('[Ads Manager] Google Ads enable $shouldShowGoogleAds:');
     if (shouldShowGoogleAds) {
-      _currentAdType = AdType.Google;
       logger.i('[Ads Manager] Decision: Loading Google Ads.');
       await _loadInterstitialAd();
     }
@@ -67,6 +63,7 @@ class AdHelper {
 
   Future<void> _loadInterstitialAd() async {
     //To avoid calling multiple ads request repeatedly
+    isAdsLoading= true;
     assert(interstitialAdUnitId != "",
         "interstitialAdUnitId should not be null or empty");
     if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
@@ -77,6 +74,7 @@ class AdHelper {
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) {
             _failedLoadAttempts = 0;
+            isAdsLoading= false;
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdClicked: (ad) {
                 logger.i('[Ads Manager] onAdClicked callback');
@@ -126,6 +124,11 @@ class AdHelper {
   Future<void> loadAds({
     required bool shouldShowGoogleAds,
   }) async {
+    if(isAdsLoading) {
+      logger.i('[Ads Manager] Request: Ads already loading. Ignoring request.');
+      return;
+    }
+
     await _decideAndLoadAds(
       shouldShowGoogleAds: shouldShowGoogleAds,
     );
