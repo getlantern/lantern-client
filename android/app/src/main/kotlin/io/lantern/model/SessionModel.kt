@@ -33,6 +33,7 @@ import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
+import org.getlantern.lantern.util.ProClient
 import org.getlantern.lantern.util.castToBoolean
 import org.getlantern.lantern.util.restartApp
 import org.getlantern.lantern.util.showErrorDialog
@@ -289,25 +290,12 @@ class SessionModel(
 
     private fun updatePaymentMethods(result: MethodChannel.Result?) {
         val userId = LanternApp.getSession().userId()
-        //Check if not found then call createUserAndFetchPaymentMethods
+        //Check if not found then call createUser
         if (userId == 0L) {
-            createUserAndFetchPaymentMethods(result)
+            ProClient.createUser({ _ -> fetchPaymentMethods(result) })
         } else {
             fetchPaymentMethods(result)
         }
-    }
-
-    private fun createUserAndFetchPaymentMethods(result: MethodChannel.Result?) {
-        lanternClient.createUser(object : ProUserCallback {
-            override fun onFailure(t: Throwable?, error: ProError?) {
-                handleFailure(result, "payment_method_fail", error?.id, t)
-            }
-
-            override fun onSuccess(response: Response, userData: ProUser) {
-                LanternApp.getSession().setUserIdAndToken(userData.userId, userData.token)
-                fetchPaymentMethods(result)
-            }
-        })
     }
 
     private fun fetchPaymentMethods(result: MethodChannel.Result?) {

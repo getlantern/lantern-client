@@ -24,6 +24,7 @@ type ProClient interface {
 	//Plans() (*pro.PlansResponse, error)
 	//UserCreate() (*pro.UserDataResponse, error)
 	//UserData() *pro.UserDataResponse
+	UserCreate() (string, error)
 	UserData() (string, error)
 }
 
@@ -43,11 +44,6 @@ func NewProClient(wrappedSession Session) ProClient {
 	return &proClient{client}
 }
 
-// UserCreate creates a new user
-func (c *proClient) UserCreate() (*pro.UserDataResponse, error) {
-	return c.ProClient.UserCreate(context.Background())
-}
-
 func protoMarshal[T protoreflect.ProtoMessage](resp T) string {
 	b, err := proto.Marshal(resp)
 	if err != nil {
@@ -61,9 +57,19 @@ func jsonMarshal(resp any) string {
 	return string(b)
 }
 
-// UserData returns data associated with a user
 // TODO: We should be able to consolidate these changes and re-use the same code on
 // desktop and Android
+
+// UserCreate is used to create a new user
+func (c *proClient) UserCreate() (string, error) {
+	resp, err := c.ProClient.UserCreate(context.Background())
+	if err != nil {
+		return "", err
+	}
+	return jsonMarshal(resp.User), nil
+}
+
+// UserData returns data associated with a user
 func (c *proClient) UserData() (string, error) {
 	resp, err := c.ProClient.UserData(context.Background())
 	if err != nil {
