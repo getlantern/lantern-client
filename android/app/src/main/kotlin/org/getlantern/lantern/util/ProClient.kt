@@ -12,7 +12,7 @@ object ProClient {
 
     fun updateUserData() {
         val userData = proClient.userData()
-        val proUser: ProUser? = JsonUtil.fromJson(userData, ProUser::class.java)
+        val proUser: ProUser? = JsonUtil.fromJson<ProUser>(userData)
         proUser?.let { session.storeUserData(it) }
     }
 }
