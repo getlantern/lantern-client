@@ -324,14 +324,16 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
 
-        val devices = Vpn.Devices.newBuilder().addAllDevices(
-            user.devices.map {
-                Vpn.Device.newBuilder().setId(it.id)
-                    .setName(it.name).setCreated(it.created).build()
-            },
-        ).build()
-        db.mutate { tx ->
-            tx.put(DEVICES, devices)
+        user.devices?.let {
+            val devices = Vpn.Devices.newBuilder().addAllDevices(
+                user.devices.map {
+                    Vpn.Device.newBuilder().setId(it.id)
+                        .setName(it.name).setCreated(it.created).build()
+                },
+            ).build()
+            db.mutate { tx ->
+                tx.put(DEVICES, devices)
+            }
         }
 
         if (user.isProUser) {

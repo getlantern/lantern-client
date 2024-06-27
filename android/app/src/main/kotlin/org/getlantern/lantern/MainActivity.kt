@@ -44,6 +44,8 @@ import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.Json
+import org.getlantern.lantern.util.ProClient
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -126,7 +128,7 @@ class MainActivity :
                     )
                 }
                 is AppEvent.StatusEvent -> {
-                    updateUserData()
+                    ProClient.updateUserData()
                     updatePaymentMethods()
                     updateCurrencyList()
                 }
@@ -224,6 +226,7 @@ class MainActivity :
         }
 
         sessionModel.checkAdsAvailability()
+
         Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
 
@@ -294,27 +297,6 @@ class MainActivity :
                 )
             }
         }
-    }
-
-    private fun updateUserData() {
-        lanternClient.userData(
-            object : ProUserCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch user data: $error", throwable)
-                }
-
-                override fun onSuccess(
-                    response: Response,
-                    user: ProUser,
-                ) {
-                    // save latest user data
-                    LanternApp.getSession().storeUserData(user)
-                }
-            },
-        )
     }
 
     private fun updatePaymentMethods() {

@@ -43,11 +43,6 @@ func NewProClient(wrappedSession Session) ProClient {
 	return &proClient{client}
 }
 
-// Plans returns a list of plans along with payment providers and available payment methods
-//func (c *proClient) Plans() (*pro.PlansResponse, error) {
-//	return c.ProClient.Plans(context.Background())
-//}
-
 // UserCreate creates a new user
 func (c *proClient) UserCreate() (*pro.UserDataResponse, error) {
 	return c.ProClient.UserCreate(context.Background())
@@ -67,11 +62,12 @@ func jsonMarshal(resp any) string {
 }
 
 // UserData returns data associated with a user
+// TODO: We should be able to consolidate these changes and re-use the same code on
+// desktop and Android
 func (c *proClient) UserData() (string, error) {
 	resp, err := c.ProClient.UserData(context.Background())
 	if err != nil {
 		return "", err
 	}
 	return jsonMarshal(resp.User), nil
-	//return protoMarshal[*protos.User](resp.User), nil
 }
