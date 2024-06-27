@@ -16,6 +16,7 @@ type AuthConfig interface {
 
 type UserConfig interface {
 	AuthConfig
+	GetEmail() string
 	GetLanguage() string
 	GetTimeZone() (string, error)
 	GetInternalHeaders() map[string]string
@@ -26,6 +27,7 @@ type UserConfig interface {
 type UserConfigData struct {
 	AppName  string
 	DeviceID string
+	Email    string
 	UserID   int64
 	Token    string
 	Language string
@@ -34,6 +36,7 @@ type UserConfigData struct {
 
 func (uc *UserConfigData) GetAppName() string              { return uc.AppName }
 func (uc *UserConfigData) GetDeviceID() string             { return uc.DeviceID }
+func (uc *UserConfigData) GetEmail() string                { return uc.Email }
 func (uc *UserConfigData) GetUserID() int64                { return uc.UserID }
 func (uc *UserConfigData) GetToken() string                { return uc.Token }
 func (uc *UserConfigData) GetLanguage() string             { return uc.Language }

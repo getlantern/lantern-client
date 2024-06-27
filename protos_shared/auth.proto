@@ -9,9 +9,7 @@ message SignupRequest {
   bool skip_email_confirmation = 4;
 }
 
-
 message EmptyResponse{}
-
 
 // POST /users/signup/resend/email
 message SignupEmailResendRequest {

@@ -40,6 +40,8 @@ Pointer<Utf8> ffiProxyAll() => _bindings.proxyAll().cast<Utf8>();
 
 Pointer<Utf8> ffiStoreVersion() => _bindings.storeVersion().cast<Utf8>();
 
+Pointer<Utf8> ffiUserSignedIn() => _bindings.userSignedIn().cast<Utf8>();
+
 Pointer<Utf8> ffiHasSucceedingProxy() =>
     _bindings.hasSucceedingProxy().cast<Utf8>();
 
@@ -95,6 +97,30 @@ Future<void> ffiRemoveDevice(String deviceId) async {
   checkAPIError(result, 'cannot_remove_device'.i18n);
   // refresh user data after removing a device
   await ffiUserData();
+  return;
+}
+
+Future<void> ffiLogin(List<String> list) async {
+  final email = list[0].toPointerChar();
+  final password = list[1].toPointerChar();
+  final json = await _bindings
+      .login(email, password)
+      .cast<Utf8>()
+      .toDartString();
+  //final result = LoginResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  // checkAPIError(result, 'cannot_remove_device'.i18n);
+  return;
+}
+
+Future<void> ffiSignUp(List<String> list) async {
+  final email = list[0].toPointerChar();
+  final password = list[1].toPointerChar();
+  final json = await _bindings
+      .signUp(email, password)
+      .cast<Utf8>()
+      .toDartString();
+  //final result = LoginResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  // checkAPIError(result, 'cannot_remove_device'.i18n);
   return;
 }
 
