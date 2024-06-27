@@ -36,6 +36,7 @@ import (
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
+
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/features"
@@ -384,6 +385,11 @@ func (app *App) SetUserLoggedIn(value bool) {
 			"login": value,
 		})
 	}
+}
+
+func (app *App) IsUserLoggedIn() bool {
+	return app.Settings().IsUserLoggedIn()
+
 }
 
 // Create func that send message to UI

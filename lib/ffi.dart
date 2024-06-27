@@ -77,6 +77,18 @@ void checkAPIError(result, errorMessage) {
     throw PlatformException(code: result.error, message: errorMessage);
   }
 }
+void checkAuthAPIError(result) {
+  if (result is String) {
+    if(result=="true"){
+      return;
+    }
+    final errorMessageMap = jsonDecode(result);
+    if (errorMessageMap.containsKey('error')){
+      throw PlatformException(
+          code: errorMessageMap['error'], message: errorMessageMap['error']);
+    }
+  }
+}
 
 Future<String> ffiApproveDevice(String code) async {
   final json = await _bindings
@@ -250,7 +262,7 @@ Future<void> ffiLogin(List<String> params) {
       .cast<Utf8>()
       .toDartString();
   print("login result $result");
-  // checkAPIError(result, "errorMessage");
+  checkAuthAPIError(result,);
   return Future.value(result.toBool());
 }
 

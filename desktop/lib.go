@@ -133,7 +133,8 @@ func start() {
 	}()
 
 	golog.SetPrepender(logging.Timestamped)
-	handleSignals(a)
+	// Todo uncomment this code
+	// handleSignals(a)
 
 	go func() {
 		defer logging.Close()
@@ -270,6 +271,7 @@ func userCreate() error {
 		return errors.New("Could not create new Pro user: %v", err)
 	}
 	a.Settings().SetUserIDAndToken(user.UserId, user.Token)
+
 	return nil
 }
 
@@ -296,13 +298,11 @@ func fetchPayentMethodV4() error {
 	if err != nil {
 		return errors.New("Could not get payment methods: %v", err)
 	}
-	// log.Debugf("DEBUG: Payment methods logos: %v providers %v  and plans in string %v", resp.Logo, resp.Providers, resp.Plans)
 	bytes, err := json.Marshal(resp)
 	if err != nil {
 		return errors.New("Could not marshal payment methods: %v", err)
 	}
 	settings.SetPaymentMethodPlans(bytes)
-
 	return nil
 }
 
@@ -867,7 +867,7 @@ func setFirstTimeVisit() {
 
 //export isUserLoggedIn
 func isUserLoggedIn() *C.char {
-	loggedIn := a.Settings().IsUserLoggedIn()
+	loggedIn := a.IsUserLoggedIn()
 	stringValue := fmt.Sprintf("%t", loggedIn)
 	log.Debugf("User logged in %v", stringValue)
 	return C.CString(stringValue)
@@ -891,7 +891,7 @@ func signup(email *C.char, password *C.char) *C.char {
 	setting := a.Settings()
 	setting.SaveSalt(salt)
 	setting.SetEmailAddress(C.GoString(email))
-	setting.SetUserLoggedIn(true)
+	a.SetUserLoggedIn(true)
 	return C.CString("true")
 }
 
@@ -916,7 +916,6 @@ func login(email *C.char, password *C.char) *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-	a.SendMessageToUI("login", nil)
 	return C.CString("true")
 }
 
@@ -940,7 +939,6 @@ func logout() *C.char {
 	if logoutErr != nil {
 		return sendError(log.Errorf("Error while signing out %v", logoutErr))
 	}
-
 	if !loggedOut {
 		return sendError(log.Errorf("Error while signing out %v", logoutErr))
 	}

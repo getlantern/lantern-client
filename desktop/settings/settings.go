@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"reflect"
@@ -106,6 +105,11 @@ var settingMeta = map[SettingName]struct {
 	SNRevisionDate: {stString, false, false},
 
 	SNEnabledExperiments: {stStringArray, false, false},
+
+	//Auth releated
+	SNUserFirstVisit: {stBool, true, true},
+	SNUserLoggedIn:   {stBool, true, true},
+	SNSalt:           {stString, true, true},
 }
 
 // Settings is a struct of all settings unique to this particular Lantern instance.
@@ -128,7 +132,7 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	set := sett.m
 
 	// Use settings from disk if they're available.
-	if bytes, err := ioutil.ReadFile(path); err != nil {
+	if bytes, err := os.ReadFile(path); err != nil {
 		sett.log.Debugf("Could not read file %v", err)
 	} else if err := yaml.Unmarshal(bytes, set); err != nil {
 		sett.log.Errorf("Could not load yaml %v", err)
@@ -191,6 +195,8 @@ func newSettings(filePath string) *Settings {
 			SNUserToken:                 "",
 			SNUIAddr:                    "",
 			SNMigratedDeviceIDForUserID: int64(0),
+			SNUserLoggedIn:              false,
+			SNUserFirstVisit:            false,
 		},
 		filePath:        filePath,
 		changeNotifiers: make(map[SettingName][]func(interface{})),
@@ -749,7 +755,7 @@ func (s *Settings) IsUserLoggedIn() bool {
 }
 func (s *Settings) SetUserLoggedIn(value bool) {
 	log.Println("Setting user logged in to ", value)
-	s.setBool(SNUserLoggedIn, value)
+	s.setVal(SNUserLoggedIn, value)
 }
 
 func (s *Settings) GetSalt() []byte {
