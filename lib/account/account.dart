@@ -231,7 +231,6 @@ class _AccountMenuState extends State<AccountMenu> {
                 : freeItems(sessionContext, hasUserLoggedIn),
           );
         });
-
       }),
     );
   }
