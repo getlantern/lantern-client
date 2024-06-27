@@ -90,24 +90,7 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
-  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
-  // the onMessage callback is triggered with the given property value
-  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
-      String? property, void Function(T?) onMessage) {
-    if (websocket == null) return;
-    websocket.messageStream.listen(
-      (json) {
-        if (json["type"] == messageType) {
-          if (property != null) {
-            onMessage(json["message"][property]);
-          } else {
-            onMessage(json["message"]);
-          }
-        }
-      },
-      onError: (error) => appLogger.i("websocket error: ${error.description}"),
-    );
-  }
+
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
@@ -117,10 +100,13 @@ class SessionModel extends Model {
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
-      onChanges: (setValue) =>
-          listenWebsocket(websocket, "pro", "userStatus", (value) {
-        if (value != null && value.toString() == "active") setValue(true);
-      }),
+      onChanges: (setValue)=> {
+        listenWebsocket(websocket, 'pro', 'isProUser', (p0) {
+          if(p0!=null) {
+            setValue(p0 as bool);
+          }
+        })
+      },
       ffiProUser,
       builder: builder,
     );
@@ -314,8 +300,7 @@ class SessionModel extends Model {
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
-
-    if (isDesktop()) {
+   if (isDesktop()) {
       return ffiValueBuilder<bool>(
         'IsUserLoggedIn',
         ffiIsUserLoggedIn,
@@ -955,6 +940,25 @@ class SessionModel extends Model {
       }),
       ffiProxyAll,
       builder: builder,
+    );
+  }
+
+  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
+  // the onMessage callback is triggered with the given property value
+  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
+      String? property, void Function(T?) onMessage) {
+    if (websocket == null) return;
+    websocket.messageStream.listen(
+          (json) {
+        if (json["type"] == messageType) {
+          if (property != null) {
+            onMessage(json["message"][property]);
+          } else {
+            onMessage(json["message"]);
+          }
+        }
+      },
+      onError: (error) => appLogger.i("websocket error: ${error.description}"),
     );
   }
 

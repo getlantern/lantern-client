@@ -381,7 +381,6 @@ func (app *App) SetUserLoggedIn(value bool) {
 	app.settings.SetUserLoggedIn(value)
 	if app.ws != nil {
 		app.ws.SendMessage("pro", map[string]interface{}{
-			"type":  "pro",
 			"login": value,
 		})
 	}

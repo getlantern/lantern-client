@@ -232,7 +232,9 @@ func setExpiration(expiration int64) error {
 
 func setProUser(isPro bool) {
 	a.Settings().SetProUser(isPro)
-
+	a.SendMessageToUI("pro", map[string]interface{}{
+		"isProUser": isPro,
+	})
 }
 
 //export hasProxyFected
@@ -958,7 +960,7 @@ func clearLocalUserData() {
 	setting.SaveSalt(nil)
 	setting.SetEmailAddress("")
 	a.SetUserLoggedIn(false)
-	setting.SetProUser(false)
+	setProUser(false)
 }
 
 func main() {}

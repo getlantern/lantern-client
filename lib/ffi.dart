@@ -67,7 +67,7 @@ void checkAPIError(result, errorMessage) {
   print(result);
   if (result is String) {
     final errorMessageMap = jsonDecode(result);
-    if (errorMessageMap.containsKey('error')){
+    if (errorMessageMap.containsKey('error')) {
       throw PlatformException(
           code: errorMessageMap['error'], message: errorMessage);
     }
@@ -77,13 +77,14 @@ void checkAPIError(result, errorMessage) {
     throw PlatformException(code: result.error, message: errorMessage);
   }
 }
+
 void checkAuthAPIError(result) {
   if (result is String) {
-    if(result=="true"){
+    if (result == "true") {
       return;
     }
     final errorMessageMap = jsonDecode(result);
-    if (errorMessageMap.containsKey('error')){
+    if (errorMessageMap.containsKey('error')) {
       throw PlatformException(
           code: errorMessageMap['error'], message: errorMessageMap['error']);
     }
@@ -232,7 +233,7 @@ void loadLibrary() {
 
 /// FFI pointer to the native function
 Pointer<Utf8> ffiIsUserLoggedIn() {
-  final result =_bindings.isUserLoggedIn().cast<Utf8>();
+  final result = _bindings.isUserLoggedIn().cast<Utf8>();
   print(result.toDartString());
   return result;
 }
@@ -257,12 +258,8 @@ Future<void> ffiSignUp(List<String> params) {
 Future<void> ffiLogin(List<String> params) {
   final email = params[0].toPointerChar();
   final password = params[1].toPointerChar();
-  final result = _bindings
-      .login(email, password)
-      .cast<Utf8>()
-      .toDartString();
-  print("login result $result");
-  checkAuthAPIError(result,);
+  final result = _bindings.login(email, password).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
   return Future.value(result.toBool());
 }
 
