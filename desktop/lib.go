@@ -237,6 +237,10 @@ func setProUser(isPro bool) {
 	})
 }
 
+func saveUserSalt(salt []byte) {
+	a.Settings().SaveSalt(salt)
+}
+
 //export hasProxyFected
 func hasProxyFected() *C.char {
 	if a.GetHasProxyFetched() {
@@ -891,7 +895,7 @@ func signup(email *C.char, password *C.char) *C.char {
 	}
 	// save salt and email in settings
 	setting := a.Settings()
-	setting.SaveSalt(salt)
+	saveUserSalt(salt)
 	setting.SetEmailAddress(C.GoString(email))
 	a.SetUserLoggedIn(true)
 	return C.CString("true")
@@ -906,8 +910,7 @@ func login(email *C.char, password *C.char) *C.char {
 	}
 	log.Debugf("User login successfull %+v", user)
 	// save salt and email in settings
-	setting := a.Settings()
-	setting.SaveSalt(salt)
+	saveUserSalt(salt)
 	a.SetUserLoggedIn(true)
 	userData := auth.ConvertToUserDetailsResponse(user)
 	// once login is successfull save user details
@@ -934,9 +937,7 @@ func logout() *C.char {
 		LegacyToken:  token,
 		LegacyUserID: userId,
 	}
-
 	log.Debugf("Sign out request %+v", signoutData)
-
 	loggedOut, logoutErr := authClient.SignOut(context.Background(), signoutData)
 	if logoutErr != nil {
 		return sendError(log.Errorf("Error while signing out %v", logoutErr))
@@ -954,10 +955,82 @@ func logout() *C.char {
 	return C.CString("true")
 }
 
+// Send recovery code to user email
+//
+//export startRecoveryByEmail
+func startRecoveryByEmail(email *C.char) *C.char {
+	//Create body
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+	prepareRequestBody := &protos.StartRecoveryByEmailRequest{
+		Email: lowerCaseEmail,
+	}
+	recovery, err := authClient.StartRecoveryByEmail(context.Background(), prepareRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("StartRecoveryByEmail response %v", recovery)
+	return C.CString("true")
+}
+
+// Complete recovery by email
+//
+//export completeRecoveryByEmail
+func completeRecoveryByEmail(email *C.char, code *C.char, password *C.char) *C.char {
+	//Create body
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+	newsalt, err := auth.GenerateSalt()
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("Slat %v and length %v", newsalt, len(newsalt))
+	srpClient := auth.NewSRPClient(lowerCaseEmail, C.GoString(password), newsalt)
+	verifierKey, err := srpClient.Verifier()
+	if err != nil {
+		return sendError(err)
+	}
+	prepareRequestBody := &protos.CompleteRecoveryByEmailRequest{
+		Email:       lowerCaseEmail,
+		Code:        C.GoString(code),
+		NewSalt:     newsalt,
+		NewVerifier: verifierKey.Bytes(),
+	}
+
+	log.Debugf("new Verifier %v and salt %v", verifierKey.Bytes(), newsalt)
+	recovery, err := authClient.CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	//User has been recovered successfully
+	//Save new salt
+	saveUserSalt(newsalt)
+	log.Debugf("CompleteRecoveryByEmail response %v", recovery)
+	return C.CString("true")
+}
+
+// // This will validate code send by server
+//
+//export validateRecoveryByEmail
+func validateRecoveryByEmail(email *C.char, code *C.char) *C.char {
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+	prepareRequestBody := &protos.ValidateRecoveryCodeRequest{
+		Email: lowerCaseEmail,
+		Code:  C.GoString(code),
+	}
+	recovery, err := authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	if !recovery.Valid {
+		return sendError(log.Errorf("invalid_code Error: %v", err))
+	}
+	log.Debugf("Validate code response %v", recovery.Valid)
+	return C.CString("true")
+}
+
 // clearLocalUserData clears the local user data from the settings
 func clearLocalUserData() {
 	setting := a.Settings()
-	setting.SaveSalt(nil)
+	saveUserSalt([]byte{})
 	setting.SetEmailAddress("")
 	a.SetUserLoggedIn(false)
 	setProUser(false)

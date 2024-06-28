@@ -597,6 +597,64 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('logout');
   late final _logout =
       _logoutPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  /// Send recovery code to user email
+  ffi.Pointer<ffi.Char> startRecoveryByEmail(
+    ffi.Pointer<ffi.Char> email,
+  ) {
+    return _startRecoveryByEmail(
+      email,
+    );
+  }
+
+  late final _startRecoveryByEmailPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('startRecoveryByEmail');
+  late final _startRecoveryByEmail = _startRecoveryByEmailPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
+
+  /// Complete recovery by email
+  ffi.Pointer<ffi.Char> completeRecoveryByEmail(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> code,
+    ffi.Pointer<ffi.Char> password,
+  ) {
+    return _completeRecoveryByEmail(
+      email,
+      code,
+      password,
+    );
+  }
+
+  late final _completeRecoveryByEmailPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>>('completeRecoveryByEmail');
+  late final _completeRecoveryByEmail = _completeRecoveryByEmailPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  /// // This will validate code send by server
+  ffi.Pointer<ffi.Char> validateRecoveryByEmail(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> code,
+  ) {
+    return _validateRecoveryByEmail(
+      email,
+      code,
+    );
+  }
+
+  late final _validateRecoveryByEmailPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>>('validateRecoveryByEmail');
+  late final _validateRecoveryByEmail = _validateRecoveryByEmailPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 }
 
 /// mbstate_t is an opaque object to keep conversion state, during multibyte

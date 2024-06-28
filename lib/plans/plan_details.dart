@@ -132,8 +132,11 @@ class _PlanCardState extends State<PlanCard> {
         resolveRouteIOS();
         break;
       default:
-        // proceed to the default checkout page on Android and desktop
-        _checkOut(context);
+        if (widget.isPro) {
+          _processCheckOut(context);
+        } else {
+          signUpFlow();
+        }
         break;
     }
   }
@@ -150,7 +153,7 @@ class _PlanCardState extends State<PlanCard> {
     return providers;
   }
 
-  Future<void> _checkOut(BuildContext context) async {
+  Future<void> _processCheckOut(BuildContext context) async {
     final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // * Play version (Android only)
@@ -192,7 +195,7 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   void resolveRouteIOS() {
-    if (widget.isPro ) {
+    if (widget.isPro) {
       //user is signed in
       _proceedToCheckoutIOS(context);
     } else {

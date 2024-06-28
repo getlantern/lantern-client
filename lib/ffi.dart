@@ -264,11 +264,41 @@ Future<void> ffiLogin(List<String> params) {
 }
 
 /// logout
-
 Future<void> ffiLogout(dynamic context) {
   final result = _bindings.logout().cast<Utf8>().toDartString();
   return Future.value(result.toBool());
 }
+
+
+/// start recovery by email
+/// send verification code to email
+Future<void> ffiStartRecoveryByEmail(String email) {
+  final result = _bindings.startRecoveryByEmail(email.toPointerChar()).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
+  return Future.value(result.toBool());
+}
+
+/// start recovery by email
+/// send verification code to email
+Future<void> ffiValidateRecoveryByEmail(List<String> params) {
+  final email = params[0].toPointerChar();
+  final code = params[2].toPointerChar();
+  final result = _bindings.validateRecoveryByEmail(email,code).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
+  return Future.value(result.toBool());
+}
+
+
+
+Future<void> ffiCompleteRecoveryByEmail(List<String> params) {
+  final email = params[0].toPointerChar();
+  final password = params[1].toPointerChar();
+  final code = params[2].toPointerChar();
+  final result = _bindings.completeRecoveryByEmail(email,code,password).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
+  return Future.value(result.toBool());
+}
+
 
 //Custom exception for handling error
 class NoPlansUpdate implements Exception {

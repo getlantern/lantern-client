@@ -17,6 +17,12 @@ const (
 	group = srp.RFC5054Group3072
 )
 
+func NewSRPClient(email string, password string, salt []byte) *srp.SRP {
+	lowerCaseEmail := strings.ToLower(email)
+	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
+	return srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+}
+
 func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) *protos.User {
 	// Convert protobuf to usre details struct
 	log.Debugf("ConvertToUserDetailsResponse %+v", userResponse)

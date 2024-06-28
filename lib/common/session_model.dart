@@ -90,8 +90,6 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
-
-
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -100,9 +98,9 @@ class SessionModel extends Model {
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
-      onChanges: (setValue)=> {
+      onChanges: (setValue) => {
         listenWebsocket(websocket, 'pro', 'isProUser', (p0) {
-          if(p0!=null) {
+          if (p0 != null) {
             setValue(p0 as bool);
           }
         })
@@ -300,15 +298,17 @@ class SessionModel extends Model {
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
-   if (isDesktop()) {
+    if (isDesktop()) {
       return ffiValueBuilder<bool>(
         'IsUserLoggedIn',
         ffiIsUserLoggedIn,
         defaultValue: false,
         builder: builder,
         onChanges: (setValue) {
-          listenWebsocket(websocket, 'pro', 'login', (p0) {
-            setValue(p0 as bool);
+          listenWebsocket(websocket, 'pro', 'login', (userLoggedIn) {
+            if (userLoggedIn != null) {
+              setValue(userLoggedIn as bool);
+            }
           });
         },
       );
@@ -355,6 +355,9 @@ class SessionModel extends Model {
   }
 
   Future<void> startRecoveryByEmail(String email) {
+    if (isDesktop()) {
+      return compute(ffiStartRecoveryByEmail, email);
+    }
     return methodChannel.invokeMethod('startRecoveryByEmail', <String, dynamic>{
       'email': email,
     });
@@ -362,6 +365,9 @@ class SessionModel extends Model {
 
   Future<void> completeRecoveryByEmail(
       String email, String password, String code) {
+    if (isDesktop()) {
+      compute(ffiCompleteRecoveryByEmail, [email, password, code]);
+    }
     return methodChannel
         .invokeMethod('completeRecoveryByEmail', <String, dynamic>{
       'email': email,
@@ -371,6 +377,9 @@ class SessionModel extends Model {
   }
 
   Future<void> validateRecoveryCode(String email, String code) {
+    if (isDesktop()) {
+      compute(ffiCompleteRecoveryByEmail, [email, code]);
+    }
     return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
       'email': email,
       'code': code,
@@ -949,7 +958,7 @@ class SessionModel extends Model {
       String? property, void Function(T?) onMessage) {
     if (websocket == null) return;
     websocket.messageStream.listen(
-          (json) {
+      (json) {
         if (json["type"] == messageType) {
           if (property != null) {
             onMessage(json["message"][property]);
