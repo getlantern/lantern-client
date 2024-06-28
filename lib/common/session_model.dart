@@ -366,7 +366,7 @@ class SessionModel extends Model {
   Future<void> completeRecoveryByEmail(
       String email, String password, String code) {
     if (isDesktop()) {
-      compute(ffiCompleteRecoveryByEmail, [email, password, code]);
+     return compute(ffiCompleteRecoveryByEmail, [email, password, code]);
     }
     return methodChannel
         .invokeMethod('completeRecoveryByEmail', <String, dynamic>{
@@ -378,7 +378,7 @@ class SessionModel extends Model {
 
   Future<void> validateRecoveryCode(String email, String code) {
     if (isDesktop()) {
-      compute(ffiCompleteRecoveryByEmail, [email, code]);
+      return   compute(ffiValidateRecoveryByEmail, [email, code]);
     }
     return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
       'email': email,

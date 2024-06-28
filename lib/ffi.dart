@@ -282,7 +282,7 @@ Future<void> ffiStartRecoveryByEmail(String email) {
 /// send verification code to email
 Future<void> ffiValidateRecoveryByEmail(List<String> params) {
   final email = params[0].toPointerChar();
-  final code = params[2].toPointerChar();
+  final code = params[1].toPointerChar();
   final result = _bindings.validateRecoveryByEmail(email,code).cast<Utf8>().toDartString();
   checkAuthAPIError(result);
   return Future.value(result.toBool());
