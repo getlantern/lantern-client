@@ -56,6 +56,30 @@ open class LanternHttpClient : HttpClient() {
         return Gson().fromJson(row, object : TypeToken<T>() {}.type)
     }
 
+    fun createUser(cb: ProUserCallback) {
+        val formBody =
+            FormBody.Builder()
+                .add("locale", LanternApp.getSession().language)
+                .build()
+
+        val url = createProUrl("/user-create")
+        post(url, formBody, object : ProCallback {
+            override fun onFailure(throwable: Throwable?, error: ProError?) {
+                cb.onFailure(throwable, error)
+            }
+
+            override fun onSuccess(response: Response?, result: JsonObject?) {
+                val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
+                if (user == null) {
+                    Logger.error(TAG, "Unable to parse user from JSON")
+                    return
+                }
+                cb.onSuccess(response!!, user)
+            }
+
+        })
+    }
+
     fun userData(cb: ProUserCallback) {
         val params = mapOf<String, String>("locale" to LanternApp.getSession().language)
         val url = createProUrl("/user-data", params)
