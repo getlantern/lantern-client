@@ -122,34 +122,12 @@ class PaymentsUtil(private val activity: Activity) {
                     "provider" to provider,
                     "deviceName" to session.deviceName(),
                 )
-
-            sendPaymentRedirectRequest(params, object : ProCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "$provider is unavailable ", throwable)
-                    methodCallResult.error(
-                        "unknownError",
-                        "$provider is unavailable", // This error message is localized Flutter-side
-                        null,
-                    )
-                    return
-                }
-
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    val providerUrl = result!!.get("redirect").asString
-                    Logger.debug(
-                        TAG,
-                        "$provider url is  $providerUrl",
-                    )
-
+            ProClient.sendPaymentRedirectRequest(email, planID, provider, 
+                providerUrl -> {
+                    Logger.debug(TAG, "$provider url is  $providerUrl")
                     methodCallResult.success(providerUrl)
                 }
-            })
+            )
         } catch (t: Throwable) {
             methodCallResult.error(
                 "unknownError",
@@ -246,21 +224,9 @@ class PaymentsUtil(private val activity: Activity) {
                         * */
                         session.linkDevice()
                         session.setIsProUser(true)
-                        lanternClient.userData(object : LanternHttpClient.ProUserCallback {
-                            override fun onSuccess(response: Response, userData: ProUser) {
-                                Logger.e(TAG, "User detail : $userData")
-                                activity.runOnUiThread {
-                                    methodCallResult.success("purchaseSuccessful")
-                                }
-                            }
-
-                            override fun onFailure(throwable: Throwable?, error: ProError?) {
-                                Logger.error(TAG, "Unable to fetch user data: $throwable.message")
-                                /* Regardless of failure send success coz purchase has been processed  */
-                                activity.runOnUiThread {
-                                    methodCallResult.success("purchaseSuccessful")
-                                }
-
+                        ProClient.updateUserData({ _ -> 
+                            activity.runOnUiThread {
+                                methodCallResult.success("purchaseSuccessful")
                             }
                         })
                         return
@@ -294,37 +260,7 @@ class PaymentsUtil(private val activity: Activity) {
             val formBody: FormBody =
                 FormBody.Builder()
                     .add("code", refCode).build()
-            lanternClient.post(
-                LanternHttpClient.createProUrl("/referral-attach"),
-                formBody,
-                object : ProCallback {
-                    override fun onFailure(
-                        throwable: Throwable?,
-                        error: ProError?,
-                    ) {
-                        if (error != null && error.message != null) {
-                            methodCallResult.error(
-                                "unknownError",
-                                error.message,
-                                null,
-                            )
-                            return
-                        }
-                    }
-
-                    override fun onSuccess(
-                        response: Response?,
-                        result: JsonObject?,
-                    ) {
-                        Logger.debug(
-                            TAG,
-                            "Successfully redeemed referral code: $refCode",
-                        )
-                        session.setReferral(refCode)
-                        methodCallResult.success("applyCodeSuccessful")
-                    }
-                },
-            )
+            // TODO CALL /referral-attach here
         } catch (t: Throwable) {
             methodCallResult.error(
                 "unknownError",
@@ -401,58 +337,9 @@ class PaymentsUtil(private val activity: Activity) {
 
             else -> {}
         }
-
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/purchase"),
-            LanternHttpClient.createJsonBody(json),
-            object : ProCallback {
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    Logger.e(TAG, "Purchase Completed: $response")
-                    session.linkDevice()
-                    lanternClient.userData(object : LanternHttpClient.ProUserCallback {
-                        override fun onSuccess(response: Response, userData: ProUser) {
-                            Logger.e(TAG, "User detail : $userData")
-                            session.setIsProUser(true)
-                            activity.runOnUiThread {
-                                methodCallResult.success("purchaseSuccessful")
-                            }
-                        }
-
-                        override fun onFailure(throwable: Throwable?, error: ProError?) {
-                            Logger.error(TAG, "Unable to fetch user data: $throwable.message")
-                            activity.runOnUiThread {
-                                methodCallResult.success("purchaseSuccessful")
-                            }
-
-                        }
-                    })
-
-                    Logger.d(TAG, "Successful purchase response: $result")
-                }
-
-                override fun onFailure(
-                    t: Throwable?,
-                    error: ProError?,
-                ) {
-
-                    Logger.e(TAG, "Error with purchase request: $error")
-                    methodCallResult.error(
-                        "errorMakingPurchase",
-                        activity.getString(
-                            R.string.error_making_purchase,
-                        ),
-                        null,
-                    )
-                }
-            },
-        )
     }
 
     companion object {
         private val TAG = PaymentsUtil::class.java.name
-        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
     }
 }

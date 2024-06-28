@@ -32,9 +32,6 @@ import org.getlantern.lantern.event.AppEvent.*
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
-import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
@@ -71,7 +68,6 @@ class MainActivity :
     private lateinit var receiver: NotificationReceiver
     private var accountInitDialog: AlertDialog? = null
     private var autoUpdateJob: Job? = null
-    private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(
         @NonNull flutterEngine: FlutterEngine,

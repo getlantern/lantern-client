@@ -22,15 +22,20 @@ data class PaymentMethodsResponse(
     val plans: Map<String, ProPlan>,
 ) : APIResponse()
 
+data class PaymentRedirectResponse(
+    val redirectURL: String,
+) : APIResponse()
+
 object ProClient {
     private val proClient = Internalsdk.newProClient(LanternApp.getSession())
     private val session = LanternApp.getSession()
     private const val TAG = "ProClient"
 
-    fun updateUserData() {
+    fun updateUserData(callback: ((user: ProUser) -> Unit)? = null) {
         val response = proClient.userData()
         val proUser: ProUser? = JsonUtil.fromJson<ProUser>(response)
         proUser?.let { session.storeUserData(it) }
+        callback?.invoke(it)
     }
 
     fun createUser(callback: ((user: ProUser) -> Unit)? = null) {
@@ -40,13 +45,18 @@ object ProClient {
           user?.let {
             Logger.debug(TAG, "Created new Lantern user: ${it.newUserDetails()}")
             session.setUserIdAndToken(it.userId, it.token)
-            if (callback != null) callback(it)
+            callback?.invoke(it)
             EventHandler.postStatusEvent(LanternStatus(Status.ON))
             EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
           }
         } catch (e:Exception) {
           Logger.error(TAG, "Error creating new user: $e", e)
         }
+    }
+
+    fun paymentRedirect(planID: String, email: String, provider: String, callback: ((redirectURL: String) -> Unit)? = null) {
+        val response: PaymentRedirectResponse? = JsonUtil.fromJson<PaymentRedirectResponse>(proClient.paymentRedirect(planID, email, provider))
+        response?.let { callback?.invoke(it) }
     }
 
     fun updatePaymentMethods(callback: ((proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) -> Unit)? = null) {

@@ -11,6 +11,7 @@ import (
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -72,6 +73,19 @@ func (c *proClient) UserCreate() (string, error) {
 // UpdatePaymentMethods is used to update the payment methods and plans that are shown to a user
 func (c *proClient) PaymentMethods() (string, error) {
 	resp, err := c.ProClient.PaymentMethods(context.Background())
+	if err != nil {
+		return "", err
+	}
+	return jsonMarshal(resp), nil
+}
+
+// PaymentRedirect is used to select a payment provider to redirect a user to
+func (c *proClient) PaymentRedirect(email, planID, provider string) (string, error) {
+	resp, err := c.ProClient.PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
+		Email:    email,
+		Plan:     planID,
+		Provider: provider,
+	})
 	if err != nil {
 		return "", err
 	}
