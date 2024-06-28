@@ -3,6 +3,8 @@ package org.getlantern.lantern.util
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 
@@ -19,6 +21,10 @@ object JsonUtil {
 
     inline fun <reified T> fromJson(json: String): T {
         return GSON.fromJson(json, object : TypeToken<T>() {}.type)
+    }
+
+    fun asJsonObject(responseData: String): JsonObject {
+        return JsonParser().parse(responseData).asJsonObject
     }
 
     fun toJson(obj: Any): String {

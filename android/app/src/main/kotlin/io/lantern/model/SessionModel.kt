@@ -288,33 +288,20 @@ class SessionModel(
         }
     }
 
+    private fun fetchPaymentMethods(result: MethodChannel.Result?) {
+        ProClient.updatePaymentMethods({ proPlans, paymentMethods ->
+            result?.success("Payment method successfully updated")
+        })
+    }
+
     private fun updatePaymentMethods(result: MethodChannel.Result?) {
         val userId = LanternApp.getSession().userId()
-        //Check if not found then call createUser
+        // Check if not found then call createUser
         if (userId == 0L) {
             ProClient.createUser({ _ -> fetchPaymentMethods(result) })
         } else {
             fetchPaymentMethods(result)
         }
-    }
-
-    private fun fetchPaymentMethods(result: MethodChannel.Result?) {
-        lanternClient.plansV4(object : LanternHttpClient.PlansV3Callback {
-            override fun onSuccess(
-                proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>
-            ) {
-                Logger.debug(
-                    TAG,
-                    "Successfully payment proplan $proPlans and methods $paymentMethods"
-                )
-                processPaymentMethods(proPlans, paymentMethods)
-                result?.success("Payment method successfully updated")
-            }
-
-            override fun onFailure(throwable: Throwable?, error: ProError?) {
-                handleFailure(result, "payment_method_fail", error?.id, throwable)
-            }
-        })
     }
 
     private fun handleFailure(

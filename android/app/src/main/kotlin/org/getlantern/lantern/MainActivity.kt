@@ -129,8 +129,10 @@ class MainActivity :
                 }
                 is AppEvent.StatusEvent -> {
                     ProClient.updateUserData()
-                    updatePaymentMethods()
-                    updateCurrencyList()
+                    ProClient.updatePaymentMethods({ proPlans, paymentMethods ->
+                        sessionModel.processPaymentMethods(proPlans, paymentMethods)
+                    })
+                    ProClient.updateCurrenciesList()
                 }
                 is AppEvent.VpnStateEvent -> {
                     updateStatus(appEvent.vpnState.useVpn)
@@ -297,66 +299,6 @@ class MainActivity :
                 )
             }
         }
-    }
-
-    private fun updatePaymentMethods() {
-        lanternClient.plansV4(
-            object : PlansV3Callback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
-                }
-
-                override fun onSuccess(
-                    proPlans: Map<String, ProPlan>,
-                    paymentMethods: List<PaymentMethods>,
-                ) {
-                    Logger.debug(
-                        TAG,
-                        "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans",
-                    )
-                    sessionModel.processPaymentMethods(proPlans, paymentMethods)
-                }
-            },
-        )
-    }
-
-    private fun updateCurrencyList() {
-        val url = LanternHttpClient.createProUrl("/supported-currencies")
-        lanternClient.get(
-            url,
-            object : LanternHttpClient.ProCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch currency list: $error", throwable)
-                /*
-                retry to fetch currency list again
-                fetch until we get the currency list
-                retry after 5 seconds
-                 */
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(5000)
-                        updateCurrencyList()
-                    }
-                }
-
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    val currencies = result?.getAsJsonArray("supported-currencies")
-                    val currencyList = mutableListOf<String>()
-                    currencies?.forEach {
-                        currencyList.add(it.asString.lowercase())
-                    }
-                    LanternApp.getSession().setCurrencyList(currencyList)
-                }
-            },
-        )
     }
 
     private fun doProcessLoconf(loconf: LoConf) {

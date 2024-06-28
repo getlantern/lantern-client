@@ -6,8 +6,21 @@ import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.LanternStatus.Status
+import org.getlantern.lantern.model.PaymentMethods
+import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.mobilesdk.Logger
+
+abstract class APIResponse(
+    var error: String? = null,
+    var errorId: String = "",
+    var status: String = ""
+)
+
+data class PaymentMethodsResponse(
+    val providers: Map<String, List<PaymentMethods>>? = null,
+    val plans: Map<String, ProPlan>,
+) : APIResponse()
 
 object ProClient {
     private val proClient = Internalsdk.newProClient(LanternApp.getSession())
@@ -34,5 +47,21 @@ object ProClient {
         } catch (e:Exception) {
           Logger.error(TAG, "Error creating new user: $e", e)
         }
+    }
+
+    fun updatePaymentMethods(callback: ((proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) -> Unit)? = null) {
+        val response: PaymentMethodsResponse? = JsonUtil.fromJson<PaymentMethodsResponse>(proClient.paymentMethods())
+        response?.let {
+            val paymentMethods = it.providers?.get("android")
+            val proPlans = it.plans
+            Logger.debug(TAG, "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans")
+            if (callback != null && paymentMethods != null) callback(proPlans, paymentMethods)
+        }
+    }
+
+    fun updateCurrenciesList() {
+        val response = proClient.currenciesList()
+        val currencies: List<String>? = JsonUtil.fromJson<List<String>>(response)
+        currencies?.let { session.setCurrencyList(it) }
     }
 }

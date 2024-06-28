@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/getlantern/flashlight/v7/proxied"
@@ -21,9 +22,8 @@ type proClient struct {
 
 // ProClient is a simplified version of pro.ProClient that can be used on Android
 type ProClient interface {
-	//Plans() (*pro.PlansResponse, error)
-	//UserCreate() (*pro.UserDataResponse, error)
-	//UserData() *pro.UserDataResponse
+	CurrenciesList() (string, error)
+	PaymentMethods() (string, error)
 	UserCreate() (string, error)
 	UserData() (string, error)
 }
@@ -67,6 +67,28 @@ func (c *proClient) UserCreate() (string, error) {
 		return "", err
 	}
 	return jsonMarshal(resp.User), nil
+}
+
+// UpdatePaymentMethods is used to update the payment methods and plans that are shown to a user
+func (c *proClient) PaymentMethods() (string, error) {
+	resp, err := c.ProClient.PaymentMethods(context.Background())
+	if err != nil {
+		return "", err
+	}
+	return jsonMarshal(resp), nil
+}
+
+// UpdatePaymentMethods is used to update the payment methods and plans that are shown to a user
+func (c *proClient) CurrenciesList() (string, error) {
+	resp, err := c.ProClient.SupportedCurrencies(context.Background())
+	if err != nil {
+		return "", err
+	}
+	var currencies []string
+	for _, currency := range resp.Currencies {
+		currencies = append(currencies, strings.ToLower(currency))
+	}
+	return jsonMarshal(currencies), nil
 }
 
 // UserData returns data associated with a user

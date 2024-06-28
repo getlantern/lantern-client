@@ -25,13 +25,13 @@ object PlansUtil {
                     Math.round(plan.discount * 100).toString()
                 )
         }
-        val oneMonthCost = plan.formattedPriceOneMonth
+        val oneMonthCost = plan.oneMonthCost
         plan.renewalText = proRenewalText(activity.resources, formattedBonus)
         plan.totalCostBilledOneTime = totalCostBilledOneTime
         plan.oneMonthCost = oneMonthCost
         plan.formattedBonus = formattedBonus
         plan.setFormattedDiscount(formattedDiscount)
-        plan.totalCost = totalCost
+        if (totalCost != null) plan.totalCost = totalCost
     }
 
     private fun proRenewalText(resources: Resources, formattedBonus: String): String {
