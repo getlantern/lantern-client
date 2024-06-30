@@ -118,6 +118,9 @@ public class ProPlan {
     }
 
     public Integer numYears() {
+        if (duration == null) {
+            return 0;
+        }
         return duration.get("years");
     }
 

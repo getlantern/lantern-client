@@ -399,7 +399,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                         .addAllProviders(
                             methods.providers.map {
                                 // Check if payment provider is stipe add pubkey
-                                if (it.name == PaymentProvider.Stripe) {
+                                if (it.name == PaymentProvider.Stripe && it.data != null) {
                                     setStripePubKey(it.data["pubKey"] as String)
                                 }
                                 Vpn.PaymentProviders.newBuilder()

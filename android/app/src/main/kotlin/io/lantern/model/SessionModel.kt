@@ -447,7 +447,7 @@ class SessionModel(
     }
 
     private fun approveDevice(code: String, methodCallResult: MethodChannel.Result) {
-        ProClient.approveDevice(code, { code -> result.success("approvedDevice") })
+        ProClient.approveDevice(code, { code -> methodCallResult.success("approvedDevice") })
     }
 
     // Hits the /user-data endpoint and saves { userLevel: null | "pro" | "platinum" } to PATH_USER_LEVEL

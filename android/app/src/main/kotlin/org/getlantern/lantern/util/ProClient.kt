@@ -19,6 +19,7 @@ abstract class APIResponse(
 )
 
 data class PaymentMethodsResponse(
+    val icons: Map<String, List<String>>? = null,
     val providers: Map<String, List<PaymentMethods>>? = null,
     val plans: Map<String, ProPlan>,
 ) : APIResponse()
@@ -76,14 +77,14 @@ object ProClient {
             )
         response?.let {
             LanternApp.getSession().setDeviceCode(it.code, it.expireAt)
-            callback?.invoke(it)
+            callback?.invoke(it.code)
         }
     }
 
     fun redeemLinkCode(code: String, callback: ((resp: LinkCodeRedeemResponse) -> Unit)? = null) {
         val response: LinkCodeRedeemResponse? =
             JsonUtil.fromJson<LinkCodeRedeemResponse>(
-                proClient.linkCodeRedeem(LanternApp.getSession().deviceName()),
+                proClient.linkCodeRedeem(LanternApp.getSession().deviceName(), code),
             )
         response?.let {
             LanternApp.getSession().setUserIdAndToken(it.userID, it.token)
@@ -93,7 +94,7 @@ object ProClient {
 
     fun approveDevice(code: String, callback: Callback? = null) {
         val response: APIResponse? = JsonUtil.fromJson<APIResponse>(proClient.linkCodeApprove(code))
-        response?.let { callback?.invoke() }
+        response?.let { callback?.invoke(response) }
     }
 
     fun removeDevice(deviceId: String, callback: ((resp: APIResponse) -> Unit)? = null) {
@@ -128,14 +129,39 @@ object ProClient {
         response?.let { Logger.debug(TAG, "Making server acknowledgement response: $response") }
     }
 
-    fun updatePaymentMethods(callback: ((proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) -> Unit)? = null) {
-        val response: PaymentMethodsResponse? = JsonUtil.fromJson<PaymentMethodsResponse>(proClient.paymentMethods())
-        response?.let {
-            val paymentMethods = it.providers?.get("android")
-            val proPlans = it.plans
-            Logger.debug(TAG, "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans")
-            if (callback != null && paymentMethods != null) callback(proPlans, paymentMethods)
+    private fun plansMap(fetched: List<ProPlan>): Map<String, ProPlan> {
+        val plans = mutableMapOf<String, ProPlan>()
+        for (plan in fetched) {
+            plan.formatCost()
+            plans.put(plan.id, plan)
         }
+        return plans
+    }
+
+    fun updatePaymentMethods(callback: ((proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) -> Unit)? = null) {
+        val result = JsonUtil.asJsonObject(proClient.paymentMethods())
+        val methods:Map<String, List<PaymentMethods>>? = JsonUtil.fromJson<Map<String, List<PaymentMethods>>>(result?.get("providers").toString())
+        if (methods == null) return
+        val providers = methods.get("android")
+        // Due to API limitations
+        // We need loop all the provider and info since we can multiple provider with multiple methods
+        providers?.let {
+            providers.forEach { it ->
+                it.providers.forEach { provider ->
+                    val icons = result?.get("icons")?.asJsonObject
+                    val logoJson = icons?.get(
+                        provider.name.toString().lowercase()
+                    )!!.asJsonArray
+                    val logoUrlsList: List<String> =
+                        logoJson?.map { it.asString } ?: emptyList()
+                    provider.logoUrl = logoUrlsList
+                }
+            }
+        }
+        val fetched = JsonUtil.fromJson<List<ProPlan>>(result?.get("plans").toString())
+        val plans = plansMap(fetched)
+        Logger.debug(TAG, "Successfully fetched payment methods with providers: $providers and plans $plans")
+        if (providers != null) callback?.invoke(plans, providers)
     }
 
     fun updateCurrenciesList() {
