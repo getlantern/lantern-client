@@ -37,6 +37,8 @@ data class LinkCodeRedeemResponse(
     val userID: Long,
 ) : APIResponse()
 
+typealias Callback = (APIResponse) -> Unit
+
 object ProClient {
     private val proClient = Internalsdk.newProClient(LanternApp.getSession())
     private val session = LanternApp.getSession()
@@ -89,14 +91,14 @@ object ProClient {
         }
     }
 
-    fun approveDevice(code: String, callback: (() -> Unit)? = null) {
+    fun approveDevice(code: String, callback: Callback? = null) {
         val response: APIResponse? = JsonUtil.fromJson<APIResponse>(proClient.linkCodeApprove(code))
         response?.let { callback?.invoke() }
     }
 
-    fun removeDevice(deviceId: String, callback: (() -> Unit)? = null) {
+    fun removeDevice(deviceId: String, callback: ((resp: APIResponse) -> Unit)? = null) {
         val response: APIResponse? = JsonUtil.fromJson<APIResponse>(proClient.deviceRemove(deviceId))
-        response?.let { callback?.invoke() }
+        response?.let { callback?.invoke(response) }
     }
 
     fun userLinkValidate(code: String, callback: ((resp: LinkCodeRedeemResponse) -> Unit)? = null) {
@@ -105,8 +107,7 @@ object ProClient {
     }
 
     fun requestRecoveryEmail(deviceName: String, callback: ((resp: LinkCodeRedeemResponse) -> Unit)? = null) {
-        val response: LinkCodeRedeemResponse? = JsonUtil.fromJson<LinkCodeRedeemResponse>(proClient.userLinkCodeRequest(deviceName))
-        response?.let { callback?.invoke(response) }
+        proClient.userLinkCodeRequest(deviceName)
     }
 
     fun paymentRedirect(

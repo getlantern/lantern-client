@@ -137,7 +137,7 @@ class SessionModel(
             "redeemLinkCode" -> redeemLinkCode(result)
             //"resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
-            "approveDevice" -> ProClient.approveDevice(call.argument("code")!!, { code -> result.success("approvedDevice") })
+            "approveDevice" -> approveDevice(call.argument("code")!!, result)
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             "reportIssue" -> reportIssue(
                 call.argument("email")!!,
@@ -403,7 +403,7 @@ class SessionModel(
         Logger.debug(TAG, "Validating link request; code:$code")
         ProClient.userLinkValidate(code, { it -> 
             // update token and user ID with those returned by the pro server
-            LanternApp.getSession().setUserIdAndToken(it.userId, it.token)
+            LanternApp.getSession().setUserIdAndToken(it.userID, it.token)
             LanternApp.getSession().linkDevice()
             LanternApp.getSession().setIsProUser(true)
             activity.runOnUiThread {
@@ -434,7 +434,7 @@ class SessionModel(
 
     private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {
         Logger.debug(TAG, "Removing device $deviceId")
-        ProClient.removeDevice(deviceId, { _ -> 
+        ProClient.removeDevice(deviceId, { response -> 
             methodCallResult.success("approvedDevice")
             val isLogout = deviceId == LanternApp.getSession().deviceID
             if (isLogout) {
@@ -444,6 +444,10 @@ class SessionModel(
                 ProClient.updateUserData()
             }
         })
+    }
+
+    private fun approveDevice(code: String, methodCallResult: MethodChannel.Result) {
+        ProClient.approveDevice(code, { code -> result.success("approvedDevice") })
     }
 
     // Hits the /user-data endpoint and saves { userLevel: null | "pro" | "platinum" } to PATH_USER_LEVEL
