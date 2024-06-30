@@ -21,9 +21,6 @@ import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
-import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.LanternHttpClient.ProCallback
-import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
@@ -52,7 +49,6 @@ class SessionModel(
     private val appsDataProvider: AppsDataProvider = AppsDataProvider(
         activity.packageManager, activity.packageName
     )
-    private val lanternClient = LanternApp.getLanternHttpClient()
     private val autoUpdater = AutoUpdater(activity, activity)
     private val paymentsUtil = PaymentsUtil(activity)
 
@@ -137,12 +133,11 @@ class SessionModel(
             }
 
             "authorizeViaEmail" -> requestRecoveryEmail(call.argument("emailAddress")!!, result)
-            "checkEmailExists" -> checkEmailExists(call.argument("emailAddress")!!, result)
-            "requestLinkCode" -> requestLinkCode(result)
+            "requestLinkCode" -> ProClient.requestLinkCode({ code -> result.success(code) })
             "redeemLinkCode" -> redeemLinkCode(result)
-            "resendRecoveryCode" -> sendRecoveryCode(result)
+            //"resendRecoveryCode" -> sendRecoveryCode(result)
             "validateRecoveryCode" -> validateRecoveryCode(call.argument("code")!!, result)
-            "approveDevice" -> approveDevice(call.argument("code")!!, result)
+            "approveDevice" -> ProClient.approveDevice(call.argument("code")!!, { code -> result.success("approvedDevice") })
             "removeDevice" -> removeDevice(call.argument("deviceId")!!, result)
             "reportIssue" -> reportIssue(
                 call.argument("email")!!,
@@ -380,158 +375,25 @@ class SessionModel(
         }
     }
 
-    private fun requestLinkCode(methodCallResult: MethodChannel.Result) {
-        val formBody =
-            FormBody.Builder().add("deviceName", LanternApp.getSession().deviceName()).build()
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/link-code-request"),
-            formBody,
-            object : ProCallback {
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    if (error == null) {
-                        activity.runOnUiThread {
-                            methodCallResult.error("unknownError", null, null)
-                        }
-                        return
-                    }
-                    val errorId = error.id
-                    activity.runOnUiThread {
-                        methodCallResult.error("linkCodeError", errorId, null)
-                    }
-                }
-
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    result?.let {
-                        if (result["code"] == null || result["expireAt"] == null) return
-                        val code = result["code"].asString
-                        val expireAt = result["expireAt"].asLong
-                        LanternApp.getSession().setDeviceCode(code, expireAt)
-                        methodCallResult.success(code)
-                    }
-                }
-            },
-        )
-    }
-
     private fun redeemLinkCode(methodCallResult: MethodChannel.Result) {
-        val formBody = FormBody.Builder().add("code", LanternApp.getSession().deviceCode()!!)
-            .add("deviceName", LanternApp.getSession().deviceName()).build()
-        Logger.info(TAG, "Redeeming link code")
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/link-code-redeem"),
-            formBody,
-            object : ProCallback {
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.error(TAG, "Error making link redeem request..", t)
-                    if (error == null) {
-                        activity.runOnUiThread {
-                            methodCallResult.error("unknownError", null, null)
-                        }
-                        return
-                    }
-                    activity.runOnUiThread {
-                        methodCallResult.error("linkCodeError", error.id, null)
-                    }
+        val code = LanternApp.getSession().deviceCode()!!
+        ProClient.redeemLinkCode(code, { result ->
+            Logger.debug(TAG, "Successfully redeemed link code")
+            activity.runOnUiThread {
+                val intent = Intent(activity, MainActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 }
-
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    Logger.debug(TAG, "redeem link code response: $result")
-                    if (result == null || result["token"] == null || result["userID"] == null) return
-                    Logger.debug(TAG, "Successfully redeemed link code")
-                    val userID = result["userID"].asLong
-                    val token = result["token"].asString
-                    //Set the new user id
-                    LanternApp.getSession().setUserIdAndToken(userID, token)
-                    //Refresh all the user data
-                    lanternClient.userData(object : ProUserCallback {
-                        override fun onSuccess(response: Response, userData: ProUser) {
-                            Logger.debug(TAG, "Successfully updated userData")
-                            activity.runOnUiThread {
-                                //todo find better solution restart the app is the good option
-                                //Restart the app
-                                val intent = Intent(activity, MainActivity::class.java).apply {
-                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                }
-                                activity.startActivity(intent)
-//                                methodCallResult.success("redeemedLinkCode")
-
-                            }
-                        }
-
-                        override fun onFailure(t: Throwable?, error: ProError?) {
-                            Logger.error(TAG, "Unable to fetch user data: $t.message")
-                            methodCallResult.error(
-                                "errorUpdatingUserData", t?.message, error?.message
-                            )
-                        }
-                    })
-
-                    // methodCallResult.success(null)
-                }
-            },
-        )
-    }
-
-    private fun checkEmailExists(emailAddress: String, methodCallResult: MethodChannel.Result) {
-        val params = mapOf("email" to emailAddress)
-        val isPlayVersion = LanternApp.getSession().isStoreVersion()
-        val useStripe = !isPlayVersion
-        lanternClient.get(
-            LanternHttpClient.createProUrl("/email-exists", params),
-            object : ProCallback {
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    if (error != null) confirmEmailError(error)
-                }
-
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    Logger.debug(TAG, "Email successfully validated " + emailAddress)
-                    LanternApp.getSession().setEmail(emailAddress)
-                }
-            },
-        )
+                activity.startActivity(intent)
+            }
+        })
     }
 
     private fun requestRecoveryEmail(emailAddress: String, methodCallResult: MethodChannel.Result) {
         val session = LanternApp.getSession()
         session.setEmail(emailAddress)
-        val formBody =
-            FormBody.Builder().add("email", emailAddress).add("deviceName", session.deviceName())
-                .add("locale", session.locale()).build()
-
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/user-link-request"),
-            formBody,
-            object : ProCallback {
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    activity.runOnUiThread {
-                        methodCallResult.success("Recovery code sent")
-                    }
-                }
-
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.error(TAG, "Failure on  requestRecoveryEmail", error)
-                    activity.runOnUiThread {
-                        methodCallResult.error("unknownError", t?.message, null)
-                    }
-                }
-            },
-        )
-    }
-
-    private fun sendRecoveryCode(methodCallResult: MethodChannel.Result) {
-        Logger.debug(TAG, "Sending link request...")
-        lanternClient.sendLinkRequest(object : ProCallback {
-            override fun onSuccess(response: Response?, result: JsonObject?) {
-                activity.runOnUiThread {
-                    methodCallResult.success("needPin")
-                }
-            }
-
-            override fun onFailure(t: Throwable?, error: ProError?) {
-                activity.runOnUiThread {
-                    methodCallResult.error("unableToRequestRecoveryCode", t?.message, null)
-                }
-                activity.showErrorDialog(activity.resources.getString(R.string.unknown_error))
+        ProClient.requestRecoveryEmail(session.deviceName(), { _ -> 
+            activity.runOnUiThread {
+                methodCallResult.success("Recovery code sent")
             }
         })
     }
@@ -539,86 +401,15 @@ class SessionModel(
     private fun validateRecoveryCode(code: String, methodCallResult: MethodChannel.Result) {
         val formBody: RequestBody = FormBody.Builder().add("code", code).build()
         Logger.debug(TAG, "Validating link request; code:$code")
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/user-link-validate"),
-            formBody,
-            object : ProCallback {
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.error(TAG, "Unable to validate link code", t)
-                    activity.runOnUiThread {
-                        methodCallResult.error(
-                            "unableToVerifyRecoveryCode", t?.message, error?.message
-                        )
-                    }
-                    if (error == null) {
-                        Logger.error(TAG, "Unable to validate recovery code and no error to show")
-                        return
-                    }
-                    val errorId = error.id
-                    if (errorId == "too-many-devices") {
-                        activity.showErrorDialog(activity.resources.getString(R.string.too_many_devices))
-                    } else if (error.message != null) {
-                        activity.showErrorDialog(error.message)
-                    }
-                }
-
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    if (result != null && result["token"] != null && result["userID"] != null) {
-                        Logger.debug(TAG, "Successfully validated recovery code")
-                        // update token and user ID with those returned by the pro server
-                        // update token and user ID with those returned by the pro server
-                        LanternApp.getSession()
-                            .setUserIdAndToken(result["userID"].asLong, result["token"].asString)
-                        LanternApp.getSession().linkDevice()
-                        LanternApp.getSession().setIsProUser(true)
-                        activity.runOnUiThread {
-                            methodCallResult.success(
-                                activity.getString(R.string.device_added),
-                            )
-                        }
-                    }
-                }
-            },
-        )
-    }
-
-    private fun approveDevice(code: String, methodCallResult: MethodChannel.Result) {
-        val formBody: RequestBody = FormBody.Builder().add("code", code).build()
-
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/link-code-approve"),
-            formBody,
-            object : ProCallback {
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.error(TAG, "Error approving device link code: $error")
-                    activity.runOnUiThread {
-                        val errorMessage =
-                            activity.resources.getString(R.string.invalid_verification_code)
-                        methodCallResult.error("errorApprovingDevice", errorMessage, errorMessage)
-                    }
-                }
-
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    //Add one second dealy to api
-                    Thread.sleep(1000)
-                    lanternClient.userData(object : ProUserCallback {
-                        override fun onSuccess(response: Response, userData: ProUser) {
-                            Logger.debug(TAG, "Successfully updated userData")
-                            activity.runOnUiThread {
-                                methodCallResult.success("approvedDevice")
-                            }
-                        }
-
-                        override fun onFailure(t: Throwable?, error: ProError?) {
-                            Logger.error(TAG, "Unable to fetch user data: $t.message")
-                            methodCallResult.error(
-                                "errorUpdatingUserData", t?.message, error?.message
-                            )
-                        }
-                    })
-                }
-            },
-        )
+        ProClient.userLinkValidate(code, { it -> 
+            // update token and user ID with those returned by the pro server
+            LanternApp.getSession().setUserIdAndToken(it.userId, it.token)
+            LanternApp.getSession().linkDevice()
+            LanternApp.getSession().setIsProUser(true)
+            activity.runOnUiThread {
+                methodCallResult.success(activity.getString(R.string.device_added))
+            }
+        })
     }
 
     private fun reportIssue(
@@ -643,80 +434,24 @@ class SessionModel(
 
     private fun removeDevice(deviceId: String, methodCallResult: MethodChannel.Result) {
         Logger.debug(TAG, "Removing device $deviceId")
-        val formBody: RequestBody = FormBody.Builder().add("deviceID", deviceId).build()
-
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/user-link-remove"),
-            formBody,
-            object : ProCallback {
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    if (error != null) {
-                        Logger.error(TAG, "Error removing device: $error")
-                    }
-                    activity.runOnUiThread {
-                        methodCallResult.error("errorApprovingDevice", t?.message, error?.message)
-                    }
-                    // encountered some issue removing the device; display an error
-                    activity.showErrorDialog(activity.resources.getString(R.string.unable_remove_device))
-                }
-
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    Logger.debug(TAG, "Successfully removed device")
-
-                    val isLogout = deviceId == LanternApp.getSession().deviceID
-                    if (isLogout) {
-                        // if one of the devices we removed is the current device
-                        // make sure to logout
-                        Logger.debug(TAG, "Logging out")
-                        LanternApp.getSession().logout()
-                        activity.restartApp()
-                        return
-                    }
-
-                    lanternClient.userData(object : ProUserCallback {
-                        override fun onSuccess(response: Response, userData: ProUser) {
-                            Logger.debug(TAG, "Successfully updated userData")
-                            activity.runOnUiThread {
-                                methodCallResult.success("removedDevice")
-                            }
-                        }
-
-                        override fun onFailure(t: Throwable?, error: ProError?) {
-                            Logger.error(TAG, "Unable to fetch user data: $t.message")
-                            methodCallResult.error(
-                                "errorUpdatingUserData", t?.message, error?.message
-                            )
-                        }
-                    })
-                }
-            },
-        )
+        ProClient.removeDevice(deviceId, { _ -> 
+            methodCallResult.success("approvedDevice")
+            val isLogout = deviceId == LanternApp.getSession().deviceID
+            if (isLogout) {
+                LanternApp.getSession().logout()
+                activity.restartApp()
+            } else {
+                ProClient.updateUserData()
+            }
+        })
     }
 
     // Hits the /user-data endpoint and saves { userLevel: null | "pro" | "platinum" } to PATH_USER_LEVEL
     private fun userStatus(result: MethodChannel.Result) {
-        try {
-            lanternClient.userData(object : ProUserCallback {
-                override fun onSuccess(response: Response, userData: ProUser) {
-                    Logger.debug(TAG, "Successfully updated userData")
-                    result.success("cachingUserDataSuccess")
-                    LanternApp.getSession().setUserLevel(userData.userLevel)
-                }
-
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.error(TAG, "Unable to fetch user data: $t.message")
-                    result.error(
-                        "cachingUserDataError", "Unable to cache user status", error?.message
-                    ) // This will be localized Flutter-side
-                    return
-                }
-            })
-        } catch (t: Throwable) {
-            Logger.error(TAG, "Error caching user status", t)
-            result.error(
-                "unknownError", "Unable to cache user status", null
-            ) // This will be localized Flutter-side
-        }
+        ProClient.updateUserData({ user -> 
+            result.success("cachingUserDataSuccess")
+            LanternApp.getSession().setUserLevel(user.userLevel)
+        })
     }
 
     fun saveServerInfo(serverInfo: Vpn.ServerInfo) {

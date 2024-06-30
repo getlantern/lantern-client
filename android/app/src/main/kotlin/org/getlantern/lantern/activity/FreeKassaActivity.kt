@@ -17,7 +17,6 @@ import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.util.FreeKassa
 import org.getlantern.lantern.util.showErrorDialog
@@ -33,7 +32,6 @@ open class FreeKassaActivity : BaseFragmentActivity() {
         private val TAG = FreeKassaActivity::class.java.name
         private const val secretWordOne = "={WBvUg}wci5qx("
         private const val merchantId = 25970
-        private val lanternHTTPClient: LanternHttpClient = LanternApp.getLanternHttpClient()
     }
 
     // @JvmField is necessary when working with Kotlin and the
@@ -73,84 +71,12 @@ open class FreeKassaActivity : BaseFragmentActivity() {
         closeButton?.setOnClickListener(View.OnClickListener {
             finish()
         })
-        makeRequestToPrepayHandler(
-            { transactionID: String -> displayWebView(transactionID) },
-            { error: String -> showErrorDialog(error) }
-        )
     }
 
     private fun assertIntentExtras() {
         if (userEmail == null) {
             throw RuntimeException("User email is null. This should never happen")
         }
-    }
-
-    private fun makeRequestToPrepayHandler(onSuccess: (String) -> Unit, onError: (String) -> Unit) {
-        val params = hashMapOf(
-            "locale" to LanternApp.getSession().language,
-        )
-        val url = LanternHttpClient.createProUrl("/freekassa-prepay", params)
-        val requestBodyParams = FormBody.Builder()
-            .add("deviceName", LanternApp.getSession().deviceName())
-            .add("plan", planID!!)
-            .add("email", userEmail!!)
-            .build()
-
-        Logger.d(TAG, "Sending request to Freekassa prepay handler")
-
-        lanternHTTPClient.post(
-            url,
-            requestBodyParams,
-            object : LanternHttpClient.ProCallback {
-                override fun onFailure(throwable: Throwable?, error: ProError?) {
-                    Logger.error(TAG, error.toString())
-                    onError(error.toString())
-                }
-
-                override fun onSuccess(response: Response?, result: JsonObject?) {
-                    Logger.debug(TAG, "Prepay handler response: $response")
-                    if (response == null) {
-                        val error = "Unable to prepare FreeKassa: Response is null"
-                        Logger.error(TAG, error)
-                        onError(error)
-                        return
-                    }
-                    if (!response.isSuccessful) {
-                        val error = "Unable to prepare FreeKassa: Response is not successful"
-                        Logger.error(TAG, error)
-                        onError(error)
-                        return
-                    }
-                    if (result == null) {
-                        val error = "Unable to prepare FreeKassa: Result is null"
-                        Logger.error(TAG, error)
-                        onError(error)
-                        return
-                    }
-
-                    try {
-                        if (result.has("error")) {
-                            val error = result.get("error").asString
-                            Logger.error(TAG, error)
-                            onError(error)
-                            return
-                        }
-                        if (!result.has("transactionId")) {
-                            val error = "Unable to prepare FreeKassa: Transaction ID is null"
-                            Logger.error(TAG, error)
-                            onError(error)
-                            return
-                        }
-                        val transactionID: String = result.get("transactionId").asString
-                        displayWebView(transactionID)
-                    } catch (e: JSONException) {
-                        val error = "Unable to parse FreeKassa prepay response: $response"
-                        Logger.error(TAG, error)
-                        onError(error)
-                    }
-                }
-            }
-        )
     }
 
     // convertToPro assumes we've done a successful purchase since

@@ -27,6 +27,14 @@ type ProClient interface {
 	PaymentMethods() (string, error)
 	UserCreate() (string, error)
 	UserData() (string, error)
+	LinkCodeRequest(string) (string, error)
+	LinkCodeApprove(string) (string, error)
+	LinkCodeRedeem(string, string) (string, error)
+	DeviceRemove(string) (string, error)
+	UserLinkValidate(string) (string, error)
+	PaymentRedirect(string, string, string) (string, error)
+	Purchase(string) (string, error)
+	UserLinkCodeRequest(string) (bool, error)
 }
 
 // NewProClient creates a new instance of ProClient
@@ -79,6 +87,53 @@ func (c *proClient) PaymentMethods() (string, error) {
 	return jsonMarshal(resp), nil
 }
 
+func (c *proClient) LinkCodeRequest(deviceName string) (string, error) {
+	resp, err := c.ProClient.LinkCodeRequest(context.Background(), deviceName)
+	if err != nil {
+		return "", err
+	}
+	return jsonMarshal(resp), nil
+}
+
+func (c *proClient) LinkCodeRedeem(deviceName, code string) (string, error) {
+	resp, err := c.ProClient.LinkCodeRedeem(context.Background(), deviceName, code)
+	if err != nil {
+		return "", err
+	}
+	return jsonMarshal(resp), nil
+}
+
+// LinkCodeApprove is used to approve a code to link a device to an existing Pro account
+func (c *proClient) LinkCodeApprove(code string) (string, error) {
+	resp, err := c.ProClient.LinkCodeApprove(context.Background(), code)
+	if err != nil {
+		return "", err
+	}
+	return jsonMarshal(resp), nil
+}
+
+// DeviceRemove removes the device with the given ID from a user's Pro account
+func (c *proClient) DeviceRemove(deviceId string) (string, error) {
+	resp, err := c.ProClient.DeviceRemove(context.Background(), deviceId)
+	if err != nil {
+		return "", err
+	}
+	return jsonMarshal(resp), nil
+}
+
+func (c *proClient) UserLinkValidate(code string) (string, error) {
+	resp, err := c.ProClient.UserLinkValidate(context.Background(), code)
+	if err != nil {
+		return "", err
+	}
+	return jsonMarshal(resp), nil
+}
+
+// UserLinkCodeRequest returns a code to email register pro account email that can be used to link device to an existing Pro account
+func (c *proClient) UserLinkCodeRequest(deviceId string) (bool, error) {
+	return c.ProClient.UserLinkCodeRequest(context.Background(), deviceId)
+}
+
 // PaymentRedirect is used to select a payment provider to redirect a user to
 func (c *proClient) PaymentRedirect(email, planID, provider string) (string, error) {
 	resp, err := c.ProClient.PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
@@ -86,6 +141,19 @@ func (c *proClient) PaymentRedirect(email, planID, provider string) (string, err
 		Plan:     planID,
 		Provider: provider,
 	})
+	if err != nil {
+		return "", err
+	}
+	return jsonMarshal(resp), nil
+}
+
+func (c *proClient) Purchase(b string) (string, error) {
+	data := map[string]interface{}{}
+	err := json.Unmarshal([]byte(b), &data)
+	if err != nil {
+		return "", err
+	}
+	resp, err := c.ProClient.PurchaseRequest(context.Background(), data)
 	if err != nil {
 		return "", err
 	}

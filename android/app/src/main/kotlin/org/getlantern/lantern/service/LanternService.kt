@@ -10,7 +10,6 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.util.AutoUpdater
@@ -32,7 +31,6 @@ open class LanternService :
         private val TAG = LanternService::class.java.simpleName
         private const val MAX_CREATE_USER_TRIES = 11
         private const val baseWaitMs = 3000
-        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
         val AUTO_BOOTED = "autoBooted"
     }
 
