@@ -62,23 +62,6 @@ class PlansPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // * Step
-                      Container(
-                        color: white,
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 16.0,
-                          bottom: 16.0,
-                          start: 32.0,
-                          end: 32.0,
-                        ),
-                        child: Container(
-                          margin: const EdgeInsetsDirectional.only(start: 4.0),
-                          child: PlanStep(
-                            stepNum: '1',
-                            description: 'choose_plan'.i18n,
-                          ),
-                        ),
-                      ),
                       // * Card
                       ...plans
                           .toList()
@@ -100,8 +83,6 @@ class PlansPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                // todo need to enable this for other platform soon
-
                 _buildFooter(context, proUser),
               ],
             );
@@ -114,10 +95,6 @@ class PlansPage extends StatelessWidget {
   ///If the user is already so not ask for email
   ///f the user is not pro, ask for email
   void _onPromoCodeTap(BuildContext context, bool proUser) {
-    if (!Platform.isIOS) {
-      context.pushRoute(ResellerCodeCheckoutLegacy(isPro: true));
-      return;
-    }
     if (proUser) {
       context.pushRoute(
         ResellerCodeCheckout(isPro: true, email: sessionModel.userEmail.value!),

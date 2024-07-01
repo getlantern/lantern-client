@@ -309,11 +309,10 @@ class _AccountManagementState extends State<AccountManagement>
             header: 'lantern_pro_email'.i18n,
             icon: ImagePaths.email,
             content: emailAddress,
-            trailingArray: [
-            ],
+            trailingArray: [],
           );
         }),
-        if(Platform.isIOS)
+
         ListItemFactory.settingsItem(
           header: 'password'.i18n,
           icon: ImagePaths.lockFiled,
@@ -339,7 +338,6 @@ class _AccountManagementState extends State<AccountManagement>
         }),
         //Disable device linking in IOS
         const UserDevices(),
-        if(Platform.isIOS)
         ListItemFactory.settingsItem(
           header: 'danger_zone'.i18n,
           icon: ImagePaths.alert,

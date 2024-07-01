@@ -64,13 +64,30 @@ Future<User> ffiUserData() async {
 
 // checkAPIError throws a PlatformException if the API response contains an error
 void checkAPIError(result, errorMessage) {
+  print(result);
   if (result is String) {
     final errorMessageMap = jsonDecode(result);
-    throw PlatformException(
-        code: errorMessageMap.toString(), message: errorMessage);
+    if (errorMessageMap.containsKey('error')) {
+      throw PlatformException(
+          code: errorMessageMap['error'], message: errorMessage);
+    }
+    return;
   }
   if (result.error != "") {
     throw PlatformException(code: result.error, message: errorMessage);
+  }
+}
+
+void checkAuthAPIError(result) {
+  if (result is String) {
+    if (result == "true") {
+      return;
+    }
+    final errorMessageMap = jsonDecode(result);
+    if (errorMessageMap.containsKey('error')) {
+      throw PlatformException(
+          code: errorMessageMap['error'], message: errorMessageMap['error']);
+    }
   }
 }
 
@@ -212,8 +229,83 @@ void loadLibrary() {
   _bindings.start();
 }
 
-//Custom exception for handling error
+/// Auth methods for desktop
 
+/// FFI pointer to the native function
+Pointer<Utf8> ffiIsUserLoggedIn() {
+  final result = _bindings.isUserLoggedIn().cast<Utf8>();
+  print(result.toDartString());
+  return result;
+}
+
+/// FFI function
+Future<bool> ffiUserFirstVisit() {
+  final result = _bindings.isUserFirstTime().cast<Utf8>().toDartString();
+  return Future.value(result == 'true');
+}
+
+void setUserFirstTimeVisit() => _bindings.setFirstTimeVisit();
+
+///signup
+Future<void> ffiSignUp(List<String> params) {
+  final email = params[0].toPointerChar();
+  final password = params[1].toPointerChar();
+  final result = _bindings.signup(email, password).cast<Utf8>().toDartString();
+  return Future.value(result.toBool());
+}
+
+/// login
+Future<void> ffiLogin(List<String> params) {
+  final email = params[0].toPointerChar();
+  final password = params[1].toPointerChar();
+  final result = _bindings.login(email, password).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
+  return Future.value(result.toBool());
+}
+
+/// logout
+Future<void> ffiLogout(dynamic context) {
+  final result = _bindings.logout().cast<Utf8>().toDartString();
+  return Future.value(result.toBool());
+}
+
+
+/// start recovery by email
+/// send verification code to email
+Future<void> ffiStartRecoveryByEmail(String email) {
+  final result = _bindings.startRecoveryByEmail(email.toPointerChar()).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
+  return Future.value(result.toBool());
+}
+
+/// start recovery by email
+/// send verification code to email
+Future<void> ffiValidateRecoveryByEmail(List<String> params) {
+  final email = params[0].toPointerChar();
+  final code = params[1].toPointerChar();
+  final result = _bindings.validateRecoveryByEmail(email,code).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
+  return Future.value(result.toBool());
+}
+
+
+Future<void> ffiCompleteRecoveryByEmail(List<String> params) {
+  final email = params[0].toPointerChar();
+  final password = params[1].toPointerChar();
+  final code = params[2].toPointerChar();
+  final result = _bindings.completeRecoveryByEmail(email,code,password).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
+  return Future.value(result.toBool());
+}
+
+Future<void> ffiDeleteAccount(String password) {
+  final result = _bindings.deleteAccount(password.toPointerChar()).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
+  return Future.value(result.toBool());
+}
+
+
+//Custom exception for handling error
 class NoPlansUpdate implements Exception {
   String message;
 

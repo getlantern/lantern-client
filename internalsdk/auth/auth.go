@@ -25,14 +25,14 @@ type authClient struct {
 
 type AuthClient interface {
 	//Sign up methods
-	SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error)
+	SignUp(email string, password string) ([]byte, error)
 	SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error)
 	SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error)
 
 	//Login methods
 	GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error)
 	LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error)
-	Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error)
+	Login(email string, password string, deviceId string) (*protos.LoginResponse, []byte, error)
 	// Recovery methods
 	StartRecoveryByEmail(ctx context.Context, loginData *protos.StartRecoveryByEmailRequest) (bool, error)
 	CompleteRecoveryByEmail(ctx context.Context, loginData *protos.CompleteRecoveryByEmailRequest) (bool, error)
@@ -94,7 +94,7 @@ func (c *authClient) GetSalt(ctx context.Context, email string) (*protos.GetSalt
 
 // Sign up API
 // SignUp is used to sign up a new user with the SignupRequest
-func (c *authClient) SignUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error) {
+func (c *authClient) signUp(ctx context.Context, signupData *protos.SignupRequest) (bool, error) {
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp)
 	if err != nil {
@@ -137,7 +137,7 @@ func (c *authClient) LoginPrepare(ctx context.Context, loginData *protos.Prepare
 }
 
 // Login is used to login a user with the LoginRequest
-func (c *authClient) Login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
+func (c *authClient) login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
 	var resp protos.LoginResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/login", nil, loginData, &resp)
 	if err != nil {
