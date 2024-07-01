@@ -289,7 +289,6 @@ Future<void> ffiValidateRecoveryByEmail(List<String> params) {
 }
 
 
-
 Future<void> ffiCompleteRecoveryByEmail(List<String> params) {
   final email = params[0].toPointerChar();
   final password = params[1].toPointerChar();
