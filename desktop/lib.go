@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/big"
 	"net/http"
 	"os"
 	"os/signal"
@@ -16,6 +17,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/1Password/srp"
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
@@ -267,7 +269,6 @@ func onSuccess() *C.char {
 
 func userCreate() error {
 	// User is new
-	a.Settings().SetUserFirstVisit(true)
 	user, err := proClient.UserCreate(context.Background())
 	if err != nil {
 		return errors.New("Could not create new Pro user: %v", err)
@@ -285,6 +286,7 @@ func fetchOrCreate() error {
 	settings := a.Settings()
 	userID := settings.GetUserID()
 	if userID == 0 {
+		a.Settings().SetUserFirstVisit(true)
 		err := userCreate()
 		if err != nil {
 			return err
@@ -378,6 +380,9 @@ func getUserData() (*protos.User, error) {
 	resp, err := proClient.UserData(context.Background())
 	if err != nil {
 		return nil, err
+	}
+	if resp.User == nil {
+		return nil, errors.New("User data not found")
 	}
 	user := resp.User
 	// if user != nil && user.Email != "" {
@@ -879,6 +884,23 @@ func isUserLoggedIn() *C.char {
 	return C.CString(stringValue)
 }
 
+func getUserSalt(email string) ([]byte, error) {
+	lowerCaseEmail := strings.ToLower(email)
+	salt := a.Settings().GetSalt()
+	if len(salt) == 16 {
+		log.Debugf("salt return from cache %v", salt)
+		return salt, nil
+	}
+	log.Debugf("Salt not found calling api for %s", email)
+	saltResponse, err := authClient.GetSalt(context.Background(), lowerCaseEmail)
+	if err != nil {
+		return nil, err
+	}
+	log.Debugf("Salt Response-> %v", saltResponse.Salt)
+	return salt, nil
+
+}
+
 // Authenticates the user with the given email and password.
 //
 //	Note-: On Sign up Client needed to generate 16 byte slat
@@ -1024,6 +1046,93 @@ func validateRecoveryByEmail(email *C.char, code *C.char) *C.char {
 		return sendError(log.Errorf("invalid_code Error: %v", err))
 	}
 	log.Debugf("Validate code response %v", recovery.Valid)
+	return C.CString("true")
+}
+
+// This will delete user accoutn and creates new user
+//
+//export deleteAccount
+func deleteAccount(password *C.char) *C.char {
+	email := a.Settings().GetEmailAddress()
+	lowerCaseEmail := strings.ToLower(email)
+	// Get the salt
+	salt, err := getUserSalt(lowerCaseEmail)
+	if err != nil {
+		return sendError(err)
+	}
+
+	encryptedKey := auth.GenerateEncryptedKey(C.GoString(password), lowerCaseEmail, salt)
+	log.Debugf("Encrypted key %v Login", encryptedKey)
+	// Prepare login request body
+	client := srp.NewSRPClient(srp.KnownGroups[srp.RFC5054Group3072], encryptedKey, nil)
+	//Send this key to client
+	A := client.EphemeralPublic()
+	//Create body
+	prepareRequestBody := &protos.PrepareRequest{
+		Email: lowerCaseEmail,
+		A:     A.Bytes(),
+	}
+	srpB, err := authClient.LoginPrepare(context.Background(), prepareRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("Login prepare response %v", srpB)
+
+	// // Once the client receives B from the server Client should check error status here as defense against
+	// // a malicious B sent from server
+	B := big.NewInt(0).SetBytes(srpB.B)
+
+	if err = client.SetOthersPublic(B); err != nil {
+		log.Errorf("Error while setting srpB %v", err)
+		return sendError(err)
+	}
+
+	// client can now make the session key
+	clientKey, err := client.Key()
+	if err != nil || clientKey == nil {
+		return sendError(log.Errorf("user_not_found error while generating Client key %v", err))
+	}
+
+	// // Step 3
+
+	// // check if the server proof is valid
+	if !client.GoodServerProof(salt, lowerCaseEmail, srpB.Proof) {
+		return sendError(log.Error("user_not_found error while checking server proof"))
+	}
+
+	clientProof, err := client.ClientProof()
+	if err != nil {
+		return sendError(log.Errorf("user_not_found error while generating client proof %v", err))
+	}
+	deviceId := a.Settings().GetDeviceID()
+
+	changeEmailRequestBody := &protos.DeleteUserRequest{
+		Email:     lowerCaseEmail,
+		Proof:     clientProof,
+		Permanent: true,
+		DeviceId:  deviceId,
+	}
+
+	log.Debugf("Delete Account request email %v prooof %v deviceId %v", lowerCaseEmail, clientProof, deviceId)
+	isAccountDeleted, err := authClient.DeleteAccount(context.Background(), changeEmailRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("Account Delted response %v", isAccountDeleted)
+
+	if !isAccountDeleted {
+		return sendError(log.Errorf("user_not_found error while deleting account %v", err))
+	}
+
+	// Clear local user data
+	clearLocalUserData()
+	// Set user id and token to nil
+	a.Settings().SetUserIDAndToken(0, "")
+	// Create new user
+	err = userCreate()
+	if err != nil {
+		return sendError(err)
+	}
 	return C.CString("true")
 }
 

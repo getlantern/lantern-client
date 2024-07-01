@@ -655,6 +655,22 @@ class NativeLibrary {
   late final _validateRecoveryByEmail = _validateRecoveryByEmailPtr.asFunction<
       ffi.Pointer<ffi.Char> Function(
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  /// This will delete user accoutn and creates new user
+  ffi.Pointer<ffi.Char> deleteAccount(
+    ffi.Pointer<ffi.Char> password,
+  ) {
+    return _deleteAccount(
+      password,
+    );
+  }
+
+  late final _deleteAccountPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('deleteAccount');
+  late final _deleteAccount = _deleteAccountPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 }
 
 /// mbstate_t is an opaque object to keep conversion state, during multibyte

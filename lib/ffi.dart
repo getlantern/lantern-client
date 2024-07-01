@@ -298,6 +298,12 @@ Future<void> ffiCompleteRecoveryByEmail(List<String> params) {
   return Future.value(result.toBool());
 }
 
+Future<void> ffiDeleteAccount(String password) {
+  final result = _bindings.deleteAccount(password.toPointerChar()).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
+  return Future.value(result.toBool());
+}
+
 
 //Custom exception for handling error
 class NoPlansUpdate implements Exception {

@@ -759,7 +759,7 @@ func (s *Settings) SetUserLoggedIn(value bool) {
 }
 
 func (s *Settings) GetSalt() []byte {
-	return s.getbytes(SNPaymentMethods)
+	return s.getbytes(SNSalt)
 }
 
 func (s *Settings) SaveSalt(salt []byte) {

@@ -478,8 +478,6 @@ func (app *App) HasSucceedingProxy() bool {
 }
 
 func (app *App) GetHasConfigFetched() bool {
-
-	log.Debugf("Global config fetched: %v, Proxies config fetched: %v")
 	return atomic.LoadInt32(&app.fetchedGlobalConfig) == 1
 }
 
