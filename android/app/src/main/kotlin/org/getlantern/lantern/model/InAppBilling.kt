@@ -21,6 +21,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.JsonObject
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.util.ProClient
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentHashMap
 
@@ -32,8 +33,6 @@ class InAppBilling(
 ) : PurchasesUpdatedListener, InAppBillingInterface {
     companion object {
         private val TAG = InAppBilling::class.java.simpleName
-        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
-
     }
 
     init {
@@ -203,12 +202,12 @@ class InAppBilling(
                             it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
                         val proModel = ProPlan(
                             id,
+                            it.description,
                             hashMapOf(currency to price.toLong()),
                             hashMapOf(currency to priceWithoutTax.toLong()),
                             "2" == years,
                             hashMapOf("years" to years.toInt()),
                         )
-                        proModel.description = it.description
 
                         plans[id] = proModel
                         skus[id] = it
@@ -341,25 +340,6 @@ class InAppBilling(
         json.addProperty("currency", currency.lowercase())
         json.addProperty("deviceName", session.deviceName())
         json.addProperty("token", token)
-
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/purchase"),
-            LanternHttpClient.createJsonBody(json),
-            object : LanternHttpClient.ProCallback {
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    Logger.debug(TAG, "Making server acknowledgement response: $response")
-                }
-
-                override fun onFailure(
-                    t: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Error while making server acknowledgement: $error")
-                }
-            },
-        )
+        ProClient.acknowledgePurchase(json)
     }
 }

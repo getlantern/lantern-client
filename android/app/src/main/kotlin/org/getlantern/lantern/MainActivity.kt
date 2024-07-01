@@ -32,9 +32,6 @@ import org.getlantern.lantern.event.AppEvent.*
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
-import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
 import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProError
 import org.getlantern.lantern.model.ProPlan
@@ -44,6 +41,8 @@ import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.Json
+import org.getlantern.lantern.util.ProClient
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -69,7 +68,6 @@ class MainActivity :
     private lateinit var receiver: NotificationReceiver
     private var accountInitDialog: AlertDialog? = null
     private var autoUpdateJob: Job? = null
-    private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(
         @NonNull flutterEngine: FlutterEngine,
@@ -126,9 +124,11 @@ class MainActivity :
                     )
                 }
                 is AppEvent.StatusEvent -> {
-                    updateUserData()
-                    updatePaymentMethods()
-                    updateCurrencyList()
+                    ProClient.updateUserData()
+                    ProClient.updatePaymentMethods(this, { proPlans, paymentMethods ->
+                        sessionModel.processPaymentMethods(proPlans, paymentMethods)
+                    })
+                    ProClient.updateCurrenciesList()
                 }
                 is AppEvent.VpnStateEvent -> {
                     updateStatus(appEvent.vpnState.useVpn)
@@ -224,6 +224,7 @@ class MainActivity :
         }
 
         sessionModel.checkAdsAvailability()
+
         Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
 
@@ -294,87 +295,6 @@ class MainActivity :
                 )
             }
         }
-    }
-
-    private fun updateUserData() {
-        lanternClient.userData(
-            object : ProUserCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch user data: $error", throwable)
-                }
-
-                override fun onSuccess(
-                    response: Response,
-                    user: ProUser,
-                ) {
-                    // save latest user data
-                    LanternApp.getSession().storeUserData(user)
-                }
-            },
-        )
-    }
-
-    private fun updatePaymentMethods() {
-        lanternClient.plansV4(
-            object : PlansV3Callback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
-                }
-
-                override fun onSuccess(
-                    proPlans: Map<String, ProPlan>,
-                    paymentMethods: List<PaymentMethods>,
-                ) {
-                    Logger.debug(
-                        TAG,
-                        "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans",
-                    )
-                    sessionModel.processPaymentMethods(proPlans, paymentMethods)
-                }
-            },
-        )
-    }
-
-    private fun updateCurrencyList() {
-        val url = LanternHttpClient.createProUrl("/supported-currencies")
-        lanternClient.get(
-            url,
-            object : LanternHttpClient.ProCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch currency list: $error", throwable)
-                /*
-                retry to fetch currency list again
-                fetch until we get the currency list
-                retry after 5 seconds
-                 */
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(5000)
-                        updateCurrencyList()
-                    }
-                }
-
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    val currencies = result?.getAsJsonArray("supported-currencies")
-                    val currencyList = mutableListOf<String>()
-                    currencies?.forEach {
-                        currencyList.add(it.asString.lowercase())
-                    }
-                    LanternApp.getSession().setCurrencyList(currencyList)
-                }
-            },
-        )
     }
 
     private fun doProcessLoconf(loconf: LoConf) {

@@ -41,7 +41,7 @@ class LoConf {
         }
 
         fun fetch(loconfUrl: String, cb: LoConfCallback) {
-            fetch(LanternApp.getHttpClient(), loconfUrl, cb)
+            //fetch(LanternApp.getHttpClient(), loconfUrl, cb)
         }
 
         fun fetch(client: HttpClient, loconfUrl: String, cb: LoConfCallback) {

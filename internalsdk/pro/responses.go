@@ -11,6 +11,11 @@ type PaymentMethodsResponse struct {
 	Logo                 map[string]interface{}            `json:"icons"`
 }
 
+type CurrenciesResponse struct {
+	*protos.BaseResponse `json:",inline"`
+	Currencies           []string `json:"supported-currencies"`
+}
+
 type PaymentRedirectResponse struct {
 	*protos.BaseResponse `json:",inline"`
 	Redirect             string `json:"redirect"`

@@ -48,6 +48,7 @@ type ProClient interface {
 	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
 	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
 	DeviceAdd(ctx context.Context, deviceName string) (bool, error)
+	SupportedCurrencies(ctx context.Context) (*CurrenciesResponse, error)
 }
 
 // NewClient creates a new instance of ProClient
@@ -83,6 +84,16 @@ func (c *proClient) defaultParams() map[string]interface{} {
 		"locale": uc.GetLanguage(),
 	}
 	return params
+}
+
+// SupportedCurrencies returns a list of currencies that are currently supported to pay for Pro
+func (c *proClient) SupportedCurrencies(ctx context.Context) (*CurrenciesResponse, error) {
+	var resp CurrenciesResponse
+	err := c.webclient.GetJSON(ctx, "/supported-currencies", nil, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
 }
 
 // EmailExists is used to check if an email address belongs to an existing Pro account

@@ -1,12 +1,10 @@
 package org.getlantern.lantern
 
-//import org.getlantern.lantern.util.SentryUtil
 import android.app.Application
 import android.content.Context
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
 import org.getlantern.lantern.model.InAppBilling
-import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.model.MessagingHolder
 import org.getlantern.lantern.util.LanternProxySelector
@@ -49,8 +47,6 @@ open class LanternApp : Application() {
 
         LanternProxySelector(session)
 
-        lanternHttpClient = LanternHttpClient()
-
         // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
         // about proxies being unavailable.
         session.resetHasSucceedingProxy()
@@ -62,7 +58,6 @@ open class LanternApp : Application() {
         private val TAG = LanternApp::class.java.simpleName
         private lateinit var appContext: Context
         private lateinit var inAppBilling: InAppBilling
-        private lateinit var lanternHttpClient: LanternHttpClient
         private lateinit var session: LanternSessionManager
         var messaging: MessagingHolder = MessagingHolder()
 
@@ -72,18 +67,8 @@ open class LanternApp : Application() {
         }
 
         @JvmStatic
-        fun getHttpClient(): HttpClient {
-            return lanternHttpClient
-        }
-
-        @JvmStatic
         fun getInAppBilling(): InAppBilling {
             return inAppBilling
-        }
-
-        @JvmStatic
-        fun getLanternHttpClient(): LanternHttpClient {
-            return lanternHttpClient
         }
 
         @JvmStatic

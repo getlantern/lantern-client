@@ -324,14 +324,16 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
 
-        val devices = Vpn.Devices.newBuilder().addAllDevices(
-            user.devices.map {
-                Vpn.Device.newBuilder().setId(it.id)
-                    .setName(it.name).setCreated(it.created).build()
-            },
-        ).build()
-        db.mutate { tx ->
-            tx.put(DEVICES, devices)
+        user.devices?.let {
+            val devices = Vpn.Devices.newBuilder().addAllDevices(
+                user.devices.map {
+                    Vpn.Device.newBuilder().setId(it.id)
+                        .setName(it.name).setCreated(it.created).build()
+                },
+            ).build()
+            db.mutate { tx ->
+                tx.put(DEVICES, devices)
+            }
         }
 
         if (user.isProUser) {
@@ -349,18 +351,14 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setUserPlans(context: Context, proPlans: Map<String, ProPlan>) {
-        for (planId in proPlans.keys) {
-            proPlans[planId]?.let { PlansUtil.updatePrice(context, it) }
-        }
-
         plans.clear()
         plans.putAll(proPlans)
+
         db.mutate { tx ->
             proPlans.values.forEach {
                 try {
                     val planID = it.id.substringBefore('-')
                     val path = PLANS + planID
-
                     val planItem = Vpn.Plan.newBuilder().setId(it.id)
                         .setDescription(it.description).setBestValue(it.bestValue)
                         .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime)
@@ -373,7 +371,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                         planItem,
                     )
                 } catch (e: Exception) {
-                    Logger.error(TAG, e.message)
+                    Logger.error(TAG, "Unable to put plans in db: ${e.message}")
                 }
             }
         }
@@ -397,7 +395,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                         .addAllProviders(
                             methods.providers.map {
                                 // Check if payment provider is stipe add pubkey
-                                if (it.name == PaymentProvider.Stripe) {
+                                if (it.name == PaymentProvider.Stripe && it.data != null) {
                                     setStripePubKey(it.data["pubKey"] as String)
                                 }
                                 Vpn.PaymentProviders.newBuilder()
