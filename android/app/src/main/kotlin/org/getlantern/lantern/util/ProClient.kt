@@ -2,6 +2,7 @@ package org.getlantern.lantern.util
 
 import internalsdk.Internalsdk
 import com.google.gson.JsonObject
+import android.content.Context
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
@@ -11,6 +12,7 @@ import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.mobilesdk.Logger
+import org.getlantern.lantern.R
 
 abstract class APIResponse(
     var error: String? = null,
@@ -129,16 +131,15 @@ object ProClient {
         response?.let { Logger.debug(TAG, "Making server acknowledgement response: $response") }
     }
 
-    private fun plansMap(fetched: List<ProPlan>): Map<String, ProPlan> {
+    private fun plansMap(activity: Context, fetched: List<ProPlan>): Map<String, ProPlan> {
         val plans = mutableMapOf<String, ProPlan>()
         for (plan in fetched) {
-            plan.formatCost()
-            plans.put(plan.id, plan)
+            plans.put(plan.id, PlansUtil.updatePrice(activity, plan))
         }
         return plans
     }
 
-    fun updatePaymentMethods(callback: ((proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) -> Unit)? = null) {
+    fun updatePaymentMethods(activity: Context, callback: ((proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) -> Unit)? = null) {
         val result = JsonUtil.asJsonObject(proClient.paymentMethods())
         val methods:Map<String, List<PaymentMethods>>? = JsonUtil.fromJson<Map<String, List<PaymentMethods>>>(result?.get("providers").toString())
         if (methods == null) return
@@ -159,7 +160,7 @@ object ProClient {
             }
         }
         val fetched = JsonUtil.fromJson<List<ProPlan>>(result?.get("plans").toString())
-        val plans = plansMap(fetched)
+        val plans = plansMap(activity, fetched)
         Logger.debug(TAG, "Successfully fetched payment methods with providers: $providers and plans $plans")
         if (providers != null) callback?.invoke(plans, providers)
     }

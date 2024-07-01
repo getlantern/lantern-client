@@ -125,7 +125,7 @@ class MainActivity :
                 }
                 is AppEvent.StatusEvent -> {
                     ProClient.updateUserData()
-                    ProClient.updatePaymentMethods({ proPlans, paymentMethods ->
+                    ProClient.updatePaymentMethods(this, { proPlans, paymentMethods ->
                         sessionModel.processPaymentMethods(proPlans, paymentMethods)
                     })
                     ProClient.updateCurrenciesList()

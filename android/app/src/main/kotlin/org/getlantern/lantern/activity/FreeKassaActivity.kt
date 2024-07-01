@@ -133,7 +133,7 @@ open class FreeKassaActivity : BaseFragmentActivity() {
             }
 
             val plan = LanternApp.getSession().planByID(planID!!)!!
-            val currency = plan.currency
+            val currency = plan.currencyCode
             val u = FreeKassa.getPayURI(
                 merchantId,
                 price!!,

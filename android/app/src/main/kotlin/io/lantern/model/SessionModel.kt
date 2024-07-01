@@ -284,7 +284,7 @@ class SessionModel(
     }
 
     private fun fetchPaymentMethods(result: MethodChannel.Result?) {
-        ProClient.updatePaymentMethods({ proPlans, paymentMethods ->
+        ProClient.updatePaymentMethods(activity, { proPlans, paymentMethods ->
             result?.success("Payment method successfully updated")
         })
     }

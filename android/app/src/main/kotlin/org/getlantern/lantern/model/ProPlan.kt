@@ -2,30 +2,30 @@ package org.getlantern.lantern.model
 
 import java.util.Currency
 
-data class ProPlanNew(
+data class ProPlan(
     val id: String,
-    val description: String,
-    val bestValue: Boolean,
-    val duration: Map<String, Int>,
-    val price: Map<String, Long>,
-    val discount: Float,
-    val renewalBonusExpected: MutableMap<String, Int>,
-    var oneMonthCost: String,
-    var renewalText: String,
-    var totalCost: String,
+    var description: String,
+    var price: Map<String, Long> = mutableMapOf<String, Long>(),
+    var priceWithoutTax: Map<String, Long> = mutableMapOf<String, Long>(),
+    var bestValue: Boolean = false,
+    var duration: Map<String, Int> = mutableMapOf<String, Int>(),
+    var discount: Double = 0.0,
+    var renewalBonusExpected: MutableMap<String, Int> = mutableMapOf<String, Int>(),
+    var expectedMonthlyPrice: MutableMap<String, Int> = mutableMapOf<String, Int>(),
+    var renewalText: String = "",
+    var totalCost: String = "",
+    var currencyCode: String = "",
+    var oneMonthCost: String = ""
 ) {
-
-    val currencyCode: String? = null
-    var formattedDiscount: String? = null
-    var formattedBonus: String = ""
-
     private val currency: Currency? = null
-    var costStr: String? = null
+    var formattedBonus: String = ""
+    var formattedDiscount: String = ""
+    var costStr: String = ""
     var costWithoutTaxStr: String? = null
-    var totalCostBilledOneTime: String? = null
+    var totalCostBilledOneTime: String = ""
 
-    private fun formattedCost():String {
-        if (currencyCode == null || price.get(currencyCode) == null) return ""
+    fun formattedCost():String {
+        if (currencyCode == "" || price.get(currencyCode) == null) return ""
         val currencyPrice:Long = price.get(currencyCode)!!
         var formattedPrice = ""
         formattedPrice = when (currencyCode.lowercase()) {
@@ -45,10 +45,5 @@ data class ProPlanNew(
         return currency()?.let {
             return it.symbol
         } ?: ""
-    }
-
-    fun formatCost() {
-        if (currencyCode == null) return
-        costStr = formattedCost()
     }
 }
