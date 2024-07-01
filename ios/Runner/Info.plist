@@ -39,8 +39,6 @@
 	<string>Lantern require access to your photo library for essential functionality.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Lantern require access to your photo library for essential functionality.</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>This identifier will be used to deliver personalized ads to you.</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
