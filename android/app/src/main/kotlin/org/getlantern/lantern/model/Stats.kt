@@ -7,6 +7,4 @@ data class Stats(
   val httpsUpgrades: Long = 0,
   val adsBlocked: Long = 0,
   val hasSucceedingProxy:Boolean = false
-) {
-
-}
+)
