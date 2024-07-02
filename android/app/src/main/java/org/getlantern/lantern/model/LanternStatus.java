@@ -1,6 +1,6 @@
 package org.getlantern.lantern.model;
 
-public class LanternStatus {
+/*public class LanternStatus {
 
     private final Status status;
 
@@ -20,4 +20,4 @@ public class LanternStatus {
         return status != null &&
                 status.equals(Status.ON);
     }
-}
+}*/

@@ -800,7 +800,7 @@ func (m *SessionModel) IsStoreVersion() (bool, error) {
 	return pathdb.Get[bool](m.db, pathStoreVersion)
 }
 
-func (m *SessionModel) GetEmail() (string, error) {
+func (m *SessionModel) Email() (string, error) {
 	return pathdb.Get[string](m.db, pathEmailAddress)
 }
 
@@ -1555,7 +1555,7 @@ func clearLocalUserData(session SessionModel) error {
 }
 
 func deleteAccount(session SessionModel, password string) error {
-	email, err := session.GetEmail()
+	email, err := session.Email()
 	if err != nil {
 		return err
 	}

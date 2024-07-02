@@ -83,7 +83,7 @@ type Session interface {
 	GetDNSServer() (string, error)
 	Provider() (string, error)
 	IsStoreVersion() (bool, error)
-	GetEmail() (string, error)
+	Email() (string, error)
 	Currency() (string, error)
 	DeviceOS() (string, error)
 	IsProUser() (bool, error)
@@ -120,7 +120,7 @@ type PanickingSession interface {
 	GetTimeZone() string
 	Code() string
 	GetCountryCode() string
-	GetEmail() string
+	Email() string
 	GetForcedCountryCode() string
 	GetDNSServer() string
 	Provider() string
@@ -160,8 +160,8 @@ func (s *panickingSessionImpl) GetAppName() string {
 	return s.wrapped.GetAppName()
 }
 
-func (s *panickingSessionImpl) GetEmail() string {
-	result, err := s.wrapped.GetEmail()
+func (s *panickingSessionImpl) Email() string {
+	result, err := s.wrapped.Email()
 	panicIfNecessary(err)
 	return result
 }
@@ -312,7 +312,7 @@ type UserConfig struct {
 
 func (uc *UserConfig) GetAppName() string              { return common.DefaultAppName }
 func (uc *UserConfig) GetDeviceID() string             { return uc.session.GetDeviceID() }
-func (uc *UserConfig) GetEmail() string                { return uc.session.GetEmail() }
+func (uc *UserConfig) GetEmail() string                { return uc.session.Email() }
 func (uc *UserConfig) GetUserID() int64                { return uc.session.GetUserID() }
 func (uc *UserConfig) GetToken() string                { return uc.session.GetToken() }
 func (uc *UserConfig) GetEnabledExperiments() []string { return nil }
