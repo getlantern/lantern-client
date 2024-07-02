@@ -393,7 +393,7 @@ dependencies {
     // from https://github.com/getlantern/opus_android
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
-    implementation 'com.github.getlantern:db-android:5a082e0bdd'
+    implementation 'com.github.getlantern:db-android:2f6a3920db'
     implementation 'com.github.getlantern:messaging-android:ca369d5173'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
