@@ -33,7 +33,6 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.90
 	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
@@ -147,6 +146,7 @@ require (
 	github.com/getlantern/enhttp v0.0.0-20210901195634-6f89d45ee033 // indirect
 	github.com/getlantern/event v0.0.0-20210901195647-a7e3145142e6 // indirect
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
+	github.com/getlantern/flashlight/v7 v7.6.90 // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
 	github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9 // indirect
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 // indirect

@@ -138,22 +138,10 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 			Timeout:   dialTimeout,
 		},
 		UserConfig: func() common.UserConfig {
-			deviceID, _ := m.GetDeviceID()
-			userID, _ := m.GetUserID()
-			token, _ := m.GetToken()
-			lang, _ := m.Locale()
-			internalHeaders := map[string]string{
+			return sessionToUserConfig(m, map[string]string{
 				common.PlatformHeader:   opts.Platform,
 				common.AppVersionHeader: common.ApplicationVersion,
-			}
-			return common.NewUserConfig(
-				common.DefaultAppName,
-				deviceID,
-				userID,
-				token,
-				internalHeaders,
-				lang,
-			)
+			})
 		},
 	}
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
@@ -162,6 +150,21 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
+}
+
+func sessionToUserConfig(m *SessionModel, internalHeaders map[string]string) common.UserConfig {
+	deviceID, _ := m.GetDeviceID()
+	userID, _ := m.GetUserID()
+	token, _ := m.GetToken()
+	lang, _ := m.Locale()
+	return common.NewUserConfig(
+		common.DefaultAppName,
+		deviceID,
+		userID,
+		token,
+		internalHeaders,
+		lang,
+	)
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -341,7 +344,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "signOut":
-		err := signOut(*m)
+		err := signOut(m)
 		if err != nil {
 			return nil, err
 		}
@@ -797,7 +800,7 @@ func (m *SessionModel) IsStoreVersion() (bool, error) {
 	return pathdb.Get[bool](m.db, pathStoreVersion)
 }
 
-func (m *SessionModel) Email() (string, error) {
+func (m *SessionModel) GetEmail() (string, error) {
 	return pathdb.Get[string](m.db, pathEmailAddress)
 }
 
@@ -1208,32 +1211,10 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 //	Then use srpClient.Verifier() to generate verifierKey
 func signup(session *SessionModel, email string, password string) error {
 	lowerCaseEmail := strings.ToLower(email)
-	err := setEmail(session.baseModel, lowerCaseEmail)
+	salt, err := session.authClient.SignUp(lowerCaseEmail, password)
 	if err != nil {
 		return err
 	}
-	salt, err := GenerateSalt()
-	if err != nil {
-		return err
-	}
-
-	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
-	verifierKey, err := srpClient.Verifier()
-	if err != nil {
-		return err
-	}
-	signUpRequestBody := &protos.SignupRequest{
-		Email:                 lowerCaseEmail,
-		Salt:                  salt,
-		Verifier:              verifierKey.Bytes(),
-		SkipEmailConfirmation: true,
-	}
-	log.Debugf("Sign up request email %v, salt %v verifier %v verifiter in bytes %v", lowerCaseEmail, salt, verifierKey, verifierKey.Bytes())
-	signupResponse, err := session.authClient.SignUp(context.Background(), signUpRequestBody)
-	if err != nil {
-		return err
-	}
-	log.Debugf("sign up response %v", signupResponse)
 	//Request successfull then save salt
 	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
@@ -1288,67 +1269,8 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 func login(session *SessionModel, email string, password string) error {
 	lowerCaseEmail := strings.ToLower(email)
 	start := time.Now()
-	// Get the salt
-	salt, err := getUserSalt(session, lowerCaseEmail)
-	if err != nil {
-		return err
-	}
-
-	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
-	log.Debugf("Encrypted key %v Login", encryptedKey)
-	// Prepare login request body
-	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
-	//Send this key to client
-	A := client.EphemeralPublic()
-	//Create body
-	prepareRequestBody := &protos.PrepareRequest{
-		Email: lowerCaseEmail,
-		A:     A.Bytes(),
-	}
-	srpB, err := session.authClient.LoginPrepare(context.Background(), prepareRequestBody)
-	if err != nil {
-		return err
-	}
-	log.Debugf("Login prepare response %v", srpB)
-
-	// // Once the client receives B from the server Client should check error status here as defense against
-	// // a malicious B sent from server
-	B := big.NewInt(0).SetBytes(srpB.B)
-
-	if err = client.SetOthersPublic(B); err != nil {
-		log.Errorf("Error while setting srpB %v", err)
-		return err
-	}
-
-	// client can now make the session key
-	clientKey, err := client.Key()
-	if err != nil || clientKey == nil {
-		return log.Errorf("user_not_found error while generating Client key %v", err)
-	}
-
-	// // Step 3
-
-	// // check if the server proof is valid
-	if !client.GoodServerProof(salt, lowerCaseEmail, srpB.Proof) {
-		return log.Errorf("user_not_found error while checking server proof%v", err)
-	}
-
-	clientProof, err := client.ClientProof()
-	if err != nil {
-		return log.Errorf("user_not_found error while generating client proof %v", err)
-	}
-	deviceId, err := session.GetDeviceID()
-	if err != nil {
-		return err
-	}
-	loginRequestBody := &protos.LoginRequest{
-		Email:    lowerCaseEmail,
-		Proof:    clientProof,
-		DeviceId: deviceId,
-	}
-	log.Debugf("Login request body %v", loginRequestBody)
-
-	login, err := session.authClient.Login(context.Background(), loginRequestBody)
+	uc := NewUserConfig(NewPanickingSession(session))
+	login, salt, err := session.authClient.Login(uc, lowerCaseEmail, password)
 	if err != nil {
 		return err
 	}
@@ -1445,13 +1367,13 @@ func startRecoveryByEmail(session *SessionModel, email string) error {
 func completeRecoveryByEmail(session *SessionModel, email string, code string, password string) error {
 	//Create body
 	lowerCaseEmail := strings.ToLower(email)
-	newsalt, err := GenerateSalt()
+	newsalt, err := auth.GenerateSalt()
 	if err != nil {
 		return err
 	}
 	log.Debugf("Slat %v and length %v", newsalt, len(newsalt))
 
-	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, newsalt)
+	encryptedKey := auth.GenerateEncryptedKey(password, lowerCaseEmail, newsalt)
 	log.Debugf("Encrypted key %v completeRecoveryByEmail", encryptedKey)
 	srpClient := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
 	verifierKey, err := srpClient.Verifier()
@@ -1511,8 +1433,7 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 	}
 
 	// Prepare login request body
-	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
-
+	client := srp.NewSRPClient(srp.KnownGroups[group], auth.GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
 	//Send this key to client
 	A := client.EphemeralPublic()
 
@@ -1567,13 +1488,13 @@ func startChangeEmail(session SessionModel, email string, newEmail string, passw
 
 func completeChangeEmail(session SessionModel, email string, newEmail string, password string, code string) error {
 	// Create new salt and verifier with new email and new slat
-	newsalt, err := GenerateSalt()
+	newsalt, err := auth.GenerateSalt()
 	if err != nil {
 		return err
 	}
 	log.Debugf("Slat %v and length %v", newsalt, len(newsalt))
 
-	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, newEmail, newsalt), nil)
+	srpClient := srp.NewSRPClient(srp.KnownGroups[group], auth.GenerateEncryptedKey(password, newEmail, newsalt), nil)
 	verifierKey, err := srpClient.Verifier()
 	if err != nil {
 		return err
@@ -1596,37 +1517,10 @@ func completeChangeEmail(session SessionModel, email string, newEmail string, pa
 }
 
 // Clear slat and change accoutn state
-func signOut(session SessionModel) error {
-	email, err := session.Email()
-	if err != nil {
-		return log.Errorf("Email not found %v", err)
-	}
-
-	deviceId, err := session.GetDeviceID()
-	if err != nil {
-		return log.Errorf("deviceId not found %v", err)
-	}
-
-	token, err := session.GetToken()
-	if err != nil {
-		return log.Errorf("token not found %v", err)
-	}
-
-	userId, err := session.GetUserID()
-	if err != nil {
-		return log.Errorf("userid not found %v", err)
-	}
-
-	signoutData := &protos.LogoutRequest{
-		Email:        email,
-		DeviceId:     deviceId,
-		LegacyToken:  token,
-		LegacyUserID: userId,
-	}
-
-	log.Debugf("Sign out request %+v", signoutData)
-
-	loggedOut, logoutErr := session.authClient.SignOut(context.Background(), signoutData)
+func signOut(session *SessionModel) error {
+	uc := NewUserConfig(NewPanickingSession(session))
+	ctx := context.Background()
+	loggedOut, logoutErr := session.authClient.SignOut(ctx, uc)
 	if logoutErr != nil {
 		return log.Errorf("Error while signing out %v", logoutErr)
 	}
@@ -1634,12 +1528,10 @@ func signOut(session SessionModel) error {
 	if !loggedOut {
 		return log.Errorf("Error while signing out %v", logoutErr)
 	}
-
-	err = clearLocalUserData(session)
-	if err != nil {
+	if err := clearLocalUserData(*session); err != nil {
 		return log.Errorf("Error while clearing local data %v", err)
 	}
-	return session.userCreate(context.Background())
+	return session.userCreate(ctx)
 }
 
 func clearLocalUserData(session SessionModel) error {
@@ -1663,7 +1555,7 @@ func clearLocalUserData(session SessionModel) error {
 }
 
 func deleteAccount(session SessionModel, password string) error {
-	email, err := session.Email()
+	email, err := session.GetEmail()
 	if err != nil {
 		return err
 	}
@@ -1678,7 +1570,7 @@ func deleteAccount(session SessionModel, password string) error {
 	}
 
 	// Prepare login request body
-	client := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
+	client := srp.NewSRPClient(srp.KnownGroups[group], auth.GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
 
 	//Send this key to client
 	A := client.EphemeralPublic()

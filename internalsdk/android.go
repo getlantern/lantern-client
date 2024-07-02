@@ -49,6 +49,8 @@ var (
 	dnsGrabEventual          = eventual.NewValue()
 	dnsGrabAddrEventual      = eventual.NewValue()
 	errNoAdProviderAvailable = errors.New("no ad provider available")
+	dialTimeout              = 30 * time.Second
+	userConfig               *UserConfig
 )
 
 type Settings interface {
@@ -81,7 +83,7 @@ type Session interface {
 	GetDNSServer() (string, error)
 	Provider() (string, error)
 	IsStoreVersion() (bool, error)
-	Email() (string, error)
+	GetEmail() (string, error)
 	Currency() (string, error)
 	DeviceOS() (string, error)
 	IsProUser() (bool, error)
@@ -118,11 +120,11 @@ type PanickingSession interface {
 	GetTimeZone() string
 	Code() string
 	GetCountryCode() string
+	GetEmail() string
 	GetForcedCountryCode() string
 	GetDNSServer() string
 	Provider() string
 	IsStoreVersion() bool
-	Email() string
 	Currency() string
 	DeviceOS() string
 	IsProUser() bool
@@ -156,6 +158,12 @@ func (s *panickingSessionImpl) Wrapped() Session {
 
 func (s *panickingSessionImpl) GetAppName() string {
 	return s.wrapped.GetAppName()
+}
+
+func (s *panickingSessionImpl) GetEmail() string {
+	result, err := s.wrapped.GetEmail()
+	panicIfNecessary(err)
+	return result
 }
 
 func (s *panickingSessionImpl) GetDeviceID() string {
@@ -254,12 +262,6 @@ func (s *panickingSessionImpl) IsStoreVersion() bool {
 	return result
 }
 
-func (s *panickingSessionImpl) Email() string {
-	result, err := s.wrapped.Email()
-	panicIfNecessary(err)
-	return result
-}
-
 func (s *panickingSessionImpl) Currency() string {
 	result, err := s.wrapped.Currency()
 	panicIfNecessary(err)
@@ -310,6 +312,7 @@ type UserConfig struct {
 
 func (uc *UserConfig) GetAppName() string              { return common.DefaultAppName }
 func (uc *UserConfig) GetDeviceID() string             { return uc.session.GetDeviceID() }
+func (uc *UserConfig) GetEmail() string                { return uc.session.GetEmail() }
 func (uc *UserConfig) GetUserID() int64                { return uc.session.GetUserID() }
 func (uc *UserConfig) GetToken() string                { return uc.session.GetToken() }
 func (uc *UserConfig) GetEnabledExperiments() []string { return nil }
@@ -554,7 +557,8 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		config.ForceCountry(forcedCountryCode)
 	}
 
-	userConfig := NewUserConfig(session)
+	userConfig = NewUserConfig(session)
+
 	globalConfigChanged := make(chan interface{})
 	geoRefreshed := geolookup.OnRefresh()
 
