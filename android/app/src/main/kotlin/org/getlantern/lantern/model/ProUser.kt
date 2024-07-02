@@ -7,14 +7,14 @@ import org.joda.time.Months
 data class ProUser(
     val userId: Long,
     val token: String,
-    val referral: String,
-    val email: String,
-    val userStatus: String,
-    val code: String,
-    val subscription: String,
-    val expiration: Long,
-    val devices: List<Device>,
-    val userLevel: String,
+    val referral: String = "",
+    val email: String = "",
+    val userStatus: String = "",
+    val code: String = "",
+    val subscription: String = "",
+    val expiration: Long = 0,
+    val devices: List<Device> = mutableListOf<Device>(),
+    val userLevel: String = "",
 ) {
     private fun isUserStatus(status: String) = userStatus == status
 
