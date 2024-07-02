@@ -113,13 +113,22 @@ func fetchUserDataWithClient(ctx context.Context, proClient pro.ProClient, uc co
 	if err != nil {
 		return nil, err
 	}
-	setUserData(ctx, userID, resp.User)
+	SetUserData(ctx, userID, resp.User)
 	log.Debugf("User %d is '%v'", userID, resp.User.UserStatus)
 	return resp, nil
 }
 
-func setUserData(ctx context.Context, userID int64, user *protos.User) {
+func SetUserData(ctx context.Context, userID int64, user *protos.User) {
 	log.Debugf("Storing user data for user %v", userID)
+	userData.save(ctx, userID, user)
+}
+
+func SetUserDevices(ctx context.Context, userID int64, devices []*protos.Device) {
+	user, found := userData.get(ctx, userID)
+	if !found {
+		return
+	}
+	user.Devices = devices
 	userData.save(ctx, userID, user)
 }
 

@@ -930,6 +930,15 @@ func login(email *C.char, password *C.char) *C.char {
 	if err != nil {
 		return sendError(err)
 	}
+	// User has more than 3 device connected to device
+	if !user.Success {
+		err := deviceLimitFlow(user)
+		if err != nil {
+			return sendError(log.Errorf("error while starting device limit flow %v", err))
+		}
+		return sendError(log.Errorf("too-many-devices %v", err))
+	}
+
 	log.Debugf("User login successfull %+v", user)
 	// save salt and email in settings
 	saveUserSalt(salt)
@@ -975,6 +984,29 @@ func logout() *C.char {
 		return sendError(err)
 	}
 	return C.CString("true")
+}
+
+// User has reached device limit
+// Save latest device
+func deviceLimitFlow(login *protos.LoginResponse) error {
+	var protoDevices []*protos.Device
+	for _, device := range login.Devices {
+		protoDevice := &protos.Device{
+			Id:      device.Id,
+			Name:    device.Name,
+			Created: device.Created,
+		}
+		protoDevices = append(protoDevices, protoDevice)
+	}
+
+	user := &protos.User{
+		UserId:  login.LegacyID,
+		Token:   login.LegacyToken,
+		Devices: protoDevices,
+	}
+
+	app.SetUserData(context.Background(), login.LegacyID, user)
+	return nil
 }
 
 // Send recovery code to user email

@@ -26,6 +26,7 @@ func NewSRPClient(email string, password string, salt []byte) *srp.SRP {
 func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) *protos.User {
 	// Convert protobuf to usre details struct
 	log.Debugf("ConvertToUserDetailsResponse %+v", userResponse)
+	log.Debugf("ConvertToUserDetailsResponse  legacy %+v", userResponse.LegacyUserData)
 
 	user := userResponse.LegacyUserData
 
