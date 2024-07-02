@@ -41,7 +41,6 @@ import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
-import org.getlantern.lantern.util.Json
 import org.getlantern.lantern.util.ProClient
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.showAlertDialog

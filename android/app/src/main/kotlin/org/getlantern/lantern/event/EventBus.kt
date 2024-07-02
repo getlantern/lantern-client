@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.mobilesdk.model.LoConf

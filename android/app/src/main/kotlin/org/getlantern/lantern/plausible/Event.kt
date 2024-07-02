@@ -1,6 +1,6 @@
 package org.getlantern.lantern.plausible
 
-import org.getlantern.lantern.util.Json
+import org.getlantern.lantern.util.JsonUtil
 
 internal data class Event(
     val domain: String,
@@ -12,11 +12,11 @@ internal data class Event(
 ) {
     companion object {
         fun fromJson(json: String): Event? = try {
-            Json.gson.fromJson(json, Event::class.java)
+            JsonUtil.fromJson(json, Event::class.java)
         } catch (ignored: Exception) {
             null
         }
     }
 }
 
-internal fun Event.toJson(): String = Json.gson.toJson(this)
+internal fun Event.toJson(): String = JsonUtil.toJson(this)

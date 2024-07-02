@@ -2,7 +2,6 @@ package org.getlantern.lantern.model
 
 import com.google.gson.annotations.SerializedName
 
-
 enum class PaymentMethod(val method: String) {
     @SerializedName("credit-card")
     CreditCard("credit-card"),

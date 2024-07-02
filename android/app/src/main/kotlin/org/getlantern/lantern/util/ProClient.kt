@@ -7,7 +7,6 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.model.PaymentMethods
 import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
@@ -64,7 +63,7 @@ object ProClient {
                 Logger.debug(TAG, "Created new Lantern user: ${it.newUserDetails()}")
                 session.setUserIdAndToken(it.userId, it.token)
                 callback?.invoke(it)
-                EventHandler.postStatusEvent(LanternStatus(Status.ON))
+                EventHandler.postStatusEvent(LanternStatus.On)
                 EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
             }
         } catch (e: Exception) {

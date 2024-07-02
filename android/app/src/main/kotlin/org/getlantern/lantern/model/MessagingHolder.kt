@@ -33,7 +33,7 @@ import io.lantern.messaging.path
 import io.lantern.messaging.tassis.websocket.WebSocketTransportFactory
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
-import org.getlantern.lantern.util.Json
+import org.getlantern.lantern.util.JsonUtil
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -86,7 +86,7 @@ class MessagingHolder {
 
             // show notifications for incoming calls
             messaging.subscribeToWebRTCSignals("messagingholder") { signal ->
-                val msg = Json.gson.fromJson(
+                val msg = JsonUtil.fromJson(
                     signal.content.toString(Charsets.UTF_8),
                     SignalingMessage::class.java
                 )
@@ -197,7 +197,7 @@ class MessagingHolder {
         notificationManager: NotificationManager,
         signal: WebRTCSignal,
     ) {
-        val serializedSignal = Json.gson.toJson(signal)
+        val serializedSignal = JsonUtil.toJson(signal)
         val contact =
             messaging.db.get<Model.Contact>(signal.senderId.directContactPath)
         contact?.let {

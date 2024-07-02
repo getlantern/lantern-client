@@ -11,7 +11,6 @@ import org.getlantern.lantern.R
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.ProClient
 import org.getlantern.mobilesdk.Lantern
@@ -106,7 +105,7 @@ open class LanternService :
             // check if an update is available
             autoUpdater.checkForUpdates()
         }
-        EventHandler.postStatusEvent(LanternStatus(Status.ON))
+        EventHandler.postStatusEvent(LanternStatus.On)
 
         // fetch latest loconf
         LoConf.Companion.fetch(
