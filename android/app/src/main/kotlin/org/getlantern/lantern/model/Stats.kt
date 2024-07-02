@@ -1,10 +1,12 @@
 package org.getlantern.lantern.model
 
-/*data class Stats(
-  var city: String = "",
-  var country: String = "",
-  var countryCode: String = "",
-  var httpsUpgrades: Long = 0,
-  var adsBlocked: Long = 0,
-  var hasSucceedingProxy = false
-)*/
+data class Stats(
+  val city: String = "",
+  val country: String = "",
+  val countryCode: String = "",
+  val httpsUpgrades: Long = 0,
+  val adsBlocked: Long = 0,
+  val hasSucceedingProxy:Boolean = false
+) {
+
+}
