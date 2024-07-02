@@ -87,6 +87,9 @@ class SessionModel(
             )
             // hard disable chat
             tx.put(SessionManager.CHAT_ENABLED, false)
+            tx.put(
+                SessionManager.USER_LOGGED_IN, castToBoolean(tx.get(SessionManager.USER_LOGGED_IN), false)
+            )
             tx.put(PATH_SDK_VERSION, Internalsdk.sdkVersion())
 
         }

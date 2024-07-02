@@ -250,6 +250,13 @@ abstract class SessionManager(application: Application) : Session {
 
     fun chatEnabled(): Boolean = prefs.getBoolean(CHAT_ENABLED, false)
 
+    fun isUserLoggedIn(): Boolean = prefs.getBoolean(USER_LOGGED_IN, false)
+
+    fun setUserLoggedIn(isUserLoggedIn: Boolean) {
+        Logger.d(TAG, "Setting $USER_LOGGED_IN to $isUserLoggedIn")
+        prefs.edit().putBoolean(USER_LOGGED_IN, isUserLoggedIn)
+    }
+
     fun appVersion(): String {
         return appVersion
     }
@@ -537,6 +544,7 @@ abstract class SessionManager(application: Application) : Session {
 
         private const val REPLICA_ADDR = "replicaAddr"
         const val CHAT_ENABLED = "chatEnabled"
+        const val USER_LOGGED_IN = "isUserLoggedIn"
         const val ADS_ENABLED = "adsEnabled"
         const val CAS_ADS_ENABLED = "casAsEnabled"
 

@@ -50,7 +50,7 @@ class SessionModel extends Model {
       /// This warning is not needed for the Non pro user
       /// This flow is not needed anymore
       /// We don't user create account if email address is not verified
-      hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
+      hasUserSignedInNotifier = singleValueNotifier('isUserLoggedIn', false);
       proUserNotifier = singleValueNotifier('prouser', false);
 
       userEmail = singleValueNotifier(
@@ -74,7 +74,7 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
-      hasUserSignedInNotifier = ffiValueNotifier(ffiUserSignedIn, 'IsUserLoggedIn', false);
+      hasUserSignedInNotifier = ffiValueNotifier(ffiUserSignedIn, 'isUserLoggedIn', false);
       userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', '');
       proUserNotifier = ffiValueNotifier(ffiProUser,'prouser', false);
     }
@@ -314,7 +314,7 @@ class SessionModel extends Model {
   ///Auth Widgets
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
+    return subscribedSingleValueBuilder<bool>('isUserLoggedIn',
         builder: builder, defaultValue: false);
   }
 
