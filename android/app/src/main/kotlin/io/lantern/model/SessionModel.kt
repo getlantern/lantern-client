@@ -6,7 +6,6 @@ import android.view.WindowManager
 import com.google.gson.JsonObject
 import com.google.protobuf.ByteString
 import internalsdk.Internalsdk
-//import internalsdk.Internalsdk.AuthClient
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -28,6 +27,7 @@ import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.plausible.Plausible
+import org.getlantern.lantern.util.AuthClient 
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
@@ -52,8 +52,6 @@ class SessionModel(
     )
     private val autoUpdater = AutoUpdater(activity, activity)
     private val paymentsUtil = PaymentsUtil(activity)
-
-    //private val authClient = Internalsdk.NewAuthClient(this)
 
     companion object {
         private const val TAG = "SessionModel"
@@ -210,11 +208,23 @@ class SessionModel(
             }
 
             "login" -> {
-                //authClient.login(call.argument("email")!!, url = call.argument("password")!!)
+                AuthClient.signIn(call.argument("email")!!, call.argument("password")!!, { resp ->
+                    LanternApp.getSession().setUserLoggedIn(true)
+                })
             }
 
-            "signOut" -> {
-                //authClient.signOut()
+            "signout" -> {
+                AuthClient.signOut()
+            }
+
+            "signup" -> {
+                AuthClient.signUp(call.argument("email")!!, call.argument("password")!!, { resp ->
+                    LanternApp.getSession().setUserLoggedIn(true)
+                })
+            }
+
+            "startRecoveryByEmail" -> {
+                AuthClient.startRecoveryByEmail(call.argument("email")!!)
             }
 
             "trackUserAction" -> {
