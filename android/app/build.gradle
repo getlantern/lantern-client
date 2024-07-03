@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlinx-serialization'
     id 'dev.flutter.flutter-gradle-plugin'
     id 'org.jlleitschuh.gradle.ktlint'
     id 'org.jetbrains.kotlin.android'
@@ -367,6 +368,8 @@ configurations {
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.5"
     implementation "com.google.protobuf:protobuf-javalite:$protoc_version"
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1'
+
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugarJdk"
     implementation fileTree(dir: "libs", include: "liblantern-${androidArch()}.aar")
     implementation fileTree(dir: 'libs', include: '*.jar')

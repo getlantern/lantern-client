@@ -1,40 +1,43 @@
 package org.getlantern.lantern.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
 
-
+@Serializable
 enum class PaymentMethod(val method: String) {
-    @SerializedName("credit-card")
+    @SerialName("credit-card")
     CreditCard("credit-card"),
 
-    @SerializedName("unionpay")
+    @SerialName("unionpay")
     UnionPay("unionpay"),
 
-    @SerializedName("alipay")
+    @SerialName("alipay")
     Alipay("alipay"),
 
-    @SerializedName("btc")
+    @SerialName("btc")
     BTC("btc"),
 
-    @SerializedName("wechatpay")
+    @SerialName("wechatpay")
     WeChatPay("wechatpay"),
 
-    @SerializedName("freekassa")
+    @SerialName("freekassa")
     Freekassa("freekassa"),
 
-    @SerializedName("paymentwall")
+    @SerialName("paymentwall")
     PaymentWall("paymentwall"),
 
-    @SerializedName("fropay")
+    @SerialName("fropay")
     FroPay("fropay")
 }
 
+@Serializable
 data class PaymentMethods(
-    @SerializedName("method") var method: PaymentMethod,
-    @SerializedName("providers") var providers: List<ProviderInfo>,
+    @SerialName("method") var method: PaymentMethod,
+    @SerialName("providers") var providers: List<ProviderInfo>,
 )
 
+@Serializable
 data class Icons(
-    @SerializedName("paymentwall") val paymentwall: List<String>,
-    @SerializedName("stripe") val stripe: List<String>
+    @SerialName("paymentwall") val paymentwall: List<String>,
+    @SerialName("stripe") val stripe: List<String>
 )

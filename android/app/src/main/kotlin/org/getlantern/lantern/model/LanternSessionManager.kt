@@ -349,10 +349,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
     }
 
     fun setUserPlans(context: Context, proPlans: Map<String, ProPlan>) {
-        for (planId in proPlans.keys) {
-            proPlans[planId]?.let { PlansUtil.updatePrice(context, it) }
-        }
-
         plans.clear()
         plans.putAll(proPlans)
         db.mutate { tx ->
@@ -360,7 +356,6 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                 try {
                     val planID = it.id.substringBefore('-')
                     val path = PLANS + planID
-
                     val planItem = Vpn.Plan.newBuilder().setId(it.id)
                         .setDescription(it.description).setBestValue(it.bestValue)
                         .putAllPrice(it.price).setTotalCostBilledOneTime(it.totalCostBilledOneTime)

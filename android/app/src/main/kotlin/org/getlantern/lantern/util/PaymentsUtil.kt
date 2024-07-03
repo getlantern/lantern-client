@@ -363,7 +363,7 @@ class PaymentsUtil(private val activity: Activity) {
     ) {
         val currency = deviceLocal.ifEmpty {
             LanternApp.getSession().planByID(planID)?.let {
-                it.currency
+                it.currencyCode
             } ?: "usd"
         }
         Logger.d(

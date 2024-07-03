@@ -1,9 +1,10 @@
 package org.getlantern.lantern.model;
 
-import android.content.Context;
+/*import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
+import kotlinx.serialization.Serializable;
 
 import org.getlantern.lantern.R;
 import org.getlantern.mobilesdk.Logger;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+@Serializable
 public class ProPlan {
     private static final String TAG = ProPlan.class.getName();
 
@@ -96,7 +98,7 @@ public class ProPlan {
 
     /**
      * The formula in here matches the calculation in the pro-servers /plans endpoint
-     */
+     *
     private void calculateExpectedMonthlyPrice() {
         this.expectedMonthlyPrice = new HashMap<>();
         final Integer monthsPerYear = 12;
@@ -360,4 +362,4 @@ public class ProPlan {
     public float getDiscount() {
         return discount;
     }
-}
+}*/
