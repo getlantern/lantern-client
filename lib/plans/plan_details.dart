@@ -21,6 +21,7 @@ class _PlanCardState extends State<PlanCard> {
   Widget build(BuildContext context) {
     final planName = widget.plan.id.split('-')[0];
     final formattedPricePerYear = widget.plan.totalCostBilledOneTime;
+    final totalCost = widget.plan.totalCost;
     final formattedPricePerMonth = widget.plan.oneMonthCost;
     final isBestValue = widget.plan.bestValue;
 
@@ -59,8 +60,12 @@ class _PlanCardState extends State<PlanCard> {
                       children: [
                         CText(
                           planName == '1y'
-                              ? 'one_year_plan'.i18n
-                              : 'two_year_plan'.i18n,
+                              ? Platform.isIOS
+                                  ? 'lantern_pro_one_year'.i18n
+                                  : 'one_year_plan'.i18n
+                              : Platform.isIOS
+                                  ? 'lantern_pro_two_year'.i18n
+                                  : 'two_year_plan'.i18n,
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
@@ -77,20 +82,25 @@ class _PlanCardState extends State<PlanCard> {
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: [
-                        CText(formattedPricePerMonth, style: tsHeading1),
-                        CText(' / ', style: tsBody2),
-                        CText('month'.i18n, style: tsBody2),
+                        if (Platform.isIOS)
+                          CText(totalCost, style: tsHeading1)
+                        else
+                          CText(formattedPricePerMonth, style: tsHeading1),
+                       if(!Platform.isIOS)...{
+                         CText(' / ', style: tsBody2),
+                         CText('month'.i18n, style: tsBody2),
+                       }
+
                       ],
                     ),
-                    // * Price per year
-                    Row(
-                      children: [
-                        CText(
-                          formattedPricePerYear,
-                          style: tsBody2.copiedWith(color: grey5),
-                        ),
-                      ],
-                    ),
+                    if (Platform.isIOS)
+                      CText('non_renewing_subscription'.i18n,
+                          style: tsBody2.copiedWith(color: grey5))
+                    else
+                      CText(
+                        formattedPricePerYear,
+                        style: tsBody2.copiedWith(color: grey5),
+                      ),
                   ],
                 ),
               ),
@@ -192,7 +202,7 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   void resolveRouteIOS() {
-    if (widget.isPro ) {
+    if (widget.isPro) {
       //user is signed in
       _proceedToCheckoutIOS(context);
     } else {

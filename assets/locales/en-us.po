@@ -1752,3 +1752,14 @@ msgstr "Limit Reached"
 msgid "file_size_limit_description"
 msgstr "Attachment sizes should be under 100 MB"
 
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: One Year Plan"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: Two Year Plan"
+
+msgid "non_renewing_subscription"
+msgstr "Non-renewing subscription"
+
+
+

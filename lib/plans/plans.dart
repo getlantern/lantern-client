@@ -62,23 +62,7 @@ class PlansPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      // * Step
-                      Container(
-                        color: white,
-                        padding: const EdgeInsetsDirectional.only(
-                          top: 16.0,
-                          bottom: 16.0,
-                          start: 32.0,
-                          end: 32.0,
-                        ),
-                        child: Container(
-                          margin: const EdgeInsetsDirectional.only(start: 4.0),
-                          child: PlanStep(
-                            stepNum: '1',
-                            description: 'choose_plan'.i18n,
-                          ),
-                        ),
-                      ),
+
                       // * Card
                       ...plans
                           .toList()
