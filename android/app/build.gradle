@@ -7,7 +7,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'com.google.protobuf'
-    id "io.sentry.android.gradle" version "4.2.0"
+    id "io.sentry.android.gradle" version "4.9.0"
 }
 
 android {
