@@ -234,10 +234,9 @@ class _VerificationState extends State<Verification> {
     switch (Platform.operatingSystem) {
       case "ios":
         _proceedToCheckoutIOS();
-      break;
+        break;
       default:
         _proceedToCheckout();
-
     }
   }
 
@@ -274,11 +273,13 @@ class _VerificationState extends State<Verification> {
     }
   }
 
-
-  void _proceedToCheckout(){
+  void _proceedToCheckout() {
     context.pushRoute(Checkout(
       plan: widget.plan!,
-      isPro:false,
+      isPro: false,
+      authFlow: widget.authFlow,
+      email: widget.email,
+      verificationPin: pinCodeController.text,
     ));
   }
 
@@ -311,8 +312,6 @@ class _VerificationState extends State<Verification> {
         openResetPassword(code);
     }
   }
-
-
 
   Future<void> onBackPressed() async {
     if (widget.authFlow == AuthFlow.createAccount ||

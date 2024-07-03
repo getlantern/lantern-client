@@ -245,6 +245,24 @@ class NativeLibrary {
   late final _emailExists = _emailExistsPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
+  ffi.Pointer<ffi.Char> testProviderRequest(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> paymentProvider,
+  ) {
+    return _testProviderRequest(
+      email,
+      paymentProvider,
+    );
+  }
+
+  late final _testProviderRequestPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>>('testProviderRequest');
+  late final _testProviderRequest = _testProviderRequestPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
   /// The function returns two C strings: the first represents success, and the second represents an error.
   /// If the redemption is successful, the first string contains "true", and the second string is nil.
   /// If an error occurs during redemption, the first string is nil, and the second string contains the error message.

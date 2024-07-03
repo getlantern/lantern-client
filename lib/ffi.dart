@@ -15,6 +15,29 @@ extension StringEx on String {
   }
 }
 
+const String _libName = 'liblantern';
+
+final DynamicLibrary _dylib = () {
+  if (Platform.isMacOS) {
+    return DynamicLibrary.open('$_libName.dylib');
+  }
+  if (Platform.isLinux) {
+    String dir = Directory.current.path;
+    return DynamicLibrary.open('$dir/$_libName.so');
+  }
+  if (Platform.isWindows) {
+    return DynamicLibrary.open('$_libName.dll');
+  }
+  throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
+}();
+
+/// The bindings to the native functions in [dylib].
+final NativeLibrary _bindings = NativeLibrary(_dylib);
+
+void loadLibrary() {
+  _bindings.start();
+}
+
 void sysProxyOn() => _bindings.sysProxyOn();
 
 void sysProxyOff() => _bindings.sysProxyOff();
@@ -60,35 +83,6 @@ Future<User> ffiUserData() async {
   final success = _bindings.onSuccess().cast<Utf8>().toDartString();
   print("startup status proxy $proxy config $config success $success");
   return (proxy.toBool(), config.toBool(), success.toBool());
-}
-
-// checkAPIError throws a PlatformException if the API response contains an error
-void checkAPIError(result, errorMessage) {
-  print(result);
-  if (result is String) {
-    final errorMessageMap = jsonDecode(result);
-    if (errorMessageMap.containsKey('error')) {
-      throw PlatformException(
-          code: errorMessageMap['error'], message: errorMessage);
-    }
-    return;
-  }
-  if (result.error != "") {
-    throw PlatformException(code: result.error, message: errorMessage);
-  }
-}
-
-void checkAuthAPIError(result) {
-  if (result is String) {
-    if (result == "true") {
-      return;
-    }
-    final errorMessageMap = jsonDecode(result);
-    if (errorMessageMap.containsKey('error')) {
-      throw PlatformException(
-          code: errorMessageMap['error'], message: errorMessageMap['error']);
-    }
-  }
 }
 
 Future<String> ffiApproveDevice(String code) async {
@@ -206,27 +200,15 @@ Future<String> ffiPaymentRedirect(List<String> list) {
   return Future.value(result.redirect);
 }
 
-const String _libName = 'liblantern';
-
-final DynamicLibrary _dylib = () {
-  if (Platform.isMacOS) {
-    return DynamicLibrary.open('$_libName.dylib');
-  }
-  if (Platform.isLinux) {
-    String dir = Directory.current.path;
-    return DynamicLibrary.open('$dir/$_libName.so');
-  }
-  if (Platform.isWindows) {
-    return DynamicLibrary.open('$_libName.dll');
-  }
-  throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
-}();
-
-/// The bindings to the native functions in [dylib].
-final NativeLibrary _bindings = NativeLibrary(_dylib);
-
-void loadLibrary() {
-  _bindings.start();
+Future<void> ffiTestPaymentRequest(List<String> params) {
+  final email = params[0].toPointerChar();
+  final paymentProvider = params[1].toPointerChar();
+  final result = _bindings
+      .testProviderRequest(email, paymentProvider)
+      .cast<Utf8>()
+      .toDartString();
+  checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
+  return Future.value();
 }
 
 /// Auth methods for desktop
@@ -271,11 +253,13 @@ Future<void> ffiLogout(dynamic context) {
   return Future.value(result.toBool());
 }
 
-
 /// start recovery by email
 /// send verification code to email
 Future<void> ffiStartRecoveryByEmail(String email) {
-  final result = _bindings.startRecoveryByEmail(email.toPointerChar()).cast<Utf8>().toDartString();
+  final result = _bindings
+      .startRecoveryByEmail(email.toPointerChar())
+      .cast<Utf8>()
+      .toDartString();
   checkAuthAPIError(result);
   return Future.value(result.toBool());
 }
@@ -285,31 +269,67 @@ Future<void> ffiStartRecoveryByEmail(String email) {
 Future<void> ffiValidateRecoveryByEmail(List<String> params) {
   final email = params[0].toPointerChar();
   final code = params[1].toPointerChar();
-  final result = _bindings.validateRecoveryByEmail(email,code).cast<Utf8>().toDartString();
+  final result = _bindings
+      .validateRecoveryByEmail(email, code)
+      .cast<Utf8>()
+      .toDartString();
   checkAuthAPIError(result);
   return Future.value(result.toBool());
 }
-
 
 Future<void> ffiCompleteRecoveryByEmail(List<String> params) {
   final email = params[0].toPointerChar();
   final password = params[1].toPointerChar();
   final code = params[2].toPointerChar();
-  final result = _bindings.completeRecoveryByEmail(email,code,password).cast<Utf8>().toDartString();
+  final result = _bindings
+      .completeRecoveryByEmail(email, code, password)
+      .cast<Utf8>()
+      .toDartString();
   checkAuthAPIError(result);
   return Future.value(result.toBool());
 }
 
 Future<void> ffiDeleteAccount(String password) {
-  final result = _bindings.deleteAccount(password.toPointerChar()).cast<Utf8>().toDartString();
+  final result = _bindings
+      .deleteAccount(password.toPointerChar())
+      .cast<Utf8>()
+      .toDartString();
   checkAuthAPIError(result);
   return Future.value(result.toBool());
 }
-
 
 //Custom exception for handling error
 class NoPlansUpdate implements Exception {
   String message;
 
   NoPlansUpdate(this.message);
+}
+
+// checkAPIError throws a PlatformException if the API response contains an error
+void checkAPIError(result, errorMessage) {
+  print(result);
+  if (result is String) {
+    final errorMessageMap = jsonDecode(result);
+    if (errorMessageMap.containsKey('error')) {
+      throw PlatformException(
+          code: errorMessageMap['error'], message: errorMessage);
+    }
+    return;
+  }
+  if (result.error != "") {
+    throw PlatformException(code: result.error, message: errorMessage);
+  }
+}
+
+void checkAuthAPIError(result) {
+  if (result is String) {
+    if (result == "true") {
+      return;
+    }
+    final errorMessageMap = jsonDecode(result);
+    if (errorMessageMap.containsKey('error')) {
+      throw PlatformException(
+          code: errorMessageMap['error'], message: errorMessageMap['error']);
+    }
+  }
 }

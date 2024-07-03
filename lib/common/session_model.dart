@@ -294,6 +294,11 @@ class SessionModel extends Model {
     );
   }
 
+  /// This only supports desktop fo now
+  Future<void> testProviderRequest(String email, String paymentProvider) {
+    return compute(ffiTestPaymentRequest, [email, paymentProvider]);
+  }
+
   ///Auth Widgets
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {

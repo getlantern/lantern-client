@@ -190,6 +190,7 @@ class _PlanCardState extends State<PlanCard> {
       Checkout(
         plan: widget.plan,
         isPro: widget.isPro,
+
       ),
     );
   }

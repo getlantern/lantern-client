@@ -529,6 +529,22 @@ func emailExists(email *C.char) *C.char {
 	return C.CString("false")
 }
 
+//export testProviderRequest
+func testProviderRequest(email *C.char, paymentProvider *C.char) *C.char {
+	puchaseData := map[string]interface{}{
+		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
+		"provider":       C.GoString(paymentProvider),
+		"email":          C.GoString(email),
+	}
+	log.Debugf("DEBUG: Testing provider request: %v", puchaseData)
+	_, err := proClient.PurchaseRequest(context.Background(), puchaseData)
+	if err != nil {
+		return sendError(err)
+	}
+	setProUser(true)
+	return C.CString("true")
+}
+
 // The function returns two C strings: the first represents success, and the second represents an error.
 // If the redemption is successful, the first string contains "true", and the second string is nil.
 // If an error occurs during redemption, the first string is nil, and the second string contains the error message.
@@ -1007,7 +1023,7 @@ func deviceLimitFlow(login *protos.LoginResponse) error {
 		Token:   login.LegacyToken,
 		Devices: protoDevices,
 	}
-	a.Settings().SetUserIDAndToken(login.LegacyID, login.LegacyToken)
+
 	app.SetUserData(context.Background(), login.LegacyID, user)
 	return nil
 }
