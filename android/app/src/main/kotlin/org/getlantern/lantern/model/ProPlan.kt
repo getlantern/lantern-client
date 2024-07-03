@@ -39,16 +39,6 @@ data class ProPlan(
         return String.format("%s%s", symbol(), formattedPrice)
     }
 
-    private fun currencyObject(): Currency? {
-        return if (currencyCode.isNullOrEmpty()) null else Currency.getInstance(currencyCode)
-    }
-
-    private fun symbol(): String {
-        return currencyObject()?.let {
-            return it.symbol
-        } ?: ""
-    }
-
     fun formattedPrice() = formattedCost(price)
 
     fun formattedPriceOneMonth() = formattedCost(expectedMonthlyPrice, true)
@@ -61,7 +51,15 @@ data class ProPlan(
         } else {
             this.costWithoutTaxStr = costStr
         }
-        Logger.debug("ProPlan", "costStr is $costStr")
-        Logger.debug("ProPlan", "costWithoutTaxStr is $costWithoutTaxStr")
+    }
+
+    private fun currencyObject(): Currency? {
+        return if (currencyCode.isNullOrEmpty()) null else Currency.getInstance(currencyCode)
+    }
+
+    private fun symbol(): String {
+        return currencyObject()?.let {
+            return it.symbol
+        } ?: ""
     }
 }
