@@ -231,6 +231,17 @@ class _VerificationState extends State<Verification> {
 
   // Purchase flow
   void startPurchase() {
+    switch (Platform.operatingSystem) {
+      case "ios":
+        _proceedToCheckoutIOS();
+      break;
+      default:
+        _proceedToCheckout();
+
+    }
+  }
+
+  void _proceedToCheckoutIOS() {
     assert(widget.plan != null, 'Plan object is null');
     final appPurchase = sl<AppPurchase>();
     try {
@@ -263,6 +274,14 @@ class _VerificationState extends State<Verification> {
     }
   }
 
+
+  void _proceedToCheckout(){
+    context.pushRoute(Checkout(
+      plan: widget.plan!,
+      isPro:false,
+    ));
+  }
+
   void openPassword() {
     context.pushRoute(CreateAccountPassword(
       email: widget.email.validateEmail,
@@ -292,6 +311,8 @@ class _VerificationState extends State<Verification> {
         openResetPassword(code);
     }
   }
+
+
 
   Future<void> onBackPressed() async {
     if (widget.authFlow == AuthFlow.createAccount ||

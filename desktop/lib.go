@@ -17,7 +17,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/1Password/srp"
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
@@ -135,8 +134,7 @@ func start() {
 	}()
 
 	golog.SetPrepender(logging.Timestamped)
-	// Todo uncomment this code
-	// handleSignals(a)
+	handleSignals(a)
 
 	go func() {
 		defer logging.Close()
@@ -306,6 +304,8 @@ func fetchPayentMethodV4() error {
 	if err != nil {
 		return errors.New("Could not get payment methods: %v", err)
 	}
+	log.Debugf("DEBUG: Payment methods: %+v", resp)
+	log.Debugf("DEBUG: Payment methods providers: %+v", resp.Providers)
 	bytes, err := json.Marshal(resp)
 	if err != nil {
 		return errors.New("Could not marshal payment methods: %v", err)
@@ -920,6 +920,9 @@ func signup(email *C.char, password *C.char) *C.char {
 	saveUserSalt(salt)
 	setting.SetEmailAddress(C.GoString(email))
 	a.SetUserLoggedIn(true)
+	// Todo remove this once we complete teting auth flow
+	// we don't need this on prod
+	fetchPayentMethodV4()
 	return C.CString("true")
 }
 
@@ -1004,7 +1007,7 @@ func deviceLimitFlow(login *protos.LoginResponse) error {
 		Token:   login.LegacyToken,
 		Devices: protoDevices,
 	}
-
+	a.Settings().SetUserIDAndToken(login.LegacyID, login.LegacyToken)
 	app.SetUserData(context.Background(), login.LegacyID, user)
 	return nil
 }
@@ -1092,11 +1095,9 @@ func deleteAccount(password *C.char) *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-
-	encryptedKey := auth.GenerateEncryptedKey(C.GoString(password), lowerCaseEmail, salt)
-	log.Debugf("Encrypted key %v Login", encryptedKey)
 	// Prepare login request body
-	client := srp.NewSRPClient(srp.KnownGroups[srp.RFC5054Group3072], encryptedKey, nil)
+	client := auth.NewSRPClient(lowerCaseEmail, C.GoString(password), salt)
+
 	//Send this key to client
 	A := client.EphemeralPublic()
 	//Create body

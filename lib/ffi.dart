@@ -251,6 +251,7 @@ Future<void> ffiSignUp(List<String> params) {
   final email = params[0].toPointerChar();
   final password = params[1].toPointerChar();
   final result = _bindings.signup(email, password).cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
   return Future.value(result.toBool());
 }
 
@@ -266,6 +267,7 @@ Future<void> ffiLogin(List<String> params) {
 /// logout
 Future<void> ffiLogout(dynamic context) {
   final result = _bindings.logout().cast<Utf8>().toDartString();
+  checkAuthAPIError(result);
   return Future.value(result.toBool());
 }
 

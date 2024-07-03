@@ -79,6 +79,8 @@ class _CheckoutState extends State<Checkout>
     return BaseScreen(
         resizeToAvoidBottomInset: false,
         title: 'lantern_pro_checkout'.i18n,
+        padHorizontal: true,
+        padVertical:  true,
         body: sessionModel.paymentMethods(
           builder: (
             context,
@@ -86,118 +88,70 @@ class _CheckoutState extends State<Checkout>
             Widget? child,
           ) {
             defaultProviderIfNecessary(paymentMethods.toList());
-            return sessionModel.emailAddress((
-              BuildContext context,
-              String emailAddress,
-              Widget? child,
-            ) {
-              return Container(
-                padding: const EdgeInsetsDirectional.only(
-                  start: 16,
-                  end: 16,
-                  top: 24,
-                  bottom: 32,
+            return Column(
+              children: [
+                CText('choose_payment_method'.i18n, style:tsHeading1),
+                const SizedBox(height: 24),
+                Container(
+                  padding: const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: paymentOptions(paymentMethods)),
                 ),
-                child: Column(
-                  children: [
-                    // * Step 2
-                    PlanStep(
-                      stepNum: '2',
-                      description: 'enter_email'.i18n,
+                if (isRefCodeFieldShowing)
+                  Form(
+                    key: refCodeFieldKey,
+                    child: CTextField(
+                      controller: refCodeController,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      onChanged: (text) {
+                        setState(() {
+                          showContinueButton = enableContinueButton();
+                        });
+                      },
+                      textCapitalization: TextCapitalization.characters,
+                      label: 'referral_code'.i18n,
+                      keyboardType: TextInputType.text,
+                      prefixIcon: const CAssetImage(path: ImagePaths.star),
                     ),
-                    // * Email field
-                    Container(
-                      padding: const EdgeInsetsDirectional.only(
-                        top: 8,
-                        bottom: 8,
-                      ),
-                      child: Form(
-                        key: emailFieldKey,
-                        child: CTextField(
-                          initialValue: widget.isPro ? emailAddress : '',
-                          controller: emailController,
-                          onChanged: (text) {
-                            setState(() {
-                              showContinueButton = enableContinueButton();
-                            });
-                          },
-                          autovalidateMode: widget.isPro
-                              ? AutovalidateMode.always
-                              : AutovalidateMode.disabled,
-                          label: 'email'.i18n,
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const CAssetImage(path: ImagePaths.email),
+                  )
+                else
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isRefCodeFieldShowing = true;
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        const CAssetImage(path: ImagePaths.add),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                            start: 8.0,
+                          ),
+                          child: CText(
+                            'add_referral_code'.i18n,
+                            style: tsBody1,
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    if (isRefCodeFieldShowing)
-                      Form(
-                        key: refCodeFieldKey,
-                        child: CTextField(
-                          controller: refCodeController,
-                          autovalidateMode: AutovalidateMode.disabled,
-                          onChanged: (text) {
-                            setState(() {
-                              showContinueButton = enableContinueButton();
-                            });
-                          },
-                          textCapitalization: TextCapitalization.characters,
-                          label: 'referral_code'.i18n,
-                          keyboardType: TextInputType.text,
-                          prefixIcon: const CAssetImage(path: ImagePaths.star),
-                        ),
-                      )
-                    else
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isRefCodeFieldShowing = true;
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            const CAssetImage(path: ImagePaths.add),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.only(
-                                start: 8.0,
-                              ),
-                              child: CText(
-                                'add_referral_code'.i18n,
-                                style: tsBody1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    const SizedBox(height: 16.0),
-                    PlanStep(
-                      stepNum: '3',
-                      description: 'choose_payment_method'.i18n,
+                  ),
+                const Spacer(),
+                Tooltip(
+                  message: AppKeys.continueCheckout,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Button(
+                      text: 'continue'.i18n,
+                      disabled: !enableContinueButton(),
+                      onPressed: onContinueTapped,
                     ),
-                    //* Payment options
-                    Container(
-                      padding:
-                          const EdgeInsetsDirectional.only(top: 16, bottom: 16),
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: paymentOptions(paymentMethods)),
-                    ),
-                    // * Price summary, unused pro time disclaimer, Continue button
-
-                    Tooltip(
-                      message: AppKeys.continueCheckout,
-                      child: Button(
-                        text: 'continue'.i18n,
-                        disabled: !enableContinueButton(),
-                        onPressed: onContinueTapped,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              );
-            });
+              ],
+            );
           },
         ));
   }
@@ -260,15 +214,10 @@ class _CheckoutState extends State<Checkout>
   }
 
   bool enableContinueButton() {
-    if (emailFieldKey.currentState == null) {
-      return false;
-    }
-    final isEmailValid = emailController.value.text.isNotEmpty &&
-        emailFieldKey.currentState!.validate();
     if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
-      return isEmailValid;
+      return true;
     }
-    return isEmailValid && refCodeFieldKey.currentState!.validate();
+    return refCodeFieldKey.currentState!.validate();
   }
 
   //Class methods
@@ -318,6 +267,11 @@ class _CheckoutState extends State<Checkout>
         }
         _proceedWithPaymentWall();
         break;
+      case Providers.test:
+        if (isDesktop()) {
+
+          return;
+        }
     }
   }
 
