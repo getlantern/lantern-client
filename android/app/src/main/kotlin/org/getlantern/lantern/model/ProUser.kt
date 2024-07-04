@@ -16,7 +16,7 @@ data class ProUser(
     val locale: String = "",
     val subscription: String = "",
     val expiration: Long = 0,
-    val devices: List<Device> = mutableListOf<Device>(),
+    val devices: List<Device> = mutableListOf(),
     var userLevel: String = "",
 ) {
     private fun isUserStatus(status: String) = userStatus == status

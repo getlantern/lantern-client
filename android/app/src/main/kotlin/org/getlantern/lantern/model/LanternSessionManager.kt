@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import io.lantern.model.Vpn
-import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.SessionManager
 import org.joda.time.LocalDateTime
@@ -308,11 +307,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     fun storeUserData(user: ProUser) {
         Logger.debug(TAG, "Storing user data $user")
-        if (!user.email.isNullOrEmpty()) {
+        if (user.email.isNotEmpty()) {
             setEmail(user.email)
         }
 
-        if (!user.code.isNullOrEmpty()) {
+        if (user.code.isNotEmpty()) {
             setCode(user.code)
         }
 
@@ -324,14 +323,16 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         setExpired(user.isExpired)
         setIsProUser(user.isProUser)
 
-        val devices = Vpn.Devices.newBuilder().addAllDevices(
-            user.devices.map {
-                Vpn.Device.newBuilder().setId(it.id)
-                    .setName(it.name).setCreated(it.created).build()
-            },
-        ).build()
-        db.mutate { tx ->
-            tx.put(DEVICES, devices)
+        if (user.devices.isNotEmpty()) {
+            val devices = Vpn.Devices.newBuilder().addAllDevices(
+                user.devices.map {
+                    Vpn.Device.newBuilder().setId(it.id)
+                        .setName(it.name).setCreated(it.created).build()
+                },
+            ).build()
+            db.mutate { tx ->
+                tx.put(DEVICES, devices)
+            }
         }
 
         if (user.isProUser) {

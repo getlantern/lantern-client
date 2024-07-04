@@ -1,9 +1,8 @@
 package org.getlantern.lantern.model
 
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.google.gson.reflect.TypeToken
+import kotlinx.serialization.SerializationException
 import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.Callback
@@ -18,7 +17,6 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.service.LanternService
 import org.getlantern.lantern.util.JsonUtil
 import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.mobilesdk.Logger
@@ -93,9 +91,27 @@ open class LanternHttpClient : HttpClient() {
                 ) {
                     Logger.debug(TAG, "JSON response" + result.toString())
                     result?.let {
-                        val user = JsonUtil.fromJson<ProUser>(result.toString())
-                        Logger.debug(TAG, "User ID is ${user.userId}")
-                        cb.onSuccess(response!!, user)
+                        try {
+                            val user = JsonUtil.fromJson<ProUser>(result.toString())
+                            Logger.debug(TAG, "User ID is ${user.userId}")
+                            cb.onSuccess(response!!, user)
+                        } catch (e: SerializationException) {
+                            // If for some reason we get error return user with basic string
+                            Logger.error(TAG, "Unable to parse user from JSON", e)
+                            val userId = result.get("userId").asLong
+                            val token = result.get("token").asString
+                            val referral = result.get("referral").asString
+                            val email = result.get("email").asString
+                            val userStatus = result.get("userStatus").asString
+                            val userLevel = result.get("userLevel").asString
+                            val user = ProUser(
+                                userId, token, referral, email, userStatus, "", "en_us", "", 0L,
+                                mutableListOf(), userLevel
+                            )
+                            cb.onSuccess(response!!, user)
+
+                        }
+
                     }
                 }
             },
