@@ -65,8 +65,10 @@ open class LanternHttpClient : HttpClient() {
 
             override fun onSuccess(response: Response?, result: JsonObject?) {
                 result?.let {
-                    val user: ProUser = JsonUtil.fromJson<ProUser>(result.toString())
-                    cb.onSuccess(response!!, user)
+                    val user: ProUser? = JsonUtil.tryParseJson<ProUser?>(result.toString())
+                    user?.let {
+                        cb.onSuccess(response!!, user)
+                    }
                 }
             }
         })
@@ -91,27 +93,8 @@ open class LanternHttpClient : HttpClient() {
                 ) {
                     Logger.debug(TAG, "JSON response" + result.toString())
                     result?.let {
-                        try {
-                            val user = JsonUtil.fromJson<ProUser>(result.toString())
-                            Logger.debug(TAG, "User ID is ${user.userId}")
-                            cb.onSuccess(response!!, user)
-                        } catch (e: SerializationException) {
-                            // If for some reason we get error return user with basic string
-                            Logger.error(TAG, "Unable to parse user from JSON", e)
-                            val userId = result.get("userId").asLong
-                            val token = result.get("token").asString
-                            val referral = result.get("referral").asString
-                            val email = result.get("email").asString
-                            val userStatus = result.get("userStatus").asString
-                            val userLevel = result.get("userLevel").asString
-                            val user = ProUser(
-                                userId, token, referral, email, userStatus, "", "en_us", "", 0L,
-                                mutableListOf(), userLevel
-                            )
-                            cb.onSuccess(response!!, user)
-
-                        }
-
+                        var user: ProUser? = JsonUtil.tryParseJson<ProUser?>(result.toString())
+                        user?.let { cb.onSuccess(response!!, it) }
                     }
                 }
             },

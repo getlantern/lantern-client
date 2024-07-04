@@ -3,6 +3,7 @@ package org.getlantern.lantern.util
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.getlantern.mobilesdk.Logger
 
 object JsonUtil {
 
@@ -19,5 +20,14 @@ object JsonUtil {
 
     inline fun <reified T> toJson(obj: T): String {
         return json.encodeToString(obj)
+    }
+
+    inline fun <reified T> tryParseJson(s: String?): T? {
+        return try {
+            fromJson(s ?: return null)
+        } catch (e: Exception) {
+            Logger.error("JsonUtil", "Unable to parse JSON", e)
+            null
+        }
     }
 }
