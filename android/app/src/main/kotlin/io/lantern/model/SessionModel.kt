@@ -351,7 +351,6 @@ class SessionModel(
         paymentMethods: List<PaymentMethods>,
 
         ) {
-
         LanternApp.getSession().setUserPlans(activity, proPlans)
         LanternApp.getSession().setPaymentMethods(paymentMethods)
     }

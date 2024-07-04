@@ -13,7 +13,7 @@ import org.joda.time.LocalDateTime
 
 object PlansUtil {
     @JvmStatic
-    fun updatePrice(activity: Context, plan: ProPlan) {
+    fun updatePrice(activity: Context, plan: ProPlan):ProPlan {
         val formattedBonus = formatRenewalBonusExpected(activity, plan.renewalBonusExpected, false)
         val totalCost = plan.costWithoutTaxStr
         var totalCostBilledOneTime = activity.resources.getString(R.string.total_cost, totalCost)
@@ -25,13 +25,14 @@ object PlansUtil {
                     Math.round(plan.discount * 100).toString()
                 )
         }
-        val oneMonthCost = plan.formattedPriceOneMonth
+        val oneMonthCost = plan.formattedPriceOneMonth()
         plan.renewalText = proRenewalText(activity.resources, formattedBonus)
         plan.totalCostBilledOneTime = totalCostBilledOneTime
         plan.oneMonthCost = oneMonthCost
         plan.formattedBonus = formattedBonus
-        plan.setFormattedDiscount(formattedDiscount)
-        plan.totalCost = totalCost
+        plan.formattedDiscount = formattedDiscount
+        if (totalCost != null) plan.totalCost = totalCost
+        return plan
     }
 
     private fun proRenewalText(resources: Resources, formattedBonus: String): String {

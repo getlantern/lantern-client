@@ -1,9 +1,8 @@
 package org.getlantern.lantern.model
 
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.google.gson.reflect.TypeToken
+import kotlinx.serialization.SerializationException
 import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.Callback
@@ -18,8 +17,8 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.service.LanternService
-import org.getlantern.lantern.util.Json
+import org.getlantern.lantern.util.JsonUtil
+import org.getlantern.lantern.util.PlansUtil
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.util.HttpClient
 import java.io.IOException
@@ -52,10 +51,6 @@ open class LanternHttpClient : HttpClient() {
         proRequest("POST", url, userHeaders(), body, cb)
     }
 
-    inline fun <reified T> parseData(row: String): T {
-        return Gson().fromJson(row, object : TypeToken<T>() {}.type)
-    }
-
     fun createUser(cb: ProUserCallback) {
         val formBody =
             FormBody.Builder()
@@ -69,14 +64,13 @@ open class LanternHttpClient : HttpClient() {
             }
 
             override fun onSuccess(response: Response?, result: JsonObject?) {
-                val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
-                if (user == null) {
-                    Logger.error(TAG, "Unable to parse user from JSON")
-                    return
+                result?.let {
+                    val user: ProUser? = JsonUtil.tryParseJson<ProUser?>(result.toString())
+                    user?.let {
+                        cb.onSuccess(response!!, user)
+                    }
                 }
-                cb.onSuccess(response!!, user)
             }
-
         })
     }
 
@@ -99,9 +93,8 @@ open class LanternHttpClient : HttpClient() {
                 ) {
                     Logger.debug(TAG, "JSON response" + result.toString())
                     result?.let {
-                        val user = parseData<ProUser>(result.toString())
-                        Logger.debug(TAG, "User ID is ${user.userId}")
-                        cb.onSuccess(response!!, user)
+                        var user: ProUser? = JsonUtil.tryParseJson<ProUser?>(result.toString())
+                        user?.let { cb.onSuccess(response!!, it) }
                     }
                 }
             },
@@ -142,7 +135,7 @@ open class LanternHttpClient : HttpClient() {
         val plans = mutableMapOf<String, ProPlan>()
         for (plan in fetched) {
             plan.formatCost()
-            plans.put(plan.id, plan)
+            plans.put(plan.id, PlansUtil.updatePrice(LanternApp.getAppContext(), plan))
         }
         return plans
     }
@@ -173,10 +166,10 @@ open class LanternHttpClient : HttpClient() {
                 ) {
                     Logger.d(TAG, "Plans v3 Response body $result")
                     val methods =
-                        parseData<Map<String, List<PaymentMethods>>>(
+                        JsonUtil.fromJson<Map<String, List<PaymentMethods>>>(
                             result?.get("providers").toString(),
                         )
-                    val icons = parseData<Icons>(result?.get("icons").toString())
+                    val icons = JsonUtil.fromJson<Icons>(result?.get("icons").toString())
                     Logger.d(TAG, "Plans v3 Icons Response body $icons")
                     val providers = methods.get("android")
                     // Due to API limitations
@@ -194,7 +187,7 @@ open class LanternHttpClient : HttpClient() {
                             }
                         }
                     }
-                    val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
+                    val fetched = JsonUtil.fromJson<List<ProPlan>>(result?.get("plans").toString())
                     val plans = plansMap(fetched)
                     if (providers != null) cb.onSuccess(plans, providers)
                 }
@@ -228,10 +221,10 @@ open class LanternHttpClient : HttpClient() {
                 ) {
                     Logger.d(TAG, "Plans v3 Response body $result")
                     val methods =
-                        parseData<Map<String, List<PaymentMethods>>>(
+                        JsonUtil.fromJson<Map<String, List<PaymentMethods>>>(
                             result?.get("providers").toString(),
                         )
-                    val icons = parseData<Icons>(result?.get("icons").toString())
+                    val icons = JsonUtil.fromJson<Icons>(result?.get("icons").toString())
                     Logger.d(TAG, "Plans v3 Icons Response body $icons")
                     val providers = methods.get("android")
                     // Due to API limitations
@@ -249,7 +242,7 @@ open class LanternHttpClient : HttpClient() {
                             }
                         }
                     }
-                    val fetched = parseData<List<ProPlan>>(result?.get("plans").toString())
+                    val fetched = JsonUtil.fromJson<List<ProPlan>>(result?.get("plans").toString())
                     val plans = plansMap(fetched)
                     if (providers != null) cb.onSuccess(plans, providers)
                 }
