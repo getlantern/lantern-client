@@ -295,8 +295,9 @@ class SessionModel extends Model {
   }
 
   /// This only supports desktop fo now
-  Future<void> testProviderRequest(String email, String paymentProvider) {
-    return compute(ffiTestPaymentRequest, [email, paymentProvider]);
+  Future<void> testProviderRequest(
+      String email, String paymentProvider, String planId) {
+    return compute(ffiTestPaymentRequest, [email, paymentProvider, planId]);
   }
 
   ///Auth Widgets

@@ -248,19 +248,23 @@ class NativeLibrary {
   ffi.Pointer<ffi.Char> testProviderRequest(
     ffi.Pointer<ffi.Char> email,
     ffi.Pointer<ffi.Char> paymentProvider,
+    ffi.Pointer<ffi.Char> plan,
   ) {
     return _testProviderRequest(
       email,
       paymentProvider,
+      plan,
     );
   }
 
   late final _testProviderRequestPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>)>>('testProviderRequest');
   late final _testProviderRequest = _testProviderRequestPtr.asFunction<
-      ffi.Pointer<ffi.Char> Function(
+      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
   /// The function returns two C strings: the first represents success, and the second represents an error.

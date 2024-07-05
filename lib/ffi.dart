@@ -7,7 +7,7 @@ import 'generated_bindings.dart';
 
 extension StringEx on String {
   Pointer<Char> toPointerChar() {
-    return this.toNativeUtf8().cast<Char>();
+    return toNativeUtf8().cast<Char>();
   }
 
   bool toBool() {
@@ -203,11 +203,12 @@ Future<String> ffiPaymentRedirect(List<String> list) {
 Future<void> ffiTestPaymentRequest(List<String> params) {
   final email = params[0].toPointerChar();
   final paymentProvider = params[1].toPointerChar();
+  final planId = params[2].toPointerChar();
   final result = _bindings
-      .testProviderRequest(email, paymentProvider)
+      .testProviderRequest(email, paymentProvider, planId)
       .cast<Utf8>()
       .toDartString();
-  checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
+  checkAuthAPIError(result);
   return Future.value();
 }
 

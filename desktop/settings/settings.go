@@ -735,6 +735,10 @@ func (s *Settings) SetProUser(value bool) {
 	s.setVal(SNUserPro, value)
 }
 
+func (s *Settings) IsProUser() bool {
+	return s.getBool(SNUserPro)
+}
+
 // Auth methods
 // SetUserFirstVisit sets the user's first visit flag
 func (s *Settings) SetUserFirstVisit(value bool) {

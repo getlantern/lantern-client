@@ -45,6 +45,7 @@ func TestPurchaseRequest(t *testing.T) {
 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
 		"provider":       "test",
 		"email":          "jigar+macos+test@getlantern.org",
+		"plan":           "1y-usd",
 	}
 	log.Debugf("DEBUG: Testing provider request: %v", puchaseData)
 	_, err := proClient.PurchaseRequest(context.Background(), puchaseData)

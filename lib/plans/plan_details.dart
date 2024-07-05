@@ -185,12 +185,13 @@ class _PlanCardState extends State<PlanCard> {
       }
     }
 
+    final email = sessionModel.userEmail.value;
     // * Proceed to our own Checkout
     await context.pushRoute(
       Checkout(
         plan: widget.plan,
         isPro: widget.isPro,
-
+        email: email,
       ),
     );
   }

@@ -149,7 +149,7 @@ func IsProUserFast(ctx context.Context, uc common.UserConfig) (isPro bool, statu
 	if !found {
 		return false, false
 	}
-	return isActive(user.UserStatus), found
+	return (isActive(user.UserStatus) || user.UserLevel == "pro"), found
 }
 
 // isProUserFast checks a cached value for the pro status and doesn't wait for

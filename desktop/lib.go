@@ -204,14 +204,10 @@ func cacheUserDetail(userDetail *protos.User) error {
 		setProUser(false)
 	}
 
-	//Store all device
-	// err = setDevices(session.baseModel, userDetail.Devices)
-	// if err != nil {
-	// 	return err
-	// }
-
 	a.Settings().SetUserIDAndToken(userDetail.UserId, userDetail.Token)
 	log.Debugf("User caching successful: %+v", userDetail)
+	// Save data in userData cache
+	app.SetUserData(context.Background(), userDetail.UserId, userDetail)
 	return nil
 }
 
@@ -385,9 +381,7 @@ func getUserData() (*protos.User, error) {
 		return nil, errors.New("User data not found")
 	}
 	user := resp.User
-	// if user != nil && user.Email != "" {
-	// 	a.Settings().SetEmailAddress(user.Email)
-	// }
+	cacheUserDetail(user)
 	return user, nil
 }
 
@@ -408,12 +402,12 @@ func setProxyAll(value *C.char) {
 
 // tryCacheUserData retrieves the latest user data for the given user.
 // It first checks the cache and if present returns the user data stored there
-func tryCacheUserData() (*protos.User, error) {
-	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
-		return cacheUserData, nil
-	}
-	return getUserData()
-}
+// func tryCacheUserData() (*protos.User, error) {
+// 	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
+// 		return cacheUserData, nil
+// 	}
+// 	return getUserData()
+// }
 
 // this method is reposible for checking if the user has updated plan or bought plans
 //
@@ -530,11 +524,12 @@ func emailExists(email *C.char) *C.char {
 }
 
 //export testProviderRequest
-func testProviderRequest(email *C.char, paymentProvider *C.char) *C.char {
+func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *C.char {
 	puchaseData := map[string]interface{}{
 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
 		"provider":       C.GoString(paymentProvider),
 		"email":          C.GoString(email),
+		"plan":           C.GoString(plan),
 	}
 	log.Debugf("DEBUG: Testing provider request: %v", puchaseData)
 	_, err := proClient.PurchaseRequest(context.Background(), puchaseData)
@@ -660,13 +655,15 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
-	ctx := context.Background()
-	// refresh user data when home page is loaded on desktop
-	go getUserData()
+	// // refresh user data when home page is loaded on desktop
+	// go getUserData()
 	uc := a.Settings()
-	if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
-		return C.CString("true")
+	if uc.IsProUser() {
+		return C.CString("false")
 	}
+	// if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
+	// 	return C.CString("true")
+	// }
 	return C.CString("false")
 }
 
@@ -936,6 +933,7 @@ func signup(email *C.char, password *C.char) *C.char {
 	saveUserSalt(salt)
 	setting.SetEmailAddress(C.GoString(email))
 	a.SetUserLoggedIn(true)
+
 	// Todo remove this once we complete teting auth flow
 	// we don't need this on prod
 	fetchPayentMethodV4()

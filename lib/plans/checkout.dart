@@ -1,4 +1,3 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/plans/payment_provider.dart';
@@ -30,7 +29,6 @@ class _CheckoutState extends State<Checkout>
     with SingleTickerProviderStateMixin {
   bool showMoreOptions = false;
   bool showContinueButton = false;
-
 
   final refCodeFieldKey = GlobalKey<FormState>();
   late final refCodeController = CustomTextEditingController(
@@ -320,12 +318,16 @@ class _CheckoutState extends State<Checkout>
   }
 
   void _proceedTestRequest() async {
-
     try {
       context.loaderOverlay.show();
       final value = await sessionModel.testProviderRequest(
-          widget.email!, Providers.test.name);
-      resolveRoute();
+          widget.email!, Providers.test.name, widget.plan.id);
+      context.loaderOverlay.hide();
+      if (widget.isPro) {
+        showSuccessDialog(context, widget.isPro);
+      } else {
+        resolveRoute();
+      }
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -404,7 +406,7 @@ class _CheckoutState extends State<Checkout>
       var currencyCost = widget.plan.price[currency];
       if (currencyCost == null) return;
       await sessionModel.submitFreekassa(
-          widget.email!,
+        widget.email!,
         widget.plan.id,
         currencyCost.toString(),
       );
