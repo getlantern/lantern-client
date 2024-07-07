@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import org.getlantern.lantern.util.JsonUtil
 
 @Serializable
-internal data class Event(
+data class Event(
     val domain: String,
     val name: String,
     val url: String,
@@ -21,4 +21,4 @@ internal data class Event(
     }
 }
 
-internal fun Event.toJson(): String = JsonUtil.toJson(this)
+fun Event.toJson(): String = JsonUtil.toJson(this)

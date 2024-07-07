@@ -30,8 +30,8 @@ enum class PaymentProvider(val provider: String) {
 @Serializable
 data class ProviderInfo(
     var name: PaymentProvider,
-    @SerialName("data") var data: Map<String, String> = mapOf<String, String>(),
-    var logoUrl: List<String> = listOf<String>()
+    var data: Map<String, String> = mutableMapOf(),
+    var logoUrl: List<String> = mutableListOf<String>()
 )
 
 fun String.toPaymentProvider(): PaymentProvider? {

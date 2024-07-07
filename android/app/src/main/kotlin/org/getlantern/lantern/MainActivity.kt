@@ -87,6 +87,7 @@ class MainActivity :
                         Plausible.enable(true)
                         Logger.debug(TAG, "Plausible initialized")
                         fetchLoConf()
+                        updateUserAndPaymentData()
                     }
                     LanternApp.getSession().dnsDetector.publishNetworkAvailability()
                 }
@@ -228,7 +229,6 @@ class MainActivity :
         }
 
         sessionModel.checkAdsAvailability()
-        updateUserAndPaymentData()
         Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
 
