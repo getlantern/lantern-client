@@ -27,8 +27,9 @@ import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.plausible.Plausible
-import org.getlantern.lantern.util.AuthClient 
+import org.getlantern.lantern.util.AuthClient
 import org.getlantern.lantern.util.AutoUpdater
+import org.getlantern.lantern.util.LoginResponse
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.ProClient
@@ -188,23 +189,12 @@ class SessionModel(
                 result.success(false)
             }
 
-
-            "login" -> {
-                AuthClient.signIn(call.argument("email")!!, call.argument("password")!!, { resp ->
-                    LanternApp.getSession().setUserLoggedIn(true)
-                })
-            }
+            "login" -> login(call.argument("email")!!, call.argument("password")!!, result)
+            "signup" -> signUp(call.argument("email")!!, call.argument("password")!!, result)
 
             "signout" -> {
                 AuthClient.signOut()
             }
-
-            "signup" -> {
-                AuthClient.signUp(call.argument("email")!!, call.argument("password")!!, { resp ->
-                    LanternApp.getSession().setUserLoggedIn(true)
-                })
-            }
-
 
             "userStatus" -> userStatus(result)
             "updatePaymentPlans" -> updatePaymentMethods(result)
@@ -354,6 +344,26 @@ class SessionModel(
         LanternApp.getSession().setUserPlans(activity, proPlans)
         LanternApp.getSession().setPaymentMethods(paymentMethods)
     }
+
+    // Auth Related
+    private fun authSuccess() = LanternApp.getSession().setUserLoggedIn(true)
+
+    private fun authResponse(resp: LoginResponse, result: MethodChannel.Result) {
+        if (resp.error.isNullOrEmpty()) authSuccess() else result.error("errorAuth", resp.error, null)
+    }
+
+    private fun login(email: String, password: String, result: MethodChannel.Result) {
+        AuthClient.signIn(email, password, { resp ->
+            authResponse(resp, result)
+        })
+    }
+
+    private fun signUp(email: String, password: String, result: MethodChannel.Result) {
+        AuthClient.signUp(email, password, { resp ->
+            authResponse(resp, result)
+        })
+    }
+
 
     // updateAppData looks up the app data for the given package name and updates whether or
     // not the app is allowed access to the VPN connection in the database

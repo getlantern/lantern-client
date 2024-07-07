@@ -34,7 +34,7 @@ func (c *authClient) getUserSalt(email string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Debugf("Salt Response-> %v", salt.Salt)
+	log.Debugf("Salt Response-> %v", string(salt.Salt))
 	return salt.Salt, nil
 }
 
