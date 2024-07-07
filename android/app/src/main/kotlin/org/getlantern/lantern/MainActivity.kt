@@ -87,7 +87,6 @@ class MainActivity :
                         Plausible.enable(true)
                         Logger.debug(TAG, "Plausible initialized")
                         fetchLoConf()
-                        updateUserAndPaymentData()
                     }
                     LanternApp.getSession().dnsDetector.publishNetworkAvailability()
                 }
@@ -130,6 +129,7 @@ class MainActivity :
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
         subscribeAppEvents()
+        updateUserAndPaymentData()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -181,11 +181,13 @@ class MainActivity :
     }
 
     private fun updateUserAndPaymentData() {
-        ProClient.updateUserData()
-        ProClient.updatePaymentMethods(this, { proPlans, paymentMethods ->
-            sessionModel.processPaymentMethods(proPlans, paymentMethods)
-        })
-        ProClient.updateCurrenciesList()
+        CoroutineScope(Dispatchers.IO).launch {
+            ProClient.updateUserData()
+            ProClient.updatePaymentMethods(this, { proPlans, paymentMethods ->
+                sessionModel.processPaymentMethods(proPlans, paymentMethods)
+            })
+            ProClient.updateCurrenciesList()
+        }
     }
 
     private fun navigateForIntent(intent: Intent) {
