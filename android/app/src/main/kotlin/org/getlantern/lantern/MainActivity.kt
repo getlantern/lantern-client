@@ -129,7 +129,8 @@ class MainActivity :
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
         subscribeAppEvents()
-        updateUserAndPaymentData()
+        CoroutineScope(Dispatchers.IO).launch { updateUserAndPaymentData() }
+
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -181,13 +182,11 @@ class MainActivity :
     }
 
     private fun updateUserAndPaymentData() {
-        CoroutineScope(Dispatchers.IO).launch {
-            ProClient.updateUserData()
-            ProClient.updatePaymentMethods(this, { proPlans, paymentMethods ->
-                sessionModel.processPaymentMethods(proPlans, paymentMethods)
-            })
-            ProClient.updateCurrenciesList()
-        }
+        ProClient.updateUserData()
+        ProClient.updatePaymentMethods(this, { proPlans, paymentMethods ->
+            sessionModel.processPaymentMethods(proPlans, paymentMethods)
+        })
+        ProClient.updateCurrenciesList()
     }
 
     private fun navigateForIntent(intent: Intent) {
