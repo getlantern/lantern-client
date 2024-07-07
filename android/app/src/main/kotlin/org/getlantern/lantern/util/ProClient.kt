@@ -156,7 +156,7 @@ object ProClient {
     ): Map<String, ProPlan> {
         val plans = mutableMapOf<String, ProPlan>()
         for (plan in fetched) {
-            plan.formatCost()
+            
             plans.put(plan.id, PlansUtil.updatePrice(activity, plan))
         }
         return plans
