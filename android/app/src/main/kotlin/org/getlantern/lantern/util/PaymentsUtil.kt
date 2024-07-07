@@ -270,12 +270,11 @@ class PaymentsUtil(
         methodCallResult: MethodChannel.Result,
         deviceLocal: String = "",
     ) {
-        val currency =
-            deviceLocal.ifEmpty {
-                LanternApp.getSession().planByID(planID)?.let {
-                    it.currencyCode
-                } ?: "usd"
-            }
+        val currency = deviceLocal.ifEmpty {
+            LanternApp.getSession().planByID(planID)?.let {
+                it.currencyCode
+            } ?: "usd"
+        }
         Logger.d(
             TAG,
             "Sending purchase request: provider $provider; plan ID: $planID; currency: $currency",

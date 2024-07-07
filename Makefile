@@ -358,7 +358,9 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 	done && \
 	ALL=`echo $$ALL | xargs` && \
 	echo "Uploading $$ALL for auto-updates" && \
-	echo $$ALL | xargs $(RUBY) ./$(INSTALLER_RESOURCES)/tools/create_or_update_release.rb $(GH_USER) $(GH_RELEASE_REPOSITORY) $$VERSION
+	echo $$ALL
+
+#xargs $(RUBY) ./$(INSTALLER_RESOURCES)/tools/create_or_update_release.rb $(GH_USER) $(GH_RELEASE_REPOSITORY) $$VERSION
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 

@@ -12,7 +12,7 @@ internal data class Event(
 ) {
     companion object {
         fun fromJson(json: String): Event? = try {
-            JsonUtil.fromJson(json, Event::class.java)
+            JsonUtil.fromJson<Event>(json)
         } catch (ignored: Exception) {
             null
         }

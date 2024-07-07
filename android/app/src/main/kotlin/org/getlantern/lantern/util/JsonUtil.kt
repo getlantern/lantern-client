@@ -1,33 +1,39 @@
 package org.getlantern.lantern.util
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.getlantern.mobilesdk.Logger
 
 object JsonUtil {
-    val GSON: Gson = GsonBuilder().create()
 
-    fun <T> fromJson(json: String, clazz: Class<T>): T {
-        return GSON.fromJson(json, clazz)
+    val json = Json {
+        encodeDefaults = true
+        ignoreUnknownKeys = true
+        explicitNulls = false
+        prettyPrint = true
     }
 
-    fun <T> fromJson(json: String, typeOfT: Type): T {
-        return GSON.fromJson(json, typeOfT)
+    inline fun <reified T : Any> fromJson(s: String): T {
+        return json.decodeFromString<T>(s)
     }
 
-    inline fun <reified T> fromJson(json: String): T {
-        return GSON.fromJson(json, object : TypeToken<T>() {}.type)
+    inline fun <reified T> toJson(obj: T): String {
+        return json.encodeToString(obj)
+    }
+
+    inline fun <reified T> tryParseJson(s: String?): T? {
+        return try {
+            fromJson(s ?: return null)
+        } catch (e: Exception) {
+            Logger.error("JsonUtil", "Unable to parse JSON", e)
+            null
+        }
     }
 
     fun asJsonObject(responseData: String): JsonObject {
         return JsonParser().parse(responseData).asJsonObject
-    }
-
-    fun toJson(obj: Any): String {
-        return GSON.toJson(obj)
     }
 }

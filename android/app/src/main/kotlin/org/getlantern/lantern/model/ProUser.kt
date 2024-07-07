@@ -3,7 +3,9 @@ package org.getlantern.lantern.model
 import org.joda.time.Days
 import org.joda.time.LocalDateTime
 import org.joda.time.Months
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ProUser(
     val userId: Long,
     val token: String,
@@ -11,10 +13,11 @@ data class ProUser(
     val email: String = "",
     val userStatus: String = "",
     val code: String = "",
+    val locale: String = "",
     val subscription: String = "",
     val expiration: Long = 0,
     val devices: List<Device> = mutableListOf<Device>(),
-    val userLevel: String = "",
+    var userLevel: String = "",
 ) {
     private fun isUserStatus(status: String) = userStatus == status
 

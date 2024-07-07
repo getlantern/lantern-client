@@ -12,18 +12,11 @@ import org.getlantern.lantern.util.DateUtil.isToday
 import org.joda.time.LocalDateTime
 
 object PlansUtil {
-    private fun currencyFromID(id:String):String {
-        val parts = id.split("-")
-        return if (parts.size > 0) parts[1] else ""
-    }
-
     @JvmStatic
-    fun updatePrice(activity: Context, plan: ProPlan): ProPlan {
+    fun updatePrice(activity: Context, plan: ProPlan):ProPlan {
         val formattedBonus = formatRenewalBonusExpected(activity, plan.renewalBonusExpected, false)
-        val currencyCode = currencyFromID(plan.id)
-        plan.currencyCode = currencyCode
-        val monthlyPrice = plan.expectedMonthlyPrice.get(currencyCode)
-        val totalCost = plan.formattedCost()
+        val totalCost = plan.costWithoutTaxStr
+        var totalCostBilledOneTime = activity.resources.getString(R.string.total_cost, totalCost)
         var formattedDiscount = ""
         if (plan.discount > 0) {
             formattedDiscount =
@@ -32,11 +25,13 @@ object PlansUtil {
                     Math.round(plan.discount * 100).toString()
                 )
         }
-        plan.totalCost = totalCost
-        plan.oneMonthCost = if (monthlyPrice != null) (monthlyPrice.toFloat()/100.0).toString() else ""
-        plan.renewalText = ""
-        plan.formattedBonus = formattedDiscount
-        plan.totalCostBilledOneTime = activity.resources.getString(R.string.total_cost, totalCost)
+        val oneMonthCost = plan.formattedPriceOneMonth()
+        plan.renewalText = proRenewalText(activity.resources, formattedBonus)
+        plan.totalCostBilledOneTime = totalCostBilledOneTime
+        plan.oneMonthCost = oneMonthCost
+        plan.formattedBonus = formattedBonus
+        plan.formattedDiscount = formattedDiscount
+        if (totalCost != null) plan.totalCost = totalCost
         return plan
     }
 

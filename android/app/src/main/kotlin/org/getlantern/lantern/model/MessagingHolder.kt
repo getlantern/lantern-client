@@ -86,9 +86,8 @@ class MessagingHolder {
 
             // show notifications for incoming calls
             messaging.subscribeToWebRTCSignals("messagingholder") { signal ->
-                val msg = JsonUtil.fromJson(
+                val msg = JsonUtil.fromJson<SignalingMessage>(
                     signal.content.toString(Charsets.UTF_8),
-                    SignalingMessage::class.java
                 )
                 when (msg.type) {
                     "offer" -> notifyCall(application, notificationManager, signal)
