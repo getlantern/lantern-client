@@ -395,7 +395,8 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
                             methods.providers.map {
                                 // Check if payment provider is stipe add pubkey
                                 if (it.name == PaymentProvider.Stripe && it.data != null) {
-                                    setStripePubKey(it.data["pubKey"] as String)
+                                    val pubKey = it.data["pubKey"]?.let { it as String } ?: ""
+                                    setStripePubKey(pubKey)
                                 }
                                 Vpn.PaymentProviders.newBuilder()
                                     .setName(it.name.toString().lowercase())

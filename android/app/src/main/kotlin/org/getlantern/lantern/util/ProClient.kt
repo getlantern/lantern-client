@@ -3,6 +3,7 @@ package org.getlantern.lantern.util
 import android.content.Context
 import com.google.gson.JsonObject
 import internalsdk.Internalsdk
+import kotlinx.serialization.Serializable
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
@@ -12,27 +13,32 @@ import org.getlantern.lantern.model.ProPlan
 import org.getlantern.lantern.model.ProUser
 import org.getlantern.mobilesdk.Logger
 
+@Serializable
 abstract class APIResponse(
     var error: String? = null,
     var errorId: String = "",
     var status: String = "",
 )
 
+@Serializable
 data class PaymentMethodsResponse(
-    val icons: Map<String, List<String>>? = null,
-    val providers: Map<String, List<PaymentMethods>>? = null,
-    val plans: Map<String, ProPlan>,
+    val icons: Map<String, List<String>> = mutableMapOf(),
+    val providers: Map<String, List<PaymentMethods>> = mutableMapOf(),
+    val plans: List<ProPlan> = mutableListOf(),
 ) : APIResponse()
 
+@Serializable
 data class PaymentRedirectResponse(
     val redirectURL: String,
 ) : APIResponse()
 
+@Serializable
 data class LinkCodeResponse(
     val code: String,
     val expireAt: Long,
 ) : APIResponse()
 
+@Serializable
 data class LinkCodeRedeemResponse(
     val token: String,
     val userID: Long,
@@ -150,6 +156,7 @@ object ProClient {
     ): Map<String, ProPlan> {
         val plans = mutableMapOf<String, ProPlan>()
         for (plan in fetched) {
+            plan.formatCost()
             plans.put(plan.id, PlansUtil.updatePrice(activity, plan))
         }
         return plans
@@ -159,33 +166,19 @@ object ProClient {
         activity: Context,
         callback: ((proPlans: Map<String, ProPlan>, paymentMethods: List<PaymentMethods>) -> Unit)? = null,
     ) {
-        val result = JsonUtil.asJsonObject(proClient.paymentMethods())
-        val methods: Map<String, List<PaymentMethods>>? =
-            JsonUtil.fromJson<Map<String, List<PaymentMethods>>>(
-                result?.get("providers").toString(),
-            )
-        if (methods == null) return
-        val providers = methods.get("android")
+        val result = JsonUtil.fromJson<PaymentMethodsResponse>(proClient.paymentMethods())
+        val providers = result.providers.get("android")
         // Due to API limitations
         // We need loop all the provider and info since we can multiple provider with multiple methods
-        providers?.let {
-            providers.forEach { it ->
-                it.providers.forEach { provider ->
-                    val icons = result?.get("icons")?.asJsonObject
-                    val logoJson =
-                        icons
-                            ?.get(
-                                provider.name.toString().lowercase(),
-                            )!!
-                            .asJsonArray
-                    val logoUrlsList: List<String> =
-                        logoJson?.map { it.asString } ?: emptyList()
-                    provider.logoUrl = logoUrlsList
-                }
+        providers?.forEach { it ->
+            it.providers.forEach { provider ->
+                val icons = result.icons
+                val logoUrlsList =
+                    icons.get(provider.name.toString().lowercase()) ?: emptyList()
+                provider.logoUrl = logoUrlsList
             }
         }
-        val fetched = JsonUtil.fromJson<List<ProPlan>>(result?.get("plans").toString())
-        val plans = plansMap(activity, fetched)
+        val plans = plansMap(activity, result.plans)
         Logger.debug(TAG, "Successfully fetched payment methods with providers: $providers and plans $plans")
         if (providers != null) callback?.invoke(plans, providers)
     }

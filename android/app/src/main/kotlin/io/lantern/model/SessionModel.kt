@@ -183,6 +183,29 @@ class SessionModel(
                 result,
             )
 
+            "isUserLoggedIn" -> {
+                Logger.debug(TAG, "isUserLoggedIn called")
+                result.success(false)
+            }
+
+
+            "login" -> {
+                AuthClient.signIn(call.argument("email")!!, call.argument("password")!!, { resp ->
+                    LanternApp.getSession().setUserLoggedIn(true)
+                })
+            }
+
+            "signout" -> {
+                AuthClient.signOut()
+            }
+
+            "signup" -> {
+                AuthClient.signUp(call.argument("email")!!, call.argument("password")!!, { resp ->
+                    LanternApp.getSession().setUserLoggedIn(true)
+                })
+            }
+
+
             "userStatus" -> userStatus(result)
             "updatePaymentPlans" -> updatePaymentMethods(result)
             "setLanguage" -> {
@@ -205,22 +228,6 @@ class SessionModel(
                 } else {
                     throw IllegalArgumentException("No URL provided for webview")
                 }
-            }
-
-            "login" -> {
-                AuthClient.signIn(call.argument("email")!!, call.argument("password")!!, { resp ->
-                    LanternApp.getSession().setUserLoggedIn(true)
-                })
-            }
-
-            "signout" -> {
-                AuthClient.signOut()
-            }
-
-            "signup" -> {
-                AuthClient.signUp(call.argument("email")!!, call.argument("password")!!, { resp ->
-                    LanternApp.getSession().setUserLoggedIn(true)
-                })
             }
 
             "startRecoveryByEmail" -> {

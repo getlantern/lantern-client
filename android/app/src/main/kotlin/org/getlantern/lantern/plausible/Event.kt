@@ -1,7 +1,9 @@
 package org.getlantern.lantern.plausible
 
+import kotlinx.serialization.Serializable
 import org.getlantern.lantern.util.JsonUtil
 
+@Serializable
 internal data class Event(
     val domain: String,
     val name: String,
