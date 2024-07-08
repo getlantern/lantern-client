@@ -140,6 +140,8 @@ void ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
 
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
 
+Pointer<Utf8> ffiDeviceId() => _bindings.myDeviceId().cast<Utf8>();
+
 Pointer<Utf8> ffiReplicaAddr() => _bindings.replicaAddr().cast<Utf8>();
 
 Pointer<Utf8> ffiChatEnabled() => _bindings.chatEnabled().cast<Utf8>();

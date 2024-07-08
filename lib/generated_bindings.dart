@@ -307,6 +307,16 @@ class NativeLibrary {
   late final _referral =
       _referralPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
+  ffi.Pointer<ffi.Char> myDeviceId() {
+    return _myDeviceId();
+  }
+
+  late final _myDeviceIdPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'myDeviceId');
+  late final _myDeviceId =
+      _myDeviceIdPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
   ffi.Pointer<ffi.Char> chatEnabled() {
     return _chatEnabled();
   }

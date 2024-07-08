@@ -426,6 +426,7 @@ class UserDevices extends StatelessWidget {
           return Column(children: [
             ...devices.devices.map<Widget>((device) {
               var isMyDevice = device.id == myDeviceId;
+              print('Device: ${device.id} isMyDevice: $myDeviceId');
               var allowRemoval = devices.devices.length > 1 || !isMyDevice;
               var index = devices.devices.indexWhere((d) => d == device);
               return Padding(

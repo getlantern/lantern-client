@@ -177,6 +177,7 @@ func cacheUserDetail(userDetail *protos.User) error {
 		return err
 	}
 	currentDevice := getDeviceID()
+	log.Debugf("Current device %v", currentDevice)
 
 	// Check if device id is connect to same device if not create new user
 	// this is for the case when user removed device from other device
@@ -432,9 +433,11 @@ func hasPlanUpdatedOrBuy() *C.char {
 
 //export devices
 func devices() *C.char {
-	user, err := tryCacheUserData()
-	if err != nil {
-		return sendError(err)
+	user, found := cachedUserData()
+	if !found {
+		// for now just return empty array
+		b, _ := json.Marshal("[]")
+		return C.CString(string(b))
 	}
 	b, _ := json.Marshal(user.Devices)
 	return C.CString(string(b))
@@ -475,9 +478,9 @@ func removeDevice(deviceId *C.char) *C.char {
 
 //export expiryDate
 func expiryDate() *C.char {
-	user, err := tryCacheUserData()
-	if err != nil {
-		return sendError(err)
+	user, found := cachedUserData()
+	if !found {
+		return sendError(log.Errorf("User data not found"))
 	}
 	tm := time.Unix(user.Expiration, 0)
 	exp := tm.Format("01/02/2006")
@@ -576,6 +579,12 @@ func referral() *C.char {
 	return C.CString(referralCode)
 }
 
+//export myDeviceId
+func myDeviceId() *C.char {
+	deviceId := getDeviceID()
+	return C.CString(deviceId)
+}
+
 //export chatEnabled
 func chatEnabled() *C.char {
 	return C.CString("false")
@@ -659,7 +668,7 @@ func proUser() *C.char {
 	// go getUserData()
 	uc := a.Settings()
 	if uc.IsProUser() {
-		return C.CString("false")
+		return C.CString("true")
 	}
 	// if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
 	// 	return C.CString("true")

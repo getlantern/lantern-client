@@ -255,7 +255,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'deviceid',
-      ffiReferral,
+      ffiDeviceId,
       defaultValue: '',
       builder: builder,
     );
