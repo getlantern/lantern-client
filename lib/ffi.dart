@@ -172,17 +172,13 @@ Pointer<Utf8> ffiOnBoardingStatus() =>
 Pointer<Utf8> ffiServerInfo() => _bindings.serverInfo().cast<Utf8>();
 
 Future<void> ffiReportIssue(List<String> list) {
-  final email = list[0].toNativeUtf8();
-  final issueType = list[1].toNativeUtf8();
-  final description = list[2].toNativeUtf8();
-  final result = _bindings.reportIssue(email as Pointer<Char>,
-      issueType as Pointer<Char>, description as Pointer<Char>);
-  if (result.r1 != nullptr) {
-    // Got error throw error to show error ui state
-    final errorCode = result.r1.cast<Utf8>().toDartString();
-    throw PlatformException(
-        code: errorCode, message: 'report_issue_error'.i18n);
-  }
+  final email = list[0].toPointerChar();
+  final issueType = list[1].toPointerChar();
+  final description = list[2].toPointerChar();
+  final result =
+      _bindings.reportIssue(email, issueType, description).cast<Utf8>().toDartString();
+
+  checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
   return Future.value();
 }
 

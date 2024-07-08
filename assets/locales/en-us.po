@@ -244,7 +244,7 @@ msgstr "Cannot complete purchase"
 
 
 msgid "discover_not_working"
-msgstr "Discover not working "
+msgstr "Discover not working"
 
 msgid "cannot_sign_in"
 msgstr "Cannot sign in"

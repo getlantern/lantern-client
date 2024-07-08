@@ -152,6 +152,7 @@ func start() {
 }
 
 func fetchUserData() error {
+
 	user, err := getUserData()
 	if err != nil {
 		return log.Errorf("error while fetching user data: %v", err)
@@ -279,6 +280,7 @@ func userCreate() error {
 
 func fetchOrCreate() error {
 	settings := a.Settings()
+	settings.SetLanguage("en_us")
 	userID := settings.GetUserID()
 	if userID == 0 {
 		a.Settings().SetUserFirstVisit(true)
@@ -745,12 +747,14 @@ func userConfig(settings *settings.Settings) common.UserConfig {
 }
 
 //export reportIssue
-func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
+func reportIssue(email, issueType, description *C.char) *C.char {
+	issueTypeStr := C.GoString(issueType)
 	deviceID := a.Settings().GetDeviceID()
-	issueIndex := issueMap[C.GoString(issueType)]
+	issueIndex := issueMap[issueTypeStr]
 	issueTypeInt, err := strconv.Atoi(issueIndex)
 	if err != nil {
-		return nil, sendError(err)
+		log.Errorf("Error converting issue type to int: %v", err)
+		return sendError(err)
 	}
 	ctx := context.Background()
 	uc := userConfig(a.Settings())
@@ -779,10 +783,10 @@ func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 		nil,
 	)
 	if err != nil {
-		return nil, sendError(err)
+		return sendError(err)
 	}
 	log.Debug("Successfully reported issue")
-	return C.CString("true"), nil
+	return C.CString("true")
 }
 
 //export checkUpdates

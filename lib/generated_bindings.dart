@@ -526,7 +526,7 @@ class NativeLibrary {
   late final _replicaAddr =
       _replicaAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  reportIssue_return reportIssue(
+  ffi.Pointer<ffi.Char> reportIssue(
     ffi.Pointer<ffi.Char> email,
     ffi.Pointer<ffi.Char> issueType,
     ffi.Pointer<ffi.Char> description,
@@ -540,11 +540,11 @@ class NativeLibrary {
 
   late final _reportIssuePtr = _lookup<
       ffi.NativeFunction<
-          reportIssue_return Function(ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('reportIssue');
   late final _reportIssue = _reportIssuePtr.asFunction<
-      reportIssue_return Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<ffi.Char>)>();
+      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
   ffi.Pointer<ffi.Char> checkUpdates() {
     return _checkUpdates();
@@ -832,13 +832,6 @@ final class GoSlice extends ffi.Struct {
 typedef GoInt = GoInt64;
 typedef GoInt64 = ffi.LongLong;
 typedef DartGoInt64 = int;
-
-/// Return type for reportIssue
-final class reportIssue_return extends ffi.Struct {
-  external ffi.Pointer<ffi.Char> r0;
-
-  external ffi.Pointer<ffi.Char> r1;
-}
 
 const int __has_safe_buffers = 1;
 

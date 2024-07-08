@@ -32,11 +32,16 @@ type UserConfigData struct {
 	Headers  map[string]string
 }
 
-func (uc *UserConfigData) GetAppName() string              { return uc.AppName }
-func (uc *UserConfigData) GetDeviceID() string             { return uc.DeviceID }
-func (uc *UserConfigData) GetUserID() int64                { return uc.UserID }
-func (uc *UserConfigData) GetToken() string                { return uc.Token }
-func (uc *UserConfigData) GetLanguage() string             { return uc.Language }
+func (uc *UserConfigData) GetAppName() string  { return uc.AppName }
+func (uc *UserConfigData) GetDeviceID() string { return uc.DeviceID }
+func (uc *UserConfigData) GetUserID() int64    { return uc.UserID }
+func (uc *UserConfigData) GetToken() string    { return uc.Token }
+func (uc *UserConfigData) GetLanguage() string {
+	if uc.Language != "" {
+		return uc.Language
+	}
+	return "en_Us"
+}
 func (uc *UserConfigData) GetTimeZone() (string, error)    { return timezone.IANANameForTime(time.Now()) }
 func (uc *UserConfigData) GetEnabledExperiments() []string { return nil }
 func (uc *UserConfigData) GetInternalHeaders() map[string]string {
