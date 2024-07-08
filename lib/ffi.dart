@@ -128,14 +128,17 @@ Future<String> ffiEmailExists(String email) async => await _bindings
     .cast<Utf8>()
     .toDartString();
 
-void ffiRedeemResellerCode(email, currency, deviceName, resellerCode) {
+Future<void> ffiRedeemResellerCode(List<String> params) {
+  final email = params[0].toPointerChar();
+  final currency = params[1].toPointerChar();
+  final deviceName = params[2].toPointerChar();
+  final resellerCode = params[3].toPointerChar();
   final result = _bindings
       .redeemResellerCode(email, currency, deviceName, resellerCode)
       .cast<Utf8>()
       .toDartString();
   checkAPIError(result, 'wrong_seller_code'.i18n);
-  // if successful redeeming a reseller code, immediately refresh Pro user data
-  ffiProUser();
+  return Future.value();
 }
 
 Pointer<Utf8> ffiReferral() => _bindings.referral().cast<Utf8>();
@@ -175,8 +178,10 @@ Future<void> ffiReportIssue(List<String> list) {
   final email = list[0].toPointerChar();
   final issueType = list[1].toPointerChar();
   final description = list[2].toPointerChar();
-  final result =
-      _bindings.reportIssue(email, issueType, description).cast<Utf8>().toDartString();
+  final result = _bindings
+      .reportIssue(email, issueType, description)
+      .cast<Utf8>()
+      .toDartString();
 
   checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
   return Future.value();
@@ -306,8 +311,10 @@ class NoPlansUpdate implements Exception {
 
 // checkAPIError throws a PlatformException if the API response contains an error
 void checkAPIError(result, errorMessage) {
-  print(result);
   if (result is String) {
+    if (result == 'true') {
+      return;
+    }
     final errorMessageMap = jsonDecode(result);
     if (errorMessageMap.containsKey('error')) {
       throw PlatformException(
