@@ -825,8 +825,8 @@ class SessionModel extends Model {
       });
     }
 
-    compute(ffiRedeemResellerCode, [email,currency,deviceName, resellerCode]);
-
+    await compute(
+        ffiRedeemResellerCode, [email, currency, deviceName, resellerCode]);
   }
 
   Future<String> submitBitcoinPayment(
