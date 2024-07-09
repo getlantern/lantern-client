@@ -18,7 +18,10 @@ const (
 )
 
 func NewSRPClient(email string, password string, salt []byte) *srp.SRP {
-
+	if len(salt) == 0 || len(password) == 0 || len(email) == 0 {
+		log.Errorf("salt, password and email should not be empty %v %v %v", salt, password, email)
+		return nil
+	}
 	log.Debugf("NewSRPClient email %v password %v salt %v", email, password, salt)
 	lowerCaseEmail := strings.ToLower(email)
 	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
@@ -29,7 +32,6 @@ func NewSRPClient(email string, password string, salt []byte) *srp.SRP {
 func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) *protos.User {
 	// Convert protobuf to usre details struct
 	log.Debugf("ConvertToUserDetailsResponse %+v", userResponse)
-	log.Debugf("ConvertToUserDetailsResponse  legacy %+v", userResponse.LegacyUserData)
 
 	user := userResponse.LegacyUserData
 
@@ -133,11 +135,8 @@ func (c *authClient) Login(email string, password string, deviceId string) (*pro
 		return nil, nil, err
 	}
 
-	log.Debugf("Login password %v email %v salt %v", password, lowerCaseEmail, salt)
-	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
-	log.Debugf("Encrypted key %v Login", encryptedKey)
 	// Prepare login request body
-	client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
+	client := NewSRPClient(lowerCaseEmail, password, salt)
 	//Send this key to client
 	A := client.EphemeralPublic()
 	//Create body
