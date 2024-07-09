@@ -427,6 +427,8 @@ func hasPlanUpdatedOrBuy() *C.char {
 	if isOldFound {
 		if cacheUserData.Expiration < resp.User.Expiration {
 			// New data has a later expiration
+			// if foud then update the cache
+			cacheUserDetail(resp.User)
 			return C.CString(string("true"))
 		}
 	}
@@ -536,12 +538,12 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 		"email":          C.GoString(email),
 		"plan":           C.GoString(plan),
 	}
-	log.Debugf("DEBUG: Testing provider request: %v", puchaseData)
 	_, err := proClient.PurchaseRequest(context.Background(), puchaseData)
 	if err != nil {
 		return sendError(err)
 	}
 	setProUser(true)
+	getUserData()
 	return C.CString("true")
 }
 
