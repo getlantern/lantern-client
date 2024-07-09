@@ -18,8 +18,11 @@ const (
 )
 
 func NewSRPClient(email string, password string, salt []byte) *srp.SRP {
+
+	log.Debugf("NewSRPClient email %v password %v salt %v", email, password, salt)
 	lowerCaseEmail := strings.ToLower(email)
 	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
+	log.Debugf("Encrypted key %v", encryptedKey)
 	return srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
 }
 
@@ -62,6 +65,10 @@ func ConvertToUserDetailsResponse(userResponse *protos.LoginResponse) *protos.Us
 
 // Takes password and email, salt and returns encrypted key
 func GenerateEncryptedKey(password string, email string, salt []byte) *big.Int {
+	if len(salt) == 0 || len(password) == 0 || len(email) == 0 {
+		log.Errorf("slat or password or email is empty %v %v %v", salt, password, email)
+		return nil
+	}
 	lowerCaseEmail := strings.ToLower(email)
 	combinedInput := password + lowerCaseEmail
 	encryptedKey := pbkdf2.Key([]byte(combinedInput), salt, 4096, 32, sha256.New)
@@ -97,7 +104,7 @@ func (c *authClient) SignUp(email string, password string) ([]byte, error) {
 		return nil, err
 	}
 
-	srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
+	srpClient := NewSRPClient(lowerCaseEmail, password, salt)
 	verifierKey, err := srpClient.Verifier()
 	if err != nil {
 		return nil, err
@@ -126,6 +133,7 @@ func (c *authClient) Login(email string, password string, deviceId string) (*pro
 		return nil, nil, err
 	}
 
+	log.Debugf("Login password %v email %v salt %v", password, lowerCaseEmail, salt)
 	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
 	log.Debugf("Encrypted key %v Login", encryptedKey)
 	// Prepare login request body
@@ -137,6 +145,7 @@ func (c *authClient) Login(email string, password string, deviceId string) (*pro
 		Email: lowerCaseEmail,
 		A:     A.Bytes(),
 	}
+	log.Debugf("Login prepare request email %v A %v", lowerCaseEmail, A.Bytes())
 	srpB, err := c.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return nil, nil, err

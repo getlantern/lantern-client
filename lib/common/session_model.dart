@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/plans/utils.dart';
 import 'package:lantern/replica/common.dart';
-
 import 'common.dart';
 import 'common_desktop.dart';
 

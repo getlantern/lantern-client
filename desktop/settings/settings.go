@@ -197,6 +197,7 @@ func newSettings(filePath string) *Settings {
 			SNMigratedDeviceIDForUserID: int64(0),
 			SNUserLoggedIn:              false,
 			SNUserFirstVisit:            false,
+			SNSalt:                      "",
 		},
 		filePath:        filePath,
 		changeNotifiers: make(map[SettingName][]func(interface{})),

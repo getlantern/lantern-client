@@ -923,7 +923,7 @@ func getUserSalt(email string) ([]byte, error) {
 		return nil, err
 	}
 	log.Debugf("Salt Response-> %v", saltResponse.Salt)
-	return salt, nil
+	return saltResponse.Salt, nil
 
 }
 
@@ -1132,11 +1132,12 @@ func deleteAccount(password *C.char) *C.char {
 		Email: lowerCaseEmail,
 		A:     A.Bytes(),
 	}
+	log.Debugf("Delete Account request email %v A %v", lowerCaseEmail, A.Bytes())
 	srpB, err := authClient.LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
-	log.Debugf("Login prepare response %v", srpB)
+	log.Debugf("Login prepare response %v", srpB.B)
 
 	// // Once the client receives B from the server Client should check error status here as defense against
 	// // a malicious B sent from server
