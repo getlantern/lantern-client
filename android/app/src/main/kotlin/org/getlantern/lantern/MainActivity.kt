@@ -5,7 +5,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.VpnService
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.JsonObject
+import internalsdk.SessionModelOpts
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -22,6 +25,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.lantern.model.MessagingModel
 import io.lantern.model.ReplicaModel
 import io.lantern.model.SessionModel
+import io.lantern.model.SessionModelLegacy
 import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
@@ -61,7 +65,7 @@ class MainActivity :
     CoroutineScope by MainScope() {
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
-    private lateinit var sessionModel: SessionModel
+    private lateinit var sessionModel: SessionModelLegacy
     private lateinit var replicaModel: ReplicaModel
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
@@ -78,7 +82,20 @@ class MainActivity :
         super.configureFlutterEngine(flutterEngine)
         messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
-        sessionModel = SessionModel(this, flutterEngine)
+        val opts = SessionModelOpts()
+        opts.lang = "en_us"
+        opts.deviceID =
+            Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        opts.model = Build.MODEL
+        opts.osVersion = String.format("Android-%s", Build.VERSION.RELEASE)
+        opts.playVersion = LanternApp.getSession().isStoreVersion()
+        opts.device = LanternApp.getSession().deviceName()
+        opts.paymentTestMode = false
+        opts.platform = "android"
+        val sessionNew = SessionModel(this, flutterEngine, opts)
+
+        sessionModel = SessionModelLegacy(this, flutterEngine)
+
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)
@@ -150,13 +167,16 @@ class MainActivity :
                     Logger.debug("bandwidth updated", event.bandwidth.toString())
                     vpnModel.updateBandwidth(event.bandwidth)
                 }
+
                 is AppEvent.LoConfEvent -> {
                     doProcessLoconf(appEvent.loconf)
                 }
+
                 is AppEvent.LocaleEvent -> {
                     // Recreate the activity when the language changes
                     recreate()
                 }
+
                 is AppEvent.StatsEvent -> {
                     val stats = appEvent.stats
                     Logger.debug("Stats updated", stats.toString())
@@ -169,12 +189,15 @@ class MainActivity :
                             .build(),
                     )
                 }
+
                 is AppEvent.StatusEvent -> {
                     updateUserAndPaymentData()
                 }
+
                 is AppEvent.VpnStateEvent -> {
                     updateStatus(appEvent.vpnState.useVpn)
                 }
+
                 else -> {
                     Logger.debug(TAG, "Unknown app event " + appEvent)
                 }
@@ -356,11 +379,11 @@ class MainActivity :
                     error: ProError?,
                 ) {
                     Logger.error(TAG, "Unable to fetch currency list: $error", throwable)
-                /*
-                retry to fetch currency list again
-                fetch until we get the currency list
-                retry after 5 seconds
-                 */
+                    /*
+                    retry to fetch currency list again
+                    fetch until we get the currency list
+                    retry after 5 seconds
+                     */
                     CoroutineScope(Dispatchers.IO).launch {
                         delay(5000)
                         updateCurrencyList()
