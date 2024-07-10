@@ -27,6 +27,12 @@ import top.oply.opuslib.OpusRecorder
 import java.io.*
 import java.util.concurrent.atomic.AtomicReference
 
+///Add below permission in AndroidManifest.xml
+//<!-- Re-enable for Chat!
+//<uses-permission android:name="android.permission.RECORD_AUDIO" />
+//<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+//<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+//-->
 class MessagingModel(
     private val activity: MainActivity,
     flutterEngine: FlutterEngine,
