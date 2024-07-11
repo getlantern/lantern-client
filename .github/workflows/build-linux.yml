@@ -94,7 +94,7 @@ jobs:
           cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
           make package-linux
           mv dist/1.0.0+1/lantern-1.0.0+1-linux.deb lantern-installer-preview.deb
-          mv dist/1.0.0+1/lantern-1.0.0+1-linux.rpm lantern-desktop-beta.rpm
+          mv dist/1.0.0+1/lantern-1.0.0+1-linux.rpm lantern-installer-preview.rpm
 
       - uses: actions/upload-artifact@v4
         with:
@@ -113,8 +113,6 @@ jobs:
         env:
           VERSION: "${{ inputs.version }}"
         run: |
-          ls -l
           shasum -a 256 lantern-installer-preview.deb | cut -d " " -f 1 > lantern-installer-preview.deb.sha256
           shasum -a 256 lantern-installer-preview.rpm | cut -d " " -f 1 > lantern-installer-preview.rpm.sha256
-          ls -l
           s3cmd put --acl-public lantern-installer-preview.deb lantern-installer-preview.deb.sha256 lantern-installer-preview.rpm lantern-installer-preview.rpm.sha256 "s3://lantern"
