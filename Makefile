@@ -140,8 +140,6 @@ WINDOWS_APP_NAME ?= $(APP).exe
 WINDOWS64_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
 WINDOWS64_APP_NAME ?= $(APP)_x64.exe
 LINUX_LIB_NAME ?= $(DESKTOP_LIB_NAME).so
-LINUX_LIB_NAME_AMD64 ?= $(LINUX_LIB_NAME)
-LINUX_LIB_NAME_ARM64 ?= $(LINUX_LIB_NAME)
 
 APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
@@ -469,24 +467,22 @@ ffigen:
 	dart run ffigen --config ffigen.yaml
 
 .PHONY: linux-amd64
-linux-amd64: $(LINUX_LIB_NAME_AMD64) ## Build lantern for linux-amd64
-$(LINUX_LIB_NAME_AMD64): export GOOS = linux
-$(LINUX_LIB_NAME_AMD64): export GOARCH = amd64
-$(LINUX_LIB_NAME_AMD64): export LIB_NAME = $(LINUX_LIB_NAME)
-$(LINUX_LIB_NAME_AMD64): export EXTRA_LDFLAGS += -linkmode external -s -w
-$(LINUX_LIB_NAME_AMD64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
-$(LINUX_LIB_NAME_AMD64): export Environment = production
-$(LINUX_LIB_NAME_AMD64): desktop-lib
+linux-amd64: export GOOS = linux
+linux-amd64: export GOARCH = amd64
+linux-amd64: export LIB_NAME = $(LINUX_LIB_NAME)
+linux-amd64: export EXTRA_LDFLAGS += -linkmode external -s -w
+linux-amd64: export GO_BUILD_FLAGS += -a -buildmode=c-shared
+linux-amd64: export Environment = production
+linux-amd64: desktop-lib ## Build lantern for linux-amd64
 
 .PHONY: linux-arm64
-linux-arm64: $(LINUX_LIB_NAME_ARM64) ## Build lantern for linux-arm64
-$(LINUX_LIB_NAME_ARM64): export GOOS = linux
-$(LINUX_LIB_NAME_ARM64): export GOARCH = arm64
-$(LINUX_LIB_NAME_ARM64): export LIB_NAME = $(LINUX_LIB_NAME)
-$(LINUX_LIB_NAME_ARM64): export EXTRA_LDFLAGS += -linkmode external -s -w
-$(LINUX_LIB_NAME_ARM64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
-$(LINUX_LIB_NAME_ARM64): export Environment = production
-$(LINUX_LIB_NAME_ARM64): desktop-lib
+linux-arm64: export GOOS = linux
+linux-arm64: export GOARCH = arm64
+linux-arm64: export LIB_NAME = $(LINUX_LIB_NAME)
+linux-arm64: export EXTRA_LDFLAGS += -linkmode external -s -w
+linux-arm64: export GO_BUILD_FLAGS += -a -buildmode=c-shared
+linux-arm64: export Environment = production
+linux-arm64: desktop-lib ## Build lantern for linux-arm64
 
 .PHONY: windows
 windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
