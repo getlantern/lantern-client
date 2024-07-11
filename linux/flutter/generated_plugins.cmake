@@ -3,10 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  dynamic_color
-  file_selector_linux
+  audioplayers_linux
+  emoji_picker_flutter
   gtk
   screen_retriever
+  sentry_flutter
   tray_manager
   url_launcher_linux
   window_manager
