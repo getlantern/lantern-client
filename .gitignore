@@ -77,14 +77,11 @@ appium_kotlin/app/src/test/resources/local/local_config.json
 
 ios/internalsdk/Internalsdk.xcframework/
 android/app/libs/liblantern-all.aar
-lantern-installer.dmg
 liblantern.h
 *.dylib
 *.so
-liblantern_arm64.dylib
-liblantern_amd64.dylib
+*.dmg
 lib/generated_bindings.dart
-linux/flutter/ephemeral
 
 *.env
 ExportOptions.plist

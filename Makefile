@@ -470,7 +470,6 @@ ffigen:
 
 .PHONY: linux-amd64
 linux-amd64: $(LINUX_LIB_NAME_AMD64) ## Build lantern for linux-amd64
-
 $(LINUX_LIB_NAME_AMD64): export GOOS = linux
 $(LINUX_LIB_NAME_AMD64): export GOARCH = amd64
 $(LINUX_LIB_NAME_AMD64): export LIB_NAME = $(LINUX_LIB_NAME)
@@ -479,6 +478,8 @@ $(LINUX_LIB_NAME_AMD64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(LINUX_LIB_NAME_AMD64): export Environment = production
 $(LINUX_LIB_NAME_AMD64): desktop-lib
 
+.PHONY: linux-arm64
+linux-arm64: $(LINUX_LIB_NAME_ARM64) ## Build lantern for linux-arm64
 $(LINUX_LIB_NAME_ARM64): export GOOS = linux
 $(LINUX_LIB_NAME_ARM64): export GOARCH = arm64
 $(LINUX_LIB_NAME_ARM64): export LIB_NAME = $(LINUX_LIB_NAME)
@@ -487,12 +488,8 @@ $(LINUX_LIB_NAME_ARM64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(LINUX_LIB_NAME_ARM64): export Environment = production
 $(LINUX_LIB_NAME_ARM64): desktop-lib
 
-.PHONY: linux-arm64
-linux-arm64: $(LINUX_LIB_NAME_ARM64)
-
 .PHONY: windows
 windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
-
 $(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
 $(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
 $(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
@@ -508,7 +505,6 @@ $(WINDOWS_LIB_NAME): desktop-lib
 
 .PHONY: windows64
 windows64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
-
 $(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
 $(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
 $(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static
