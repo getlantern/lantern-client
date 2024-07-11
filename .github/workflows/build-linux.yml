@@ -92,12 +92,29 @@ jobs:
       - name: Build installer
         run: |
           cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
-          flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
-          ls
+          make package-linux
+          mv dist/1.0.0+1/lantern-1.0.0+1-linux.deb lantern-installer-preview.deb
+          mv dist/1.0.0+1/lantern-1.0.0+1-linux.rpm lantern-desktop-beta.rpm
 
       - uses: actions/upload-artifact@v4
         with:
-          name: linux-build
+          name: linux-deb-build
           path: |
-            lantern_${{inputs.version}}_x64.deb
+            lantern-installer-preview.deb
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-rpm-build
+          path: |
+            lantern-installer-preview.rpm
+
+      - name: Push binaries to s3
+
+        env:
+          VERSION: "${{ inputs.version }}"
+        run: |
+          ls -l
+          shasum -a 256 lantern-installer-preview.deb | cut -d " " -f 1 > lantern-installer-preview.deb.sha256
+          shasum -a 256 lantern-installer-preview.rpm | cut -d " " -f 1 > lantern-installer-preview.rpm.sha256
+          ls -l
+          s3cmd put --acl-public lantern-installer-preview.deb lantern-installer-preview.deb.sha256 lantern-installer-preview.rpm lantern-installer-preview.rpm.sha256 "s3://lantern"

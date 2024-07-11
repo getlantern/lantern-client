@@ -484,6 +484,10 @@ linux-arm64: export GO_BUILD_FLAGS += -a -buildmode=c-shared
 linux-arm64: export Environment = production
 linux-arm64: desktop-lib ## Build lantern for linux-arm64
 
+.PHONY: package-linux
+package-linux:
+	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
+
 .PHONY: windows
 windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
 $(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
