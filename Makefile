@@ -231,40 +231,6 @@ tag: require-version
 	git commit -m "Updated changelog for $$VERSION" && \
 	git push
 
-define fpm-debian-build =
-	echo "Running fpm-debian-build" && \
-	PKG_ARCH=$1 && \
-	WORKDIR=$$(mktemp -dt "$$(basename $$0).XXXXXXXXXX") && \
-	INSTALLER_RESOURCES=./$(INSTALLER_RESOURCES)/linux && \
-	\
-	mkdir -p $$WORKDIR/usr/bin && \
-	mkdir -p $$WORKDIR/usr/lib/$(APP) && \
-	mkdir -p $$WORKDIR/usr/share/applications && \
-	mkdir -p $$WORKDIR/usr/share/icons/hicolor/128x128/apps && \
-	mkdir -p $$WORKDIR/usr/share/doc/$(APP) && \
-	chmod -R 755 $$WORKDIR && \
-	\
-	cp $$INSTALLER_RESOURCES/deb-copyright $$WORKDIR/usr/share/doc/$(APP)/copyright && \
-	cp $$INSTALLER_RESOURCES/$(APP).desktop $$WORKDIR/usr/share/applications && \
-	cp $$INSTALLER_RESOURCES/icon128x128on.png $$WORKDIR/usr/share/icons/hicolor/128x128/apps/$(APP).png && \
-	\
-	cp build/linux/$$PKG_ARCH/release/bundle/$(APP) $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
-	cp $$INSTALLER_RESOURCES/$(APP).sh $$WORKDIR/usr/lib/$(APP) && \
-	\
-	chmod -x $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
-	chmod +x $$WORKDIR/usr/lib/$(APP)/$(APP).sh && \
-	\
-	ln -s /usr/lib/$(APP)/$(APP).sh $$WORKDIR/usr/bin/$(APP) && \
-	rm -f $$WORKDIR/usr/lib/$(APP)/$(PACKAGED_YAML) && \
-	rm -f $$WORKDIR/usr/lib/$(APP)/$(APP_YAML) && \
-	cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $$WORKDIR/usr/lib/$(APP)/$(PACKAGED_YAML) && \
-	cp $(APP_YAML_PATH) $$WORKDIR/usr/lib/$(APP)/$(APP_YAML) && \
-	\
-	cat $$WORKDIR/usr/lib/$(APP)/$(APP)-binary | bzip2 > $(APP)_update_linux_$$PKG_ARCH.bz2 && \
-	bundle install && \
-	fpm -a $$PKG_ARCH -s dir -t deb -n $(APP) -v $$VERSION -m "$(PACKAGE_MAINTAINER)" --description "$(APP_DESCRIPTION)\n$(APP_EXTENDED_DESCRIPTION)" --category net --license "Apache-2.0" --vendor "$(PACKAGE_VENDOR)" --url $(PACKAGE_URL) --deb-compression gz -f -C $$WORKDIR usr;
-endef
-
 define osxcodesign
 	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Innovate Labs LLC (4FYC28AXA2)" -v $(1)
 endef
@@ -504,16 +470,6 @@ ffigen:
 
 .PHONY: linux-amd64
 linux-amd64: $(LINUX_LIB_NAME_AMD64) ## Build lantern for linux-amd64
-
-.PHONY: package-linux-x64
-package-linux-x64: require-version
-	@$(call fpm-debian-build,"x64")
-	@echo "-> $(APP)_$(VERSION)_x64.deb"
-
-.PHONY: package-linux-arm64
-package-linux-amd64: require-version
-	@$(call fpm-debian-build,"arm64")
-	@echo "-> $(APP)_$(VERSION)_arm64.deb"
 
 $(LINUX_LIB_NAME_AMD64): export GOOS = linux
 $(LINUX_LIB_NAME_AMD64): export GOARCH = amd64
