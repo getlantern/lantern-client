@@ -24,7 +24,10 @@ enum class PaymentProvider(val provider: String) {
     PaymentWall("paymentwall"),
 
     @SerialName("fropay")
-	Fropay("fropay")
+	Fropay("fropay"),
+
+    @SerialName("shepherd")
+    Shepherd("shepherd")
 }
 
 @Serializable
