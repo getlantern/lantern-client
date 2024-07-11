@@ -25,7 +25,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.lantern.model.MessagingModel
 import io.lantern.model.ReplicaModel
 import io.lantern.model.SessionModel
-import io.lantern.model.SessionModelLegacy
+//import io.lantern.model.SessionModelLegacy
 import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
@@ -36,13 +36,13 @@ import org.getlantern.lantern.event.AppEvent.*
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
-import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-import org.getlantern.lantern.model.PaymentMethods
-import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProPlan
-import org.getlantern.lantern.model.ProUser
+//import org.getlantern.lantern.model.LanternHttpClient
+//import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
+//import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+//import org.getlantern.lantern.model.PaymentMethods
+//import org.getlantern.lantern.model.ProError
+//import org.getlantern.lantern.model.ProPlan
+//import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
@@ -65,7 +65,7 @@ class MainActivity :
     CoroutineScope by MainScope() {
     private lateinit var messagingModel: MessagingModel
     private lateinit var vpnModel: VpnModel
-    private lateinit var sessionModel: SessionModelLegacy
+    private lateinit var sessionModel: SessionModel
     private lateinit var replicaModel: ReplicaModel
     private lateinit var eventManager: EventManager
     private lateinit var flutterNavigation: MethodChannel
@@ -73,7 +73,7 @@ class MainActivity :
     private lateinit var receiver: NotificationReceiver
     private var accountInitDialog: AlertDialog? = null
     private var autoUpdateJob: Job? = null
-    private val lanternClient = LanternApp.getLanternHttpClient()
+//    private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(
         @NonNull flutterEngine: FlutterEngine,
@@ -88,13 +88,15 @@ class MainActivity :
             Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
         opts.model = Build.MODEL
         opts.osVersion = String.format("Android-%s", Build.VERSION.RELEASE)
-        opts.playVersion = LanternApp.getSession().isStoreVersion()
-        opts.device = LanternApp.getSession().deviceName()
+//        opts.playVersion = LanternApp.getSession().isStoreVersion()
+//        opts.device = LanternApp.getSession().deviceName()
         opts.paymentTestMode = false
         opts.platform = "android"
-        val sessionNew = SessionModel(this, flutterEngine, opts)
+//        val sessionNew = SessionModel(this, flutterEngine, opts)
 
-        sessionModel = SessionModelLegacy(this, flutterEngine)
+//        sessionModel = SessionModelLegacy(this, flutterEngine)
+        sessionModel = SessionModel(this, flutterEngine, opts)
+        LanternApp.setSession(sessionModel)
 
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
@@ -107,7 +109,7 @@ class MainActivity :
                         Plausible.enable(true)
                         Logger.debug(TAG, "Plausible initialized")
                         fetchLoConf()
-                        updateUserAndPaymentData()
+//                        updateUserAndPaymentData()
                     }
                     LanternApp.getSession().dnsDetector.publishNetworkAvailability()
                 }
@@ -148,7 +150,7 @@ class MainActivity :
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
-        subscribeAppEvents()
+//        subscribeAppEvents()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -158,58 +160,58 @@ class MainActivity :
         navigateForIntent(intent)
     }
 
-    private fun subscribeAppEvents() {
-        EventHandler.subscribeAppEvents { appEvent ->
-            when (appEvent) {
-                is AppEvent.AccountInitializationEvent -> onInitializingAccount(appEvent.status)
-                is AppEvent.BandwidthEvent -> {
-                    val event = appEvent as AppEvent.BandwidthEvent
-                    Logger.debug("bandwidth updated", event.bandwidth.toString())
-                    vpnModel.updateBandwidth(event.bandwidth)
-                }
+//    private fun subscribeAppEvents() {
+//        EventHandler.subscribeAppEvents { appEvent ->
+//            when (appEvent) {
+//                is AppEvent.AccountInitializationEvent -> onInitializingAccount(appEvent.status)
+//                is AppEvent.BandwidthEvent -> {
+//                    val event = appEvent as AppEvent.BandwidthEvent
+//                    Logger.debug("bandwidth updated", event.bandwidth.toString())
+//                    vpnModel.updateBandwidth(event.bandwidth)
+//                }
+//
+//                is AppEvent.LoConfEvent -> {
+//                    doProcessLoconf(appEvent.loconf)
+//                }
+//
+//                is AppEvent.LocaleEvent -> {
+//                    // Recreate the activity when the language changes
+//                    recreate()
+//                }
+//
+//                is AppEvent.StatsEvent -> {
+//                    val stats = appEvent.stats
+//                    Logger.debug("Stats updated", stats.toString())
+//                    sessionModel.saveServerInfo(
+//                        Vpn.ServerInfo
+//                            .newBuilder()
+//                            .setCity(stats.city)
+//                            .setCountry(stats.country)
+//                            .setCountryCode(stats.countryCode)
+//                            .build(),
+//                    )
+//                }
+//
+//                is AppEvent.StatusEvent -> {
+////                    updateUserAndPaymentData()
+//                }
+//
+//                is AppEvent.VpnStateEvent -> {
+//                    updateStatus(appEvent.vpnState.useVpn)
+//                }
+//
+//                else -> {
+//                    Logger.debug(TAG, "Unknown app event " + appEvent)
+//                }
+//            }
+//        }
+//    }
 
-                is AppEvent.LoConfEvent -> {
-                    doProcessLoconf(appEvent.loconf)
-                }
-
-                is AppEvent.LocaleEvent -> {
-                    // Recreate the activity when the language changes
-                    recreate()
-                }
-
-                is AppEvent.StatsEvent -> {
-                    val stats = appEvent.stats
-                    Logger.debug("Stats updated", stats.toString())
-                    sessionModel.saveServerInfo(
-                        Vpn.ServerInfo
-                            .newBuilder()
-                            .setCity(stats.city)
-                            .setCountry(stats.country)
-                            .setCountryCode(stats.countryCode)
-                            .build(),
-                    )
-                }
-
-                is AppEvent.StatusEvent -> {
-                    updateUserAndPaymentData()
-                }
-
-                is AppEvent.VpnStateEvent -> {
-                    updateStatus(appEvent.vpnState.useVpn)
-                }
-
-                else -> {
-                    Logger.debug(TAG, "Unknown app event " + appEvent)
-                }
-            }
-        }
-    }
-
-    private fun updateUserAndPaymentData() {
-        updateUserData()
-        updatePaymentMethods()
-        updateCurrencyList()
-    }
+//    private fun updateUserAndPaymentData() {
+//        updateUserData()
+//        updatePaymentMethods()
+//        updateCurrencyList()
+//    }
 
     private fun navigateForIntent(intent: Intent) {
         // handles text messaging intent
@@ -251,7 +253,7 @@ class MainActivity :
             vpnModel.setVpnOn(true)
         }
 
-        sessionModel.checkAdsAvailability()
+//        sessionModel.checkAdsAvailability()
         Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
 
@@ -324,90 +326,90 @@ class MainActivity :
         }
     }
 
-    private fun updateUserData() {
-        lanternClient.userData(
-            object : ProUserCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch user data: $error", throwable)
-                }
-
-                override fun onSuccess(
-                    response: Response,
-                    user: ProUser,
-                ) {
-                    // save latest user data
-                    LanternApp.getSession().storeUserData(user)
-                }
-            },
-        )
-    }
-
-    private fun updatePaymentMethods() {
-        lanternClient.plansV4(
-            object : PlansV3Callback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
-                }
-
-                override fun onSuccess(
-                    proPlans: Map<String, ProPlan>,
-                    paymentMethods: List<PaymentMethods>,
-                ) {
-                    Logger.debug(
-                        TAG,
-                        "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans",
-                    )
-                    sessionModel.processPaymentMethods(proPlans, paymentMethods)
-                }
-            },
-        )
-    }
-
-    private fun updateCurrencyList() {
-        val url = LanternHttpClient.createProUrl("/supported-currencies")
-        lanternClient.get(
-            url,
-            object : LanternHttpClient.ProCallback {
-                override fun onFailure(
-                    throwable: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Unable to fetch currency list: $error", throwable)
-                    /*
-                    retry to fetch currency list again
-                    fetch until we get the currency list
-                    retry after 5 seconds
-                     */
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(5000)
-                        updateCurrencyList()
-                    }
-                }
-
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    val currencies = result?.getAsJsonArray("supported-currencies")
-                    val currencyList = mutableListOf<String>()
-                    currencies?.forEach {
-                        currencyList.add(it.asString.lowercase())
-                    }
-                    LanternApp.getSession().setCurrencyList(currencyList)
-                }
-            },
-        )
-    }
+//    private fun updateUserData() {
+//        lanternClient.userData(
+//            object : ProUserCallback {
+//                override fun onFailure(
+//                    throwable: Throwable?,
+//                    error: ProError?,
+//                ) {
+//                    Logger.error(TAG, "Unable to fetch user data: $error", throwable)
+//                }
+//
+//                override fun onSuccess(
+//                    response: Response,
+//                    user: ProUser,
+//                ) {
+//                    // save latest user data
+//                    LanternApp.getSession().storeUserData(user)
+//                }
+//            },
+//        )
+//    }
+//
+//    private fun updatePaymentMethods() {
+//        lanternClient.plansV4(
+//            object : PlansV3Callback {
+//                override fun onFailure(
+//                    throwable: Throwable?,
+//                    error: ProError?,
+//                ) {
+//                    Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
+//                }
+//
+//                override fun onSuccess(
+//                    proPlans: Map<String, ProPlan>,
+//                    paymentMethods: List<PaymentMethods>,
+//                ) {
+//                    Logger.debug(
+//                        TAG,
+//                        "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans",
+//                    )
+//                    sessionModel.processPaymentMethods(proPlans, paymentMethods)
+//                }
+//            },
+//        )
+//    }
+//
+//    private fun updateCurrencyList() {
+//        val url = LanternHttpClient.createProUrl("/supported-currencies")
+//        lanternClient.get(
+//            url,
+//            object : LanternHttpClient.ProCallback {
+//                override fun onFailure(
+//                    throwable: Throwable?,
+//                    error: ProError?,
+//                ) {
+//                    Logger.error(TAG, "Unable to fetch currency list: $error", throwable)
+//                    /*
+//                    retry to fetch currency list again
+//                    fetch until we get the currency list
+//                    retry after 5 seconds
+//                     */
+//                    CoroutineScope(Dispatchers.IO).launch {
+//                        delay(5000)
+//                        updateCurrencyList()
+//                    }
+//                }
+//
+//                override fun onSuccess(
+//                    response: Response?,
+//                    result: JsonObject?,
+//                ) {
+//                    val currencies = result?.getAsJsonArray("supported-currencies")
+//                    val currencyList = mutableListOf<String>()
+//                    currencies?.forEach {
+//                        currencyList.add(it.asString.lowercase())
+//                    }
+//                    LanternApp.getSession().setCurrencyList(currencyList)
+//                }
+//            },
+//        )
+//    }
 
     private fun doProcessLoconf(loconf: LoConf) {
         val locale = LanternApp.getSession().language
-        val countryCode = LanternApp.getSession().countryCode
+        val countryCode = LanternApp.getSession().countryCode()
         Logger.debug(
             SURVEY_TAG,
             "Processing loconf; country code is $countryCode",
@@ -444,13 +446,13 @@ class MainActivity :
             )
             val userType = survey.userType
             if (userType != null) {
-                if (userType == "free" && LanternApp.getSession().isProUser) {
+                if (userType == "free" && LanternApp.getSession().isProUser()) {
                     Logger.debug(
                         SURVEY_TAG,
                         "Not showing messages targetted to free users to Pro users",
                     )
                     return
-                } else if (userType == "pro" && !LanternApp.getSession().isProUser) {
+                } else if (userType == "pro" && !LanternApp.getSession().isProUser()) {
                     Logger.debug(
                         SURVEY_TAG,
                         "Not showing messages targetted to free users to Pro users",
@@ -465,13 +467,13 @@ class MainActivity :
     fun showSurveySnackbar(survey: Survey) {
         val url = survey.url
         if (url != null && url != "") {
-            if (LanternApp.getSession().surveyLinkOpened(url)) {
-                Logger.debug(
-                    TAG,
-                    "User already opened link to survey; not displaying snackbar",
-                )
-                return
-            }
+//            if (LanternApp.getSession().surveyLinkOpened(url)) {
+//                Logger.debug(
+//                    TAG,
+//                    "User already opened link to survey; not displaying snackbar",
+//                )
+//                return
+//            }
         }
         lastSurvey = survey
         Logger.debug(TAG, "Showing user survey snackbar")
@@ -488,7 +490,7 @@ class MainActivity :
         val intent = Intent(this, WebViewActivity_::class.java)
         intent.putExtra("url", survey.url!!)
         startActivity(intent)
-        LanternApp.getSession().setSurveyLinkOpened(survey.url)
+//        LanternApp.getSession().setSurveyLinkOpened(survey.url)
     }
 
     @Throws(Exception::class)
@@ -585,7 +587,7 @@ class MainActivity :
                 // If user come here it mean user has all permissions needed
                 // Also user given permission for VPN service dialog as well
                 LanternApp.getSession().setHasFirstSessionCompleted(true)
-                sessionModel.checkAdsAvailability()
+//                sessionModel.checkAdsAvailability()
                 updateStatus(true)
                 startVpnService()
             }
@@ -654,7 +656,7 @@ class MainActivity :
                 // this mean user has already given
                 // system permissions
                 LanternApp.getSession().setHasFirstSessionCompleted(true)
-                sessionModel.checkAdsAvailability()
+//                sessionModel.checkAdsAvailability()
             }
         }
     }
@@ -674,8 +676,8 @@ class MainActivity :
 
     private fun updateStatus(useVpn: Boolean) {
         Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
-        LanternApp.getSession().updateVpnPreference(useVpn)
-        LanternApp.getSession().updateBootUpVpnPreference(useVpn)
+//        LanternApp.getSession().updateVpnPreference(useVpn)
+//        LanternApp.getSession().updateBootUpVpnPreference(useVpn)
         vpnModel.updateStatus(useVpn)
     }
 

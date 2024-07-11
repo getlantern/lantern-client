@@ -32,7 +32,7 @@ class InAppBilling(
 ) : PurchasesUpdatedListener, InAppBillingInterface {
     companion object {
         private val TAG = InAppBilling::class.java.simpleName
-        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
+//        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
 
     }
 
@@ -128,14 +128,14 @@ class InAppBilling(
         )
 
         Logger.d(TAG, "Launching billing flow for plan $planID, sku ${skuDetails.productId}")
-        launchBillingFlow(
-            activity,
-            BillingFlowParams.newBuilder()
-                .setProductDetailsParamsList(productDetailsParamsList)
-                .setObfuscatedAccountId(LanternApp.getSession().getDeviceID())// add device-od
-                .setObfuscatedProfileId(LanternApp.getSession().userID.toString())
-                .build(),
-        )
+//        launchBillingFlow(
+//            activity,
+//            BillingFlowParams.newBuilder()
+//                .setProductDetailsParamsList(productDetailsParamsList)
+//                .setObfuscatedAccountId(LanternApp.getSession().getDeviceID())// add device-od
+//                .setObfuscatedProfileId(LanternApp.getSession().userID.toString())
+//                .build(),
+//        )
     }
 
     @UiThread
@@ -259,53 +259,53 @@ class InAppBilling(
                     return@queryPurchasesAsync
                 }
                 Logger.d(TAG, "Got ${purchases.size} purchases")
-                handleAcknowledgedPurchases(purchases)
+//                handleAcknowledgedPurchases(purchases)
             }
         }
     }
 
-    private fun handleAcknowledgedPurchases(purchases: List<Purchase>) {
-        for (purchase in purchases) {
-            Logger.debug(TAG, "Purchase: $purchase")
-            ensureConnected {
-                if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                    if (!purchase.isAcknowledged) {
-                        /*
-                        * Important: acknowledgement need to happen only on server
-                        * if the purchase are not acknowledged from server
-                        * then make purchase request it mark purchase as isAcknowledged
-                        */
-                        val currency = LanternApp.getSession().deviceCurrencyCode()
-                        val planID = "${purchase.products[0]}-$currency"
-
-                        addAcknowledgePurchase(
-                            planID = planID,
-                            currency = currency,
-                            token = purchase.purchaseToken
-                        )
-                    }
-                }
-
-                val consumeParams =
-                    ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
-                        .build()
-                val listener =
-                    ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
-                        if (!billingResult.responseCodeOK()) {
-                            return@ConsumeResponseListener
-                        }
-                    }
-                // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
-                // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
-                // been consumed, we just do this every time we start up.
-                Logger.d(
-                    TAG,
-                    "Consuming already acknowledged purchase ${purchase.purchaseToken}"
-                )
-                consumeAsync(consumeParams, listener)
-            }
-        }
-    }
+//    private fun handleAcknowledgedPurchases(purchases: List<Purchase>) {
+//        for (purchase in purchases) {
+//            Logger.debug(TAG, "Purchase: $purchase")
+//            ensureConnected {
+//                if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+//                    if (!purchase.isAcknowledged) {
+//                        /*
+//                        * Important: acknowledgement need to happen only on server
+//                        * if the purchase are not acknowledged from server
+//                        * then make purchase request it mark purchase as isAcknowledged
+//                        */
+//                        val currency = LanternApp.getSession().deviceCurrencyCode()
+//                        val planID = "${purchase.products[0]}-$currency"
+//
+//                        addAcknowledgePurchase(
+//                            planID = planID,
+//                            currency = currency,
+//                            token = purchase.purchaseToken
+//                        )
+//                    }
+//                }
+//
+//                val consumeParams =
+//                    ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
+//                        .build()
+//                val listener =
+//                    ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
+//                        if (!billingResult.responseCodeOK()) {
+//                            return@ConsumeResponseListener
+//                        }
+//                    }
+//                // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
+//                // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
+//                // been consumed, we just do this every time we start up.
+//                Logger.d(
+//                    TAG,
+//                    "Consuming already acknowledged purchase ${purchase.purchaseToken}"
+//                )
+//                consumeAsync(consumeParams, listener)
+//            }
+//        }
+//    }
 
     private fun isRetriable(billingResult: BillingResult): Boolean {
         val responseCode = billingResult.responseCode
@@ -332,35 +332,35 @@ class InAppBilling(
         }
     }
 
-    private fun addAcknowledgePurchase(planID: String, currency: String, token: String) {
-        val session = LanternApp.getSession()
-        val json = JsonObject()
-        json.addProperty("idempotencyKey", System.currentTimeMillis().toString())
-        json.addProperty("provider", PaymentProvider.GooglePlay.toString().lowercase())
-        json.addProperty("email", session.email())
-        json.addProperty("plan", planID)
-        json.addProperty("currency", currency.lowercase())
-        json.addProperty("deviceName", session.deviceName())
-        json.addProperty("token", token)
-
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/purchase"),
-            LanternHttpClient.createJsonBody(json),
-            object : LanternHttpClient.ProCallback {
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    Logger.debug(TAG, "Making server acknowledgement response: $response")
-                }
-
-                override fun onFailure(
-                    t: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Error while making server acknowledgement: $error")
-                }
-            },
-        )
-    }
+//    private fun addAcknowledgePurchase(planID: String, currency: String, token: String) {
+//        val session = LanternApp.getSession()
+//        val json = JsonObject()
+//        json.addProperty("idempotencyKey", System.currentTimeMillis().toString())
+//        json.addProperty("provider", PaymentProvider.GooglePlay.toString().lowercase())
+//        json.addProperty("email", session.email())
+//        json.addProperty("plan", planID)
+//        json.addProperty("currency", currency.lowercase())
+//        json.addProperty("deviceName", session.deviceName())
+//        json.addProperty("token", token)
+//
+//        lanternClient.post(
+//            LanternHttpClient.createProUrl("/purchase"),
+//            LanternHttpClient.createJsonBody(json),
+//            object : LanternHttpClient.ProCallback {
+//                override fun onSuccess(
+//                    response: Response?,
+//                    result: JsonObject?,
+//                ) {
+//                    Logger.debug(TAG, "Making server acknowledgement response: $response")
+//                }
+//
+//                override fun onFailure(
+//                    t: Throwable?,
+//                    error: ProError?,
+//                ) {
+//                    Logger.error(TAG, "Error while making server acknowledgement: $error")
+//                }
+//            },
+//        )
+//    }
 }

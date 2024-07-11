@@ -77,9 +77,11 @@ const (
 	pathStoreVersion           = "storeVersion"
 	pathServerInfo             = "/server_info"
 	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
-	pathShouldShowGoogleAds    = "shouldShowGoogleAds"
-	currentTermsVersion        = 1
-	pathUserSalt               = "user_salt"
+	pathPrefVPN                = "pref_vpn"
+
+	pathShouldShowGoogleAds = "shouldShowGoogleAds"
+	currentTermsVersion     = 1
+	pathUserSalt            = "user_salt"
 
 	pathPlans        = "/plans/"
 	pathResellerCode = "resellercode"
@@ -120,6 +122,12 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	dialTimeout := 30 * time.Second
 	if opts.Platform == "ios" {
 		dialTimeout = 20 * time.Second
+		base.db.RegisterType(1000, &protos.ServerInfo{})
+		base.db.RegisterType(2000, &protos.Devices{})
+		base.db.RegisterType(5000, &protos.Device{})
+		base.db.RegisterType(3000, &protos.Plan{})
+		base.db.RegisterType(4000, &protos.Plans{})
+	} else {
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 		base.db.RegisterType(5000, &protos.Device{})
@@ -589,6 +597,10 @@ func (m *SessionModel) SetIP(ipAddress string) error {
 	})
 }
 
+func (m *SessionModel) IpAddress() (string, error) {
+	return pathdb.Get[string](m.db, pathIPAddress)
+}
+
 func (m *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 	// Not using these ads anymore
 	return nil
@@ -898,6 +910,12 @@ func acceptTerms(m *baseModel) error {
 func setStoreVersion(m *baseModel, isStoreVersion bool) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathStoreVersion, isStoreVersion, "")
+	})
+}
+
+func UpdateVpnPreference(m *baseModel, prefVPN bool) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathPrefVPN, prefVPN, "")
 	})
 }
 

@@ -36,20 +36,20 @@ class AutoUpdater(val context: Context, val activity: Activity? = null) {
 
     private fun noUpdateAvailable() {
         if (activity == null) return
-        activity.runOnUiThread {
-            val appName = resources.getString(R.string.app_name)
-            val noUpdateTitle = resources.getString(R.string.no_update_available)
-            val noUpdateMsg = String.format(
-                resources.getString(R.string.have_latest_version),
-                appName,
-                LanternApp.getSession().appVersion(),
-            )
-            activity.showAlertDialog(noUpdateTitle, noUpdateMsg)
-        }
+//        activity.runOnUiThread {
+//            val appName = resources.getString(R.string.app_name)
+//            val noUpdateTitle = resources.getString(R.string.no_update_available)
+//            val noUpdateMsg = String.format(
+//                resources.getString(R.string.have_latest_version),
+//                appName,
+//                LanternApp.getSession().appVersion(),
+//            )
+//            activity.showAlertDialog(noUpdateTitle, noUpdateMsg)
+//        }
     }
 
     fun checkForUpdates() {
-        if (LanternApp.getSession().isStoreVersion && activity != null) {
+        if (LanternApp.getSession().isStoreVersion() && activity != null) {
             Utils.openPlayStore(context)
             return
         }

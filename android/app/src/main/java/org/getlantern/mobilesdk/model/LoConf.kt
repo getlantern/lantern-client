@@ -41,29 +41,29 @@ class LoConf {
         }
 
         fun fetch(loconfUrl: String, cb: LoConfCallback) {
-            fetch(LanternApp.getHttpClient(), loconfUrl, cb)
+//            fetch(LanternApp.getHttpClient(), loconfUrl, cb)
         }
 
         fun fetch(client: HttpClient, loconfUrl: String, cb: LoConfCallback) {
-            val builder = loconfUrl.toHttpUrlOrNull()!!.newBuilder()
-            client.request(
-                "GET", builder.build(),
-                object : HttpCallback {
-                    override fun onFailure(throwable: Throwable?) {
-                        Logger.error(TAG, "Unable to fetch surveys", throwable)
-                    }
-
-                    override fun onSuccess(response: Response?, result: JsonObject) {
-                        try {
-                            Logger.debug(TAG, "JSON response$result")
-                            val loconf = Gson().fromJson(result, LoConf::class.java)
-                            cb.onSuccess(loconf)
-                        } catch (e: Exception) {
-                            Logger.error(TAG, "Unable to parse surveys: " + e.message, e)
-                        }
-                    }
-                }
-            )
+//            val builder = loconfUrl.toHttpUrlOrNull()!!.newBuilder()
+//            client.request(
+//                "GET", builder.build(),
+//                object : HttpCallback {
+//                    override fun onFailure(throwable: Throwable?) {
+//                        Logger.error(TAG, "Unable to fetch surveys", throwable)
+//                    }
+//
+//                    override fun onSuccess(response: Response?, result: JsonObject) {
+//                        try {
+//                            Logger.debug(TAG, "JSON response$result")
+//                            val loconf = Gson().fromJson(result, LoConf::class.java)
+//                            cb.onSuccess(loconf)
+//                        } catch (e: Exception) {
+//                            Logger.error(TAG, "Unable to parse surveys: " + e.message, e)
+//                        }
+//                    }
+//                }
+//            )
         }
     }
 }

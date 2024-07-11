@@ -21,6 +21,6 @@ object DeviceInfo : internalsdk.DeviceInfo {
     }
 
     override fun userID(): String {
-        return LanternApp.getSession().userID().toString()
+        return LanternApp.getSession().userId().toString()
     }
 }

@@ -15,7 +15,7 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.LanternHttpClient
+//import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.model.ProError
@@ -38,13 +38,13 @@ open class LanternService : Service(), Runnable {
         private val TAG = LanternService::class.java.simpleName
         private const val MAX_CREATE_USER_TRIES = 11
         private const val baseWaitMs = 3000
-        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
+
         val AUTO_BOOTED = "autoBooted"
     }
 
     private var thread: Thread? = null
     private val createUserHandler: Handler = Handler(Looper.getMainLooper())
-    private val createUserRunnable: CreateUser = CreateUser(this)
+//    private val createUserRunnable: CreateUser = CreateUser(this)
     private val random: Random = Random()
     private val serviceIcon: Int = if (LanternApp.getSession().chatEnabled()) {
         R.drawable.status_chat
@@ -92,7 +92,7 @@ open class LanternService : Service(), Runnable {
         try {
             Logger.debug(TAG, "Successfully loaded config: $settings")
             val result: StartResult =
-                Lantern.enable(this, locale, settings, LanternApp.getSession())
+                Lantern.enable(this, locale, settings, LanternApp.getGoSession())
             LanternApp.getSession().setStartResult(result)
             afterStart()
         } catch (lnre: LanternNotRunningException) {
@@ -126,68 +126,68 @@ open class LanternService : Service(), Runnable {
         val maxBackOffTime = 60000L // maximum backoff time in milliseconds (e.g., 1 minute)
         val timeOut =
             (baseWaitMs * Math.pow(2.0, attempt.toDouble())).toLong().coerceAtMost(maxBackOffTime)
-        createUserHandler.postDelayed(createUserRunnable, timeOut)
+//        createUserHandler.postDelayed(createUserRunnable, timeOut)
     }
 
-    private class CreateUser(val service: LanternService) : Runnable,
-        LanternHttpClient.ProCallback {
+//    private class CreateUser(val service: LanternService) : Runnable,
+//        LanternHttpClient.ProCallback {
+//
+//        private var attempts: Int = 0
+//
+//        override fun run() {
+//            val url: HttpUrl = LanternHttpClient.createProUrl("/user-create")
+//            val json: JsonObject = JsonObject()
+//            json.addProperty("locale", LanternApp.getSession().language)
+//            lanternClient.post(url, LanternHttpClient.createJsonBody(json), this)
+//        }
+//
+//        override fun onFailure(@Nullable throwable: Throwable?, @Nullable error: ProError?) {
+//            if (attempts >= MAX_CREATE_USER_TRIES) {
+//                Logger.error(TAG, "Max. number of tries made to create Pro user")
+//                EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
+//                return
+//            }
+//            attempts++
+//            service.createUser(attempts)
+//        }
+//
+//        override fun onSuccess(response: Response?, result: JsonObject?) {
+//            val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
+//            if (user == null) {
+//                Logger.error(TAG, "Unable to parse user from JSON")
+//                return
+//            }
+//            service.createUserHandler.removeCallbacks(service.createUserRunnable)
+//            Logger.debug(TAG, "Created new Lantern user: ${user.newUserDetails()}")
+//            LanternApp.getSession().setUserIdAndToken(user.userId, user.token)
+//            val referral = user.referral
+//            if (!referral.isEmpty()) {
+//                LanternApp.getSession().setCode(referral)
+//            }
+//            EventHandler.postStatusEvent(LanternStatus(Status.ON))
+//            EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
+//        }
+//    }
 
-        private var attempts: Int = 0
-
-        override fun run() {
-            val url: HttpUrl = LanternHttpClient.createProUrl("/user-create")
-            val json: JsonObject = JsonObject()
-            json.addProperty("locale", LanternApp.getSession().language)
-            lanternClient.post(url, LanternHttpClient.createJsonBody(json), this)
-        }
-
-        override fun onFailure(@Nullable throwable: Throwable?, @Nullable error: ProError?) {
-            if (attempts >= MAX_CREATE_USER_TRIES) {
-                Logger.error(TAG, "Max. number of tries made to create Pro user")
-                EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
-                return
-            }
-            attempts++
-            service.createUser(attempts)
-        }
-
-        override fun onSuccess(response: Response?, result: JsonObject?) {
-            val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
-            if (user == null) {
-                Logger.error(TAG, "Unable to parse user from JSON")
-                return
-            }
-            service.createUserHandler.removeCallbacks(service.createUserRunnable)
-            Logger.debug(TAG, "Created new Lantern user: ${user.newUserDetails()}")
-            LanternApp.getSession().setUserIdAndToken(user.userId, user.token)
-            val referral = user.referral
-            if (!referral.isEmpty()) {
-                LanternApp.getSession().setCode(referral)
-            }
-            EventHandler.postStatusEvent(LanternStatus(Status.ON))
-            EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (!started.get()) {
-            Logger.debug(TAG, "Service never started, exit immediately")
-            return
-        }
-        helper.onDestroy()
-        thread?.interrupt()
-        try {
-            Logger.debug(TAG, "Unregistering screen state receiver")
-            createUserHandler.removeCallbacks(createUserRunnable)
-        } catch (e: Exception) {
-            Logger.error(TAG, "Exception", e)
-        }
-        // We want to keep the service running as much as possible to allow receiving messages, so
-        // we start it back up automatically as explained at https://stackoverflow.com/a/52258125.
-        val broadcastIntent = Intent()
-            .setAction("restartservice")
-            .setClass(this, AutoStarter::class.java)
-        sendBroadcast(broadcastIntent)
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        if (!started.get()) {
+//            Logger.debug(TAG, "Service never started, exit immediately")
+//            return
+//        }
+//        helper.onDestroy()
+//        thread?.interrupt()
+//        try {
+//            Logger.debug(TAG, "Unregistering screen state receiver")
+//            createUserHandler.removeCallbacks(createUserRunnable)
+//        } catch (e: Exception) {
+//            Logger.error(TAG, "Exception", e)
+//        }
+//        // We want to keep the service running as much as possible to allow receiving messages, so
+//        // we start it back up automatically as explained at https://stackoverflow.com/a/52258125.
+//        val broadcastIntent = Intent()
+//            .setAction("restartservice")
+//            .setClass(this, AutoStarter::class.java)
+//        sendBroadcast(broadcastIntent)
+//    }
 }
