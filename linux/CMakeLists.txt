@@ -118,7 +118,7 @@ install(FILES "${FLUTTER_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
   COMPONENT Runtime)
 
 # liblantern.so
-set(LANTERN_DIR "..")
+set(LANTERN_DIR "../liblantern/linux/arm64")
 install(FILES "${LANTERN_DIR}/liblantern.so" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
   COMPONENT Runtime)
 
