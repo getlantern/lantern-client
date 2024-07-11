@@ -524,7 +524,7 @@ $(LINUX_LIB_NAME_AMD64): export Environment = production
 $(LINUX_LIB_NAME_AMD64): desktop-lib
 
 $(LINUX_LIB_NAME_ARM64): export GOOS = linux
-$(LINUX_LIB_NAME_ARM64): export GOARCH = amd64
+$(LINUX_LIB_NAME_ARM64): export GOARCH = arm64
 $(LINUX_LIB_NAME_ARM64): export LIB_NAME = $(LINUX_LIB_NAME)
 $(LINUX_LIB_NAME_ARM64): export EXTRA_LDFLAGS += -linkmode external -s -w
 $(LINUX_LIB_NAME_ARM64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
