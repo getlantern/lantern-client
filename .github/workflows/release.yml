@@ -114,10 +114,15 @@ jobs:
       version: ${{ needs.set-version.outputs.version }}
       prefix: ${{ needs.set-version.outputs.prefix }}
     steps:
-      - name: Download the linux build output
+      - name: Download the linux build deb output
         uses: actions/download-artifact@v4
         with:
-          name: linux-build
+          name: linux-deb-build
+
+      - name: Download the linux build rpm output
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-rpm-build
 
       - name: Grant private modules access
         run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
@@ -128,10 +133,12 @@ jobs:
       - name: Rename builds
         run: |
           mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
+          mv "lantern_${{env.version}}_x64.rpm" ${{ env.prefix }}-64-bit.rpm
 
       - name: Prepare sha256 sums
         run: |
           shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
+          shasum -a 256 ${{ env.prefix }}-64-bit.rpm | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.rpm.sha256
 
       - name: Commit
         run: |
