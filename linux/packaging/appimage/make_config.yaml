@@ -1,0 +1,15 @@
+display_name: Lantern
+
+icon: ./assets/images/launch_icon.png
+
+keywords:
+  - Lantern
+
+generic_name: Lantern
+
+categories:
+  - Network
+
+startup_notify: true
+
+include: []
