@@ -1632,7 +1632,7 @@ msgid "recovery_not_found"
 msgstr "Device not associated to this user"
 
 msgid "device_added"
-msgstr "Device not associated to this user"
+msgstr "Device added"
 
 msgid "device_added_message"
 msgstr "Your device has been successfully added. If you do not see the device connected, please restart the app on both devices"

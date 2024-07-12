@@ -29,9 +29,23 @@ class _LinkDeviceState extends State<LinkDevice> {
       // then it will show on the device list
       retry(
         () async {
-         return sessionModel.redeemLinkCode().then((value) {
+          return sessionModel.redeemLinkCode().then((value) {
             if (context.mounted) {
-              context.router.popUntilRoot();
+              CDialog.showInfo(
+                context,
+                title: "device_added".i18n,
+                description: "device_added_message".i18n,
+                agreeAction: () async {
+                  Future.delayed(
+                    const Duration(milliseconds: 400),
+                    () {
+                      context.router.popUntilRoot();
+                    },
+                  );
+
+                  return true;
+                },
+              );
             }
           });
         },
