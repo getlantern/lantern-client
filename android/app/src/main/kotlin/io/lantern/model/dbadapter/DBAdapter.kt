@@ -9,7 +9,15 @@ import minisql.Values
 import net.sqlcipher.database.SQLiteDatabase
 import java.util.UUID
 
-open class DBAdapter( val db: SQLiteDatabase) : DB {
+open class DBAdapter(val db: SQLiteDatabase) : DB {
+    init {
+        setPragmaSettings()
+    }
+    private fun setPragmaSettings() {
+        db.query("PRAGMA journal_mode = WAL")
+        db.query("PRAGMA busy_timeout = 5000")
+    }
+
     override fun exec(sql: String, args: Values?) = db.execSQL(sql, args!!.toBindArgs())
 
     override fun query(sql: String?, args: Values?) =
@@ -23,7 +31,8 @@ open class DBAdapter( val db: SQLiteDatabase) : DB {
 
 class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx {
     val id = UUID.randomUUID().toString()
-    @Volatile private var isSavepointActive = false
+    @Volatile
+    private var isSavepointActive = false
 
     init {
         createSavepoint()
