@@ -93,26 +93,33 @@ jobs:
         run: |
           cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
           make package-linux
-          mv dist/1.0.0+1/lantern-1.0.0+1-linux.deb lantern-installer-preview.deb
-          mv dist/1.0.0+1/lantern-1.0.0+1-linux.rpm lantern-installer-preview.rpm
+          mv dist/1.0.0+1/lantern-1.0.0+1-linux.deb lantern_${{inputs.version}}_x64.deb
+          mv dist/1.0.0+1/lantern-1.0.0+1-linux.rpm lantern_${{inputs.version}}_x64.rpm
 
       - uses: actions/upload-artifact@v4
         with:
           name: linux-deb-build
           path: |
-            lantern-installer-preview.deb
+            lantern_${{inputs.version}}_x64.deb
 
       - uses: actions/upload-artifact@v4
         with:
           name: linux-rpm-build
           path: |
-            lantern-installer-preview.rpm
+            lantern_${{inputs.version}}_x64.rpm
 
       - name: Push binaries to s3
 
         env:
           VERSION: "${{ inputs.version }}"
+          dist_versionless: "${{inputs.prefix}}-64-bit.deb"
+          dist_deb: "${{inputs.prefix}}-${{inputs.version}}-64-bit.deb"
+          dist_deb_source: "lantern_${{inputs.version}}_x64.deb"
+          dist_rpm: "${{inputs.prefix}}-${{inputs.version}}-64-bit.rpm"
+          dist_rpm_source: "lantern_${{inputs.version}}_x64.rpm"
         run: |
-          shasum -a 256 lantern-installer-preview.deb | cut -d " " -f 1 > lantern-installer-preview.deb.sha256
-          shasum -a 256 lantern-installer-preview.rpm | cut -d " " -f 1 > lantern-installer-preview.rpm.sha256
-          s3cmd put --acl-public lantern-installer-preview.deb lantern-installer-preview.deb.sha256 lantern-installer-preview.rpm lantern-installer-preview.rpm.sha256 "s3://lantern"
+          mv ${{ env.dist_deb_source }} ${{ env.dist_deb }}
+          mv ${{ env.dist_rpm_source }} ${{ env.dist_rpm }}
+          shasum -a 256 ${{ env.dist_deb }} | cut -d " " -f 1 > ${{ env.dist_deb }}.sha256
+          shasum -a 256 ${{ env.dist_rpm }} | cut -d " " -f 1 > ${{ env.dist_rpm }}.sha256
+          s3cmd put --acl-public ${{ env.dist_deb }} ${{ env.dist_deb }}.sha256 ${{ env.dist_rpm }} ${{ env.dist_rpm }}.sha256 "s3://lantern"
