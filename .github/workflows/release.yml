@@ -109,7 +109,7 @@ jobs:
 
   push-binaries:
     runs-on: ubuntu-latest
-    needs: [ set-version, build-android, build-ios, build-darwin, build-linux, build-windows-x64 ]
+    needs: [ set-version, build-android ]
     env:
       version: ${{ needs.set-version.outputs.version }}
       prefix: ${{ needs.set-version.outputs.prefix }}
