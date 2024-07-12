@@ -463,6 +463,9 @@ msgstr "Elegir método de pago"
 msgid "pro_plan"
 msgstr "Plan Pro"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "Plan de 1 año"
 
