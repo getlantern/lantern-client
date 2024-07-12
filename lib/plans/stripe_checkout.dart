@@ -26,17 +26,19 @@ class StripeCheckout extends StatefulWidget {
 }
 
 class _StripeCheckoutState extends State<StripeCheckout> {
-  final copy = 'Complete Purchase'.i18n;
-  final _formKey = GlobalKey<FormState>();
   late final ccValidator = CreditCardValidator();
-
   final creditCardFieldKey = GlobalKey<FormState>();
   late final creditCardController = CustomTextEditingController(
     formKey: creditCardFieldKey,
-    validator: (value) =>
-        value != null && ccValidator.validateCCNum(value).isValid
-            ? null
-            : 'invalid_card'.i18n,
+    validator: (value) {
+      if(value=="" || value==null){
+        return 'invalid_card'.i18n;
+      }
+      if(!ccValidator.validateCCNum(value).isValid){
+        return 'invalid_card'.i18n;
+      }
+      return null;
+    }
   );
 
   final expDateFieldKey = GlobalKey<FormState>();
@@ -71,7 +73,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     return Tooltip(
       message: AppKeys.checkOut,
       child: Button(
-        text: copy,
+        text: "Complete Purchase".i18n,
         onPressed: onCheckoutButtonTap,
       ),
     );
@@ -79,6 +81,9 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   Future<void> onCheckoutButtonTap() async {
     try {
+      if(!determineFormIsValid()){
+        return;
+      }
       context.loaderOverlay.show(widget: spinner);
       await sessionModel.submitStripePayment(
         widget.plan.id,
@@ -107,103 +112,97 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     return BaseScreen(
       resizeToAvoidBottomInset: false,
       title: 'lantern_pro_checkout'.i18n,
-      body: Form(
-        key: _formKey,
-        onChanged: () => setState(() {
-          formIsValid = determineFormIsValid();
-        }),
-        child: Container(
-          padding: const EdgeInsetsDirectional.only(
-            start: 16,
-            end: 16,
-            top: 24,
-            bottom: 32,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // * Step 3
-              PlanStep(
-                stepNum: '3',
-                description: 'checkout'.i18n,
+      padVertical: true,
+      padHorizontal: true,
+      body: Container(
+        padding: const EdgeInsetsDirectional.only(
+          start: 16,
+          end: 16,
+          bottom: 32,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+
+            PlanStep(
+              stepNum: '3',
+              description: 'checkout'.i18n,
+            ),
+
+            Form(
+              key: creditCardFieldKey,
+              child: CTextField(
+                tooltipMessage: AppKeys.cardNumberKey,
+                controller: creditCardController,
+                // autovalidateMode: AutovalidateMode.disabled,
+                label: 'card_number'.i18n,
+                keyboardType: TextInputType.number,
+                maxLines: 1,
+                prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
+                inputFormatters: [CreditCardNumberInputFormatter()],
               ),
-              // * Credit card number
-              Container(
-                padding: const EdgeInsetsDirectional.only(
-                  top: 16.0,
-                  bottom: 16.0,
-                ),
-                child: CTextField(
-                  tooltipMessage: AppKeys.cardNumberKey,
-                  controller: creditCardController,
-                  // autovalidateMode: AutovalidateMode.disabled,
-                  label: 'card_number'.i18n,
-                  keyboardType: TextInputType.number,
-                  maxLines: 1,
-                  prefixIcon: const CAssetImage(path: ImagePaths.credit_card),
-                  inputFormatters: [CreditCardNumberInputFormatter()],
-                ),
-              ),
-              // * Credit card month and expiration
-              Container(
-                padding: const EdgeInsetsDirectional.only(
-                  bottom: 16.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //* Expiration
-                    Expanded(
-                      child: CTextField(
-                        tooltipMessage: AppKeys.mmYYKey,
-                        maxLines: 1,
-                        maxLength: 5,
-                        controller: expDateController,
-                        autovalidateMode: AutovalidateMode.disabled,
-                        label: 'card_expiration'.i18n,
-                        inputFormatters: [CreditCardExpirationDateFormatter()],
-                        keyboardType: TextInputType.datetime,
-                        prefixIcon:
-                            const CAssetImage(path: ImagePaths.calendar),
-                      ),
+            ),
+            SizedBox(height: 16.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                Expanded(
+                  child: Form(
+                    key: expDateFieldKey,
+                    child: CTextField(
+                      tooltipMessage: AppKeys.mmYYKey,
+                      maxLines: 1,
+                      maxLength: 5,
+                      controller: expDateController,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      label: 'card_expiration'.i18n,
+                      inputFormatters: [CreditCardExpirationDateFormatter()],
+                      keyboardType: TextInputType.datetime,
+                      prefixIcon:
+                          const CAssetImage(path: ImagePaths.calendar),
                     ),
-                    const SizedBox(width: 45),
-                    //* CVV
-                    Expanded(
-                      child: CTextField(
-                        tooltipMessage: AppKeys.cvcKey,
-                        maxLines: 1,
-                        maxLength: 4,
-                        controller: cvcFieldController,
-                        autovalidateMode: AutovalidateMode.disabled,
-                        label: 'cvc'.i18n.toUpperCase(),
-                        keyboardType: TextInputType.number,
-                        prefixIcon: const CAssetImage(path: ImagePaths.lock),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              Flexible(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // * Price summary
-                    PriceSummary(
-                      plan: widget.plan,
-                      refCode: widget.refCode,
-                      isPro: widget.isPro,
+                const SizedBox(width: 45),
+                //* CVV
+                Expanded(
+                  child: Form(
+                    key: cvcFieldKey,
+                    child: CTextField(
+                      tooltipMessage: AppKeys.cvcKey,
+                      maxLines: 1,
+                      maxLength: 4,
+                      controller: cvcFieldController,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      label: 'cvc'.i18n.toUpperCase(),
+                      keyboardType: TextInputType.number,
+                      prefixIcon: const CAssetImage(path: ImagePaths.lock),
                     ),
-                    TOS(),
-                    checkoutButton(),
-                  ],
+                  ),
                 ),
+              ],
+            ),
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // * Price summary
+                  PriceSummary(
+                    plan: widget.plan,
+                    refCode: widget.refCode,
+                    isPro: widget.isPro,
+                  ),
+                  const TOS(),
+                  const SizedBox(height: 16),
+                  checkoutButton(),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -211,10 +210,15 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   bool determineFormIsValid() {
     // returns true if there is at least one empty field
+
     final anyFieldsEmpty = creditCardController.value.text.isEmpty ||
         expDateController.value.text.isEmpty ||
         cvcFieldController.value.text.isEmpty;
-
+    if(anyFieldsEmpty){
+      creditCardFieldKey.currentState?.validate();
+      expDateFieldKey.currentState?.validate();
+      cvcFieldKey.currentState?.validate();
+    }
     // returns true if there is at least one invalid field
     final anyFieldsInvalid =
         creditCardFieldKey.currentState?.validate() == false ||
