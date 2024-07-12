@@ -61,11 +61,8 @@ class _StripeCheckoutState extends State<StripeCheckout> {
         : 'invalid_cvc'.i18n,
   );
 
-  var formIsValid = false;
-
   @override
   void dispose() {
-    creditCardController.dispose();
     super.dispose();
   }
 
