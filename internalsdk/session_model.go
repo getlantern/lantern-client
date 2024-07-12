@@ -1,12 +1,15 @@
 package internalsdk
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"math/big"
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/1Password/srp"
@@ -70,7 +73,7 @@ const (
 	pathEmailAddress           = "emailAddress"
 	pathCurrencyCode           = "currency_Code"
 	pathReplicaAddr            = "replicaAddr"
-	pathSplitTunneling         = "splitTunneling"
+	pathSplitTunneling         = "/splitTunneling"
 	pathLang                   = "lang"
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
@@ -97,6 +100,9 @@ const (
 	pathHasConfig    = "hasConfigFetched"
 	pathHasProxy     = "hasProxyFetched"
 	pathHasonSuccess = "hasOnSuccess"
+
+	//Split Tunneling
+	pathAppsData = "/appsData/"
 )
 
 type SessionModelOpts struct {
@@ -113,6 +119,10 @@ type SessionModelOpts struct {
 	Platform        string
 }
 
+var (
+	stasMutex sync.Mutex
+)
+
 // NewSessionModel initializes a new SessionModel instance.
 func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, error) {
 	base, err := newModel("session", mdb)
@@ -128,11 +138,19 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(3000, &protos.Plan{})
 		base.db.RegisterType(4000, &protos.Plans{})
 	} else {
+		// db.registerType(2000, Vpn.Device::class.java)
+		// ////        db.registerType(2001, Vpn.Devices::class.java)
+		// ////        db.registerType(2002, Vpn.Plan::class.java)
+		// ////        db.registerType(2004, Vpn.PaymentProviders::class.java)
+		// ////        db.registerType(2005, Vpn.PaymentMethod::class.java)
+		// ////        db.registerType(2006, Vpn.AppData::class.java)
+		// ////        db.registerType(2007, Vpn.ServerInfo::class.java)
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(3000, &protos.Plan{})
 		base.db.RegisterType(4000, &protos.Plans{})
+		base.db.RegisterType(5000, &protos.AppData{})
 	}
 
 	m := &SessionModel{baseModel: base}
@@ -268,7 +286,15 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		if err != nil {
 			return nil, err
 		}
-		return true, nil // Add return statement here
+		return true, nil
+	case "setDeviceId":
+		deviceId := arguments.Get("deviceID").String()
+		err := m.setDeviceId(deviceId)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	case "signupEmailResendCode":
 		email := arguments.Get("email").String()
 		err := signupEmailResend(m, email)
@@ -417,6 +443,15 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "isUserFirstTimeVisit":
 		return checkFirstTimeVisit(m.baseModel)
+
+	case "updateVpnPref":
+		useVpn := arguments.Get("useVpn").Bool()
+		err := m.updateVpnPref(useVpn)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	case "setFirstTimeVisit":
 		err := isShowFirstTimeUserVisit(m.baseModel)
 		if err != nil {
@@ -430,6 +465,22 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+
+	case "appsAllowedAccess":
+		apps, err := m.appsAllowedAccess()
+		if err != nil {
+			return nil, err
+		}
+		return apps, nil
+	case "updateAppsData":
+		appsData := arguments.Get("appsList").String()
+		log.Debugf("Apps Data %v", appsData)
+		err := m.updateAppsData(appsData)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -447,6 +498,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		log.Debugf("Init Session setting email value to an empty string")
 		setEmail(m.baseModel, "")
 	}
+	log.Debugf("Begining transaction")
 	tx, err := m.db.Begin()
 	if err != nil {
 		return err
@@ -484,6 +536,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		}
 	}
 
+	log.Debugf("Commiting transaction")
 	err = tx.Commit()
 	if err != nil {
 		log.Debugf("Error while commiting transaction %v", err)
@@ -519,8 +572,22 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 			// return err
 		}
 	}()
-
+	go checkSplitTunneling(m)
 	return checkAdsEnabled(m)
+}
+
+func checkSplitTunneling(m *SessionModel) error {
+	tunneling, err := pathdb.Get[bool](m.db, pathSplitTunneling)
+	if err != nil {
+		log.Errorf("Error while getting split tunneling value %v", err)
+		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathSplitTunneling, false, "")
+		})
+	}
+	log.Debugf("Split Tunneling value is %v", tunneling)
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathSplitTunneling, false, "")
+	})
 }
 
 func (session *SessionModel) paymentMethods() error {
@@ -609,26 +676,32 @@ func (m *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 // Note - the names of these parameters have to match what's defined on the `Session` interface
 func (m *SessionModel) UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error {
 	if serverCity != "" && serverCountry != "" && serverCountryCode != "" {
-
+		stasMutex.Lock()
+		defer stasMutex.Unlock()
 		serverInfo := &protos.ServerInfo{
 			City:        serverCity,
 			Country:     serverCountry,
 			CountryCode: serverCountryCode,
 		}
 		log.Debugf("UpdateStats city %v country %v hasSucceedingProxy %v serverInfo %v", serverCity, serverCountry, hasSucceedingProxy, serverInfo)
-		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			err := pathdb.Put[bool](tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
-			if err != nil {
-				log.Debugf("Error while adding hasSucceedingProxy %v", err)
-				return err
-			}
-			return pathdb.PutAll(tx, map[string]interface{}{
-				pathServerCountry:     serverCountry,
-				pathServerCity:        serverCity,
-				pathServerCountryCode: serverCountryCode,
-				pathServerInfo:        serverInfo,
-			})
-		})
+		tx, err := m.db.Begin()
+		if err != nil {
+			log.Errorf("Error while begining transaction %v", err)
+			return err
+		}
+		pathdb.Put[*protos.ServerInfo](tx, pathServerInfo, serverInfo, "")
+		pathdb.Put[bool](tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
+		return tx.Commit()
+
+		// return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		// 	return pathdb.PutAll(tx, map[string]interface{}{
+		// 		// pathServerCountry:     serverCountry,
+		// 		// pathServerCity:        serverCity,
+		// 		// pathServerCountryCode: serverCountryCode,
+		// 		pathServerInfo:         serverInfo,
+		// 		pathHasSucceedingProxy: hasSucceedingProxy,
+		// 	})
+		// })
 	}
 	return nil
 }
@@ -833,6 +906,12 @@ func (m *SessionModel) DeviceOS() (string, error) {
 	return "IOS", nil
 }
 
+func (m *SessionModel) setDeviceId(deviceId string) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathDeviceID, deviceId, "")
+	})
+}
+
 func (m *SessionModel) IsProUser() (bool, error) {
 	return pathdb.Get[bool](m.db, pathProUser)
 }
@@ -861,9 +940,16 @@ func (m *SessionModel) SetChatEnabled(chatEnable bool) {
 	}))
 }
 
+func (m *SessionModel) ChatEnable() bool {
+	chat, err := pathdb.Get[bool](m.db, pathChatEnabled)
+	if err != nil {
+		return false
+	}
+	return chat
+}
+
 func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
-	// Return static for now
-	return true, nil
+	return pathdb.Get[bool](m.db, pathSplitTunneling)
 }
 
 func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
@@ -913,8 +999,8 @@ func setStoreVersion(m *baseModel, isStoreVersion bool) error {
 	})
 }
 
-func UpdateVpnPreference(m *baseModel, prefVPN bool) error {
-	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+func (session *SessionModel) updateVpnPref(prefVPN bool) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathPrefVPN, prefVPN, "")
 	})
 }
@@ -1887,4 +1973,52 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 	})
 	// Update user detail to reflact on UI
 	return session.userDetail(context.Background())
+}
+
+//Split Tunneling
+
+func (session *SessionModel) appsAllowedAccess() (string, error) {
+	// Get the list of apps that are allowed to access the network.
+	installedApps, err := pathdb.List[string](session.db, nil)
+	if err != nil {
+		return "", err
+	}
+	log.Debugf("Installed apps %v", installedApps)
+
+	strSlice := make([]string, len(installedApps))
+	for i, v := range installedApps {
+		strSlice[i] = fmt.Sprint(v)
+	}
+	log.Debugf("Installed apps str%v", strSlice)
+	return strings.Join(strSlice, ","), nil
+
+}
+
+// Define the struct to match the JSON structure
+type AppInfo struct {
+	PackageName string `json:"packageName"`
+	Name        string `json:"name"`
+	Icon        string `json:"icon"`
+}
+
+func (session *SessionModel) updateAppsData(appsList string) error {
+	log.Debugf("Apps list %v", appsList)
+	var apps []AppInfo
+	err := json.Unmarshal([]byte(appsList), &apps)
+	if err != nil {
+		log.Fatalf("Error decoding JSON: %v", err)
+	}
+
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		for _, app := range apps {
+			path := pathAppsData + app.PackageName
+			vpn := &protos.AppData{
+				PackageName: app.PackageName,
+				Name:        app.Name,
+				Icon:        bytes.NewBufferString(app.Icon).Bytes(),
+			}
+			pathdb.Put(tx, path, vpn, "")
+		}
+		return nil
+	})
 }

@@ -46,12 +46,12 @@ open class LanternService : Service(), Runnable {
     private val createUserHandler: Handler = Handler(Looper.getMainLooper())
 //    private val createUserRunnable: CreateUser = CreateUser(this)
     private val random: Random = Random()
-    private val serviceIcon: Int = if (LanternApp.getSession().chatEnabled()) {
-        R.drawable.status_chat
-    } else {
-        R.drawable.status_plain
-    }
-    private val helper: ServiceHelper = ServiceHelper(this, serviceIcon, R.string.ready_to_connect)
+//    private val serviceIcon: Int = if (LanternApp.getSession().chatEnabled()) {
+//        R.drawable.status_chat
+//    } else {
+//        R.drawable.status_plain
+//    }
+//    private val helper: ServiceHelper = ServiceHelper(this, serviceIcon, R.string.ready_to_connect)
     private val started: AtomicBoolean = AtomicBoolean()
     private lateinit var autoUpdater: AutoUpdater
 

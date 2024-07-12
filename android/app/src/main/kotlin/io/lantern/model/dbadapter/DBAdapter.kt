@@ -1,6 +1,7 @@
 package io.lantern.model.dbadapter
 
 import android.database.Cursor
+import android.util.Log
 import minisql.DB
 import minisql.Rows
 import minisql.Tx
@@ -8,28 +9,61 @@ import minisql.Values
 import net.sqlcipher.database.SQLiteDatabase
 import java.util.UUID
 
-open class DBAdapter(protected val db: SQLiteDatabase) : DB {
+open class DBAdapter( val db: SQLiteDatabase) : DB {
     override fun exec(sql: String, args: Values?) = db.execSQL(sql, args!!.toBindArgs())
 
     override fun query(sql: String?, args: Values?) =
         RowsAdapter(db.rawQuery(sql, args?.toBindArgs()))
 
-    override fun begin() = TxAdapter(db)
+    override fun begin(): Tx {
+        Log.d("Database", "BEGIN")
+        return TxAdapter(db);
+    }
 }
 
-class TxAdapter(db: SQLiteDatabase) : DBAdapter(db), Tx {
+class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx {
     val id = UUID.randomUUID().toString()
+    @Volatile private var isSavepointActive = false
 
     init {
-        db.execSQL("SAVEPOINT '$id'")
+        createSavepoint()
     }
 
+    @Synchronized
+    private fun createSavepoint() {
+        if (!isSavepointActive) {
+            sqliteDB.execSQL("SAVEPOINT ${id.quote()}")
+            Log.d("Database", "SAVEPOINT ${id.quote()} created")
+            isSavepointActive = true
+        } else {
+            Log.w("Database", "Attempted to create nested savepoint: ${id.quote()}")
+        }
+    }
+
+    @Synchronized
     override fun commit() {
-        db.execSQL("RELEASE '$id'")
+        if (isSavepointActive) {
+            sqliteDB.execSQL("RELEASE ${id.quote()}")
+            Log.d("Database", "RELEASE ${id.quote()}")
+            isSavepointActive = false
+        } else {
+            Log.w("Database", "No active savepoint to release")
+        }
     }
 
+    @Synchronized
     override fun rollback() {
-        db.execSQL("ROLLBACK TO '$id' ")
+        if (isSavepointActive) {
+            sqliteDB.execSQL("ROLLBACK TO ${id.quote()}")
+            Log.d("Database", "ROLLBACK TO ${id.quote()}")
+            isSavepointActive = false
+        } else {
+            Log.w("Database", "No active savepoint to rollback to")
+        }
+    }
+
+    private fun String.quote(): String {
+        return "'${this.replace("'", "''")}'"
     }
 }
 
