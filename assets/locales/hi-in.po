@@ -453,6 +453,9 @@ msgstr "भुगतान का तरीका चुनें"
 msgid "pro_plan"
 msgstr "प्रो प्‍लान"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "1-वर्षीय प्‍लान"
 

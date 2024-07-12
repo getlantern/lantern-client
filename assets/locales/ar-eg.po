@@ -458,6 +458,9 @@ msgstr "اختر وسيلة الدفع"
 msgid "pro_plan"
 msgstr "خطة Pro"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "خطة لمدة عام واحد"
 

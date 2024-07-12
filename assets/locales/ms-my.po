@@ -458,6 +458,9 @@ msgstr "Pilih Kaedah Pembayaran"
 msgid "pro_plan"
 msgstr "Pelan Pro"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "Pelan 1 Tahun"
 

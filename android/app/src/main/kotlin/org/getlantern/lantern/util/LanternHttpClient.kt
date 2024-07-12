@@ -164,32 +164,34 @@ open class LanternHttpClient : HttpClient() {
                     response: Response?,
                     result: JsonObject?,
                 ) {
+                    if (result == null || result.get("providers") == null  || result.get("icons") == null) return
                     Logger.d(TAG, "Plans v3 Response body $result")
                     val methods =
-                        JsonUtil.fromJson<Map<String, List<PaymentMethods>>>(
-                            result?.get("providers").toString(),
+                        JsonUtil.tryParseJson<Map<String, List<PaymentMethods>>>(
+                            result.get("providers").toString(),
                         )
-                    val icons = JsonUtil.fromJson<Icons>(result?.get("icons").toString())
-                    Logger.d(TAG, "Plans v3 Icons Response body $icons")
+                    if (methods == null) return
+                    val icons = JsonUtil.tryParseJson<Icons>(result.get("icons").toString())
                     val providers = methods.get("android")
+                    if (providers == null) return
                     // Due to API limitations
                     // We need loop all the provider and info since we can multiple provider with multiple methods
-                    providers?.let {
-                        providers.forEach { it ->
-                            it.providers.forEach { provider ->
-                                val icons = result?.get("icons")?.asJsonObject
-                                val logoJson = icons?.get(
-                                    provider.name.toString().lowercase()
-                                )!!.asJsonArray
-                                val logoUrlsList: List<String> =
-                                    logoJson?.map { it.asString } ?: emptyList()
-                                provider.logoUrl = logoUrlsList
-                            }
+                    providers.forEach { it ->
+                        it.providers.forEach { provider ->
+                            val icons = result?.get("icons")?.asJsonObject
+                            val logoJson = icons?.get(
+                                provider.name.toString().lowercase()
+                            )!!.asJsonArray
+                            val logoUrlsList: List<String> =
+                                logoJson?.map { it.asString } ?: emptyList()
+                            provider.logoUrl = logoUrlsList
                         }
                     }
-                    val fetched = JsonUtil.fromJson<List<ProPlan>>(result?.get("plans").toString())
-                    val plans = plansMap(fetched)
-                    if (providers != null) cb.onSuccess(plans, providers)
+                    val fetched = JsonUtil.tryParseJson<List<ProPlan>>(result.get("plans").toString())
+                    if (fetched != null) {
+                        val plans = plansMap(fetched!!)
+                        cb.onSuccess(plans, providers)
+                    }
                 }
             },
         )
@@ -219,32 +221,35 @@ open class LanternHttpClient : HttpClient() {
                     response: Response?,
                     result: JsonObject?,
                 ) {
+                    if (result == null || result.get("providers") == null  || result.get("icons") == null) return
                     Logger.d(TAG, "Plans v3 Response body $result")
                     val methods =
-                        JsonUtil.fromJson<Map<String, List<PaymentMethods>>>(
-                            result?.get("providers").toString(),
+                        JsonUtil.tryParseJson<Map<String, List<PaymentMethods>>>(
+                            result.get("providers").toString(),
                         )
-                    val icons = JsonUtil.fromJson<Icons>(result?.get("icons").toString())
+                    if (methods == null) return
+                    val icons = JsonUtil.tryParseJson<Icons>(result.get("icons").toString())
                     Logger.d(TAG, "Plans v3 Icons Response body $icons")
                     val providers = methods.get("android")
+                    if (providers == null) return
                     // Due to API limitations
                     // We need loop all the provider and info since we can multiple provider with multiple methods
-                    providers?.let {
-                        providers.forEach { it ->
-                            it.providers.forEach { provider ->
-                                val icons = result?.get("icons")?.asJsonObject
-                                val logoJson = icons?.get(
-                                    provider.name.toString().lowercase()
-                                )!!.asJsonArray
-                                val logoUrlsList: List<String> =
-                                    logoJson?.map { it.asString } ?: emptyList()
-                                provider.logoUrl = logoUrlsList
-                            }
+                    providers.forEach { it ->
+                        it.providers.forEach { provider ->
+                            val icons = result?.get("icons")?.asJsonObject
+                            val logoJson = icons?.get(
+                                provider.name.toString().lowercase()
+                            )!!.asJsonArray
+                            val logoUrlsList: List<String> =
+                                logoJson?.map { it.asString } ?: emptyList()
+                            provider.logoUrl = logoUrlsList
                         }
                     }
-                    val fetched = JsonUtil.fromJson<List<ProPlan>>(result?.get("plans").toString())
-                    val plans = plansMap(fetched)
-                    if (providers != null) cb.onSuccess(plans, providers)
+                    val fetched = JsonUtil.tryParseJson<List<ProPlan>>(result?.get("plans").toString())
+                    if (fetched != null) {
+                        val plans = plansMap(fetched)
+                        cb.onSuccess(plans, providers)
+                    }
                 }
             },
         )

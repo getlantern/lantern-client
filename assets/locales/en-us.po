@@ -404,6 +404,9 @@ msgstr "Choose Payment Method"
 msgid "pro_plan"
 msgstr "Pro Plan"
 
+msgid "one_month_plan"
+msgstr "1-Month Plan"
+
 msgid "one_year_plan"
 msgstr "1-Year Plan"
 

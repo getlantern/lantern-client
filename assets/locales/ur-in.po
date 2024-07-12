@@ -455,6 +455,9 @@ msgstr "ادائیگی کا طریقہ منتخب کریں"
 msgid "pro_plan"
 msgstr "پرو پلان"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "1 سال کا پلان"
 

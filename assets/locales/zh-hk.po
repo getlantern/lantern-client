@@ -426,6 +426,9 @@ msgstr "选择付款方式"
 msgid "pro_plan"
 msgstr "专业版计划"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "1 年专业版"
 

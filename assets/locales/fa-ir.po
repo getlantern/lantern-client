@@ -465,6 +465,9 @@ msgstr "روش پرداخت را انتخاب کنید"
 msgid "pro_plan"
 msgstr "طرح حرفه‌ای"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "طرح یک ساله"
 
