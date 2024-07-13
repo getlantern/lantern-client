@@ -1751,7 +1751,7 @@ msgid "recovery_not_found"
 msgstr "อุปกรณ์ที่ไม่เชื่อมโยงกับผู้ใช้รายนี้"
 
 msgid "device_added"
-msgstr "อุปกรณ์ที่ไม่เชื่อมโยงกับผู้ใช้รายนี้"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

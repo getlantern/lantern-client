@@ -1778,7 +1778,7 @@ msgid "recovery_not_found"
 msgstr "ڈیوائس اس یوزر سے منسلک نہیں "
 
 msgid "device_added"
-msgstr "ڈیوائس اس یوزر سے منسلک نہیں "
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""
