@@ -7,6 +7,8 @@ import UIKit
 //know Issue
 //  CFPrefsPlistSource<0x28281e580> (Domain: group.getlantern.lantern, User: kCFPreferencesAnyUser, ByHost: Yes, Container: (null), Contents Need Refresh: Yes): Using kCFPreferencesAnyUser with a container is only allowed for System Containers,
 
+//For ios trakcing:- https://stackoverflow.com/questions/65207375/nsusertrackingdescription-failure
+
 // For IOS App Lunch time issue
 //https://developer.apple.com/videos/play/wwdc2019/423/?time=305
 @UIApplicationMain

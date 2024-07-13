@@ -458,6 +458,9 @@ msgstr "Pilih Kaedah Pembayaran"
 msgid "pro_plan"
 msgstr "Pelan Pro"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "Pelan 1 Tahun"
 
@@ -1785,7 +1788,7 @@ msgid "recovery_not_found"
 msgstr "Peranti tidak dikaitkan dengan pengguna ini"
 
 msgid "device_added"
-msgstr "Peranti tidak dikaitkan dengan pengguna ini"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

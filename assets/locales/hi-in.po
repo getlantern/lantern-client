@@ -453,6 +453,9 @@ msgstr "भुगतान का तरीका चुनें"
 msgid "pro_plan"
 msgstr "प्रो प्‍लान"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "1-वर्षीय प्‍लान"
 
@@ -1763,7 +1766,7 @@ msgid "recovery_not_found"
 msgstr "डिवाइस इस उपयोगकर्ता के लिए नहीं जुड़े"
 
 msgid "device_added"
-msgstr "डिवाइस इस उपयोगकर्ता के लिए नहीं जुड़े"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

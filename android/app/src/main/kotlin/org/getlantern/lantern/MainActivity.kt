@@ -87,57 +87,14 @@ class MainActivity :
                 override fun onListen(event: Event) {
                     if (LanternApp.getSession().lanternDidStart()) {
                         Plausible.init(applicationContext)
-                        Logger.debug(TAG, "Plausible initialized")
                         Plausible.enable(true)
+                        Logger.debug(TAG, "Plausible initialized")
                         fetchLoConf()
-                        Logger.debug(
-                            TAG,
-                            "fetchLoConf() finished at ${System.currentTimeMillis() - start}",
-                        )
+                        updateUserAndPaymentData()
                     }
                     LanternApp.getSession().dnsDetector.publishNetworkAvailability()
                 }
             }
-        EventHandler.subscribeAppEvents { appEvent ->
-            when (appEvent) {
-                is AppEvent.AccountInitializationEvent -> onInitializingAccount(appEvent.status)
-                is AppEvent.BandwidthEvent -> {
-                    val event = appEvent as AppEvent.BandwidthEvent
-                    Logger.debug("bandwidth updated", event.bandwidth.toString())
-                    vpnModel.updateBandwidth(event.bandwidth)
-                }
-                is AppEvent.LoConfEvent -> {
-                    doProcessLoconf(appEvent.loconf)
-                }
-                is AppEvent.LocaleEvent -> {
-                    // Recreate the activity when the language changes
-                    recreate()
-                }
-                is AppEvent.StatsEvent -> {
-                    val stats = appEvent.stats
-                    Logger.debug("Stats updated", stats.toString())
-                    sessionModel.saveServerInfo(
-                        Vpn.ServerInfo
-                            .newBuilder()
-                            .setCity(stats.city)
-                            .setCountry(stats.country)
-                            .setCountryCode(stats.countryCode)
-                            .build(),
-                    )
-                }
-                is AppEvent.StatusEvent -> {
-                    updateUserData()
-                    updatePaymentMethods()
-                    updateCurrencyList()
-                }
-                is AppEvent.VpnStateEvent -> {
-                    updateStatus(appEvent.vpnState.useVpn)
-                }
-                else -> {
-                    Logger.debug(TAG, "Unknown app event " + appEvent)
-                }
-            }
-        }
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "lantern_method_channel",
@@ -174,6 +131,7 @@ class MainActivity :
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
+        subscribeAppEvents()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -181,6 +139,53 @@ class MainActivity :
         // If the user clicks on a message notification and MainActivity is already the top activity,
         // this ensures that we navigate to the corresponding conversation.
         navigateForIntent(intent)
+    }
+
+    private fun subscribeAppEvents() {
+        EventHandler.subscribeAppEvents { appEvent ->
+            when (appEvent) {
+                is AppEvent.AccountInitializationEvent -> onInitializingAccount(appEvent.status)
+                is AppEvent.BandwidthEvent -> {
+                    val event = appEvent as AppEvent.BandwidthEvent
+                    Logger.debug("bandwidth updated", event.bandwidth.toString())
+                    vpnModel.updateBandwidth(event.bandwidth)
+                }
+                is AppEvent.LoConfEvent -> {
+                    doProcessLoconf(appEvent.loconf)
+                }
+                is AppEvent.LocaleEvent -> {
+                    // Recreate the activity when the language changes
+                    recreate()
+                }
+                is AppEvent.StatsEvent -> {
+                    val stats = appEvent.stats
+                    Logger.debug("Stats updated", stats.toString())
+                    sessionModel.saveServerInfo(
+                        Vpn.ServerInfo
+                            .newBuilder()
+                            .setCity(stats.city)
+                            .setCountry(stats.country)
+                            .setCountryCode(stats.countryCode)
+                            .build(),
+                    )
+                }
+                is AppEvent.StatusEvent -> {
+                    updateUserAndPaymentData()
+                }
+                is AppEvent.VpnStateEvent -> {
+                    updateStatus(appEvent.vpnState.useVpn)
+                }
+                else -> {
+                    Logger.debug(TAG, "Unknown app event " + appEvent)
+                }
+            }
+        }
+    }
+
+    private fun updateUserAndPaymentData() {
+        updateUserData()
+        updatePaymentMethods()
+        updateCurrencyList()
     }
 
     private fun navigateForIntent(intent: Intent) {

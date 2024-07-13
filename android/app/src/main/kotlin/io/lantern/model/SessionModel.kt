@@ -351,7 +351,6 @@ class SessionModel(
         paymentMethods: List<PaymentMethods>,
 
         ) {
-
         LanternApp.getSession().setUserPlans(activity, proPlans)
         LanternApp.getSession().setPaymentMethods(paymentMethods)
     }
@@ -472,14 +471,8 @@ class SessionModel(
                         override fun onSuccess(response: Response, userData: ProUser) {
                             Logger.debug(TAG, "Successfully updated userData")
                             activity.runOnUiThread {
-                                //todo find better solution restart the app is the good option
-                                //Restart the app
-                                val intent = Intent(activity, MainActivity::class.java).apply {
-                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                                }
-                                activity.startActivity(intent)
-//                                methodCallResult.success("redeemedLinkCode")
-
+                                LanternApp.getSession().storeUserData(userData)
+                                methodCallResult.success("redeemedLinkCode")
                             }
                         }
 

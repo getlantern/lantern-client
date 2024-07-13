@@ -431,6 +431,9 @@ msgstr "选择付款方式"
 msgid "pro_plan"
 msgstr "专业版计划"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "一年专业版"
 
@@ -1671,7 +1674,7 @@ msgid "recovery_not_found"
 msgstr "设备未关联此用户"
 
 msgid "device_added"
-msgstr "设备未关联此用户"
+msgstr ""
 
 msgid "device_added_message"
 msgstr "您的设备已成功添加。如果您没有看到设备连接，请重新启动两个设备上的应用程序 "

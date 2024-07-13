@@ -463,6 +463,9 @@ msgstr "Elegir método de pago"
 msgid "pro_plan"
 msgstr "Plan Pro"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "Plan de 1 año"
 
@@ -1795,7 +1798,7 @@ msgid "recovery_not_found"
 msgstr "Dispositivo no asociado a este usuario"
 
 msgid "device_added"
-msgstr "Dispositivo no asociado a este usuario"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

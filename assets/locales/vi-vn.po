@@ -454,6 +454,9 @@ msgstr "Chọn phương thức thanh toán"
 msgid "pro_plan"
 msgstr "Gói Pro"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "Gói 1 năm"
 
@@ -1769,7 +1772,7 @@ msgid "recovery_not_found"
 msgstr "Máy không liên đới với người dùng này"
 
 msgid "device_added"
-msgstr "Máy không liên đới với người dùng này"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

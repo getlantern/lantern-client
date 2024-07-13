@@ -465,6 +465,9 @@ msgstr "روش پرداخت را انتخاب کنید"
 msgid "pro_plan"
 msgstr "طرح حرفه‌ای"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "طرح یک ساله"
 
@@ -1768,7 +1771,7 @@ msgid "recovery_not_found"
 msgstr "دستگاه به این کاربر وابسته نیست"
 
 msgid "device_added"
-msgstr "دستگاه به این کاربر وابسته نیست"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

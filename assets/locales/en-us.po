@@ -404,6 +404,9 @@ msgstr "Choose Payment Method"
 msgid "pro_plan"
 msgstr "Pro Plan"
 
+msgid "one_month_plan"
+msgstr "1-Month Plan"
+
 msgid "one_year_plan"
 msgstr "1-Year Plan"
 
@@ -1629,7 +1632,7 @@ msgid "recovery_not_found"
 msgstr "Device not associated to this user"
 
 msgid "device_added"
-msgstr "Device not associated to this user"
+msgstr "Device added"
 
 msgid "device_added_message"
 msgstr "Your device has been successfully added. If you do not see the device connected, please restart the app on both devices"

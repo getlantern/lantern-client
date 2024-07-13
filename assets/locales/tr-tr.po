@@ -465,6 +465,9 @@ msgstr "Ödeme Yöntemi Seç"
 msgid "pro_plan"
 msgstr "Pro Plan"
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "1 Yıllık Plan"
 
@@ -1776,7 +1779,7 @@ msgid "recovery_not_found"
 msgstr "Cihaz bu kullancı ile ilişkilendirilmemiş"
 
 msgid "device_added"
-msgstr "Cihaz bu kullancı ile ilişkilendirilmemiş"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

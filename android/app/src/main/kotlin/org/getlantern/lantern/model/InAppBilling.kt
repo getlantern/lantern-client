@@ -203,6 +203,7 @@ class InAppBilling(
                             it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
                         val proModel = ProPlan(
                             id,
+                            it.description,
                             hashMapOf(currency to price.toLong()),
                             hashMapOf(currency to priceWithoutTax.toLong()),
                             "2" == years,

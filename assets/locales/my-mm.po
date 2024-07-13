@@ -465,6 +465,9 @@ msgstr "ငွေပေးချေမှုနည်းလမ်းရွေး
 msgid "pro_plan"
 msgstr "Pro အစီအစဉ် "
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "၁ နှစ်အစီအစဉ် "
 
@@ -1810,7 +1813,7 @@ msgid "recovery_not_found"
 msgstr "စက်ကို ဤအသုံးပြုသူနှင့် တွဲဖက်ထားခြင်းမရှိပါ"
 
 msgid "device_added"
-msgstr "စက်ကို ဤအသုံးပြုသူနှင့် တွဲဖက်ထားခြင်းမရှိပါ"
+msgstr ""
 
 msgid "device_added_message"
 msgstr "ပြန်လည်ရယူရန်ကုဒ် ပေးပို့ပြီးပြီ "

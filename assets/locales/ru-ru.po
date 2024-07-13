@@ -464,6 +464,9 @@ msgstr "Выберете способ оплаты "
 msgid "pro_plan"
 msgstr "Подписка Pro "
 
+msgid "one_month_plan"
+msgstr ""
+
 msgid "one_year_plan"
 msgstr "Подписка на 1 год "
 
@@ -1781,7 +1784,7 @@ msgid "recovery_not_found"
 msgstr "Устройство не связано с этим пользователем"
 
 msgid "device_added"
-msgstr "Устройство не связано с этим пользователем"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

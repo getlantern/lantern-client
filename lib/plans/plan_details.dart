@@ -60,7 +60,7 @@ class _PlanCardState extends State<PlanCard> {
                         CText(
                           planName == '1y'
                               ? 'one_year_plan'.i18n
-                              : 'two_year_plan'.i18n,
+                              : (planName == '1m' ? 'one_month_plan'.i18n : 'two_year_plan'.i18n),
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
