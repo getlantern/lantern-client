@@ -1788,7 +1788,7 @@ msgid "recovery_not_found"
 msgstr "Peranti tidak dikaitkan dengan pengguna ini"
 
 msgid "device_added"
-msgstr "Peranti tidak dikaitkan dengan pengguna ini"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

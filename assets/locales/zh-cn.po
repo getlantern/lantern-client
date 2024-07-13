@@ -1674,7 +1674,7 @@ msgid "recovery_not_found"
 msgstr "设备未关联此用户"
 
 msgid "device_added"
-msgstr "设备未关联此用户"
+msgstr ""
 
 msgid "device_added_message"
 msgstr "您的设备已成功添加。如果您没有看到设备连接，请重新启动两个设备上的应用程序 "

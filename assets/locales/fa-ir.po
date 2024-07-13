@@ -1771,7 +1771,7 @@ msgid "recovery_not_found"
 msgstr "دستگاه به این کاربر وابسته نیست"
 
 msgid "device_added"
-msgstr "دستگاه به این کاربر وابسته نیست"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

@@ -1813,7 +1813,7 @@ msgid "recovery_not_found"
 msgstr "စက်ကို ဤအသုံးပြုသူနှင့် တွဲဖက်ထားခြင်းမရှိပါ"
 
 msgid "device_added"
-msgstr "စက်ကို ဤအသုံးပြုသူနှင့် တွဲဖက်ထားခြင်းမရှိပါ"
+msgstr ""
 
 msgid "device_added_message"
 msgstr "ပြန်လည်ရယူရန်ကုဒ် ပေးပို့ပြီးပြီ "
