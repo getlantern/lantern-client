@@ -103,12 +103,7 @@ func start() {
 		}
 	}()
 
-	go func() {
-		err = fetchUserData()
-		if err != nil {
-			log.Errorf("error while fetching user data: %v", err)
-		}
-	}()
+	go fetchUserData()
 
 	go func() {
 		err := fetchPayentMethodV4()
@@ -152,7 +147,6 @@ func start() {
 }
 
 func fetchUserData() error {
-
 	user, err := getUserData()
 	if err != nil {
 		return log.Errorf("error while fetching user data: %v", err)
@@ -1006,7 +1000,7 @@ func logout() *C.char {
 		return sendError(log.Errorf("Error while signing out %v", logoutErr))
 	}
 	if !loggedOut {
-		return sendError(log.Errorf("Error while signing out %v", logoutErr))
+		return sendError(log.Error("Error while signing out"))
 	}
 
 	clearLocalUserData()
