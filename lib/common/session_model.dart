@@ -559,7 +559,7 @@ class SessionModel extends Model {
 
   Future<bool> getChatEnabled() async {
     return methodChannel
-        .invokeMethod('get', 'chatEnabled')
+        .invokeMethod('chatEnabled', '')
         .then((enabled) => enabled == true);
   }
 

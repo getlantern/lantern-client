@@ -92,6 +92,8 @@ class MainActivity :
 //        opts.device = LanternApp.getSession().deviceName()
         opts.paymentTestMode = false
         opts.platform = "android"
+        opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
+
 //        val sessionNew = SessionModel(this, flutterEngine, opts)
 
 //        sessionModel = SessionModelLegacy(this, flutterEngine)

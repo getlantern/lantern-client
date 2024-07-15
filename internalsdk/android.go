@@ -93,6 +93,7 @@ type Session interface {
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
 	SetOnSuccess(bool)
+	ChatEnable() bool
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
@@ -137,6 +138,7 @@ type PanickingSession interface {
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
 	SetOnSuccess(bool)
+	ChatEnable() bool
 
 	Wrapped() Session
 }
@@ -144,10 +146,6 @@ type PanickingSession interface {
 // panickingSessionImpl implements PanickingSession
 type panickingSessionImpl struct {
 	wrapped Session
-}
-
-func NewPanickingSession(s *SessionModel) PanickingSession {
-	return &panickingSessionImpl{s}
 }
 
 func (s *panickingSessionImpl) Wrapped() Session {
@@ -200,6 +198,9 @@ func (s *panickingSessionImpl) SplitTunnelingEnabled() bool {
 	result, err := s.wrapped.SplitTunnelingEnabled()
 	panicIfNecessary(err)
 	return result
+}
+func (s *panickingSessionImpl) ChatEnable() bool {
+	return s.wrapped.ChatEnable()
 }
 
 func (s *panickingSessionImpl) BandwidthUpdate(percent, remaining, allowed, ttlSeconds int) {

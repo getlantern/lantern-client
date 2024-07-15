@@ -474,12 +474,13 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return apps, nil
 	case "updateAppsData":
 		appsData := arguments.Get("appsList").String()
-		log.Debugf("Apps Data %v", appsData)
 		err := m.updateAppsData(appsData)
 		if err != nil {
 			return nil, err
 		}
 		return true, nil
+	case "chatEnabled":
+		return m.ChatEnable(), nil
 
 	default:
 		return m.methodNotImplemented(method)
@@ -684,14 +685,14 @@ func (m *SessionModel) UpdateStats(serverCity string, serverCountry string, serv
 			CountryCode: serverCountryCode,
 		}
 		log.Debugf("UpdateStats city %v country %v hasSucceedingProxy %v serverInfo %v", serverCity, serverCountry, hasSucceedingProxy, serverInfo)
-		tx, err := m.db.Begin()
-		if err != nil {
-			log.Errorf("Error while begining transaction %v", err)
-			return err
-		}
-		pathdb.Put[*protos.ServerInfo](tx, pathServerInfo, serverInfo, "")
-		pathdb.Put[bool](tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
-		return tx.Commit()
+		// tx, err := m.db.Begin()
+		// if err != nil {
+		// 	log.Errorf("Error while begining transaction %v", err)
+		// 	return err
+		// }
+		// pathdb.Put[*protos.ServerInfo](tx, pathServerInfo, serverInfo, "")
+		// pathdb.Put[bool](tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
+		// return tx.Commit()
 
 		// return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		// 	return pathdb.PutAll(tx, map[string]interface{}{
@@ -923,9 +924,9 @@ func setProUser(m *baseModel, isPro bool) error {
 }
 
 func (m *SessionModel) SetReplicaAddr(replicaAddr string) {
+	log.Debugf("Setting replica address %v", replicaAddr)
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		//For now force replicate to disbale it
-		return pathdb.Put(tx, pathReplicaAddr, "", "")
+		return pathdb.Put(tx, pathReplicaAddr, replicaAddr, "")
 	}))
 }
 
@@ -1979,17 +1980,16 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 
 func (session *SessionModel) appsAllowedAccess() (string, error) {
 	// Get the list of apps that are allowed to access the network.
-	installedApps, err := pathdb.List[string](session.db, nil)
+	installedApps, err := pathdb.List[*protos.AppData](session.db, &pathdb.QueryParams{
+		Path: pathAppsData + "%",
+	})
 	if err != nil {
 		return "", err
 	}
-	log.Debugf("Installed apps %v", installedApps)
-
 	strSlice := make([]string, len(installedApps))
 	for i, v := range installedApps {
-		strSlice[i] = fmt.Sprint(v)
+		strSlice[i] = fmt.Sprint(v.Value.PackageName)
 	}
-	log.Debugf("Installed apps str%v", strSlice)
 	return strings.Join(strSlice, ","), nil
 
 }
@@ -2002,7 +2002,6 @@ type AppInfo struct {
 }
 
 func (session *SessionModel) updateAppsData(appsList string) error {
-	log.Debugf("Apps list %v", appsList)
 	var apps []AppInfo
 	err := json.Unmarshal([]byte(appsList), &apps)
 	if err != nil {

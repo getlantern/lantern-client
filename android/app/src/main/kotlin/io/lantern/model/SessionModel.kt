@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Proxy
 import android.util.ArrayMap
 import android.util.Log
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.webkit.ProxyConfig
 import androidx.webkit.ProxyController
@@ -15,6 +16,8 @@ import com.google.protobuf.ByteString
 import internalsdk.SessionModel
 import internalsdk.SessionModelOpts
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 import io.lantern.apps.AppsDataProvider
 import io.lantern.model.dbadapter.DBAdapter
 import kotlinx.coroutines.CoroutineScope
@@ -65,6 +68,28 @@ class SessionModel internal constructor(
         LanternApp.setGoSession(model)
         updateAppsData()
     }
+
+    override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            "enableScreenshot" -> {
+                activity.runOnUiThread {
+                    activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
+                Logger.debug("Screenshot enabled", "Screenshot enabled")
+            }
+
+            "disableScreenshot" -> {
+                activity.runOnUiThread {
+                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
+                Logger.debug("Screenshot disable", "Screenshot disabled")
+            }
+
+            else -> super.doOnMethodCall(call, result)
+        }
+
+    }
+
 
     /// Utils class methods
 
@@ -122,21 +147,6 @@ class SessionModel internal constructor(
         model.invokeMethod("updateVpnPref", Arguments(mapOf("useVpn" to useVpn)))
     }
 
-    // appsAllowedAccess returns a list of package names for those applications that are allowed
-//    // to access the VPN connection. If split tunneling is enabled, and any app is added to
-//    // the list, only those applications (and no others) are allowed access.
-    fun appsAllowedAccess(): List<String> {
-        val result = model.invokeMethod("appsAllowedAccess", Arguments(mapOf("useVpn" to true)))
-        result.toJava()
-        Logger.debug(TAG, "appsAllowedAccess: ${result.toJava()}")
-
-//        var installedApps = db.list<Vpn.AppData>(PATH_APPS_DATA + "%")
-//        val apps = mutableListOf<String>()
-//        for (appData in installedApps) {
-//            if (appData.value.allowedAccess) apps.add(appData.value.packageName)
-//        }
-        return listOf()
-    }
 
     fun splitTunnelingEnabled(): Boolean {
         return model.splitTunnelingEnabled()
@@ -156,7 +166,7 @@ class SessionModel internal constructor(
     }
 
     // TO update to use sessionModel go
-    fun chatEnabled(): Boolean = false
+    fun chatEnabled(): Boolean = model.chatEnable()
 
     fun lanternDidStart(): Boolean {
         return startResult != null
@@ -280,6 +290,15 @@ class SessionModel internal constructor(
         }
     }
 
+    // appsAllowedAccess returns a list of package names for those applications that are allowed
+//    // to access the VPN connection. If split tunneling is enabled, and any app is added to
+//    // the list, only those applications (and no others) are allowed access.
+    fun appsAllowedAccess(): List<String> {
+        val result = model.invokeMethod("appsAllowedAccess", Arguments(mapOf("useVpn" to true)))
+        val appList = result.toJava().toString().split(",")
+        Logger.debug(TAG, "appsAllowedAccess: $appList")
+        return appList
+    }
 
     //updateAppsData stores app data for the list of applications installed for the current
     // user in the database
