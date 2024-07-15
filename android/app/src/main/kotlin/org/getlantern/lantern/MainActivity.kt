@@ -48,6 +48,7 @@ import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.util.DeviceUtil
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
@@ -57,6 +58,7 @@ import org.getlantern.mobilesdk.model.LoConf
 import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
 import org.getlantern.mobilesdk.model.Survey
 import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.*
 
 class MainActivity :
@@ -84,22 +86,20 @@ class MainActivity :
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         val opts = SessionModelOpts()
         opts.lang = "en_us"
-        opts.deviceID =
-            Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-        opts.model = Build.MODEL
-        opts.osVersion = String.format("Android-%s", Build.VERSION.RELEASE)
-//        opts.playVersion = LanternApp.getSession().isStoreVersion()
-//        opts.device = LanternApp.getSession().deviceName()
+        opts.deviceID =DeviceUtil.deviceId(this)
+        opts.model = DeviceUtil.model()
+        opts.osVersion = DeviceUtil.deviceOs()
+        opts.playVersion = DeviceUtil.isStoreVersion(this)
+        opts.device = DeviceUtil.model()
         opts.paymentTestMode = false
         opts.platform = "android"
         opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
+        opts.timeZone = TimeZone.getDefault().displayName
 
 //        val sessionNew = SessionModel(this, flutterEngine, opts)
-
 //        sessionModel = SessionModelLegacy(this, flutterEngine)
         sessionModel = SessionModel(this, flutterEngine, opts)
         LanternApp.setSession(sessionModel)
-
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)

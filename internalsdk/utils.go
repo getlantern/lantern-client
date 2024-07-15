@@ -174,3 +174,28 @@ func GenerateEncryptedKey(password string, email string, salt []byte) *big.Int {
 	encryptedKeyBigInt := big.NewInt(0).SetBytes(encryptedKey)
 	return encryptedKeyBigInt
 }
+
+func convertIntArrayToByteArray(intArray []int) ([]byte, error) {
+	byteArray := make([]byte, len(intArray))
+	for i, val := range intArray {
+		if val < 0 || val > 255 {
+			return nil, fmt.Errorf("value out of byte range: %d", val)
+		}
+		byteArray[i] = byte(val)
+	}
+	return byteArray, nil
+}
+
+// Function to convert a slice of strings to a slice of ints
+func convertStringArrayToIntArray(stringArray []string) ([]int, error) {
+	intArray := make([]int, len(stringArray))
+	for i, s := range stringArray {
+		// Convert each string to an int
+		val, err := strconv.Atoi(s)
+		if err != nil {
+			return nil, err
+		}
+		intArray[i] = val
+	}
+	return intArray, nil
+}

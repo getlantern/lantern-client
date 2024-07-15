@@ -308,16 +308,16 @@ class SessionModel internal constructor(
             val appsList = appsDataProvider.listOfApps()
             // First add just the app names to get a list quickly
             val apps = buildJsonArray {
-                appsList.forEach { app ->
+                appsList.forEach{ app ->
                     add(
                         buildJsonObject {
                             val byte = ByteString.copyFrom(app.icon)
-                            val encodedIcon = Base64.getEncoder().encodeToString(byte.toByteArray())
                             put("packageName", app.packageName)
                             put("name", app.name)
-                            put("icon", encodedIcon)
+                            put("icon", byte.toByteArray().toUByteArray().joinToString(", "))
                         }
                     )
+
                 }
             }
 
@@ -326,22 +326,6 @@ class SessionModel internal constructor(
                 Arguments(mapOf("appsList" to apps.toString()))
             )
 
-//            db.mutate { tx ->
-//                appsList.forEach {
-//                    val path = PATH_APPS_DATA + it.packageName
-//                    if (!tx.contains(path)) {
-//                        // App not already in list, add it
-//                        tx.put(
-//                            path,
-//                            Vpn.AppData.newBuilder().setPackageName(it.packageName).setName(it.name)
-//                                .setIcon(ByteString.copyFrom(it.icon)).build()
-//                        )
-//                    }
-//                }
-//            }
-
         }
     }
-
-
 }

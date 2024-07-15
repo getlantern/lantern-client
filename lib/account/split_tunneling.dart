@@ -26,7 +26,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   }
 
   void init() async {
-    unawaited(sessionModel.refreshAppsList());
+    // unawaited(sessionModel.refreshAppsList());
     var _vpnConnected = await vpnModel.isVpnConnected();
     setState(() {
       vpnConnected = _vpnConnected;
@@ -238,6 +238,7 @@ class _SplitTunnelingAppsListState extends State<SplitTunnelingAppsList> {
   }
 
   Widget buildAppItem(AppData appData) {
+    print("appData: ${appData.icon}");
     return Container(
       height: 72,
       padding: EdgeInsets.zero,

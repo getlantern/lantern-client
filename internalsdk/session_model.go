@@ -1,7 +1,6 @@
 package internalsdk
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -466,6 +465,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 
+		//SplitTunneling
+
 	case "appsAllowedAccess":
 		apps, err := m.appsAllowedAccess()
 		if err != nil {
@@ -475,6 +476,37 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "updateAppsData":
 		appsData := arguments.Get("appsList").String()
 		err := m.updateAppsData(appsData)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "refreshAppsList":
+		appsData := arguments.Get("appsList").String()
+		err := m.updateAppsData(appsData)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "setSplitTunneling":
+		tunneling := arguments.Get("on").Bool()
+		err := m.setSplitTunneling(tunneling)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "denyAppAccess":
+		appName := arguments.Get("packageName").String()
+		err := m.updateAppData(appName, false)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "allowAppAccess":
+		appName := arguments.Get("packageName").String()
+		err := m.updateAppData(appName, true)
 		if err != nil {
 			return nil, err
 		}
@@ -588,6 +620,12 @@ func checkSplitTunneling(m *SessionModel) error {
 	log.Debugf("Split Tunneling value is %v", tunneling)
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathSplitTunneling, false, "")
+	})
+}
+
+func (session *SessionModel) setSplitTunneling(tunneling bool) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathSplitTunneling, tunneling, "")
 	})
 }
 
@@ -2007,17 +2045,35 @@ func (session *SessionModel) updateAppsData(appsList string) error {
 	if err != nil {
 		log.Fatalf("Error decoding JSON: %v", err)
 	}
-
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		for _, app := range apps {
 			path := pathAppsData + app.PackageName
+			list, _ := convertStringArrayToIntArray(strings.Split(app.Icon, ", "))
+			imagebyte, _ := convertIntArrayToByteArray(list)
 			vpn := &protos.AppData{
 				PackageName: app.PackageName,
 				Name:        app.Name,
-				Icon:        bytes.NewBufferString(app.Icon).Bytes(),
+				Icon:        imagebyte,
 			}
 			pathdb.Put(tx, path, vpn, "")
 		}
 		return nil
 	})
+}
+
+func (session *SessionModel) updateAppData(appName string, allowedAccess bool) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		appData, err := pathdb.Get[*protos.AppData](session.db, pathAppsData+appName)
+		if err != nil {
+			log.Errorf("error getting app data: %v", err)
+			return err
+		}
+		return pathdb.Put[*protos.AppData](tx, pathAppsData+appName, &protos.AppData{
+			PackageName:   appData.PackageName,
+			Name:          appData.Name,
+			Icon:          appData.Icon,
+			AllowedAccess: allowedAccess,
+		}, "")
+	})
+
 }

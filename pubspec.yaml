@@ -58,7 +58,7 @@ dependencies:
   audioplayers: ^6.0.0
   video_player: ^2.7.0
   video_thumbnail: ^0.5.3
-  file_picker: ^8.0.5
+  file_picker: ^8.0.6
   filesize: ^2.0.1
   flutter_image_compress: ^2.3.0
 
