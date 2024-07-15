@@ -85,15 +85,17 @@ const (
 	currentTermsVersion     = 1
 	pathUserSalt            = "user_salt"
 
-	pathPlans        = "/plans/"
-	pathResellerCode = "resellercode"
-	pathExpirydate   = "expirydate"
-	pathExpirystr    = "expirydatestr"
+	pathPlans          = "/plans/"
+	pathPaymentMethods = "/paymentMethods/"
+	pathResellerCode   = "resellercode"
+	pathExpirydate     = "expirydate"
+	pathExpirystr      = "expirydatestr"
 
 	pathIsUserLoggedIn    = "IsUserLoggedIn"
 	pathIsFirstTime       = "isFirstTime"
 	pathDeviceLinkingCode = "devicelinkingcode"
 	pathDeviceCodeExp     = "devicecodeexp"
+	pathStripePubKey      = "stripe_api_key"
 
 	group            = srp.RFC5054Group3072
 	pathHasConfig    = "hasConfigFetched"
@@ -150,6 +152,9 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(3000, &protos.Plan{})
 		base.db.RegisterType(4000, &protos.Plans{})
 		base.db.RegisterType(5000, &protos.AppData{})
+		base.db.RegisterType(6000, &protos.PaymentProviders{})
+		base.db.RegisterType(6000, &protos.PaymentMethod{})
+
 	}
 
 	m := &SessionModel{baseModel: base}
@@ -617,10 +622,13 @@ func checkSplitTunneling(m *SessionModel) error {
 			return pathdb.Put(tx, pathSplitTunneling, false, "")
 		})
 	}
-	log.Debugf("Split Tunneling value is %v", tunneling)
-	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathSplitTunneling, false, "")
-	})
+	if !tunneling {
+		log.Debugf("Split Tunneling value is %v", tunneling)
+		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathSplitTunneling, false, "")
+		})
+	}
+	return nil
 }
 
 func (session *SessionModel) setSplitTunneling(tunneling bool) error {
@@ -642,6 +650,7 @@ func (session *SessionModel) paymentMethods() error {
 	if err != nil {
 		return err
 	}
+	storePaymentProviders(session, *plans)
 	return nil
 }
 
@@ -842,6 +851,57 @@ func storePlanDetail(m *baseModel, plan *pro.PaymentMethodsResponse) error {
 	}
 	log.Debugf("Plan details stored successful")
 	return nil
+}
+
+func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMethodsResponse) error {
+	log.Debugf("Storing Payment Providers")
+
+	logos, err := convertLogoToMapStringSlice(paymentMethodsResponse.Logo)
+	if err != nil {
+		log.Errorf("Error while converting logo to map %v", err)
+		return err
+	}
+	providers := paymentMethodsResponse.Providers["android"]
+	if providers == nil {
+		return log.Errorf("Android Providers not found")
+	}
+
+	var paymentProviders []*protos.PaymentProviders
+	for index, provider := range providers {
+		log.Debugf("Provider Values %+v", provider)
+		path := pathPaymentMethods + ToString(int64(index))
+		for _, paymentMethod := range provider.Providers {
+			if paymentMethod.Name == paymentProviderStripe {
+				m.setStripePubKey(paymentMethod.Data)
+			}
+			paymentProviders = append(paymentProviders, &protos.PaymentProviders{
+				Name:     paymentMethod.Name,
+				LogoUrls: logos[paymentMethod.Name],
+			})
+		}
+
+		payment := &protos.PaymentMethod{
+			Method:    provider.Method,
+			Providers: paymentProviders,
+		}
+
+		log.Debugf("Provider Values %+v path %v", &payment, path)
+		if err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put[*protos.PaymentMethod](tx, path, payment, "")
+		}); err != nil {
+			log.Errorf("Error while adding payment method", err)
+			return err
+		}
+
+	}
+	return nil
+}
+
+func (session *SessionModel) setStripePubKey(pubKey map[string]string) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathStripePubKey, pubKey, "")
+	})
+
 }
 
 func setPlans(m *baseModel, plans []protos.Plan) error {
@@ -2055,7 +2115,7 @@ func (session *SessionModel) updateAppsData(appsList string) error {
 				Name:        app.Name,
 				Icon:        imagebyte,
 			}
-			pathdb.Put(tx, path, vpn, "")
+			pathdb.PutIfAbsent(tx, path, vpn, "")
 		}
 		return nil
 	})

@@ -85,6 +85,7 @@ class _CheckoutState extends State<Checkout>
             Iterable<PathAndValue<PaymentMethod>> paymentMethods,
             Widget? child,
           ) {
+            print("paymentMethods: $paymentMethods");
             defaultProviderIfNecessary(paymentMethods.toList());
             return sessionModel.emailAddress((
               BuildContext context,

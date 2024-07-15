@@ -199,3 +199,30 @@ func convertStringArrayToIntArray(stringArray []string) ([]int, error) {
 	}
 	return intArray, nil
 }
+
+func convertLogoToMapStringSlice(logo map[string]interface{}) (map[string][]string, error) {
+	convertedLogo := make(map[string][]string)
+	for key, value := range logo {
+		switch value.(type) {
+		case []string:
+			convertedLogo[key] = value.([]string)
+		case []interface{}:
+			var stringSlice []string
+			for _, item := range value.([]interface{}) {
+				if str, ok := item.(string); ok {
+					stringSlice = append(stringSlice, str)
+				} else {
+					// Handle non-string elements (optional)
+					// You could log an error or return an error from the function
+					return nil, fmt.Errorf("Unexpected type in logo map: %v", item)
+				}
+			}
+			convertedLogo[key] = stringSlice
+		default:
+			// Handle unexpected types (optional)
+			// You could log an error or return an error from the function
+			return nil, fmt.Errorf("Unexpected type in logo map: %v", value)
+		}
+	}
+	return convertedLogo, nil
+}
