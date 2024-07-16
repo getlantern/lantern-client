@@ -1274,66 +1274,10 @@ func signupEmailConfirmation(session *SessionModel, email string, code string) e
 // Todo find way to optimize this method
 func login(session *SessionModel, email string, password string) error {
 	start := time.Now()
-	// // Get the salt
-	// salt, err := getUserSalt(session, lowerCaseEmail)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
-	// log.Debugf("Encrypted key %v Login", encryptedKey)
-	// // Prepare login request body
-	// client := srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
-	// //Send this key to client
-	// A := client.EphemeralPublic()
-	// //Create body
-	// prepareRequestBody := &protos.PrepareRequest{
-	// 	Email: lowerCaseEmail,
-	// 	A:     A.Bytes(),
-	// }
-	// srpB, err := session.authClient.LoginPrepare(context.Background(), prepareRequestBody)
-	// if err != nil {
-	// 	return err
-	// }
-	// log.Debugf("Login prepare response %v", srpB)
-
-	// // // Once the client receives B from the server Client should check error status here as defense against
-	// // // a malicious B sent from server
-	// B := big.NewInt(0).SetBytes(srpB.B)
-
-	// if err = client.SetOthersPublic(B); err != nil {
-	// 	log.Errorf("Error while setting srpB %v", err)
-	// 	return err
-	// }
-
-	// // client can now make the session key
-	// clientKey, err := client.Key()
-	// if err != nil || clientKey == nil {
-	// 	return log.Errorf("user_not_found error while generating Client key %v", err)
-	// }
-
-	// // // Step 3
-
-	// // // check if the server proof is valid
-	// if !client.GoodServerProof(salt, lowerCaseEmail, srpB.Proof) {
-	// 	return log.Errorf("user_not_found error while checking server proof%v", err)
-	// }
-
-	// clientProof, err := client.ClientProof()
-	// if err != nil {
-	// 	return log.Errorf("user_not_found error while generating client proof %v", err)
-	// }
 	deviceId, err := session.GetDeviceID()
 	if err != nil {
 		return err
 	}
-	// loginRequestBody := &protos.LoginRequest{
-	// 	Email:    lowerCaseEmail,
-	// 	Proof:    clientProof,
-	// 	DeviceId: deviceId,
-	// }
-	// log.Debugf("Login request body %v", loginRequestBody)
-
 	login, salt, err := session.authClient.Login(email, password, deviceId)
 	if err != nil {
 		return err
