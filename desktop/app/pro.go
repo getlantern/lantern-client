@@ -203,17 +203,6 @@ func (app *App) servePro(channel ws.UIChannel) error {
 		}
 	}()
 
-	// helloFn := func(write func(interface{})) {
-	// 	if user, known := GetUserDataFast(ctx, app.settings.GetUserID()); known {
-	// 		log.Debugf("Sending current user data to new client: %v", user)
-	// 		write(user)
-	// 	}
-	// 	log.Debugf("Fetching user data again to see if any changes")
-	// 	select {
-	// 	case chFetch <- true:
-	// 	default: // fetching in progress, skipping
-	// 	}
-	// }
 	service, err := channel.Register("pro", nil)
 	if err != nil {
 		return err
