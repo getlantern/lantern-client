@@ -46,6 +46,10 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
   * You can get this from Android SDK Manager
 * [CocoaPods](https://cocoapods.org/)
   * Possibly this is only needed on Apple platforms.
+* Linux
+  * [libayatana-appindicator](https://github.com/AyatanaIndicators/libayatana-appindicator) (required by [tray_manager](https://github.com/leanflutter/tray_manager#linux-requirements))
+  * [gstreamer](https://gstreamer.freedesktop.org/documentation/installing/on-linux.html) (required by [flutter plugin audioplayers](https://pub.dev/packages/audioplayers_linux))
+  * [libclang-dev](https://apt.llvm.org) (required by [ffigen](https://pub.dev/packages/ffigen))
 
 ### 🚀 Setup Project:
 
