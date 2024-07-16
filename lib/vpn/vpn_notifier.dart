@@ -36,14 +36,19 @@ class VPNChangeNotifier extends ChangeNotifier {
         notifyListeners();
         timer?.cancel();
       } else if (timer!.tick >= 6) {
-        // Timer has reached 6 seconds
-        // Stop the timer and set isFlashlightInitialized to true
-        print("flashlight fail initialized");
-        isFlashlightInitialized = true;
-        isFlashlightInitializedFailed = true;
-        notifyListeners();
+        resetTimerAndInitializeFlashlight(true);
       }
     });
+  }
+
+  // Timer has reached 6 seconds. Stop the timer and set isFlashlightInitialized to true
+  void resetTimerAndInitializeFlashlight(bool initializationFailed) {
+      if (initializationFailed) print("flashlight fail initialized");
+      isFlashlightInitialized = true;
+      isFlashlightInitializedFailed = initializationFailed;
+      notifyListeners();
+      timer?.cancel();
+      timer = null;
   }
 
   void initCallbackForMobile() {
@@ -63,10 +68,7 @@ class VPNChangeNotifier extends ChangeNotifier {
       if (timer!.tick >= 6) {
         // Timer has reached 6 seconds
         // Stop the timer and set isFlashlightInitialized to true
-        print("flashlight fail initialized");
-        isFlashlightInitialized = true;
-        isFlashlightInitializedFailed = true;
-        notifyListeners();
+        resetTimerAndInitializeFlashlight(true);
       }
     });
     final configNotifier = sessionModel.pathValueNotifier('hasConfigFetched', false);

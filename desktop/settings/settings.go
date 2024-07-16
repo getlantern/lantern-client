@@ -118,8 +118,8 @@ type Settings struct {
 	changeNotifiers map[SettingName][]func(interface{})
 	wsOut           chan<- interface{}
 
-	m map[SettingName]interface{}
-	sync.RWMutex
+	m        map[SettingName]interface{}
+	mu       *sync.RWMutex
 	filePath string
 
 	log golog.Logger
@@ -186,6 +186,7 @@ func newSettings(filePath string) *Settings {
 			SNUserID:                    int64(0),
 			SNAutoReport:                true,
 			SNAutoLaunch:                true,
+			SNUserPro:                   false,
 			SNProxyAll:                  false,
 			SNGoogleAds:                 true,
 			SNSystemProxy:               true,
@@ -199,6 +200,7 @@ func newSettings(filePath string) *Settings {
 			SNUserFirstVisit:            false,
 			SNSalt:                      "",
 		},
+		mu:              new(sync.RWMutex),
 		filePath:        filePath,
 		changeNotifiers: make(map[SettingName][]func(interface{})),
 		log:             golog.LoggerFor("app.settings"),
@@ -352,8 +354,8 @@ func (s *Settings) writeTo(w io.Writer) (int, error) {
 
 func (s *Settings) mapToSave() map[string]interface{} {
 	m := make(map[string]interface{})
-	s.RLock()
-	defer s.RUnlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	for k, v := range s.m {
 		if settingMeta[k].persist {
 			m[string(k)] = v
@@ -366,8 +368,8 @@ func (s *Settings) mapToSave() map[string]interface{} {
 // values.
 func (s *Settings) uiMap() map[string]interface{} {
 	m := make(map[string]interface{})
-	s.RLock()
-	defer s.RUnlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	for key, v := range s.m {
 		meta := settingMeta[key]
 		k := string(key)
@@ -662,8 +664,8 @@ func (s *Settings) getInt64(name SettingName) int64 {
 
 func (s *Settings) getVal(name SettingName) (interface{}, error) {
 	s.log.Tracef("Getting value for %v", name)
-	s.RLock()
-	defer s.RUnlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	if val, ok := s.m[name]; ok {
 		return val, nil
 	}
@@ -677,12 +679,12 @@ func (s *Settings) setVal(name SettingName, val interface{}) {
 
 func (s *Settings) setVals(vals map[SettingName]interface{}) {
 	s.log.Debugf("Setting %v in %v", vals, s.m)
-	s.Lock()
+	s.mu.Lock()
 	for name, val := range vals {
 		s.m[name] = val
 	}
 	// Need to unlock here because s.save() will lock again.
-	s.Unlock()
+	s.mu.Unlock()
 	s.save()
 	for name, val := range vals {
 		s.onChange(name, val)
