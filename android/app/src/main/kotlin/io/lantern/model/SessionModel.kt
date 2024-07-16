@@ -291,8 +291,8 @@ class SessionModel internal constructor(
     }
 
     // appsAllowedAccess returns a list of package names for those applications that are allowed
-//    // to access the VPN connection. If split tunneling is enabled, and any app is added to
-//    // the list, only those applications (and no others) are allowed access.
+    // to access the VPN connection. If split tunneling is enabled, and any app is added to
+    // the list, only those applications (and no others) are allowed access.
     fun appsAllowedAccess(): List<String> {
         val result = model.invokeMethod("appsAllowedAccess", Arguments(mapOf("useVpn" to true)))
         val appList = result.toJava().toString().split(",")

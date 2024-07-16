@@ -139,13 +139,6 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(3000, &protos.Plan{})
 		base.db.RegisterType(4000, &protos.Plans{})
 	} else {
-		// db.registerType(2000, Vpn.Device::class.java)
-		// ////        db.registerType(2001, Vpn.Devices::class.java)
-		// ////        db.registerType(2002, Vpn.Plan::class.java)
-		// ////        db.registerType(2004, Vpn.PaymentProviders::class.java)
-		// ////        db.registerType(2005, Vpn.PaymentMethod::class.java)
-		// ////        db.registerType(2006, Vpn.AppData::class.java)
-		// ////        db.registerType(2007, Vpn.ServerInfo::class.java)
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 		base.db.RegisterType(5000, &protos.Device{})
@@ -536,7 +529,6 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		log.Debugf("Init Session setting email value to an empty string")
 		setEmail(m.baseModel, "")
 	}
-	log.Debugf("Begining transaction")
 	tx, err := m.db.Begin()
 	if err != nil {
 		return err
@@ -573,11 +565,8 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 			return err
 		}
 	}
-
-	log.Debugf("Commiting transaction")
 	err = tx.Commit()
 	if err != nil {
-		log.Debugf("Error while commiting transaction %v", err)
 		return err
 	}
 	// Check if user is already registered or not
@@ -776,9 +765,12 @@ func setExpiration(m *baseModel, expiration int64) error {
 	if expiration == 0 {
 		return nil
 	}
+	log.Debugf("Expiration value %v", expiration)
 	expiry := time.Unix(0, expiration*int64(time.Second))
+	log.Debugf("Expiration value %v", expiry)
 	dateFormat := "01/02/2006"
 	dateStr := expiry.Format(dateFormat)
+	log.Debugf("Expiration value %v", dateStr)
 
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		err := pathdb.Put[string](tx, pathExpirystr, dateStr, "")
@@ -865,10 +857,9 @@ func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMe
 	if providers == nil {
 		return log.Errorf("Android Providers not found")
 	}
-
 	var paymentProviders []*protos.PaymentProviders
 	for index, provider := range providers {
-		log.Debugf("Provider Values %+v", provider)
+		paymentProviders = nil
 		path := pathPaymentMethods + ToString(int64(index))
 		for _, paymentMethod := range provider.Providers {
 			if paymentMethod.Name == paymentProviderStripe {
@@ -879,7 +870,6 @@ func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMe
 				LogoUrls: logos[paymentMethod.Name],
 			})
 		}
-
 		payment := &protos.PaymentMethod{
 			Method:    provider.Method,
 			Providers: paymentProviders,
@@ -892,7 +882,6 @@ func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMe
 			log.Errorf("Error while adding payment method", err)
 			return err
 		}
-
 	}
 	return nil
 }
@@ -1191,8 +1180,6 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 		return errors.New("User data not found")
 	}
 	userDetail := resp.User
-	log.Debugf("User detail: %+v", userDetail)
-
 	logged, err := session.isUserLoggedIn()
 	if err != nil {
 		log.Errorf("Error while checking user login status %v", err)
@@ -1202,12 +1189,7 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	if logged {
 		userDetail.Email = ""
 	}
-	log.Debugf("User detail: %+v", userDetail)
-	err = cacheUserDetail(session, userDetail)
-	if err != nil {
-		return err
-	}
-	return nil
+	return cacheUserDetail(session, userDetail)
 }
 
 func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
@@ -1248,19 +1230,6 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 		}
 	}
 	log.Debugf("Device found %v", deviceFound)
-	// if !deviceFound {
-	// 	// Device has not found in the list
-	// 	// Switch to free user
-	// 	signOut(*session)
-	// 	log.Debugf("Device has not found in the list creating new user")
-	// 	err = session.userCreate(context.Background())
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// 	return nil
-	// }
-
-	/// Check if user has installed app first time
 	firstTime, err := checkFirstTimeVisit(session.baseModel)
 	if err != nil {
 		log.Debugf("Error while checking first time visit %v", err)

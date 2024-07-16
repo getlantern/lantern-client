@@ -85,6 +85,9 @@ class _CheckoutState extends State<Checkout>
             Iterable<PathAndValue<PaymentMethod>> paymentMethods,
             Widget? child,
           ) {
+            if(paymentMethods.isEmpty){
+              return SizedBox();
+            }
             print("paymentMethods: $paymentMethods");
             defaultProviderIfNecessary(paymentMethods.toList());
             return sessionModel.emailAddress((
@@ -318,6 +321,12 @@ class _CheckoutState extends State<Checkout>
           return;
         }
         _proceedWithPaymentWall();
+      case Providers.shepherd:
+        if (isDesktop()) {
+          _proceedWithPaymentRedirect(Providers.shepherd);
+          return;
+        }
+        _proceedWithShepherdPay();
         break;
     }
   }
@@ -340,6 +349,23 @@ class _CheckoutState extends State<Checkout>
           planID: widget.plan.id,
           email: emailController.text,
           paymentProvider: Providers.btcpay);
+
+      context.loaderOverlay.hide();
+      final btcPayURL = value;
+      await sessionModel.openWebview(btcPayURL);
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
+  }
+
+  void _proceedWithShepherdPay() async {
+    try {
+      context.loaderOverlay.show();
+      final value = await sessionModel.generatePaymentRedirectUrl(
+          planID: widget.plan.id,
+          email: emailController.text,
+          paymentProvider: Providers.shepherd);
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
