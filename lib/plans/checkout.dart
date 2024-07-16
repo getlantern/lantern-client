@@ -311,6 +311,13 @@ class _CheckoutState extends State<Checkout>
           return;
         }
         _proceedWithFroPay();
+      case Providers.shepherd:
+        if (isDesktop()) {
+          _proceedWithPaymentRedirect(Providers.shepherd);
+          return;
+        }
+        _proceedWithShepherd();
+        return;
       case Providers.paymentwall:
         if (isDesktop()) {
           _proceedWithPaymentRedirect(Providers.paymentwall);
@@ -361,6 +368,24 @@ class _CheckoutState extends State<Checkout>
       context.loaderOverlay.hide();
       final froPayURL = value;
       await sessionModel.openWebview(froPayURL);
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
+  }
+
+  void _proceedWithShepherd() async {
+    try {
+      context.loaderOverlay.show();
+
+      final value = await sessionModel.generatePaymentRedirectUrl(
+          planID: widget.plan.id,
+          email: emailController.text,
+          paymentProvider: Providers.shepherd);
+
+      context.loaderOverlay.hide();
+      final shepherdURL = value;
+      await sessionModel.openWebview(shepherdURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
