@@ -19,6 +19,7 @@ import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.JsonObject
+import io.lantern.model.SessionModel
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
@@ -32,8 +33,6 @@ class InAppBilling(
 ) : PurchasesUpdatedListener, InAppBillingInterface {
     companion object {
         private val TAG = InAppBilling::class.java.simpleName
-//        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
-
     }
 
     init {
@@ -128,14 +127,14 @@ class InAppBilling(
         )
 
         Logger.d(TAG, "Launching billing flow for plan $planID, sku ${skuDetails.productId}")
-//        launchBillingFlow(
-//            activity,
-//            BillingFlowParams.newBuilder()
-//                .setProductDetailsParamsList(productDetailsParamsList)
-//                .setObfuscatedAccountId(LanternApp.getSession().getDeviceID())// add device-od
-//                .setObfuscatedProfileId(LanternApp.getSession().userID.toString())
-//                .build(),
-//        )
+        launchBillingFlow(
+            activity,
+            BillingFlowParams.newBuilder()
+                .setProductDetailsParamsList(productDetailsParamsList)
+                .setObfuscatedAccountId(LanternApp.getSession().deviceID())// add device-od
+                .setObfuscatedProfileId(LanternApp.getSession().userId().toString())
+                .build(),
+        )
     }
 
     @UiThread
@@ -259,22 +258,22 @@ class InAppBilling(
                     return@queryPurchasesAsync
                 }
                 Logger.d(TAG, "Got ${purchases.size} purchases")
-//                handleAcknowledgedPurchases(purchases)
+                handleAcknowledgedPurchases(purchases)
             }
         }
     }
 
-//    private fun handleAcknowledgedPurchases(purchases: List<Purchase>) {
-//        for (purchase in purchases) {
-//            Logger.debug(TAG, "Purchase: $purchase")
-//            ensureConnected {
-//                if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-//                    if (!purchase.isAcknowledged) {
-//                        /*
-//                        * Important: acknowledgement need to happen only on server
-//                        * if the purchase are not acknowledged from server
-//                        * then make purchase request it mark purchase as isAcknowledged
-//                        */
+    private fun handleAcknowledgedPurchases(purchases: List<Purchase>) {
+        for (purchase in purchases) {
+            Logger.debug(TAG, "Purchase: $purchase")
+            ensureConnected {
+                if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                    if (!purchase.isAcknowledged) {
+                        /*
+                        * Important: acknowledgement need to happen only on server
+                        * if the purchase are not acknowledged from server
+                        * then make purchase request it mark purchase as isAcknowledged
+                        */
 //                        val currency = LanternApp.getSession().deviceCurrencyCode()
 //                        val planID = "${purchase.products[0]}-$currency"
 //
@@ -283,29 +282,29 @@ class InAppBilling(
 //                            currency = currency,
 //                            token = purchase.purchaseToken
 //                        )
-//                    }
-//                }
-//
-//                val consumeParams =
-//                    ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
-//                        .build()
-//                val listener =
-//                    ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
-//                        if (!billingResult.responseCodeOK()) {
-//                            return@ConsumeResponseListener
-//                        }
-//                    }
-//                // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
-//                // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
-//                // been consumed, we just do this every time we start up.
-//                Logger.d(
-//                    TAG,
-//                    "Consuming already acknowledged purchase ${purchase.purchaseToken}"
-//                )
-//                consumeAsync(consumeParams, listener)
-//            }
-//        }
-//    }
+                    }
+                }
+
+                val consumeParams =
+                    ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
+                        .build()
+                val listener =
+                    ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
+                        if (!billingResult.responseCodeOK()) {
+                            return@ConsumeResponseListener
+                        }
+                    }
+                // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
+                // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
+                // been consumed, we just do this every time we start up.
+                Logger.d(
+                    TAG,
+                    "Consuming already acknowledged purchase ${purchase.purchaseToken}"
+                )
+                consumeAsync(consumeParams, listener)
+            }
+        }
+    }
 
     private fun isRetriable(billingResult: BillingResult): Boolean {
         val responseCode = billingResult.responseCode

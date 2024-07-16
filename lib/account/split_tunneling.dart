@@ -238,7 +238,6 @@ class _SplitTunnelingAppsListState extends State<SplitTunnelingAppsList> {
   }
 
   Widget buildAppItem(AppData appData) {
-    print("appData: ${appData.icon}");
     return Container(
       height: 72,
       padding: EdgeInsets.zero,

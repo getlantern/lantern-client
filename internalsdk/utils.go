@@ -43,12 +43,21 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 		"email":          email,
 		"deviceName":     device,
 	}
-
 	switch paymentProvider {
 	case paymentProviderResellerCode:
 		data["provider"] = paymentProviderResellerCode
 		data["resellerCode"] = resellerCode
 		data["plan"] = planId
+	case paymentProviderGooglePlay:
+		// get currency from plan id
+		parts := strings.Split(planId, "-")
+		if len(parts) != 3 {
+			return errors.New("Invalid plan id"), nil
+		}
+		cur := parts[1]
+		data["token"] = purchaseToken
+		data["plan"] = planId
+		data["currency"] = cur
 	case paymentProviderApplePay:
 		// get currency from plan id
 		parts := strings.Split(planId, "-")
@@ -56,7 +65,6 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 			return errors.New("Invalid plan id"), nil
 		}
 		cur := parts[1]
-
 		data["token"] = purchaseToken
 		data["plan"] = planId
 		data["currency"] = cur

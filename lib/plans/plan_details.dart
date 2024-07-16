@@ -151,7 +151,7 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   Future<void> _checkOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // * Play version (Android only)
     if (isPlayVersion && !inRussia) {

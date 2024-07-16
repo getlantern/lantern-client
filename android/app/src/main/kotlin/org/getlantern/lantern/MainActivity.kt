@@ -78,7 +78,7 @@ class MainActivity :
 //    private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(
-        @NonNull flutterEngine: FlutterEngine,
+        flutterEngine: FlutterEngine,
     ) {
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
@@ -90,16 +90,15 @@ class MainActivity :
         opts.model = DeviceUtil.model()
         opts.osVersion = DeviceUtil.deviceOs()
         opts.playVersion = DeviceUtil.isStoreVersion(this)
+//        opts.playVersion = true
         opts.device = DeviceUtil.model()
         opts.paymentTestMode = false
         opts.platform = "android"
         opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
         opts.timeZone = TimeZone.getDefault().displayName
-
 //        val sessionNew = SessionModel(this, flutterEngine, opts)
 //        sessionModel = SessionModelLegacy(this, flutterEngine)
         sessionModel = SessionModel(this, flutterEngine, opts)
-        LanternApp.setSession(sessionModel)
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)

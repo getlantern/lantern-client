@@ -28,7 +28,10 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
+import org.getlantern.lantern.activity.WebViewActivity_
+import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
@@ -36,7 +39,6 @@ import org.getlantern.mobilesdk.util.DnsDetector
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.lang.reflect.InvocationTargetException
-import java.util.Base64
 
 class SessionModel internal constructor(
     private val activity: Activity,
@@ -63,10 +65,14 @@ class SessionModel internal constructor(
     private val appsDataProvider: AppsDataProvider = AppsDataProvider(
         activity.packageManager, activity.packageName
     )
+    private val inAppBilling = InAppBilling(activity)
+    private lateinit var paymentUtils: PaymentsUtil
 
     init {
+        LanternApp.setSession(this)
         LanternApp.setGoSession(model)
         updateAppsData()
+        paymentUtils = PaymentsUtil(activity, inAppBilling)
     }
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -85,14 +91,40 @@ class SessionModel internal constructor(
                 Logger.debug("Screenshot disable", "Screenshot disabled")
             }
 
+            "submitGooglePlayPayment" -> {
+                val args = call.arguments as Map<*, *>
+                val email = args["email"] as String
+                val planId = args["planID"] as String
+                paymentUtils.submitGooglePlayPayment(email, planId, result)
+            }
+
+            "openWebview" -> {
+                val url = call.argument("url") ?: ""
+                if (url.isNotEmpty()) {
+                    val intent = Intent(activity, WebViewActivity_::class.java)
+                    intent.putExtra("url", url.trim())
+                    activity.startActivity(intent)
+                } else {
+                    throw IllegalArgumentException("No URL provided for webview")
+                }
+            }
+            "submitStripePayment" -> {
+                val url = call.argument("url") ?: ""
+                if (url.isNotEmpty()) {
+                    val intent = Intent(activity, WebViewActivity_::class.java)
+                    intent.putExtra("url", url.trim())
+                    activity.startActivity(intent)
+                } else {
+                    throw IllegalArgumentException("No URL provided for webview")
+                }
+            }
+
             else -> super.doOnMethodCall(call, result)
         }
 
     }
 
-
     /// Utils class methods
-
     val language: String = model.locale()
 
     val ipAddress: String?
@@ -141,6 +173,10 @@ class SessionModel internal constructor(
 
     fun setDeviceId(deviceId: String) {
         model.invokeMethod("setDevice", Arguments(mapOf("deviceID" to deviceId)))
+    }
+
+    fun setUserPro(isPro: Boolean) {
+        model.invokeMethod("setProUser", Arguments(isPro))
     }
 
     fun updateVpnPreference(useVpn: Boolean) {
@@ -308,7 +344,7 @@ class SessionModel internal constructor(
             val appsList = appsDataProvider.listOfApps()
             // First add just the app names to get a list quickly
             val apps = buildJsonArray {
-                appsList.forEach{ app ->
+                appsList.forEach { app ->
                     add(
                         buildJsonObject {
                             val byte = ByteString.copyFrom(app.icon)
@@ -317,15 +353,24 @@ class SessionModel internal constructor(
                             put("icon", byte.toByteArray().toUByteArray().joinToString(", "))
                         }
                     )
-
                 }
             }
-
             model.invokeMethod(
                 "updateAppsData",
                 Arguments(mapOf("appsList" to apps.toString()))
             )
-
         }
     }
+
+
+    // Payment methods
+    fun submitGooglePlayPayment(email: String, planId: String, purchaseToken: String) {
+        val purchaseData = mapOf<String, Any>(
+            "email" to email,
+            "planID" to planId,
+            "purchaseToken" to purchaseToken
+        )
+        model.invokeMethod("submitGooglePlayPayment", Arguments(purchaseData))
+    }
+
 }

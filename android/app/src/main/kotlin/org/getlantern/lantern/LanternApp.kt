@@ -79,6 +79,10 @@ open class LanternApp : Application() {
         fun getInAppBilling(): InAppBilling {
             return inAppBilling
         }
+        @JvmStatic
+        fun setInAppBilling(inAppBilling: InAppBilling)  {
+             this.inAppBilling= inAppBilling
+        }
 
 //        @JvmStatic
 //        fun getLanternHttpClient(): LanternHttpClient {

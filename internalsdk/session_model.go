@@ -218,7 +218,6 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "setProUser":
-		// Todo Implement setCurrency server
 		err := setProUser(m.baseModel, arguments.Scalar().Bool())
 		if err != nil {
 			return nil, err
@@ -512,6 +511,26 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "chatEnabled":
 		return m.ChatEnable(), nil
 
+	case "submitGooglePlayPayment":
+		email := arguments.Get("email").String()
+		plandId := arguments.Get("planID").String()
+		purchaseToken := arguments.Get("purchaseToken").String()
+		err := submitGooglePlayPayment(m, email, plandId, purchaseToken)
+		if err != nil {
+			log.Errorf("Error while submitting google play payment %v", err)
+			return nil, err
+		}
+		return true, nil
+	case "generatePaymentRedirectUrl":
+		email := arguments.Get("email").String()
+		plandId := arguments.Get("planID").String()
+		provider := arguments.Get("provider").String()
+		url, err := generatePaymentRedirectUrl(m, email, plandId, provider)
+		if err != nil {
+			log.Errorf("Error while genrating url %v", err)
+			return nil, err
+		}
+		return url, nil
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -1369,6 +1388,45 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 	}
 	// Set user to pro
 	return setProUser(m.baseModel, true)
+}
+
+func submitGooglePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
+	log.Debugf("Submit Apple Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
+	err, purchaseData := createPurchaseData(m, email, paymentProviderGooglePlay, "", purchaseToken, planId)
+	if err != nil {
+		log.Errorf("Error while creating  purchase data %v", err)
+		return err
+	}
+	log.Debugf("Purchase data %+v", purchaseData)
+	purchase, err := m.proClient.PurchaseRequest(context.Background(), purchaseData)
+	if err != nil {
+		return err
+	}
+	log.Debugf("Purchase response %+v", purchase)
+
+	if purchase.Status != "ok" {
+		return errors.New("Purchase Request failed")
+	}
+	// Set user to pro
+	return setProUser(m.baseModel, true)
+
+}
+
+func generatePaymentRedirectUrl(m *SessionModel, email string, planId string, provider string) (string, error) {
+	deviceModel, err := pathdb.Get[string](m.db, pathModel)
+
+	redirectUrl, err := m.proClient.PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
+		Plan:       planId,
+		Provider:   provider,
+		Email:      email,
+		DeviceName: deviceModel,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return redirectUrl.Redirect, nil
+
 }
 
 /// Auth APIS
