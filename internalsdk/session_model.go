@@ -511,11 +511,25 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "chatEnabled":
 		return m.ChatEnable(), nil
 
+	case "getStripePubKey":
+		return m.getStripePubKey()
+
 	case "submitGooglePlayPayment":
 		email := arguments.Get("email").String()
 		plandId := arguments.Get("planID").String()
 		purchaseToken := arguments.Get("purchaseToken").String()
 		err := submitGooglePlayPayment(m, email, plandId, purchaseToken)
+		if err != nil {
+			log.Errorf("Error while submitting google play payment %v", err)
+			return nil, err
+		}
+		return true, nil
+
+	case "submitStripePlayPayment":
+		email := arguments.Get("email").String()
+		plandId := arguments.Get("planID").String()
+		purchaseToken := arguments.Get("purchaseToken").String()
+		err := submitStripePlayPayment(m, email, plandId, purchaseToken)
 		if err != nil {
 			log.Errorf("Error while submitting google play payment %v", err)
 			return nil, err
@@ -905,10 +919,18 @@ func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMe
 	return nil
 }
 
-func (session *SessionModel) setStripePubKey(pubKey map[string]string) error {
+func (session *SessionModel) setStripePubKey(args map[string]string) error {
+	pubKey := args["pubKey"]
+	if pubKey == "" {
+		return log.Errorf("Stripe public key is empty")
+	}
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathStripePubKey, pubKey, "")
 	})
+}
+
+func (session *SessionModel) getStripePubKey() (string, error) {
+	return pathdb.Get[string](session.db, pathStripePubKey)
 
 }
 
@@ -1391,7 +1413,7 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 }
 
 func submitGooglePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
-	log.Debugf("Submit Apple Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
+	log.Debugf("Submit Google Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
 	err, purchaseData := createPurchaseData(m, email, paymentProviderGooglePlay, "", purchaseToken, planId)
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
@@ -1402,11 +1424,33 @@ func submitGooglePlayPayment(m *SessionModel, email string, planId string, purch
 	if err != nil {
 		return err
 	}
-	log.Debugf("Purchase response %+v", purchase)
 
 	if purchase.Status != "ok" {
 		return errors.New("Purchase Request failed")
 	}
+	log.Debugf("Purchase response %v", purchase)
+	// Set user to pro
+	return setProUser(m.baseModel, true)
+
+}
+
+func submitStripePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
+	log.Debugf("Submit Stripe Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
+	err, purchaseData := createPurchaseData(m, email, paymentProviderStripe, "", purchaseToken, planId)
+	if err != nil {
+		log.Errorf("Error while creating  purchase data %v", err)
+		return err
+	}
+	log.Debugf("Purchase data %+v", purchaseData)
+	purchase, err := m.proClient.PurchaseRequest(context.Background(), purchaseData)
+	if err != nil {
+		return err
+	}
+
+	if purchase.Status != "ok" {
+		return errors.New("Purchase Request failed")
+	}
+	log.Debugf("Purchase response %v", purchase)
 	// Set user to pro
 	return setProUser(m.baseModel, true)
 
@@ -1414,6 +1458,9 @@ func submitGooglePlayPayment(m *SessionModel, email string, planId string, purch
 
 func generatePaymentRedirectUrl(m *SessionModel, email string, planId string, provider string) (string, error) {
 	deviceModel, err := pathdb.Get[string](m.db, pathModel)
+	if err != nil {
+		return "", err
+	}
 
 	redirectUrl, err := m.proClient.PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
 		Plan:       planId,

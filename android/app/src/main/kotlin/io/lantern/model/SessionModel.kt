@@ -108,15 +108,16 @@ class SessionModel internal constructor(
                     throw IllegalArgumentException("No URL provided for webview")
                 }
             }
+
             "submitStripePayment" -> {
-                val url = call.argument("url") ?: ""
-                if (url.isNotEmpty()) {
-                    val intent = Intent(activity, WebViewActivity_::class.java)
-                    intent.putExtra("url", url.trim())
-                    activity.startActivity(intent)
-                } else {
-                    throw IllegalArgumentException("No URL provided for webview")
-                }
+                paymentUtils.submitStripePayment(
+                    call.argument("planID")!!,
+                    call.argument("email")!!,
+                    call.argument("cardNumber")!!,
+                    call.argument("expDate")!!,
+                    call.argument("cvc")!!,
+                    result
+                )
             }
 
             else -> super.doOnMethodCall(call, result)
@@ -175,6 +176,7 @@ class SessionModel internal constructor(
         model.invokeMethod("setDevice", Arguments(mapOf("deviceID" to deviceId)))
     }
 
+
     fun setUserPro(isPro: Boolean) {
         model.invokeMethod("setProUser", Arguments(isPro))
     }
@@ -206,6 +208,11 @@ class SessionModel internal constructor(
 
     fun lanternDidStart(): Boolean {
         return startResult != null
+    }
+
+    fun stripePubKey(): String {
+        val result = model.invokeMethod("getStripePubKey", Arguments(""))
+        return result.toJava().toString()
     }
 
     val hTTPAddr: String
@@ -371,6 +378,15 @@ class SessionModel internal constructor(
             "purchaseToken" to purchaseToken
         )
         model.invokeMethod("submitGooglePlayPayment", Arguments(purchaseData))
+    }
+
+    fun submitStripePlayPayment(email: String, planId: String, purchaseToken: String) {
+        val purchaseData = mapOf<String, Any>(
+            "email" to email,
+            "planID" to planId,
+            "purchaseToken" to purchaseToken
+        )
+        model.invokeMethod("submitStripePlayPayment", Arguments(purchaseData))
     }
 
 }

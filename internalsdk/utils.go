@@ -68,7 +68,19 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 		data["token"] = purchaseToken
 		data["plan"] = planId
 		data["currency"] = cur
+
+	case paymentProviderStripe:
+		// get currency from plan id
+		parts := strings.Split(planId, "-")
+		if len(parts) != 3 {
+			return errors.New("Invalid plan id"), nil
+		}
+		cur := parts[1]
+		data["token"] = purchaseToken
+		data["plan"] = planId
+		data["currency"] = cur
 	}
+
 	return nil, data
 }
 

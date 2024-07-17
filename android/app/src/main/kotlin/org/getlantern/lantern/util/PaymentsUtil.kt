@@ -5,14 +5,17 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
+import com.stripe.android.ApiResultCallback
+import com.stripe.android.Stripe
 import com.stripe.android.model.CardParams
+import com.stripe.android.model.Token
 import io.flutter.plugin.common.MethodChannel
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.mobilesdk.Logger
 
-class PaymentsUtil(private val activity: Activity, inAppBilling: InAppBilling) {
+class PaymentsUtil(private val activity: Activity) {
 
     val session = LanternApp.getSession()
 
@@ -36,7 +39,7 @@ class PaymentsUtil(private val activity: Activity, inAppBilling: InAppBilling) {
 
             val stripeKey = session.stripePubKey()
             //Make sure if key null throw error
-            if (stripeKey.isNullOrEmpty()) {
+            if (stripeKey.isEmpty()) {
                 Logger.error(TAG, "Stripe public key is not set")
                 methodCallResult.error(
                     "errorSubmittingToStripe",
@@ -45,7 +48,7 @@ class PaymentsUtil(private val activity: Activity, inAppBilling: InAppBilling) {
                 )
                 return
             }
-            val stripe = Stripe(activity, session.stripePubKey()!!)
+            val stripe = Stripe(activity, stripeKey)
             stripe.createCardToken(
                 card,
                 callback =
@@ -55,13 +58,17 @@ class PaymentsUtil(private val activity: Activity, inAppBilling: InAppBilling) {
                     ) {
                         Logger.debug(TAG, "Stripe Card Token Success: $result")
 
-                        sendPurchaseRequest(
-                            planID,
-                            email,
-                            result.id,
-                            PaymentProvider.Stripe,
-                            methodCallResult,
-                        )
+                        try{
+                            session.submitStripePlayPayment(email, planID, result.id)
+                            methodCallResult.success("purchaseSuccessful")
+                        }catch (e: Exception){
+                            Logger.error(TAG, "Error submitting to Stripe: $e")
+                            methodCallResult.error(
+                                "unknownError",
+                                activity.resources.getString(R.string.error_making_purchase),
+                                null,
+                            )
+                        }
                     }
 
                     override fun onError(
@@ -87,89 +94,6 @@ class PaymentsUtil(private val activity: Activity, inAppBilling: InAppBilling) {
     }
 
 
-//    fun generatePaymentRedirectUrl(
-//        planID: String,
-//        email: String,
-//        provider: String,
-//        methodCallResult: MethodChannel.Result,
-//    ) {
-//        try {
-//            val provider = provider.toPaymentProvider().toString().lowercase()
-//            if (provider == null) {
-//                methodCallResult.error(
-//                    "unknownError",
-//                    "$provider is unavailable", // This error message is localized Flutter-side
-//                    null,
-//                )
-//                return
-//            }
-//            val params =
-//                mutableMapOf(
-//                    "email" to email,
-//                    "plan" to planID,
-//                    "provider" to provider,
-//                    "deviceName" to session.deviceName(),
-//                )
-//
-//            sendPaymentRedirectRequest(params, object : ProCallback {
-//                override fun onFailure(
-//                    throwable: Throwable?,
-//                    error: ProError?,
-//                ) {
-//                    Logger.error(TAG, "$provider is unavailable ", throwable)
-//                    methodCallResult.error(
-//                        "unknownError",
-//                        "$provider is unavailable", // This error message is localized Flutter-side
-//                        null,
-//                    )
-//                    return
-//                }
-//
-//                override fun onSuccess(
-//                    response: Response?,
-//                    result: JsonObject?,
-//                ) {
-//                    val providerUrl = result!!.get("redirect").asString
-//                    Logger.debug(
-//                        TAG,
-//                        "$provider url is  $providerUrl",
-//                    )
-//
-//                    methodCallResult.success(providerUrl)
-//                }
-//            })
-//        } catch (t: Throwable) {
-//            methodCallResult.error(
-//                "unknownError",
-//                "$provider is unavailable", // This error message is localized Flutter-side
-//                null,
-//            )
-//        }
-//    }
-
-//    private fun sendPaymentRedirectRequest(params: Map<String, String>, proCallback: ProCallback) {
-//        lanternClient.get(
-//            LanternHttpClient.createProUrl("/payment-redirect", params),
-//            object : ProCallback {
-//                override fun onFailure(
-//                    throwable: Throwable?,
-//                    error: ProError?,
-//                ) {
-//                    proCallback.onFailure(throwable, error)
-//                    return
-//                }
-//
-//                override fun onSuccess(
-//                    response: Response?,
-//                    result: JsonObject?,
-//                ) {
-//                    proCallback.onSuccess(response, result)
-//
-//                }
-//            },
-//        )
-//    }
-
     // getPlanYear splits the given plan ID by hyphen and returns the year the given startas with
     private fun getPlanYear(planID: String): String {
         var plan = planID
@@ -188,7 +112,7 @@ class PaymentsUtil(private val activity: Activity, inAppBilling: InAppBilling) {
         methodCallResult: MethodChannel.Result,
     ) {
         assert(email.isNotEmpty(), { "Email cannot be empty" })
-        assert(planID.isNotEmpty(), { "Email cannot be empty" })
+        assert(planID.isNotEmpty(), { "PlanId cannot be empty" })
         val inAppBilling = LanternApp.getInAppBilling()
         val plan = getPlanYear(planID)
         Logger.debug(TAG, "Starting in-app purchase for plan with ID $plan")
