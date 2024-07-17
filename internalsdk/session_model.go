@@ -1196,27 +1196,6 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 //	Then use srpClient.Verifier() to generate verifierKey
 func signup(session *SessionModel, email string, password string) error {
 	lowerCaseEmail := strings.ToLower(email)
-	// err := setEmail(session.baseModel, lowerCaseEmail)
-	// if err != nil {
-	// 	return err
-	// }
-	// salt, err := GenerateSalt()
-	// if err != nil {
-	// 	return err
-	// }
-
-	// srpClient := srp.NewSRPClient(srp.KnownGroups[group], GenerateEncryptedKey(password, lowerCaseEmail, salt), nil)
-	// verifierKey, err := srpClient.Verifier()
-	// if err != nil {
-	// 	return err
-	// }
-	// signUpRequestBody := &protos.SignupRequest{
-	// 	Email:                 lowerCaseEmail,
-	// 	Salt:                  salt,
-	// 	Verifier:              verifierKey.Bytes(),
-	// 	SkipEmailConfirmation: true,
-	// }
-	// log.Debugf("Sign up request email %v, salt %v verifier %v verifiter in bytes %v", lowerCaseEmail, salt, verifierKey, verifierKey.Bytes())
 	salt, err := session.authClient.SignUp(email, password)
 	if err != nil {
 		return err
