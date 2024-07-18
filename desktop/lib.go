@@ -877,6 +877,7 @@ func handleSignals(a *app.App) {
 		syscall.SIGINT,
 		syscall.SIGTERM,
 		syscall.SIGQUIT)
+	defer signal.Stop(c)
 	go func() {
 		s := <-c
 		log.Debugf("Got signal \"%s\", exiting...", s)
