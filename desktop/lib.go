@@ -8,13 +8,11 @@ import (
 	"math/big"
 	"net/http"
 	"os"
-	"os/signal"
 	"path/filepath"
 	"runtime"
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/getlantern/appdir"
@@ -129,7 +127,7 @@ func start() {
 	}()
 
 	golog.SetPrepender(logging.Timestamped)
-	handleSignals(a)
+	// handleSignals(a)
 
 	go func() {
 		defer logging.Close()
@@ -870,20 +868,19 @@ func useOSLocale() (string, error) {
 // }
 
 // Handle system signals for clean exit
-func handleSignals(a *app.App) {
-	c := make(chan os.Signal, 1)
-	signal.Notify(c,
-		syscall.SIGHUP,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGQUIT)
-	defer signal.Stop(c)
-	go func() {
-		s := <-c
-		log.Debugf("Got signal \"%s\", exiting...", s)
-		a.Exit(nil)
-	}()
-}
+// func handleSignals(a *app.App) {
+// 	c := make(chan os.Signal, 1)
+// 	signal.Notify(c,
+// 		syscall.SIGHUP,
+// 		syscall.SIGINT,
+// 		syscall.SIGTERM,
+// 		syscall.SIGQUIT)
+// 	go func() {
+// 		s := <-c
+// 		log.Debugf("Got signal \"%s\", exiting...", s)
+// 		a.Exit(nil)
+// 	}()
+// }
 
 // Auth Methods
 
