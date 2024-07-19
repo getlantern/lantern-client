@@ -189,6 +189,9 @@ class SessionModel(
                 LanternApp.getSession().setLanguage(call.argument("lang"))
                 fetchPaymentMethods(result)
             }
+            "isPlayServiceAvailable" -> {
+                result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
+            }
 
             else -> super.doOnMethodCall(call, result)
         }

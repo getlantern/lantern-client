@@ -60,7 +60,9 @@ class _PlanCardState extends State<PlanCard> {
                         CText(
                           planName == '1y'
                               ? 'one_year_plan'.i18n
-                              : (planName == '1m' ? 'one_month_plan'.i18n : 'two_year_plan'.i18n),
+                              : (planName == '1m'
+                                  ? 'one_month_plan'.i18n
+                                  : 'two_year_plan'.i18n),
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
@@ -153,8 +155,9 @@ class _PlanCardState extends State<PlanCard> {
   Future<void> _checkOut(BuildContext context) async {
     final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
-    // * Play version (Android only)
-    if (isPlayVersion && !inRussia) {
+    // check if google play payment is available
+    final isGooglePlayAvailable = await sessionModel.isGooglePlayServiceAvailable();
+    if (isPlayVersion && !inRussia && isGooglePlayAvailable) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -192,7 +195,7 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   void resolveRouteIOS() {
-    if (widget.isPro ) {
+    if (widget.isPro) {
       //user is signed in
       _proceedToCheckoutIOS(context);
     } else {

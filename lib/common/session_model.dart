@@ -74,8 +74,8 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
-      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress',"");
-      proUserNotifier = ffiValueNotifier(ffiProUser,'prouser', false);
+      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
+      proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
     }
 
     if (Platform.isAndroid) {
@@ -816,6 +816,11 @@ class SessionModel extends Model {
       'email': email,
       'provider': paymentProvider.name
     }).then((value) => value as String);
+  }
+
+  Future<bool> isGooglePlayServiceAvailable() async {
+    final result = await methodChannel.invokeMethod('isPlayServiceAvailable');
+    return result as bool;
   }
 
   Future<void> submitPlayPayment(
