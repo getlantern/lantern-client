@@ -256,6 +256,13 @@ class _CheckoutState extends State<Checkout>
           return;
         }
         _proceedWithFroPay();
+      case Providers.shepherd:
+        if (isDesktop()) {
+          _proceedWithPaymentRedirect(Providers.shepherd);
+          return;
+        }
+        _proceedWithShepherd();
+        return;
       case Providers.paymentwall:
         if (isDesktop()) {
           _proceedWithPaymentRedirect(Providers.paymentwall);
@@ -318,16 +325,34 @@ class _CheckoutState extends State<Checkout>
   }
 
   void _proceedTestRequest() async {
+      try {
+        context.loaderOverlay.show();
+        final value = await sessionModel.testProviderRequest(
+            widget.email!, Providers.test.name, widget.plan.id);
+        context.loaderOverlay.hide();
+        if (widget.isPro) {
+          showSuccessDialog(context, widget.isPro);
+        } else {
+          resolveRoute();
+        }
+      } catch (error, stackTrace) {
+        context.loaderOverlay.hide();
+        showError(context, error: error, stackTrace: stackTrace);
+      }
+  }
+
+  void _proceedWithShepherd() async {
     try {
       context.loaderOverlay.show();
-      final value = await sessionModel.testProviderRequest(
-          widget.email!, Providers.test.name, widget.plan.id);
+
+      final value = await sessionModel.generatePaymentRedirectUrl(
+          planID: widget.plan.id,
+          email: widget.email!,
+          paymentProvider: Providers.shepherd);
+
       context.loaderOverlay.hide();
-      if (widget.isPro) {
-        showSuccessDialog(context, widget.isPro);
-      } else {
-        resolveRoute();
-      }
+      final shepherdURL = value;
+      await sessionModel.openWebview(shepherdURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);

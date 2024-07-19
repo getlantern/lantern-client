@@ -46,6 +46,7 @@ fun String.toPaymentProvider(): PaymentProvider? {
         "reseller-code" -> PaymentProvider.ResellerCode
         "paymentwall" -> PaymentProvider.PaymentWall
         "fropay" -> PaymentProvider.Fropay
+        "shepherd" -> PaymentProvider.Shepherd
         else -> null
     }
 }

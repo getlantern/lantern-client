@@ -83,7 +83,7 @@ void showSuccessDialog(
   );
 }
 
-enum Providers { stripe, btcpay, freekassa, fropay, paymentwall,test }
+enum Providers { shepherd, stripe, btcpay, freekassa, fropay, paymentwall, test }
 
 extension ProviderExtension on String {
   Providers toPaymentEnum() {
@@ -96,6 +96,8 @@ extension ProviderExtension on String {
         return Providers.fropay;
       case "paymentwall":
         return Providers.paymentwall;
+      case "shepherd":
+        return Providers.shepherd;
       case "test":
         return Providers.test;
       default:
