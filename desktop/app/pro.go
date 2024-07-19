@@ -113,13 +113,22 @@ func fetchUserDataWithClient(ctx context.Context, proClient pro.ProClient, uc co
 	if err != nil {
 		return nil, err
 	}
-	setUserData(ctx, userID, resp.User)
+	SetUserData(ctx, userID, resp.User)
 	log.Debugf("User %d is '%v'", userID, resp.User.UserStatus)
 	return resp, nil
 }
 
-func setUserData(ctx context.Context, userID int64, user *protos.User) {
+func SetUserData(ctx context.Context, userID int64, user *protos.User) {
 	log.Debugf("Storing user data for user %v", userID)
+	userData.save(ctx, userID, user)
+}
+
+func SetUserDevices(ctx context.Context, userID int64, devices []*protos.Device) {
+	user, found := userData.get(ctx, userID)
+	if !found {
+		return
+	}
+	user.Devices = devices
 	userData.save(ctx, userID, user)
 }
 
@@ -140,7 +149,7 @@ func IsProUserFast(ctx context.Context, uc common.UserConfig) (isPro bool, statu
 	if !found {
 		return false, false
 	}
-	return isActive(user.UserStatus), found
+	return (isActive(user.UserStatus) || user.UserLevel == "pro"), found
 }
 
 // isProUserFast checks a cached value for the pro status and doesn't wait for
@@ -194,18 +203,7 @@ func (app *App) servePro(channel ws.UIChannel) error {
 		}
 	}()
 
-	helloFn := func(write func(interface{})) {
-		if user, known := GetUserDataFast(ctx, app.settings.GetUserID()); known {
-			log.Debugf("Sending current user data to new client: %v", user)
-			write(user)
-		}
-		log.Debugf("Fetching user data again to see if any changes")
-		select {
-		case chFetch <- true:
-		default: // fetching in progress, skipping
-		}
-	}
-	service, err := channel.Register("pro", helloFn)
+	service, err := channel.Register("pro", nil)
 	if err != nil {
 		return err
 	}

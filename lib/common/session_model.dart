@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/plans/utils.dart';
 import 'package:lantern/replica/common.dart';
-
 import 'common.dart';
 import 'common_desktop.dart';
 
@@ -74,10 +73,11 @@ class SessionModel extends Model {
         'hasSucceedingProxy',
         false,
       );
-      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress',"");
-      proUserNotifier = ffiValueNotifier(ffiProUser,'prouser', false);
+      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
+      proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
+      hasUserSignedInNotifier =
+          ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
     }
-
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
       // if user goes to chat then screenshot will be disabled
@@ -89,25 +89,6 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
-  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
-  // the onMessage callback is triggered with the given property value
-  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
-      String? property, void Function(T?) onMessage) {
-    if (websocket == null) return;
-    websocket.messageStream.listen(
-      (json) {
-        if (json["type"] == messageType) {
-          if (property != null) {
-            onMessage(json["message"][property]);
-          } else {
-            onMessage(json["message"]);
-          }
-        }
-      },
-      onError: (error) => appLogger.i("websocket error: ${error.description}"),
-    );
-  }
-
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -116,10 +97,13 @@ class SessionModel extends Model {
     return ffiValueBuilder<bool>(
       'prouser',
       defaultValue: false,
-      onChanges: (setValue) =>
-          listenWebsocket(websocket, "pro", "userStatus", (value) {
-        if (value != null && value.toString() == "active") setValue(true);
-      }),
+      onChanges: (setValue) => {
+        listenWebsocket(websocket, 'pro', 'isProUser', (p0) {
+          if (p0 != null) {
+            setValue(p0 as bool);
+          }
+        })
+      },
       ffiProUser,
       builder: builder,
     );
@@ -270,7 +254,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'deviceid',
-      ffiReferral,
+      ffiDeviceId,
       defaultValue: '',
       builder: builder,
     );
@@ -309,9 +293,31 @@ class SessionModel extends Model {
     );
   }
 
+  /// This only supports desktop fo now
+  Future<void> testProviderRequest(
+      String email, String paymentProvider, String planId) {
+    return compute(ffiTestPaymentRequest, [email, paymentProvider, planId]);
+  }
+
   ///Auth Widgets
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
+    final websocket = WebsocketImpl.instance();
+    if (isDesktop()) {
+      return ffiValueBuilder<bool>(
+        'IsUserLoggedIn',
+        ffiIsUserLoggedIn,
+        defaultValue: false,
+        builder: builder,
+        onChanges: (setValue) {
+          listenWebsocket(websocket, 'pro', 'login', (userLoggedIn) {
+            if (userLoggedIn != null) {
+              setValue(userLoggedIn as bool);
+            }
+          });
+        },
+      );
+    }
     return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
         builder: builder, defaultValue: false);
   }
@@ -319,6 +325,9 @@ class SessionModel extends Model {
   /// Auth Method channel
 
   Future<void> signUp(String email, String password) {
+    if (isDesktop()) {
+      return compute(ffiSignUp, [email, password]);
+    }
     return methodChannel.invokeMethod('signup', <String, dynamic>{
       'email': email,
       'password': password,
@@ -341,6 +350,9 @@ class SessionModel extends Model {
   }
 
   Future<void> login(String email, String password) {
+    if (isDesktop()) {
+      return compute(ffiLogin, [email, password]);
+    }
     return methodChannel.invokeMethod('login', <String, dynamic>{
       'email': email,
       'password': password,
@@ -348,6 +360,9 @@ class SessionModel extends Model {
   }
 
   Future<void> startRecoveryByEmail(String email) {
+    if (isDesktop()) {
+      return compute(ffiStartRecoveryByEmail, email);
+    }
     return methodChannel.invokeMethod('startRecoveryByEmail', <String, dynamic>{
       'email': email,
     });
@@ -355,6 +370,9 @@ class SessionModel extends Model {
 
   Future<void> completeRecoveryByEmail(
       String email, String password, String code) {
+    if (isDesktop()) {
+      return compute(ffiCompleteRecoveryByEmail, [email, password, code]);
+    }
     return methodChannel
         .invokeMethod('completeRecoveryByEmail', <String, dynamic>{
       'email': email,
@@ -364,6 +382,9 @@ class SessionModel extends Model {
   }
 
   Future<void> validateRecoveryCode(String email, String code) {
+    if (isDesktop()) {
+      return compute(ffiValidateRecoveryByEmail, [email, code]);
+    }
     return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
       'email': email,
       'code': code,
@@ -390,23 +411,34 @@ class SessionModel extends Model {
   }
 
   Future<void> signOut() {
+    if (isDesktop()) {
+      return compute(ffiLogout, '');
+    }
     return methodChannel.invokeMethod('signOut', <String, dynamic>{});
   }
 
   Future<void> deleteAccount(String password) {
+    if (isDesktop()) {
+      return compute(ffiDeleteAccount, password);
+    }
     return methodChannel.invokeMethod('deleteAccount', <String, dynamic>{
       'password': password,
     });
   }
 
   Future<bool> isUserFirstTimeVisit() async {
+    if (isDesktop()) {
+      return await ffiUserFirstVisit();
+    }
     final firsTime = await methodChannel
         .invokeMethod<bool>('isUserFirstTimeVisit', <String, dynamic>{});
-    print("firsTime $firsTime");
     return firsTime ?? false;
   }
 
   Future<void> setFirstTimeVisit() async {
+    if (isDesktop()) {
+      return setUserFirstTimeVisit();
+    }
     return methodChannel
         .invokeMethod<void>('setFirstTimeVisit', <String, dynamic>{});
   }
@@ -791,8 +823,9 @@ class SessionModel extends Model {
         print('value $value');
       });
     }
-    ffiRedeemResellerCode(email.toNativeUtf8(), currency.toNativeUtf8(),
-        deviceName.toNativeUtf8(), resellerCode.toNativeUtf8());
+
+    await compute(
+        ffiRedeemResellerCode, [email, currency, deviceName, resellerCode]);
   }
 
   Future<String> submitBitcoinPayment(
@@ -925,6 +958,25 @@ class SessionModel extends Model {
       }),
       ffiProxyAll,
       builder: builder,
+    );
+  }
+
+  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
+  // the onMessage callback is triggered with the given property value
+  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
+      String? property, void Function(T?) onMessage) {
+    if (websocket == null) return;
+    websocket.messageStream.listen(
+      (json) {
+        if (json["type"] == messageType) {
+          if (property != null) {
+            onMessage(json["message"][property]);
+          } else {
+            onMessage(json["message"]);
+          }
+        }
+      },
+      onError: (error) => appLogger.i("websocket error: ${error.description}"),
     );
   }
 

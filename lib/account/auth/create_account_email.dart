@@ -107,37 +107,6 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
     createAccount();
   }
 
-  void _showEmailVerificationDialog({required VoidCallback onVerified}) {
-    CDialog(
-      title: "check_your_email".i18n,
-      description: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          CText(
-            "please_verify_email".i18n,
-            style:
-                tsBody1.copiedWith(fontWeight: FontWeight.w400, color: grey5),
-          ),
-          const SizedBox(height: 24.0),
-          EmailTag(email: _emailController.text.validateEmail),
-          const SizedBox(height: 24.0),
-        ],
-      ),
-      barrierDismissible: false,
-      dismissText: 'change_email'.i18n.toUpperCase(),
-      agreeText: "verify".i18n.toUpperCase(),
-      agreeAction: () async {
-        context.popRoute();
-        Future.delayed(
-          const Duration(milliseconds: 300),
-          () {
-            onVerified.call();
-          },
-        );
-        return false;
-      },
-    ).show(context);
-  }
 
   /// Process for creating account
   /// Create new temp account with random password

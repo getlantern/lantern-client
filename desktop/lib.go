@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/big"
 	"net/http"
 	"os"
 	"os/signal"
@@ -28,6 +29,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/settings"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -45,9 +47,10 @@ const (
 )
 
 var (
-	log       = golog.LoggerFor("lantern-desktop.main")
-	a         *app.App
-	proClient proclient.ProClient
+	log        = golog.LoggerFor("lantern-desktop.main")
+	a          *app.App
+	proClient  proclient.ProClient
+	authClient auth.AuthClient
 )
 
 var issueMap = map[string]string{
@@ -80,15 +83,17 @@ func start() {
 
 	cdir := configDir(&flags)
 	settings := loadSettings(cdir)
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
+	webclientOpts := &webclient.Opts{
 		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
+			Transport: proxied.ParallelPreferChained(),
 			Timeout:   30 * time.Second,
 		},
 		UserConfig: func() common.UserConfig {
 			return userConfig(settings)
 		},
-	})
+	}
+	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
 
 	a = app.NewApp(flags, cdir, proClient, settings)
 	go func() {
@@ -97,6 +102,8 @@ func start() {
 			log.Error(err)
 		}
 	}()
+
+	go fetchUserData()
 
 	go func() {
 		err := fetchPayentMethodV4()
@@ -139,6 +146,93 @@ func start() {
 	}()
 }
 
+func fetchUserData() error {
+	user, err := getUserData()
+	if err != nil {
+		return log.Errorf("error while fetching user data: %v", err)
+	}
+	return cacheUserDetail(user)
+}
+
+func cacheUserDetail(userDetail *protos.User) error {
+	if userDetail.Email != "" {
+		a.Settings().SetEmailAddress(userDetail.Email)
+	}
+	//Save user refferal code
+	if userDetail.Referral != "" {
+		a.SetReferralCode(userDetail.Referral)
+	}
+	// err := setUserLevel(session.baseModel, userDetail.UserLevel)
+	// if err != nil {
+	// 	return err
+	// }
+
+	err := setExpiration(userDetail.Expiration)
+	if err != nil {
+		return err
+	}
+	currentDevice := getDeviceID()
+	log.Debugf("Current device %v", currentDevice)
+
+	// Check if device id is connect to same device if not create new user
+	// this is for the case when user removed device from other device
+	deviceFound := false
+	if userDetail.Devices != nil {
+		for _, device := range userDetail.Devices {
+			if device.Id == currentDevice {
+				deviceFound = true
+				break
+			}
+		}
+	}
+	log.Debugf("Device found %v", deviceFound)
+	/// Check if user has installed app first time
+	firstTime := a.Settings().GetUserFirstVisit()
+	log.Debugf("First time visit %v", firstTime)
+	if userDetail.UserLevel == "pro" && firstTime {
+		log.Debugf("User is pro and first time")
+		setProUser(true)
+	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
+		log.Debugf("User is pro and not first time")
+		setProUser(true)
+	} else {
+		log.Debugf("User is not pro")
+		setProUser(false)
+	}
+
+	a.Settings().SetUserIDAndToken(userDetail.UserId, userDetail.Token)
+	log.Debugf("User caching successful: %+v", userDetail)
+	// Save data in userData cache
+	app.SetUserData(context.Background(), userDetail.UserId, userDetail)
+	return nil
+}
+
+func getDeviceID() string {
+	return a.Settings().GetDeviceID()
+}
+
+func setExpiration(expiration int64) error {
+	if expiration == 0 {
+		return log.Errorf("Expiration date is 0")
+	}
+	expiry := time.Unix(0, expiration*int64(time.Second))
+	dateFormat := "01/02/2006"
+	dateStr := expiry.Format(dateFormat)
+	a.Settings().SetExpirationDate(dateStr)
+	return nil
+}
+
+func setProUser(isPro bool) {
+	a.Settings().SetProUser(isPro)
+	a.SendMessageToUI("pro", map[string]interface{}{
+		"isProUser": isPro,
+	})
+}
+
+func saveUserSalt(salt []byte) {
+	a.Settings().SaveSalt(salt)
+}
+
 //export hasProxyFected
 func hasProxyFected() *C.char {
 	if a.GetHasProxyFetched() {
@@ -163,19 +257,31 @@ func onSuccess() *C.char {
 	return C.CString(string("false"))
 }
 
+func userCreate() error {
+	// User is new
+	user, err := proClient.UserCreate(context.Background())
+	if err != nil {
+		return errors.New("Could not create new Pro user: %v", err)
+	}
+	log.Debugf("DEBUG: User created: %v", user)
+	if user.BaseResponse != nil && user.BaseResponse.Error != "" {
+		return errors.New("Could not create new Pro user: %v", err)
+	}
+	a.Settings().SetUserIDAndToken(user.UserId, user.Token)
+
+	return nil
+}
+
 func fetchOrCreate() error {
 	settings := a.Settings()
+	settings.SetLanguage("en_us")
 	userID := settings.GetUserID()
 	if userID == 0 {
-		user, err := proClient.UserCreate(context.Background())
+		a.Settings().SetUserFirstVisit(true)
+		err := userCreate()
 		if err != nil {
-			return errors.New("Could not create new Pro user: %v", err)
+			return err
 		}
-		log.Debugf("DEBUG: User created: %v", user)
-		if user.BaseResponse != nil && user.BaseResponse.Error != "" {
-			return errors.New("Could not create new Pro user: %v", err)
-		}
-		settings.SetUserIDAndToken(user.UserId, user.Token)
 		// if the user is new mean we need to fetch the payment methods
 		fetchPayentMethodV4()
 	}
@@ -191,13 +297,13 @@ func fetchPayentMethodV4() error {
 	if err != nil {
 		return errors.New("Could not get payment methods: %v", err)
 	}
-	// log.Debugf("DEBUG: Payment methods logos: %v providers %v  and plans in string %v", resp.Logo, resp.Providers, resp.Plans)
+	log.Debugf("DEBUG: Payment methods: %+v", resp)
+	log.Debugf("DEBUG: Payment methods providers: %+v", resp.Providers)
 	bytes, err := json.Marshal(resp)
 	if err != nil {
 		return errors.New("Could not marshal payment methods: %v", err)
 	}
 	settings.SetPaymentMethodPlans(bytes)
-
 	return nil
 }
 
@@ -268,10 +374,11 @@ func getUserData() (*protos.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	user := resp.User
-	if user != nil && user.Email != "" {
-		a.Settings().SetEmailAddress(user.Email)
+	if resp.User == nil {
+		return nil, errors.New("User data not found")
 	}
+	user := resp.User
+	cacheUserDetail(user)
 	return user, nil
 }
 
@@ -292,12 +399,12 @@ func setProxyAll(value *C.char) {
 
 // tryCacheUserData retrieves the latest user data for the given user.
 // It first checks the cache and if present returns the user data stored there
-func tryCacheUserData() (*protos.User, error) {
-	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
-		return cacheUserData, nil
-	}
-	return getUserData()
-}
+// func tryCacheUserData() (*protos.User, error) {
+// 	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
+// 		return cacheUserData, nil
+// 	}
+// 	return getUserData()
+// }
 
 // this method is reposible for checking if the user has updated plan or bought plans
 //
@@ -314,6 +421,8 @@ func hasPlanUpdatedOrBuy() *C.char {
 	if isOldFound {
 		if cacheUserData.Expiration < resp.User.Expiration {
 			// New data has a later expiration
+			// if foud then update the cache
+			cacheUserDetail(resp.User)
 			return C.CString(string("true"))
 		}
 	}
@@ -322,9 +431,11 @@ func hasPlanUpdatedOrBuy() *C.char {
 
 //export devices
 func devices() *C.char {
-	user, err := tryCacheUserData()
-	if err != nil {
-		return sendError(err)
+	user, found := cachedUserData()
+	if !found {
+		// for now just return empty array
+		b, _ := json.Marshal("[]")
+		return C.CString(string(b))
 	}
 	b, _ := json.Marshal(user.Devices)
 	return C.CString(string(b))
@@ -365,9 +476,9 @@ func removeDevice(deviceId *C.char) *C.char {
 
 //export expiryDate
 func expiryDate() *C.char {
-	user, err := tryCacheUserData()
-	if err != nil {
-		return sendError(err)
+	user, found := cachedUserData()
+	if !found {
+		return sendError(log.Errorf("User data not found"))
 	}
 	tm := time.Unix(user.Expiration, 0)
 	exp := tm.Format("01/02/2006")
@@ -413,6 +524,23 @@ func emailExists(email *C.char) *C.char {
 	return C.CString("false")
 }
 
+//export testProviderRequest
+func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *C.char {
+	puchaseData := map[string]interface{}{
+		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
+		"provider":       C.GoString(paymentProvider),
+		"email":          C.GoString(email),
+		"plan":           C.GoString(plan),
+	}
+	_, err := proClient.PurchaseRequest(context.Background(), puchaseData)
+	if err != nil {
+		return sendError(err)
+	}
+	setProUser(true)
+	getUserData()
+	return C.CString("true")
+}
+
 // The function returns two C strings: the first represents success, and the second represents an error.
 // If the redemption is successful, the first string contains "true", and the second string is nil.
 // If an error occurs during redemption, the first string is nil, and the second string contains the error message.
@@ -447,6 +575,12 @@ func referral() *C.char {
 		return sendError(err)
 	}
 	return C.CString(referralCode)
+}
+
+//export myDeviceId
+func myDeviceId() *C.char {
+	deviceId := getDeviceID()
+	return C.CString(deviceId)
 }
 
 //export chatEnabled
@@ -528,13 +662,15 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
-	ctx := context.Background()
-	// refresh user data when home page is loaded on desktop
-	go getUserData()
+	// // refresh user data when home page is loaded on desktop
+	// go getUserData()
 	uc := a.Settings()
-	if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
+	if uc.IsProUser() {
 		return C.CString("true")
 	}
+	// if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
+	// 	return C.CString("true")
+	// }
 	return C.CString("false")
 }
 
@@ -607,12 +743,14 @@ func userConfig(settings *settings.Settings) common.UserConfig {
 }
 
 //export reportIssue
-func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
+func reportIssue(email, issueType, description *C.char) *C.char {
+	issueTypeStr := C.GoString(issueType)
 	deviceID := a.Settings().GetDeviceID()
-	issueIndex := issueMap[C.GoString(issueType)]
+	issueIndex := issueMap[issueTypeStr]
 	issueTypeInt, err := strconv.Atoi(issueIndex)
 	if err != nil {
-		return nil, sendError(err)
+		log.Errorf("Error converting issue type to int: %v", err)
+		return sendError(err)
 	}
 	ctx := context.Background()
 	uc := userConfig(a.Settings())
@@ -641,10 +779,10 @@ func reportIssue(email, issueType, description *C.char) (*C.char, *C.char) {
 		nil,
 	)
 	if err != nil {
-		return nil, sendError(err)
+		return sendError(err)
 	}
 	log.Debug("Successfully reported issue")
-	return C.CString("true"), nil
+	return C.CString("true")
 }
 
 //export checkUpdates
@@ -744,6 +882,324 @@ func handleSignals(a *app.App) {
 		log.Debugf("Got signal \"%s\", exiting...", s)
 		a.Exit(nil)
 	}()
+}
+
+// Auth Methods
+
+//export isUserFirstTime
+func isUserFirstTime() *C.char {
+	firstVist := a.Settings().GetUserFirstVisit()
+	stringValue := fmt.Sprintf("%t", firstVist)
+	return C.CString(stringValue)
+}
+
+//export setFirstTimeVisit
+func setFirstTimeVisit() {
+	a.Settings().SetUserFirstVisit(false)
+}
+
+//export isUserLoggedIn
+func isUserLoggedIn() *C.char {
+	loggedIn := a.IsUserLoggedIn()
+	stringValue := fmt.Sprintf("%t", loggedIn)
+	log.Debugf("User logged in %v", stringValue)
+	return C.CString(stringValue)
+}
+
+func getUserSalt(email string) ([]byte, error) {
+	lowerCaseEmail := strings.ToLower(email)
+	salt := a.Settings().GetSalt()
+	if len(salt) == 16 {
+		log.Debugf("salt return from cache %v", salt)
+		return salt, nil
+	}
+	log.Debugf("Salt not found calling api for %s", email)
+	saltResponse, err := authClient.GetSalt(context.Background(), lowerCaseEmail)
+	if err != nil {
+		return nil, err
+	}
+	log.Debugf("Salt Response-> %v", saltResponse.Salt)
+	return saltResponse.Salt, nil
+
+}
+
+// Authenticates the user with the given email and password.
+//
+//	Note-: On Sign up Client needed to generate 16 byte slat
+//	Then use that salt, password and email generate encryptedKey once you created encryptedKey pass it to srp.NewSRPClient
+//	Then use srpClient.Verifier() to generate verifierKey
+
+//export signup
+func signup(email *C.char, password *C.char) *C.char {
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+
+	salt, err := authClient.SignUp(lowerCaseEmail, C.GoString(password))
+	if err != nil {
+		return sendError(err)
+	}
+	// save salt and email in settings
+	setting := a.Settings()
+	saveUserSalt(salt)
+	setting.SetEmailAddress(C.GoString(email))
+	a.SetUserLoggedIn(true)
+
+	// Todo remove this once we complete teting auth flow
+	// we don't need this on prod
+	fetchPayentMethodV4()
+	return C.CString("true")
+}
+
+//export login
+func login(email *C.char, password *C.char) *C.char {
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+	user, salt, err := authClient.Login(lowerCaseEmail, C.GoString(password), getDeviceID())
+	if err != nil {
+		return sendError(err)
+	}
+	// User has more than 3 device connected to device
+	if !user.Success {
+		err := deviceLimitFlow(user)
+		if err != nil {
+			return sendError(log.Errorf("error while starting device limit flow %v", err))
+		}
+		return sendError(log.Errorf("too-many-devices %v", err))
+	}
+
+	log.Debugf("User login successfull %+v", user)
+	// save salt and email in settings
+	saveUserSalt(salt)
+	a.SetUserLoggedIn(true)
+	userData := auth.ConvertToUserDetailsResponse(user)
+	// once login is successfull save user details
+	// but overide there email with login email
+	// old email might be differnt but we want to show latets email
+	userData.Email = C.GoString(email)
+	err = cacheUserDetail(userData)
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString("true")
+}
+
+//export logout
+func logout() *C.char {
+	email := a.Settings().GetEmailAddress()
+	deviceId := getDeviceID()
+	token := a.Settings().GetToken()
+	userId := a.Settings().GetUserID()
+
+	signoutData := &protos.LogoutRequest{
+		Email:        email,
+		DeviceId:     deviceId,
+		LegacyToken:  token,
+		LegacyUserID: userId,
+	}
+	log.Debugf("Sign out request %+v", signoutData)
+	loggedOut, logoutErr := authClient.SignOut(context.Background(), signoutData)
+	if logoutErr != nil {
+		return sendError(log.Errorf("Error while signing out %v", logoutErr))
+	}
+	if !loggedOut {
+		return sendError(log.Error("Error while signing out"))
+	}
+
+	clearLocalUserData()
+	// Create new user
+	err := userCreate()
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString("true")
+}
+
+// User has reached device limit
+// Save latest device
+func deviceLimitFlow(login *protos.LoginResponse) error {
+	var protoDevices []*protos.Device
+	for _, device := range login.Devices {
+		protoDevice := &protos.Device{
+			Id:      device.Id,
+			Name:    device.Name,
+			Created: device.Created,
+		}
+		protoDevices = append(protoDevices, protoDevice)
+	}
+
+	user := &protos.User{
+		UserId:  login.LegacyID,
+		Token:   login.LegacyToken,
+		Devices: protoDevices,
+	}
+
+	app.SetUserData(context.Background(), login.LegacyID, user)
+	return nil
+}
+
+// Send recovery code to user email
+//
+//export startRecoveryByEmail
+func startRecoveryByEmail(email *C.char) *C.char {
+	//Create body
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+	prepareRequestBody := &protos.StartRecoveryByEmailRequest{
+		Email: lowerCaseEmail,
+	}
+	recovery, err := authClient.StartRecoveryByEmail(context.Background(), prepareRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("StartRecoveryByEmail response %v", recovery)
+	return C.CString("true")
+}
+
+// Complete recovery by email
+//
+//export completeRecoveryByEmail
+func completeRecoveryByEmail(email *C.char, code *C.char, password *C.char) *C.char {
+	//Create body
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+	newsalt, err := auth.GenerateSalt()
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("Slat %v and length %v", newsalt, len(newsalt))
+	srpClient := auth.NewSRPClient(lowerCaseEmail, C.GoString(password), newsalt)
+	verifierKey, err := srpClient.Verifier()
+	if err != nil {
+		return sendError(err)
+	}
+	prepareRequestBody := &protos.CompleteRecoveryByEmailRequest{
+		Email:       lowerCaseEmail,
+		Code:        C.GoString(code),
+		NewSalt:     newsalt,
+		NewVerifier: verifierKey.Bytes(),
+	}
+
+	log.Debugf("new Verifier %v and salt %v", verifierKey.Bytes(), newsalt)
+	recovery, err := authClient.CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	//User has been recovered successfully
+	//Save new salt
+	saveUserSalt(newsalt)
+	log.Debugf("CompleteRecoveryByEmail response %v", recovery)
+	return C.CString("true")
+}
+
+// // This will validate code send by server
+//
+//export validateRecoveryByEmail
+func validateRecoveryByEmail(email *C.char, code *C.char) *C.char {
+	lowerCaseEmail := strings.ToLower(C.GoString(email))
+	prepareRequestBody := &protos.ValidateRecoveryCodeRequest{
+		Email: lowerCaseEmail,
+		Code:  C.GoString(code),
+	}
+	recovery, err := authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	if !recovery.Valid {
+		return sendError(log.Errorf("invalid_code Error: %v", err))
+	}
+	log.Debugf("Validate code response %v", recovery.Valid)
+	return C.CString("true")
+}
+
+// This will delete user accoutn and creates new user
+//
+//export deleteAccount
+func deleteAccount(password *C.char) *C.char {
+	email := a.Settings().GetEmailAddress()
+	lowerCaseEmail := strings.ToLower(email)
+	// Get the salt
+	salt, err := getUserSalt(lowerCaseEmail)
+	if err != nil {
+		return sendError(err)
+	}
+	// Prepare login request body
+	client := auth.NewSRPClient(lowerCaseEmail, C.GoString(password), salt)
+
+	//Send this key to client
+	A := client.EphemeralPublic()
+	//Create body
+	prepareRequestBody := &protos.PrepareRequest{
+		Email: lowerCaseEmail,
+		A:     A.Bytes(),
+	}
+	log.Debugf("Delete Account request email %v A %v", lowerCaseEmail, A.Bytes())
+	srpB, err := authClient.LoginPrepare(context.Background(), prepareRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("Login prepare response %v", srpB.B)
+
+	// // Once the client receives B from the server Client should check error status here as defense against
+	// // a malicious B sent from server
+	B := big.NewInt(0).SetBytes(srpB.B)
+
+	if err = client.SetOthersPublic(B); err != nil {
+		log.Errorf("Error while setting srpB %v", err)
+		return sendError(err)
+	}
+
+	// client can now make the session key
+	clientKey, err := client.Key()
+	if err != nil || clientKey == nil {
+		return sendError(log.Errorf("user_not_found error while generating Client key %v", err))
+	}
+
+	// // Step 3
+
+	// // check if the server proof is valid
+	if !client.GoodServerProof(salt, lowerCaseEmail, srpB.Proof) {
+		return sendError(log.Error("user_not_found error while checking server proof"))
+	}
+
+	clientProof, err := client.ClientProof()
+	if err != nil {
+		return sendError(log.Errorf("user_not_found error while generating client proof %v", err))
+	}
+	deviceId := a.Settings().GetDeviceID()
+
+	changeEmailRequestBody := &protos.DeleteUserRequest{
+		Email:     lowerCaseEmail,
+		Proof:     clientProof,
+		Permanent: true,
+		DeviceId:  deviceId,
+	}
+
+	log.Debugf("Delete Account request email %v prooof %v deviceId %v", lowerCaseEmail, clientProof, deviceId)
+	isAccountDeleted, err := authClient.DeleteAccount(context.Background(), changeEmailRequestBody)
+	if err != nil {
+		return sendError(err)
+	}
+	log.Debugf("Account Delted response %v", isAccountDeleted)
+
+	if !isAccountDeleted {
+		return sendError(log.Errorf("user_not_found error while deleting account %v", err))
+	}
+
+	// Clear local user data
+	clearLocalUserData()
+	// Set user id and token to nil
+	a.Settings().SetUserIDAndToken(0, "")
+	// Create new user
+	err = userCreate()
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString("true")
+}
+
+// clearLocalUserData clears the local user data from the settings
+func clearLocalUserData() {
+	setting := a.Settings()
+	saveUserSalt([]byte{})
+	setting.SetEmailAddress("")
+	a.SetUserLoggedIn(false)
+	setProUser(false)
 }
 
 func main() {}

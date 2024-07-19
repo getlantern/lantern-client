@@ -193,6 +193,9 @@ abstract class $AppRouter extends _i53.RootStackRouter {
         child: _i15.Checkout(
           plan: args.plan,
           isPro: args.isPro,
+          authFlow: args.authFlow,
+          email: args.email,
+          verificationPin: args.verificationPin,
           key: args.key,
         ),
       );
@@ -896,6 +899,9 @@ class Checkout extends _i53.PageRouteInfo<CheckoutArgs> {
   Checkout({
     required _i55.Plan plan,
     required bool isPro,
+    _i55.AuthFlow? authFlow,
+    String? email,
+    String? verificationPin,
     _i55.Key? key,
     List<_i53.PageRouteInfo>? children,
   }) : super(
@@ -903,6 +909,9 @@ class Checkout extends _i53.PageRouteInfo<CheckoutArgs> {
           args: CheckoutArgs(
             plan: plan,
             isPro: isPro,
+            authFlow: authFlow,
+            email: email,
+            verificationPin: verificationPin,
             key: key,
           ),
           initialChildren: children,
@@ -918,6 +927,9 @@ class CheckoutArgs {
   const CheckoutArgs({
     required this.plan,
     required this.isPro,
+    this.authFlow,
+    this.email,
+    this.verificationPin,
     this.key,
   });
 
@@ -925,11 +937,17 @@ class CheckoutArgs {
 
   final bool isPro;
 
+  final _i55.AuthFlow? authFlow;
+
+  final String? email;
+
+  final String? verificationPin;
+
   final _i55.Key? key;
 
   @override
   String toString() {
-    return 'CheckoutArgs{plan: $plan, isPro: $isPro, key: $key}';
+    return 'CheckoutArgs{plan: $plan, isPro: $isPro, authFlow: $authFlow, email: $email, verificationPin: $verificationPin, key: $key}';
   }
 }
 
