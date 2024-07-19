@@ -214,9 +214,11 @@ class _HomePageState extends State<HomePage> with WindowListener {
               return const PrivacyDisclosure();
             }
 
-            userNew(() {
-              _checkForFirstTimeVisit();
-            });
+            if(!Platform.isAndroid){
+              userNew(() {
+                _checkForFirstTimeVisit();
+              });
+            }
 
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
