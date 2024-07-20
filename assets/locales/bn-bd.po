@@ -3,12 +3,12 @@
 # Lantern, 2023
 # Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2024
 # code smite <codesmite@gmail.com>, 2024
-# tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
+# tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
+"Last-Translator: tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2024\n"
 "Language-Team: Bengali (https://app.transifex.com/lantern-1/teams/94371/bn/)\n"
 "Language: bn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -286,7 +286,7 @@ msgid "cannot_complete_purchase"
 msgstr "কেনা সম্পূর্ণ করা যাচ্ছে না"
 
 msgid "discover_not_working"
-msgstr "ডিসকভার কাজ করছে না "
+msgstr "ডিসকভার কাজ করছে না"
 
 msgid "cannot_sign_in"
 msgstr "সাইন ইন করা যাচ্ছে না"

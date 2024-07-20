@@ -4,15 +4,15 @@
 # tx_e2f_hi r2 <tx_e2f_hi_r2@ate2f.com>, 2023
 # Lantern, 2023
 # tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2023
-# E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2024
 # Kalyan Dikshit <dikshitrocks93@gmail.com>, 2024
 # e2f <projects@e2f.com>, 2024
 # tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
+# E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
+"Last-Translator: E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2024\n"
 "Language-Team: Hindi (India) (https://app.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
 "Language: hi_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -286,7 +286,7 @@ msgid "cannot_complete_purchase"
 msgstr "खरीदारी पूरी नहीं की जा सकती है"
 
 msgid "discover_not_working"
-msgstr "खोज काम नहीं कर रहा है "
+msgstr "डिस्‍कवर काम नहीं कर रहा"
 
 msgid "cannot_sign_in"
 msgstr "साइन इन नहीं किया जा सकता है"

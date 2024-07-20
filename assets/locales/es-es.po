@@ -7,16 +7,16 @@
 # Lantern, 2023
 # e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2023
 # Aimara pena, 2024
-# e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
 # e2f <projects@e2f.com>, 2024
 # tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2024
 # strel, 2024
 # tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
+# e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
+"Last-Translator: e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -297,7 +297,7 @@ msgid "cannot_complete_purchase"
 msgstr "No se puede realizar la compra"
 
 msgid "discover_not_working"
-msgstr "Descubrir no funciona"
+msgstr "El descubrimiento no funciona"
 
 msgid "cannot_sign_in"
 msgstr "No se puede iniciar sesión"

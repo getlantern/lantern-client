@@ -3,16 +3,16 @@
 # abuyop <abuyop@gmail.com>, 2022
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2023
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2023
-# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2024
 # Alyssa Chung <lisiachung7@gmail.com>, 2024
 # Lantern, 2024
 # e2f <projects@e2f.com>, 2024
 # e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
+# tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
+"Last-Translator: tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2024\n"
 "Language-Team: Malay (https://app.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -292,7 +292,7 @@ msgid "cannot_complete_purchase"
 msgstr "Tidak dapat melengkapkan pembelian"
 
 msgid "discover_not_working"
-msgstr "Fungsi 'Discover' tidak berfungsi "
+msgstr "Terokai tidak berfungsi"
 
 msgid "cannot_sign_in"
 msgstr "Tidak boleh mendaftar masuk"

@@ -296,7 +296,7 @@ msgid "cannot_complete_purchase"
 msgstr "Satın alma tamamlanamıyor"
 
 msgid "discover_not_working"
-msgstr "Keşfet çalışmıyor "
+msgstr "Keşfet çalışmıyor"
 
 msgid "cannot_sign_in"
 msgstr "Giriş yapılamadı"

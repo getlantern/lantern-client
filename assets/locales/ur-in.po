@@ -285,7 +285,7 @@ msgid "cannot_complete_purchase"
 msgstr "خریداری مکمل نہیں کر سکتے"
 
 msgid "discover_not_working"
-msgstr "دریافت کام نہیں کر رہا "
+msgstr "ڈسکور کام نہیں کر رہا"
 
 msgid "cannot_sign_in"
 msgstr "سائن ان نہیں کر سکتے"
