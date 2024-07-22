@@ -285,7 +285,7 @@ msgid "cannot_complete_purchase"
 msgstr "خریداری مکمل نہیں کر سکتے"
 
 msgid "discover_not_working"
-msgstr "دریافت کام نہیں کر رہا "
+msgstr "ڈسکور کام نہیں کر رہا"
 
 msgid "cannot_sign_in"
 msgstr "سائن ان نہیں کر سکتے"
@@ -454,6 +454,9 @@ msgstr "ادائیگی کا طریقہ منتخب کریں"
 
 msgid "pro_plan"
 msgstr "پرو پلان"
+
+msgid "one_month_plan"
+msgstr ""
 
 msgid "one_year_plan"
 msgstr "1 سال کا پلان"
@@ -1775,7 +1778,7 @@ msgid "recovery_not_found"
 msgstr "ڈیوائس اس یوزر سے منسلک نہیں "
 
 msgid "device_added"
-msgstr "ڈیوائس اس یوزر سے منسلک نہیں "
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

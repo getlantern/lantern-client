@@ -12,7 +12,6 @@
 # Evan <alireza.firoozi68@gmail.com>, 2024
 # Mary Sol <salar.adlparvar@gmail.com>, 2024
 # Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024
-# Mersen M, 2024
 # NoProfile, 2024
 # Lantern, 2024
 # Vaseto Nora <n.nouri67@gmail.com>, 2024
@@ -22,10 +21,11 @@
 # e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # AHMAD MASOUD BARAKZAI, 2024
+# Mersen M, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: AHMAD MASOUD BARAKZAI, 2024\n"
+"Last-Translator: Mersen M, 2024\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -298,7 +298,7 @@ msgid "cannot_complete_purchase"
 msgstr "خرید تکمیل نشد"
 
 msgid "discover_not_working"
-msgstr "عملکرد Discover کار نمی‌کند "
+msgstr "بخش دیسکاور کار نمی‌کند"
 
 msgid "cannot_sign_in"
 msgstr "ورود انجام نشد"
@@ -464,6 +464,9 @@ msgstr "روش پرداخت را انتخاب کنید"
 
 msgid "pro_plan"
 msgstr "طرح حرفه‌ای"
+
+msgid "one_month_plan"
+msgstr ""
 
 msgid "one_year_plan"
 msgstr "طرح یک ساله"
@@ -1768,7 +1771,7 @@ msgid "recovery_not_found"
 msgstr "دستگاه به این کاربر وابسته نیست"
 
 msgid "device_added"
-msgstr "دستگاه به این کاربر وابسته نیست"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

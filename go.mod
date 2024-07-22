@@ -50,7 +50,7 @@ require (
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
 	github.com/getlantern/replica v0.14.3
 	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627
-	github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b
+	github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426
 	github.com/getsentry/sentry-go v0.27.0
@@ -229,6 +229,7 @@ require (
 	github.com/mitchellh/go-ps v1.0.0 // indirect
 	github.com/mitchellh/go-server-timing v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/mschoch/smat v0.2.0 // indirect
 	github.com/nwaples/rardecode v1.1.2 // indirect
 	github.com/onsi/ginkgo/v2 v2.16.0 // indirect

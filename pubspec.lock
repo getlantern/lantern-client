@@ -33,6 +33,78 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.1"
+  app_package_maker:
+    dependency: transitive
+    description:
+      name: app_package_maker
+      sha256: "0dc1949e09a60ec2d0b79b43c5237734e6d03f7a022919bdfe1b4789f4c3bfb0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
+  app_package_maker_aab:
+    dependency: transitive
+    description:
+      name: app_package_maker_aab
+      sha256: "44810e77dff3b3b54011270b01a42876e838766d6e85c98f9a33bfe61db51651"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
+  app_package_maker_apk:
+    dependency: transitive
+    description:
+      name: app_package_maker_apk
+      sha256: "974e639cda26c2e18fffaba18f88797523731f5b5457056b25e92243c9191f61"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
+  app_package_maker_deb:
+    dependency: transitive
+    description:
+      name: app_package_maker_deb
+      sha256: dcd4047cb67648e53afd61079a8baa3c8ea383668f068e3ce8da841f3728eb29
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
+  app_package_maker_dmg:
+    dependency: transitive
+    description:
+      name: app_package_maker_dmg
+      sha256: e0410a51304f3fff3e3850696c8e56f53f71c990e097f1c325126ebe90d242c4
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
+  app_package_maker_exe:
+    dependency: transitive
+    description:
+      name: app_package_maker_exe
+      sha256: "07e3899a3ae12e8b6cd80efc7281ccca6c9050d2810e0fdc0e7e614cf4bd8a02"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
+  app_package_maker_ipa:
+    dependency: transitive
+    description:
+      name: app_package_maker_ipa
+      sha256: "1a11498506ba975d02a4715650701981a382a2161c81481911517b50b378cd65"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
+  app_package_maker_zip:
+    dependency: transitive
+    description:
+      name: app_package_maker_zip
+      sha256: cef07a47c589036a4762fdc9e61b9022f0a2a2a9f69538109a0a952a7e668306
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
+  archive:
+    dependency: transitive
+    description:
+      name: archive
+      sha256: cb6a278ef2dbb298455e1a713bda08524a175630ec643a242c399c932a0a1f7d
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.1"
   args:
     dependency: transitive
     description:
@@ -534,6 +606,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  flutter_app_builder:
+    dependency: transitive
+    description:
+      name: flutter_app_builder
+      sha256: "9e5527919f62424f0fafaa3e8dfda8469caf63e465862e9866a0d60a37c00fcf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
+  flutter_app_packager:
+    dependency: transitive
+    description:
+      name: flutter_app_packager
+      sha256: b5bfb7113b49710c004c5f1ab6f08ac121418540d49e14825dd75e99810fa695
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.9"
   flutter_cache_manager:
     dependency: "direct main"
     description:
@@ -542,6 +630,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.2"
+  flutter_distributor:
+    dependency: "direct main"
+    description:
+      name: flutter_distributor
+      sha256: "50d56df265e97396427ec42cc02374b72d08c71b3442d662b97fc089bd1705ea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   flutter_dotenv:
     dependency: "direct main"
     description:

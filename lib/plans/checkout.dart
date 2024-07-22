@@ -1,8 +1,6 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/plans/payment_provider.dart';
-import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
 import 'package:retry/retry.dart';
 
@@ -10,10 +8,16 @@ import 'package:retry/retry.dart';
 class Checkout extends StatefulWidget {
   final Plan plan;
   final bool isPro;
+  final AuthFlow? authFlow;
+  final String? verificationPin;
+  final String? email;
 
   const Checkout({
     required this.plan,
     required this.isPro,
+    this.authFlow,
+    this.email,
+    this.verificationPin,
     Key? key,
   }) : super(key: key);
 
@@ -25,15 +29,6 @@ class _CheckoutState extends State<Checkout>
     with SingleTickerProviderStateMixin {
   bool showMoreOptions = false;
   bool showContinueButton = false;
-  final emailFieldKey = GlobalKey<FormState>();
-  late final emailController = CustomTextEditingController(
-    formKey: emailFieldKey,
-    validator: (value) => value!.isEmpty
-        ? null
-        : EmailValidator.validate(value ?? '')
-            ? null
-            : 'please_enter_a_valid_email_address'.i18n,
-  );
 
   final refCodeFieldKey = GlobalKey<FormState>();
   late final refCodeController = CustomTextEditingController(
@@ -79,6 +74,8 @@ class _CheckoutState extends State<Checkout>
     return BaseScreen(
         resizeToAvoidBottomInset: false,
         title: 'lantern_pro_checkout'.i18n,
+        padHorizontal: true,
+        padVertical: true,
         body: sessionModel.paymentMethods(
           builder: (
             context,
@@ -90,118 +87,71 @@ class _CheckoutState extends State<Checkout>
             }
             print("paymentMethods: $paymentMethods");
             defaultProviderIfNecessary(paymentMethods.toList());
-            return sessionModel.emailAddress((
-              BuildContext context,
-              String emailAddress,
-              Widget? child,
-            ) {
-              return Container(
-                padding: const EdgeInsetsDirectional.only(
-                  start: 16,
-                  end: 16,
-                  top: 24,
-                  bottom: 32,
+            return Column(
+              children: [
+                CText('choose_payment_method'.i18n, style: tsHeading1),
+                const SizedBox(height: 24),
+                Container(
+                  padding:
+                      const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: paymentOptions(paymentMethods)),
                 ),
-                child: Column(
-                  children: [
-                    // * Step 2
-                    PlanStep(
-                      stepNum: '2',
-                      description: 'enter_email'.i18n,
+                if (isRefCodeFieldShowing)
+                  Form(
+                    key: refCodeFieldKey,
+                    child: CTextField(
+                      controller: refCodeController,
+                      autovalidateMode: AutovalidateMode.disabled,
+                      onChanged: (text) {
+                        setState(() {
+                          showContinueButton = enableContinueButton();
+                        });
+                      },
+                      textCapitalization: TextCapitalization.characters,
+                      label: 'referral_code'.i18n,
+                      keyboardType: TextInputType.text,
+                      prefixIcon: const CAssetImage(path: ImagePaths.star),
                     ),
-                    // * Email field
-                    Container(
-                      padding: const EdgeInsetsDirectional.only(
-                        top: 8,
-                        bottom: 8,
-                      ),
-                      child: Form(
-                        key: emailFieldKey,
-                        child: CTextField(
-                          initialValue: widget.isPro ? emailAddress : '',
-                          controller: emailController,
-                          onChanged: (text) {
-                            setState(() {
-                              showContinueButton = enableContinueButton();
-                            });
-                          },
-                          autovalidateMode: widget.isPro
-                              ? AutovalidateMode.always
-                              : AutovalidateMode.disabled,
-                          label: 'email'.i18n,
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const CAssetImage(path: ImagePaths.email),
+                  )
+                else
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isRefCodeFieldShowing = true;
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        const CAssetImage(path: ImagePaths.add),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                            start: 8.0,
+                          ),
+                          child: CText(
+                            'add_referral_code'.i18n,
+                            style: tsBody1,
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    if (isRefCodeFieldShowing)
-                      Form(
-                        key: refCodeFieldKey,
-                        child: CTextField(
-                          controller: refCodeController,
-                          autovalidateMode: AutovalidateMode.disabled,
-                          onChanged: (text) {
-                            setState(() {
-                              showContinueButton = enableContinueButton();
-                            });
-                          },
-                          textCapitalization: TextCapitalization.characters,
-                          label: 'referral_code'.i18n,
-                          keyboardType: TextInputType.text,
-                          prefixIcon: const CAssetImage(path: ImagePaths.star),
-                        ),
-                      )
-                    else
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isRefCodeFieldShowing = true;
-                          });
-                        },
-                        child: Row(
-                          children: [
-                            const CAssetImage(path: ImagePaths.add),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.only(
-                                start: 8.0,
-                              ),
-                              child: CText(
-                                'add_referral_code'.i18n,
-                                style: tsBody1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                    const SizedBox(height: 16.0),
-                    PlanStep(
-                      stepNum: '3',
-                      description: 'choose_payment_method'.i18n,
+                  ),
+                const Spacer(),
+                Tooltip(
+                  message: AppKeys.continueCheckout,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Button(
+                      text: 'continue'.i18n,
+                      disabled: !enableContinueButton(),
+                      onPressed: onContinueTapped,
                     ),
-                    //* Payment options
-                    Container(
-                      padding:
-                          const EdgeInsetsDirectional.only(top: 16, bottom: 16),
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: paymentOptions(paymentMethods)),
-                    ),
-                    // * Price summary, unused pro time disclaimer, Continue button
-
-                    Tooltip(
-                      message: AppKeys.continueCheckout,
-                      child: Button(
-                        text: 'continue'.i18n,
-                        disabled: !enableContinueButton(),
-                        onPressed: onContinueTapped,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              );
-            });
+              ],
+            );
           },
         ));
   }
@@ -264,15 +214,10 @@ class _CheckoutState extends State<Checkout>
   }
 
   bool enableContinueButton() {
-    if (emailFieldKey.currentState == null) {
-      return false;
-    }
-    final isEmailValid = emailController.value.text.isNotEmpty &&
-        emailFieldKey.currentState!.validate();
     if (!isRefCodeFieldShowing || refCodeController.text.isEmpty) {
-      return isEmailValid;
+      return true;
     }
-    return isEmailValid && refCodeFieldKey.currentState!.validate();
+    return refCodeFieldKey.currentState!.validate();
   }
 
   //Class methods
@@ -290,7 +235,7 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-  Future<void> resolvePaymentRoute() async {
+  Future<void> resolvePaymentMethod() async {
     switch (selectedPaymentProvider!) {
       case Providers.stripe:
         if (isDesktop()) {
@@ -315,6 +260,13 @@ class _CheckoutState extends State<Checkout>
           return;
         }
         _proceedWithFroPay();
+      case Providers.shepherd:
+        if (isDesktop()) {
+          _proceedWithPaymentRedirect(Providers.shepherd);
+          return;
+        }
+        _proceedWithShepherd();
+        return;
       case Providers.paymentwall:
         if (isDesktop()) {
           _proceedWithPaymentRedirect(Providers.paymentwall);
@@ -328,13 +280,18 @@ class _CheckoutState extends State<Checkout>
         }
         _proceedWithShepherdPay();
         break;
+      case Providers.test:
+        if (isDesktop()) {
+          _proceedTestRequest();
+          return;
+        }
     }
   }
 
   Future<void> _proceedWithStripe() async {
     await context.pushRoute(
       StripeCheckout(
-        email: emailController.text,
+        email: widget.email!,
         refCode: refCodeController.text,
         plan: widget.plan,
         isPro: widget.isPro,
@@ -347,7 +304,7 @@ class _CheckoutState extends State<Checkout>
       context.loaderOverlay.show();
       final value = await sessionModel.generatePaymentRedirectUrl(
           planID: widget.plan.id,
-          email: emailController.text,
+          email: widget.email!,
           paymentProvider: Providers.btcpay);
 
       context.loaderOverlay.hide();
@@ -382,12 +339,47 @@ class _CheckoutState extends State<Checkout>
 
       final value = await sessionModel.generatePaymentRedirectUrl(
           planID: widget.plan.id,
-          email: emailController.text,
+          email: widget.email!,
           paymentProvider: Providers.fropay);
 
       context.loaderOverlay.hide();
       final froPayURL = value;
       await sessionModel.openWebview(froPayURL);
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
+  }
+
+  void _proceedTestRequest() async {
+      try {
+        context.loaderOverlay.show();
+        final value = await sessionModel.testProviderRequest(
+            widget.email!, Providers.test.name, widget.plan.id);
+        context.loaderOverlay.hide();
+        if (widget.isPro) {
+          showSuccessDialog(context, widget.isPro);
+        } else {
+          resolveRoute();
+        }
+      } catch (error, stackTrace) {
+        context.loaderOverlay.hide();
+        showError(context, error: error, stackTrace: stackTrace);
+      }
+  }
+
+  void _proceedWithShepherd() async {
+    try {
+      context.loaderOverlay.show();
+
+      final value = await sessionModel.generatePaymentRedirectUrl(
+          planID: widget.plan.id,
+          email: widget.email!,
+          paymentProvider: Providers.shepherd);
+
+      context.loaderOverlay.hide();
+      final shepherdURL = value;
+      await sessionModel.openWebview(shepherdURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -423,7 +415,7 @@ class _CheckoutState extends State<Checkout>
       final redirectUrl = await sessionModel.paymentRedirectForDesktop(
         context,
         widget.plan.id,
-        emailController.text,
+        widget.email!,
         provider,
       );
       context.loaderOverlay.hide();
@@ -445,7 +437,7 @@ class _CheckoutState extends State<Checkout>
       context.loaderOverlay.show();
       final value = await sessionModel.generatePaymentRedirectUrl(
           planID: widget.plan.id,
-          email: emailController.text,
+          email: widget.email!,
           paymentProvider: Providers.paymentwall);
 
       context.loaderOverlay.hide();
@@ -466,7 +458,7 @@ class _CheckoutState extends State<Checkout>
       var currencyCost = widget.plan.price[currency];
       if (currencyCost == null) return;
       await sessionModel.submitFreekassa(
-        emailController.text,
+        widget.email!,
         widget.plan.id,
         currencyCost.toString(),
       );
@@ -497,7 +489,7 @@ class _CheckoutState extends State<Checkout>
       if (refCode.text.isNotEmpty) {
         await sessionModel.applyRefCode(refCode.text);
       }
-      resolvePaymentRoute();
+      resolvePaymentMethod();
     } catch (e) {
       if (refCode.text.isNotEmpty) {
         refCodeController.error = 'invalid_or_incomplete_referral_code'.i18n;
@@ -507,19 +499,29 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-  Future<bool> checkIfEmailExits() async {
-    try {
-      await sessionModel.checkEmailExists(
-        emailController.value.text,
-      );
-      return false;
-    } catch (error, stackTrace) {
-      showError(
-        context,
-        error: error,
-        stackTrace: stackTrace,
-      );
-      return false;
+  void resolveRoute() {
+    switch (widget.authFlow!) {
+      case AuthFlow.createAccount:
+        context.pushRoute(CreateAccountPassword(
+          email: widget.email.validateEmail,
+          code: widget.verificationPin!,
+        ));
+        break;
+      case AuthFlow.reset:
+        // TODO: Handle this case.
+        break;
+      case AuthFlow.signIn:
+        // TODO: Handle this case.
+        break;
+
+      case AuthFlow.verifyEmail:
+      // TODO: Handle this case.
+      case AuthFlow.proCodeActivation:
+      // TODO: Handle this case.
+      case AuthFlow.changeEmail:
+      // TODO: Handle this case.
+      case AuthFlow.updateAccount:
+      // TODO: Handle this case.
     }
   }
 }

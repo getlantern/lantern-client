@@ -421,8 +421,8 @@ github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627 h1:eYXtxjR
 github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627/go.mod h1:QJUudepmTj/KQXnReV6DZSJY/xO05fnfcZf3t8zkNLg=
 github.com/getlantern/shortcut v0.0.0-20211026183428-bf59a137fdec h1:8TfjIMydnhBs4edmXu2Nz1f2P0QOcXfol2rR1cxfrSs=
 github.com/getlantern/shortcut v0.0.0-20211026183428-bf59a137fdec/go.mod h1:3VQ6qvEBehqDBNbEKfNtSjK6MR5ydOdjMPgKjKay7vo=
-github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b h1:sn68kKTXZ6k7vyhPfYvjtoDSMufTlvvkAZ6Y+VJ25ZA=
-github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b/go.mod h1:qjD2ty3qu7E12mJ2gVU/I2wCuebaLR5ePSQLY3eXrDQ=
+github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb h1:9eaFCu1MZ5yp1vpg6KNOkjTzQnfo2MAbgqOqL/AnmAw=
+github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb/go.mod h1:sIaf1EQGv8d+l71iPiFYiLJtBp9fRy5wgO3mTFXSPzM=
 github.com/getlantern/telemetry v0.0.0-20230523155019-be7c1d8cd8cb h1:6XZ3Q4oD6A1Tjq6QLgzzQrdQ8FvulzW16HhNQOSECAM=
 github.com/getlantern/telemetry v0.0.0-20230523155019-be7c1d8cd8cb/go.mod h1:nGOdDc0aD/LRTaY2SGKQ7nsYcWFXrhgkrhIhJuYN614=
 github.com/getlantern/testify v0.0.0-20160317154340-2eeb3906e78f h1:R6iv+VzCrbxlBm2TcgyJi9c7tQguNXi9JmIvuUJKrdc=
@@ -684,6 +684,8 @@ github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742/go.mod h1:bx2lN
 github.com/modern-go/reflect2 v1.0.1/go.mod h1:bx2lNnkwVCuqBIxFjflWJWanXIb3RllmbCylyMrvgv0=
 github.com/montanaflynn/stats v0.5.0 h1:2EkzeTSqBB4V4bJwWrt5gIIrZmpJBcoIRGS2kWLgzmk=
 github.com/montanaflynn/stats v0.5.0/go.mod h1:wL8QJuTMNUDYhXwkmfOly8iTdp5TEcJFWZD2D7SIkUc=
+github.com/moul/http2curl v1.0.0 h1:dRMWoAtb+ePxMlLkrCbAqh4TlPHXvoGUSQ323/9Zahs=
+github.com/moul/http2curl v1.0.0/go.mod h1:8UbvGypXm98wA/IqH45anm5Y2Z6ep6O31QGOAZ3H0fQ=
 github.com/mschoch/smat v0.0.0-20160514031455-90eadee771ae/go.mod h1:qAyveg+e4CE+eKJXWVjKXM4ck2QobLqTDytGJbLLhJg=
 github.com/mschoch/smat v0.2.0 h1:8imxQsjDm8yFEAVBe7azKmKSgzSkZXDuKkSq9374khM=
 github.com/mschoch/smat v0.2.0/go.mod h1:kc9mz7DoBKqDyiRL7VZN8KvXQMWeTaVnttLRXOlotKw=

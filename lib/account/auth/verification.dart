@@ -115,7 +115,8 @@ class _VerificationState extends State<Verification> {
       case AuthFlow.changeEmail:
         resendChangeEmailVerificationCode();
       case AuthFlow.signIn:
-  /// there is no verification flow for sign in
+
+      /// there is no verification flow for sign in
       case AuthFlow.updateAccount:
         resendResetEmailVerificationCode();
     }
@@ -156,7 +157,8 @@ class _VerificationState extends State<Verification> {
         _verifyEmail(code);
         break;
       case AuthFlow.reset:
-        openResetPassword(code);
+        _verifyEmail(code);
+
         break;
       case AuthFlow.signIn:
 
@@ -175,7 +177,8 @@ class _VerificationState extends State<Verification> {
   }
 
   void openResetPassword(String code) {
-    context.pushRoute(ResetPassword(email: widget.email, code: code,authFlow: widget.authFlow));
+    context.pushRoute(ResetPassword(
+        email: widget.email, code: code, authFlow: widget.authFlow));
   }
 
   void _verifyEmail(String code) async {
@@ -228,6 +231,16 @@ class _VerificationState extends State<Verification> {
 
   // Purchase flow
   void startPurchase() {
+    switch (Platform.operatingSystem) {
+      case "ios":
+        _proceedToCheckoutIOS();
+        break;
+      default:
+        _proceedToCheckout();
+    }
+  }
+
+  void _proceedToCheckoutIOS() {
     assert(widget.plan != null, 'Plan object is null');
     final appPurchase = sl<AppPurchase>();
     try {
@@ -260,6 +273,16 @@ class _VerificationState extends State<Verification> {
     }
   }
 
+  void _proceedToCheckout() {
+    context.pushRoute(Checkout(
+      plan: widget.plan!,
+      isPro: false,
+      authFlow: widget.authFlow,
+      email: widget.email,
+      verificationPin: pinCodeController.text,
+    ));
+  }
+
   void openPassword() {
     context.pushRoute(CreateAccountPassword(
       email: widget.email.validateEmail,
@@ -272,7 +295,7 @@ class _VerificationState extends State<Verification> {
       case AuthFlow.signIn:
       // TODO: Handle this case.
       case AuthFlow.reset:
-        context.router.maybePop();
+        openResetPassword(code);
       case AuthFlow.createAccount:
         startPurchase();
       case AuthFlow.verifyEmail:
@@ -292,7 +315,8 @@ class _VerificationState extends State<Verification> {
 
   Future<void> onBackPressed() async {
     if (widget.authFlow == AuthFlow.createAccount ||
-        widget.authFlow == AuthFlow.updateAccount||widget.authFlow == AuthFlow.proCodeActivation) {
+        widget.authFlow == AuthFlow.updateAccount ||
+        widget.authFlow == AuthFlow.proCodeActivation) {
       assert(widget.tempPassword != null, 'Temp password is null');
       // if user press back button while creating account
       // we need to delete that temp account

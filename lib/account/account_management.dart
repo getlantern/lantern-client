@@ -309,11 +309,11 @@ class _AccountManagementState extends State<AccountManagement>
             header: 'lantern_pro_email'.i18n,
             icon: ImagePaths.email,
             content: emailAddress,
-            trailingArray: [
-            ],
+            trailingArray: [],
           );
         }),
-        if(Platform.isIOS)
+
+        if(!Platform.isAndroid)
         ListItemFactory.settingsItem(
           header: 'password'.i18n,
           icon: ImagePaths.lockFiled,
@@ -339,7 +339,7 @@ class _AccountManagementState extends State<AccountManagement>
         }),
         //Disable device linking in IOS
         const UserDevices(),
-        if(Platform.isIOS)
+        if(!Platform.isAndroid)
         ListItemFactory.settingsItem(
           header: 'danger_zone'.i18n,
           icon: ImagePaths.alert,
@@ -428,6 +428,7 @@ class UserDevices extends StatelessWidget {
           return Column(children: [
             ...devices.devices.map<Widget>((device) {
               var isMyDevice = device.id == myDeviceId;
+              print('Device: ${device.id} isMyDevice: $myDeviceId');
               var allowRemoval = devices.devices.length > 1 || !isMyDevice;
               var index = devices.devices.indexWhere((d) => d == device);
               return Padding(

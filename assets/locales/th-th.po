@@ -285,7 +285,7 @@ msgid "cannot_complete_purchase"
 msgstr "ไม่สามารถดำเนินการซื้อได้เสร็จสิ้น"
 
 msgid "discover_not_working"
-msgstr "การค้นหาไม่ทำงาน "
+msgstr "การค้นพบใหม่ไม่ทำงาน"
 
 msgid "cannot_sign_in"
 msgstr "ไม่สามารถเข้าสู่ระบบ"
@@ -447,6 +447,9 @@ msgstr "เลือกวิธีการชำระเงิน"
 
 msgid "pro_plan"
 msgstr "แผน Pro"
+
+msgid "one_month_plan"
+msgstr ""
 
 msgid "one_year_plan"
 msgstr "แผน 1 ปี"
@@ -1748,7 +1751,7 @@ msgid "recovery_not_found"
 msgstr "อุปกรณ์ที่ไม่เชื่อมโยงกับผู้ใช้รายนี้"
 
 msgid "device_added"
-msgstr "อุปกรณ์ที่ไม่เชื่อมโยงกับผู้ใช้รายนี้"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

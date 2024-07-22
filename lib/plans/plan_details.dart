@@ -60,7 +60,7 @@ class _PlanCardState extends State<PlanCard> {
                         CText(
                           planName == '1y'
                               ? 'one_year_plan'.i18n
-                              : 'two_year_plan'.i18n,
+                              : (planName == '1m' ? 'one_month_plan'.i18n : 'two_year_plan'.i18n),
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
@@ -132,8 +132,15 @@ class _PlanCardState extends State<PlanCard> {
         resolveRouteIOS();
         break;
       default:
-        // proceed to the default checkout page on Android and desktop
-        _checkOut(context);
+        if(Platform.isAndroid){
+          _processCheckOut(context);
+        return;
+        }
+        if (widget.isPro) {
+          _processCheckOut(context);
+        } else {
+          signUpFlow();
+        }
         break;
     }
   }
@@ -150,8 +157,8 @@ class _PlanCardState extends State<PlanCard> {
     return providers;
   }
 
-  Future<void> _checkOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
+  Future<void> _processCheckOut(BuildContext context) async {
+    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // * Play version (Android only)
     if (isPlayVersion && !inRussia) {
@@ -182,17 +189,19 @@ class _PlanCardState extends State<PlanCard> {
       }
     }
 
+    final email = sessionModel.userEmail.value;
     // * Proceed to our own Checkout
     await context.pushRoute(
       Checkout(
         plan: widget.plan,
         isPro: widget.isPro,
+        email: email,
       ),
     );
   }
 
   void resolveRouteIOS() {
-    if (widget.isPro ) {
+    if (widget.isPro) {
       //user is signed in
       _proceedToCheckoutIOS(context);
     } else {

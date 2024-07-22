@@ -4,14 +4,14 @@
 # fffw <fffw@getlantern.org>, 2023
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2024
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2024
-# e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024
 # axel <axel+transifex@axelsimon.net>, 2024
 # AO <ao@localizationlab.org>, 2024
 # Derek F <derek@getlantern.org>, 2024
+# e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
+"Last-Translator: e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024\n"
 "Language-Team: French (Canada) (https://app.transifex.com/lantern-1/teams/94371/fr_CA/)\n"
 "Language: fr_CA\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -294,7 +294,7 @@ msgid "cannot_complete_purchase"
 msgstr "Impossible de terminer l’achat"
 
 msgid "discover_not_working"
-msgstr "Découverte ne fonctionne pas "
+msgstr "La fonctionnalité de découverte ne fonctionne pas"
 
 msgid "cannot_sign_in"
 msgstr "Impossible de se connecter"
@@ -465,6 +465,9 @@ msgstr "Choisissez un mode de paiement"
 
 msgid "pro_plan"
 msgstr "Abonnement Pro"
+
+msgid "one_month_plan"
+msgstr ""
 
 msgid "one_year_plan"
 msgstr "Abonnement d’un an"
@@ -1817,7 +1820,7 @@ msgid "recovery_not_found"
 msgstr "L’appareil n’est pas associé à cet utilisateur"
 
 msgid "device_added"
-msgstr "L’appareil n’est pas associé à cet utilisateur"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""
