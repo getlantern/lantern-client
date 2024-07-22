@@ -36,6 +36,7 @@ import (
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
+
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/features"
@@ -376,6 +377,27 @@ func (app *App) SetLanguage(lang string) {
 	}
 }
 
+func (app *App) SetUserLoggedIn(value bool) {
+	app.settings.SetUserLoggedIn(value)
+	if app.ws != nil {
+		app.ws.SendMessage("pro", map[string]interface{}{
+			"login": value,
+		})
+	}
+}
+
+func (app *App) IsUserLoggedIn() bool {
+	return app.Settings().IsUserLoggedIn()
+
+}
+
+// Create func that send message to UI
+func (app *App) SendMessageToUI(service string, message interface{}) {
+	if app.ws != nil {
+		app.ws.SendMessage(service, message)
+	}
+}
+
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
 func (app *App) OnSettingChange(attr settings.SettingName, cb func(interface{})) {
@@ -456,8 +478,6 @@ func (app *App) HasSucceedingProxy() bool {
 }
 
 func (app *App) GetHasConfigFetched() bool {
-
-	log.Debugf("Global config fetched: %v, Proxies config fetched: %v")
 	return atomic.LoadInt32(&app.fetchedGlobalConfig) == 1
 }
 

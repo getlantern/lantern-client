@@ -9,7 +9,6 @@
 # Serg <sergkoshkin@yandex.ru>, 2023
 # e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2023
 # e2f_ru r1 <tx_e2f_ru_r1@ate2f.com>, 2023
-# Deanna D, 2024
 # Anna Evdokimova <anna.evdokimova@yahoo.com>, 2024
 # Helen Russel <coo@workogram.com>, 2024
 # Tina T, 2024
@@ -18,10 +17,11 @@
 # Derek F <derek@getlantern.org>, 2024
 # tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2024
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024
+# Deanna D, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024\n"
+"Last-Translator: Deanna D, 2024\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -295,7 +295,7 @@ msgid "cannot_complete_purchase"
 msgstr "Ваша покупка не может быть завершена"
 
 msgid "discover_not_working"
-msgstr "Функция обнаружения не работает "
+msgstr "Не удается запустить Обзор "
 
 msgid "cannot_sign_in"
 msgstr "Не удается войти в аккаунт"

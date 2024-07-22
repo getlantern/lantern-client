@@ -104,8 +104,6 @@ class _HomePageState extends State<HomePage> with WindowListener {
   }
 
   Future<void> _checkForFirstTimeVisit() async {
-    if (!Platform.isIOS) return;
-
     checkForFirstTimeVisit() async {
       if (sessionModel.proUserNotifier.value == null) {
         return;
@@ -215,9 +213,9 @@ class _HomePageState extends State<HomePage> with WindowListener {
               // not already been accepted
               return const PrivacyDisclosure();
             }
-            if (Platform.isIOS) {
+
+            if(!Platform.isAndroid){
               userNew(() {
-                print("called user new function");
                 _checkForFirstTimeVisit();
               });
             }

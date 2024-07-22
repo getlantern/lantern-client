@@ -285,7 +285,7 @@ msgid "cannot_complete_purchase"
 msgstr "ไม่สามารถดำเนินการซื้อได้เสร็จสิ้น"
 
 msgid "discover_not_working"
-msgstr "การค้นหาไม่ทำงาน "
+msgstr "การค้นพบใหม่ไม่ทำงาน"
 
 msgid "cannot_sign_in"
 msgstr "ไม่สามารถเข้าสู่ระบบ"
