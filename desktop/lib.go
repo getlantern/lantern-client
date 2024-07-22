@@ -73,6 +73,9 @@ func start() {
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
 
+	// this is used to setup a new signal handler in C that overrides the current one so that SA_ONSTACK is used.
+	installSignalHandlers()
+
 	// Load application configuration from .env file
 	err := godotenv.Load()
 	if err != nil {
