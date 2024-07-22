@@ -34,13 +34,8 @@ class Settings extends StatelessWidget {
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
-  void openWebView(String url, BuildContext context, String title) async {
-    if (isDesktop()) {
-      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
-    } else if (isMobile()) {
-      context.pushRoute(AppWebview(url: url, title: title));
-    }
-  }
+  void openWebView(String url, BuildContext context, String title) async =>
+    await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
 
   Future<void> checkForUpdateTap(BuildContext context) async {
     if (Platform.isAndroid) {
