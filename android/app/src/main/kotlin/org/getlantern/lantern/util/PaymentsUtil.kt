@@ -198,7 +198,6 @@ class PaymentsUtil(private val activity: Activity) {
                             null,
                         )
                     }
-
                 }
             },
         )

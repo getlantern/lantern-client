@@ -176,12 +176,16 @@ class SessionModel extends Model {
     );
   }
 
-  Widget playVersion(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
+  // Widget playVersion(ValueWidgetBuilder<bool> builder) {
+  //   return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
+  // }
+
+  Widget storeVersion(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('storeVersion', builder: builder);
   }
 
   Future<void> setPlayVersion(bool on) {
-    return methodChannel.invokeMethod('setPlayVersion', <String, dynamic>{
+    return methodChannel.invokeMethod('setStoreVersion', <String, dynamic>{
       'on': on,
     });
   }

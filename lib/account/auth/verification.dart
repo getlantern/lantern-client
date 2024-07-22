@@ -278,12 +278,7 @@ class _VerificationState extends State<Verification> {
     final inRussia = sessionModel.country.value == 'RU';
     // * Play version (Android only)
     if (isPlayVersion && !inRussia) {
-      await context.pushRoute(
-        PlayCheckout(
-          plan: widget.plan!,
-          isPro: false,
-        ),
-      );
+      _startGoogleCheckout();
       return;
     }
     final email = sessionModel.userEmail.value;
@@ -295,6 +290,25 @@ class _VerificationState extends State<Verification> {
         email: email,
       ),
     );
+  }
+
+  // Make sure this google play flow is only for play version
+  // it will take care of purchase flow and also calling /purchase api on native end
+  Future<void> _startGoogleCheckout() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.submitPlayPayment(widget.plan!.id, widget.email);
+      context.loaderOverlay.hide();
+      Future.delayed(const Duration(milliseconds: 400), openPassword);
+    } catch (e) {
+      mainLogger.e("Error while purchase flow", error: e);
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        description: e.toString(),
+      );
+    }
   }
 
   void openPassword() {

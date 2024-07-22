@@ -90,7 +90,7 @@ class MainActivity :
         opts.model = DeviceUtil.model()
         opts.osVersion = DeviceUtil.deviceOs()
 //        opts.playVersion = DeviceUtil.isStoreVersion(this)
-//        opts.playVersion = true
+        opts.playVersion = true
         opts.device = DeviceUtil.model()
         opts.paymentTestMode = false
         opts.platform = "android"

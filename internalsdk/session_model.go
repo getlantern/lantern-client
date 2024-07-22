@@ -238,7 +238,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "setStoreVersion":
-		err := setStoreVersion(m.baseModel, arguments.Scalar().Bool())
+		value := arguments.Get("on").Bool()
+		err := setStoreVersion(m.baseModel, value)
 		if err != nil {
 			return nil, err
 		}
@@ -545,7 +546,6 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return url, nil
-	case "setStoreVersion":
 
 	default:
 		return m.methodNotImplemented(method)
@@ -2132,13 +2132,6 @@ func (session *SessionModel) updateAppData(appName string, allowedAccess bool) e
 			Icon:          appData.Icon,
 			AllowedAccess: allowedAccess,
 		}, "")
-	})
-
-}
-
-func (session *SessionModel) setStoreVersion(storeVersion bool) {
-	pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.Put[bool](tx, pathStoreVersion, storeVersion, "")
 	})
 
 }

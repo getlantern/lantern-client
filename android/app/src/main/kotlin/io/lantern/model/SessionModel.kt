@@ -80,7 +80,7 @@ class SessionModel internal constructor(
     private fun checkIfPlayStoreVersion() {
         try {
             if (BuildConfig.PLAY_VERSION) {
-                model.invokeMethod("setStoreVersion", Arguments(true))
+                model.invokeMethod("setStoreVersion", Arguments(mapOf("on" to true)))
                 return
             }
 
@@ -93,9 +93,10 @@ class SessionModel internal constructor(
             val installer = activity.packageManager
                 .getInstallerPackageName(activity.packageName)
 
+            val found = installer != null && validInstallers.contains(installer)
             model.invokeMethod(
                 "setStoreVersion",
-                Arguments(installer != null && validInstallers.contains(installer))
+                Arguments(mapOf("on" to found))
             )
 
         } catch (e: java.lang.Exception) {
