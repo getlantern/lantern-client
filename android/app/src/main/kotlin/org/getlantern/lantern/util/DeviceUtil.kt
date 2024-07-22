@@ -13,13 +13,15 @@ object DeviceUtil {
     fun devicePlatform(): String {
         return "Android"
     }
-    fun deviceId(context:Context): String? {
-       return  Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+
+    fun deviceId(context: Context): String? {
+        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
-    fun deviceOs():String{
-       return String.format("Android-%s", Build.VERSION.RELEASE)
+    fun deviceOs(): String {
+        return String.format("Android-%s", Build.VERSION.RELEASE)
     }
+
     fun model(): String {
         return android.os.Build.MODEL ?: ""
     }
@@ -35,6 +37,9 @@ object DeviceUtil {
 
     fun isStoreVersion(activity: Activity): Boolean {
         try {
+            if (BuildConfig.PLAY_VERSION) {
+                return true
+            }
             val validInstallers: List<String> = ArrayList(
                 listOf(
                     "com.android.vending",

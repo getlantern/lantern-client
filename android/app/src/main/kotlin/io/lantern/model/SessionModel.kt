@@ -73,6 +73,40 @@ class SessionModel internal constructor(
         LanternApp.setGoSession(model)
         updateAppsData()
         paymentUtils = PaymentsUtil(activity)
+        checkIfPlayStoreVersion()
+    }
+
+
+    private fun checkIfPlayStoreVersion() {
+        try {
+            if (BuildConfig.PLAY_VERSION) {
+                model.invokeMethod("setStoreVersion", Arguments(true))
+                return
+            }
+
+            val validInstallers: List<String> = ArrayList(
+                listOf(
+                    "com.android.vending",
+                    "com.google.android.feedback"
+                )
+            )
+            val installer = activity.packageManager
+                .getInstallerPackageName(activity.packageName)
+
+            model.invokeMethod(
+                "setStoreVersion",
+                Arguments(installer != null && validInstallers.contains(installer))
+            )
+
+        } catch (e: java.lang.Exception) {
+            Logger.error(TAG, "Error fetching package information: " + e.message)
+        }
+    }
+
+
+    fun createUser(): Boolean {
+        val result = model.invokeMethod("createUser", Arguments(""))
+        return result.toJava().toString() == "true";
     }
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {

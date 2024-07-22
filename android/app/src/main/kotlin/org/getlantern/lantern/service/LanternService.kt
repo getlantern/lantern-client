@@ -1,27 +1,21 @@
 package org.getlantern.lantern.service
 
+//import org.getlantern.lantern.model.LanternHttpClient
 import android.app.Service
 import android.content.Intent
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.annotation.Nullable
-import com.google.gson.JsonObject
-import okhttp3.HttpUrl
-import okhttp3.Response
 import org.androidannotations.annotations.EService
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
-//import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.LanternStatus.Status
-import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.util.AutoUpdater
-import org.getlantern.lantern.util.Json
 import org.getlantern.mobilesdk.Lantern
 import org.getlantern.mobilesdk.LanternNotRunningException
 import org.getlantern.mobilesdk.Logger
@@ -44,14 +38,14 @@ open class LanternService : Service(), Runnable {
 
     private var thread: Thread? = null
     private val createUserHandler: Handler = Handler(Looper.getMainLooper())
-//    private val createUserRunnable: CreateUser = CreateUser(this)
+    private val createUserRunnable: CreateUser = CreateUser(this)
     private val random: Random = Random()
-//    private val serviceIcon: Int = if (LanternApp.getSession().chatEnabled()) {
-//        R.drawable.status_chat
-//    } else {
-//        R.drawable.status_plain
-//    }
-//    private val helper: ServiceHelper = ServiceHelper(this, serviceIcon, R.string.ready_to_connect)
+    private val serviceIcon: Int = if (LanternApp.getSession().chatEnabled()) {
+        R.drawable.status_chat
+    } else {
+        R.drawable.status_plain
+    }
+    private val helper: ServiceHelper = ServiceHelper(this, serviceIcon, R.string.ready_to_connect)
     private val started: AtomicBoolean = AtomicBoolean()
     private lateinit var autoUpdater: AutoUpdater
 
@@ -85,10 +79,8 @@ open class LanternService : Service(), Runnable {
     override fun run() {
         // move the current thread of the service to the background
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
-
         val locale = LanternApp.getSession().language
         val settings = LanternApp.getSession().settings
-
         try {
             Logger.debug(TAG, "Successfully loaded config: $settings")
             val result: StartResult =
@@ -107,7 +99,6 @@ open class LanternService : Service(), Runnable {
             EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING)
             createUser(0)
         }
-
         if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
             // check if an update is available
             autoUpdater.checkForUpdates()
@@ -126,68 +117,52 @@ open class LanternService : Service(), Runnable {
         val maxBackOffTime = 60000L // maximum backoff time in milliseconds (e.g., 1 minute)
         val timeOut =
             (baseWaitMs * Math.pow(2.0, attempt.toDouble())).toLong().coerceAtMost(maxBackOffTime)
-//        createUserHandler.postDelayed(createUserRunnable, timeOut)
+        createUserHandler.postDelayed(createUserRunnable, timeOut)
     }
 
-//    private class CreateUser(val service: LanternService) : Runnable,
-//        LanternHttpClient.ProCallback {
-//
-//        private var attempts: Int = 0
-//
-//        override fun run() {
-//            val url: HttpUrl = LanternHttpClient.createProUrl("/user-create")
-//            val json: JsonObject = JsonObject()
-//            json.addProperty("locale", LanternApp.getSession().language)
-//            lanternClient.post(url, LanternHttpClient.createJsonBody(json), this)
-//        }
-//
-//        override fun onFailure(@Nullable throwable: Throwable?, @Nullable error: ProError?) {
-//            if (attempts >= MAX_CREATE_USER_TRIES) {
-//                Logger.error(TAG, "Max. number of tries made to create Pro user")
-//                EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
-//                return
-//            }
-//            attempts++
-//            service.createUser(attempts)
-//        }
-//
-//        override fun onSuccess(response: Response?, result: JsonObject?) {
-//            val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
-//            if (user == null) {
-//                Logger.error(TAG, "Unable to parse user from JSON")
-//                return
-//            }
-//            service.createUserHandler.removeCallbacks(service.createUserRunnable)
-//            Logger.debug(TAG, "Created new Lantern user: ${user.newUserDetails()}")
-//            LanternApp.getSession().setUserIdAndToken(user.userId, user.token)
-//            val referral = user.referral
-//            if (!referral.isEmpty()) {
-//                LanternApp.getSession().setCode(referral)
-//            }
-//            EventHandler.postStatusEvent(LanternStatus(Status.ON))
-//            EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
-//        }
-//    }
+    private class CreateUser(val service: LanternService) : Runnable {
+    private var attempts: Int = 0
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        if (!started.get()) {
-//            Logger.debug(TAG, "Service never started, exit immediately")
-//            return
-//        }
-//        helper.onDestroy()
-//        thread?.interrupt()
-//        try {
-//            Logger.debug(TAG, "Unregistering screen state receiver")
-//            createUserHandler.removeCallbacks(createUserRunnable)
-//        } catch (e: Exception) {
-//            Logger.error(TAG, "Exception", e)
-//        }
-//        // We want to keep the service running as much as possible to allow receiving messages, so
-//        // we start it back up automatically as explained at https://stackoverflow.com/a/52258125.
-//        val broadcastIntent = Intent()
-//            .setAction("restartservice")
-//            .setClass(this, AutoStarter::class.java)
-//        sendBroadcast(broadcastIntent)
-//    }
+        override fun run() {
+            try {
+                val userCreated = LanternApp.getSession().createUser()
+                if (userCreated) {
+                    service.createUserHandler.removeCallbacks(service.createUserRunnable)
+                    EventHandler.postStatusEvent(LanternStatus(Status.ON))
+                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
+                }
+            } catch (e: Exception) {
+                if (attempts >= MAX_CREATE_USER_TRIES) {
+                    Logger.error(TAG, "Max. number of tries made to create Pro user")
+                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
+                    return
+                }
+                attempts++
+                service.createUser(attempts)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!started.get()) {
+            Logger.debug(TAG, "Service never started, exit immediately")
+            return
+        }
+        helper.onDestroy()
+        thread?.interrupt()
+        try {
+            Logger.debug(TAG, "Unregistering screen state receiver")
+            createUserHandler.removeCallbacks(createUserRunnable)
+        } catch (e: Exception) {
+            Logger.error(TAG, "Exception", e)
+        }
+        // We want to keep the service running as much as possible to allow receiving messages, so
+        // we start it back up automatically as explained at https://stackoverflow.com/a/52258125.
+        val broadcastIntent = Intent()
+            .setAction("restartservice")
+            .setClass(this, AutoStarter::class.java)
+        sendBroadcast(broadcastIntent)
+    }
 }
+

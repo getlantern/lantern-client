@@ -236,7 +236,7 @@ class _VerificationState extends State<Verification> {
         _proceedToCheckoutIOS();
         break;
       default:
-        _proceedToCheckout();
+        _processCheckOut();
     }
   }
 
@@ -273,14 +273,28 @@ class _VerificationState extends State<Verification> {
     }
   }
 
-  void _proceedToCheckout() {
-    context.pushRoute(Checkout(
-      plan: widget.plan!,
-      isPro: false,
-      authFlow: widget.authFlow,
-      email: widget.email,
-      verificationPin: pinCodeController.text,
-    ));
+  Future<void> _processCheckOut() async {
+    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
+    final inRussia = sessionModel.country.value == 'RU';
+    // * Play version (Android only)
+    if (isPlayVersion && !inRussia) {
+      await context.pushRoute(
+        PlayCheckout(
+          plan: widget.plan!,
+          isPro: false,
+        ),
+      );
+      return;
+    }
+    final email = sessionModel.userEmail.value;
+    // * Proceed to our own Checkout
+    await context.pushRoute(
+      Checkout(
+        plan: widget.plan!,
+        isPro: false,
+        email: email,
+      ),
+    );
   }
 
   void openPassword() {

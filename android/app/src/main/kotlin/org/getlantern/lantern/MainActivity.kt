@@ -89,7 +89,7 @@ class MainActivity :
         opts.deviceID =DeviceUtil.deviceId(this)
         opts.model = DeviceUtil.model()
         opts.osVersion = DeviceUtil.deviceOs()
-        opts.playVersion = DeviceUtil.isStoreVersion(this)
+//        opts.playVersion = DeviceUtil.isStoreVersion(this)
 //        opts.playVersion = true
         opts.device = DeviceUtil.model()
         opts.paymentTestMode = false

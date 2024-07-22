@@ -19,7 +19,7 @@ class SessionModel extends Model {
   late final EventManager eventManager;
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  late ValueNotifier<bool?> isPlayVersion;
+  // late ValueNotifier<bool?> isPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<bool?> proUserNotifier;
@@ -35,10 +35,10 @@ class SessionModel extends Model {
         'storeVersion',
         false,
       );
-      isPlayVersion = singleValueNotifier(
-        'playVersion',
-        false,
-      );
+      // isPlayVersion = singleValueNotifier(
+      //   'playVersion',
+      //   false,
+      // );
       /*Note
       * Make proxyAvailable default value to true on IOS it take some to get data from go side
       * So show banner only if proxyAvailable is false
@@ -58,11 +58,11 @@ class SessionModel extends Model {
       );
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
-      isPlayVersion = ffiValueNotifier(
-        ffiPlayVersion,
-        'isPlayVersion',
-        false,
-      );
+      // isPlayVersion = ffiValueNotifier(
+      //   ffiPlayVersion,
+      //   'isPlayVersion',
+      //   false,
+      // );
       isStoreVersion = ffiValueNotifier(
         ffiStoreVersion,
         'isStoreVersion',

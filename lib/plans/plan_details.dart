@@ -132,10 +132,6 @@ class _PlanCardState extends State<PlanCard> {
         resolveRouteIOS();
         break;
       default:
-        if(Platform.isAndroid){
-          _processCheckOut(context);
-        return;
-        }
         if (widget.isPro) {
           _processCheckOut(context);
         } else {
@@ -158,7 +154,7 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   Future<void> _processCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // * Play version (Android only)
     if (isPlayVersion && !inRussia) {
