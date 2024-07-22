@@ -66,13 +66,13 @@ class SessionModel internal constructor(
         activity.packageManager, activity.packageName
     )
     private val inAppBilling = InAppBilling(activity)
-    private lateinit var paymentUtils: PaymentsUtil
+    private var paymentUtils: PaymentsUtil
 
     init {
         LanternApp.setSession(this)
         LanternApp.setGoSession(model)
         updateAppsData()
-        paymentUtils = PaymentsUtil(activity, inAppBilling)
+        paymentUtils = PaymentsUtil(activity)
     }
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {

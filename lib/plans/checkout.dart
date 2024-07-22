@@ -321,7 +321,7 @@ class _CheckoutState extends State<Checkout>
       context.loaderOverlay.show();
       final value = await sessionModel.generatePaymentRedirectUrl(
           planID: widget.plan.id,
-          email: emailController.text,
+          email: widget.email!,
           paymentProvider: Providers.shepherd);
 
       context.loaderOverlay.hide();

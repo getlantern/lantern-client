@@ -13,6 +13,7 @@ open class DBAdapter(val db: SQLiteDatabase) : DB {
     init {
         setPragmaSettings()
     }
+
     private fun setPragmaSettings() {
         db.query("PRAGMA journal_mode = WAL")
         db.query("PRAGMA busy_timeout = 5000")
@@ -31,6 +32,7 @@ open class DBAdapter(val db: SQLiteDatabase) : DB {
 
 class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx {
     val id = UUID.randomUUID().toString()
+
     @Volatile
     private var isSavepointActive = false
 
@@ -51,13 +53,18 @@ class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx 
 
     @Synchronized
     override fun commit() {
-        if (isSavepointActive) {
-            sqliteDB.execSQL("RELEASE ${id.quote()}")
-            Log.d("Database", "RELEASE ${id.quote()}")
-            isSavepointActive = false
-        } else {
-            Log.w("Database", "No active savepoint to release")
+        try {
+            if (isSavepointActive) {
+                sqliteDB.execSQL("RELEASE ${id.quote()}")
+                Log.d("Database", "RELEASE ${id.quote()}")
+                isSavepointActive = false
+            } else {
+                Log.w("Database", "No active savepoint to release")
+            }
+        } catch (e: Exception) {
+            Log.e("Database", "Error while commit", e)
         }
+
     }
 
     @Synchronized

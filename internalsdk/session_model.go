@@ -754,24 +754,24 @@ func (m *SessionModel) UpdateStats(serverCity string, serverCountry string, serv
 			CountryCode: serverCountryCode,
 		}
 		log.Debugf("UpdateStats city %v country %v hasSucceedingProxy %v serverInfo %v", serverCity, serverCountry, hasSucceedingProxy, serverInfo)
-		// tx, err := m.db.Begin()
-		// if err != nil {
-		// 	log.Errorf("Error while begining transaction %v", err)
-		// 	return err
-		// }
+		// // tx, err := m.db.Begin()
+		// // if err != nil {
+		// // 	log.Errorf("Error while begining transaction %v", err)
+		// // 	return err
+		// // }
 		// pathdb.Put[*protos.ServerInfo](tx, pathServerInfo, serverInfo, "")
 		// pathdb.Put[bool](tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
 		// return tx.Commit()
 
-		// return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		// 	return pathdb.PutAll(tx, map[string]interface{}{
-		// 		// pathServerCountry:     serverCountry,
-		// 		// pathServerCity:        serverCity,
-		// 		// pathServerCountryCode: serverCountryCode,
-		// 		pathServerInfo:         serverInfo,
-		// 		pathHasSucceedingProxy: hasSucceedingProxy,
-		// 	})
-		// })
+		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.PutAll(tx, map[string]interface{}{
+				// pathServerCountry:     serverCountry,
+				// pathServerCity:        serverCity,
+				// pathServerCountryCode: serverCountryCode,
+				pathServerInfo:         serverInfo,
+				pathHasSucceedingProxy: hasSucceedingProxy,
+			})
+		})
 	}
 	return nil
 }
@@ -799,7 +799,7 @@ func setExpiration(m *baseModel, expiration int64) error {
 		return nil
 	}
 	log.Debugf("Expiration value %v", expiration)
-	expiry := time.Unix(0, expiration*int64(time.Second))
+	expiry := time.Unix(expiration, 0)
 	log.Debugf("Expiration value %v", expiry)
 	dateFormat := "01/02/2006"
 	dateStr := expiry.Format(dateFormat)
