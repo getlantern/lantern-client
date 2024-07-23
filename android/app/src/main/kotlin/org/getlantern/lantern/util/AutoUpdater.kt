@@ -1,11 +1,13 @@
 package org.getlantern.lantern.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import internalsdk.Internalsdk
+import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -36,19 +38,14 @@ class AutoUpdater(val context: Context, val activity: Activity? = null) {
 
     private fun noUpdateAvailable() {
         if (activity == null) return
-//        activity.runOnUiThread {
-//            val appName = resources.getString(R.string.app_name)
-//            val noUpdateTitle = resources.getString(R.string.no_update_available)
-//            val noUpdateMsg = String.format(
-//                resources.getString(R.string.have_latest_version),
-//                appName,
-//                LanternApp.getSession().appVersion(),
-//            )
-//            activity.showAlertDialog(noUpdateTitle, noUpdateMsg)
-//        }
+        activity.runOnUiThread {
+            val appName = resources.getString(R.string.app_name)
+            val noUpdateTitle = resources.getString(R.string.no_update_available)
+
+        }
     }
 
-    fun checkForUpdates() {
+    fun checkForUpdates(result: MethodChannel.Result?) {
         if (LanternApp.getSession().isStoreVersion() && activity != null) {
             Utils.openPlayStore(context)
             return
@@ -64,7 +61,9 @@ class AutoUpdater(val context: Context, val activity: Activity? = null) {
                 val deviceInfo: internalsdk.DeviceInfo = DeviceInfo
                 val updateURL = Internalsdk.checkForUpdates(deviceInfo)
                 when {
-                    updateURL.isEmpty() -> noUpdateAvailable()
+                    updateURL.isEmpty() -> {
+                        result?.success("no_new_update")
+                    }
                     else -> startUpdateActivity(updateURL)
                 }
             } catch (e: Exception) {

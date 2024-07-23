@@ -101,7 +101,7 @@ open class LanternService : Service(), Runnable {
         }
         if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
             // check if an update is available
-            autoUpdater.checkForUpdates()
+            autoUpdater.checkForUpdates(null)
         }
         EventHandler.postStatusEvent(LanternStatus(Status.ON))
 

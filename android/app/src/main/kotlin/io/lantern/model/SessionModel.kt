@@ -31,6 +31,7 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
@@ -39,6 +40,8 @@ import org.getlantern.mobilesdk.util.DnsDetector
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.lang.reflect.InvocationTargetException
+import java.util.Currency
+import java.util.Locale
 
 class SessionModel internal constructor(
     private val activity: Activity,
@@ -52,10 +55,7 @@ class SessionModel internal constructor(
 ) {
     companion object {
         const val TAG = "SessionModel"
-        const val PATH_SPLIT_TUNNELING = "/splitTunneling"
-        const val SHOULD_SHOW_GOOGLE_ADS = "shouldShowGoogleAds"
-        const val PATH_APPS_DATA = "/appsData/"
-        val fakeDnsIP = "1.1.1.1"
+        const val fakeDnsIP = "1.1.1.1"
         const val PREFERENCES_SCHEMA = "session_model"
     }
 
@@ -67,6 +67,7 @@ class SessionModel internal constructor(
     )
     private val inAppBilling = InAppBilling(activity)
     private var paymentUtils: PaymentsUtil
+    private val autoUpdater = AutoUpdater(activity, activity)
 
     init {
         LanternApp.setSession(this)
@@ -155,6 +156,11 @@ class SessionModel internal constructor(
                 )
             }
 
+            "checkForUpdates" -> {
+                autoUpdater.checkForUpdates(result)
+
+            }
+
             else -> super.doOnMethodCall(call, result)
         }
 
@@ -167,6 +173,16 @@ class SessionModel internal constructor(
         get() = model.ipAddress()
 
     fun setHasFirstSessionCompleted(bool: Boolean) {
+
+    }
+
+    fun deviceCurrencyCode(): String {
+        val langSplit = language.split("-")
+        val locale = Locale(langSplit[0], langSplit[1])
+        val currency = Currency.getInstance(locale).currencyCode.lowercase()
+        Log.d(TAG, "Currency code: $currency")
+        return currency
+
 
     }
 
@@ -232,6 +248,9 @@ class SessionModel internal constructor(
 
     fun userId(): Long {
         return model.userID
+    }
+    fun email(): String {
+        return model.email()
     }
 
     fun countryCode(): String {
@@ -423,5 +442,6 @@ class SessionModel internal constructor(
         )
         model.invokeMethod("submitStripePlayPayment", Arguments(purchaseData))
     }
+
 
 }

@@ -1755,3 +1755,6 @@ msgstr "Limit Reached"
 msgid "file_size_limit_description"
 msgstr "Attachment sizes should be under 100 MB"
 
+msgid "no_new_update"
+msgstr "You're up to date!"
+

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/plans/utils.dart';
 import 'package:lantern/replica/common.dart';
+
 import 'common.dart';
 import 'common_desktop.dart';
 
@@ -19,6 +20,7 @@ class SessionModel extends Model {
   late final EventManager eventManager;
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+
   // late ValueNotifier<bool?> isPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
@@ -599,13 +601,18 @@ class SessionModel extends Model {
         .then((enabled) => enabled == true);
   }
 
-  Future<void> checkForUpdates() async {
-    if (Platform.isAndroid) {
-      return methodChannel.invokeMethod('checkForUpdates');
-    } else if (isDesktop()) {
-      await ffiCheckUpdates();
+  Future<String?> checkForUpdates() async {
+    if (isMobile()) {
+      if (Platform.isAndroid) {
+        return methodChannel.invokeMethod('checkForUpdates');
+      }else{
+        AppMethods.openAppstore();
+        return "";
+      }
+    } else {
+       ffiCheckUpdates();
+       return "";
     }
-    return;
   }
 
   // Plans and payment methods

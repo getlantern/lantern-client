@@ -18,9 +18,6 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.gson.JsonObject
-import io.lantern.model.SessionModel
-import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentHashMap
@@ -274,34 +271,38 @@ class InAppBilling(
                         * if the purchase are not acknowledged from server
                         * then make purchase request it mark purchase as isAcknowledged
                         */
-//                        val currency = LanternApp.getSession().deviceCurrencyCode()
-//                        val planID = "${purchase.products[0]}-$currency"
-//
-//                        addAcknowledgePurchase(
-//                            planID = planID,
-//                            currency = currency,
-//                            token = purchase.purchaseToken
-//                        )
-                    }
-                }
-
-                val consumeParams =
-                    ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
-                        .build()
-                val listener =
-                    ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
-                        if (!billingResult.responseCodeOK()) {
-                            return@ConsumeResponseListener
+                        try {
+                            Logger.debug(TAG, "Purchase is not acknowledgement yet: $purchase")
+                            val currency = LanternApp.getSession().deviceCurrencyCode()
+                            val planID = "${purchase.products[0]}-$currency"
+                            LanternApp.getSession().submitGooglePlayPayment(
+                                email = LanternApp.getSession().email(),
+                                planId = planID,
+                                purchaseToken = purchase.purchaseToken
+                            )
+                        } catch (e: Exception) {
+                            Logger.e(TAG, "Error while submitting purchase to server: ${e.message}")
                         }
                     }
-                // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
-                // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
-                // been consumed, we just do this every time we start up.
-                Logger.d(
-                    TAG,
-                    "Consuming already acknowledged purchase ${purchase.purchaseToken}"
-                )
-                consumeAsync(consumeParams, listener)
+
+                    val consumeParams =
+                        ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
+                            .build()
+                    val listener =
+                        ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
+                            if (!billingResult.responseCodeOK()) {
+                                return@ConsumeResponseListener
+                            }
+                        }
+                    // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
+                    // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
+                    // been consumed, we just do this every time we start up.
+                    Logger.d(
+                        TAG,
+                        "Consuming already acknowledged purchase ${purchase.purchaseToken}"
+                    )
+                    consumeAsync(consumeParams, listener)
+                }
             }
         }
     }
@@ -331,35 +332,5 @@ class InAppBilling(
         }
     }
 
-//    private fun addAcknowledgePurchase(planID: String, currency: String, token: String) {
-//        val session = LanternApp.getSession()
-//        val json = JsonObject()
-//        json.addProperty("idempotencyKey", System.currentTimeMillis().toString())
-//        json.addProperty("provider", PaymentProvider.GooglePlay.toString().lowercase())
-//        json.addProperty("email", session.email())
-//        json.addProperty("plan", planID)
-//        json.addProperty("currency", currency.lowercase())
-//        json.addProperty("deviceName", session.deviceName())
-//        json.addProperty("token", token)
-//
-//        lanternClient.post(
-//            LanternHttpClient.createProUrl("/purchase"),
-//            LanternHttpClient.createJsonBody(json),
-//            object : LanternHttpClient.ProCallback {
-//                override fun onSuccess(
-//                    response: Response?,
-//                    result: JsonObject?,
-//                ) {
-//                    Logger.debug(TAG, "Making server acknowledgement response: $response")
-//                }
-//
-//                override fun onFailure(
-//                    t: Throwable?,
-//                    error: ProError?,
-//                ) {
-//                    Logger.error(TAG, "Error while making server acknowledgement: $error")
-//                }
-//            },
-//        )
-//    }
+
 }
