@@ -24,9 +24,9 @@ func TestPurchaseRequest(t *testing.T) {
 
 		HttpClient: &http.Client{},
 		UserConfig: func() common.UserConfig {
-			deviceID := "81004e7f-c135-4fd2-96fd-588895b5fcd3"
-			userID := int64(372759893)
-			token := "fFNNcUAf20uQdZ6ay_mZd9WkwUu22iD7hPQVxBDBhrTWOvwHS7T8ZQ"
+			deviceID := "c8484d35d019ae02"
+			userID := int64(373643046)
+			token := "2jnuNPf_ZqP-HFJKLkzvbd6rAf1x1M7NFChpjx9Ud2vP7WwpNYqurg"
 			lang := "en_US"
 			return common.NewUserConfig(
 				common.DefaultAppName,
@@ -43,11 +43,14 @@ func TestPurchaseRequest(t *testing.T) {
 
 	puchaseData := map[string]interface{}{
 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
-		"provider":       "test",
-		"email":          "jigar+macos+test@getlantern.org",
-		"plan":           "1y-usd",
+		"provider":       "reseller-code",
+		"email":          "jigar+seller@getlanern.org",
+		"resellerCode":   "DKXTT-YHHT4-CD4M4-33726-4XT99",
+		"device":         "Nokia 8.1",
+		"currency":       "usd",
 	}
 	log.Debugf("DEBUG: Testing provider request: %v", puchaseData)
+
 	_, err := proClient.PurchaseRequest(context.Background(), puchaseData)
 
 	assert.NoError(t, err)

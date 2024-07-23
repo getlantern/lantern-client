@@ -26,6 +26,11 @@ extension ErrorX on Object {
         if (description.contains("user already exists")) {
           return "signup_error_user_exists".i18n;
         }
+        if (description.contains("wrong_seller_code")) {
+          return "wrong_seller_code".i18n;
+        }
+
+
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;
         } else {

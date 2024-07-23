@@ -47,7 +47,6 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 	case paymentProviderResellerCode:
 		data["provider"] = paymentProviderResellerCode
 		data["resellerCode"] = resellerCode
-		data["plan"] = planId
 	case paymentProviderGooglePlay:
 		// get currency from plan id
 		parts := strings.Split(planId, "-")

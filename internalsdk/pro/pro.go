@@ -335,5 +335,8 @@ func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interfac
 	if err != nil {
 		return nil, err
 	}
+	if resp.Status != "ok" {
+		return nil, errors.New("wrong_seller_code: %v", resp.Status)
+	}
 	return &resp, nil
 }
