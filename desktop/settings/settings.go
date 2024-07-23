@@ -665,8 +665,9 @@ func (s *Settings) getInt64(name SettingName) int64 {
 func (s *Settings) getVal(name SettingName) (interface{}, error) {
 	s.log.Tracef("Getting value for %v", name)
 	s.RLock()
-	defer s.RUnlock()
-	if val, ok := s.m[name]; ok {
+	m := s.m
+	s.RUnlock()
+	if val, ok := m[name]; ok {
 		return val, nil
 	}
 	s.log.Debugf("Could not get value for %s", name)
