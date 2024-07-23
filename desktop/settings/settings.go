@@ -91,6 +91,7 @@ var settingMeta = map[SettingName]struct {
 	// SNDeviceID: intentionally omit, to avoid setting it from UI
 	SNEmailAddress:              {stString, true, true},
 	SNUserID:                    {stNumber, true, true},
+	SNUserPro:                   {stBool, true, true},
 	SNUserToken:                 {stString, true, true},
 	SNMigratedDeviceIDForUserID: {stNumber, true, true},
 	SNTakenSurveys:              {stStringArray, true, true},
@@ -195,6 +196,7 @@ func newSettings(filePath string) *Settings {
 			SNUserToken:                 "",
 			SNUIAddr:                    "",
 			SNMigratedDeviceIDForUserID: int64(0),
+			SNUserPro:                   false,
 			SNUserLoggedIn:              false,
 			SNUserFirstVisit:            false,
 			SNSalt:                      "",
