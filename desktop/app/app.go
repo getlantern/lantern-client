@@ -30,7 +30,6 @@ import (
 	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/memhelper"
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
@@ -143,16 +142,6 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 // Run starts the app.
 func (app *App) Run(isMain bool) {
 	golog.OnFatal(app.exitOnFatal)
-
-	memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
-		sentry.CaptureException(err)
-	})
-
-	go func() {
-		for <-geolookup.OnRefresh() {
-			app.settings.SetCountry(geolookup.GetCountry(0))
-		}
-	}()
 
 	// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
 	// for the first time. User can still quit Lantern through systray menu when it happens.
