@@ -93,7 +93,7 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
-  Future<void> updateUserDetails(){
+  Future<void> updateUserDetails() {
     return methodChannel.invokeMethod('updateUserDetail', {});
   }
 
@@ -313,6 +313,14 @@ class SessionModel extends Model {
   /// This only supports desktop fo now
   Future<void> testProviderRequest(
       String email, String paymentProvider, String planId) {
+    if (isMobile()) {
+      return methodChannel
+          .invokeMethod('testProviderRequest', <String, dynamic>{
+        'email': email,
+        'provider': paymentProvider,
+        'planId': planId,
+      });
+    }
     return compute(ffiTestPaymentRequest, [email, paymentProvider, planId]);
   }
 

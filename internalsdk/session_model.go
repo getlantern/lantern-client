@@ -553,6 +553,18 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return url, nil
+
+	case "testProviderRequest":
+		email := arguments.Get("email").String()
+		plandId := arguments.Get("planId").String()
+		provider := arguments.Get("provider").String()
+		err := testProviderRequest(m, email, provider, plandId)
+		if err != nil {
+			log.Errorf("Error while calling testProvider %v", err)
+			return nil, err
+		}
+		return true, nil
+
 	case "setTestPlayVesion":
 		value := arguments.Get("on").Bool()
 		err := m.setTestPlayVesion(value)
@@ -1503,9 +1515,21 @@ func generatePaymentRedirectUrl(m *SessionModel, email string, planId string, pr
 	if err != nil {
 		return "", err
 	}
-
 	return redirectUrl.Redirect, nil
+}
 
+func testProviderRequest(session *SessionModel, email string, paymentProvider string, plan string) error {
+	puchaseData := map[string]interface{}{
+		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
+		"provider":       paymentProvider,
+		"email":          email,
+		"plan":           plan,
+	}
+	_, err := session.proClient.PurchaseRequest(context.Background(), puchaseData)
+	if err != nil {
+		return err
+	}
+	return setProUser(session.baseModel, true)
 }
 
 /// Auth APIS

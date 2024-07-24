@@ -284,25 +284,26 @@ class InAppBilling(
                             Logger.e(TAG, "Error while submitting purchase to server: ${e.message}")
                         }
                     }
-
-                    val consumeParams =
-                        ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
-                            .build()
-                    val listener =
-                        ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
-                            if (!billingResult.responseCodeOK()) {
-                                return@ConsumeResponseListener
-                            }
-                        }
-                    // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
-                    // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
-                    // been consumed, we just do this every time we start up.
-                    Logger.d(
-                        TAG,
-                        "Consuming already acknowledged purchase ${purchase.purchaseToken}"
-                    )
-                    consumeAsync(consumeParams, listener)
                 }
+
+                val consumeParams =
+                    ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken)
+                        .build()
+                val listener =
+                    ConsumeResponseListener { billingResult: BillingResult, outToken: String? ->
+                        if (!billingResult.responseCodeOK()) {
+                            return@ConsumeResponseListener
+                        }
+                    }
+                // Purchases are acknowledged on the server side. In order to allow further purchasing of the same plan,
+                // we have to consume it first, so we do that here. Since we don't actually know what has and what hasn't
+                // been consumed, we just do this every time we start up.
+                Logger.d(
+                    TAG,
+                    "Consuming already acknowledged purchase ${purchase.purchaseToken}"
+                )
+                consumeAsync(consumeParams, listener)
+
             }
         }
     }

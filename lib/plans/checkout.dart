@@ -82,7 +82,7 @@ class _CheckoutState extends State<Checkout>
             Iterable<PathAndValue<PaymentMethod>> paymentMethods,
             Widget? child,
           ) {
-            if(paymentMethods.isEmpty){
+            if (paymentMethods.isEmpty) {
               return SizedBox();
             }
             print("paymentMethods: $paymentMethods");
@@ -273,18 +273,9 @@ class _CheckoutState extends State<Checkout>
           return;
         }
         _proceedWithPaymentWall();
-      case Providers.shepherd:
-        if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.shepherd);
-          return;
-        }
-        _proceedWithShepherdPay();
-        break;
       case Providers.test:
-        if (isDesktop()) {
-          _proceedTestRequest();
-          return;
-        }
+        _proceedTestRequest();
+        return;
     }
   }
 
@@ -352,20 +343,20 @@ class _CheckoutState extends State<Checkout>
   }
 
   void _proceedTestRequest() async {
-      try {
-        context.loaderOverlay.show();
-        final value = await sessionModel.testProviderRequest(
-            widget.email!, Providers.test.name, widget.plan.id);
-        context.loaderOverlay.hide();
-        if (widget.isPro) {
-          showSuccessDialog(context, widget.isPro);
-        } else {
-          resolveRoute();
-        }
-      } catch (error, stackTrace) {
-        context.loaderOverlay.hide();
-        showError(context, error: error, stackTrace: stackTrace);
+    try {
+      context.loaderOverlay.show();
+      final value = await sessionModel.testProviderRequest(
+          widget.email!, Providers.test.name, widget.plan.id);
+      context.loaderOverlay.hide();
+      if (widget.isPro) {
+        showSuccessDialog(context, widget.isPro);
+      } else {
+        resolveRoute();
       }
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
   }
 
   void _proceedWithShepherd() async {
@@ -385,6 +376,7 @@ class _CheckoutState extends State<Checkout>
       showError(context, error: error, stackTrace: stackTrace);
     }
   }
+
 
   // This methods is responsible for polling for user data
   // so if user has done payment or renew plans and show
