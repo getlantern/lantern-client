@@ -8,13 +8,11 @@ import (
 	"math/big"
 	"net/http"
 	"os"
-	"os/signal"
 	"path/filepath"
 	"runtime"
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/getlantern/appdir"
@@ -129,7 +127,6 @@ func start() {
 	}()
 
 	golog.SetPrepender(logging.Timestamped)
-	handleSignals(a)
 
 	go func() {
 		defer logging.Close()
@@ -845,43 +842,6 @@ func useOSLocale() (string, error) {
 	log.Debugf("Using OS locale of current user: %v", userLocale)
 	a.SetLanguage(userLocale)
 	return userLocale, nil
-}
-
-//Do not need to call this function
-// Since localisation is happing on client side
-// func i18nInit(a *app.App) {
-// 	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
-// 		return a.GetTranslations(filename)
-// 	})
-// 	locale := a.GetLanguage()
-// 	log.Debugf("Using locale: %v", locale)
-// 	if _, err := i18n.SetLocale(locale); err != nil {
-// 		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
-
-// 		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
-// 		// populated.
-// 		if locale, err := useOSLocale(); err != nil {
-// 			log.Debugf("i18n.UseOSLocale: %q", err)
-// 			a.SetLanguage(defaultLocale)
-// 		} else {
-// 			a.SetLanguage(locale)
-// 		}
-// 	}
-// }
-
-// Handle system signals for clean exit
-func handleSignals(a *app.App) {
-	c := make(chan os.Signal, 1)
-	signal.Notify(c,
-		syscall.SIGHUP,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGQUIT)
-	go func() {
-		s := <-c
-		log.Debugf("Got signal \"%s\", exiting...", s)
-		a.Exit(nil)
-	}()
 }
 
 // Auth Methods
