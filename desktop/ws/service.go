@@ -2,6 +2,7 @@ package ws
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -152,9 +153,7 @@ func (c *uiChannel) RegisterWithMsgInitializer(t string, helloFn helloFnType, ne
 	defer c.muServices.Unlock()
 
 	if c.services[t] != nil {
-		// Using panic because this would be a developer error rather that
-		// something that could happen naturally.
-		panic("Service was already registered.")
+		return nil, errors.New("Service was already registered.")
 	}
 
 	// Adding new service to service map.
