@@ -274,10 +274,8 @@ class _VerificationState extends State<Verification> {
   }
 
   Future<void> _processCheckOut() async {
-    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
-    final inRussia = sessionModel.country.value == 'RU';
-    // * Play version (Android only)
-    if (isPlayVersion && !inRussia) {
+    // All the check has been moved to isPlayStoreEnable method
+    if (AppMethods.isPlayStoreEnable()) {
       _startGoogleCheckout();
       return;
     }

@@ -17,6 +17,7 @@ class PlanCard extends StatefulWidget {
 }
 
 class _PlanCardState extends State<PlanCard> {
+
   @override
   Widget build(BuildContext context) {
     final planName = widget.plan.id.split('-')[0];
@@ -60,7 +61,9 @@ class _PlanCardState extends State<PlanCard> {
                         CText(
                           planName == '1y'
                               ? 'one_year_plan'.i18n
-                              : (planName == '1m' ? 'one_month_plan'.i18n : 'two_year_plan'.i18n),
+                              : (planName == '1m'
+                                  ? 'one_month_plan'.i18n
+                                  : 'two_year_plan'.i18n),
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
@@ -126,6 +129,18 @@ class _PlanCardState extends State<PlanCard> {
     );
   }
 
+  // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
+  List<PaymentProviders> paymentProvidersFromMethods(
+      Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+    var providers = <PaymentProviders>[];
+    for (final paymentMethod in paymentMethods) {
+      for (final provider in paymentMethod.value.providers) {
+        providers.add(provider);
+      }
+    }
+    return providers;
+  }
+
   void onPlanTap(BuildContext context) {
     switch (Platform.operatingSystem) {
       case 'ios':
@@ -141,29 +156,15 @@ class _PlanCardState extends State<PlanCard> {
     }
   }
 
-  // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
-  List<PaymentProviders> paymentProvidersFromMethods(
-      Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
-    var providers = <PaymentProviders>[];
-    for (final paymentMethod in paymentMethods) {
-      for (final provider in paymentMethod.value.providers) {
-        providers.add(provider);
-      }
-    }
-    return providers;
+  void signUpFlow() {
+    // If user is new we need to send plans id to create account flow
+    context.pushRoute(CreateAccountEmail(
+        authFlow: AuthFlow.createAccount, plan: widget.plan));
   }
 
   Future<void> _processCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
-    final inRussia = sessionModel.country.value == 'RU';
-    // * Play version (Android only)
-    if (isPlayVersion && !inRussia) {
-      await context.pushRoute(
-        PlayCheckout(
-          plan: widget.plan,
-          isPro: widget.isPro,
-        ),
-      );
+    if (AppMethods.isPlayStoreEnable()) {
+      _processGooglePlayPayment();
       return;
     } else if (isDesktop()) {
       final paymentMethods = await sessionModel.paymentMethodsv4();
@@ -205,12 +206,6 @@ class _PlanCardState extends State<PlanCard> {
     }
   }
 
-  void signUpFlow() {
-    // If user is new we need to send plans id to create account flow
-    context.pushRoute(CreateAccountEmail(
-        authFlow: AuthFlow.createAccount, plan: widget.plan));
-  }
-
   void _proceedToCheckoutIOS(BuildContext context) {
     final appPurchase = sl<AppPurchase>();
     try {
@@ -237,6 +232,31 @@ class _PlanCardState extends State<PlanCard> {
         context,
         error: e,
         description: e.toString(),
+      );
+    }
+  }
+
+  // Make sure this google play flow is only for play version
+  // it will take care of purchase flow and also calling /purchase api on native end
+  Future<void> _processGooglePlayPayment() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.submitPlayPayment(
+          widget.plan!.id, sessionModel.userEmail.value!);
+      context.loaderOverlay.hide();
+      sessionModel.updateUserDetails();
+      Future.delayed(const Duration(milliseconds: 400), () {
+        context.loaderOverlay.hide();
+        showSuccessDialog(context, widget.isPro);
+      });
+
+    } catch (e) {
+      mainLogger.e("Error while purchase flow", error: e);
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        description: e.localizedDescription,
       );
     }
   }

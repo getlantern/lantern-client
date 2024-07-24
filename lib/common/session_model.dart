@@ -21,7 +21,7 @@ class SessionModel extends Model {
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
 
-  // late ValueNotifier<bool?> isPlayVersion;
+  late ValueNotifier<bool?> isTestPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<bool?> proUserNotifier;
@@ -37,10 +37,12 @@ class SessionModel extends Model {
         'storeVersion',
         false,
       );
-      // isPlayVersion = singleValueNotifier(
-      //   'playVersion',
-      //   false,
-      // );
+
+      isTestPlayVersion = singleValueNotifier(
+        'testPlayVersion',
+        false,
+      );
+
       /*Note
       * Make proxyAvailable default value to true on IOS it take some to get data from go side
       * So show banner only if proxyAvailable is false
@@ -89,6 +91,10 @@ class SessionModel extends Model {
 
   ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue) {
     return singleValueNotifier(path, defaultValue);
+  }
+
+  Future<void> updateUserDetails(){
+    return methodChannel.invokeMethod('updateUserDetail', {});
   }
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
@@ -186,8 +192,13 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<bool>('storeVersion', builder: builder);
   }
 
-  Future<void> setPlayVersion(bool on) {
-    return methodChannel.invokeMethod('setStoreVersion', <String, dynamic>{
+  Widget testPlayVersion(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('testPlayVersion',
+        builder: builder, defaultValue: false);
+  }
+
+  Future<void> setTestPlayVersion(bool on) {
+    return methodChannel.invokeMethod('setTestPlayVesion', <String, dynamic>{
       'on': on,
     });
   }
@@ -605,13 +616,13 @@ class SessionModel extends Model {
     if (isMobile()) {
       if (Platform.isAndroid) {
         return methodChannel.invokeMethod('checkForUpdates');
-      }else{
+      } else {
         AppMethods.openAppstore();
         return "";
       }
     } else {
-       ffiCheckUpdates();
-       return "";
+      ffiCheckUpdates();
+      return "";
     }
   }
 

@@ -77,6 +77,7 @@ const (
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
 	pathStoreVersion           = "storeVersion"
+	pathTestPlayVersion        = "testPlayVersion"
 	pathServerInfo             = "/server_info"
 	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
 	pathPrefVPN                = "pref_vpn"
@@ -272,6 +273,12 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "createUser":
 		err := m.userCreate(context.Background())
+		if err != nil {
+			log.Error(err)
+		}
+		return true, nil
+	case "updateUserDetail":
+		err := m.userDetail(context.Background())
 		if err != nil {
 			log.Error(err)
 		}
@@ -546,7 +553,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return url, nil
+	case "setTestPlayVesion":
+		value := arguments.Get("on").Bool()
+		err := m.setTestPlayVesion(value)
+		if err != nil {
+			return nil, err
 
+		}
+		return true, nil
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -572,16 +586,17 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	err = pathdb.PutAll(tx, map[string]interface{}{
 		pathDevelopmentMode: opts.DevelopmentMode,
 		pathDeviceID:        opts.DeviceID,
-		pathStoreVersion:    opts.PlayVersion,
 		pathTimezoneID:      opts.TimeZone,
 		pathDevice:          opts.Device,
 		pathModel:           opts.Model,
 		pathOSVersion:       opts.OsVersion,
+		pathStoreVersion:    opts.PlayVersion,
 		pathSDKVersion:      SDKVersion(),
 	})
 	if err != nil {
 		return err
 	}
+
 	err = pathdb.Put(tx, pathPaymentTestMode, opts.PaymentTestMode, "")
 	if err != nil {
 		return err
@@ -600,6 +615,15 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 			return err
 		}
 	}
+	forceCountry, err := pathdb.Get[string](tx, pathForceCountry)
+	if err != nil {
+		return err
+	}
+	countryErr := pathdb.Put(tx, pathForceCountry, forceCountry, "")
+	if countryErr != nil {
+		log.Errorf("Error while setting force country %v", countryErr)
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		return err
@@ -1096,6 +1120,12 @@ func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 	return "", nil
 }
 
+func (m *SessionModel) setTestPlayVesion(value bool) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathTestPlayVersion, value, "")
+	})
+}
+
 func saveUserSalt(m *baseModel, salt []byte) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put[[]byte](tx, pathUserSalt, salt, "")
@@ -1427,14 +1457,13 @@ func submitGooglePlayPayment(m *SessionModel, email string, planId string, purch
 	if err != nil {
 		return err
 	}
-
 	if purchase.Status != "ok" {
 		return errors.New("Purchase Request failed")
 	}
 	log.Debugf("Purchase response %v", purchase)
+
 	// Set user to pro
 	return setProUser(m.baseModel, true)
-
 }
 
 func submitStripePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {

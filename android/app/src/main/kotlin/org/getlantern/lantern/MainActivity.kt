@@ -89,15 +89,13 @@ class MainActivity :
         opts.deviceID =DeviceUtil.deviceId(this)
         opts.model = DeviceUtil.model()
         opts.osVersion = DeviceUtil.deviceOs()
-//        opts.playVersion = DeviceUtil.isStoreVersion(this)
-        opts.playVersion = true
+        opts.playVersion = DeviceUtil.isStoreVersion(this)
         opts.device = DeviceUtil.model()
         opts.paymentTestMode = false
         opts.platform = "android"
         opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
         opts.timeZone = TimeZone.getDefault().displayName
-//        val sessionNew = SessionModel(this, flutterEngine, opts)
-//        sessionModel = SessionModelLegacy(this, flutterEngine)
+
         sessionModel = SessionModel(this, flutterEngine, opts)
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
