@@ -39,7 +39,7 @@ func Configure(updateURL, updateCA string, iconURL func() string) {
 		&http.Client{
 			Transport: proxied.ChainedThenFrontedWith(updateCA),
 		})
-	enableAutoupdate()
+	//enableAutoupdate()
 }
 
 func setUpdateURL(url string) {
@@ -67,7 +67,7 @@ func CheckUpdates() (string, error) {
 	return autoupdate.CheckMobileUpdate(&autoupdate.Config{
 		CurrentVersion: Version,
 		URL:            getUpdateURL(),
-		HTTPClient: 	httpClient.Load().(*http.Client),
+		HTTPClient:     httpClient.Load().(*http.Client),
 		PublicKey:      PublicKey,
 	})
 }

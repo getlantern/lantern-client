@@ -30,9 +30,7 @@ import (
 	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/i18n"
 	"github.com/getlantern/memhelper"
-	notify "github.com/getlantern/notifier"
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
@@ -40,7 +38,6 @@ import (
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/features"
-	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -242,22 +239,10 @@ func (app *App) Run(isMain bool) {
 		})
 		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged)
 
-		notifyConfigSaveErrorOnce := new(sync.Once)
-
 		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
 			switch t {
 			case flashlight.ErrorTypeProxySaveFailure, flashlight.ErrorTypeConfigSaveFailure:
 				log.Errorf("failed to save config (%v): %v", t, err)
-
-				notifyConfigSaveErrorOnce.Do(func() {
-					note := &notify.Notification{
-						Title:      i18n.T("BACKEND_CONFIG_SAVE_ERROR_TITLE"),
-						Message:    i18n.T("BACKEND_CONFIG_SAVE_ERROR_MESSAGE", i18n.T(translationAppName)),
-						ClickLabel: i18n.T("BACKEND_CLICK_LABEL_GOT_IT"),
-						IconURL:    "/img/lantern_logo.png",
-					}
-					_ = notifier.ShowNotification(note, "alert-prompt")
-				})
 
 			default:
 				log.Errorf("flashlight error: %v: %v", t, err)
@@ -346,16 +331,17 @@ func (app *App) beforeStart(listenAddr string) {
 		return app.IsProUser(context.Background())
 	}
 
-	if err := datacap.ServeDataCap(app.ws, func() string {
+	// temporarily disabled until we construct notifications from the client side
+	/*if err := datacap.ServeDataCap(app.ws, func() string {
 		return "/img/lantern_logo.png"
 	}, func() string { return "" }, isProUser); err != nil {
 		log.Errorf("Unable to serve bandwidth to UI: %v", err)
-	}
+	}*/
 
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
 	}))
-	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
+	//app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
 // GetLanguage returns the user language
