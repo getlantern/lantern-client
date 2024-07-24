@@ -54,6 +54,9 @@ static void install_signal_handlers()
 #if defined(SIGSEGV)
     fix_signal(SIGSEGV);
 #endif
+#if defined(SIGURG)
+    fix_signal(SIGURG);
+#endif
 #if defined(SIGXCPU)
     fix_signal(SIGXCPU);
 #endif
