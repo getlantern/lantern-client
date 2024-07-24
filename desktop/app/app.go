@@ -76,8 +76,6 @@ type App struct {
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
 
-	chGlobalConfigChanged chan bool
-
 	translations eventual.Value
 
 	flashlight *flashlight.Flashlight
@@ -242,7 +240,7 @@ func (app *App) Run(isMain bool) {
 		app.settings.OnChange(settings.SNUserID, func(v interface{}) {
 			chUserChanged <- true
 		})
-		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
+		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged)
 
 		notifyConfigSaveErrorOnce := new(sync.Once)
 
@@ -455,7 +453,6 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 			log.Errorf("failed to set browser market share data: %v", err)
 		}
 	}
-	app.chGlobalConfigChanged <- true
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
@@ -605,6 +602,8 @@ func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
 		resp, err := app.proClient.UserData(context.Background())
 		if err != nil {
 			return "", errors.New("error fetching user data: %v", err)
+		} else if resp.User == nil {
+			return "", errors.New("error fetching user data")
 		}
 
 		app.SetReferralCode(resp.User.Code)
