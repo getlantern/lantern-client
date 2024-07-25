@@ -317,6 +317,16 @@ class NativeLibrary {
   late final _myDeviceId =
       _myDeviceIdPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
+  ffi.Pointer<ffi.Char> authEnabled() {
+    return _authEnabled();
+  }
+
+  late final _authEnabledPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'authEnabled');
+  late final _authEnabled =
+      _authEnabledPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
   ffi.Pointer<ffi.Char> chatEnabled() {
     return _chatEnabled();
   }

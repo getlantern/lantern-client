@@ -88,9 +88,9 @@ class _AccountMenuState extends State<AccountMenu> {
     );
   }
 
-  List<Widget> freeItems(BuildContext context, bool hasUserLoggedIn) {
+  List<Widget> freeItems(BuildContext context, bool authEnabled, hasUserLoggedIn) {
     return [
-      if (!hasUserLoggedIn)
+      if (authEnabled && !hasUserLoggedIn)
         ListItemFactory.settingsItem(
           icon: ImagePaths.signIn,
           content: 'sign_in'.i18n,
@@ -140,11 +140,11 @@ class _AccountMenuState extends State<AccountMenu> {
         content: 'Authorize Device for Pro'.i18n,
         onTap: () => authorizeDeviceForPro(context),
       ),
-      ...commonItems(context, hasUserLoggedIn)
+      ...commonItems(context, authEnabled, hasUserLoggedIn)
     ];
   }
 
-  List<Widget> proItems(BuildContext context, bool hasUserLoggedIn) {
+  List<Widget> proItems(BuildContext context, bool authEnabled, hasUserLoggedIn) {
     return [
       messagingModel.getOnBoardingStatus(
             (context, hasBeenOnboarded, child) =>
@@ -176,11 +176,11 @@ class _AccountMenuState extends State<AccountMenu> {
         content: 'add_device'.i18n,
         onTap: () async => await context.pushRoute(ApproveDevice()),
       ),
-      ...commonItems(context, hasUserLoggedIn)
+      ...commonItems(context, authEnabled, hasUserLoggedIn)
     ];
   }
 
-  List<Widget> commonItems(BuildContext context, bool hasUserLoggedIn) {
+  List<Widget> commonItems(BuildContext context, bool authEnabled, hasUserLoggedIn) {
     return [
       if (isMobile())
         ListItemFactory.settingsItem(
@@ -212,7 +212,7 @@ class _AccountMenuState extends State<AccountMenu> {
           openSettings(context);
         },
       ),
-      if (hasUserLoggedIn)
+      if (authEnabled && hasUserLoggedIn)
         ListItemFactory.settingsItem(
           icon: ImagePaths.signOut,
           content: 'sign_out'.i18n,
@@ -228,12 +228,14 @@ class _AccountMenuState extends State<AccountMenu> {
       automaticallyImplyLeading: false,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
-          return ListView(
-            children: proUser
-                ? proItems(sessionContext, hasUserLoggedIn)
-                : freeItems(sessionContext, hasUserLoggedIn),
-          );
+        return sessionModel.authEnabled((context, authEnabled, _) {
+          return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
+            return ListView(
+              children: proUser
+                  ? proItems(sessionContext, authEnabled, hasUserLoggedIn)
+                  : freeItems(sessionContext, authEnabled, hasUserLoggedIn),
+            );
+          });
         });
       }),
     );

@@ -20,6 +20,7 @@ import (
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
@@ -581,6 +582,15 @@ func referral() *C.char {
 func myDeviceId() *C.char {
 	deviceId := getDeviceID()
 	return C.CString(deviceId)
+}
+
+//export authEnabled
+func authEnabled() *C.char {
+	authEnabled := a.IsFeatureEnabled(config.FeatureAuth)
+	if authEnabled {
+		return C.CString("true")
+	}
+	return C.CString("false")
 }
 
 //export chatEnabled

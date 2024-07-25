@@ -557,6 +557,22 @@ class SessionModel extends Model {
     return replicaAddr;
   }
 
+  Widget authEnabled(ValueWidgetBuilder<bool> builder) {
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<bool>(
+        'authEnabled',
+        defaultValue: false,
+        builder: builder,
+      );
+    }
+    return ffiValueBuilder<bool>(
+      'authEnabled',
+      ffiAuthEnabled,
+      defaultValue: false,
+      builder: builder,
+    );
+  }
+
   Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>(
