@@ -9,7 +9,6 @@ import (
 
 const (
 	pathVPNStatus = "/vpn_status"
-	pathBandwidth = "/bandwidth"
 )
 
 // Custom Model implemnation

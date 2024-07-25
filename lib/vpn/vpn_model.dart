@@ -46,33 +46,5 @@ class VpnModel extends Model {
     return vpnStatus == 'connected';
   }
 
-  Widget bandwidth(ValueWidgetBuilder<Bandwidth> builder) {
-    if (isMobile()) {
-      return subscribedSingleValueBuilder<Bandwidth>(
-        '/bandwidth',
-        builder: builder,
-        deserialize: (Uint8List serialized) {
-          return Bandwidth.fromBuffer(serialized);
-        },
-      );
-    }
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<Bandwidth>(
-      'bandwidth',
-      defaultValue: null,
-      onChanges: (setValue) =>
-          sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
-        if (value != null) {
-          final Map res = jsonDecode(jsonEncode(value));
-          setValue(Bandwidth.create()
-            ..mergeFromProto3Json({
-              'allowed': res['mibAllowed'],
-              'remaining': res['mibUsed'],
-            }));
-        }
-      }),
-      null,
-      builder: builder,
-    );
-  }
+
 }

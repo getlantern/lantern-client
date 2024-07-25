@@ -1,22 +1,26 @@
 package org.getlantern.lantern
 
+//import io.lantern.model.SessionModelLegacy
+//import org.getlantern.lantern.model.LanternHttpClient
+//import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
+//import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
+//import org.getlantern.lantern.model.PaymentMethods
+//import org.getlantern.lantern.model.ProError
+//import org.getlantern.lantern.model.ProPlan
+//import org.getlantern.lantern.model.ProUser
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.VpnService
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.gson.JsonObject
 import internalsdk.SessionModelOpts
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -25,24 +29,14 @@ import io.flutter.plugin.common.MethodChannel
 import io.lantern.model.MessagingModel
 import io.lantern.model.ReplicaModel
 import io.lantern.model.SessionModel
-//import io.lantern.model.SessionModelLegacy
-import io.lantern.model.Vpn
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
-import okhttp3.Response
 import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.event.AppEvent
 import org.getlantern.lantern.event.AppEvent.*
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.event.EventManager
 import org.getlantern.lantern.model.AccountInitializationStatus
-//import org.getlantern.lantern.model.LanternHttpClient
-//import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
-//import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-//import org.getlantern.lantern.model.PaymentMethods
-//import org.getlantern.lantern.model.ProError
-//import org.getlantern.lantern.model.ProPlan
-//import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
@@ -74,8 +68,6 @@ class MainActivity :
     private lateinit var notifications: NotificationHelper
     private lateinit var receiver: NotificationReceiver
     private var accountInitDialog: AlertDialog? = null
-    private var autoUpdateJob: Job? = null
-//    private val lanternClient = LanternApp.getLanternHttpClient()
 
     override fun configureFlutterEngine(
         flutterEngine: FlutterEngine,
@@ -86,7 +78,7 @@ class MainActivity :
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         val opts = SessionModelOpts()
         opts.lang = "en_us"
-        opts.deviceID =DeviceUtil.deviceId(this)
+        opts.deviceID = DeviceUtil.deviceId(this)
         opts.model = DeviceUtil.model()
         opts.osVersion = DeviceUtil.deviceOs()
         opts.playVersion = DeviceUtil.isStoreVersion(this)
@@ -142,13 +134,11 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
-
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
-
         val intent = Intent(this, LanternService_::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
-//        subscribeAppEvents()
+        subscribeAppEvents()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -158,58 +148,21 @@ class MainActivity :
         navigateForIntent(intent)
     }
 
-//    private fun subscribeAppEvents() {
-//        EventHandler.subscribeAppEvents { appEvent ->
-//            when (appEvent) {
-//                is AppEvent.AccountInitializationEvent -> onInitializingAccount(appEvent.status)
-//                is AppEvent.BandwidthEvent -> {
-//                    val event = appEvent as AppEvent.BandwidthEvent
-//                    Logger.debug("bandwidth updated", event.bandwidth.toString())
-//                    vpnModel.updateBandwidth(event.bandwidth)
-//                }
-//
-//                is AppEvent.LoConfEvent -> {
-//                    doProcessLoconf(appEvent.loconf)
-//                }
-//
-//                is AppEvent.LocaleEvent -> {
-//                    // Recreate the activity when the language changes
-//                    recreate()
-//                }
-//
-//                is AppEvent.StatsEvent -> {
-//                    val stats = appEvent.stats
-//                    Logger.debug("Stats updated", stats.toString())
-//                    sessionModel.saveServerInfo(
-//                        Vpn.ServerInfo
-//                            .newBuilder()
-//                            .setCity(stats.city)
-//                            .setCountry(stats.country)
-//                            .setCountryCode(stats.countryCode)
-//                            .build(),
-//                    )
-//                }
-//
-//                is AppEvent.StatusEvent -> {
-////                    updateUserAndPaymentData()
-//                }
-//
-//                is AppEvent.VpnStateEvent -> {
-//                    updateStatus(appEvent.vpnState.useVpn)
-//                }
-//
-//                else -> {
-//                    Logger.debug(TAG, "Unknown app event " + appEvent)
-//                }
-//            }
-//        }
-//    }
+    private fun subscribeAppEvents() {
+        EventHandler.subscribeAppEvents { appEvent ->
+            when (appEvent) {
+                is AppEvent.AccountInitializationEvent -> onInitializingAccount(appEvent.status)
+                is AppEvent.LoConfEvent -> {
+                    doProcessLoconf(appEvent.loconf)
+                }
 
-//    private fun updateUserAndPaymentData() {
-//        updateUserData()
-//        updatePaymentMethods()
-//        updateCurrencyList()
-//    }
+                else -> {
+                    Logger.debug(TAG, "Unknown app event " + appEvent)
+                }
+            }
+        }
+    }
+
 
     private fun navigateForIntent(intent: Intent) {
         // handles text messaging intent
@@ -250,8 +203,6 @@ class MainActivity :
             Logger.d(TAG, "LanternVpnService is running, updating VPN preference")
             vpnModel.setVpnOn(true)
         }
-
-//        sessionModel.checkAdsAvailability()
         Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
     }
 
@@ -261,6 +212,7 @@ class MainActivity :
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
+        messagingModel.destroy()
     }
 
     override fun onMethodCall(
@@ -344,66 +296,7 @@ class MainActivity :
 //            },
 //        )
 //    }
-//
-//    private fun updatePaymentMethods() {
-//        lanternClient.plansV4(
-//            object : PlansV3Callback {
-//                override fun onFailure(
-//                    throwable: Throwable?,
-//                    error: ProError?,
-//                ) {
-//                    Logger.error(TAG, "Unable to fetch payment methods: $error", throwable)
-//                }
-//
-//                override fun onSuccess(
-//                    proPlans: Map<String, ProPlan>,
-//                    paymentMethods: List<PaymentMethods>,
-//                ) {
-//                    Logger.debug(
-//                        TAG,
-//                        "Successfully fetched payment methods with payment methods: $paymentMethods and plans $proPlans",
-//                    )
-//                    sessionModel.processPaymentMethods(proPlans, paymentMethods)
-//                }
-//            },
-//        )
-//    }
-//
-//    private fun updateCurrencyList() {
-//        val url = LanternHttpClient.createProUrl("/supported-currencies")
-//        lanternClient.get(
-//            url,
-//            object : LanternHttpClient.ProCallback {
-//                override fun onFailure(
-//                    throwable: Throwable?,
-//                    error: ProError?,
-//                ) {
-//                    Logger.error(TAG, "Unable to fetch currency list: $error", throwable)
-//                    /*
-//                    retry to fetch currency list again
-//                    fetch until we get the currency list
-//                    retry after 5 seconds
-//                     */
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                        delay(5000)
-//                        updateCurrencyList()
-//                    }
-//                }
-//
-//                override fun onSuccess(
-//                    response: Response?,
-//                    result: JsonObject?,
-//                ) {
-//                    val currencies = result?.getAsJsonArray("supported-currencies")
-//                    val currencyList = mutableListOf<String>()
-//                    currencies?.forEach {
-//                        currencyList.add(it.asString.lowercase())
-//                    }
-//                    LanternApp.getSession().setCurrencyList(currencyList)
-//                }
-//            },
-//        )
-//    }
+
 
     private fun doProcessLoconf(loconf: LoConf) {
         val locale = LanternApp.getSession().language

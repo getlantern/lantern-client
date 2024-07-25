@@ -64,6 +64,7 @@ const (
 	pathServerCity             = "server_city"
 	pathHasSucceedingProxy     = "hasSucceedingProxy"
 	pathLatestBandwith         = "latest_bandwidth"
+	pathBandwidth              = "/bandwidth"
 	pathTimezoneID             = "timezone_id"
 	pathReferralCode           = "referral"
 	pathForceCountry           = "forceCountry"
@@ -147,7 +148,8 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(4000, &protos.Plans{})
 		base.db.RegisterType(5000, &protos.AppData{})
 		base.db.RegisterType(6000, &protos.PaymentProviders{})
-		base.db.RegisterType(6000, &protos.PaymentMethod{})
+		base.db.RegisterType(7000, &protos.PaymentMethod{})
+		base.db.RegisterType(8000, &protos.Bandwidth{})
 
 	}
 
@@ -819,11 +821,17 @@ func (m *SessionModel) SetStaging(staging bool) error {
 	return nil
 }
 
-// Keep name as p1,p2,p3.....
+// Keep name as p1,p2,p3..... percent: Long, remaining: Long, allowed: Long, ttlSeconds: Long
 // Name become part of Objective c so this is important
 func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
+	bandwidth := &protos.Bandwidth{
+		Percent:    int64(p1),
+		Remaining:  int64(p2),
+		Allowed:    int64(p3),
+		TtlSeconds: int64(p4),
+	}
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathLatestBandwith, p1, "")
+		return pathdb.Put(tx, pathBandwidth, bandwidth, "")
 	})
 }
 

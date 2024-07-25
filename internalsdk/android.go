@@ -515,7 +515,6 @@ func ReverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 }
 
 func run(configDir, locale string, settings Settings, session PanickingSession) {
-
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(false)
 
