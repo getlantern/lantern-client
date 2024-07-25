@@ -163,8 +163,7 @@ class _PlanCardState extends State<PlanCard> {
     final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
-    final isGooglePlayAvailable = await sessionModel.isGooglePlayServiceAvailable();
-    if (isPlayVersion && !inRussia && isGooglePlayAvailable) {
+    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
