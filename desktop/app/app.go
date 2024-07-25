@@ -218,7 +218,7 @@ func (app *App) Run(isMain bool) {
 		app.settings.OnChange(settings.SNUserID, func(v interface{}) {
 			chUserChanged <- true
 		})
-		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged)
+		//app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged)
 
 		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
 			switch t {
