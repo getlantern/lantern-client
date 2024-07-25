@@ -195,22 +195,14 @@ func (app *App) Run(isMain bool) {
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
 			app.Flags.AsMap(),
+			app.onConfigUpdate,
+			app.onProxiesUpdate,
 			app.settings,
 			app.statsTracker,
 			app.IsPro,
 			app.settings.GetLanguage,
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
 			app.analyticsSession.EventWithLabel,
-			flashlight.WithOnConfig(app.onConfigUpdate),
-			flashlight.WithOnProxies(app.onProxiesUpdate),
-			flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
-				if err != nil && !hasSucceeding {
-					app.onSucceedingProxy(hasSucceeding)
-				}
-			}),
-			flashlight.WithOnSucceedingProxy(func() {
-				app.onSucceedingProxy(true)
-			}),
 		)
 		if err != nil {
 			app.Exit(err)
