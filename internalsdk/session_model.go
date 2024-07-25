@@ -53,6 +53,7 @@ const (
 	pathProUser                = "prouser"
 	pathSDKVersion             = "sdkVersion"
 	pathUserLevel              = "userLevel"
+	pathAuthEnabled            = "authEnabled"
 	pathChatEnabled            = "chatEnabled"
 	pathDevelopmentMode        = "developmentMode"
 	pathGeoCountryCode         = "geo_country_code"
@@ -841,6 +842,12 @@ func (m *SessionModel) SetReplicaAddr(replicaAddr string) {
 func (m *SessionModel) ForceReplica() bool {
 	// return static for now
 	return false
+}
+
+func (m *SessionModel) SetAuthEnabled(authEnabled bool) {
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathAuthEnabled, authEnabled, "")
+	}))
 }
 
 func (m *SessionModel) SetChatEnabled(chatEnable bool) {
