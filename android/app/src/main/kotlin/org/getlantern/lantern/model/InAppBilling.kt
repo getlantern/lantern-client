@@ -45,7 +45,7 @@ class InAppBilling(
     private val skus: ConcurrentHashMap<String, ProductDetails> = ConcurrentHashMap()
     private val handler = Handler(Looper.getMainLooper())
 
-    val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap()
+//    val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap()
 
     @Volatile
     private var purchasesUpdated: PurchasesUpdatedListener? = null
@@ -185,32 +185,32 @@ class InAppBilling(
                     return@queryProductDetailsAsync
                 }
                 Logger.d(TAG, "Got ${skuDetailsList.size} skus")
-                synchronized(this) {
-                    plans.clear()
-                    skus.clear()
-                    skuDetailsList.forEach {
-                        val currency =
-                            it.oneTimePurchaseOfferDetails!!.priceCurrencyCode.lowercase()
-                        val id = it.productId
-                        val years = it.productId.substring(0, 1)
-                        val price = it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
-                        // Todo no originalPriceAmountMicros found in latest lib
-                        val priceWithoutTax =
-                            it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
-                        val proModel = ProPlan(
-                            id,
-                            it.description,
-                            hashMapOf(currency to price.toLong()),
-                            hashMapOf(currency to priceWithoutTax.toLong()),
-                            "2" == years,
-                            hashMapOf("years" to years.toInt()),
-                        )
-                        proModel.description = it.description
-
-                        plans[id] = proModel
-                        skus[id] = it
-                    }
-                }
+//                synchronized(this) {
+//                    plans.clear()
+//                    skus.clear()
+//                    skuDetailsList.forEach {
+//                        val currency =
+//                            it.oneTimePurchaseOfferDetails!!.priceCurrencyCode.lowercase()
+//                        val id = it.productId
+//                        val years = it.productId.substring(0, 1)
+//                        val price = it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
+//                        // Todo no originalPriceAmountMicros found in latest lib
+//                        val priceWithoutTax =
+//                            it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
+//                        val proModel = ProPlan(
+//                            id,
+//                            it.description,
+//                            hashMapOf(currency to price.toLong()),
+//                            hashMapOf(currency to priceWithoutTax.toLong()),
+//                            "2" == years,
+//                            hashMapOf("years" to years.toInt()),
+//                        )
+//                        proModel.description = it.description
+//
+//                        plans[id] = proModel
+//                        skus[id] = it
+//                    }
+//                }
 
             }
         }

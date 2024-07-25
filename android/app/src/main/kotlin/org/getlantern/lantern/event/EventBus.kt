@@ -12,12 +12,10 @@ import kotlinx.coroutines.launch
 import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.LanternStatus
-import org.getlantern.lantern.model.LanternStatus.Status
-import org.getlantern.lantern.model.Stats
 import org.getlantern.lantern.model.VpnState
 import org.getlantern.mobilesdk.model.LoConf
-import kotlin.coroutines.coroutineContext
 import java.util.Locale
+import kotlin.coroutines.coroutineContext
 
 object EventBus {
     private val _events = MutableSharedFlow<Any>()
@@ -55,9 +53,9 @@ internal object EventHandler {
         postAppEvent(AppEvent.LoConfEvent(loconf))
     }
 
-    fun postStatsEvent(stats: Stats) {
-        postAppEvent(AppEvent.StatsEvent(stats))
-    }
+//    fun postStatsEvent(stats: Stats) {
+//        postAppEvent(AppEvent.StatsEvent(stats))
+//    }
 
     fun postStatusEvent(status: LanternStatus) {
         postAppEvent(AppEvent.StatusEvent(status))
@@ -99,9 +97,9 @@ sealed class AppEvent {
         val loconf: LoConf,
     ) : AppEvent()
 
-    data class StatsEvent(
-        val stats: Stats,
-    ) : AppEvent()
+//    data class StatsEvent(
+//        val stats: Stats,
+//    ) : AppEvent()
 
     data class StatusEvent(
         val status: LanternStatus,
