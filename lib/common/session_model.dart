@@ -851,6 +851,11 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<bool> isGooglePlayServiceAvailable() async {
+    final result = await methodChannel.invokeMethod('isPlayServiceAvailable');
+    return result as bool;
+  }
+
   Future<void> submitPlayPayment(
     String planID,
     String email,

@@ -85,7 +85,7 @@ func start() {
 	settings := loadSettings(cdir)
 	webclientOpts := &webclient.Opts{
 		HttpClient: &http.Client{
-			Transport: proxied.ParallelPreferChained(),
+			Transport: proxied.ChainedThenFronted(),
 			Timeout:   30 * time.Second,
 		},
 		UserConfig: func() common.UserConfig {

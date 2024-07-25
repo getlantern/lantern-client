@@ -56,10 +56,11 @@ class _AccountMenuState extends State<AccountMenu> {
     ).show(context);
   }
 
-  void onAccountManagementTap(
-      BuildContext context, bool isProUser, bool hasUserLoggedIn) {
-    if(Platform.isAndroid){
+  void onAccountManagementTap(BuildContext context, bool isProUser,
+      bool hasUserLoggedIn) {
+    if (Platform.isAndroid) {
       context.pushRoute(AccountManagement(isPro: isProUser));
+      return;
     }
     if (hasUserLoggedIn) {
       // User has gone through onboarding
@@ -97,26 +98,26 @@ class _AccountMenuState extends State<AccountMenu> {
         ),
       if (Platform.isAndroid)
         messagingModel.getOnBoardingStatus(
-          (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
+              (context, hasBeenOnboarded, child) =>
+          hasBeenOnboarded == true
               ? messagingModel.getCopiedRecoveryStatus(
-                  (
-                    BuildContext context,
-                    bool hasCopiedRecoveryKey,
-                    Widget? child,
-                  ) =>
-                      ListItemFactory.settingsItem(
-                    icon: ImagePaths.account,
-                    content: 'account_management'.i18n,
-                    onTap: () async => await context
-                        .pushRoute(AccountManagement(isPro: false)),
-                    trailingArray: [
-                      if (!hasCopiedRecoveryKey)
-                        const CAssetImage(
-                          path: ImagePaths.badge,
-                        ),
-                    ],
-                  ),
-                )
+                (BuildContext context,
+                bool hasCopiedRecoveryKey,
+                Widget? child,) =>
+                ListItemFactory.settingsItem(
+                  icon: ImagePaths.account,
+                  content: 'account_management'.i18n,
+                  onTap: () async =>
+                  await context
+                      .pushRoute(AccountManagement(isPro: false)),
+                  trailingArray: [
+                    if (!hasCopiedRecoveryKey)
+                      const CAssetImage(
+                        path: ImagePaths.badge,
+                      ),
+                  ],
+                ),
+          )
               : const SizedBox(),
         ),
       ListItemFactory.settingsItem(
@@ -146,9 +147,9 @@ class _AccountMenuState extends State<AccountMenu> {
   List<Widget> proItems(BuildContext context, bool hasUserLoggedIn) {
     return [
       messagingModel.getOnBoardingStatus(
-        (context, hasBeenOnboarded, child) =>
+            (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus((BuildContext context,
-                    bool hasCopiedRecoveryKey, Widget? child) =>
+                bool hasCopiedRecoveryKey, Widget? child) =>
                 ListItemFactory.settingsItem(
                   key: AppKeys.account_management,
                   icon: ImagePaths.account,
