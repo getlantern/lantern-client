@@ -110,7 +110,6 @@ const (
 
 type SessionModelOpts struct {
 	DevelopmentMode bool
-	// ProUser         bool
 	DeviceID        string
 	Device          string
 	Model           string
@@ -118,7 +117,6 @@ type SessionModelOpts struct {
 	PlayVersion     bool
 	Lang            string
 	TimeZone        string
-	PaymentTestMode bool
 	Platform        string
 }
 
@@ -292,6 +290,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		if err != nil {
 			return nil, err
 		}
+		checkAdsEnabled(m)
 		return true, nil
 	case "setDeviceId":
 		deviceId := arguments.Get("deviceID").String()
@@ -300,7 +299,6 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-
 	case "signupEmailResendCode":
 		email := arguments.Get("email").String()
 		err := signupEmailResend(m, email)
@@ -611,10 +609,6 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		return err
 	}
 
-	err = pathdb.Put(tx, pathPaymentTestMode, opts.PaymentTestMode, "")
-	if err != nil {
-		return err
-	}
 	// Check if lang is already added or not
 	// If yes then do not add it
 	// This is used for only when user is new
@@ -1386,6 +1380,18 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 
 func checkAdsEnabled(session *SessionModel) error {
 	log.Debugf("Check ads enabled")
+	// Check if ads is enable or not
+	adsEnable, err := pathdb.Get[bool](session.db, pathAdsEnabled)
+	if err != nil {
+		return log.Errorf("Error while getting ads enabled %v", err)
+	}
+	if !adsEnable {
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
+		})
+	}
+
+	// if enable
 	hasAllPermisson, err := pathdb.Get[bool](session.db, pathHasAllNetworkPermssion)
 	if err != nil {
 		return err

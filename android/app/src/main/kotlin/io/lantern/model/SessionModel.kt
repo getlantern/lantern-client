@@ -143,8 +143,8 @@ class SessionModel internal constructor(
     val ipAddress: String?
         get() = model.ipAddress()
 
-    fun setHasFirstSessionCompleted(bool: Boolean) {
-
+    fun setHasAllNetworkPermissions(bool: Boolean) {
+        model.invokeMethod("hasAllNetworkPermssion", Arguments(""))
     }
 
     fun deviceCurrencyCode(): String {
@@ -153,8 +153,6 @@ class SessionModel internal constructor(
         val currency = Currency.getInstance(locale).currencyCode.lowercase()
         Log.d(TAG, "Currency code: $currency")
         return currency
-
-
     }
 
     fun isStoreVersion(): Boolean {

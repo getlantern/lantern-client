@@ -1,13 +1,6 @@
 package org.getlantern.lantern
 
-//import io.lantern.model.SessionModelLegacy
-//import org.getlantern.lantern.model.LanternHttpClient
-//import org.getlantern.lantern.model.LanternHttpClient.PlansV3Callback
-//import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-//import org.getlantern.lantern.model.PaymentMethods
-//import org.getlantern.lantern.model.ProError
-//import org.getlantern.lantern.model.ProPlan
-//import org.getlantern.lantern.model.ProUser
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
@@ -83,7 +76,6 @@ class MainActivity :
         opts.osVersion = DeviceUtil.deviceOs()
         opts.playVersion = DeviceUtil.isStoreVersion(this)
         opts.device = DeviceUtil.model()
-        opts.paymentTestMode = false
         opts.platform = "android"
         opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
         opts.timeZone = TimeZone.getDefault().displayName
@@ -276,27 +268,6 @@ class MainActivity :
         }
     }
 
-//    private fun updateUserData() {
-//        lanternClient.userData(
-//            object : ProUserCallback {
-//                override fun onFailure(
-//                    throwable: Throwable?,
-//                    error: ProError?,
-//                ) {
-//                    Logger.error(TAG, "Unable to fetch user data: $error", throwable)
-//                }
-//
-//                override fun onSuccess(
-//                    response: Response,
-//                    user: ProUser,
-//                ) {
-//                    // save latest user data
-//                    LanternApp.getSession().storeUserData(user)
-//                }
-//            },
-//        )
-//    }
-
 
     private fun doProcessLoconf(loconf: LoConf) {
         val locale = LanternApp.getSession().language
@@ -477,8 +448,7 @@ class MainActivity :
                 )
                 // If user come here it mean user has all permissions needed
                 // Also user given permission for VPN service dialog as well
-                LanternApp.getSession().setHasFirstSessionCompleted(true)
-//                sessionModel.checkAdsAvailability()
+                LanternApp.getSession().setHasAllNetworkPermissions(true)
                 updateStatus(true)
                 startVpnService()
             }
@@ -546,7 +516,7 @@ class MainActivity :
                 // This check is for new user that will start app first time
                 // this mean user has already given
                 // system permissions
-                LanternApp.getSession().setHasFirstSessionCompleted(true)
+                LanternApp.getSession().setHasAllNetworkPermissions(true)
 //                sessionModel.checkAdsAvailability()
             }
         }
