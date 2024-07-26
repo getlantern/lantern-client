@@ -667,6 +667,10 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		}
 	}()
 	go checkSplitTunneling(m)
+	surveyModel, err := NewSurveyModel(*m)
+	surveyModel.fetchSurvey()
+	log.Debugf("Survey Model %v", surveyModel)
+
 	return checkAdsEnabled(m)
 }
 
