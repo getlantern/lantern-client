@@ -587,6 +587,7 @@ func myDeviceId() *C.char {
 //export authEnabled
 func authEnabled() *C.char {
 	authEnabled := a.IsFeatureEnabled(config.FeatureAuth)
+	log.Debugf("DEBUG: Auth enabled: %v", authEnabled)
 	if authEnabled {
 		return C.CString("true")
 	}
