@@ -227,14 +227,12 @@ class _AccountMenuState extends State<AccountMenu> {
       automaticallyImplyLeading: false,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        return sessionModel.authEnabled((context, authEnabled, _) {
-          return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
-            return ListView(
-              children: proUser
-                  ? proItems(sessionContext, authEnabled, hasUserLoggedIn)
-                  : freeItems(sessionContext, authEnabled, hasUserLoggedIn),
-            );
-          });
+        return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
+          return ListView(
+            children: proUser
+                ? proItems(sessionContext, sessionModel.isAuthEnabled.value!, hasUserLoggedIn)
+                : freeItems(sessionContext, sessionModel.isAuthEnabled.value!, hasUserLoggedIn),
+          );
         });
       }),
     );

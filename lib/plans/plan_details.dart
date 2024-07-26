@@ -134,10 +134,11 @@ class _PlanCardState extends State<PlanCard> {
         resolveRouteIOS();
         break;
       default:
-        if(Platform.isAndroid){
+        if(Platform.isAndroid || !sessionModel.isAuthEnabled.value!){
           _processCheckOut(context);
         return;
         }
+
         if (widget.isPro) {
           _processCheckOut(context);
         } else {
