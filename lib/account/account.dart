@@ -56,9 +56,8 @@ class _AccountMenuState extends State<AccountMenu> {
     ).show(context);
   }
 
-  void onAccountManagementTap(BuildContext context, bool isProUser,
-      bool hasUserLoggedIn) {
-    if (Platform.isAndroid) {
+  void onAccountManagementTap(BuildContext context, bool isProUser, authEnabled, hasUserLoggedIn) {
+    if (!authEnabled || Platform.isAndroid) {
       context.pushRoute(AccountManagement(isPro: isProUser));
       return;
     }
@@ -155,7 +154,7 @@ class _AccountMenuState extends State<AccountMenu> {
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
                   onTap: () =>
-                      onAccountManagementTap(context, true, hasUserLoggedIn),
+                      onAccountManagementTap(context, true, authEnabled, hasUserLoggedIn),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
                       const CAssetImage(
