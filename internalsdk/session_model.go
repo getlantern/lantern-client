@@ -850,9 +850,9 @@ func (m *SessionModel) SetAuthEnabled(authEnabled bool) {
 	}))
 }
 
-func (m *SessionModel) SetChatEnabled(chatEnable bool) {
+func (m *SessionModel) SetChatEnabled(chatEnabled bool) {
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathChatEnabled, chatEnable, "")
+		return pathdb.Put(tx, pathChatEnabled, chatEnabled, "")
 	}))
 }
 
