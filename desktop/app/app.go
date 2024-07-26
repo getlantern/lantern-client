@@ -284,13 +284,10 @@ func (app *App) checkEnabledFeatures() {
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
 func (app *App) IsFeatureEnabled(feature string) bool {
-	enabledFeatures := app.flashlight.EnabledFeatures()
-	for enabledFeature, isEnabled := range enabledFeatures {
-		if isEnabled && enabledFeature == feature {
-			return true
-		}
+	if app.flashlight == nil {
+		return false
 	}
-	return false
+	return app.flashlight.EnabledFeatures()[feature]
 }
 
 // startFeaturesService starts a new features service that dispatches features to any relevant listeners.
