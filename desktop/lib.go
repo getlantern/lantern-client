@@ -110,23 +110,46 @@ func start() {
 		}
 	}()
 
-	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+	logFile, err := logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+	if err != nil {
+		log.Error(err)
+		// Nothing we can do if fails to create log files, leave logFile nil so
+		// the child process writes to standard outputs as usual.
+	}
+	defer logFile.Close()
 
-	go func() {
-		tk := time.NewTicker(time.Minute)
-		for {
-			<-tk.C
-			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-			if err := a.ProxyAddrReachable(ctx); err != nil {
-				log.Debugf("********* ERROR: Lantern HTTP proxy not working properly: %v\n", err)
-			} else {
-				log.Debugf("DEBUG: Lantern HTTP proxy is working fine")
+	if logFile != nil {
+		go func() {
+			tk := time.NewTicker(time.Minute)
+			for {
+				<-tk.C
+				ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+				if err := a.ProxyAddrReachable(ctx); err != nil {
+					// Can restart child process for better resiliency, but
+					// just print an error message for now to be safe.
+					fmt.Fprintf(logFile, "********* ERROR: Lantern HTTP proxy not working properly: %v\n", err)
+				} else {
+					fmt.Fprintln(logFile, "DEBUG: Lantern HTTP proxy is working fine")
+				}
+				cancel()
 			}
-			cancel()
-		}
-	}()
+		}()
+	}
 
 	golog.SetPrepender(logging.Timestamped)
+
+	if flags.Pprof {
+		addr := "localhost:6060"
+		go func() {
+			log.Debugf("Starting pprof page at http://%s/debug/pprof", addr)
+			srv := &http.Server{
+				Addr: addr,
+			}
+			if err := srv.ListenAndServe(); err != nil {
+				log.Error(err)
+			}
+		}()
+	}
 
 	go func() {
 		defer logging.Close()
