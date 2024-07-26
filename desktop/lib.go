@@ -79,7 +79,6 @@ func start() {
 		log.Errorf("Error loading .env file: %v", err)
 	} else {
 		log.Debug("Successfully loaded .env file")
-		log.Debugf("enable auth is %v", os.Getenv("ENABLE_AUTH_FEATURE"))
 	}
 
 	flags := flashlight.ParseFlags()
