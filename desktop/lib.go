@@ -566,7 +566,7 @@ func myDeviceId() *C.char {
 //export authEnabled
 func authEnabled() *C.char {
 	authEnabled := a.IsFeatureEnabled(config.FeatureAuth)
-	if ok, err := strconv.ParseBool(os.Getenv("ENABLE_AUTH_FEATURE")); err != nil && ok {
+	if ok, err := strconv.ParseBool(os.Getenv("ENABLE_AUTH_FEATURE")); err == nil && ok {
 		authEnabled = true
 	}
 	log.Debugf("DEBUG: Auth enabled: %v", authEnabled)
