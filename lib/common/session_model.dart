@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/plans/utils.dart';
 import 'package:lantern/replica/common.dart';
+
 import 'common.dart';
 import 'common_desktop.dart';
 
@@ -26,6 +27,7 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
+  late ValueNotifier<bool?> isAuthEnabled;
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -56,6 +58,10 @@ class SessionModel extends Model {
         'emailAddress',
         "",
       );
+      isAuthEnabled = singleValueNotifier(
+        'authEnabled',
+        false,
+      );
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
       isPlayVersion = ffiValueNotifier(
@@ -77,6 +83,7 @@ class SessionModel extends Model {
       proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
       hasUserSignedInNotifier =
           ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
+      isAuthEnabled = ffiValueNotifier(ffiAuthEnabled, 'authEnabled', false);
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -556,6 +563,22 @@ class SessionModel extends Model {
     }
     return replicaAddr;
   }
+
+  // Widget authEnabled(ValueWidgetBuilder<bool> builder) {
+  //   if (isMobile()) {
+  //     return subscribedSingleValueBuilder<bool>(
+  //       'authEnabled',
+  //       defaultValue: false,
+  //       builder: builder,
+  //     );
+  //   }
+  //   return ffiValueBuilder<bool>(
+  //     'authEnabled',
+  //     ffiAuthEnabled,
+  //     defaultValue: false,
+  //     builder: builder,
+  //   );
+  // }
 
   Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {

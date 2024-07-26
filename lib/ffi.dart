@@ -149,6 +149,8 @@ Pointer<Utf8> ffiReplicaAddr() => _bindings.replicaAddr().cast<Utf8>();
 
 Pointer<Utf8> ffiChatEnabled() => _bindings.chatEnabled().cast<Utf8>();
 
+Pointer<Utf8> ffiAuthEnabled() => _bindings.authEnabled().cast<Utf8>();
+
 Pointer<Utf8> ffiSdkVersion() => _bindings.sdkVersion().cast<Utf8>();
 
 Pointer<Utf8> ffiCheckUpdates() => _bindings.checkUpdates().cast<Utf8>();

@@ -39,7 +39,6 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
-	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
@@ -91,6 +90,7 @@ type App struct {
 	connectionStatusCallbacks []func(isConnected bool)
 	_sysproxyOff              func() error
 
+	// Websocket-related settings
 	websocketAddr   string
 	websocketServer *http.Server
 	ws              ws.UIChannel
@@ -275,26 +275,19 @@ func (app *App) Run(isMain bool) {
 	}()
 }
 
-// setFeatures enables or disables the features specified by values in the features map
-// sent back to the UI
-func (app *App) setFeatures(enabledFeatures map[string]bool, values map[features.Feature]bool) {
-	for feature, isEnabled := range values {
-		if isEnabled {
-			enabledFeatures[feature.String()] = isEnabled
-		}
-	}
-}
-
 // checkEnabledFeatures checks if features are enabled
-// (based on the env vars at build time or the user's settings/geolocation)
-// and starts appropriate services
 func (app *App) checkEnabledFeatures() {
 	enabledFeatures := app.flashlight.EnabledFeatures()
-
-	app.setFeatures(enabledFeatures, features.EnabledFeatures)
-
 	log.Debugf("Starting enabled features: %v", enabledFeatures)
 	//go app.startReplicaIfNecessary(enabledFeatures)
+}
+
+// IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
+func (app *App) IsFeatureEnabled(feature string) bool {
+	if app.flashlight == nil {
+		return false
+	}
+	return app.flashlight.EnabledFeatures()[feature]
 }
 
 // startFeaturesService starts a new features service that dispatches features to any relevant listeners.
