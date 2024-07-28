@@ -109,6 +109,25 @@ Future<void> ffiRemoveDevice(String deviceId) async {
   return;
 }
 
+Future<String> ffiAuthorizeEmail(String emailAddress) async {
+  final json = await _bindings
+      .approveDevice(emailAddress.toPointerChar())
+      .cast<Utf8>()
+      .toDartString();
+  final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  return json;
+}
+
+Future<String> ffiUserLinkValidate(String code) async {
+  final json = await _bindings
+      .userLinkValidate(code.toPointerChar())
+      .cast<Utf8>()
+      .toDartString();
+  final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
+  await ffiUserData();
+  return json;
+}
+
 FutureOr<bool> ffiHasPlanUpdateOrBuy(dynamic context) {
   final json = _bindings.hasPlanUpdatedOrBuy().cast<Utf8>().toDartString();
   return json == 'true' ? true : throw NoPlansUpdate("No Plans update");

@@ -453,6 +453,16 @@ func removeDevice(deviceId *C.char) *C.char {
 	return sendJson(resp)
 }
 
+//export userLinkValidate
+func userLinkValidate(code *C.char) *C.char {
+	resp, err := proClient.UserLinkValidate(context.Background(), C.GoString(code))
+	if err != nil {
+		log.Error(err)
+		return sendError(err)
+	}
+	return sendJson(resp)
+}
+
 //export expiryDate
 func expiryDate() *C.char {
 	user, found := cachedUserData()
