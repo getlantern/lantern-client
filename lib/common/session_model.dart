@@ -476,7 +476,7 @@ class SessionModel extends Model {
     return Future(() => null);
   }
 
-  Future<void> authorizeViaEmail(String emailAddress) {
+  Future<void> authorizeViaEmail(String emailAddress) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
         'emailAddress': emailAddress,
