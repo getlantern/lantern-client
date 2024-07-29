@@ -843,6 +843,8 @@ github.com/refraction-networking/utls v1.3.3 h1:f/TBLX7KBciRyFH3bwupp+CE4fzoYKCi
 github.com/refraction-networking/utls v1.3.3/go.mod h1:DlecWW1LMlMJu+9qpzzQqdHDT/C2LAe03EdpLUz/RL8=
 github.com/refraction-networking/water v0.7.0-alpha h1:yLMAvIi0lHHD2mvwx63GLnptpjvnmBCWFvTHTWLykLk=
 github.com/refraction-networking/water v0.7.0-alpha/go.mod h1:VPQENA6E5+2V5RlX/yaBlTCKeFQ25j49DUc/pmmwkXE=
+github.com/refraction-networking/wazero v1.7.1-w h1:z7Ty5PsMkJEDBCsn3ELUjceQGBT0FMVGldOSpDK3giQ=
+github.com/refraction-networking/wazero v1.7.1-w/go.mod h1:ytl6Zuh20R/eROuyDaGPkp82O9C/DJfXAwJfQ3X6/7Y=
 github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=

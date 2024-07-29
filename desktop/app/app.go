@@ -31,7 +31,6 @@ import (
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
-	"github.com/getlantern/memhelper"
 	notify "github.com/getlantern/notifier"
 	"github.com/getlantern/profiling"
 
@@ -150,10 +149,6 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 // Run starts the app.
 func (app *App) Run(isMain bool) {
 	golog.OnFatal(app.exitOnFatal)
-
-	memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
-		sentry.CaptureException(err)
-	})
 
 	go func() {
 		for <-geolookup.OnRefresh() {
