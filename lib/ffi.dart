@@ -123,8 +123,7 @@ Future<String> ffiUserLinkValidate(String code) async {
       .userLinkValidate(code.toPointerChar())
       .cast<Utf8>()
       .toDartString();
-  final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
-  await ffiUserData();
+  checkAPIError(json, "invalid_code".i18n);
   return json;
 }
 
@@ -358,5 +357,6 @@ void checkAuthAPIError(result) {
       throw PlatformException(
           code: errorMessageMap['error'], message: errorMessageMap['error']);
     }
+    return;
   }
 }

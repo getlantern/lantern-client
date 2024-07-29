@@ -455,12 +455,12 @@ func removeDevice(deviceId *C.char) *C.char {
 
 //export userLinkValidate
 func userLinkValidate(code *C.char) *C.char {
-	resp, err := proClient.UserLinkValidate(context.Background(), C.GoString(code))
+	_, err := proClient.UserLinkValidate(context.Background(), C.GoString(code))
 	if err != nil {
 		log.Error(err)
 		return sendError(err)
 	}
-	return sendJson(resp)
+	return C.CString("true")
 }
 
 //export expiryDate
