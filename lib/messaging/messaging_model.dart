@@ -348,6 +348,13 @@ class MessagingModel extends Model {
     String? replyToId,
     String? replyToSenderId,
   }) {
+    if (Platform.isAndroid) {
+      return methodChannel.invokeMethod('trackUserAction', <String, dynamic>{
+        'name': 'User sent message via Lantern Chat',
+        'url': '/message',
+        'title': '',
+      });
+    }
     return methodChannel.invokeMethod('sendToDirectContact', <String, dynamic>{
       'identityKey': identityKey,
       'text': text,
