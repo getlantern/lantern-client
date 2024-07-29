@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func (app *App) serveWebsocket() {
+func (app *App) serveWebsocket() error {
 	mux := http.NewServeMux()
 	mux.Handle("/data", app.ws.Handler())
 	mux.Handle("/sysproxy", app.ws.Handler())
@@ -17,7 +17,10 @@ func (app *App) serveWebsocket() {
 		Handler:  mux,
 		ErrorLog: log.AsStdLogger(),
 	}
-	l, _ := net.Listen("tcp", "127.0.0.1:0")
+	l, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		return err
+	}
 
 	port := l.Addr().(*net.TCPAddr).Port
 	go server.Serve(l)
@@ -25,6 +28,7 @@ func (app *App) serveWebsocket() {
 	u := url.URL{Scheme: "ws", Host: "127.0.0.1:" + strconv.Itoa(port), Path: "/data"}
 	log.Debugf("serving websocket connections at %s", u.String())
 	app.setWebsocketAddr(fmt.Sprintf("127.0.0.1:%d", port))
+	return nil
 }
 
 func (app *App) setWebsocketAddr(addr string) {

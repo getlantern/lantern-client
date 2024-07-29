@@ -66,6 +66,8 @@ var issueMap = map[string]string{
 
 //export start
 func start() {
+	// this is used to setup a new signal handler in C that overrides the current one so that SA_ONSTACK is used.
+	installSignalHandlers()
 	runtime.LockOSThread()
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.

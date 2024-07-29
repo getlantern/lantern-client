@@ -108,7 +108,9 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		ws:                        ws.NewUIChannel(),
 	}
 	app.statsTracker = NewStatsTracker(app)
-	app.serveWebsocket()
+	if err := app.serveWebsocket(); err != nil {
+		log.Fatal(err)
+	}
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
