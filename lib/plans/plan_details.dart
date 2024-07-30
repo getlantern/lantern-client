@@ -17,7 +17,6 @@ class PlanCard extends StatefulWidget {
 }
 
 class _PlanCardState extends State<PlanCard> {
-
   @override
   Widget build(BuildContext context) {
     final planName = widget.plan.id.split('-')[0];
@@ -132,14 +131,23 @@ class _PlanCardState extends State<PlanCard> {
   void onPlanTap(BuildContext context) {
     switch (Platform.operatingSystem) {
       case 'ios':
+        if (!sessionModel.isAuthEnabled.value!) {
+          //Legacy checkout flow
+          context.pushRoute(
+            PlayCheckout(
+              plan: widget.plan,
+              isPro: widget.isPro,
+            ),
+          );
+          return;
+        }
         resolveRouteIOS();
         break;
       default:
-        if(Platform.isAndroid || !sessionModel.isAuthEnabled.value!){
+        if (!sessionModel.isAuthEnabled.value!) {
           _processLegacyCheckOut(context);
-        return;
+          return;
         }
-
         if (widget.isPro) {
           _processCheckOut(context);
         } else {
@@ -161,21 +169,6 @@ class _PlanCardState extends State<PlanCard> {
     return providers;
   }
 
-  void onPlanTap(BuildContext context) {
-    switch (Platform.operatingSystem) {
-      case 'ios':
-        resolveRouteIOS();
-        break;
-      default:
-        if (widget.isPro) {
-          _processCheckOut(context);
-        } else {
-          signUpFlow();
-        }
-        break;
-    }
-  }
-
   void signUpFlow() {
     // If user is new we need to send plans id to create account flow
     context.pushRoute(CreateAccountEmail(
@@ -183,10 +176,12 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   Future<void> _processCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
-    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
+    if (isPlayVersion &&
+        !inRussia &&
+        await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -226,10 +221,12 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   Future<void> _processLegacyCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
-    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
+    if (isPlayVersion &&
+        !inRussia &&
+        await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -317,7 +314,6 @@ class _PlanCardState extends State<PlanCard> {
         context.loaderOverlay.hide();
         showSuccessDialog(context, widget.isPro);
       });
-
     } catch (e) {
       mainLogger.e("Error while purchase flow", error: e);
       context.loaderOverlay.hide();

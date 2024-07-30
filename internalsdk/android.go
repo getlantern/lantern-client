@@ -624,19 +624,16 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 
 		authEnabled := runner.FeatureEnabled("auth", common.ApplicationVersion)
 		log.Debugf("Auth enabled? %v", authEnabled)
-		session.SetAuthEnabled(authEnabled)
-
+		session.SetAuthEnabled(true)
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
 			showAdsEnabled := runner.FeatureEnabled("interstitialads", common.ApplicationVersion)
 			log.Debugf("Show ads enabled? %v", showAdsEnabled)
 			session.SetShowInterstitialAdsEnabled(showAdsEnabled)
-
 		} else {
 			// Explicitly disable ads for Pro users.
 			session.SetShowInterstitialAdsEnabled(false)
 		}
-
 	}
 
 	// When features are enabled/disabled, the UI changes. To minimize this, we only check features once on startup, preferring

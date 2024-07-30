@@ -189,6 +189,11 @@ Pointer<Utf8> ffiSplitTunneling() => _bindings.splitTunneling().cast<Utf8>();
 
 Pointer<Utf8> ffiChatMe() => _bindings.chatMe().cast<Utf8>();
 
+
+Pointer<Utf8> ffIsPlayVersion() =>  "false".toPointerChar().cast<Utf8>();
+
+
+
 Pointer<Utf8> ffiOnBoardingStatus() =>
     _bindings.onBoardingStatus().cast<Utf8>();
 

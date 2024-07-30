@@ -32,25 +32,21 @@ class InAppBilling(
         private val TAG = InAppBilling::class.java.simpleName
     }
 
-    init {
-        initConnection()
-    }
-
-
     @get:Synchronized
     @set:Synchronized
     @Volatile
     private var billingClient: BillingClient? = null
-
     private var billingResult: BillingResult? = null
-
     private val skus: ConcurrentHashMap<String, ProductDetails> = ConcurrentHashMap()
     private val handler = Handler(Looper.getMainLooper())
 
-//    val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap()
-
     @Volatile
     private var purchasesUpdated: PurchasesUpdatedListener? = null
+
+
+    init {
+        initConnection()
+    }
 
 
     fun isPlayStoreAvailable(): Boolean {
@@ -287,7 +283,7 @@ class InAppBilling(
                             Logger.debug(TAG, "Purchase is not acknowledgement yet: $purchase")
                             val currency = LanternApp.getSession().deviceCurrencyCode()
                             val planID = "${purchase.products[0]}-$currency"
-                            LanternApp.getSession().submitGooglePlayPayment(
+                            LanternApp.g    etSession().submitGooglePlayPayment(
                                 email = LanternApp.getSession().email(),
                                 planId = planID,
                                 purchaseToken = purchase.purchaseToken

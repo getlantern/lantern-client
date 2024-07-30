@@ -105,7 +105,7 @@ const (
 	pathHasConfig    = "hasConfigFetched"
 	pathHasProxy     = "hasProxyFetched"
 	pathHasonSuccess = "hasOnSuccess"
-
+	pathPlatform     = "platform"
 	//Split Tunneling
 	pathAppsData = "/appsData/"
 )
@@ -622,6 +622,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		pathOSVersion:       opts.OsVersion,
 		pathStoreVersion:    opts.PlayVersion,
 		pathSDKVersion:      SDKVersion(),
+		pathPlatform:        opts.Platform,
 	})
 	if err != nil {
 		return err
@@ -685,10 +686,16 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		}
 	}()
 	go checkSplitTunneling(m)
-	surveyModel, err := NewSurveyModel(*m)
-	log.Debugf("Survey Model %v", surveyModel)
 	m.surveyModel, _ = NewSurveyModel(*m)
+	// By defautl on ios  auth flow enabled
+	if opts.Platform == "ios" {
+		m.SetAuthEnabled(false)
+	}
 	return checkAdsEnabled(m)
+}
+
+func (m *SessionModel) platform() (string, error) {
+	return pathdb.Get[string](m.db, pathPlatform)
 }
 
 func checkSplitTunneling(m *SessionModel) error {
@@ -727,7 +734,13 @@ func (session *SessionModel) paymentMethods() error {
 	if err != nil {
 		return err
 	}
-	storePaymentProviders(session, *plans)
+	platform, err := session.platform()
+	if err != nil {
+		return err
+	}
+	if platform != "ios" {
+		storePaymentProviders(session, *plans)
+	}
 	return nil
 }
 

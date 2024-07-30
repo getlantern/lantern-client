@@ -18,7 +18,6 @@ const TAB_DEVELOPER = 'developer';
 
 class SessionModel extends Model {
   late final EventManager eventManager;
-
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
 
   late ValueNotifier<bool?> isTestPlayVersion;
@@ -33,12 +32,10 @@ class SessionModel extends Model {
   SessionModel() : super('session') {
     if (isMobile()) {
       eventManager = EventManager('lantern_event_channel');
-
       isStoreVersion = singleValueNotifier(
         'storeVersion',
         false,
       );
-
       isTestPlayVersion = singleValueNotifier(
         'testPlayVersion',
         false,
@@ -56,7 +53,6 @@ class SessionModel extends Model {
       /// We don't user create account if email address is not verified
       hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
       proUserNotifier = singleValueNotifier('prouser', false);
-
       userEmail = singleValueNotifier(
         'emailAddress',
         "",
@@ -67,11 +63,6 @@ class SessionModel extends Model {
       );
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
-      // isPlayVersion = ffiValueNotifier(
-      //   ffiPlayVersion,
-      //   'isPlayVersion',
-      //   false,
-      // );
       isStoreVersion = ffiValueNotifier(
         ffiStoreVersion,
         'isStoreVersion',
@@ -87,6 +78,11 @@ class SessionModel extends Model {
       hasUserSignedInNotifier =
           ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
       isAuthEnabled = ffiValueNotifier(ffiAuthEnabled, 'authEnabled', false);
+      isTestPlayVersion = ffiValueNotifier(
+        ffIsPlayVersion,
+        'testPlayVersion',
+        false,
+      );
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -139,15 +135,15 @@ class SessionModel extends Model {
       defaultValue: null,
       onChanges: (setValue) =>
           sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
-            if (value != null) {
-              final Map res = jsonDecode(jsonEncode(value));
-              setValue(Bandwidth.create()
-                ..mergeFromProto3Json({
-                  'allowed': res['mibAllowed'],
-                  'remaining': res['mibUsed'],
-                }));
-            }
-          }),
+        if (value != null) {
+          final Map res = jsonDecode(jsonEncode(value));
+          setValue(Bandwidth.create()
+            ..mergeFromProto3Json({
+              'allowed': res['mibAllowed'],
+              'remaining': res['mibUsed'],
+            }));
+        }
+      }),
       null,
       builder: builder,
     );

@@ -86,7 +86,7 @@ func (s *SurveyModel) fetchSurvey() error {
 		tempSurvey[lowerKey] = value
 	}
 	surveysResponse.Surveys = tempSurvey
-	log.Debugf("Survey response fetched successfully %+v", surveysResponse.Surveys)
+	// log.Debugf("Survey response fetched successfully %+v", surveysResponse.Surveys)
 	return nil
 }
 
