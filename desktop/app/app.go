@@ -600,6 +600,8 @@ func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
 		resp, err := app.proClient.UserData(context.Background())
 		if err != nil {
 			return "", errors.New("error fetching user data: %v", err)
+		} else if resp.User == nil {
+			return "", errors.New("error fetching user data")
 		}
 
 		app.SetReferralCode(resp.User.Code)
