@@ -28,6 +28,7 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
+  late ValueNotifier<bool?> isAuthEnabled;
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -60,6 +61,10 @@ class SessionModel extends Model {
         'emailAddress',
         "",
       );
+      isAuthEnabled = singleValueNotifier(
+        'authEnabled',
+        false,
+      );
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
       // isPlayVersion = ffiValueNotifier(
@@ -81,6 +86,7 @@ class SessionModel extends Model {
       proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
       hasUserSignedInNotifier =
           ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
+      isAuthEnabled = ffiValueNotifier(ffiAuthEnabled, 'authEnabled', false);
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -524,17 +530,23 @@ class SessionModel extends Model {
     return Future(() => null);
   }
 
-  Future<void> authorizeViaEmail(String emailAddress) {
-    return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
-      'emailAddress': emailAddress,
-    }).then((value) => value.toString());
+  Future<void> authorizeViaEmail(String emailAddress) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
+        'emailAddress': emailAddress,
+      }).then((value) => value.toString());
+    }
+    return await compute(ffiAuthorizeEmail, emailAddress);
   }
 
   Future<String> validateDeviceRecoveryCode(String code) async {
-    return await methodChannel
-        .invokeMethod('validateDeviceRecoveryCode', <String, dynamic>{
-      'code': code,
-    }).then((value) => value.toString());
+    if (isMobile()) {
+      return await methodChannel
+          .invokeMethod('validateRecoveryCode', <String, dynamic>{
+        'code': code,
+      }).then((value) => value.toString());
+    }
+    return await compute(ffiUserLinkValidate, code);
   }
 
   Future<void> approveDevice(String code) async {
@@ -611,6 +623,22 @@ class SessionModel extends Model {
     }
     return replicaAddr;
   }
+
+  // Widget authEnabled(ValueWidgetBuilder<bool> builder) {
+  //   if (isMobile()) {
+  //     return subscribedSingleValueBuilder<bool>(
+  //       'authEnabled',
+  //       defaultValue: false,
+  //       builder: builder,
+  //     );
+  //   }
+  //   return ffiValueBuilder<bool>(
+  //     'authEnabled',
+  //     ffiAuthEnabled,
+  //     defaultValue: false,
+  //     builder: builder,
+  //   );
+  // }
 
   Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
@@ -909,6 +937,11 @@ class SessionModel extends Model {
       'email': email,
       'provider': paymentProvider.name
     }).then((value) => value as String);
+  }
+
+  Future<bool> isGooglePlayServiceAvailable() async {
+    final result = await methodChannel.invokeMethod('isPlayServiceAvailable');
+    return result as bool;
   }
 
   Future<void> submitPlayPayment(

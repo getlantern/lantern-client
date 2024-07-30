@@ -70,6 +70,7 @@ func (c testSession) GetCountryCode() (string, error)            { return "us", 
 func (c testSession) IsStoreVersion() (bool, error)              { return false, nil }
 func (c testSession) Provider() (string, error)                  { return "stripe", nil }
 func (c testSession) SetChatEnabled(enabled bool)                {}
+func (c testSession) SetAuthEnabled(enabled bool)                {}
 func (c testSession) SetMatomoEnabled(bool)                      {}
 func (c testSession) IsPlayVersion() (bool, error)               { return false, nil }
 func (c testSession) SetShowInterstitialAdsEnabled(enabled bool) {}

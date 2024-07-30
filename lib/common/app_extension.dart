@@ -34,7 +34,7 @@ extension ErrorX on Object {
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;
         } else {
-          return description.i18n;
+          return 'we_are_experiencing_technical_difficulties'.i18n;
         }
       } else {
         return toString().i18n;

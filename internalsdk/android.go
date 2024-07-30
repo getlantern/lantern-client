@@ -87,6 +87,7 @@ type Session interface {
 	IsProUser() (bool, error)
 	SetReplicaAddr(string)
 	ForceReplica() bool
+	SetAuthEnabled(bool)
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
 	SetShowInterstitialAdsEnabled(bool)
@@ -127,6 +128,7 @@ type PanickingSession interface {
 	Currency() string
 	DeviceOS() string
 	IsProUser() bool
+	SetAuthEnabled(bool)
 	SetChatEnabled(bool)
 	SetIP(string)
 	SplitTunnelingEnabled() bool
@@ -281,6 +283,10 @@ func (s *panickingSessionImpl) IsProUser() bool {
 
 func (s *panickingSessionImpl) SetChatEnabled(enabled bool) {
 	s.wrapped.SetChatEnabled(enabled)
+}
+
+func (s *panickingSessionImpl) SetAuthEnabled(enabled bool) {
+	s.wrapped.SetAuthEnabled(enabled)
 }
 
 func (s *panickingSessionImpl) SetShowInterstitialAdsEnabled(enabled bool) {
@@ -615,6 +621,10 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		chatEnabled := runner.FeatureEnabled("chat", common.ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
+
+		authEnabled := runner.FeatureEnabled("auth", common.ApplicationVersion)
+		log.Debugf("Auth enabled? %v", authEnabled)
+		session.SetAuthEnabled(authEnabled)
 
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {

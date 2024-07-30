@@ -131,6 +131,9 @@ class SessionModel internal constructor(
                 autoUpdater.checkForUpdates(result)
 
             }
+              "isPlayServiceAvailable" -> {
+                result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
+            }
 
             else -> super.doOnMethodCall(call, result)
         }

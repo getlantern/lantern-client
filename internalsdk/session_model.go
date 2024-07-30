@@ -56,6 +56,7 @@ const (
 	pathProUser                = "prouser"
 	pathSDKVersion             = "sdkVersion"
 	pathUserLevel              = "userLevel"
+	pathAuthEnabled            = "authEnabled"
 	pathChatEnabled            = "chatEnabled"
 	pathDevelopmentMode        = "developmentMode"
 	pathGeoCountryCode         = "geo_country_code"
@@ -1123,9 +1124,15 @@ func (m *SessionModel) ForceReplica() bool {
 	return false
 }
 
-func (m *SessionModel) SetChatEnabled(chatEnable bool) {
+func (m *SessionModel) SetAuthEnabled(authEnabled bool) {
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathChatEnabled, chatEnable, "")
+		return pathdb.Put(tx, pathAuthEnabled, authEnabled, "")
+	}))
+}
+
+func (m *SessionModel) SetChatEnabled(chatEnabled bool) {
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathChatEnabled, chatEnabled, "")
 	}))
 }
 

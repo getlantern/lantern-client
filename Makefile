@@ -461,7 +461,7 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: export CGO_ENABLED = 1
 desktop-lib: echo-build-tags
-	go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+	go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
 ffigen:
 	dart run ffigen --config ffigen.yaml

@@ -324,6 +324,9 @@ func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRec
 	if err != nil {
 		return nil, err
 	}
+	if resp.Status != "ok" {
+		return nil, errors.New("error validating link code: %v", resp.Status)
+	}
 
 	return &resp, nil
 }
