@@ -114,7 +114,9 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		ws:                        ws.NewUIChannel(),
 	}
 	app.statsTracker = NewStatsTracker(app)
-	app.serveWebsocket()
+	if err := app.serveWebsocket(); err != nil {
+		log.Error(err)
+	}
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
@@ -598,6 +600,8 @@ func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
 		resp, err := app.proClient.UserData(context.Background())
 		if err != nil {
 			return "", errors.New("error fetching user data: %v", err)
+		} else if resp.User == nil {
+			return "", errors.New("error fetching user data")
 		}
 
 		app.SetReferralCode(resp.User.Code)
