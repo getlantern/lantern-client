@@ -351,6 +351,7 @@ class ConversationState extends State<Conversation>
         replyToId: replyToId,
         replyToSenderId: replyToSenderId,
       );
+      await sessionModel.trackUserAction('User sent message via Lantern Chat', '/message');
       newMessage.clear();
       setState(() {
         recording = null;
