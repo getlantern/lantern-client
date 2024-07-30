@@ -414,4 +414,26 @@ class SessionModel internal constructor(
     }
 
 
+    /**
+     * Survey methods and utils
+     */
+
+    fun getSurvey(): String {
+        val result = model.invokeMethod("getSurvey", Arguments(""))
+        return result.toJava().toString()
+    }
+
+    fun setSurveyLinkOpened(url: String) {
+        try {
+            val result = model.invokeMethod("setSurveyLink", Arguments(url))
+        } catch (e: Exception) {
+            Logger.error(TAG, "Error setting survey link", e)
+        }
+    }
+
+    fun checkIfSurveyLinkOpened(surveyLink :String): Boolean {
+        val result = model.invokeMethod("checkIfSurveyLinkOpened", Arguments(surveyLink))
+        return result.toJava().toString() == "true"
+    }
+
 }

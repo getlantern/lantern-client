@@ -45,7 +45,6 @@ class _VPNSwitchState extends State<VPNSwitch> {
         await Future.delayed(const Duration(seconds: 5));
       }
     }
-
     await vpnModel.switchVPN(newValue);
 
     //add delayed to avoid flickering

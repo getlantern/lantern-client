@@ -7,6 +7,8 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.gson.Gson
 import internalsdk.SessionModelOpts
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -41,8 +44,6 @@ import org.getlantern.lantern.util.showAlertDialog
 import org.getlantern.lantern.vpn.LanternVpnService
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.model.Event
-import org.getlantern.mobilesdk.model.LoConf
-import org.getlantern.mobilesdk.model.LoConf.Companion.fetch
 import org.getlantern.mobilesdk.model.Survey
 import java.util.Locale
 import java.util.TimeZone
@@ -61,6 +62,7 @@ class MainActivity :
     private lateinit var notifications: NotificationHelper
     private lateinit var receiver: NotificationReceiver
     private var accountInitDialog: AlertDialog? = null
+    private var lastSurvey: Survey? = null
 
     override fun configureFlutterEngine(
         flutterEngine: FlutterEngine,
@@ -91,7 +93,7 @@ class MainActivity :
                         Plausible.init(applicationContext)
                         Plausible.enable(true)
                         Logger.debug(TAG, "Plausible initialized")
-                        fetchLoConf()
+                        checkIfSurveyAvailable()
                     }
                     LanternApp.getSession().dnsDetector.publishNetworkAvailability()
                 }
@@ -144,10 +146,6 @@ class MainActivity :
         EventHandler.subscribeAppEvents { appEvent ->
             when (appEvent) {
                 is AppEvent.AccountInitializationEvent -> onInitializingAccount(appEvent.status)
-                is AppEvent.LoConfEvent -> {
-                    doProcessLoconf(appEvent.loconf)
-                }
-
                 else -> {
                     Logger.debug(TAG, "Unknown app event " + appEvent)
                 }
@@ -213,7 +211,7 @@ class MainActivity :
     ) {
         when (call.method) {
             "showLastSurvey" -> {
-                showSurvey(lastSurvey)
+                showSurvey(lastSurvey!!)
                 result.success(true)
             }
 
@@ -225,13 +223,23 @@ class MainActivity :
      * Fetch the latest loconf config and update the UI based on those
      * settings
      */
-    private fun fetchLoConf() {
-        fetch { loconf -> runOnUiThread { doProcessLoconf(loconf) } }
+    private fun checkIfSurveyAvailable() {
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed({
+            try {
+                val surveyString = sessionModel.getSurvey()
+                Logger.debug("Survey", "Survey string: $surveyString")
+                Gson().fromJson(surveyString, Survey::class.java)?.let {
+                    sendSurveyEvent(it)
+                }
+            } catch (e: Exception) {
+                Logger.error("Survey", "Error fetching loconf", e)
+            }
+        }, 2000L)
     }
 
-    fun onInitializingAccount(status: AccountInitializationStatus.Status) {
+    private fun onInitializingAccount(status: AccountInitializationStatus.Status) {
         val appName = getString(R.string.app_name)
-
         when (status) {
             AccountInitializationStatus.Status.PROCESSING -> {
                 accountInitDialog = AlertDialog.Builder(this).create()
@@ -269,90 +277,87 @@ class MainActivity :
     }
 
 
-    private fun doProcessLoconf(loconf: LoConf) {
-        val locale = LanternApp.getSession().language
-        val countryCode = LanternApp.getSession().countryCode()
-        Logger.debug(
-            SURVEY_TAG,
-            "Processing loconf; country code is $countryCode",
-        )
-        if (loconf.surveys == null) {
-            Logger.debug(SURVEY_TAG, "No survey config")
-            return
-        }
-        for (key in loconf.surveys!!.keys) {
-            Logger.debug(SURVEY_TAG, "Survey: " + loconf.surveys!![key])
-        }
-        var key = countryCode
-        var survey = loconf.surveys!![key]
-        if (survey == null) {
-            key = countryCode.lowercase()
-            survey = loconf.surveys!![key]
-        }
-        if (survey == null || !survey.enabled) {
-            key = locale
-            survey = loconf.surveys!![key]
-        }
-        if (survey == null) {
-            Logger.debug(SURVEY_TAG, "No survey found")
-        } else if (!survey.enabled) {
-            Logger.debug(SURVEY_TAG, "Survey disabled")
-        } else if (Math.random() > survey.probability) {
-            Logger.debug(SURVEY_TAG, "Not showing survey this time")
-        } else {
-            Logger.debug(
-                SURVEY_TAG,
-                "Deciding whether to show survey for '%s' at %s",
-                key,
-                survey.url,
-            )
-            val userType = survey.userType
-            if (userType != null) {
-                if (userType == "free" && LanternApp.getSession().isProUser()) {
-                    Logger.debug(
-                        SURVEY_TAG,
-                        "Not showing messages targetted to free users to Pro users",
-                    )
-                    return
-                } else if (userType == "pro" && !LanternApp.getSession().isProUser()) {
-                    Logger.debug(
-                        SURVEY_TAG,
-                        "Not showing messages targetted to free users to Pro users",
-                    )
-                    return
-                }
-            }
-            showSurveySnackbar(survey)
-        }
-    }
-
-    fun showSurveySnackbar(survey: Survey) {
-        val url = survey.url
-        if (url != null && url != "") {
-//            if (LanternApp.getSession().surveyLinkOpened(url)) {
-//                Logger.debug(
-//                    TAG,
-//                    "User already opened link to survey; not displaying snackbar",
-//                )
-//                return
+//    private fun doProcessLoconf(loconf: LoConf) {
+//        val locale = LanternApp.getSession().language
+//        val countryCode = LanternApp.getSession().countryCode()
+//        Logger.debug(
+//            SURVEY_TAG,
+//            "Processing loconf; country code is $countryCode",
+//        )
+//        if (loconf.surveys == null) {
+//            Logger.debug(SURVEY_TAG, "No survey config")
+//            return
+//        }
+//        for (key in loconf.surveys!!.keys) {
+//            Logger.debug(SURVEY_TAG, "Survey: " + loconf.surveys!![key])
+//        }
+//        var key = countryCode
+//        var survey = loconf.surveys!![key]
+//        if (survey == null) {
+//            key = countryCode.lowercase()
+//            survey = loconf.surveys!![key]
+//        }
+//        if (survey == null || !survey.enabled) {
+//            key = locale
+//            survey = loconf.surveys!![key]
+//        }
+//        if (survey == null) {
+//            Logger.debug(SURVEY_TAG, "No survey found")
+//        } else if (!survey.enabled) {
+//            Logger.debug(SURVEY_TAG, "Survey disabled")
+//        } else if (Math.random() > survey.probability) {
+//            Logger.debug(SURVEY_TAG, "Not showing survey this time")
+//        } else {
+//            Logger.debug(
+//                SURVEY_TAG,
+//                "Deciding whether to show survey for '%s' at %s",
+//                key,
+//                survey.url,
+//            )
+//            val userType = survey.userType
+//            if (userType != null) {
+//                if (userType == "free" && LanternApp.getSession().isProUser()) {
+//                    Logger.debug(
+//                        SURVEY_TAG,
+//                        "Not showing messages targetted to free users to Pro users",
+//                    )
+//                    return
+//                } else if (userType == "pro" && !LanternApp.getSession().isProUser()) {
+//                    Logger.debug(
+//                        SURVEY_TAG,
+//                        "Not showing messages targetted to free users to Pro users",
+//                    )
+//                    return
+//                }
 //            }
+//
+//        }
+//    }
+
+    fun sendSurveyEvent(survey: Survey) {
+        val url = survey.url
+        if (url != "") {
+            if (LanternApp.getSession().checkIfSurveyLinkOpened(url)) {
+                Logger.debug(
+                    TAG,
+                    "User already opened link to survey; not displaying snackbar",
+                )
+                return
+            }
         }
         lastSurvey = survey
-        Logger.debug(TAG, "Showing user survey snackbar")
+        Logger.debug(TAG, "Sending events to UI")
         eventManager.onNewEvent(
             Event.SurveyAvailable,
             hashMapOf("message" to survey.message, "buttonText" to survey.button),
         )
     }
 
-    private var lastSurvey: Survey? = null
-
-    private fun showSurvey(survey: Survey?) {
-        survey ?: return
+    private fun showSurvey(survey: Survey) {
         val intent = Intent(this, WebViewActivity_::class.java)
-        intent.putExtra("url", survey.url!!)
+        intent.putExtra("url", survey.url)
         startActivity(intent)
-//        LanternApp.getSession().setSurveyLinkOpened(survey.url)
+        LanternApp.getSession().setSurveyLinkOpened(survey.url)
     }
 
     @Throws(Exception::class)

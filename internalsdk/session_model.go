@@ -28,8 +28,9 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
-	authClient auth.AuthClient
-	proClient  pro.ProClient
+	authClient  auth.AuthClient
+	proClient   pro.ProClient
+	surveyModel *SurveyModel
 }
 
 // Expose payment providers
@@ -573,6 +574,22 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 
 		}
 		return true, nil
+	case "getSurvey":
+		surveyString, err := m.getSurvey()
+		if err != nil {
+			return nil, err
+		}
+		log.Debugf("Survey String %v", surveyString)
+		return surveyString, nil
+
+	case "setSurveyLink":
+		err := m.setSurveyLink(arguments.Scalar().String())
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "checkIfSurveyLinkOpened":
+		return m.checkIfSurveyLinkOpened(arguments.Scalar().String())
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -668,9 +685,8 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	}()
 	go checkSplitTunneling(m)
 	surveyModel, err := NewSurveyModel(*m)
-	surveyModel.fetchSurvey()
 	log.Debugf("Survey Model %v", surveyModel)
-
+	m.surveyModel, _ = NewSurveyModel(*m)
 	return checkAdsEnabled(m)
 }
 
@@ -2204,5 +2220,33 @@ func (session *SessionModel) updateAppData(appName string, allowedAccess bool) e
 			AllowedAccess: allowedAccess,
 		}, "")
 	})
+}
+
+// Surveys
+func (session *SessionModel) getSurvey() (string, error) {
+	availableSurvey, err := session.surveyModel.IsSurveyAvalible()
+	if err != nil {
+		return "", err
+	}
+	surveyMap := map[string]string{
+		"url":     availableSurvey.URL,
+		"message": availableSurvey.Message,
+		"button":  availableSurvey.Button,
+	}
+	surveyJSON, err := json.Marshal(surveyMap)
+	if err != nil {
+		log.Errorf("Error while marshalling survey %v", err)
+		return "", err
+	}
+	return string(surveyJSON), nil
+}
+
+func (session *SessionModel) setSurveyLink(surveyLink string) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, surveyLink, true, "")
+	})
+}
+func (session *SessionModel) checkIfSurveyLinkOpened(surveyLink string) (bool, error) {
+	return pathdb.Get[bool](session.db, surveyLink)
 
 }
