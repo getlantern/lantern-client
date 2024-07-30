@@ -18,6 +18,8 @@ replace github.com/google/netstack => github.com/getlantern/netstack v0.0.0-2022
 
 replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93
 
+replace github.com/tetratelabs/wazero => github.com/refraction-networking/wazero v1.7.1-w
+
 require (
 	github.com/1Password/srp v0.2.0
 	github.com/blang/semver v3.5.1+incompatible
@@ -33,7 +35,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.90
+	github.com/getlantern/flashlight/v7 v7.6.91
 	github.com/getlantern/fronted v0.0.0-20230601004823-7fec719639d8
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
@@ -41,7 +43,7 @@ require (
 	github.com/getlantern/ipproxy v0.0.0-20240305190756-6b5b6347158b
 	github.com/getlantern/jibber_jabber v0.0.0-20210901195950-68955124cc42
 	github.com/getlantern/launcher v0.0.0-20230622120034-fe87f9bff286
-	github.com/getlantern/memhelper v0.0.0-20220104170102-df557102babd
+	github.com/getlantern/memhelper v0.0.0-20240730022403-08b6ee4ccbbb
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20240124040039-163b1628a66b
 	github.com/getlantern/notifier v0.0.0-20240529182616-a162ef2bc966
@@ -68,7 +70,7 @@ require (
 	golang.org/x/crypto v0.23.0
 	golang.org/x/mobile v0.0.0-20240404231514-09dbf07665ed
 	golang.org/x/net v0.25.0
-	golang.org/x/sys v0.20.0
+	golang.org/x/sys v0.22.0
 	google.golang.org/protobuf v1.33.0
 	nhooyr.io/websocket v1.8.10
 )
@@ -113,6 +115,7 @@ require (
 	github.com/benbjohnson/immutable v0.4.3 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bits-and-blooms/bitset v1.7.0 // indirect
+	github.com/blang/vfs v1.0.0 // indirect
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
@@ -131,6 +134,7 @@ require (
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
 	github.com/gaukas/godicttls v0.0.4 // indirect
+	github.com/gaukas/wazerofs v0.1.0 // indirect
 	github.com/getlantern/algeneva v0.0.0-20240222191137-2b4e88234f59 // indirect
 	github.com/getlantern/broflake v0.0.0-20240202015440-c06abcc42348 // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
@@ -197,7 +201,7 @@ require (
 	github.com/go-llsqlite/crawshaw v0.5.1 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
@@ -264,6 +268,7 @@ require (
 	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/quic-go/quic-go v0.42.0 // indirect
 	github.com/refraction-networking/utls v1.3.3 // indirect
+	github.com/refraction-networking/water v0.7.0-alpha // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
 	github.com/rs/dnscache v0.0.0-20211102005908-e0241e321417 // indirect
@@ -279,31 +284,32 @@ require (
 	github.com/tchap/go-patricia/v2 v2.3.1 // indirect
 	github.com/templexxx/cpu v0.1.0 // indirect
 	github.com/templexxx/xorsimd v0.4.2 // indirect
+	github.com/tetratelabs/wazero v1.7.1 // indirect
 	github.com/ti-mo/conntrack v0.3.0 // indirect
 	github.com/ti-mo/netfilter v0.3.1 // indirect
 	github.com/tidwall/btree v1.6.0 // indirect
 	github.com/tjfoc/gmsm v1.4.1 // indirect
-	github.com/tklauser/go-sysconf v0.3.10 // indirect
-	github.com/tklauser/numcpus v0.5.0 // indirect
+	github.com/tklauser/go-sysconf v0.3.14 // indirect
+	github.com/tklauser/numcpus v0.8.0 // indirect
 	github.com/tkuchiki/go-timezone v0.2.2 // indirect
 	github.com/ulikunitz/xz v0.5.11 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xjasonlyu/tun2socks/v2 v2.5.2 // indirect
 	github.com/xtaci/smux v1.5.24 // indirect
-	github.com/yusufpapurcu/wmi v1.2.3 // indirect
+	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	gitlab.com/yawning/edwards25519-extra.git v0.0.0-20211229043746-2f91fcc9fbdb // indirect
 	gitlab.com/yawning/obfs4.git v0.0.0-20220204003609-77af0cba934d // indirect
 	go.etcd.io/bbolt v1.3.7 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.44.0 // indirect
-	go.opentelemetry.io/otel v1.27.0 // indirect
+	go.opentelemetry.io/otel v1.28.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric v0.42.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetrichttp v0.42.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.21.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.21.0 // indirect
-	go.opentelemetry.io/otel/metric v1.27.0 // indirect
+	go.opentelemetry.io/otel/metric v1.28.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.27.0 // indirect
 	go.opentelemetry.io/otel/sdk/metric v1.27.0 // indirect
-	go.opentelemetry.io/otel/trace v1.27.0 // indirect
+	go.opentelemetry.io/otel/trace v1.28.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.0.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/mock v0.4.0 // indirect
