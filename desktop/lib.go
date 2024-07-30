@@ -120,7 +120,6 @@ func start() {
 		// Nothing we can do if fails to create log files, leave logFile nil so
 		// the child process writes to standard outputs as usual.
 	}
-	defer logFile.Close()
 
 	if logFile != nil {
 		go func() {
@@ -129,11 +128,9 @@ func start() {
 				<-tk.C
 				ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 				if err := a.ProxyAddrReachable(ctx); err != nil {
-					// Can restart child process for better resiliency, but
-					// just print an error message for now to be safe.
-					fmt.Fprintf(logFile, "********* ERROR: Lantern HTTP proxy not working properly: %v\n", err)
+					log.Debugf("********* ERROR: Lantern HTTP proxy not working properly: %v\n", err)
 				} else {
-					fmt.Fprintln(logFile, "DEBUG: Lantern HTTP proxy is working fine")
+					log.Debugf("DEBUG: Lantern HTTP proxy is working fine")
 				}
 				cancel()
 			}
@@ -155,8 +152,23 @@ func start() {
 		}()
 	}
 
+	if flags.Pprof {
+		addr := "localhost:6060"
+		go func() {
+			log.Debugf("Starting pprof page at http://%s/debug/pprof", addr)
+			srv := &http.Server{
+				Addr: addr,
+			}
+			if err := srv.ListenAndServe(); err != nil {
+				log.Error(err)
+			}
+		}()
+	}
+
 	go func() {
-		defer logging.Close()
+		if logFile != nil {
+			defer logFile.Close()
+		}
 		// i18nInit(a)
 		a.Run(true)
 
@@ -473,6 +485,16 @@ func removeDevice(deviceId *C.char) *C.char {
 		return sendError(err)
 	}
 	return sendJson(resp)
+}
+
+//export userLinkValidate
+func userLinkValidate(code *C.char) *C.char {
+	_, err := proClient.UserLinkValidate(context.Background(), C.GoString(code))
+	if err != nil {
+		log.Error(err)
+		return sendError(err)
+	}
+	return C.CString("true")
 }
 
 //export expiryDate

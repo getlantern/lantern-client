@@ -476,17 +476,23 @@ class SessionModel extends Model {
     return Future(() => null);
   }
 
-  Future<void> authorizeViaEmail(String emailAddress) {
-    return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
-      'emailAddress': emailAddress,
-    }).then((value) => value.toString());
+  Future<void> authorizeViaEmail(String emailAddress) async {
+    if (isMobile()) {
+      return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
+        'emailAddress': emailAddress,
+      }).then((value) => value.toString());
+    }
+    return await compute(ffiAuthorizeEmail, emailAddress);
   }
 
   Future<String> validateDeviceRecoveryCode(String code) async {
-    return await methodChannel
-        .invokeMethod('validateDeviceRecoveryCode', <String, dynamic>{
-      'code': code,
-    }).then((value) => value.toString());
+    if (isMobile()) {
+      return await methodChannel
+          .invokeMethod('validateRecoveryCode', <String, dynamic>{
+        'code': code,
+      }).then((value) => value.toString());
+    }
+    return await compute(ffiUserLinkValidate, code);
   }
 
   Future<void> approveDevice(String code) async {

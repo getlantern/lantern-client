@@ -38,6 +38,9 @@ func (app *App) setWebsocketAddr(addr string) {
 }
 
 func (app *App) WebsocketAddr() string {
+	if app == nil {
+		return ""
+	}
 	return app.websocketAddr
 }
 
