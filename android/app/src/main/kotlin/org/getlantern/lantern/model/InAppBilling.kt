@@ -283,7 +283,7 @@ class InAppBilling(
                             Logger.debug(TAG, "Purchase is not acknowledgement yet: $purchase")
                             val currency = LanternApp.getSession().deviceCurrencyCode()
                             val planID = "${purchase.products[0]}-$currency"
-                            LanternApp.g    etSession().submitGooglePlayPayment(
+                            LanternApp.getSession().submitGooglePlayPayment(
                                 email = LanternApp.getSession().email(),
                                 planId = planID,
                                 purchaseToken = purchase.purchaseToken
