@@ -8,10 +8,21 @@ import io.lantern.model.SessionModel
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.mobilesdk.Logger
 
+
 object DeviceUtil {
+    fun getLanguageCode(context: Context): String {
+        val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.resources.configuration.locales[0]
+        } else {
+            context.resources.configuration.locale
+        }
+        val lang = locale.language + "_" + locale.country;
+        Logger.debug(SessionModel.TAG, "System language code: " + lang)
+        return lang
+    }
 
     fun devicePlatform(): String {
-        return "Android"
+        return "android"
     }
 
     fun deviceId(context: Context): String? {

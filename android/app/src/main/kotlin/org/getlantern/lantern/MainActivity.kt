@@ -72,16 +72,15 @@ class MainActivity :
         messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
         vpnModel = VpnModel(flutterEngine, ::switchLantern)
         val opts = SessionModelOpts()
-        opts.lang = "en_us"
+        opts.lang = DeviceUtil.getLanguageCode(this)
         opts.deviceID = DeviceUtil.deviceId(this)
         opts.model = DeviceUtil.model()
         opts.osVersion = DeviceUtil.deviceOs()
         opts.playVersion = DeviceUtil.isStoreVersion(this)
         opts.device = DeviceUtil.model()
-        opts.platform = "android"
+        opts.platform = DeviceUtil.devicePlatform()
         opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
         opts.timeZone = TimeZone.getDefault().displayName
-
         sessionModel = SessionModel(this, flutterEngine, opts)
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
@@ -276,7 +275,7 @@ class MainActivity :
         }
     }
 
- private   fun sendSurveyEvent(survey: Survey) {
+    private fun sendSurveyEvent(survey: Survey) {
         val url = survey.url
         if (url != "") {
             if (LanternApp.getSession().checkIfSurveyLinkOpened(url)) {
