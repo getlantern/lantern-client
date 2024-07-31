@@ -59,17 +59,7 @@ class _PlanCardState extends State<PlanCard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CText(
-                          planName == '1y'
-                              ? Platform.isIOS
-                                  ? 'lantern_pro_one_year'.i18n
-                                  : 'one_year_plan'.i18n
-                              : Platform.isIOS
-                                  ? 'lantern_pro_two_year'.i18n
-                                  : 'two_year_plan'.i18n,
-                              ? 'one_year_plan'.i18n
-                              : (planName == '1m'
-                                  ? 'one_month_plan'.i18n
-                                  : 'two_year_plan'.i18n),
+                          getPlanDisplayName(planName),
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
@@ -90,11 +80,10 @@ class _PlanCardState extends State<PlanCard> {
                           CText(totalCost, style: tsHeading1)
                         else
                           CText(formattedPricePerMonth, style: tsHeading1),
-                       if(!Platform.isIOS)...{
-                         CText(' / ', style: tsBody2),
-                         CText('month'.i18n, style: tsBody2),
-                       }
-
+                        if (!Platform.isIOS) ...{
+                          CText(' / ', style: tsBody2),
+                          CText('month'.i18n, style: tsBody2),
+                        }
                       ],
                     ),
                     if (Platform.isIOS)
@@ -140,15 +129,35 @@ class _PlanCardState extends State<PlanCard> {
     );
   }
 
+  String getPlanDisplayName(String plan) {
+    if (Platform.isIOS) {
+      if (plan == '1y') {
+        return 'lantern_pro_one_year'.i18n;
+      } else if (plan == '1m') {
+        return 'lantern_pro_one_month'.i18n;
+      } else {
+        return 'lantern_pro_two_year'.i18n;
+      }
+    } else {
+      if (plan == '1y') {
+        return 'one_year_plan'.i18n;
+      } else if (plan == '1m') {
+        return 'one_month_plan'.i18n;
+      } else {
+        return 'two_year_plan'.i18n;
+      }
+    }
+  }
+
   void onPlanTap(BuildContext context) {
     switch (Platform.operatingSystem) {
       case 'ios':
         resolveRouteIOS();
         break;
       default:
-        if(Platform.isAndroid || !sessionModel.isAuthEnabled.value!){
+        if (Platform.isAndroid || !sessionModel.isAuthEnabled.value!) {
           _processLegacyCheckOut(context);
-        return;
+          return;
         }
 
         if (widget.isPro) {
@@ -160,7 +169,7 @@ class _PlanCardState extends State<PlanCard> {
     }
   }
 
-  // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
+// paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
   List<PaymentProviders> paymentProvidersFromMethods(
       Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
     var providers = <PaymentProviders>[];
@@ -176,7 +185,9 @@ class _PlanCardState extends State<PlanCard> {
     final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
-    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
+    if (isPlayVersion &&
+        !inRussia &&
+        await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -219,7 +230,9 @@ class _PlanCardState extends State<PlanCard> {
     final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
-    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
+    if (isPlayVersion &&
+        !inRussia &&
+        await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,

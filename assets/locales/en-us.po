@@ -1761,6 +1761,9 @@ msgstr "Lantern Pro: One Year Plan"
 msgid "lantern_pro_two_year"
 msgstr "Lantern Pro: Two Year Plan"
 
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: One Month Plan"
+
 msgid "non_renewing_subscription"
 msgstr "Non-renewing subscription"
 
