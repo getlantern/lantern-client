@@ -228,6 +228,11 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         return prefs.getBoolean(SPLIT_TUNNELING, false)
     }
 
+     fun chatEnable(): Boolean {
+        return prefs.getBoolean(PATH_AUTH_ENABLE, false)
+    }
+
+
     fun setIsProUser(isProUser: Boolean) {
         prefs.edit().putBoolean(PRO_USER, isProUser).apply()
     }
@@ -259,6 +264,12 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
 
     override fun provider(): String? {
         return prefs.getString(PROVIDER, "")
+    }
+
+    override fun setAuthEnabled(p0: Boolean) {
+        db.mutate {
+            it.put(PATH_AUTH_ENABLE, p0)
+        }
     }
 
     override fun setHasConfigFetched(hasConfig: Boolean) {
@@ -451,6 +462,7 @@ class LanternSessionManager(application: Application) : SessionManager(applicati
         private const val PATH_HAS_CONFIG = "hasConfigFetched"
         private const val PATH_HAS_PROXY = "hasProxyFetched"
         private const val PATH_HAS_ONSUCESS = "hasOnSuccess"
+        private const val PATH_AUTH_ENABLE = "authEnabled"
 
 
         // other constants
