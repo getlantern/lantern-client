@@ -1,6 +1,6 @@
 package org.getlantern.lantern.service
 
-//import org.getlantern.lantern.model.LanternHttpClient
+
 import android.app.Service
 import android.content.Intent
 import android.os.Handler

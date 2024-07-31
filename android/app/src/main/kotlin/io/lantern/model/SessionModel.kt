@@ -32,6 +32,7 @@ import org.getlantern.lantern.activity.WebViewActivity_
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.AutoUpdater
+import org.getlantern.lantern.util.LanternProxySelector
 import org.getlantern.lantern.util.PaymentsUtil
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
@@ -75,6 +76,7 @@ class SessionModel internal constructor(
         LanternApp.setInAppBilling(inAppBilling)
         updateAppsData()
         paymentUtils = PaymentsUtil(activity)
+        LanternProxySelector(this)
     }
 
     fun createUser(): Boolean {
@@ -131,7 +133,8 @@ class SessionModel internal constructor(
                 autoUpdater.checkForUpdates(result)
 
             }
-              "isPlayServiceAvailable" -> {
+
+            "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
             }
 
@@ -434,7 +437,7 @@ class SessionModel internal constructor(
         }
     }
 
-    fun checkIfSurveyLinkOpened(surveyLink :String): Boolean {
+    fun checkIfSurveyLinkOpened(surveyLink: String): Boolean {
         val result = model.invokeMethod("checkIfSurveyLinkOpened", Arguments(surveyLink))
         return result.toJava().toString() == "true"
     }

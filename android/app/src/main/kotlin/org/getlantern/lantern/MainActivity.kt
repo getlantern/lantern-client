@@ -276,65 +276,7 @@ class MainActivity :
         }
     }
 
-
-//    private fun doProcessLoconf(loconf: LoConf) {
-//        val locale = LanternApp.getSession().language
-//        val countryCode = LanternApp.getSession().countryCode()
-//        Logger.debug(
-//            SURVEY_TAG,
-//            "Processing loconf; country code is $countryCode",
-//        )
-//        if (loconf.surveys == null) {
-//            Logger.debug(SURVEY_TAG, "No survey config")
-//            return
-//        }
-//        for (key in loconf.surveys!!.keys) {
-//            Logger.debug(SURVEY_TAG, "Survey: " + loconf.surveys!![key])
-//        }
-//        var key = countryCode
-//        var survey = loconf.surveys!![key]
-//        if (survey == null) {
-//            key = countryCode.lowercase()
-//            survey = loconf.surveys!![key]
-//        }
-//        if (survey == null || !survey.enabled) {
-//            key = locale
-//            survey = loconf.surveys!![key]
-//        }
-//        if (survey == null) {
-//            Logger.debug(SURVEY_TAG, "No survey found")
-//        } else if (!survey.enabled) {
-//            Logger.debug(SURVEY_TAG, "Survey disabled")
-//        } else if (Math.random() > survey.probability) {
-//            Logger.debug(SURVEY_TAG, "Not showing survey this time")
-//        } else {
-//            Logger.debug(
-//                SURVEY_TAG,
-//                "Deciding whether to show survey for '%s' at %s",
-//                key,
-//                survey.url,
-//            )
-//            val userType = survey.userType
-//            if (userType != null) {
-//                if (userType == "free" && LanternApp.getSession().isProUser()) {
-//                    Logger.debug(
-//                        SURVEY_TAG,
-//                        "Not showing messages targetted to free users to Pro users",
-//                    )
-//                    return
-//                } else if (userType == "pro" && !LanternApp.getSession().isProUser()) {
-//                    Logger.debug(
-//                        SURVEY_TAG,
-//                        "Not showing messages targetted to free users to Pro users",
-//                    )
-//                    return
-//                }
-//            }
-//
-//        }
-//    }
-
-    fun sendSurveyEvent(survey: Survey) {
+ private   fun sendSurveyEvent(survey: Survey) {
         val url = survey.url
         if (url != "") {
             if (LanternApp.getSession().checkIfSurveyLinkOpened(url)) {
