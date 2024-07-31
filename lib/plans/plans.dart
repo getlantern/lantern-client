@@ -62,7 +62,6 @@ class PlansPage extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       // * Card
                       ...plans
                           .toList()
@@ -84,8 +83,6 @@ class PlansPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                // todo need to enable this for other platform soon
-
                 _buildFooter(context, proUser),
               ],
             );
@@ -98,9 +95,9 @@ class PlansPage extends StatelessWidget {
   ///If the user is already so not ask for email
   ///f the user is not pro, ask for email
   void _onPromoCodeTap(BuildContext context, bool proUser) {
-    if (!Platform.isIOS) {
-      context.pushRoute(ResellerCodeCheckoutLegacy(isPro: true));
-      return;
+    if (!sessionModel.isAuthEnabled.value!) {
+      context.pushRoute(ResellerCodeCheckoutLegacy(isPro: proUser));
+    return;
     }
     if (proUser) {
       context.pushRoute(

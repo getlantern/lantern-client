@@ -5,7 +5,6 @@
 # Po-Chun Huang <aphroteus@gmail.com>, 2024
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2024
-# Aki, 2024
 # Derek F <derek@getlantern.org>, 2024
 # Ox Cart <ox@getlantern.org>, 2024
 # Rockman Lau <im@rockman.us>, 2024
@@ -14,10 +13,11 @@
 # Lantern, 2024
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
+# Aki, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024\n"
+"Last-Translator: Aki, 2024\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/lantern-1/teams/94371/zh_HK/)\n"
 "Language: zh_HK\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -266,7 +266,7 @@ msgid "cannot_complete_purchase"
 msgstr "无法完成购买"
 
 msgid "discover_not_working"
-msgstr "发现功能不起作用 "
+msgstr "发现功能无法使用"
 
 msgid "cannot_sign_in"
 msgstr "无法登录"
@@ -425,6 +425,9 @@ msgstr "选择付款方式"
 
 msgid "pro_plan"
 msgstr "专业版计划"
+
+msgid "one_month_plan"
+msgstr ""
 
 msgid "one_year_plan"
 msgstr "1 年专业版"
@@ -1666,7 +1669,7 @@ msgid "recovery_not_found"
 msgstr "设备未与此用户关联"
 
 msgid "device_added"
-msgstr "设备未与此用户关联"
+msgstr ""
 
 msgid "device_added_message"
 msgstr "您的设备已成功添加。如果您没有看到设备连接，请重新启动两个设备上的应用程序 "

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"log"
 	"os"
 	"reflect"
 	"strings"
@@ -42,6 +42,7 @@ const (
 	SNEmailAddress              SettingName = "emailAddress"
 	SNUserID                    SettingName = "userID"
 	SNUserToken                 SettingName = "userToken"
+	SNUserPro                   SettingName = "userPro"
 	SNMigratedDeviceIDForUserID SettingName = "migratedDeviceIDForUserID"
 	SNTakenSurveys              SettingName = "takenSurveys"
 	SNPastAnnouncements         SettingName = "pastAnnouncements"
@@ -56,6 +57,11 @@ const (
 	SNEnabledExperiments SettingName = "enabledExperiments"
 
 	SNPaymentMethods SettingName = "paymentMethods"
+	// Auth methods
+	SNUserFirstVisit SettingName = "userFirstVisit"
+	SNExpiryDate     SettingName = "expirydate"
+	SNUserLoggedIn   SettingName = "userLoggedIn"
+	SNSalt           SettingName = "salt"
 )
 
 type settingType byte
@@ -86,6 +92,7 @@ var settingMeta = map[SettingName]struct {
 	SNEmailAddress:              {stString, true, true},
 	SNUserID:                    {stNumber, true, true},
 	SNUserToken:                 {stString, true, true},
+	SNUserPro:                   {stBool, true, true},
 	SNMigratedDeviceIDForUserID: {stNumber, true, true},
 	SNTakenSurveys:              {stStringArray, true, true},
 	SNPastAnnouncements:         {stStringArray, true, true},
@@ -99,6 +106,11 @@ var settingMeta = map[SettingName]struct {
 	SNRevisionDate: {stString, false, false},
 
 	SNEnabledExperiments: {stStringArray, false, false},
+
+	//Auth releated
+	SNUserFirstVisit: {stBool, true, true},
+	SNUserLoggedIn:   {stBool, true, true},
+	SNSalt:           {stString, true, true},
 }
 
 // Settings is a struct of all settings unique to this particular Lantern instance.
@@ -121,7 +133,7 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	set := sett.m
 
 	// Use settings from disk if they're available.
-	if bytes, err := ioutil.ReadFile(path); err != nil {
+	if bytes, err := os.ReadFile(path); err != nil {
 		sett.log.Debugf("Could not read file %v", err)
 	} else if err := yaml.Unmarshal(bytes, set); err != nil {
 		sett.log.Errorf("Could not load yaml %v", err)
@@ -184,6 +196,10 @@ func newSettings(filePath string) *Settings {
 			SNUserToken:                 "",
 			SNUIAddr:                    "",
 			SNMigratedDeviceIDForUserID: int64(0),
+			SNUserPro:                   false,
+			SNUserLoggedIn:              false,
+			SNUserFirstVisit:            false,
+			SNSalt:                      "",
 		},
 		filePath:        filePath,
 		changeNotifiers: make(map[SettingName][]func(interface{})),
@@ -716,4 +732,43 @@ func (s *Settings) onChange(attr SettingName, value interface{}) {
 		// notify UI of changed settings
 		wsOut <- s.uiMap()
 	}
+}
+
+func (s *Settings) SetProUser(value bool) {
+	s.setVal(SNUserPro, value)
+}
+
+func (s *Settings) IsProUser() bool {
+	return s.getBool(SNUserPro)
+}
+
+// Auth methods
+// SetUserFirstVisit sets the user's first visit flag
+func (s *Settings) SetUserFirstVisit(value bool) {
+	s.setVal(SNUserFirstVisit, value)
+}
+
+// GetUserFirstVisit returns the user's first visit flag
+func (s *Settings) GetUserFirstVisit() bool {
+	return s.getBool(SNUserFirstVisit)
+}
+
+func (s *Settings) SetExpirationDate(date string) {
+	s.setVal(SNExpiryDate, date)
+}
+
+func (s *Settings) IsUserLoggedIn() bool {
+	return s.getBool(SNUserLoggedIn)
+}
+func (s *Settings) SetUserLoggedIn(value bool) {
+	log.Println("Setting user logged in to ", value)
+	s.setVal(SNUserLoggedIn, value)
+}
+
+func (s *Settings) GetSalt() []byte {
+	return s.getbytes(SNSalt)
+}
+
+func (s *Settings) SaveSalt(salt []byte) {
+	s.setVal(SNSalt, salt)
 }

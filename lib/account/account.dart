@@ -56,18 +56,17 @@ class _AccountMenuState extends State<AccountMenu> {
     ).show(context);
   }
 
-  void onAccountManagementTap(
-      BuildContext context, bool isProUser, bool hasUserLoggedIn) {
-    if (Platform.isIOS) {
-      if (hasUserLoggedIn) {
-        // User has gone through onboarding
-        context.pushRoute(AccountManagement(isPro: isProUser));
-      } else {
-        // Ask user to update their email and password
-        showProUserDialog(context);
-      }
-    } else {
+  void onAccountManagementTap(BuildContext context, bool isProUser, authEnabled, hasUserLoggedIn) {
+    if (!authEnabled || Platform.isAndroid) {
       context.pushRoute(AccountManagement(isPro: isProUser));
+      return;
+    }
+    if (hasUserLoggedIn) {
+      // User has gone through onboarding
+      context.pushRoute(AccountManagement(isPro: isProUser));
+    } else {
+      // Ask user to update their email and password
+      showProUserDialog(context);
     }
   }
 
@@ -88,10 +87,9 @@ class _AccountMenuState extends State<AccountMenu> {
     );
   }
 
-  List<Widget> freeItems(BuildContext context, bool hasUserLoggedIn) {
+  List<Widget> freeItems(BuildContext context, bool authEnabled, hasUserLoggedIn) {
     return [
-      if(Platform.isIOS)
-      if (!hasUserLoggedIn)
+      if (authEnabled && !hasUserLoggedIn)
         ListItemFactory.settingsItem(
           icon: ImagePaths.signIn,
           content: 'sign_in'.i18n,
@@ -99,26 +97,26 @@ class _AccountMenuState extends State<AccountMenu> {
         ),
       if (Platform.isAndroid)
         messagingModel.getOnBoardingStatus(
-          (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
+              (context, hasBeenOnboarded, child) =>
+          hasBeenOnboarded == true
               ? messagingModel.getCopiedRecoveryStatus(
-                  (
-                    BuildContext context,
-                    bool hasCopiedRecoveryKey,
-                    Widget? child,
-                  ) =>
-                      ListItemFactory.settingsItem(
-                    icon: ImagePaths.account,
-                    content: 'account_management'.i18n,
-                    onTap: () async => await context
-                        .pushRoute(AccountManagement(isPro: false)),
-                    trailingArray: [
-                      if (!hasCopiedRecoveryKey)
-                        const CAssetImage(
-                          path: ImagePaths.badge,
-                        ),
-                    ],
-                  ),
-                )
+                (BuildContext context,
+                bool hasCopiedRecoveryKey,
+                Widget? child,) =>
+                ListItemFactory.settingsItem(
+                  icon: ImagePaths.account,
+                  content: 'account_management'.i18n,
+                  onTap: () async =>
+                  await context
+                      .pushRoute(AccountManagement(isPro: false)),
+                  trailingArray: [
+                    if (!hasCopiedRecoveryKey)
+                      const CAssetImage(
+                        path: ImagePaths.badge,
+                      ),
+                  ],
+                ),
+          )
               : const SizedBox(),
         ),
       ListItemFactory.settingsItem(
@@ -141,22 +139,22 @@ class _AccountMenuState extends State<AccountMenu> {
         content: 'Authorize Device for Pro'.i18n,
         onTap: () => authorizeDeviceForPro(context),
       ),
-      ...commonItems(context, hasUserLoggedIn)
+      ...commonItems(context, authEnabled, hasUserLoggedIn)
     ];
   }
 
-  List<Widget> proItems(BuildContext context, bool hasUserLoggedIn) {
+  List<Widget> proItems(BuildContext context, bool authEnabled, hasUserLoggedIn) {
     return [
       messagingModel.getOnBoardingStatus(
-        (context, hasBeenOnboarded, child) =>
+            (context, hasBeenOnboarded, child) =>
             messagingModel.getCopiedRecoveryStatus((BuildContext context,
-                    bool hasCopiedRecoveryKey, Widget? child) =>
+                bool hasCopiedRecoveryKey, Widget? child) =>
                 ListItemFactory.settingsItem(
                   key: AppKeys.account_management,
                   icon: ImagePaths.account,
                   content: 'account_management'.i18n,
                   onTap: () =>
-                      onAccountManagementTap(context, true, hasUserLoggedIn),
+                      onAccountManagementTap(context, true, authEnabled, hasUserLoggedIn),
                   trailingArray: [
                     if (!hasCopiedRecoveryKey && hasBeenOnboarded == true)
                       const CAssetImage(
@@ -177,11 +175,11 @@ class _AccountMenuState extends State<AccountMenu> {
         content: 'add_device'.i18n,
         onTap: () async => await context.pushRoute(ApproveDevice()),
       ),
-      ...commonItems(context, hasUserLoggedIn)
+      ...commonItems(context, authEnabled, hasUserLoggedIn)
     ];
   }
 
-  List<Widget> commonItems(BuildContext context, bool hasUserLoggedIn) {
+  List<Widget> commonItems(BuildContext context, bool authEnabled, hasUserLoggedIn) {
     return [
       if (isMobile())
         ListItemFactory.settingsItem(
@@ -213,13 +211,12 @@ class _AccountMenuState extends State<AccountMenu> {
           openSettings(context);
         },
       ),
-      if (Platform.isIOS)
-        if (hasUserLoggedIn)
-          ListItemFactory.settingsItem(
-            icon: ImagePaths.signOut,
-            content: 'sign_out'.i18n,
-            onTap: () => showSingOutDialog(context),
-          )
+      if (authEnabled && hasUserLoggedIn)
+        ListItemFactory.settingsItem(
+          icon: ImagePaths.signOut,
+          content: 'sign_out'.i18n,
+          onTap: () => showSingOutDialog(context),
+        )
     ];
   }
 
@@ -230,21 +227,13 @@ class _AccountMenuState extends State<AccountMenu> {
       automaticallyImplyLeading: false,
       body: sessionModel
           .proUser((BuildContext sessionContext, bool proUser, Widget? child) {
-        if (Platform.isIOS) {
-          return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
-            return ListView(
-              children: proUser
-                  ? proItems(sessionContext, hasUserLoggedIn)
-                  : freeItems(sessionContext, hasUserLoggedIn),
-            );
-          });
-        }
-
-        return ListView(
-          children: proUser
-              ? proItems(sessionContext, false)
-              : freeItems(sessionContext, false),
-        );
+        return sessionModel.isUserSignedIn((context, hasUserLoggedIn, child) {
+          return ListView(
+            children: proUser
+                ? proItems(sessionContext, sessionModel.isAuthEnabled.value!, hasUserLoggedIn)
+                : freeItems(sessionContext, sessionModel.isAuthEnabled.value!, hasUserLoggedIn),
+          );
+        });
       }),
     );
   }

@@ -139,8 +139,7 @@ WINDOWS_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
 WINDOWS_APP_NAME ?= $(APP).exe
 WINDOWS64_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
 WINDOWS64_APP_NAME ?= $(APP)_x64.exe
-LINUX_LIB_NAME_64 ?= $(DESKTOP_LIB_NAME).so
-LINUX_LIB_NAME_32 ?= $(APP)_linux_386
+LINUX_LIB_NAME ?= $(DESKTOP_LIB_NAME).so
 
 APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
@@ -229,40 +228,6 @@ tag: require-version
 	git add $(CHANGELOG_NAME) && \
 	git commit -m "Updated changelog for $$VERSION" && \
 	git push
-
-define fpm-debian-build =
-	echo "Running fpm-debian-build" && \
-	PKG_ARCH=$1 && \
-	WORKDIR=$$(mktemp -dt "$$(basename $$0).XXXXXXXXXX") && \
-	INSTALLER_RESOURCES=./$(INSTALLER_RESOURCES)/linux && \
-	\
-	mkdir -p $$WORKDIR/usr/bin && \
-	mkdir -p $$WORKDIR/usr/lib/$(APP) && \
-	mkdir -p $$WORKDIR/usr/share/applications && \
-	mkdir -p $$WORKDIR/usr/share/icons/hicolor/128x128/apps && \
-	mkdir -p $$WORKDIR/usr/share/doc/$(APP) && \
-	chmod -R 755 $$WORKDIR && \
-	\
-	cp $$INSTALLER_RESOURCES/deb-copyright $$WORKDIR/usr/share/doc/$(APP)/copyright && \
-	cp $$INSTALLER_RESOURCES/$(APP).desktop $$WORKDIR/usr/share/applications && \
-	cp $$INSTALLER_RESOURCES/icon128x128on.png $$WORKDIR/usr/share/icons/hicolor/128x128/apps/$(APP).png && \
-	\
-	cp build/linux/$$PKG_ARCH/release/bundle/$(APP) $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
-	cp $$INSTALLER_RESOURCES/$(APP).sh $$WORKDIR/usr/lib/$(APP) && \
-	\
-	chmod -x $$WORKDIR/usr/lib/$(APP)/$(APP)-binary && \
-	chmod +x $$WORKDIR/usr/lib/$(APP)/$(APP).sh && \
-	\
-	ln -s /usr/lib/$(APP)/$(APP).sh $$WORKDIR/usr/bin/$(APP) && \
-	rm -f $$WORKDIR/usr/lib/$(APP)/$(PACKAGED_YAML) && \
-	rm -f $$WORKDIR/usr/lib/$(APP)/$(APP_YAML) && \
-	cp $(INSTALLER_RESOURCES)/$(PACKAGED_YAML) $$WORKDIR/usr/lib/$(APP)/$(PACKAGED_YAML) && \
-	cp $(APP_YAML_PATH) $$WORKDIR/usr/lib/$(APP)/$(APP_YAML) && \
-	\
-	cat $$WORKDIR/usr/lib/$(APP)/$(APP)-binary | bzip2 > $(APP)_update_linux_$$PKG_ARCH.bz2 && \
-	bundle install && \
-	fpm -a $$PKG_ARCH -s dir -t deb -n $(APP) -v $$VERSION -m "$(PACKAGE_MAINTAINER)" --description "$(APP_DESCRIPTION)\n$(APP_EXTENDED_DESCRIPTION)" --category net --license "Apache-2.0" --vendor "$(PACKAGE_VENDOR)" --url $(PACKAGE_URL) --deb-compression gz -f -C $$WORKDIR usr;
-endef
 
 define osxcodesign
 	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Innovate Labs LLC (4FYC28AXA2)" -v $(1)
@@ -496,35 +461,35 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: export CGO_ENABLED = 1
 desktop-lib: echo-build-tags
-	go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/lib.go
+	go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
 ffigen:
 	dart run ffigen --config ffigen.yaml
 
 .PHONY: linux-amd64
-linux-amd64: $(LINUX_LIB_NAME_64) ## Build lantern for linux-amd64
+linux-amd64: export GOOS = linux
+linux-amd64: export GOARCH = amd64
+linux-amd64: export LIB_NAME = $(LINUX_LIB_NAME)
+linux-amd64: export EXTRA_LDFLAGS += -linkmode external -s -w
+linux-amd64: export GO_BUILD_FLAGS += -a -buildmode=c-shared
+linux-amd64: export Environment = production
+linux-amd64: desktop-lib ## Build lantern for linux-amd64
 
-.PHONY: package-linux-x64
-package-linux-x64: require-version
-	@$(call fpm-debian-build,"x64")
-	@echo "-> $(APP)_$(VERSION)_x64.deb"
+.PHONY: linux-arm64
+linux-arm64: export GOOS = linux
+linux-arm64: export GOARCH = arm64
+linux-arm64: export LIB_NAME = $(LINUX_LIB_NAME)
+linux-arm64: export EXTRA_LDFLAGS += -linkmode external -s -w
+linux-arm64: export GO_BUILD_FLAGS += -a -buildmode=c-shared
+linux-arm64: export Environment = production
+linux-arm64: desktop-lib ## Build lantern for linux-arm64
 
-.PHONY: package-linux-arm64
-package-linux-amd64: require-version
-	@$(call fpm-debian-build,"arm64")
-	@echo "-> $(APP)_$(VERSION)_arm64.deb"
-
-$(LINUX_LIB_NAME_64): export GOOS = linux
-$(LINUX_LIB_NAME_64): export GOARCH = amd64
-$(LINUX_LIB_NAME_64): export LIB_NAME = $(LINUX_LIB_NAME_64)
-$(LINUX_LIB_NAME_64): export EXTRA_LDFLAGS += -linkmode external -s -w
-$(LINUX_LIB_NAME_64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
-$(LINUX_LIB_NAME_64): export Environment = production
-$(LINUX_LIB_NAME_64): desktop-lib
+.PHONY: package-linux
+package-linux:
+	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
 
 .PHONY: windows
 windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
-
 $(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
 $(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
 $(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
@@ -540,7 +505,6 @@ $(WINDOWS_LIB_NAME): desktop-lib
 
 .PHONY: windows64
 windows64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
-
 $(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
 $(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
 $(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static

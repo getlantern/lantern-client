@@ -1,34 +1,40 @@
 package org.getlantern.lantern.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
 
+@Serializable
 enum class PaymentProvider(val provider: String) {
-    @SerializedName("stripe")
+    @SerialName("stripe")
     Stripe("stripe"),
 
-    @SerializedName("freekassa")
+    @SerialName("freekassa")
     Freekassa("freekassa"),
 
-    @SerializedName("googleplay")
+    @SerialName("googleplay")
     GooglePlay("googleplay"),
 
-    @SerializedName("btcpay")
+    @SerialName("btcpay")
     BTCPay("btcpay"),
 
-    @SerializedName("reseller-code")
+    @SerialName("reseller-code")
     ResellerCode("reseller-code"),
 
-    @SerializedName("paymentwall")
+    @SerialName("paymentwall")
     PaymentWall("paymentwall"),
 
-    @SerializedName("fropay")
-	Fropay("fropay")
+    @SerialName("fropay")
+	Fropay("fropay"),
+
+    @SerialName("shepherd")
+    Shepherd("shepherd")
 }
 
+@Serializable
 data class ProviderInfo(
-    @SerializedName("name") var name: PaymentProvider,
-    @SerializedName("data") var data: Map<String, Any>,
-    var logoUrl: List<String>
+    var name: PaymentProvider,
+    var data: Map<String, String> = mapOf<String, String>(),
+    var logoUrl: List<String> = listOf<String>()
 )
 
 fun String.toPaymentProvider(): PaymentProvider? {
@@ -40,6 +46,7 @@ fun String.toPaymentProvider(): PaymentProvider? {
         "reseller-code" -> PaymentProvider.ResellerCode
         "paymentwall" -> PaymentProvider.PaymentWall
         "fropay" -> PaymentProvider.Fropay
+        "shepherd" -> PaymentProvider.Shepherd
         else -> null
     }
 }

@@ -3,15 +3,15 @@
 # Lantern, 2023
 # Yen Le Van <yenlevanbk@gmail.com>, 2024
 # Ngoc Hoang <ngocit09@gmail.com>, 2024
-# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024
 # Nathan Tran, 2024
 # Anh Phan <vietnamesel10n@gmail.com>, 2024
 # e2f <projects@e2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
+# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2024\n"
+"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -290,7 +290,7 @@ msgid "cannot_complete_purchase"
 msgstr "Không thể hoàn tất việc mua"
 
 msgid "discover_not_working"
-msgstr "Tính năng khám phá không hoạt động "
+msgstr "Khám phá không hoạt động"
 
 msgid "cannot_sign_in"
 msgstr "Không thể đăng nhập"
@@ -453,6 +453,9 @@ msgstr "Chọn phương thức thanh toán"
 
 msgid "pro_plan"
 msgstr "Gói Pro"
+
+msgid "one_month_plan"
+msgstr ""
 
 msgid "one_year_plan"
 msgstr "Gói 1 năm"
@@ -1769,7 +1772,7 @@ msgid "recovery_not_found"
 msgstr "Máy không liên đới với người dùng này"
 
 msgid "device_added"
-msgstr "Máy không liên đới với người dùng này"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""

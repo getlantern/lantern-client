@@ -46,6 +46,8 @@ class InAppBilling(
     @Volatile
     private var billingClient: BillingClient? = null
 
+    private var billingResult: BillingResult? = null
+
     private val skus: ConcurrentHashMap<String, ProductDetails> = ConcurrentHashMap()
     private val handler = Handler(Looper.getMainLooper())
 
@@ -53,6 +55,15 @@ class InAppBilling(
 
     @Volatile
     private var purchasesUpdated: PurchasesUpdatedListener? = null
+
+
+    fun isPlayStoreAvailable(): Boolean {
+        if (billingResult != null) {
+            return billingResult!!.responseCodeOK()
+        }
+        return false
+
+    }
 
     override fun initConnection() {
         if (googleApiAvailability.isGooglePlayServicesAvailable(context)
@@ -70,7 +81,8 @@ class InAppBilling(
             it.startConnection(
                 object : BillingClientStateListener {
                     override fun onBillingSetupFinished(billingResult: BillingResult) {
-                        // The BillingClient is ready. You can query purchases here.
+
+                        this@InAppBilling.billingResult = billingResult
                         val responseCode = billingResult.responseCode
                         Logger.d(TAG, "onBillingSetupFinished with response code: $responseCode")
                         if (billingResult.responseCodeOK()) {
@@ -203,6 +215,7 @@ class InAppBilling(
                             it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
                         val proModel = ProPlan(
                             id,
+                            it.description,
                             hashMapOf(currency to price.toLong()),
                             hashMapOf(currency to priceWithoutTax.toLong()),
                             "2" == years,

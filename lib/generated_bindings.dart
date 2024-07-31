@@ -26,6 +26,154 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
+  ffi.Pointer<ffi.Char> isUserFirstTime() {
+    return _isUserFirstTime();
+  }
+
+  late final _isUserFirstTimePtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'isUserFirstTime');
+  late final _isUserFirstTime =
+      _isUserFirstTimePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  void setFirstTimeVisit() {
+    return _setFirstTimeVisit();
+  }
+
+  late final _setFirstTimeVisitPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('setFirstTimeVisit');
+  late final _setFirstTimeVisit =
+      _setFirstTimeVisitPtr.asFunction<void Function()>();
+
+  ffi.Pointer<ffi.Char> isUserLoggedIn() {
+    return _isUserLoggedIn();
+  }
+
+  late final _isUserLoggedInPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'isUserLoggedIn');
+  late final _isUserLoggedIn =
+      _isUserLoggedInPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> signup(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> password,
+  ) {
+    return _signup(
+      email,
+      password,
+    );
+  }
+
+  late final _signupPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('signup');
+  late final _signup = _signupPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  ffi.Pointer<ffi.Char> login(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> password,
+  ) {
+    return _login(
+      email,
+      password,
+    );
+  }
+
+  late final _loginPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('login');
+  late final _login = _loginPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  ffi.Pointer<ffi.Char> logout() {
+    return _logout();
+  }
+
+  late final _logoutPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('logout');
+  late final _logout =
+      _logoutPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  /// Send recovery code to user email
+  ffi.Pointer<ffi.Char> startRecoveryByEmail(
+    ffi.Pointer<ffi.Char> email,
+  ) {
+    return _startRecoveryByEmail(
+      email,
+    );
+  }
+
+  late final _startRecoveryByEmailPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('startRecoveryByEmail');
+  late final _startRecoveryByEmail = _startRecoveryByEmailPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
+
+  /// Complete recovery by email
+  ffi.Pointer<ffi.Char> completeRecoveryByEmail(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> code,
+    ffi.Pointer<ffi.Char> password,
+  ) {
+    return _completeRecoveryByEmail(
+      email,
+      code,
+      password,
+    );
+  }
+
+  late final _completeRecoveryByEmailPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>>('completeRecoveryByEmail');
+  late final _completeRecoveryByEmail = _completeRecoveryByEmailPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  /// // This will validate code send by server
+  ffi.Pointer<ffi.Char> validateRecoveryByEmail(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> code,
+  ) {
+    return _validateRecoveryByEmail(
+      email,
+      code,
+    );
+  }
+
+  late final _validateRecoveryByEmailPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>>('validateRecoveryByEmail');
+  late final _validateRecoveryByEmail = _validateRecoveryByEmailPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
+  /// This will delete user accoutn and creates new user
+  ffi.Pointer<ffi.Char> deleteAccount(
+    ffi.Pointer<ffi.Char> password,
+  ) {
+    return _deleteAccount(
+      password,
+    );
+  }
+
+  late final _deleteAccountPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('deleteAccount');
+  late final _deleteAccount = _deleteAccountPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
+
   void start() {
     return _start();
   }
@@ -33,6 +181,16 @@ class NativeLibrary {
   late final _startPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('start');
   late final _start = _startPtr.asFunction<void Function()>();
+
+  ffi.Pointer<ffi.Char> onSuccess() {
+    return _onSuccess();
+  }
+
+  late final _onSuccessPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'onSuccess');
+  late final _onSuccess =
+      _onSuccessPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> hasProxyFected() {
     return _hasProxyFected();
@@ -53,16 +211,6 @@ class NativeLibrary {
           'hasConfigFected');
   late final _hasConfigFected =
       _hasConfigFectedPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> onSuccess() {
-    return _onSuccess();
-  }
-
-  late final _onSuccessPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'onSuccess');
-  late final _onSuccess =
-      _onSuccessPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   void sysProxyOn() {
     return _sysProxyOn();
@@ -191,6 +339,21 @@ class NativeLibrary {
   late final _removeDevice = _removeDevicePtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
+  ffi.Pointer<ffi.Char> userLinkValidate(
+    ffi.Pointer<ffi.Char> code,
+  ) {
+    return _userLinkValidate(
+      code,
+    );
+  }
+
+  late final _userLinkValidatePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('userLinkValidate');
+  late final _userLinkValidate = _userLinkValidatePtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
+
   ffi.Pointer<ffi.Char> expiryDate() {
     return _expiryDate();
   }
@@ -245,6 +408,28 @@ class NativeLibrary {
   late final _emailExists = _emailExistsPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
+  ffi.Pointer<ffi.Char> testProviderRequest(
+    ffi.Pointer<ffi.Char> email,
+    ffi.Pointer<ffi.Char> paymentProvider,
+    ffi.Pointer<ffi.Char> plan,
+  ) {
+    return _testProviderRequest(
+      email,
+      paymentProvider,
+      plan,
+    );
+  }
+
+  late final _testProviderRequestPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>>('testProviderRequest');
+  late final _testProviderRequest = _testProviderRequestPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
+
   /// The function returns two C strings: the first represents success, and the second represents an error.
   /// If the redemption is successful, the first string contains "true", and the second string is nil.
   /// If an error occurs during redemption, the first string is nil, and the second string contains the error message.
@@ -284,6 +469,26 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('referral');
   late final _referral =
       _referralPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> myDeviceId() {
+    return _myDeviceId();
+  }
+
+  late final _myDeviceIdPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'myDeviceId');
+  late final _myDeviceId =
+      _myDeviceIdPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> authEnabled() {
+    return _authEnabled();
+  }
+
+  late final _authEnabledPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'authEnabled');
+  late final _authEnabled =
+      _authEnabledPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> chatEnabled() {
     return _chatEnabled();
@@ -494,7 +699,7 @@ class NativeLibrary {
   late final _replicaAddr =
       _replicaAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  reportIssue_return reportIssue(
+  ffi.Pointer<ffi.Char> reportIssue(
     ffi.Pointer<ffi.Char> email,
     ffi.Pointer<ffi.Char> issueType,
     ffi.Pointer<ffi.Char> description,
@@ -508,11 +713,11 @@ class NativeLibrary {
 
   late final _reportIssuePtr = _lookup<
       ffi.NativeFunction<
-          reportIssue_return Function(ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('reportIssue');
   late final _reportIssue = _reportIssuePtr.asFunction<
-      reportIssue_return Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
-          ffi.Pointer<ffi.Char>)>();
+      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
   ffi.Pointer<ffi.Char> checkUpdates() {
     return _checkUpdates();
@@ -652,13 +857,6 @@ final class GoSlice extends ffi.Struct {
 typedef GoInt = GoInt64;
 typedef GoInt64 = ffi.LongLong;
 typedef DartGoInt64 = int;
-
-/// Return type for reportIssue
-final class reportIssue_return extends ffi.Struct {
-  external ffi.Pointer<ffi.Char> r0;
-
-  external ffi.Pointer<ffi.Char> r1;
-}
 
 const int __has_safe_buffers = 1;
 

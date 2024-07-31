@@ -36,9 +36,9 @@ import (
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
+
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
-	"github.com/getlantern/lantern-client/desktop/features"
 	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
@@ -90,6 +90,7 @@ type App struct {
 	connectionStatusCallbacks []func(isConnected bool)
 	_sysproxyOff              func() error
 
+	// Websocket-related settings
 	websocketAddr   string
 	websocketServer *http.Server
 	ws              ws.UIChannel
@@ -113,7 +114,9 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		ws:                        ws.NewUIChannel(),
 	}
 	app.statsTracker = NewStatsTracker(app)
-	app.serveWebsocket()
+	if err := app.serveWebsocket(); err != nil {
+		log.Error(err)
+	}
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
@@ -274,26 +277,19 @@ func (app *App) Run(isMain bool) {
 	}()
 }
 
-// setFeatures enables or disables the features specified by values in the features map
-// sent back to the UI
-func (app *App) setFeatures(enabledFeatures map[string]bool, values map[features.Feature]bool) {
-	for feature, isEnabled := range values {
-		if isEnabled {
-			enabledFeatures[feature.String()] = isEnabled
-		}
-	}
-}
-
 // checkEnabledFeatures checks if features are enabled
-// (based on the env vars at build time or the user's settings/geolocation)
-// and starts appropriate services
 func (app *App) checkEnabledFeatures() {
 	enabledFeatures := app.flashlight.EnabledFeatures()
-
-	app.setFeatures(enabledFeatures, features.EnabledFeatures)
-
 	log.Debugf("Starting enabled features: %v", enabledFeatures)
 	//go app.startReplicaIfNecessary(enabledFeatures)
+}
+
+// IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
+func (app *App) IsFeatureEnabled(feature string) bool {
+	if app.flashlight == nil {
+		return false
+	}
+	return app.flashlight.EnabledFeatures()[feature]
 }
 
 // startFeaturesService starts a new features service that dispatches features to any relevant listeners.
@@ -373,6 +369,27 @@ func (app *App) SetLanguage(lang string) {
 			"type":     "pro",
 			"language": lang,
 		})
+	}
+}
+
+func (app *App) SetUserLoggedIn(value bool) {
+	app.settings.SetUserLoggedIn(value)
+	if app.ws != nil {
+		app.ws.SendMessage("pro", map[string]interface{}{
+			"login": value,
+		})
+	}
+}
+
+func (app *App) IsUserLoggedIn() bool {
+	return app.Settings().IsUserLoggedIn()
+
+}
+
+// Create func that send message to UI
+func (app *App) SendMessageToUI(service string, message interface{}) {
+	if app.ws != nil {
+		app.ws.SendMessage(service, message)
 	}
 }
 
@@ -456,8 +473,6 @@ func (app *App) HasSucceedingProxy() bool {
 }
 
 func (app *App) GetHasConfigFetched() bool {
-
-	log.Debugf("Global config fetched: %v, Proxies config fetched: %v")
 	return atomic.LoadInt32(&app.fetchedGlobalConfig) == 1
 }
 
@@ -585,6 +600,8 @@ func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
 		resp, err := app.proClient.UserData(context.Background())
 		if err != nil {
 			return "", errors.New("error fetching user data: %v", err)
+		} else if resp.User == nil {
+			return "", errors.New("error fetching user data")
 		}
 
 		app.SetReferralCode(resp.User.Code)

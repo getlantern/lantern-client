@@ -66,6 +66,10 @@ class _PlanCardState extends State<PlanCard> {
                               : Platform.isIOS
                                   ? 'lantern_pro_two_year'.i18n
                                   : 'two_year_plan'.i18n,
+                              ? 'one_year_plan'.i18n
+                              : (planName == '1m'
+                                  ? 'one_month_plan'.i18n
+                                  : 'two_year_plan'.i18n),
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
@@ -142,8 +146,16 @@ class _PlanCardState extends State<PlanCard> {
         resolveRouteIOS();
         break;
       default:
-        // proceed to the default checkout page on Android and desktop
-        _checkOut(context);
+        if(Platform.isAndroid || !sessionModel.isAuthEnabled.value!){
+          _processLegacyCheckOut(context);
+        return;
+        }
+
+        if (widget.isPro) {
+          _processCheckOut(context);
+        } else {
+          signUpFlow();
+        }
         break;
     }
   }
@@ -160,11 +172,11 @@ class _PlanCardState extends State<PlanCard> {
     return providers;
   }
 
-  Future<void> _checkOut(BuildContext context) async {
+  Future<void> _processCheckOut(BuildContext context) async {
     final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
-    // * Play version (Android only)
-    if (isPlayVersion && !inRussia) {
+    // check if google play payment is available
+    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -192,9 +204,51 @@ class _PlanCardState extends State<PlanCard> {
       }
     }
 
+    final email = sessionModel.userEmail.value;
     // * Proceed to our own Checkout
     await context.pushRoute(
       Checkout(
+        plan: widget.plan,
+        isPro: widget.isPro,
+        email: email,
+      ),
+    );
+  }
+
+  Future<void> _processLegacyCheckOut(BuildContext context) async {
+    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+    final inRussia = sessionModel.country.value == 'RU';
+    // check if google play payment is available
+    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
+      await context.pushRoute(
+        PlayCheckout(
+          plan: widget.plan,
+          isPro: widget.isPro,
+        ),
+      );
+      return;
+    } else if (isDesktop()) {
+      final paymentMethods = await sessionModel.paymentMethodsv4();
+      final providers = paymentProvidersFromMethods(paymentMethods);
+      // if only one payment provider is returned, bypass the last checkout screen
+      // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
+      if (providers.length == 1 &&
+          providers[0].name.toPaymentEnum() == Providers.stripe) {
+        final providerName = providers[0].name.toPaymentEnum();
+        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
+          context,
+          widget.plan.id,
+          "",
+          providerName,
+        );
+        await openDesktopWebview(
+            context: context, provider: providerName, redirectUrl: redirectUrl);
+        return;
+      }
+    }
+
+    await context.pushRoute(
+      CheckoutLegacy(
         plan: widget.plan,
         isPro: widget.isPro,
       ),

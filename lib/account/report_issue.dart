@@ -211,6 +211,7 @@ class _ReportIssueState extends State<ReportIssue> {
         },
       );
     } catch (error, stackTrace) {
+      print(stackTrace);
       AppLoadingDialog.dismissLoadingDialog(context);
       CDialog.showError(
         context,

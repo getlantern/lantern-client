@@ -324,14 +324,17 @@ func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRec
 	if err != nil {
 		return nil, err
 	}
+	if resp.Status != "ok" {
+		return nil, errors.New("error validating link code: %v", resp.Status)
+	}
 
 	return &resp, nil
 }
 
 // PurchaseRequest is used to request a purchase of a Pro plan is will be used for all most all the payment providers
-func (c *proClient) PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error) {
+func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interface{}) (*PurchaseResponse, error) {
 	var resp PurchaseResponse
-	err := c.webclient.PostJSONReadingJSON(ctx, "/purchase", data, nil, &resp)
+	err := c.webclient.PostFormReadingJSON(ctx, "/purchase", req, &resp)
 	if err != nil {
 		return nil, err
 	}
