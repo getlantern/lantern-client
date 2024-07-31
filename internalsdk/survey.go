@@ -21,20 +21,6 @@ var (
 
 	surveyUrl     = "https://raw.githubusercontent.com/getlantern/loconf/master/messages.json"
 	noSurveyError = errors.New("Survey is not available for the user")
-	jsonResponse  = `{
-   "defaultLocale":"en-US",
-   "surveys":{
-      "IN": {
-	 "enabled": true, 
-	 "probability": 0.5,
-	 "campaign": "",
-	 "url": "https://lantern.surveysparrow.com/s/uae---monthly-quality-check/tt-x8w5Nwc8Ar5DMTJPSh3uP8",
-	 "message": "Fill out the following survey to review Lantern's performance!",
-	 "thanks": "",
-	 "button": "Take Survey"
-      }
-   }
-}`
 )
 
 type SurveyResponse struct {

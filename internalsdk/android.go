@@ -624,7 +624,7 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 
 		authEnabled := runner.FeatureEnabled("auth", common.ApplicationVersion)
 		log.Debugf("Auth enabled? %v", authEnabled)
-		session.SetAuthEnabled(true)
+		session.SetAuthEnabled(authEnabled)
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
 			showAdsEnabled := runner.FeatureEnabled("interstitialads", common.ApplicationVersion)
