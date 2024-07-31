@@ -20,8 +20,6 @@ import org.getlantern.mobilesdk.Lantern
 import org.getlantern.mobilesdk.LanternNotRunningException
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.StartResult
-import org.getlantern.mobilesdk.model.LoConf
-import org.getlantern.mobilesdk.model.LoConfCallback
 import java.util.Random
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -104,13 +102,6 @@ open class LanternService : Service(), Runnable {
             autoUpdater.checkForUpdates(null)
         }
         EventHandler.postStatusEvent(LanternStatus(Status.ON))
-
-        // fetch latest loconf
-        LoConf.Companion.fetch(object : LoConfCallback {
-            override fun onSuccess(loconf: LoConf) {
-                EventHandler.postLoConfEvent(loconf)
-            }
-        })
     }
 
     private fun createUser(attempt: Int) {
@@ -118,29 +109,6 @@ open class LanternService : Service(), Runnable {
         val timeOut =
             (baseWaitMs * Math.pow(2.0, attempt.toDouble())).toLong().coerceAtMost(maxBackOffTime)
         createUserHandler.postDelayed(createUserRunnable, timeOut)
-    }
-
-    private class CreateUser(val service: LanternService) : Runnable {
-    private var attempts: Int = 0
-
-        override fun run() {
-            try {
-                val userCreated = LanternApp.getSession().createUser()
-                if (userCreated) {
-                    service.createUserHandler.removeCallbacks(service.createUserRunnable)
-                    EventHandler.postStatusEvent(LanternStatus(Status.ON))
-                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
-                }
-            } catch (e: Exception) {
-                if (attempts >= MAX_CREATE_USER_TRIES) {
-                    Logger.error(TAG, "Max. number of tries made to create Pro user")
-                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
-                    return
-                }
-                attempts++
-                service.createUser(attempts)
-            }
-        }
     }
 
     override fun onDestroy() {
@@ -163,6 +131,29 @@ open class LanternService : Service(), Runnable {
             .setAction("restartservice")
             .setClass(this, AutoStarter::class.java)
         sendBroadcast(broadcastIntent)
+    }
+
+    private class CreateUser(val service: LanternService) : Runnable {
+        private var attempts: Int = 0
+
+        override fun run() {
+            try {
+                val userCreated = LanternApp.getSession().createUser()
+                if (userCreated) {
+                    service.createUserHandler.removeCallbacks(service.createUserRunnable)
+                    EventHandler.postStatusEvent(LanternStatus(Status.ON))
+                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
+                }
+            } catch (e: Exception) {
+                if (attempts >= MAX_CREATE_USER_TRIES) {
+                    Logger.error(TAG, "Max. number of tries made to create Pro user")
+                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
+                    return
+                }
+                attempts++
+                service.createUser(attempts)
+            }
+        }
     }
 }
 

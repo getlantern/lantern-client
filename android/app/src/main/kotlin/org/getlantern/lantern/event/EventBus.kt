@@ -10,11 +10,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.Bandwidth
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.VpnState
-import org.getlantern.mobilesdk.model.LoConf
-import java.util.Locale
 import kotlin.coroutines.coroutineContext
 
 object EventBus {
@@ -41,22 +38,6 @@ internal object EventHandler {
         postAppEvent(AppEvent.AccountInitializationEvent(status))
     }
 
-    fun postBandwidthEvent(bandwidth: Bandwidth) {
-        postAppEvent(AppEvent.BandwidthEvent(bandwidth))
-    }
-
-    fun postLocaleEvent(locale: Locale) {
-        postAppEvent(AppEvent.LocaleEvent(locale))
-    }
-
-    fun postLoConfEvent(loconf: LoConf) {
-        postAppEvent(AppEvent.LoConfEvent(loconf))
-    }
-
-//    fun postStatsEvent(stats: Stats) {
-//        postAppEvent(AppEvent.StatsEvent(stats))
-//    }
-
     fun postStatusEvent(status: LanternStatus) {
         postAppEvent(AppEvent.StatusEvent(status))
     }
@@ -65,7 +46,7 @@ internal object EventHandler {
         postAppEvent(AppEvent.VpnStateEvent(vpnState))
     }
 
-    fun postAppEvent(appEvent: AppEvent) {
+    private fun postAppEvent(appEvent: AppEvent) {
         CoroutineScope(Dispatchers.IO).launch {
             EventBus.publish(appEvent)
         }
@@ -84,22 +65,6 @@ sealed class AppEvent {
     data class AccountInitializationEvent(
         val status: AccountInitializationStatus.Status,
     ) : AppEvent()
-
-    data class BandwidthEvent(
-        val bandwidth: Bandwidth,
-    ) : AppEvent()
-
-    data class LocaleEvent(
-        val locale: Locale,
-    ) : AppEvent()
-
-    data class LoConfEvent(
-        val loconf: LoConf,
-    ) : AppEvent()
-
-//    data class StatsEvent(
-//        val stats: Stats,
-//    ) : AppEvent()
 
     data class StatusEvent(
         val status: LanternStatus,
