@@ -170,6 +170,7 @@ class SessionModel(
                     )
                 }
                 catch (e: Exception) {
+                    Logger.error(TAG, "Error making purchase", e)
                     result.error(
                         "unknownError",
                         activity.resources.getString(R.string.error_making_purchase),
