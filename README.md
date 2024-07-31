@@ -56,7 +56,7 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
 * Install all prerequisites
 * Run `git submodule update --init --recursive`
 * Run `git lfs install && git pull`.
-* Put the [app.env][https://my.1password.com/app#/everything/AllItems/whdjlkyj7ku6pumtyc7nh5vg4yadqasjh2hspgjgvgfllyekhcrq) file (Frontend vault) from 1Password in the repo root.
+* Put the [app.env](https://my.1password.com/app#/everything/AllItems/whdjlkyj7ku6pumtyc7nh5vg4yadqasjh2hspgjgvgfllyekhcrq) file (Frontend vault) from 1Password in the repo root.
 * Go to the **SDK MANAGER**
 * Select **Android SDK**
 * Check the SDK from android 5.0(LOLLIPOP) up to the Latest Version at the moment.
