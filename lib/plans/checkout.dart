@@ -307,23 +307,6 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-  void _proceedWithShepherdPay() async {
-    try {
-      context.loaderOverlay.show();
-      final value = await sessionModel.generatePaymentRedirectUrl(
-          planID: widget.plan.id,
-          email: widget.email!,
-          paymentProvider: Providers.shepherd);
-
-      context.loaderOverlay.hide();
-      final btcPayURL = value;
-      await sessionModel.openWebview(btcPayURL);
-    } catch (error, stackTrace) {
-      context.loaderOverlay.hide();
-      showError(context, error: error, stackTrace: stackTrace);
-    }
-  }
-
   void _proceedWithFroPay() async {
     try {
       context.loaderOverlay.show();
@@ -487,7 +470,7 @@ class _CheckoutState extends State<Checkout>
         refCodeController.error = 'invalid_or_incomplete_referral_code'.i18n;
         return;
       }
-      showError(context, error: e);
+      showError(context, error: e.localizedDescription);
     }
   }
 

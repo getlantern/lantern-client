@@ -29,17 +29,16 @@ class _StripeCheckoutState extends State<StripeCheckout> {
   late final ccValidator = CreditCardValidator();
   final creditCardFieldKey = GlobalKey<FormState>();
   late final creditCardController = CustomTextEditingController(
-    formKey: creditCardFieldKey,
-    validator: (value) {
-      if(value=="" || value==null){
-        return 'invalid_card'.i18n;
-      }
-      if(!ccValidator.validateCCNum(value).isValid){
-        return 'invalid_card'.i18n;
-      }
-      return null;
-    }
-  );
+      formKey: creditCardFieldKey,
+      validator: (value) {
+        if (value == "" || value == null) {
+          return 'invalid_card'.i18n;
+        }
+        if (!ccValidator.validateCCNum(value).isValid) {
+          return 'invalid_card'.i18n;
+        }
+        return null;
+      });
 
   final expDateFieldKey = GlobalKey<FormState>();
   late final expDateController = CustomTextEditingController(
@@ -78,7 +77,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
 
   Future<void> onCheckoutButtonTap() async {
     try {
-      if(!determineFormIsValid()){
+      if (!determineFormIsValid()) {
         return;
       }
       context.loaderOverlay.show(widget: spinner);
@@ -121,12 +120,10 @@ class _StripeCheckoutState extends State<StripeCheckout> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-
             PlanStep(
               stepNum: '3',
               description: 'checkout'.i18n,
             ),
-
             Form(
               key: creditCardFieldKey,
               child: CTextField(
@@ -145,7 +142,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Expanded(
                   child: Form(
                     key: expDateFieldKey,
@@ -158,8 +154,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                       label: 'card_expiration'.i18n,
                       inputFormatters: [CreditCardExpirationDateFormatter()],
                       keyboardType: TextInputType.datetime,
-                      prefixIcon:
-                          const CAssetImage(path: ImagePaths.calendar),
+                      prefixIcon: const CAssetImage(path: ImagePaths.calendar),
                     ),
                   ),
                 ),
@@ -211,7 +206,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
     final anyFieldsEmpty = creditCardController.value.text.isEmpty ||
         expDateController.value.text.isEmpty ||
         cvcFieldController.value.text.isEmpty;
-    if(anyFieldsEmpty){
+    if (anyFieldsEmpty) {
       creditCardFieldKey.currentState?.validate();
       expDateFieldKey.currentState?.validate();
       cvcFieldKey.currentState?.validate();

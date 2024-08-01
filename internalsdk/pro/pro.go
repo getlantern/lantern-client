@@ -40,6 +40,7 @@ type ProClient interface {
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
 	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
+	ReferralAttach(ctx context.Context, refCode string) (bool, error)
 	//Device Linking
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
@@ -342,4 +343,19 @@ func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interfac
 		return nil, errors.New("wrong_seller_code: %v", resp.Status)
 	}
 	return &resp, nil
+}
+
+// PurchaseRequest is used to request a purchase of a Pro plan is will be used for all most all the payment providers
+func (c *proClient) ReferralAttach(ctx context.Context, refCode string) (bool, error) {
+	var resp protos.BaseResponse
+	params := c.defaultParams()
+	params["code"] = refCode
+	err := c.webclient.PostFormReadingJSON(ctx, "/referral-attach", params, &resp)
+	if err != nil {
+		return false, err
+	}
+	if resp.Status != "ok" {
+		return false, errors.New("error_referral: %v", resp.Status)
+	}
+	return true, nil
 }

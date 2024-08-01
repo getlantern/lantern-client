@@ -153,7 +153,6 @@ class SessionModel internal constructor(
 
             else -> super.doOnMethodCall(call, result)
         }
-
     }
 
     /// Utils class methods

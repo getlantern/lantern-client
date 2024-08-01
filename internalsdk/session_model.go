@@ -521,6 +521,13 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "chatEnabled":
 		return m.ChatEnable(), nil
 
+	case "applyRefCode":
+		refCode := arguments.Get("refCode").String()
+		err := m.applyRefCode(refCode)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	case "getStripePubKey":
 		return m.getStripePubKey()
 
@@ -1490,6 +1497,8 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 	return setProUser(m.baseModel, true)
 }
 
+// Payment Methods
+
 func submitApplePayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
 	log.Debugf("Submit Apple Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
 	err, purchaseData := createPurchaseData(m, email, paymentProviderApplePay, "", purchaseToken, planId)
@@ -1551,7 +1560,14 @@ func submitStripePlayPayment(m *SessionModel, email string, planId string, purch
 	log.Debugf("Purchase response %v", purchase)
 	// Set user to pro
 	return setProUser(m.baseModel, true)
+}
 
+func (session *SessionModel) applyRefCode(refCode string) error {
+	_, err := session.proClient.ReferralAttach(context.Background(), refCode)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func generatePaymentRedirectUrl(m *SessionModel, email string, planId string, provider string) (string, error) {
