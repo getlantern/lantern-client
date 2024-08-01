@@ -161,11 +161,24 @@ class SessionModel(
             }
 
 
-            "submitGooglePlayPayment" -> paymentsUtil.submitGooglePlayPayment(
-                call.argument("email")!!,
-                call.argument("planID")!!,
-                result,
-            )
+            "submitGooglePlayPayment" -> {
+                try {
+                    paymentsUtil.submitGooglePlayPayment(
+                        call.argument("email")!!,
+                        call.argument("planID")!!,
+                        result,
+                    )
+                }
+                catch (e: Exception) {
+                    Logger.error(TAG, "Error making purchase", e)
+                    result.error(
+                        "unknownError",
+                        activity.resources.getString(R.string.error_making_purchase),
+                        null,
+                    )
+
+                }
+            }
 
             "submitStripePayment" -> paymentsUtil.submitStripePayment(
                 call.argument("planID")!!,

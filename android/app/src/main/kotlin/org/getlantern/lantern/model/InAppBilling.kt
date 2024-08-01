@@ -131,7 +131,7 @@ class InAppBilling(
         val skuDetails = skus[planID.lowercase()]
         if (skuDetails == null) {
             Logger.e(TAG, "Unable to find sku details for plan: $planID")
-            return
+            throw IllegalArgumentException("Unable to find sku details for plan: $planID")
         }
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -189,7 +189,12 @@ class InAppBilling(
                 QueryProductDetailsParams.Product.newBuilder()
                     .setProductId("2y")
                     .setProductType(BillingClient.ProductType.INAPP)
+                    .build(),
+                QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId("1m")
+                    .setProductType(BillingClient.ProductType.INAPP)
                     .build()
+
             )
 
         val params = QueryProductDetailsParams.newBuilder().setProductList(productList).build()
