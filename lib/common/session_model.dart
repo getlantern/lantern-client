@@ -796,6 +796,9 @@ class SessionModel extends Model {
   Future<void> applyRefCode(
     String refCode,
   ) async {
+    if(isDesktop()){
+      return await compute(ffiApplyRefCode, refCode);
+    }
     return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
       'refCode': refCode,
     }).then((value) => value as String);

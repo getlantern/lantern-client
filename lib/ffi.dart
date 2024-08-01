@@ -189,10 +189,14 @@ Pointer<Utf8> ffiSplitTunneling() => _bindings.splitTunneling().cast<Utf8>();
 
 Pointer<Utf8> ffiChatMe() => _bindings.chatMe().cast<Utf8>();
 
+Pointer<Utf8> ffIsPlayVersion() => "false".toPointerChar().cast<Utf8>();
 
-Pointer<Utf8> ffIsPlayVersion() =>  "false".toPointerChar().cast<Utf8>();
-
-
+Future<void> ffiApplyRefCode(String refCode) {
+  final code = refCode.toPointerChar();
+  final result = _bindings.applyRef(code).cast<Utf8>().toDartString();
+  checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
+  return Future.value();
+}
 
 Pointer<Utf8> ffiOnBoardingStatus() =>
     _bindings.onBoardingStatus().cast<Utf8>();
