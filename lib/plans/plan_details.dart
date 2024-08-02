@@ -149,26 +149,6 @@ class _PlanCardState extends State<PlanCard> {
     }
   }
 
-  void onPlanTap(BuildContext context) {
-    switch (Platform.operatingSystem) {
-      case 'ios':
-        resolveRouteIOS();
-        break;
-      default:
-        if (Platform.isAndroid || !sessionModel.isAuthEnabled.value!) {
-          _processLegacyCheckOut(context);
-          return;
-        }
-
-        if (widget.isPro) {
-          _processCheckOut(context);
-        } else {
-          signUpFlow();
-        }
-        break;
-    }
-  }
-
 // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
   List<PaymentProviders> paymentProvidersFromMethods(
       Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
@@ -181,58 +161,33 @@ class _PlanCardState extends State<PlanCard> {
     return providers;
   }
 
-  Future<void> _processCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
-    final inRussia = sessionModel.country.value == 'RU';
-    // check if google play payment is available
-    if (isPlayVersion &&
-        !inRussia &&
-        await sessionModel.isGooglePlayServiceAvailable()) {
-      await context.pushRoute(
-        PlayCheckout(
-          plan: widget.plan,
-          isPro: widget.isPro,
-        ),
-      );
-      return;
-    } else if (isDesktop()) {
-      final paymentMethods = await sessionModel.paymentMethodsv4();
-      final providers = paymentProvidersFromMethods(paymentMethods);
-      // if only one payment provider is returned, bypass the last checkout screen
-      // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
-      if (providers.length == 1 &&
-          providers[0].name.toPaymentEnum() == Providers.stripe) {
-        final providerName = providers[0].name.toPaymentEnum();
-        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-          context,
-          widget.plan.id,
-          "",
-          providerName,
-        );
-        await openDesktopWebview(
-            context: context, provider: providerName, redirectUrl: redirectUrl);
-        return;
-      }
+  Future<void> onPlanTap(BuildContext context) async {
+    switch (Platform.operatingSystem) {
+      case 'ios':
+        _proceedToCheckoutIOS(context);
+        break;
+      default:
+        //Support for legacy purchase flow
+        if (!sessionModel.isAuthEnabled.value!) {
+          _processLegacyCheckOut(context);
+          return;
+        }
+        if (widget.isPro) {
+          _processCheckOut(context);
+          return;
+        } else {
+          if (await isPlayStoreEnabled()) {
+            _proceedToGooglePlayPurchase();
+            return;
+          }
+          signUpFlow();
+        }
+        break;
     }
-
-    final email = sessionModel.userEmail.value;
-    // * Proceed to our own Checkout
-    await context.pushRoute(
-      Checkout(
-        plan: widget.plan,
-        isPro: widget.isPro,
-        email: email,
-      ),
-    );
   }
 
   Future<void> _processLegacyCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
-    final inRussia = sessionModel.country.value == 'RU';
-    // check if google play payment is available
-    if (isPlayVersion &&
-        !inRussia &&
-        await sessionModel.isGooglePlayServiceAvailable()) {
+    if (await isPlayStoreEnabled()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -268,10 +223,25 @@ class _PlanCardState extends State<PlanCard> {
     );
   }
 
-  void resolveRouteIOS() {
+  Future<void> _processCheckOut(BuildContext context) async {
+    if (await isPlayStoreEnabled()) {
+      _proceedToGooglePlayPurchase();
+      return;
+    }
+    final email = sessionModel.userEmail.value;
+    // * Proceed to our own Checkout
+    await context.pushRoute(
+      Checkout(
+        plan: widget.plan,
+        isPro: widget.isPro,
+        email: email,
+      ),
+    );
+  }
+
+  void resolveRoute() {
     if (widget.isPro) {
-      //user is signed in
-      _proceedToCheckoutIOS(context);
+      showSuccessDialog(context, widget.isPro);
     } else {
       signUpFlow();
     }
@@ -292,7 +262,7 @@ class _PlanCardState extends State<PlanCard> {
         planId: widget.plan.id,
         onSuccess: () {
           context.loaderOverlay.hide();
-          showSuccessDialog(context, widget.isPro);
+          resolveRoute();
         },
         onFailure: (error) {
           context.loaderOverlay.hide();
@@ -310,6 +280,17 @@ class _PlanCardState extends State<PlanCard> {
         error: e,
         description: e.toString(),
       );
+    }
+  }
+
+  void _proceedToGooglePlayPurchase() {
+    try {
+      context.loaderOverlay.show();
+      sessionModel.submitPlayPayment(widget.plan.id, "");
+      context.loaderOverlay.hide();
+      resolveRoute();
+    } catch (e) {
+      showError(context, error: e);
     }
   }
 }

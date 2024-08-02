@@ -2,7 +2,7 @@
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
-import 'package:lantern/common/ui/custom/email_tag.dart';
+import 'package:lantern/plans/utils.dart';
 
 import '../../common/common.dart';
 
@@ -90,6 +90,22 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
                 ],
               ),
             ),
+            const SizedBox(height: 16),
+            FutureBuilder(
+              future: isPlayStoreEnabled(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData &&
+                    (snapshot.data == true || isAppStoreEnabled())) {
+                  return TextButton(
+                      onPressed: () {
+                        context.router.popUntilRoot();
+                      },
+                      child: CText("skip_for_now".i18n.toUpperCase(),
+                          style: tsButtonPink));
+                }
+                return const SizedBox();
+              },
+            )
           ],
         ),
       ),
@@ -106,7 +122,6 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
     FocusManager.instance.primaryFocus?.unfocus();
     createAccount();
   }
-
 
   /// Process for creating account
   /// Create new temp account with random password

@@ -1767,5 +1767,15 @@ msgstr "Lantern Pro: One Month Plan"
 msgid "non_renewing_subscription"
 msgstr "Non-renewing subscription"
 
+msgid "restore_purchase"
+msgstr "Restore Purchase"
+
+msgid "skip_for_now"
+msgstr "Skip for now"
+
+
+
+
+
 
 

@@ -83,7 +83,15 @@ void showSuccessDialog(
   );
 }
 
-enum Providers { shepherd, stripe, btcpay, freekassa, fropay, paymentwall, test }
+enum Providers {
+  shepherd,
+  stripe,
+  btcpay,
+  freekassa,
+  fropay,
+  paymentwall,
+  test
+}
 
 extension ProviderExtension on String {
   Providers toPaymentEnum() {
@@ -138,4 +146,17 @@ Future<void> openDesktopWebview(
       await context.pushRoute(
           AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
   }
+}
+
+Future<bool> isPlayStoreEnabled() async {
+  if (!Platform.isAndroid) return false;
+  final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+  final inRussia = sessionModel.country.value == 'RU';
+  return (isPlayVersion &&
+      !inRussia &&
+      await sessionModel.isGooglePlayServiceAvailable());
+}
+
+bool isAppStoreEnabled() {
+  return Platform.isIOS;
 }

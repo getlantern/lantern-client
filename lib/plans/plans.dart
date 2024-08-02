@@ -1,6 +1,5 @@
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/plans/feature_list.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
@@ -16,9 +15,11 @@ class PlansPage extends StatelessWidget {
       widget: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
         return sessionModel.plans(
-          builder: (context,
-              Iterable<PathAndValue<Plan>> plans,
-              Widget? child,) {
+          builder: (
+            context,
+            Iterable<PathAndValue<Plan>> plans,
+            Widget? child,
+          ) {
             if (plans.isEmpty) {
               // show user option to retry
               return RetryWidget(onRetryTap: () => onRetryTap(context));
@@ -63,12 +64,8 @@ class PlansPage extends StatelessWidget {
                         ),
                       ),
                       // * Card
-                      ...plans
-                          .toList()
-                          .reversed
-                          .map(
-                            (plan) =>
-                            Container(
+                      ...plans.toList().reversed.map(
+                            (plan) => Container(
                               color: white,
                               padding: const EdgeInsetsDirectional.only(
                                 start: 32.0,
@@ -79,6 +76,14 @@ class PlansPage extends StatelessWidget {
                                 isPro: proUser,
                               ),
                             ),
+                          ),
+
+                      TextButton(
+                        onPressed: () {},
+                        child: CText("restore_purchase".i18n.toUpperCase(),
+                            style: tsButton.copiedWith(
+                              color: pink5,
+                            )),
                       ),
                     ],
                   ),
@@ -97,7 +102,7 @@ class PlansPage extends StatelessWidget {
   void _onPromoCodeTap(BuildContext context, bool proUser) {
     if (!sessionModel.isAuthEnabled.value!) {
       context.pushRoute(ResellerCodeCheckoutLegacy(isPro: proUser));
-    return;
+      return;
     }
     if (proUser) {
       context.pushRoute(
