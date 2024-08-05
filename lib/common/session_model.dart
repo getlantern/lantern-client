@@ -634,6 +634,11 @@ class SessionModel extends Model {
   }
 
   // Plans and payment methods
+
+  Future<void> restorePurchase() async {
+    return methodChannel.invokeMethod('restorePurchase');
+  }
+
   Future<void> updatePaymentPlans() async {
     return methodChannel.invokeMethod('updatePaymentPlans');
   }

@@ -451,6 +451,18 @@ class PaymentsUtil(private val activity: Activity) {
         )
     }
 
+
+    fun restorePurchase(result: MethodChannel.Result) {
+        val inAppBilling = LanternApp.getInAppBilling()
+        inAppBilling.restorePurchase { purchase ->
+            if (purchase == null) {
+                result.error("purchase_not_found", "No previous purchase found", null)
+            }
+            result.success("Purchase restored")
+
+        }
+    }
+
     companion object {
         private val TAG = PaymentsUtil::class.java.name
         private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()

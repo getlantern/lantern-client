@@ -81,7 +81,6 @@ class AppPurchase {
   ) async {
     for (var purchaseDetails in purchaseDetailsList) {
       await _handlePurchase(purchaseDetails);
-      mainLogger.d('Purchase data: ${purchaseDetails}');
     }
   }
 

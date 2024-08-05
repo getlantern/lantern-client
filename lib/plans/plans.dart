@@ -197,6 +197,14 @@ class PlansPage extends StatelessWidget {
   }
 
   void restorePurchases(BuildContext context) {
-    sl<AppPurchase>().restorePurchases(context);
+    try {
+      if (Platform.isIOS) {
+        sl<AppPurchase>().restorePurchases(context);
+      } else {
+        sessionModel.restorePurchase();
+      }
+    } catch (e, stackTrace) {
+      showError(context, error: e.localizedDescription, stackTrace: stackTrace);
+    }
   }
 }

@@ -177,7 +177,7 @@ class _PlanCardState extends State<PlanCard> {
           return;
         } else {
           if (await isPlayStoreEnabled()) {
-            _proceedToGooglePlayPurchase();
+            _proceedToGooglePlayPurchase("");
             return;
           }
           signUpFlow();
@@ -225,7 +225,8 @@ class _PlanCardState extends State<PlanCard> {
 
   Future<void> _processCheckOut(BuildContext context) async {
     if (await isPlayStoreEnabled()) {
-      _proceedToGooglePlayPurchase();
+      final email = sessionModel.userEmail.value;
+      _proceedToGooglePlayPurchase(email!!);
       return;
     }
     final email = sessionModel.userEmail.value;
@@ -259,7 +260,7 @@ class _PlanCardState extends State<PlanCard> {
       context.loaderOverlay.show();
       appPurchase.startPurchase(
         context: context,
-        email: "jigarrrt@getlantern.org",
+        email: sessionModel.userEmail.value ?? '',
         planId: widget.plan.id,
         onSuccess: () {
           context.loaderOverlay.hide();
@@ -284,13 +285,14 @@ class _PlanCardState extends State<PlanCard> {
     }
   }
 
-  void _proceedToGooglePlayPurchase() {
+  Future<void> _proceedToGooglePlayPurchase(String email) async {
     try {
       context.loaderOverlay.show();
-      sessionModel.submitPlayPayment(widget.plan.id, "");
+      await sessionModel.submitPlayPayment(widget.plan.id, email);
       context.loaderOverlay.hide();
       resolveRoute();
     } catch (e) {
+      context.loaderOverlay.hide();
       showError(context, error: e);
     }
   }

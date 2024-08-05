@@ -1773,6 +1773,10 @@ msgstr "Restore Purchase"
 msgid "skip_for_now"
 msgstr "Skip for now"
 
+msgid "purchase_not_found"
+msgstr "No purchase found"
+
+
 
 
 
