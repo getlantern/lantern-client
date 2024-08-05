@@ -161,6 +161,9 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
+	if opts.Platform == "ios" {
+		m.SetAuthEnabled(true)
+	}
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
 }

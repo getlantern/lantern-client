@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:lantern/core/purchase/app_purchase.dart';
+import 'package:lantern/plans/utils.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 import '../../common/common.dart';
@@ -290,13 +291,18 @@ class _VerificationState extends State<Verification> {
     ));
   }
 
-  void resolveRoute(String code) {
+  Future<void> resolveRoute(String code) async {
     switch (widget.authFlow) {
       case AuthFlow.signIn:
       // TODO: Handle this case.
       case AuthFlow.reset:
         openResetPassword(code);
       case AuthFlow.createAccount:
+        ///Check if user is from app store or play store build
+        if (isAppStoreEnabled() || (await isPlayStoreEnabled())) {
+          openPassword();
+          return;
+        }
         startPurchase();
       case AuthFlow.verifyEmail:
         context.router.maybePop();

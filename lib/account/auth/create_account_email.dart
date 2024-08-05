@@ -2,6 +2,7 @@
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
+import 'package:lantern/core/purchase/app_purchase.dart';
 import 'package:lantern/plans/utils.dart';
 
 import '../../common/common.dart';
@@ -160,4 +161,6 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
       CDialog.showError(context, description: e.localizedDescription);
     }
   }
+
+
 }

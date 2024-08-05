@@ -4,6 +4,8 @@ import 'package:lantern/plans/feature_list.dart';
 import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/utils.dart';
 
+import '../core/purchase/app_purchase.dart';
+
 @RoutePage(name: "PlansPage")
 class PlansPage extends StatelessWidget {
   const PlansPage({super.key});
@@ -77,13 +79,29 @@ class PlansPage extends StatelessWidget {
                               ),
                             ),
                           ),
-
-                      TextButton(
-                        onPressed: () {},
-                        child: CText("restore_purchase".i18n.toUpperCase(),
-                            style: tsButton.copiedWith(
-                              color: pink5,
-                            )),
+                      FutureBuilder<bool>(
+                        future: showRestorePurchaseButton(proUser),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData && snapshot.data as bool) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () => restorePurchases(context),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: pink5,
+                                  ),
+                                  child: CText(
+                                      "restore_purchase".i18n.toUpperCase(),
+                                      style: tsButton.copiedWith(
+                                        color: pink5,
+                                      )),
+                                ),
+                              ],
+                            );
+                          }
+                          return const SizedBox();
+                        },
                       ),
                     ],
                   ),
@@ -176,5 +194,9 @@ class PlansPage extends StatelessWidget {
       AppLoadingDialog.dismissLoadingDialog(context);
       showError(context, error: e, stackTrace: stackTrace);
     }
+  }
+
+  void restorePurchases(BuildContext context) {
+    sl<AppPurchase>().restorePurchases(context);
   }
 }

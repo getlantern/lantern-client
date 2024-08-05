@@ -13,6 +13,7 @@ class AppPurchase {
   Function(dynamic error)? _onError;
   String _planId = "";
   String _email = "";
+  BuildContext? context;
 
   void init() {
     final purchaseUpdated = _inAppPurchase.purchaseStream;
@@ -39,11 +40,13 @@ class AppPurchase {
     required String email,
     required VoidCallback onSuccess,
     required Function(dynamic error) onFailure,
+    BuildContext? context,
   }) async {
     if (!(await checkForAppStoreIsAvailable())) {
       onFailure("App store is not available");
       return;
     }
+    this.context = context;
     _email = email;
     _planId = planId;
     _onSuccess = onSuccess;
@@ -83,6 +86,7 @@ class AppPurchase {
   }
 
   Future<void> _handlePurchase(PurchaseDetails purchaseDetails) async {
+    logger.d("purchase data  $purchaseDetails");
     if (purchaseDetails.status == PurchaseStatus.canceled) {
       /// if user cancels purchase and then try to purchase again it will get penning transaction errr
       /// To avoid edge case complete purchase
@@ -105,9 +109,25 @@ class AppPurchase {
         _onError?.call(e);
       }
     }
+
+    /// restore purchase
+    if (purchaseDetails.status == PurchaseStatus.restored) {
+      logger.d("purchase restored successfully ${purchaseDetails}");
+      if (context != null) {
+        CDialog.showInfo(context!,
+            title: "Restore", description: purchaseDetails.toJson);
+        copyText(context!, purchaseDetails.toJson);
+      }
+    }
     if (purchaseDetails.pendingCompletePurchase) {
       await _inAppPurchase.completePurchase(purchaseDetails);
     }
+  }
+
+  Future<void> restorePurchases(BuildContext context) async {
+    logger.d("restoring purchase");
+    this.context = context;
+    _inAppPurchase.restorePurchases(applicationUserName: null);
   }
 
   void _updateStreamOnDone() {
@@ -123,5 +143,33 @@ class AppPurchase {
     if (_onError != null) {
       _onError?.call(error);
     }
+  }
+}
+
+extension PurchaseDetailsExtension on PurchaseDetails {
+  String get toJson {
+    return """
+    {
+      "purchaseID": "$purchaseID",
+      "productID": "$productID",
+      "transactionDate": "$transactionDate",
+      "status": "$status",
+      "error": "$error",
+      "pendingCompletePurchase": "$pendingCompletePurchase"
+      "verificationData": "${verificationData.toJson}"
+    }
+    """;
+  }
+}
+
+extension PurchaseVerificationDataExtension on PurchaseVerificationData {
+  String get toJson {
+    return """
+    {
+      "localVerificationData": "$localVerificationData",
+      "serverVerificationData": "$serverVerificationData",
+      "source": "$source"
+    }
+    """;
   }
 }
