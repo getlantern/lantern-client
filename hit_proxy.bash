@@ -14,7 +14,7 @@ rm -rf "$TMPDIR"
 mkdir -p "$TMPDIR"
 
 echo "Generating config for ${PROXY} in ${OUTFILE}..."
-$LANTERN_CLOUD/bin/ptool route dump-config --legacy "$PROXY" > "$OUTFILE"
+$LANTERN_CLOUD/bin/lc route dump-config --legacy "$PROXY" > "$OUTFILE"
 
 make darwin ffigen
 LANTERN_CONFIGDIR=$TMPDIR \
