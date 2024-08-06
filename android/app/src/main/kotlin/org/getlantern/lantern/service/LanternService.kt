@@ -1,33 +1,25 @@
 package org.getlantern.lantern.service
 
+
 import android.app.Service
 import android.content.Intent
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.annotation.Nullable
-import com.google.gson.JsonObject
-import okhttp3.HttpUrl
-import okhttp3.Response
 import org.androidannotations.annotations.EService
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.event.EventHandler
 import org.getlantern.lantern.model.AccountInitializationStatus
-import org.getlantern.lantern.model.LanternHttpClient
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.LanternStatus.Status
-import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.util.AutoUpdater
-import org.getlantern.lantern.util.Json
 import org.getlantern.mobilesdk.Lantern
 import org.getlantern.mobilesdk.LanternNotRunningException
 import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.StartResult
-import org.getlantern.mobilesdk.model.LoConf
-import org.getlantern.mobilesdk.model.LoConfCallback
 import java.util.Random
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -38,7 +30,7 @@ open class LanternService : Service(), Runnable {
         private val TAG = LanternService::class.java.simpleName
         private const val MAX_CREATE_USER_TRIES = 11
         private const val baseWaitMs = 3000
-        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
+
         val AUTO_BOOTED = "autoBooted"
     }
 
@@ -85,14 +77,12 @@ open class LanternService : Service(), Runnable {
     override fun run() {
         // move the current thread of the service to the background
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
-
         val locale = LanternApp.getSession().language
         val settings = LanternApp.getSession().settings
-
         try {
             Logger.debug(TAG, "Successfully loaded config: $settings")
             val result: StartResult =
-                Lantern.enable(this, locale, settings, LanternApp.getSession())
+                Lantern.enable(this, locale, settings, LanternApp.getGoSession())
             LanternApp.getSession().setStartResult(result)
             afterStart()
         } catch (lnre: LanternNotRunningException) {
@@ -107,19 +97,11 @@ open class LanternService : Service(), Runnable {
             EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING)
             createUser(0)
         }
-
         if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
             // check if an update is available
-            autoUpdater.checkForUpdates()
+            autoUpdater.checkForUpdates(null)
         }
         EventHandler.postStatusEvent(LanternStatus(Status.ON))
-
-        // fetch latest loconf
-        LoConf.Companion.fetch(object : LoConfCallback {
-            override fun onSuccess(loconf: LoConf) {
-                EventHandler.postLoConfEvent(loconf)
-            }
-        })
     }
 
     private fun createUser(attempt: Int) {
@@ -127,46 +109,6 @@ open class LanternService : Service(), Runnable {
         val timeOut =
             (baseWaitMs * Math.pow(2.0, attempt.toDouble())).toLong().coerceAtMost(maxBackOffTime)
         createUserHandler.postDelayed(createUserRunnable, timeOut)
-    }
-
-    private class CreateUser(val service: LanternService) : Runnable,
-        LanternHttpClient.ProCallback {
-
-        private var attempts: Int = 0
-
-        override fun run() {
-            val url: HttpUrl = LanternHttpClient.createProUrl("/user-create")
-            val json: JsonObject = JsonObject()
-            json.addProperty("locale", LanternApp.getSession().language)
-            lanternClient.post(url, LanternHttpClient.createJsonBody(json), this)
-        }
-
-        override fun onFailure(@Nullable throwable: Throwable?, @Nullable error: ProError?) {
-            if (attempts >= MAX_CREATE_USER_TRIES) {
-                Logger.error(TAG, "Max. number of tries made to create Pro user")
-                EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
-                return
-            }
-            attempts++
-            service.createUser(attempts)
-        }
-
-        override fun onSuccess(response: Response?, result: JsonObject?) {
-            val user: ProUser? = Json.gson.fromJson(result, ProUser::class.java)
-            if (user == null) {
-                Logger.error(TAG, "Unable to parse user from JSON")
-                return
-            }
-            service.createUserHandler.removeCallbacks(service.createUserRunnable)
-            Logger.debug(TAG, "Created new Lantern user: ${user.newUserDetails()}")
-            LanternApp.getSession().setUserIdAndToken(user.userId, user.token)
-            val referral = user.referral
-            if (!referral.isEmpty()) {
-                LanternApp.getSession().setCode(referral)
-            }
-            EventHandler.postStatusEvent(LanternStatus(Status.ON))
-            EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
-        }
     }
 
     override fun onDestroy() {
@@ -190,4 +132,28 @@ open class LanternService : Service(), Runnable {
             .setClass(this, AutoStarter::class.java)
         sendBroadcast(broadcastIntent)
     }
+
+    private class CreateUser(val service: LanternService) : Runnable {
+        private var attempts: Int = 0
+
+        override fun run() {
+            try {
+                val userCreated = LanternApp.getSession().createUser()
+                if (userCreated) {
+                    service.createUserHandler.removeCallbacks(service.createUserRunnable)
+                    EventHandler.postStatusEvent(LanternStatus(Status.ON))
+                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
+                }
+            } catch (e: Exception) {
+                if (attempts >= MAX_CREATE_USER_TRIES) {
+                    Logger.error(TAG, "Max. number of tries made to create Pro user")
+                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
+                    return
+                }
+                attempts++
+                service.createUser(attempts)
+            }
+        }
+    }
 }
+

@@ -19,7 +19,7 @@ open class GoModel<M : internalsdk.Model>(
 ) : BaseModel(name, flutterEngine, db) {
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         try {
-            val resultVal = model.invokeMethod(call.method, Arguments(call))
+            val resultVal = model.invokeMethod(call.method, Arguments(call.arguments))
             result.success(resultVal.toJava())
         } catch (t: Throwable) {
             result.error("unknownError", t.message, null)
@@ -76,26 +76,41 @@ open class GoModel<M : internalsdk.Model>(
     }
 }
 
-private class Arguments(private val call: MethodCall) : Arguments {
-    override fun get(key: String): Value? =
-        when (val arg = call.argument<Any>(key)) {
-            is Long -> Value(arg)
-            is Int -> Value(arg.toLong())
-            is String -> Value(arg)
-            is Boolean -> Value(arg)
-            is ByteArray -> Value(arg)
-            else -> null
-        }
+public class Arguments(args: Any) : Arguments {
 
-    override fun scalar(): Value? =
-        when (val arg = call.arguments) {
-            is Long -> Value(arg)
-            is Int -> Value(arg.toLong())
-            is String -> Value(arg)
-            is Boolean -> Value(arg)
-            is ByteArray -> Value(arg)
-            else -> null
+    private var scalarValue: Value? = null
+    private val dict: MutableMap<String, Value> = mutableMapOf()
+
+    init {
+        when (args) {
+            is Map<*, *> -> {
+                args.forEach { (key, value) ->
+                    if (key is String) {
+                        dict[key] = anyToValue(value)
+                    }
+                }
+            }
+            else -> {
+                scalarValue = anyToValue(args)
+            }
         }
+    }
+
+    override fun get(key: String): Value? = dict[key]
+
+    override fun scalar(): Value? = scalarValue
+
+
+    private fun anyToValue(v: Any?): Value {
+        return when (v) {
+            is String -> Value(v)
+            is Boolean -> Value(v)
+            is Int -> Value(v.toLong())
+            is Long -> Value(v)
+            is ByteArray -> Value(v)
+            else -> throw IllegalArgumentException("Unrecognized value type: ${v?.javaClass}")
+        }
+    }
 }
 
 fun Value.toJava(): Any = when (type) {

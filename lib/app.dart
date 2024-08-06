@@ -90,10 +90,10 @@ class _LanternAppState extends State<LanternApp>
     if (!hasConnection) {
       return;
     }
-   final vpnConnected = await vpnModel.isVpnConnected();
+    final vpnConnected = await vpnModel.isVpnConnected();
 
     /// If vpn is not connected then we should not show the connectivity warning
-    if(!vpnConnected){
+    if (!vpnConnected) {
       return;
     }
     final shouldShowConnectivityWarning =
@@ -142,46 +142,48 @@ class _LanternAppState extends State<LanternApp>
               ),
               child: I18n(
                 initialLocale: currentLocale(lang),
-                child: MaterialApp.router(
-                  locale: currentLocale(lang),
-                  debugShowCheckedModeBanner: false,
-                  theme: ThemeData(
-                    useMaterial3: false,
-                    fontFamily: _getLocaleBasedFont(currentLocal),
-                    brightness: Brightness.light,
-                    primarySwatch: Colors.grey,
-                    appBarTheme: const AppBarTheme(
-                      systemOverlayStyle: SystemUiOverlayStyle.dark,
+                child: ScaffoldMessenger(
+                  child: MaterialApp.router(
+                    locale: currentLocale(lang),
+                    debugShowCheckedModeBanner: false,
+                    theme: ThemeData(
+                      useMaterial3: false,
+                      fontFamily: _getLocaleBasedFont(currentLocal),
+                      brightness: Brightness.light,
+                      primarySwatch: Colors.grey,
+                      appBarTheme: const AppBarTheme(
+                        systemOverlayStyle: SystemUiOverlayStyle.dark,
+                      ),
+                      colorScheme: ColorScheme.fromSwatch()
+                          .copyWith(secondary: Colors.black),
                     ),
-                    colorScheme: ColorScheme.fromSwatch()
-                        .copyWith(secondary: Colors.black),
+                    title: 'app_name'.i18n,
+                    localizationsDelegates: const [
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                      GlobalCupertinoLocalizations.delegate,
+                    ],
+                    routerConfig: globalRouter.config(
+                      deepLinkBuilder: navigateToDeepLink,
+                    ),
+                    supportedLocales: const [
+                      Locale('ar', 'EG'),
+                      Locale('fr', 'FR'),
+                      Locale('en', 'US'),
+                      Locale('fa', 'IR'),
+                      Locale('th', 'TH'),
+                      Locale('ms', 'MY'),
+                      Locale('ru', 'RU'),
+                      Locale('ur', 'IN'),
+                      Locale('zh', 'CN'),
+                      Locale('zh', 'HK'),
+                      Locale('es', 'ES'),
+                      Locale('es', 'CU'),
+                      Locale('tr', 'TR'),
+                      Locale('vi', 'VN'),
+                      Locale('my', 'MM'),
+                    ],
                   ),
-                  title: 'app_name'.i18n,
-                  localizationsDelegates: const [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  routerConfig: globalRouter.config(
-                    deepLinkBuilder: navigateToDeepLink,
-                  ),
-                  supportedLocales: const [
-                    Locale('ar', 'EG'),
-                    Locale('fr', 'FR'),
-                    Locale('en', 'US'),
-                    Locale('fa', 'IR'),
-                    Locale('th', 'TH'),
-                    Locale('ms', 'MY'),
-                    Locale('ru', 'RU'),
-                    Locale('ur', 'IN'),
-                    Locale('zh', 'CN'),
-                    Locale('zh', 'HK'),
-                    Locale('es', 'ES'),
-                    Locale('es', 'CU'),
-                    Locale('tr', 'TR'),
-                    Locale('vi', 'VN'),
-                    Locale('my', 'MM'),
-                  ],
                 ),
               ),
             );
@@ -192,7 +194,7 @@ class _LanternAppState extends State<LanternApp>
   }
 
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {
-    if(!Platform.isAndroid){
+    if (!Platform.isAndroid) {
       return DeepLink.defaultPath;
     }
     logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");

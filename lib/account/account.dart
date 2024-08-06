@@ -57,7 +57,7 @@ class _AccountMenuState extends State<AccountMenu> {
   }
 
   void onAccountManagementTap(BuildContext context, bool isProUser, authEnabled, hasUserLoggedIn) {
-    if (!authEnabled || Platform.isAndroid) {
+    if (!authEnabled) {
       context.pushRoute(AccountManagement(isPro: isProUser));
       return;
     }

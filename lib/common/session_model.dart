@@ -18,9 +18,9 @@ const TAB_DEVELOPER = 'developer';
 
 class SessionModel extends Model {
   late final EventManager eventManager;
-
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  late ValueNotifier<bool?> isPlayVersion;
+
+  late ValueNotifier<bool?> isTestPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<bool?> proUserNotifier;
@@ -32,15 +32,15 @@ class SessionModel extends Model {
   SessionModel() : super('session') {
     if (isMobile()) {
       eventManager = EventManager('lantern_event_channel');
-
       isStoreVersion = singleValueNotifier(
         'storeVersion',
         false,
       );
-      isPlayVersion = singleValueNotifier(
-        'playVersion',
+      isTestPlayVersion = singleValueNotifier(
+        'testPlayVersion',
         false,
       );
+
       /*Note
       * Make proxyAvailable default value to true on IOS it take some to get data from go side
       * So show banner only if proxyAvailable is false
@@ -53,7 +53,6 @@ class SessionModel extends Model {
       /// We don't user create account if email address is not verified
       hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
       proUserNotifier = singleValueNotifier('prouser', false);
-
       userEmail = singleValueNotifier(
         'emailAddress',
         "",
@@ -64,11 +63,6 @@ class SessionModel extends Model {
       );
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
-      isPlayVersion = ffiValueNotifier(
-        ffiPlayVersion,
-        'isPlayVersion',
-        false,
-      );
       isStoreVersion = ffiValueNotifier(
         ffiStoreVersion,
         'isStoreVersion',
@@ -84,6 +78,11 @@ class SessionModel extends Model {
       hasUserSignedInNotifier =
           ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
       isAuthEnabled = ffiValueNotifier(ffiAuthEnabled, 'authEnabled', false);
+      isTestPlayVersion = ffiValueNotifier(
+        ffIsPlayVersion,
+        'testPlayVersion',
+        false,
+      );
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -94,6 +93,10 @@ class SessionModel extends Model {
 
   ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue) {
     return singleValueNotifier(path, defaultValue);
+  }
+
+  Future<void> updateUserDetails() {
+    return methodChannel.invokeMethod('updateUserDetail', {});
   }
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
@@ -112,6 +115,36 @@ class SessionModel extends Model {
         })
       },
       ffiProUser,
+      builder: builder,
+    );
+  }
+
+  Widget bandwidth(ValueWidgetBuilder<Bandwidth> builder) {
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<Bandwidth>(
+        '/bandwidth',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Bandwidth.fromBuffer(serialized);
+        },
+      );
+    }
+    final websocket = WebsocketImpl.instance();
+    return ffiValueBuilder<Bandwidth>(
+      'bandwidth',
+      defaultValue: null,
+      onChanges: (setValue) =>
+          sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
+        if (value != null) {
+          final Map res = jsonDecode(jsonEncode(value));
+          setValue(Bandwidth.create()
+            ..mergeFromProto3Json({
+              'allowed': res['mibAllowed'],
+              'remaining': res['mibUsed'],
+            }));
+        }
+      }),
+      null,
       builder: builder,
     );
   }
@@ -183,12 +216,21 @@ class SessionModel extends Model {
     );
   }
 
-  Widget playVersion(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
+  // Widget playVersion(ValueWidgetBuilder<bool> builder) {
+  //   return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
+  // }
+
+  Widget storeVersion(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('storeVersion', builder: builder);
   }
 
-  Future<void> setPlayVersion(bool on) {
-    return methodChannel.invokeMethod('setPlayVersion', <String, dynamic>{
+  Widget testPlayVersion(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('testPlayVersion',
+        builder: builder, defaultValue: false);
+  }
+
+  Future<void> setTestPlayVersion(bool on) {
+    return methodChannel.invokeMethod('setTestPlayVesion', <String, dynamic>{
       'on': on,
     });
   }
@@ -303,6 +345,14 @@ class SessionModel extends Model {
   /// This only supports desktop fo now
   Future<void> testProviderRequest(
       String email, String paymentProvider, String planId) {
+    if (isMobile()) {
+      return methodChannel
+          .invokeMethod('testProviderRequest', <String, dynamic>{
+        'email': email,
+        'provider': paymentProvider,
+        'planId': planId,
+      });
+    }
     return compute(ffiTestPaymentRequest, [email, paymentProvider, planId]);
   }
 
@@ -620,17 +670,22 @@ class SessionModel extends Model {
 
   Future<bool> getChatEnabled() async {
     return methodChannel
-        .invokeMethod('get', 'chatEnabled')
+        .invokeMethod('chatEnabled', '')
         .then((enabled) => enabled == true);
   }
 
-  Future<void> checkForUpdates() async {
-    if (Platform.isAndroid) {
-      return methodChannel.invokeMethod('checkForUpdates');
-    } else if (isDesktop()) {
-      await ffiCheckUpdates();
+  Future<String?> checkForUpdates() async {
+    if (isMobile()) {
+      if (Platform.isAndroid) {
+        return methodChannel.invokeMethod('checkForUpdates');
+      } else {
+        AppMethods.openAppstore();
+        return "";
+      }
+    } else {
+      ffiCheckUpdates();
+      return "";
     }
-    return;
   }
 
   // Plans and payment methods
@@ -741,6 +796,9 @@ class SessionModel extends Model {
   Future<void> applyRefCode(
     String refCode,
   ) async {
+    if(isDesktop()){
+      return await compute(ffiApplyRefCode, refCode);
+    }
     return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
       'refCode': refCode,
     }).then((value) => value as String);

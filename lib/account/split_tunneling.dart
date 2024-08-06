@@ -26,7 +26,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
   }
 
   void init() async {
-    unawaited(sessionModel.refreshAppsList());
+    // unawaited(sessionModel.refreshAppsList());
     var _vpnConnected = await vpnModel.isVpnConnected();
     setState(() {
       vpnConnected = _vpnConnected;

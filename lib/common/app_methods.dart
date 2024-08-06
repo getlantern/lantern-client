@@ -34,4 +34,11 @@ class AppMethods {
    return List.generate(8, (i) => allChars[random.nextInt(allChars.length)])
         .join();
   }
+
+  static bool isPlayStoreEnable(){
+    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
+    final isTestPlayVersion = sessionModel.isTestPlayVersion.value ?? false;
+    final inRussia = sessionModel.country.value == 'RU';
+    return ((isPlayVersion || isTestPlayVersion) && !inRussia);
+  }
 }

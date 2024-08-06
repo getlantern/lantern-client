@@ -1,10 +1,6 @@
-import 'package:catcher_2/core/catcher_2.dart';
-import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
-import 'package:lantern/common/app_methods.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 import 'package:lantern/messaging/messaging_model.dart';
@@ -35,17 +31,15 @@ class Settings extends StatelessWidget {
       context.pushRoute(SplitTunneling());
 
   void openWebView(String url, BuildContext context, String title) async =>
-    await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
 
   Future<void> checkForUpdateTap(BuildContext context) async {
-    if (Platform.isAndroid) {
-      AppLoadingDialog.showLoadingDialog(context);
-      await sessionModel.checkForUpdates();
-      AppLoadingDialog.dismissLoadingDialog(context);
-    } else if (Platform.isIOS) {
-      AppMethods.openAppstore();
-    } else {
-      ffiCheckUpdates();
+    AppLoadingDialog.showLoadingDialog(context);
+    final result = await sessionModel.checkForUpdates();
+    AppLoadingDialog.dismissLoadingDialog(context);
+    if (result != null && result != "" && result == "no_new_update") {
+      CDialog.showInfo(context,
+          title: "app_name".i18n, description: "no_new_update".i18n);
     }
   }
 
@@ -185,7 +179,7 @@ class Settings extends StatelessWidget {
                     initialValue: proxyAll,
                     activeColor: indicatorGreen,
                     inactiveColor: offSwitchColor,
-                    onChanged: ( newValue) {
+                    onChanged: (newValue) {
                       sessionModel.setProxyAll(newValue);
                     },
                   ),

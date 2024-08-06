@@ -4,6 +4,8 @@ import 'package:lantern/plans/plan_details.dart';
 import 'package:lantern/plans/price_summary.dart';
 import 'package:lantern/plans/utils.dart';
 
+import '../core/purchase/app_purchase.dart';
+
 @RoutePage(name: 'PlayCheckout')
 class PlayCheckout extends StatefulWidget {
   final Plan plan;
@@ -28,7 +30,6 @@ class _PlayCheckoutState extends State<PlayCheckout>
         ? null
         : 'please_enter_a_valid_email_address'.i18n,
   );
-
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +90,7 @@ class _PlayCheckoutState extends State<PlayCheckout>
                           child: Button(
                             text: 'Complete Purchase'.i18n,
                             disabled: emailController.value.text.isEmpty,
-                            onPressed: submitPayment,
+                            onPressed: onCompletePurchaseTap,
                           ),
                         )
                       ]),
@@ -100,7 +101,46 @@ class _PlayCheckoutState extends State<PlayCheckout>
         }));
   }
 
-  void submitPayment() async {
+  void onCompletePurchaseTap() {
+    if (Platform.isAndroid) {
+      _proceedToCheckoutAndroid();
+      return;
+    }
+    // IOS flow
+    _proceedToCheckoutIOS(context);
+  }
+
+  void _proceedToCheckoutIOS(BuildContext context) {
+    final appPurchase = sl<AppPurchase>();
+    try {
+      context.loaderOverlay.show();
+      appPurchase.startPurchase(
+        email: sessionModel.userEmail.value ?? "",
+        planId: widget.plan.id,
+        onSuccess: () {
+          context.loaderOverlay.hide();
+          showSuccessDialog(context, widget.isPro);
+        },
+        onFailure: (error) {
+          context.loaderOverlay.hide();
+          CDialog.showError(
+            context,
+            error: error,
+            description: error.toString(),
+          );
+        },
+      );
+    } catch (e) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        description: e.toString(),
+      );
+    }
+  }
+
+  void _proceedToCheckoutAndroid() async {
     try {
       if (emailFieldKey.currentState?.validate() == false) {
         showError(context, error: 'please_enter_a_valid_email_address'.i18n);

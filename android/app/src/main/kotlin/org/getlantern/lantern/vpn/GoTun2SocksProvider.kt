@@ -6,10 +6,12 @@ import android.content.pm.PackageManager
 import android.net.VpnService
 import android.os.ParcelFileDescriptor
 import internalsdk.Internalsdk
+import io.lantern.model.SessionModel
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.mobilesdk.Logger
-import org.getlantern.mobilesdk.model.SessionManager
+
+
 import java.util.Locale
 
 class GoTun2SocksProvider(
@@ -77,7 +79,7 @@ class GoTun2SocksProvider(
 
         // this is a fake DNS server. The precise IP doesn't matter because Lantern will intercept and
         // route all DNS traffic to dnsgrab internally anyway.
-        builder.addDnsServer(SessionManager.fakeDnsIP)
+        builder.addDnsServer(SessionModel.fakeDnsIP)
 
         val intent = Intent(vpnService, MainActivity::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
@@ -115,7 +117,7 @@ class GoTun2SocksProvider(
                     socksAddr,
                     dnsGrabAddr,
                     VPN_MTU.toLong(),
-                    LanternApp.getSession(),
+                    LanternApp.getGoSession(),
                 )
             }
         } catch (t: Throwable) {

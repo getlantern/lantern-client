@@ -20,7 +20,7 @@ import io.lantern.secrets.InsecureSecretException
 import io.lantern.secrets.Secrets
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
-import org.getlantern.mobilesdk.model.SessionManager
+
 import java.io.File
 import java.util.concurrent.ConcurrentSkipListSet
 import java.util.concurrent.atomic.AtomicReference
@@ -100,9 +100,9 @@ abstract class BaseModel(
                     insecurePassword.toByteArray(Charsets.UTF_8)
                 )
                 var keysMigrated = 0
-                masterDB.withSchema(SessionManager.PREFERENCES_SCHEMA).mutate { tx ->
+                masterDB.withSchema(SessionModel.PREFERENCES_SCHEMA).mutate { tx ->
                     insecureDB
-                        .withSchema(SessionManager.PREFERENCES_SCHEMA)
+                        .withSchema(SessionModel.PREFERENCES_SCHEMA)
                         .listRaw<Any>("%").forEach {
                             tx.putRaw(it.path, it.value)
                             keysMigrated++

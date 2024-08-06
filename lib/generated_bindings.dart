@@ -289,7 +289,6 @@ class NativeLibrary {
   late final _setProxyAll =
       _setProxyAllPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
 
-  /// this method is reposible for checking if the user has updated plan or bought plans
   ffi.Pointer<ffi.Char> hasPlanUpdatedOrBuy() {
     return _hasPlanUpdatedOrBuy();
   }
@@ -299,6 +298,20 @@ class NativeLibrary {
           'hasPlanUpdatedOrBuy');
   late final _hasPlanUpdatedOrBuy =
       _hasPlanUpdatedOrBuyPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> applyRef(
+    ffi.Pointer<ffi.Char> referralCode,
+  ) {
+    return _applyRef(
+      referralCode,
+    );
+  }
+
+  late final _applyRefPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>>('applyRef');
+  late final _applyRef = _applyRefPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
   ffi.Pointer<ffi.Char> devices() {
     return _devices();

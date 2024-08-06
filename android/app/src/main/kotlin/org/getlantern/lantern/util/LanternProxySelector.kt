@@ -1,6 +1,6 @@
 package org.getlantern.lantern.util
 
-import org.getlantern.lantern.model.LanternSessionManager
+import io.lantern.model.SessionModel
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Proxy
@@ -8,7 +8,7 @@ import java.net.ProxySelector
 import java.net.SocketAddress
 import java.net.URI
 
-class LanternProxySelector(private val session: LanternSessionManager) : ProxySelector() {
+class LanternProxySelector(private val session: SessionModel) : ProxySelector() {
 
     init {
         setDefault(this)

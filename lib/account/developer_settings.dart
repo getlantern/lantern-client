@@ -43,9 +43,9 @@ class DeveloperSettingsTab extends StatelessWidget {
               ],
             ),
             ListItemFactory.settingsItem(
-              content: 'Play Version'.i18n,
+              content: 'Test Play Version'.i18n,
               trailingArray: [
-                sessionModel.playVersion(
+                sessionModel.testPlayVersion(
                     (BuildContext context, bool value, Widget? child) {
                   return AdvancedSwitch(
                     width: 44.0,
@@ -55,7 +55,7 @@ class DeveloperSettingsTab extends StatelessWidget {
                     // toggleSize: 18.0,
                     initialValue: value,
                     onChanged: ( newValue) {
-                      sessionModel.setPlayVersion(newValue);
+                      sessionModel.setTestPlayVersion(newValue);
                     },
                   );
                 })

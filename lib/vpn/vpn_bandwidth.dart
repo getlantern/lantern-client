@@ -5,7 +5,7 @@ class VPNBandwidth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return vpnModel
+    return sessionModel
         .bandwidth((BuildContext context, Bandwidth bandwidth, Widget? child) {
       return bandwidth.allowed > 0
           ? Column(

@@ -43,12 +43,20 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 		"email":          email,
 		"deviceName":     device,
 	}
-
 	switch paymentProvider {
 	case paymentProviderResellerCode:
 		data["provider"] = paymentProviderResellerCode
 		data["resellerCode"] = resellerCode
+	case paymentProviderGooglePlay:
+		// get currency from plan id
+		parts := strings.Split(planId, "-")
+		if len(parts) != 3 {
+			return errors.New("Invalid plan id"), nil
+		}
+		cur := parts[1]
+		data["token"] = purchaseToken
 		data["plan"] = planId
+		data["currency"] = cur
 	case paymentProviderApplePay:
 		// get currency from plan id
 		parts := strings.Split(planId, "-")
@@ -56,11 +64,22 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 			return errors.New("Invalid plan id"), nil
 		}
 		cur := parts[1]
+		data["token"] = purchaseToken
+		data["plan"] = planId
+		data["currency"] = cur
 
+	case paymentProviderStripe:
+		// get currency from plan id
+		parts := strings.Split(planId, "-")
+		if len(parts) != 3 {
+			return errors.New("Invalid plan id"), nil
+		}
+		cur := parts[1]
 		data["token"] = purchaseToken
 		data["plan"] = planId
 		data["currency"] = cur
 	}
+
 	return nil, data
 }
 
@@ -173,4 +192,56 @@ func GenerateEncryptedKey(password string, email string, salt []byte) *big.Int {
 	encryptedKey := pbkdf2.Key([]byte(combinedInput), salt, 4096, 32, sha256.New)
 	encryptedKeyBigInt := big.NewInt(0).SetBytes(encryptedKey)
 	return encryptedKeyBigInt
+}
+
+func convertIntArrayToByteArray(intArray []int) ([]byte, error) {
+	byteArray := make([]byte, len(intArray))
+	for i, val := range intArray {
+		if val < 0 || val > 255 {
+			return nil, fmt.Errorf("value out of byte range: %d", val)
+		}
+		byteArray[i] = byte(val)
+	}
+	return byteArray, nil
+}
+
+// Function to convert a slice of strings to a slice of ints
+func convertStringArrayToIntArray(stringArray []string) ([]int, error) {
+	intArray := make([]int, len(stringArray))
+	for i, s := range stringArray {
+		// Convert each string to an int
+		val, err := strconv.Atoi(s)
+		if err != nil {
+			return nil, err
+		}
+		intArray[i] = val
+	}
+	return intArray, nil
+}
+
+func convertLogoToMapStringSlice(logo map[string]interface{}) (map[string][]string, error) {
+	convertedLogo := make(map[string][]string)
+	for key, value := range logo {
+		switch value.(type) {
+		case []string:
+			convertedLogo[key] = value.([]string)
+		case []interface{}:
+			var stringSlice []string
+			for _, item := range value.([]interface{}) {
+				if str, ok := item.(string); ok {
+					stringSlice = append(stringSlice, str)
+				} else {
+					// Handle non-string elements (optional)
+					// You could log an error or return an error from the function
+					return nil, fmt.Errorf("Unexpected type in logo map: %v", item)
+				}
+			}
+			convertedLogo[key] = stringSlice
+		default:
+			// Handle unexpected types (optional)
+			// You could log an error or return an error from the function
+			return nil, fmt.Errorf("Unexpected type in logo map: %v", value)
+		}
+	}
+	return convertedLogo, nil
 }
