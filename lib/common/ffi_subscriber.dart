@@ -27,27 +27,19 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
       });
     }
     if (ffiFunction == null) return;
-    if (defaultValue is int) {
-        value = null;
-        //value = int.parse(ffiFunction().toDartString()) as T?;
-      } else if (defaultValue is String) {
-        print("string here1 $path");
-        value = ffiFunction().toDartString() as T;
-        print("string here2 $path");
-      } else if (defaultValue is bool) {
-        print("bool here1 $path");
-        value = ffiFunction().toDartString().parseBool() as T;
-        print("bool here2 $path");
-      } else if (fromJsonModel != null) {
-        print("fromJsonModel here1 $path");
-        var res = ffiFunction();
-        print("res is $res");
-        if (res == '') {
-          value = null;
-        } else {
+    if (defaultValue is String) {
+      final res = ffiFunction();
+      if (res != null) value = res.toDartString() as T;
+    } else if (defaultValue is bool) {
+      final res = ffiFunction();
+      if (res != null) value = res.toDartString().parseBool() as T;
+    } else if (fromJsonModel != null) {
+        final res = ffiFunction();
+        if (res != null && res != '') {
           value = fromJsonModel(json.decode(res.toDartString())) as T;
+        } else {
+          value = null;
         }
-        print("fromJsonModel here2 $path");
     }
     cancel = () {
       if (channel != null) channel.sink.close(status.goingAway);

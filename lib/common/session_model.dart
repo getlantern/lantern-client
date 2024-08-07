@@ -774,9 +774,9 @@ class SessionModel extends Model {
     );
   }
 
-  Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
+  Widget serverInfo(ValueWidgetBuilder<ServerInfo?> builder) {
     if (isMobile()) {
-      return subscribedSingleValueBuilder<ServerInfo>(
+      return subscribedSingleValueBuilder<ServerInfo?>(
         '/server_info',
         builder: builder,
         deserialize: (Uint8List serialized) {
@@ -784,15 +784,15 @@ class SessionModel extends Model {
         },
       );
     }
-    return ffiValueBuilder<ServerInfo>(
+    return ffiValueBuilder<ServerInfo?>(
       'serverInfo',
       defaultValue: null,
       ffiServerInfo,
       builder: builder,
-      fromJsonModel: (dynamic json) {
+      /*fromJsonModel: (dynamic json) {
         final res = jsonEncode(json);
         return ServerInfo.create()..mergeFromProto3Json(jsonDecode(res));
-      },
+      },*/
     );
   }
 

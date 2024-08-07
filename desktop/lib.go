@@ -26,7 +26,6 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
-	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -527,7 +526,7 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 
 //export referral
 func referral() *C.char {
-	referralCode, err := a.ReferralCode(userConfig(a.Settings()))
+	referralCode, err := a.ReferralCode()
 	if err != nil {
 		return sendError(err)
 	}
@@ -567,9 +566,9 @@ func storeVersion() *C.char {
 
 //export lang
 func lang() *C.char {
-	lang := a.GetLanguage()
-	log.Debugf("DEBUG: Language is %v", lang)
-	return C.CString(lang)
+	//lang := a.GetLanguage()
+	//log.Debugf("DEBUG: Language is %v", lang)
+	return C.CString("en-US")
 }
 
 //export setSelectLang
@@ -614,9 +613,9 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
-	if isProUser, ok := a.IsProUserFast(context.Background()); isProUser && ok {
+	/*if isProUser, ok := a.IsProUserFast(context.Background()); isProUser && ok {
 		return C.CString("true")
-	}
+	}*/
 	return C.CString("false")
 }
 
@@ -675,18 +674,6 @@ func chatMe() *C.char {
 //export replicaAddr
 func replicaAddr() *C.char {
 	return C.CString("")
-}
-
-func userConfig(settings *settings.Settings) common.UserConfig {
-	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	return common.NewUserConfig(
-		common.DefaultAppName,
-		deviceID,
-		userID,
-		token,
-		nil,
-		settings.GetLanguage(),
-	)
 }
 
 //export reportIssue

@@ -25,6 +25,7 @@ import (
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
+	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/otel"
@@ -35,6 +36,7 @@ import (
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
@@ -108,7 +110,7 @@ func NewApp(flags flashlight.Flags, configDir string) *App {
 			data:       make(map[int64]*protos.User),
 			onUserData: make([]func(current *protos.User, new *protos.User), 0),
 		},
-		//ws:                        ws.NewUIChannel(),
+		ws: ws.NewUIChannel(),
 	}
 
 	webclientOpts := &webclient.Opts{
@@ -121,16 +123,16 @@ func NewApp(flags flashlight.Flags, configDir string) *App {
 	app.proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
 	app.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
 
-	/*if err := app.serveWebsocket(); err != nil {
+	if err := app.serveWebsocket(); err != nil {
 		log.Error(err)
 	}
 
-	onProStatusChange(func(isPro bool) {
+	app.onProStatusChange(func(isPro bool) {
 		app.statsTracker.SetIsPro(isPro)
 	})
 	datacap.AddDataCapListener(func(hitDataCap bool) {
 		app.statsTracker.SetHitDataCap(hitDataCap)
-	})*/
+	})
 
 	log.Debugf("Using configdir: %v", configDir)
 
@@ -172,11 +174,11 @@ func loadSettings(configDir string) *settings.Settings {
 
 // Run starts the app.
 func (app *App) Run() {
-	/*go func() {
+	go func() {
 		for <-geolookup.OnRefresh() {
 			app.settings.SetCountry(geolookup.GetCountry(0))
 		}
-	}()*/
+	}()
 	i18nInit(app)
 	// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
 	// for the first time. User can still quit Lantern through systray menu when it happens.
@@ -265,8 +267,7 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 	if app.flashlight == nil {
 		return false
 	}
-	return false
-	//return app.flashlight.EnabledFeatures()[feature]
+	return app.flashlight.EnabledFeatures()[feature]
 }
 
 func (app *App) beforeStart(listenAddr string) {
@@ -299,7 +300,7 @@ func (app *App) beforeStart(listenAddr string) {
 		os.Exit(0)
 	}
 
-	/*if e := app.settings.StartService(app.ws); e != nil {
+	if e := app.settings.StartService(app.ws); e != nil {
 		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
 		return
 	}
@@ -316,7 +317,7 @@ func (app *App) beforeStart(listenAddr string) {
 
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
-	}))*/
+	}))
 }
 
 // GetLanguage returns the user language
@@ -609,7 +610,7 @@ func (app *App) IsPro() bool {
 }
 
 // ReferralCode returns a user's unique referral code
-func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
+func (app *App) ReferralCode() (string, error) {
 	referralCode := app.referralCode
 	if referralCode == "" {
 		resp, err := app.proClient.UserData(context.Background())
