@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/fs"
@@ -24,25 +25,23 @@ import (
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
-	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
-	"github.com/getlantern/memhelper"
-	notify "github.com/getlantern/notifier"
+	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/profiling"
 
-	"github.com/getlantern/lantern-client/desktop/analytics"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
-	"github.com/getlantern/lantern-client/desktop/datacap"
-	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 )
 
 var (
@@ -64,23 +63,20 @@ type App struct {
 	fetchedProxiesConfig int32
 	hasSucceedingProxy   int32
 
-	Flags            flashlight.Flags
-	configDir        string
-	exited           eventual.Value
-	analyticsSession analytics.Session
-	settings         *settings.Settings
-	statsTracker     stats.Tracker
+	Flags        flashlight.Flags
+	configDir    string
+	settings     *settings.Settings
+	statsTracker stats.Tracker
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
-
-	chGlobalConfigChanged chan bool
 
 	translations eventual.Value
 
 	flashlight *flashlight.Flashlight
 
 	issueReporter *issueReporter
+	authClient    auth.AuthClient
 	proClient     proclient.ProClient
 	referralCode  string
 	selectedTab   Tab
@@ -93,38 +89,48 @@ type App struct {
 	websocketServer *http.Server
 	ws              ws.UIChannel
 
+	userData userMap
+
 	mu sync.Mutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, settings *settings.Settings) *App {
-	analyticsSession := newAnalyticsSession(settings)
+func NewApp(flags flashlight.Flags, configDir string) *App {
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
-		exited:                    eventual.NewValue(),
-		proClient:                 proClient,
-		settings:                  settings,
-		analyticsSession:          analyticsSession,
+		settings:                  loadSettings(configDir),
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
-		statsTracker:              stats.NewTracker(),
+		statsTracker:              stats.NewNoop(),
 		translations:              eventual.NewValue(),
-		ws:                        ws.NewUIChannel(),
-		chGlobalConfigChanged:     make(chan bool),
+		userData: userMap{
+			data:       make(map[int64]*protos.User),
+			onUserData: make([]func(current *protos.User, new *protos.User), 0),
+		},
+		//ws:                        ws.NewUIChannel(),
 	}
-	if err := app.serveWebsocket(); err != nil {
+
+	webclientOpts := &webclient.Opts{
+		HttpClient: &http.Client{
+			//Transport: proxied.ParallelForIdempotent(),
+			Timeout: 30 * time.Second,
+		},
+		UserConfig: app.UserConfig,
+	}
+	app.proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	app.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
+
+	/*if err := app.serveWebsocket(); err != nil {
 		log.Error(err)
 	}
-	golog.OnFatal(app.exitOnFatal)
 
-	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
 	onProStatusChange(func(isPro bool) {
 		app.statsTracker.SetIsPro(isPro)
 	})
 	datacap.AddDataCapListener(func(hitDataCap bool) {
 		app.statsTracker.SetHitDataCap(hitDataCap)
-	})
+	})*/
 
 	log.Debugf("Using configdir: %v", configDir)
 
@@ -134,153 +140,124 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 	return app
 }
 
-func newAnalyticsSession(settings *settings.Settings) analytics.Session {
-	if settings.IsAutoReport() {
-		session := analytics.Start(settings.GetDeviceID(), common.ApplicationVersion)
-		go func() {
-			session.SetIP(geolookup.GetIP(eventual.Forever))
-		}()
-		return session
-	} else {
-		return analytics.NullSession{}
+func (app *App) UserConfig() common.UserConfig {
+	settings := app.settings
+	var userID int64
+	var deviceID, token string
+	if settings != nil {
+		userID, deviceID, token = settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
 	}
+	return common.NewUserConfig(
+		common.DefaultAppName,
+		deviceID,
+		userID,
+		token,
+		nil,
+		settings.GetLanguage(),
+	)
+}
+
+// loadSettings loads the initial settings at startup, either from disk or using defaults.
+func loadSettings(configDir string) *settings.Settings {
+	path := filepath.Join(configDir, "settings.yaml")
+	if common.IsStagingEnvironment() {
+		path = filepath.Join(configDir, "settings-staging.yaml")
+	}
+	settings := settings.LoadSettingsFrom(common.ApplicationVersion, common.RevisionDate, common.BuildDate, path)
+	if common.IsStagingEnvironment() {
+		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
+	}
+	return settings
 }
 
 // Run starts the app.
-func (app *App) Run(isMain bool) {
-	golog.OnFatal(app.exitOnFatal)
-
-	memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
-		sentry.CaptureException(err)
-	})
-
-	go func() {
+func (app *App) Run() {
+	/*go func() {
 		for <-geolookup.OnRefresh() {
 			app.settings.SetCountry(geolookup.GetCountry(0))
 		}
-	}()
-
+	}()*/
+	i18nInit(app)
 	// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
 	// for the first time. User can still quit Lantern through systray menu when it happens.
-	go func() {
-		log.Debug(app.Flags)
-		if app.Flags.ProxyAll {
-			// If proxyall flag was supplied, force proxying of all
-			app.settings.SetProxyAll(true)
-		}
 
-		listenAddr := app.Flags.Addr
-		if listenAddr == "" {
-			listenAddr = app.settings.GetAddr()
-		}
-		if listenAddr == "" {
-			listenAddr = defaultHTTPProxyAddress
-		}
+	log.Debug(app.Flags)
+	if app.Flags.ProxyAll {
+		// If proxyall flag was supplied, force proxying of all
+		app.settings.SetProxyAll(true)
+	}
 
-		socksAddr := app.Flags.SocksAddr
-		if socksAddr == "" {
-			socksAddr = app.settings.GetSOCKSAddr()
-		}
-		if socksAddr == "" {
-			socksAddr = defaultSOCKSProxyAddress
-		}
+	listenAddr := app.Flags.Addr
+	if listenAddr == "" {
+		listenAddr = app.settings.GetAddr()
+	}
+	if listenAddr == "" {
+		listenAddr = defaultHTTPProxyAddress
+	}
 
-		if app.Flags.Timeout > 0 {
-			go func() {
-				time.AfterFunc(app.Flags.Timeout, func() {
-					app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
-						app.Flags.Timeout, atomic.LoadInt32(&app.fetchedGlobalConfig) == 1, atomic.LoadInt32(&app.fetchedProxiesConfig) == 1))
-				})
-			}()
-		}
+	socksAddr := app.Flags.SocksAddr
+	if socksAddr == "" {
+		socksAddr = app.settings.GetSOCKSAddr()
+	}
+	if socksAddr == "" {
+		socksAddr = defaultSOCKSProxyAddress
+	}
 
-		cacheDir, err := os.UserCacheDir()
-		if err != nil {
-			cacheDir = os.TempDir()
-		}
-		cacheDir = filepath.Join(cacheDir, common.DefaultAppName, "dhtup", "data")
-		os.MkdirAll(cacheDir, 0o700)
-
-		app.flashlight, err = flashlight.New(
-			common.DefaultAppName,
-			common.ApplicationVersion,
-			common.RevisionDate,
-			app.configDir,
-			app.Flags.VPN,
-			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
-			app.settings.GetProxyAll,
-			func() bool { return false }, // on desktop, we do not allow private hosts
-			app.settings.IsAutoReport,
-			app.Flags.AsMap(),
-			app.settings,
-			app.statsTracker,
-			app.IsPro,
-			app.settings.GetLanguage,
-			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-			app.analyticsSession.EventWithLabel,
-			flashlight.WithOnConfig(app.onConfigUpdate),
-			flashlight.WithOnProxies(app.onProxiesUpdate),
-			flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
-				if err != nil && !hasSucceeding {
-					app.onSucceedingProxy(hasSucceeding)
-				}
-			}),
-			flashlight.WithOnSucceedingProxy(func() {
-				app.onSucceedingProxy(true)
-			}),
-		)
-		if err != nil {
-			app.Exit(err)
-			return
-		}
-		app.beforeStart(listenAddr)
-
-		chProStatusChanged := make(chan bool, 1)
-		onProStatusChange(func(isPro bool) {
-			chProStatusChanged <- isPro
-		})
-		chUserChanged := make(chan bool, 1)
-		app.settings.OnChange(settings.SNUserID, func(v interface{}) {
-			chUserChanged <- true
-		})
-		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
-
-		notifyConfigSaveErrorOnce := new(sync.Once)
-
-		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
-			switch t {
-			case flashlight.ErrorTypeProxySaveFailure, flashlight.ErrorTypeConfigSaveFailure:
-				log.Errorf("failed to save config (%v): %v", t, err)
-
-				notifyConfigSaveErrorOnce.Do(func() {
-					note := &notify.Notification{
-						Title:      i18n.T("BACKEND_CONFIG_SAVE_ERROR_TITLE"),
-						Message:    i18n.T("BACKEND_CONFIG_SAVE_ERROR_MESSAGE", i18n.T(translationAppName)),
-						ClickLabel: i18n.T("BACKEND_CLICK_LABEL_GOT_IT"),
-						IconURL:    "/img/lantern_logo.png",
-					}
-					_ = notifier.ShowNotification(note, "alert-prompt")
-				})
-
-			default:
-				log.Errorf("flashlight error: %v: %v", t, err)
+	if app.Flags.Timeout > 0 {
+		go func() {
+			time.AfterFunc(app.Flags.Timeout, func() {
+				app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
+					app.Flags.Timeout, atomic.LoadInt32(&app.fetchedGlobalConfig) == 1, atomic.LoadInt32(&app.fetchedProxiesConfig) == 1))
+			})
+		}()
+	}
+	var err error
+	app.flashlight, err = flashlight.New(
+		common.DefaultAppName,
+		common.ApplicationVersion,
+		common.RevisionDate,
+		app.configDir,
+		app.Flags.VPN,
+		func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
+		app.settings.GetProxyAll,
+		func() bool { return false }, // on desktop, we do not allow private hosts
+		app.settings.IsAutoReport,
+		app.Flags.AsMap(),
+		app.settings,
+		app.statsTracker,
+		app.IsPro,
+		app.settings.GetLanguage,
+		func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
+		func(string, string, string) {},
+		flashlight.WithOnConfig(app.onConfigUpdate),
+		flashlight.WithOnProxies(app.onProxiesUpdate),
+		flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
+			if err != nil && !hasSucceeding {
+				app.onSucceedingProxy(hasSucceeding)
 			}
-		})
+		}),
+		flashlight.WithOnSucceedingProxy(func() {
+			app.onSucceedingProxy(true)
+		}),
+	)
+	if err != nil {
+		app.Exit(err)
+		return
+	}
+	app.beforeStart(listenAddr)
+	/*app.flashlight.Run(
+		listenAddr,
+		socksAddr,
+		app.afterStart,
+		func(err error) { _ = app.Exit(err) },
+	)*/
 
-		app.flashlight.Run(
-			listenAddr,
-			socksAddr,
-			app.afterStart,
-			func(err error) { _ = app.Exit(err) },
-		)
-	}()
 }
 
-// checkEnabledFeatures checks if features are enabled
-func (app *App) checkEnabledFeatures() {
-	enabledFeatures := app.flashlight.EnabledFeatures()
-	log.Debugf("Starting enabled features: %v", enabledFeatures)
-	//go app.startReplicaIfNecessary(enabledFeatures)
+func (app *App) setSettings(settings *settings.Settings) {
+	app.mu.Lock()
+	app.settings = settings
+	app.mu.Unlock()
 }
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
@@ -288,19 +265,8 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 	if app.flashlight == nil {
 		return false
 	}
-	return app.flashlight.EnabledFeatures()[feature]
-}
-
-// startFeaturesService starts a new features service that dispatches features to any relevant listeners.
-func (app *App) startFeaturesService(chans ...<-chan bool) {
-	app.checkEnabledFeatures()
-	for _, ch := range chans {
-		go func(c <-chan bool) {
-			for range c {
-				app.checkEnabledFeatures()
-			}
-		}(ch)
-	}
+	return false
+	//return app.flashlight.EnabledFeatures()[feature]
 }
 
 func (app *App) beforeStart(listenAddr string) {
@@ -333,7 +299,7 @@ func (app *App) beforeStart(listenAddr string) {
 		os.Exit(0)
 	}
 
-	if e := app.settings.StartService(app.ws); e != nil {
+	/*if e := app.settings.StartService(app.ws); e != nil {
 		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
 		return
 	}
@@ -350,13 +316,39 @@ func (app *App) beforeStart(listenAddr string) {
 
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
-	}))
-	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
+	}))*/
 }
 
 // GetLanguage returns the user language
 func (app *App) GetLanguage() string {
-	return app.settings.GetLanguage()
+	if app.settings == nil {
+		return ""
+	}
+	lang := app.settings.GetLanguage()
+	if lang == "" {
+		return defaultLocale
+	}
+	return lang
+}
+
+func (app *App) fetchPayentMethodV4() error {
+	settings := app.Settings()
+	userID := settings.GetUserID()
+	if userID == 0 {
+		return errors.New("User ID is not set")
+	}
+	resp, err := app.proClient.PaymentMethodsV4(context.Background())
+	if err != nil {
+		return errors.New("Could not get payment methods: %v", err)
+	}
+	log.Debugf("DEBUG: Payment methods: %+v", resp)
+	log.Debugf("DEBUG: Payment methods providers: %+v", resp.Providers)
+	bytes, err := json.Marshal(resp)
+	if err != nil {
+		return errors.New("Could not marshal payment methods: %v", err)
+	}
+	settings.SetPaymentMethodPlans(bytes)
+	return nil
 }
 
 // SetLanguage sets the user language
@@ -381,8 +373,8 @@ func (app *App) SetUserLoggedIn(value bool) {
 }
 
 func (app *App) IsUserLoggedIn() bool {
-	return app.Settings().IsUserLoggedIn()
-
+	settings := app.Settings()
+	return settings != nil && settings.IsUserLoggedIn()
 }
 
 // Create func that send message to UI
@@ -401,6 +393,41 @@ func (app *App) OnSettingChange(attr settings.SettingName, cb func(interface{}))
 // OnStatsChange adds a listener for Stats changes.
 func (app *App) OnStatsChange(fn func(stats.Stats)) {
 	app.statsTracker.AddListener(fn)
+}
+
+func (a *App) startUpAPICalls() {
+	userCreate := func() error {
+		// User is new
+		user, err := a.proClient.UserCreate(context.Background())
+		if err != nil {
+			return errors.New("Could not create new Pro user: %v", err)
+		}
+		log.Debugf("DEBUG: User created: %v", user)
+		if user.BaseResponse != nil && user.BaseResponse.Error != "" {
+			return errors.New("Could not create new Pro user: %v", err)
+		}
+		a.Settings().SetUserIDAndToken(user.UserId, user.Token)
+
+		return nil
+	}
+
+	fetchOrCreate := func() error {
+		settings := a.Settings()
+		settings.SetLanguage("en_us")
+		userID := settings.GetUserID()
+		if userID == 0 {
+			a.Settings().SetUserFirstVisit(true)
+			err := userCreate()
+			if err != nil {
+				return err
+			}
+			// if the user is new mean we need to fetch the payment methods
+			a.fetchPayentMethodV4()
+		}
+		return nil
+	}
+	go fetchOrCreate()
+	go a.fetchPayentMethodV4()
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
@@ -427,12 +454,12 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
-	if err := app.servePro(app.ws); err != nil {
+	/*if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
 	}
 	if err := app.serveConnectionStatus(app.ws); err != nil {
 		log.Errorf("Unable to serve connection status: %v", err)
-	}
+	}*/
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
@@ -449,7 +476,6 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 			log.Errorf("failed to set browser market share data: %v", err)
 		}
 	}
-	app.chGlobalConfigChanged <- true
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
@@ -523,7 +549,6 @@ func (app *App) doExit(err error) {
 	}
 	recordStopped()
 	defer func() {
-		app.exited.Set(err)
 		log.Debugf("Finished exiting app %d(%d)", os.Getpid(), os.Getppid())
 	}()
 
@@ -560,15 +585,6 @@ func (app *App) runExitFuncs() {
 	wg.Wait()
 }
 
-// WaitForExit waits for a request to exit the application.
-func (app *App) WaitForExit() error {
-	err, _ := app.exited.Get(-1)
-	if err == nil {
-		return nil
-	}
-	return err.(error)
-}
-
 // is only used in the panicwrap parent process.
 func (app *App) LogPanicAndExit(msg string) {
 	sentry.ConfigureScope(func(scope *sentry.Scope) {
@@ -588,7 +604,7 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.isProUserFast(context.Background())
+	isPro, _ := app.IsProUserFast(context.Background())
 	return isPro
 }
 
@@ -613,6 +629,14 @@ func (app *App) SetReferralCode(referralCode string) {
 	app.mu.Lock()
 	defer app.mu.Unlock()
 	app.referralCode = referralCode
+}
+
+func (app *App) AuthClient() auth.AuthClient {
+	return app.authClient
+}
+
+func (app *App) ProClient() proclient.ProClient {
+	return app.proClient
 }
 
 // ProxyAddrReachable checks if Lantern's HTTP proxy responds with the correct status
@@ -661,6 +685,45 @@ func (app *App) Settings() *settings.Settings {
 	return app.settings
 }
 
-func (app *App) Stats() stats.Stats {
-	return app.statsTracker.Latest()
+func (app *App) Stats() *stats.Stats {
+	if app.statsTracker == nil {
+		return nil
+	}
+	stats := app.statsTracker.Latest()
+	return &stats
+}
+
+const defaultLocale = "en-US"
+
+// useOSLocale detect OS locale for current user and let i18n to use it
+func useOSLocale(a *App) (string, error) {
+	userLocale, err := jibber_jabber.DetectIETF()
+	if err != nil || userLocale == "C" {
+		log.Debugf("Ignoring OS locale and using default")
+		userLocale = defaultLocale
+	}
+	log.Debugf("Using OS locale of current user: %v", userLocale)
+	a.SetLanguage(userLocale)
+	return userLocale, nil
+}
+
+// Localization is happening on the client side but we are keeping this around for notifications
+func i18nInit(a *App) {
+	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
+		return a.GetTranslations(filename)
+	})
+	locale := a.GetLanguage()
+	log.Debugf("Using locale: %v", locale)
+	if _, err := i18n.SetLocale(locale); err != nil {
+		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
+
+		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
+		// populated.
+		if locale, err := useOSLocale(a); err != nil {
+			log.Debugf("i18n.UseOSLocale: %q", err)
+			a.SetLanguage(defaultLocale)
+		} else {
+			a.SetLanguage(locale)
+		}
+	}
 }

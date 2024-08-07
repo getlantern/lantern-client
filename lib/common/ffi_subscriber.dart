@@ -19,7 +19,7 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
     void Function(void Function(T?) setValue)? onChanges,
     WebSocketChannel? channel,
     T Function(Uint8List serialized)? deserialize,
-    T Function(dynamic json)? fromJsonModel,
+    T Function(dynamic? json)? fromJsonModel,
   }) : super(defaultValue, removeFromCache) {
     if (onChanges != null) {
       onChanges((newValue) {
@@ -31,16 +31,23 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
         value = null;
         //value = int.parse(ffiFunction().toDartString()) as T?;
       } else if (defaultValue is String) {
-        value = ffiFunction().toDartString() as T?;
+        print("string here1 $path");
+        value = ffiFunction().toDartString() as T;
+        print("string here2 $path");
       } else if (defaultValue is bool) {
-        value = ffiFunction().toDartString().parseBool() as T?;
+        print("bool here1 $path");
+        value = ffiFunction().toDartString().parseBool() as T;
+        print("bool here2 $path");
       } else if (fromJsonModel != null) {
-        var res = ffiFunction().toDartString();
+        print("fromJsonModel here1 $path");
+        var res = ffiFunction();
+        print("res is $res");
         if (res == '') {
           value = null;
         } else {
-          value = fromJsonModel(json.decode(res)) as T?;
+          value = fromJsonModel(json.decode(res.toDartString())) as T;
         }
+        print("fromJsonModel here2 $path");
     }
     cancel = () {
       if (channel != null) channel.sink.close(status.goingAway);

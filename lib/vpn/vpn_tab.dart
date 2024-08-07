@@ -16,7 +16,6 @@ class VPNTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vpnNotifier = context.watch<VPNChangeNotifier>();
     return sessionModel.proUser(
       (context, proUser, child) => BaseScreen(
         title: SvgPicture.asset(
@@ -27,11 +26,7 @@ class VPNTab extends StatelessWidget {
         // make sure to disable the back arrow button on the home screen
         automaticallyImplyLeading: false,
         padVertical: true,
-        body: !vpnNotifier.isFlashlightInitialized
-            ? VPNTapSkeleton(
-                isProUser: proUser,
-              )
-            : Column(
+        body: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (!proUser)
@@ -43,22 +38,6 @@ class VPNTab extends StatelessWidget {
                     children: [
                       const VPNSwitch(),
                       const SizedBox(height: 40),
-                      if (vpnNotifier.isFlashlightInitializedFailed)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            CText(vpnNotifier.flashlightState,
-                                style: tsSubtitle2),
-                            const SizedBox(width: 10),
-                            SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: grey5,
-                              ),
-                            )
-                          ],
-                        ),
                     ],
                   ),
                   Column(

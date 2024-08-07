@@ -15,7 +15,6 @@ import (
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/launcher"
 	"github.com/getlantern/timezone"
 	"github.com/getlantern/yaml"
 
@@ -156,7 +155,7 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	}
 
 	// Always just sync the auto-launch configuration on startup.
-	go launcher.CreateLaunchFile(sett.IsAutoLaunch())
+	//go launcher.CreateLaunchFile(sett.IsAutoLaunch())
 
 	// always override below 3 attributes as they are not meant to be persisted across versions
 	set[SNVersion] = version
@@ -196,6 +195,8 @@ func newSettings(filePath string) *Settings {
 			SNUserToken:                 "",
 			SNUIAddr:                    "",
 			SNMigratedDeviceIDForUserID: int64(0),
+			SNCountry:                   "",
+			SNEmailAddress:              "",
 			SNUserPro:                   false,
 			SNUserLoggedIn:              false,
 			SNUserFirstVisit:            false,
@@ -760,6 +761,7 @@ func (s *Settings) SetExpirationDate(date string) {
 func (s *Settings) IsUserLoggedIn() bool {
 	return s.getBool(SNUserLoggedIn)
 }
+
 func (s *Settings) SetUserLoggedIn(value bool) {
 	log.Println("Setting user logged in to ", value)
 	s.setVal(SNUserLoggedIn, value)

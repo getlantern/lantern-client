@@ -20,8 +20,8 @@ class SessionModel extends Model {
   late final EventManager eventManager;
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  late ValueNotifier<bool?> isPlayVersion;
-  late ValueNotifier<bool?> isStoreVersion;
+  ValueNotifier<bool?>? isPlayVersion;
+  ValueNotifier<bool?>? isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<bool?> proUserNotifier;
   late ValueNotifier<String?> country;
@@ -64,7 +64,7 @@ class SessionModel extends Model {
       );
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
-      isPlayVersion = ffiValueNotifier(
+      /*isPlayVersion = ffiValueNotifier(
         ffiPlayVersion,
         'isPlayVersion',
         false,
@@ -73,14 +73,14 @@ class SessionModel extends Model {
         ffiStoreVersion,
         'isStoreVersion',
         false,
-      );
+      );*/
       proxyAvailable = ffiValueNotifier(
         ffiHasSucceedingProxy,
         'hasSucceedingProxy',
         false,
       );
       userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
-      proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
+      //proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
       hasUserSignedInNotifier =
           ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
       isAuthEnabled = ffiValueNotifier(ffiAuthEnabled, 'authEnabled', false);
@@ -786,14 +786,12 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<ServerInfo>(
       'serverInfo',
+      defaultValue: null,
       ffiServerInfo,
       builder: builder,
       fromJsonModel: (dynamic json) {
         final res = jsonEncode(json);
         return ServerInfo.create()..mergeFromProto3Json(jsonDecode(res));
-      },
-      deserialize: (Uint8List serialized) {
-        return ServerInfo.fromBuffer(serialized);
       },
     );
   }
@@ -999,10 +997,10 @@ class SessionModel extends Model {
   // the onMessage callback is triggered with the given property value
   void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
       String? property, void Function(T?) onMessage) {
-    if (websocket == null) return;
+    if (websocket == null || !websocket.isConnected()) return;
     websocket.messageStream.listen(
       (json) {
-        if (json["type"] == messageType) {
+        if (json["type"] != null && json["type"] == messageType && json["message"] != null) {
           if (property != null) {
             onMessage(json["message"][property]);
           } else {

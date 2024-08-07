@@ -8,7 +8,6 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
@@ -43,7 +42,7 @@ func getUserSalt(email string) ([]byte, error) {
 		return salt, nil
 	}
 	log.Debugf("Salt not found calling api for %s", email)
-	saltResponse, err := authClient.GetSalt(context.Background(), lowerCaseEmail)
+	saltResponse, err := a.AuthClient().GetSalt(context.Background(), lowerCaseEmail)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +61,7 @@ func getUserSalt(email string) ([]byte, error) {
 func signup(email *C.char, password *C.char) *C.char {
 	lowerCaseEmail := strings.ToLower(C.GoString(email))
 
-	salt, err := authClient.SignUp(lowerCaseEmail, C.GoString(password))
+	salt, err := a.AuthClient().SignUp(lowerCaseEmail, C.GoString(password))
 	if err != nil {
 		return sendError(err)
 	}
@@ -81,7 +80,7 @@ func signup(email *C.char, password *C.char) *C.char {
 //export login
 func login(email *C.char, password *C.char) *C.char {
 	lowerCaseEmail := strings.ToLower(C.GoString(email))
-	user, salt, err := authClient.Login(lowerCaseEmail, C.GoString(password), getDeviceID())
+	user, salt, err := a.AuthClient().Login(lowerCaseEmail, C.GoString(password), getDeviceID())
 	if err != nil {
 		return sendError(err)
 	}
@@ -124,7 +123,7 @@ func logout() *C.char {
 		LegacyUserID: userId,
 	}
 	log.Debugf("Sign out request %+v", signoutData)
-	loggedOut, logoutErr := authClient.SignOut(context.Background(), signoutData)
+	loggedOut, logoutErr := a.AuthClient().SignOut(context.Background(), signoutData)
 	if logoutErr != nil {
 		return sendError(log.Errorf("Error while signing out %v", logoutErr))
 	}
@@ -160,7 +159,7 @@ func deviceLimitFlow(login *protos.LoginResponse) error {
 		Devices: protoDevices,
 	}
 
-	app.SetUserData(context.Background(), login.LegacyID, user)
+	a.SetUserData(context.Background(), login.LegacyID, user)
 	return nil
 }
 
@@ -173,7 +172,7 @@ func startRecoveryByEmail(email *C.char) *C.char {
 	prepareRequestBody := &protos.StartRecoveryByEmailRequest{
 		Email: lowerCaseEmail,
 	}
-	recovery, err := authClient.StartRecoveryByEmail(context.Background(), prepareRequestBody)
+	recovery, err := a.AuthClient().StartRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -205,7 +204,7 @@ func completeRecoveryByEmail(email *C.char, code *C.char, password *C.char) *C.c
 	}
 
 	log.Debugf("new Verifier %v and salt %v", verifierKey.Bytes(), newsalt)
-	recovery, err := authClient.CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
+	recovery, err := a.AuthClient().CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -225,7 +224,7 @@ func validateRecoveryByEmail(email *C.char, code *C.char) *C.char {
 		Email: lowerCaseEmail,
 		Code:  C.GoString(code),
 	}
-	recovery, err := authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
+	recovery, err := a.AuthClient().ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -258,7 +257,7 @@ func deleteAccount(password *C.char) *C.char {
 		A:     A.Bytes(),
 	}
 	log.Debugf("Delete Account request email %v A %v", lowerCaseEmail, A.Bytes())
-	srpB, err := authClient.LoginPrepare(context.Background(), prepareRequestBody)
+	srpB, err := a.AuthClient().LoginPrepare(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -300,7 +299,7 @@ func deleteAccount(password *C.char) *C.char {
 	}
 
 	log.Debugf("Delete Account request email %v prooof %v deviceId %v", lowerCaseEmail, clientProof, deviceId)
-	isAccountDeleted, err := authClient.DeleteAccount(context.Background(), changeEmailRequestBody)
+	isAccountDeleted, err := a.AuthClient().DeleteAccount(context.Background(), changeEmailRequestBody)
 	if err != nil {
 		return sendError(err)
 	}

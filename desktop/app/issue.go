@@ -23,6 +23,7 @@ var (
 )
 
 type issueReporter struct {
+	app       *App
 	settings  *settings.Settings
 	proClient pro.ProClient
 }
@@ -45,6 +46,7 @@ type issueMessage struct {
 // to the Lantern team.
 func newIssueReporter(app *App) *issueReporter {
 	return &issueReporter{
+		app:       app,
 		proClient: app.proClient,
 		settings:  app.settings,
 	}
@@ -69,7 +71,7 @@ func (reporter *issueReporter) sendIssueReport(msg *issueMessage) error {
 	}
 	subscriptionLevel := "free"
 	ctx := context.Background()
-	if isPro, _ := IsProUser(ctx, reporter.proClient, settings); isPro {
+	if isPro, _ := reporter.app.IsProUser(ctx); isPro {
 		subscriptionLevel = "pro"
 	}
 	var osVersion string

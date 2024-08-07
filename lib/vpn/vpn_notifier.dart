@@ -11,7 +11,7 @@ class VPNChangeNotifier extends ChangeNotifier {
     if (isMobile()) {
       initCallbackForMobile();
     } else {
-      initCallbacks();
+      //initCallbacks();
     }
   }
 
