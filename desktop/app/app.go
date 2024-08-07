@@ -36,7 +36,6 @@ import (
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
-
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/notifier"
@@ -70,7 +69,7 @@ type App struct {
 	exited           eventual.Value
 	analyticsSession analytics.Session
 	settings         *settings.Settings
-	statsTracker     *statsTracker
+	statsTracker     stats.Tracker
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
@@ -85,7 +84,6 @@ type App struct {
 	proClient     proclient.ProClient
 	referralCode  string
 	selectedTab   Tab
-	stats         *stats.Stats
 
 	connectionStatusCallbacks []func(isConnected bool)
 	_sysproxyOff              func() error
@@ -110,10 +108,11 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
+		statsTracker:              stats.NewTracker(),
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
+		chGlobalConfigChanged:     make(chan bool),
 	}
-	app.statsTracker = NewStatsTracker(app)
 	if err := app.serveWebsocket(); err != nil {
 		log.Error(err)
 	}
@@ -660,4 +659,8 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 
 func (app *App) Settings() *settings.Settings {
 	return app.settings
+}
+
+func (app *App) Stats() stats.Stats {
+	return app.statsTracker.Latest()
 }
