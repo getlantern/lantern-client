@@ -4,6 +4,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../common/common.dart';
 
+typedef PurchaseCallback = void Function(PurchaseDetails?);
+
 class AppPurchase {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
@@ -13,7 +15,7 @@ class AppPurchase {
   Function(dynamic error)? _onError;
   String _planId = "";
   String _email = "";
-  BuildContext? context;
+  PurchaseCallback? _globalPurchaseCallback;
 
   void init() {
     final purchaseUpdated = _inAppPurchase.purchaseStream;
@@ -40,13 +42,12 @@ class AppPurchase {
     required String email,
     required VoidCallback onSuccess,
     required Function(dynamic error) onFailure,
-    BuildContext? context,
   }) async {
     if (!(await checkForAppStoreIsAvailable())) {
       onFailure("App store is not available");
       return;
     }
-    this.context = context;
+
     _email = email;
     _planId = planId;
     _onSuccess = onSuccess;
@@ -79,6 +80,11 @@ class AppPurchase {
   Future<void> _onPurchaseUpdate(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
+    if(purchaseDetailsList.isEmpty){
+      if(_globalPurchaseCallback != null){
+        _globalPurchaseCallback!(null);
+      }
+    }
     for (var purchaseDetails in purchaseDetailsList) {
       await _handlePurchase(purchaseDetails);
     }
@@ -112,20 +118,19 @@ class AppPurchase {
     /// restore purchase
     if (purchaseDetails.status == PurchaseStatus.restored) {
       logger.d("purchase restored successfully ${purchaseDetails}");
-      if (context != null) {
-        CDialog.showInfo(context!,
-            title: "Restore", description: purchaseDetails.toJson);
-        copyText(context!, purchaseDetails.toJson);
+      if (_globalPurchaseCallback != null) {
+        _globalPurchaseCallback!.call(purchaseDetails);
       }
+      return;
     }
     if (purchaseDetails.pendingCompletePurchase) {
       await _inAppPurchase.completePurchase(purchaseDetails);
     }
   }
 
-  Future<void> restorePurchases(BuildContext context) async {
+  Future<void> restorePurchases({required PurchaseCallback purchase}) async {
     logger.d("restoring purchase");
-    this.context = context;
+    _globalPurchaseCallback = purchase;
     _inAppPurchase.restorePurchases(applicationUserName: null);
   }
 
@@ -133,6 +138,7 @@ class AppPurchase {
     _onError = null;
     _onSuccess = null;
     _planId = "";
+    _globalPurchaseCallback = null;
     _subscription?.cancel();
   }
 

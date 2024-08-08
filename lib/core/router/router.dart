@@ -338,6 +338,13 @@ class AppRouter extends $AppRouter {
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,
+    ),
+    CustomRoute(
+      page: RestorePurchaseVerification.page,
+      path: '/restore_purchase_verification',
+      transitionsBuilder: defaultTransition,
+      durationInMilliseconds: defaultTransitionMillis,
+      reverseDurationInMilliseconds: defaultTransitionMillis,
     )
   ];
 }

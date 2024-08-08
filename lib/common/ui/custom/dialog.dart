@@ -25,6 +25,16 @@ class CDialog extends StatefulWidget {
     ).show(context);
   }
 
+  static void noPurchaseFound(BuildContext context) {
+    CDialog(
+      title: 'purchase_not_found'.i18n,
+      description: 'no_previous_purchase'.i18n,
+      iconPath: ImagePaths.alert,
+      barrierDismissible: false,
+      agreeText: 'OK',
+    ).show(context);
+  }
+
   static void successDialog(
       {required BuildContext context,
       required String title,
@@ -85,7 +95,8 @@ class CDialog extends StatefulWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 16),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +108,9 @@ class CDialog extends StatefulWidget {
                       path: ImagePaths.cloudOff, color: Colors.black),
                 ),
               ),
-              Center(child: CText('check_your_internet_connection'.i18n, style: tsSubtitle1)),
+              Center(
+                  child: CText('check_your_internet_connection'.i18n,
+                      style: tsSubtitle1)),
               const SizedBox(height: 10),
               CText('please_try'.i18n, style: tsSubtitle2),
               RichText(
@@ -148,7 +161,8 @@ class CDialog extends StatefulWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: CText('got_it'.i18n.toUpperCase(), style: tsButtonPink),
+                    child:
+                        CText('got_it'.i18n.toUpperCase(), style: tsButtonPink),
                   ),
                 ],
               ),

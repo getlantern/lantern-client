@@ -259,7 +259,6 @@ class _PlanCardState extends State<PlanCard> {
     try {
       context.loaderOverlay.show();
       appPurchase.startPurchase(
-        context: context,
         email: sessionModel.userEmail.value ?? '',
         planId: widget.plan.id,
         onSuccess: () {

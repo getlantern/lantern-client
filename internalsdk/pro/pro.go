@@ -40,6 +40,7 @@ type ProClient interface {
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
 	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
+	RestorePurchase(ctx context.Context, req *RestorePurchaseRequest) (*OkResponse, error)
 	//Device Linking
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
@@ -335,6 +336,16 @@ func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRec
 func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interface{}) (*PurchaseResponse, error) {
 	var resp PurchaseResponse
 	err := c.webclient.PostFormReadingJSON(ctx, "/purchase", req, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+// RestorePurchase is used to restore a purchase for Google and apple play users
+func (c *proClient) RestorePurchase(ctx context.Context, req *RestorePurchaseRequest) (*OkResponse, error) {
+	var resp OkResponse
+	err := c.webclient.PostFormReadingJSON(ctx, "/restore-purchase", req, &resp)
 	if err != nil {
 		return nil, err
 	}

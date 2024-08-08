@@ -300,6 +300,16 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 
+	case "restorePurchase":
+		email := arguments.Get("email").String()
+		code := arguments.Get("code").String()
+		provider := arguments.Get("provider").String()
+		err := restorePurchase(m, email, code, provider)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 		//Recovery
 	case "startRecoveryByEmail":
 		email := arguments.Get("email").String()
@@ -1195,6 +1205,30 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 	}
 	// Set user to pro
 	return setProUser(m.baseModel, true)
+}
+
+func restorePurchase(session *SessionModel, email string, purchaseToken string, code string) error {
+	deviceName, err := pathdb.Get[string](session.db, pathDevice)
+	if err != nil {
+		return err
+	}
+	restoreRequest := &pro.RestorePurchaseRequest{
+		Email:      email,
+		Provider:   paymentProviderApplePay,
+		Token:      purchaseToken,
+		DeviceName: deviceName,
+		Code:       "",
+	}
+
+	okResponse, err := session.proClient.RestorePurchase(context.Background(), restoreRequest)
+	if err != nil {
+		return err
+	}
+	if okResponse.Status != "ok" {
+		return errors.New("Restore purchase failed")
+	}
+	return nil
+
 }
 
 /// Auth APIS

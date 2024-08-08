@@ -1776,6 +1776,12 @@ msgstr "Skip for now"
 msgid "purchase_not_found"
 msgstr "No purchase found"
 
+msgid "no_previous_purchase"
+msgstr "No previous purchase found"
+
+msgid "warning_restore_purchase"
+msgstr "*Make sure you are using the same email you used to make the purchase"
+
 
 
 
