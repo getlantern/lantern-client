@@ -239,7 +239,6 @@ class SessionModel extends Model {
       );
     }
     final res = lanternFFI.referral();
-    print("res is $res");
     return ffiValueBuilder<String>(
       'referral',
       null,
@@ -894,8 +893,7 @@ class SessionModel extends Model {
     Locale locale = Localizations.localeOf(context);
     final format = NumberFormat.simpleCurrency(locale: locale.toString());
     final currencyName = format.currencyName ?? "USD";
-    return await compute(
-        lanternFFI.paymentRedirect, [planID, currencyName, provider.name, email, os]);
+    return await lanternFFI.paymentRedirect([planID, currencyName, provider.name, email, os]);
   }
 
   Future<void> submitApplePlay(

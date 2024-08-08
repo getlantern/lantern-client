@@ -42,6 +42,7 @@ const (
 	SNUserID                    SettingName = "userID"
 	SNUserToken                 SettingName = "userToken"
 	SNUserPro                   SettingName = "userPro"
+	SNReferralCode              SettingName = "referralCode"
 	SNMigratedDeviceIDForUserID SettingName = "migratedDeviceIDForUserID"
 	SNTakenSurveys              SettingName = "takenSurveys"
 	SNPastAnnouncements         SettingName = "pastAnnouncements"
@@ -105,6 +106,7 @@ var settingMeta = map[SettingName]struct {
 	SNRevisionDate: {stString, false, false},
 
 	SNEnabledExperiments: {stStringArray, false, false},
+	SNReferralCode:       {stString, true, true},
 
 	//Auth releated
 	SNUserFirstVisit: {stBool, true, true},
@@ -196,6 +198,7 @@ func newSettings(filePath string) *Settings {
 			SNUIAddr:                    "",
 			SNMigratedDeviceIDForUserID: int64(0),
 			SNPaymentMethods:            []byte{},
+			SNReferralCode:              "",
 			SNCountry:                   "",
 			SNEmailAddress:              "",
 			SNUserPro:                   false,
@@ -479,6 +482,16 @@ func (s *Settings) SetLanguage(language string) {
 // GetLanguage returns the user language
 func (s *Settings) GetLanguage() string {
 	return s.getString(SNLanguage)
+}
+
+// SetLanguage sets the user language
+func (s *Settings) SetReferralCode(referralCode string) {
+	s.setVal(SNReferralCode, referralCode)
+}
+
+// GetLanguage returns the user language
+func (s *Settings) GetReferralCode() string {
+	return s.getString(SNReferralCode)
 }
 
 // SetCountry sets the user's country.

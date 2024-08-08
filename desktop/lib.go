@@ -5,12 +5,10 @@ import (
 	"context"
 	"encoding/json"
 	"os"
-	"os/signal"
 	"runtime"
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/getlantern/appdir"
@@ -77,7 +75,6 @@ func start() {
 	}
 
 	golog.SetPrepender(logging.Timestamped)
-	//handleSignals(a)
 	a.Run()
 }
 
@@ -368,10 +365,7 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 
 //export referral
 func referral() *C.char {
-	referralCode, err := a.ReferralCode()
-	if err != nil {
-		return sendError(err)
-	}
+	referralCode := a.Settings().GetReferralCode()
 	return C.CString(referralCode)
 }
 
@@ -494,8 +488,7 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 
 //export exitApp
 func exitApp() {
-	os.Exit(1)
-	//a.Exit(nil)
+	a.Exit(nil)
 }
 
 //export developmentMode
@@ -595,21 +588,6 @@ func configDir(flags *flashlight.Flags) string {
 		}
 	}
 	return cdir
-}
-
-// Handle system signals for clean exit
-func handleSignals(a *app.App) {
-	c := make(chan os.Signal, 1)
-	signal.Notify(c,
-		syscall.SIGHUP,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGQUIT)
-	go func() {
-		s := <-c
-		log.Debugf("Got signal \"%s\", exiting...", s)
-		a.Exit(nil)
-	}()
 }
 
 // clearLocalUserData clears the local user data from the settings

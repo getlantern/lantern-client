@@ -21,7 +21,6 @@ import (
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/bandit"
-	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
@@ -80,7 +79,6 @@ type App struct {
 	issueReporter *issueReporter
 	authClient    auth.AuthClient
 	proClient     proclient.ProClient
-	referralCode  string
 	selectedTab   Tab
 
 	connectionStatusCallbacks []func(isConnected bool)
@@ -143,7 +141,7 @@ func NewApp(flags flashlight.Flags, configDir string) *App {
 }
 
 func (app *App) UserConfig() common.UserConfig {
-	settings := app.settings
+	settings := app.Settings()
 	var userID int64
 	var deviceID, token string
 	if settings != nil {
@@ -179,14 +177,15 @@ func (app *App) Run() {
 			app.settings.SetCountry(geolookup.GetCountry(0))
 		}
 	}()
-	app.startUpAPICalls(context.Background())
-	flags := app.Flags
-	log.Debug(flags)
-	if flags.Pprof {
-		go startDebugServer()
-	}
-	i18nInit(app)
 	go func() {
+		app.startUpAPICalls(context.Background())
+		flags := app.Flags
+		log.Debug(flags)
+		if flags.Pprof {
+			go startDebugServer()
+		}
+		i18nInit(app)
+
 		// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
 		// for the first time. User can still quit Lantern through systray menu when it happens.
 		if flags.ProxyAll {
@@ -454,9 +453,9 @@ func (a *App) getUserData(ctx context.Context) error {
 	}
 	user := resp.User
 	if err := setExpiration(user.Expiration); err != nil {
-		return err
+		log.Error(err)
 	}
-
+	a.Settings().SetReferralCode(user.Referral)
 	a.SetUserData(ctx, user.UserId, user)
 	firstTime := a.Settings().GetUserFirstVisit()
 
@@ -529,17 +528,10 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
 	atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
-	autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
+	/*autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
 		return "/img/lantern_logo.png"
-	})
+	})*/
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
-	if len(cfg.GlobalBrowserMarketShareData) > 0 {
-		err := simbrowser.SetMarketShareData(
-			cfg.GlobalBrowserMarketShareData, cfg.RegionalBrowserMarketShareData)
-		if err != nil {
-			log.Errorf("failed to set browser market share data: %v", err)
-		}
-	}
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
@@ -670,29 +662,6 @@ func (app *App) exitOnFatal(err error) {
 func (app *App) IsPro() bool {
 	isPro, _ := app.IsProUserFast(context.Background())
 	return isPro
-}
-
-// ReferralCode returns a user's unique referral code
-func (app *App) ReferralCode() (string, error) {
-	referralCode := app.referralCode
-	if referralCode == "" && app.proClient != nil {
-		resp, err := app.proClient.UserData(context.Background())
-		if err != nil {
-			return "", errors.New("error fetching user data: %v", err)
-		} else if resp.User == nil {
-			return "", errors.New("error fetching user data")
-		}
-
-		app.SetReferralCode(resp.User.Code)
-		return resp.User.Code, nil
-	}
-	return referralCode, nil
-}
-
-func (app *App) SetReferralCode(referralCode string) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.referralCode = referralCode
 }
 
 func (app *App) AuthClient() auth.AuthClient {
