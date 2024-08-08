@@ -696,14 +696,12 @@ class SessionModel extends Model {
         },
       );
     }
+    final res = lanternFFI.plans();
     return ffiListBuilder<Plan>(
       '/plans/',
-      lanternFFI.plans,
+      res.toDartString(),
       planFromJson,
       builder: builder,
-      deserialize: (Uint8List serialized) {
-        return Plan.fromBuffer(serialized);
-      },
     );
   }
 

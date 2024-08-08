@@ -6,7 +6,7 @@ import 'common_desktop.dart';
 class FfiListNotifier<T> extends SubscribedNotifier<ChangeTrackingList<T>> {
   FfiListNotifier(
     path,
-    Pointer<Utf8> Function() ffiFunction,
+    dynamic defaultValue,
     T Function(Map<String, dynamic> json) fromJsonModel,
     void Function() removeFromCache, {
     bool details = false,
@@ -14,7 +14,7 @@ class FfiListNotifier<T> extends SubscribedNotifier<ChangeTrackingList<T>> {
     T Function(Uint8List serialized)? deserialize,
   }) : super(ChangeTrackingList(compare ?? sortNormally), removeFromCache) {
     value.clearPaths();
-    var result = jsonDecode(ffiFunction().toDartString());
+    var result = jsonDecode(defaultValue);
     if (result is List<dynamic>) {
       for (var item in result) {
         var id = item['id'] ?? item['name'];

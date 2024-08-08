@@ -194,6 +194,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
+    final tabModel = context.watch<BottomBarChangeNotifier>();
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(

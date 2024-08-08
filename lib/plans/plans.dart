@@ -15,6 +15,7 @@ class PlansPage extends StatelessWidget {
       bgColor: white,
       widget: sessionModel
           .proUser((BuildContext context, bool proUser, Widget? child) {
+        print("Here1");
         return sessionModel.plans(
           builder: (context,
               Iterable<PathAndValue<Plan>> plans,

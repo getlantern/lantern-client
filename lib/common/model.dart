@@ -182,7 +182,7 @@ abstract class Model {
 
   ValueListenableBuilder<ChangeTrackingList<T>> ffiListBuilder<T>(
     String path, 
-    Pointer<Utf8> Function() ffiFunction, 
+    dynamic defaultValue,
     T Function(Map<String, dynamic> json) fromJsonModel, {
     required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
     bool details = false,
@@ -191,7 +191,7 @@ abstract class Model {
   }) {
     var notifier = ffiListNotifier(
       path,
-      ffiFunction,
+      defaultValue,
       fromJsonModel,
       details: details,
       compare: compare,
@@ -211,7 +211,7 @@ abstract class Model {
 
   ValueNotifier<ChangeTrackingList<T>> ffiListNotifier<T>(
     String path, 
-    Pointer<Utf8> Function() ffiFunction, 
+    dynamic defaultValue, 
     T Function(Map<String, dynamic> json) fromJsonModel, {
     bool details = false,
     int Function(String key1, String key2)? compare,
@@ -221,7 +221,7 @@ abstract class Model {
     if (result == null) {
       result = FfiListNotifier(
         path,
-        ffiFunction,
+        defaultValue,
         fromJsonModel,
         () {
           _ffiListNotifierCache.remove(path);

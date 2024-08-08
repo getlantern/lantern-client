@@ -179,7 +179,7 @@ func (app *App) Run() {
 			app.settings.SetCountry(geolookup.GetCountry(0))
 		}
 	}()
-	app.startUpAPICalls()
+	app.startUpAPICalls(context.Background())
 	flags := app.Flags
 	log.Debug(flags)
 	if flags.Pprof {
@@ -398,27 +398,27 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 	app.statsTracker.AddListener(fn)
 }
 
-func (a *App) startUpAPICalls() {
+func (a *App) startUpAPICalls(ctx context.Context) {
 	userCreate := func() error {
 		// User is new
-		user, err := a.proClient.UserCreate(context.Background())
+		resp, err := a.proClient.UserCreate(context.Background())
 		if err != nil {
 			return errors.New("Could not create new Pro user: %v", err)
 		}
-		log.Debugf("DEBUG: User created: %v", user)
-		if user.BaseResponse != nil && user.BaseResponse.Error != "" {
+		if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
 			return errors.New("Could not create new Pro user: %v", err)
 		}
+		user := resp.User
+		log.Debugf("DEBUG: User created: %v", user)
+		a.SetUserData(ctx, user.UserId, user)
 		a.Settings().SetUserIDAndToken(user.UserId, user.Token)
-
 		return nil
 	}
 
 	fetchOrCreate := func() error {
-		settings := a.Settings()
-		settings.SetLanguage("en_us")
-		userID := settings.GetUserID()
+		userID := a.Settings().GetUserID()
 		if userID == 0 {
+			a.Settings().SetLanguage("en_us")
 			a.Settings().SetUserFirstVisit(true)
 			err := userCreate()
 			if err != nil {
@@ -426,11 +426,72 @@ func (a *App) startUpAPICalls() {
 			}
 			// if the user is new mean we need to fetch the payment methods
 			a.fetchPayentMethodV4()
+		} else {
+			return a.getUserData(ctx)
 		}
 		return nil
 	}
 	go fetchOrCreate()
 	go a.fetchPayentMethodV4()
+}
+
+func (a *App) getUserData(ctx context.Context) error {
+
+	setExpiration := func(expiration int64) error {
+		if expiration == 0 {
+			return log.Errorf("Expiration date is 0")
+		}
+		expiry := time.Unix(0, expiration*int64(time.Second))
+		dateFormat := "01/02/2006"
+		dateStr := expiry.Format(dateFormat)
+		a.Settings().SetExpirationDate(dateStr)
+		return nil
+	}
+
+	resp, err := a.proClient.UserData(ctx)
+	if err != nil {
+		return err
+	}
+	user := resp.User
+	if err := setExpiration(user.Expiration); err != nil {
+		return err
+	}
+
+	a.SetUserData(ctx, user.UserId, user)
+	firstTime := a.Settings().GetUserFirstVisit()
+
+	// Check if device id is connect to same device if not create new user
+	// this is for the case when user removed device from other device
+	deviceFound := false
+	currentDevice := a.Settings().GetDeviceID()
+	if user.Devices != nil {
+		for _, device := range user.Devices {
+			if device.Id == currentDevice {
+				deviceFound = true
+				break
+			}
+		}
+	}
+	log.Debugf("First time visit %v", firstTime)
+	if user.UserLevel == "pro" && firstTime {
+		log.Debugf("User is pro and first time")
+		a.setProUser(true)
+	} else if user.UserLevel == "pro" && !firstTime && deviceFound {
+		log.Debugf("User is pro and not first time")
+		a.setProUser(true)
+	} else {
+		log.Debugf("User is not pro")
+		a.setProUser(false)
+	}
+	log.Debugf("User caching successful: %+v", user)
+	return nil
+}
+
+func (app *App) setProUser(isPro bool) {
+	app.Settings().SetProUser(isPro)
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"isProUser": isPro,
+	})
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {

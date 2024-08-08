@@ -81,67 +81,6 @@ func start() {
 	a.Run()
 }
 
-func fetchUserData() error {
-	user, err := getUserData()
-	if err != nil {
-		return log.Errorf("error while fetching user data: %v", err)
-	}
-	return cacheUserDetail(user)
-}
-
-func cacheUserDetail(userDetail *protos.User) error {
-	if userDetail.Email != "" {
-		a.Settings().SetEmailAddress(userDetail.Email)
-	}
-	//Save user refferal code
-	if userDetail.Referral != "" {
-		a.SetReferralCode(userDetail.Referral)
-	}
-	// err := setUserLevel(session.baseModel, userDetail.UserLevel)
-	// if err != nil {
-	// 	return err
-	// }
-
-	err := setExpiration(userDetail.Expiration)
-	if err != nil {
-		return err
-	}
-	currentDevice := getDeviceID()
-	log.Debugf("Current device %v", currentDevice)
-
-	// Check if device id is connect to same device if not create new user
-	// this is for the case when user removed device from other device
-	deviceFound := false
-	if userDetail.Devices != nil {
-		for _, device := range userDetail.Devices {
-			if device.Id == currentDevice {
-				deviceFound = true
-				break
-			}
-		}
-	}
-	log.Debugf("Device found %v", deviceFound)
-	/// Check if user has installed app first time
-	firstTime := a.Settings().GetUserFirstVisit()
-	log.Debugf("First time visit %v", firstTime)
-	if userDetail.UserLevel == "pro" && firstTime {
-		log.Debugf("User is pro and first time")
-		setProUser(true)
-	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
-		log.Debugf("User is pro and not first time")
-		setProUser(true)
-	} else {
-		log.Debugf("User is not pro")
-		setProUser(false)
-	}
-
-	a.Settings().SetUserIDAndToken(userDetail.UserId, userDetail.Token)
-	log.Debugf("User caching successful: %+v", userDetail)
-	// Save data in userData cache
-	a.SetUserData(context.Background(), userDetail.UserId, userDetail)
-	return nil
-}
-
 func getDeviceID() string {
 	return a.Settings().GetDeviceID()
 }
@@ -194,43 +133,6 @@ func userCreate() error {
 		return errors.New("Could not create new Pro user: %v", err)
 	}
 	a.Settings().SetUserIDAndToken(user.UserId, user.Token)
-
-	return nil
-}
-
-func fetchOrCreate() error {
-	settings := a.Settings()
-	settings.SetLanguage("en_us")
-	userID := settings.GetUserID()
-	if userID == 0 {
-		a.Settings().SetUserFirstVisit(true)
-		err := userCreate()
-		if err != nil {
-			return err
-		}
-		// if the user is new mean we need to fetch the payment methods
-		fetchPayentMethodV4()
-	}
-	return nil
-}
-
-func fetchPayentMethodV4() error {
-	settings := a.Settings()
-	userID := settings.GetUserID()
-	if userID == 0 {
-		return errors.New("User ID is not set")
-	}
-	resp, err := a.ProClient().PaymentMethodsV4(context.Background())
-	if err != nil {
-		return errors.New("Could not get payment methods: %v", err)
-	}
-	log.Debugf("DEBUG: Payment methods: %+v", resp)
-	log.Debugf("DEBUG: Payment methods providers: %+v", resp.Providers)
-	bytes, err := json.Marshal(resp)
-	if err != nil {
-		return errors.New("Could not marshal payment methods: %v", err)
-	}
-	settings.SetPaymentMethodPlans(bytes)
 	return nil
 }
 
@@ -291,23 +193,6 @@ func paymentMethodsV4() *C.char {
 	return C.CString(string(b))
 }
 
-func cachedUserData() (*protos.User, bool) {
-	return a.UserData(context.Background())
-}
-
-func getUserData() (*protos.User, error) {
-	resp, err := a.ProClient().UserData(context.Background())
-	if err != nil {
-		return nil, err
-	}
-	if resp.User == nil {
-		return nil, errors.New("User data not found")
-	}
-	user := resp.User
-	cacheUserDetail(user)
-	return user, nil
-}
-
 //export proxyAll
 func proxyAll() *C.char {
 	proxyAll := a.Settings().GetProxyAll()
@@ -323,32 +208,25 @@ func setProxyAll(value *C.char) {
 	go a.Settings().SetProxyAll(proxyAll)
 }
 
-// tryCacheUserData retrieves the latest user data for the given user.
-// It first checks the cache and if present returns the user data stored there
-// func tryCacheUserData() (*protos.User, error) {
-// 	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
-// 		return cacheUserData, nil
-// 	}
-// 	return getUserData()
-// }
-
 // this method is reposible for checking if the user has updated plan or bought plans
 //
 //export hasPlanUpdatedOrBuy
 func hasPlanUpdatedOrBuy() *C.char {
+	ctx := context.Background()
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
-	cacheUserData, isOldFound := cachedUserData()
+	cacheUserData, isOldFound := a.UserData(ctx)
 	//Get latest user data
-	resp, err := a.ProClient().UserData(context.Background())
-	if err != nil {
-		return sendError(err)
-	}
-	if isOldFound {
-		if cacheUserData.Expiration < resp.User.Expiration {
+	if isOldFound && a.ProClient() != nil {
+		resp, err := a.ProClient().UserData(ctx)
+		if err != nil {
+			return sendError(err)
+		}
+		user := resp.User
+		if user != nil && cacheUserData.Expiration < user.Expiration {
 			// New data has a later expiration
 			// if foud then update the cache
-			cacheUserDetail(resp.User)
+			a.SetUserData(ctx, user.UserId, user)
 			return C.CString(string("true"))
 		}
 	}
@@ -357,7 +235,7 @@ func hasPlanUpdatedOrBuy() *C.char {
 
 //export devices
 func devices() *C.char {
-	user, found := cachedUserData()
+	user, found := a.UserData(context.Background())
 	if !found {
 		// for now just return empty array
 		b, _ := json.Marshal("[]")
@@ -398,7 +276,7 @@ func userLinkValidate(code *C.char) *C.char {
 
 //export expiryDate
 func expiryDate() *C.char {
-	user, found := cachedUserData()
+	user, found := a.UserData(context.Background())
 	if !found {
 		return sendError(log.Errorf("User data not found"))
 	}
@@ -409,9 +287,9 @@ func expiryDate() *C.char {
 
 //export userData
 func userData() *C.char {
-	user, err := getUserData()
-	if err != nil {
-		return sendError(err)
+	user, ok := a.UserData(context.Background())
+	if !ok {
+		return sendError(errors.New("user not found"))
 	}
 	b, _ := json.Marshal(user)
 	return C.CString(string(b))
@@ -419,7 +297,6 @@ func userData() *C.char {
 
 //export serverInfo
 func serverInfo() *C.char {
-	log.Debug("serverInfo1")
 	stats := a.Stats()
 	if stats == nil {
 		return C.CString("")
@@ -430,7 +307,6 @@ func serverInfo() *C.char {
 		"countryCode": stats.CountryCode,
 	}
 	b, _ := json.Marshal(serverInfo)
-	log.Debug("serverInfo2")
 	return C.CString(string(b))
 }
 
@@ -460,8 +336,6 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 	if err != nil {
 		return sendError(err)
 	}
-	setProUser(true)
-	getUserData()
 	return C.CString("true")
 }
 
@@ -581,9 +455,9 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
-	/*if isProUser, ok := a.IsProUserFast(context.Background()); isProUser && ok {
+	if isProUser, ok := a.IsProUserFast(context.Background()); isProUser && ok {
 		return C.CString("true")
-	}*/
+	}
 	return C.CString("false")
 }
 
