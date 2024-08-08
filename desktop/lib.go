@@ -4,7 +4,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"net/http"
 	"os"
 	"os/signal"
 	"runtime"
@@ -36,8 +35,10 @@ import (
 import "C"
 
 var (
-	log = golog.LoggerFor("lantern-desktop.main")
-	a   *app.App
+	log   = golog.LoggerFor("lantern-desktop.main")
+	flags = flashlight.ParseFlags()
+	cdir  = configDir(&flags)
+	a     = app.NewApp(flags, cdir)
 )
 
 var issueMap = map[string]string{
@@ -68,49 +69,16 @@ func start() {
 		log.Debug("Successfully loaded .env file")
 	}
 
-	flags := flashlight.ParseFlags()
-
-	cdir := configDir(&flags)
-	a = app.NewApp(flags, cdir)
-
 	_, err = logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 	if err != nil {
 		log.Error(err)
 		// Nothing we can do if fails to create log files, leave logFile nil so
 		// the child process writes to standard outputs as usual.
 	}
-	/*if logFile != nil {
-		go func() {
-			tk := time.NewTicker(time.Minute)
-			for {
-				<-tk.C
-				ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-				if err := a.ProxyAddrReachable(ctx); err != nil {
-					log.Debugf("********* ERROR: Lantern HTTP proxy not working properly: %v\n", err)
-				} else {
-					log.Debugf("DEBUG: Lantern HTTP proxy is working fine")
-				}
-				cancel()
-			}
-		}()
-	}*/
 
 	golog.SetPrepender(logging.Timestamped)
 	//handleSignals(a)
-
-	if flags.Pprof {
-		addr := "localhost:6060"
-		go func() {
-			log.Debugf("Starting pprof page at http://%s/debug/pprof", addr)
-			srv := &http.Server{
-				Addr: addr,
-			}
-			if err := srv.ListenAndServe(); err != nil {
-				log.Error(err)
-			}
-		}()
-	}
-	//go a.Run()
+	a.Run()
 }
 
 func fetchUserData() error {

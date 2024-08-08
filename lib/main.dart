@@ -32,7 +32,7 @@ Future<void> main() async {
   }
 
   if (isDesktop()) {
-    loadLibrary();
+    lanternFFI.start();
     await WebsocketImpl.instance()!.connect();
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(

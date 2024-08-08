@@ -41,7 +41,7 @@ class WebsocketImpl implements WebsocketService {
   // Creates a new Websocket connection
   @override
   Future<void> connect() async {
-    final uri = Uri.parse("ws://" + websocketAddr() + '/data');
+    final uri = Uri.parse("ws://" + lanternFFI.websocketAddr() + '/data');
     if (_isConnected) {
       return;
     }

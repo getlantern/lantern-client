@@ -20,7 +20,7 @@ class VPNChangeNotifier extends ChangeNotifier {
       return;
     }
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      final result = startUpInitCallBacks();
+      final result = lanternFFI.startUpInitCallBacks();
       if (!result.$1 || !result.$2) {
         flashlightState = 'fetching_configuration'.i18n;
       }

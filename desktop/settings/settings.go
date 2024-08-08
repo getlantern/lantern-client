@@ -195,6 +195,7 @@ func newSettings(filePath string) *Settings {
 			SNUserToken:                 "",
 			SNUIAddr:                    "",
 			SNMigratedDeviceIDForUserID: int64(0),
+			SNPaymentMethods:            []byte{},
 			SNCountry:                   "",
 			SNEmailAddress:              "",
 			SNUserPro:                   false,

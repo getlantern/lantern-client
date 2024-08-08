@@ -61,19 +61,11 @@ abstract class Model {
     required ValueWidgetBuilder<T> builder,
     bool details = false,
     void Function(void Function(T?) setValue)? onChanges,
-    WebSocketChannel? channel,
-    T Function(Uint8List serialized)? deserialize,
-    T Function(dynamic json)? fromJsonModel,
   }) {
     var notifier = ffiValueNotifier(
       ffiFunction,
       path,
-      defaultValue,
-      details: details,
-      onChanges: onChanges,
-      channel: channel,
-      deserialize: deserialize,
-      fromJsonModel: fromJsonModel,
+      defaultValue
     );
     return FfiValueBuilder<T>(path, notifier, builder);
   }
@@ -96,7 +88,7 @@ abstract class Model {
 
   ValueNotifier<T?> ffiValueNotifier<T>(
     Pointer<Utf8> Function()? ffiFunction,
-    String path,
+    String path, 
     T? defaultValue, {
       bool details = false,
       void Function(void Function(T?) setValue)? onChanges,
@@ -111,10 +103,7 @@ abstract class Model {
       () {
         _ffiValueNotifierCache.remove(path);
       },
-      details: details,
       onChanges: onChanges,
-      deserialize: deserialize,
-      fromJsonModel: fromJsonModel,
     );
   }
 

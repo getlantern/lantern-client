@@ -179,80 +179,86 @@ func (app *App) Run() {
 			app.settings.SetCountry(geolookup.GetCountry(0))
 		}
 	}()
+	app.startUpAPICalls()
+	flags := app.Flags
+	log.Debug(flags)
+	if flags.Pprof {
+		go startDebugServer()
+	}
 	i18nInit(app)
-	// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
-	// for the first time. User can still quit Lantern through systray menu when it happens.
+	go func() {
+		// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
+		// for the first time. User can still quit Lantern through systray menu when it happens.
+		if flags.ProxyAll {
+			// If proxyall flag was supplied, force proxying of all
+			app.settings.SetProxyAll(true)
+		}
 
-	log.Debug(app.Flags)
-	if app.Flags.ProxyAll {
-		// If proxyall flag was supplied, force proxying of all
-		app.settings.SetProxyAll(true)
-	}
+		listenAddr := flags.Addr
+		if listenAddr == "" {
+			listenAddr = app.settings.GetAddr()
+		}
+		if listenAddr == "" {
+			listenAddr = defaultHTTPProxyAddress
+		}
 
-	listenAddr := app.Flags.Addr
-	if listenAddr == "" {
-		listenAddr = app.settings.GetAddr()
-	}
-	if listenAddr == "" {
-		listenAddr = defaultHTTPProxyAddress
-	}
+		socksAddr := flags.SocksAddr
+		if socksAddr == "" {
+			socksAddr = app.settings.GetSOCKSAddr()
+		}
+		if socksAddr == "" {
+			socksAddr = defaultSOCKSProxyAddress
+		}
 
-	socksAddr := app.Flags.SocksAddr
-	if socksAddr == "" {
-		socksAddr = app.settings.GetSOCKSAddr()
-	}
-	if socksAddr == "" {
-		socksAddr = defaultSOCKSProxyAddress
-	}
-
-	if app.Flags.Timeout > 0 {
-		go func() {
-			time.AfterFunc(app.Flags.Timeout, func() {
-				app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
-					app.Flags.Timeout, atomic.LoadInt32(&app.fetchedGlobalConfig) == 1, atomic.LoadInt32(&app.fetchedProxiesConfig) == 1))
-			})
-		}()
-	}
-	var err error
-	app.flashlight, err = flashlight.New(
-		common.DefaultAppName,
-		common.ApplicationVersion,
-		common.RevisionDate,
-		app.configDir,
-		app.Flags.VPN,
-		func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
-		app.settings.GetProxyAll,
-		func() bool { return false }, // on desktop, we do not allow private hosts
-		app.settings.IsAutoReport,
-		app.Flags.AsMap(),
-		app.settings,
-		app.statsTracker,
-		app.IsPro,
-		app.settings.GetLanguage,
-		func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-		func(string, string, string) {},
-		flashlight.WithOnConfig(app.onConfigUpdate),
-		flashlight.WithOnProxies(app.onProxiesUpdate),
-		flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
-			if err != nil && !hasSucceeding {
-				app.onSucceedingProxy(hasSucceeding)
-			}
-		}),
-		flashlight.WithOnSucceedingProxy(func() {
-			app.onSucceedingProxy(true)
-		}),
-	)
-	if err != nil {
-		app.Exit(err)
-		return
-	}
-	app.beforeStart(listenAddr)
-	/*app.flashlight.Run(
-		listenAddr,
-		socksAddr,
-		app.afterStart,
-		func(err error) { _ = app.Exit(err) },
-	)*/
+		if flags.Timeout > 0 {
+			go func() {
+				time.AfterFunc(app.Flags.Timeout, func() {
+					app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
+						app.Flags.Timeout, atomic.LoadInt32(&app.fetchedGlobalConfig) == 1, atomic.LoadInt32(&app.fetchedProxiesConfig) == 1))
+				})
+			}()
+		}
+		var err error
+		app.flashlight, err = flashlight.New(
+			common.DefaultAppName,
+			common.ApplicationVersion,
+			common.RevisionDate,
+			app.configDir,
+			flags.VPN,
+			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
+			app.settings.GetProxyAll,
+			func() bool { return false }, // on desktop, we do not allow private hosts
+			app.settings.IsAutoReport,
+			flags.AsMap(),
+			app.settings,
+			app.statsTracker,
+			app.IsPro,
+			app.settings.GetLanguage,
+			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
+			func(string, string, string) {},
+			flashlight.WithOnConfig(app.onConfigUpdate),
+			flashlight.WithOnProxies(app.onProxiesUpdate),
+			flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
+				if err != nil && !hasSucceeding {
+					app.onSucceedingProxy(hasSucceeding)
+				}
+			}),
+			flashlight.WithOnSucceedingProxy(func() {
+				app.onSucceedingProxy(true)
+			}),
+		)
+		if err != nil {
+			app.Exit(err)
+			return
+		}
+		app.beforeStart(listenAddr)
+		app.flashlight.Run(
+			listenAddr,
+			socksAddr,
+			app.afterStart,
+			func(err error) { _ = app.Exit(err) },
+		)
+	}()
 
 }
 
@@ -314,10 +320,6 @@ func (app *App) beforeStart(listenAddr string) {
 	}, func() string { return "" }, isProUser); err != nil {
 		log.Errorf("Unable to serve bandwidth to UI: %v", err)
 	}
-
-	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
-		return "/img/lantern_logo.png"
-	}))
 }
 
 // GetLanguage returns the user language
@@ -612,7 +614,7 @@ func (app *App) IsPro() bool {
 // ReferralCode returns a user's unique referral code
 func (app *App) ReferralCode() (string, error) {
 	referralCode := app.referralCode
-	if referralCode == "" {
+	if referralCode == "" && app.proClient != nil {
 		resp, err := app.proClient.UserData(context.Background())
 		if err != nil {
 			return "", errors.New("error fetching user data: %v", err)
