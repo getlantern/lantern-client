@@ -530,11 +530,10 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    final res = lanternFFI.replicaAddr();
     return ffiValueBuilder<String>(
       'replicaAddr',
       null,
-      defaultValue: res.toDartString(),
+      defaultValue: '',
       builder: builder,
     );
   }
@@ -778,14 +777,9 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<ServerInfo?>(
       'serverInfo',
+      null,
       defaultValue: null,
-      lanternFFI.serverInfo,
       builder: builder,
-      /*fromJsonModel: (dynamic json) {
-        print("json is $json");
-        final res = jsonEncode(json);
-        return ServerInfo.create()..mergeFromProto3Json(jsonDecode(res));
-      },*/
     );
   }
 
@@ -980,7 +974,7 @@ class SessionModel extends Model {
           listenWebsocket(websocket, "settings", "proxyAll", (value) {
         if (value != null) setValue(value as bool);
       }),
-      lanternFFI.proxyAll,
+      null,
       builder: builder,
     );
   }

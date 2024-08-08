@@ -65,7 +65,7 @@ abstract class Model {
     var notifier = ffiValueNotifier(
       ffiFunction,
       path,
-      defaultValue
+      defaultValue,
     );
     return FfiValueBuilder<T>(path, notifier, builder);
   }

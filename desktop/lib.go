@@ -295,13 +295,15 @@ func userData() *C.char {
 //export serverInfo
 func serverInfo() *C.char {
 	stats := a.Stats()
-	if stats == nil {
-		return C.CString("")
-	}
 	serverInfo := map[string]interface{}{
-		"city":        stats.City,
-		"country":     stats.Country,
-		"countryCode": stats.CountryCode,
+		"city":        "",
+		"country":     "",
+		"countryCode": "",
+	}
+	if stats != nil {
+		serverInfo["city"] = stats.City
+		serverInfo["country"] = stats.Country
+		serverInfo["countryCode"] = stats.CountryCode
 	}
 	b, _ := json.Marshal(serverInfo)
 	return C.CString(string(b))

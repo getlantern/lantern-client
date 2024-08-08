@@ -79,7 +79,6 @@ type App struct {
 	issueReporter *issueReporter
 	authClient    auth.AuthClient
 	proClient     proclient.ProClient
-	selectedTab   Tab
 
 	connectionStatusCallbacks []func(isConnected bool)
 	_sysproxyOff              func() error
@@ -101,7 +100,6 @@ func NewApp(flags flashlight.Flags, configDir string) *App {
 		configDir:                 configDir,
 		settings:                  loadSettings(configDir),
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
-		selectedTab:               VPNTab,
 		statsTracker:              stats.NewNoop(),
 		translations:              eventual.NewValue(),
 		userData: userMap{
@@ -122,7 +120,7 @@ func NewApp(flags flashlight.Flags, configDir string) *App {
 	app.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
 
 	if err := app.serveWebsocket(); err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	app.onProStatusChange(func(isPro bool) {
@@ -174,7 +172,7 @@ func loadSettings(configDir string) *settings.Settings {
 func (app *App) Run() {
 	go func() {
 		for <-geolookup.OnRefresh() {
-			app.settings.SetCountry(geolookup.GetCountry(0))
+			app.Settings().SetCountry(geolookup.GetCountry(0))
 		}
 	}()
 	go func() {
@@ -305,10 +303,14 @@ func (app *App) beforeStart(listenAddr string) {
 		os.Exit(0)
 	}
 
-	if e := app.settings.StartService(app.ws); e != nil {
-		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
+	if err := app.settings.StartService(app.ws); err != nil {
+		app.Exit(fmt.Errorf("unable to register settings service: %q", err))
 		return
 	}
+
+	/*if err := app.statsTracker.StartService(app.ws); err != nil {
+		log.Errorf("Unable to serve stats to UI: %v", err)
+	}*/
 
 	isProUser := func() (bool, bool) {
 		return app.IsProUser(context.Background())
