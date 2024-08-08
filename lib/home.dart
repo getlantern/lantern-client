@@ -194,17 +194,6 @@ class _HomePageState extends State<HomePage> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    final tabModel = context.watch<BottomBarChangeNotifier>();
-    if (2 == 2) {
-      final tab = tabModel.currentIndex;
-      return Scaffold(
-                body: buildBody(tab, true),
-                bottomNavigationBar: CustomBottomBar(
-                  selectedTab: tab,
-                  isDevelop: false,
-                ),
-              );
-    }
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         return sessionModel.developmentMode(
