@@ -682,6 +682,12 @@ class SessionModel extends Model {
     });
   }
 
+  String getPlans() {
+    final res = lanternFFI.plans();
+    if (res == null) return "";
+    return res.toDartString();
+  }
+
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
   }) {
@@ -694,10 +700,10 @@ class SessionModel extends Model {
         },
       );
     }
-    final res = lanternFFI.plans();
+    final res = getPlans();
     return ffiListBuilder<Plan>(
       '/plans/',
-      res.toDartString(),
+      res,
       planFromJson,
       builder: builder,
     );

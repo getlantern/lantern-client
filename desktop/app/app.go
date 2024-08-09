@@ -175,15 +175,14 @@ func (app *App) Run() {
 			app.Settings().SetCountry(geolookup.GetCountry(0))
 		}
 	}()
+	app.startUpAPICalls(context.Background())
+	flags := app.Flags
+	log.Debug(flags)
+	if flags.Pprof {
+		go startDebugServer()
+	}
+	i18nInit(app)
 	go func() {
-		app.startUpAPICalls(context.Background())
-		flags := app.Flags
-		log.Debug(flags)
-		if flags.Pprof {
-			go startDebugServer()
-		}
-		i18nInit(app)
-
 		// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
 		// for the first time. User can still quit Lantern through systray menu when it happens.
 		if flags.ProxyAll {
@@ -347,10 +346,11 @@ func (app *App) fetchPayentMethodV4() error {
 	}
 	log.Debugf("DEBUG: Payment methods: %+v", resp)
 	log.Debugf("DEBUG: Payment methods providers: %+v", resp.Providers)
-	bytes, err := json.Marshal(resp)
+	bytes, err := json.Marshal(resp.Plans)
 	if err != nil {
 		return errors.New("Could not marshal payment methods: %v", err)
 	}
+	log.Debugf("Setting payment methods to %s", string(bytes))
 	settings.SetPaymentMethodPlans(bytes)
 	return nil
 }
@@ -433,7 +433,7 @@ func (a *App) startUpAPICalls(ctx context.Context) {
 		return nil
 	}
 	go fetchOrCreate()
-	go a.fetchPayentMethodV4()
+	a.fetchPayentMethodV4()
 }
 
 func (a *App) getUserData(ctx context.Context) error {

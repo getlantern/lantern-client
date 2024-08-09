@@ -151,15 +151,10 @@ func websocketAddr() *C.char {
 //export plans
 func plans() *C.char {
 	settings := a.Settings()
-	plans := settings.GetPaymentMethods()
+	plansByte := settings.GetPaymentMethods()
 	if plans == nil {
+		log.Error("plans not found")
 		return sendError(errors.New("plans not found"))
-	}
-	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
-	err := json.Unmarshal(plans, paymentMethodsResponse)
-	plansByte, err := json.Marshal(paymentMethodsResponse.Plans)
-	if err != nil {
-		return sendError(errors.New("error fetching payment methods: %v", err))
 	}
 	return C.CString(string(plansByte))
 }
