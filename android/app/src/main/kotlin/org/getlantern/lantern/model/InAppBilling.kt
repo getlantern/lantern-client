@@ -235,8 +235,8 @@ class InAppBilling(
 
             }
         }
-
     }
+
 
     private inline fun Boolean.then(crossinline block: () -> Unit) {
         if (this) {
@@ -322,6 +322,26 @@ class InAppBilling(
                 consumeAsync(consumeParams, listener)
             }
         }
+    }
+
+
+    fun restorePurchase(
+        purchase: (purchase: Purchase?) -> Unit
+    ) {
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.INAPP).build()
+        billingClient?.queryPurchasesAsync(
+            params
+        ) { billingResult, purchases ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                for (purchase in purchases) {
+                    Logger.d(TAG, "Purchase: $purchase")
+                    purchase(purchase)
+                }
+            }
+        }
+
+
     }
 
     private fun isRetriable(billingResult: BillingResult): Boolean {

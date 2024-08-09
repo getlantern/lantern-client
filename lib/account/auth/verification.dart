@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:lantern/core/purchase/app_purchase.dart';
+import 'package:lantern/plans/utils.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 import '../../common/common.dart';
@@ -13,6 +14,7 @@ class Verification extends StatefulWidget {
   final Plan? plan;
   final ChangeEmailPageArgs? changeEmailArgs;
   final String? tempPassword;
+  final String? purchaseToken;
 
   const Verification({
     super.key,
@@ -21,6 +23,7 @@ class Verification extends StatefulWidget {
     this.changeEmailArgs,
     this.plan,
     this.tempPassword,
+    this.purchaseToken,
   });
 
   @override
@@ -119,6 +122,8 @@ class _VerificationState extends State<Verification> {
       /// there is no verification flow for sign in
       case AuthFlow.updateAccount:
         resendResetEmailVerificationCode();
+      case AuthFlow.restoreAccount:
+        resendRestoreEmailVerificationCode();
     }
   }
 
@@ -151,6 +156,18 @@ class _VerificationState extends State<Verification> {
     }
   }
 
+  Future<void> resendRestoreEmailVerificationCode() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.authorizeViaEmail(widget.email);
+      context.loaderOverlay.hide();
+      showSnackbar(context: context, content: 'email_resend_message'.i18n);
+    } catch (e, s) {
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
   void onDone(String code) {
     switch (widget.authFlow) {
       case AuthFlow.createAccount:
@@ -173,6 +190,8 @@ class _VerificationState extends State<Verification> {
         _changeEmail(code);
       case AuthFlow.updateAccount:
         _verifyEmail(code);
+      case AuthFlow.restoreAccount:
+        _verifyRestorePurchaseEmail(code);
     }
   }
 
@@ -226,6 +245,17 @@ class _VerificationState extends State<Verification> {
         context,
         description: e.localizedDescription,
       );
+    }
+  }
+
+  void _verifyRestorePurchaseEmail(String code) {
+    try {
+      context.loaderOverlay.show();
+      sessionModel.validateDeviceRecoveryCode(code, widget.email);
+      context.loaderOverlay.show();
+      resolveRoute(code);
+    } catch (e) {
+      showError(context, description: e.localizedDescription);
     }
   }
 
@@ -290,13 +320,19 @@ class _VerificationState extends State<Verification> {
     ));
   }
 
-  void resolveRoute(String code) {
+  Future<void> resolveRoute(String code) async {
     switch (widget.authFlow) {
       case AuthFlow.signIn:
       // TODO: Handle this case.
       case AuthFlow.reset:
         openResetPassword(code);
       case AuthFlow.createAccount:
+
+        ///Check if user is from app store or play store build
+        if (isAppStoreEnabled() || (await isPlayStoreEnabled())) {
+          openPassword();
+          return;
+        }
         startPurchase();
       case AuthFlow.verifyEmail:
         context.router.maybePop();
@@ -310,6 +346,8 @@ class _VerificationState extends State<Verification> {
       // TODO: Handle this case.
       case AuthFlow.updateAccount:
         openResetPassword(code);
+      case AuthFlow.restoreAccount:
+        _restoreAccount(code);
     }
   }
 
@@ -335,6 +373,27 @@ class _VerificationState extends State<Verification> {
     } catch (e) {
       context.loaderOverlay.hide();
       mainLogger.e("Error while deleting account", error: e);
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
+  Future<void> _restoreAccount(String code) async {
+    try {
+      assert(widget.purchaseToken != null, 'Purchase token is null');
+      context.loaderOverlay.show();
+      await sessionModel.restoreAccount(widget.email, code, widget.purchaseToken!!);
+      context.loaderOverlay.hide();
+      CDialog.successDialog(
+        context: context,
+        title: "purchase_restored".i18n,
+        description: "purchase_restored_message".i18n,
+        successCallback: () {
+          context.router.popUntilRoot();
+        },
+      );
+    } catch (e) {
+      context.loaderOverlay.hide();
+      mainLogger.e("Error while restoring account", error: e);
       CDialog.showError(context, description: e.localizedDescription);
     }
   }

@@ -4,6 +4,8 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../common/common.dart';
 
+typedef PurchaseCallback = void Function(PurchaseDetails?);
+
 class AppPurchase {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
@@ -13,6 +15,7 @@ class AppPurchase {
   Function(dynamic error)? _onError;
   String _planId = "";
   String _email = "";
+  PurchaseCallback? _globalPurchaseCallback;
 
   void init() {
     final purchaseUpdated = _inAppPurchase.purchaseStream;
@@ -44,6 +47,7 @@ class AppPurchase {
       onFailure("App store is not available");
       return;
     }
+
     _email = email;
     _planId = planId;
     _onSuccess = onSuccess;
@@ -76,13 +80,19 @@ class AppPurchase {
   Future<void> _onPurchaseUpdate(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
+    if (purchaseDetailsList.isEmpty) {
+      if (_globalPurchaseCallback != null) {
+        _globalPurchaseCallback!(null);
+      }
+    }
+    mainLogger.d("purchase list ${purchaseDetailsList.length}");
     for (var purchaseDetails in purchaseDetailsList) {
       await _handlePurchase(purchaseDetails);
-      mainLogger.d('Purchase data: ${purchaseDetails}');
     }
   }
 
   Future<void> _handlePurchase(PurchaseDetails purchaseDetails) async {
+    logger.d("purchase data  $purchaseDetails");
     if (purchaseDetails.status == PurchaseStatus.canceled) {
       /// if user cancels purchase and then try to purchase again it will get penning transaction errr
       /// To avoid edge case complete purchase
@@ -105,15 +115,31 @@ class AppPurchase {
         _onError?.call(e);
       }
     }
+
+    /// restore purchase
+    if (purchaseDetails.status == PurchaseStatus.restored) {
+      logger.d("purchase restored successfully ${purchaseDetails}");
+      if (_globalPurchaseCallback != null) {
+        _globalPurchaseCallback!.call(purchaseDetails);
+      }
+      return;
+    }
     if (purchaseDetails.pendingCompletePurchase) {
       await _inAppPurchase.completePurchase(purchaseDetails);
     }
+  }
+
+  Future<void> restorePurchases({required PurchaseCallback purchase}) async {
+    logger.d("restoring purchase");
+    _globalPurchaseCallback = purchase;
+    _inAppPurchase.restorePurchases(applicationUserName: null);
   }
 
   void _updateStreamOnDone() {
     _onError = null;
     _onSuccess = null;
     _planId = "";
+    _globalPurchaseCallback = null;
     _subscription?.cancel();
   }
 
@@ -123,5 +149,33 @@ class AppPurchase {
     if (_onError != null) {
       _onError?.call(error);
     }
+  }
+}
+
+extension PurchaseDetailsExtension on PurchaseDetails {
+  String get toJson {
+    return """
+    {
+      "purchaseID": "$purchaseID",
+      "productID": "$productID",
+      "transactionDate": "$transactionDate",
+      "status": "$status",
+      "error": "$error",
+      "pendingCompletePurchase": "$pendingCompletePurchase"
+      "verificationData": "${verificationData.toJson}"
+    }
+    """;
+  }
+}
+
+extension PurchaseVerificationDataExtension on PurchaseVerificationData {
+  String get toJson {
+    return """
+    {
+      "localVerificationData": "$localVerificationData",
+      "serverVerificationData": "$serverVerificationData",
+      "source": "$source"
+    }
+    """;
   }
 }

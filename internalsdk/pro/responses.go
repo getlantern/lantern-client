@@ -55,3 +55,16 @@ type UserRecovery struct {
 	UserID int64  `json:"userID"`
 	Token  string `json:"token"`
 }
+
+type OkResponse struct {
+	Status string `json:"status"`
+}
+
+// Request
+type RestorePurchaseRequest struct {
+	Provider   string
+	Token      string
+	DeviceName string
+	Email      string
+	Code       string
+}

@@ -18,7 +18,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   let emptyCompletion: (MinisqlValue?, Error?) -> Void = { _, _ in }
   private let sessionAsyncHandler = DispatchQueue.global(qos: .background)
 
-  init(flutterBinary: FlutterBinaryMessenger) throws {
+  init(flutterBinary    : FlutterBinaryMessenger) throws {
     logger.log("Initializing SessionModel")
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current

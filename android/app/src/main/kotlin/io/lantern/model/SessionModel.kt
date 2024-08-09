@@ -17,7 +17,6 @@ import okhttp3.FormBody
 import okhttp3.RequestBody
 import okhttp3.Response
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 import org.getlantern.lantern.activity.FreeKassaActivity_
 import org.getlantern.lantern.activity.WebViewActivity_
@@ -168,8 +167,7 @@ class SessionModel(
                         call.argument("planID")!!,
                         result,
                     )
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     Logger.error(TAG, "Error making purchase", e)
                     result.error(
                         "unknownError",
@@ -202,8 +200,13 @@ class SessionModel(
                 LanternApp.getSession().setLanguage(call.argument("lang"))
                 fetchPaymentMethods(result)
             }
+
             "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
+            }
+
+            "restorePurchase" -> {
+                paymentsUtil.restorePurchase(result)
             }
 
             else -> super.doOnMethodCall(call, result)

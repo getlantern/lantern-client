@@ -90,10 +90,10 @@ class _LanternAppState extends State<LanternApp>
     if (!hasConnection) {
       return;
     }
-   final vpnConnected = await vpnModel.isVpnConnected();
+    final vpnConnected = await vpnModel.isVpnConnected();
 
     /// If vpn is not connected then we should not show the connectivity warning
-    if(!vpnConnected){
+    if (!vpnConnected) {
       return;
     }
     final shouldShowConnectivityWarning =
@@ -165,6 +165,7 @@ class _LanternAppState extends State<LanternApp>
                   routerConfig: globalRouter.config(
                     deepLinkBuilder: navigateToDeepLink,
                   ),
+
                   supportedLocales: const [
                     Locale('ar', 'EG'),
                     Locale('fr', 'FR'),
@@ -192,7 +193,7 @@ class _LanternAppState extends State<LanternApp>
   }
 
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {
-    if(!Platform.isAndroid){
+    if (!Platform.isAndroid) {
       return DeepLink.defaultPath;
     }
     logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");

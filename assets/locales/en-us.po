@@ -1755,3 +1755,45 @@ msgstr "Limit Reached"
 msgid "file_size_limit_description"
 msgstr "Attachment sizes should be under 100 MB"
 
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: One Year Plan"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: Two Year Plan"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: One Month Plan"
+
+msgid "non_renewing_subscription"
+msgstr "Non-renewing subscription"
+
+msgid "restore_purchase"
+msgstr "Restore Purchase"
+
+msgid "skip_for_now"
+msgstr "Skip for now"
+
+msgid "purchase_not_found"
+msgstr "No purchase found"
+
+msgid "no_previous_purchase"
+msgstr "No previous purchase found"
+
+msgid "warning_restore_purchase"
+msgstr "*Make sure you are using the same email you used to make the purchase"
+
+msgid "purchase_restored"
+msgstr "Purchase Restored"
+
+msgid "purchase_restored_message"
+msgstr "Your purchase has been restored successfully"
+
+msgid "err_while_sending_code"
+msgstr "Something went wrong while sending the code, please try again"
+
+
+
+
+
+
+

@@ -21,6 +21,7 @@ class _PlanCardState extends State<PlanCard> {
   Widget build(BuildContext context) {
     final planName = widget.plan.id.split('-')[0];
     final formattedPricePerYear = widget.plan.totalCostBilledOneTime;
+    final totalCost = widget.plan.totalCost;
     final formattedPricePerMonth = widget.plan.oneMonthCost;
     final isBestValue = widget.plan.bestValue;
 
@@ -58,11 +59,7 @@ class _PlanCardState extends State<PlanCard> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CText(
-                          planName == '1y'
-                              ? 'one_year_plan'.i18n
-                              : (planName == '1m'
-                                  ? 'one_month_plan'.i18n
-                                  : 'two_year_plan'.i18n),
+                          getPlanDisplayName(planName),
                           style: tsSubtitle2.copiedWith(
                             color: pink3,
                             fontWeight: FontWeight.w500,
@@ -79,20 +76,24 @@ class _PlanCardState extends State<PlanCard> {
                       crossAxisAlignment: CrossAxisAlignment.baseline,
                       textBaseline: TextBaseline.alphabetic,
                       children: [
-                        CText(formattedPricePerMonth, style: tsHeading1),
-                        CText(' / ', style: tsBody2),
-                        CText('month'.i18n, style: tsBody2),
+                        if (Platform.isIOS)
+                          CText(totalCost, style: tsHeading1)
+                        else
+                          CText(formattedPricePerMonth, style: tsHeading1),
+                        if (!Platform.isIOS) ...{
+                          CText(' / ', style: tsBody2),
+                          CText('month'.i18n, style: tsBody2),
+                        }
                       ],
                     ),
-                    // * Price per year
-                    Row(
-                      children: [
-                        CText(
-                          formattedPricePerYear,
-                          style: tsBody2.copiedWith(color: grey5),
-                        ),
-                      ],
-                    ),
+                    if (Platform.isIOS)
+                      CText('non_renewing_subscription'.i18n,
+                          style: tsBody2.copiedWith(color: grey5))
+                    else
+                      CText(
+                        formattedPricePerYear,
+                        style: tsBody2.copiedWith(color: grey5),
+                      ),
                   ],
                 ),
               ),
@@ -128,27 +129,27 @@ class _PlanCardState extends State<PlanCard> {
     );
   }
 
-  void onPlanTap(BuildContext context) {
-    switch (Platform.operatingSystem) {
-      case 'ios':
-        resolveRouteIOS();
-        break;
-      default:
-        if(Platform.isAndroid || !sessionModel.isAuthEnabled.value!){
-          _processLegacyCheckOut(context);
-        return;
-        }
-
-        if (widget.isPro) {
-          _processCheckOut(context);
-        } else {
-          signUpFlow();
-        }
-        break;
+  String getPlanDisplayName(String plan) {
+    if (Platform.isIOS) {
+      if (plan == '1y') {
+        return 'lantern_pro_one_year'.i18n;
+      } else if (plan == '1m') {
+        return 'lantern_pro_one_month'.i18n;
+      } else {
+        return 'lantern_pro_two_year'.i18n;
+      }
+    } else {
+      if (plan == '1y') {
+        return 'one_year_plan'.i18n;
+      } else if (plan == '1m') {
+        return 'one_month_plan'.i18n;
+      } else {
+        return 'two_year_plan'.i18n;
+      }
     }
   }
 
-  // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
+// paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
   List<PaymentProviders> paymentProvidersFromMethods(
       Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
     var providers = <PaymentProviders>[];
@@ -160,54 +161,33 @@ class _PlanCardState extends State<PlanCard> {
     return providers;
   }
 
-  Future<void> _processCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
-    final inRussia = sessionModel.country.value == 'RU';
-    // check if google play payment is available
-    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
-      await context.pushRoute(
-        PlayCheckout(
-          plan: widget.plan,
-          isPro: widget.isPro,
-        ),
-      );
-      return;
-    } else if (isDesktop()) {
-      final paymentMethods = await sessionModel.paymentMethodsv4();
-      final providers = paymentProvidersFromMethods(paymentMethods);
-      // if only one payment provider is returned, bypass the last checkout screen
-      // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
-      if (providers.length == 1 &&
-          providers[0].name.toPaymentEnum() == Providers.stripe) {
-        final providerName = providers[0].name.toPaymentEnum();
-        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-          context,
-          widget.plan.id,
-          "",
-          providerName,
-        );
-        await openDesktopWebview(
-            context: context, provider: providerName, redirectUrl: redirectUrl);
-        return;
-      }
+  Future<void> onPlanTap(BuildContext context) async {
+    switch (Platform.operatingSystem) {
+      case 'ios':
+        _proceedToCheckoutIOS(context);
+        break;
+      default:
+        //Support for legacy purchase flow
+        if (!sessionModel.isAuthEnabled.value!) {
+          _processLegacyCheckOut(context);
+          return;
+        }
+        if (widget.isPro) {
+          _processCheckOut(context);
+          return;
+        } else {
+          if (await isPlayStoreEnabled()) {
+            _proceedToGooglePlayPurchase("");
+            return;
+          }
+          signUpFlow();
+        }
+        break;
     }
-
-    final email = sessionModel.userEmail.value;
-    // * Proceed to our own Checkout
-    await context.pushRoute(
-      Checkout(
-        plan: widget.plan,
-        isPro: widget.isPro,
-        email: email,
-      ),
-    );
   }
 
   Future<void> _processLegacyCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
-    final inRussia = sessionModel.country.value == 'RU';
-    // check if google play payment is available
-    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
+    if (await isPlayStoreEnabled()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -243,10 +223,26 @@ class _PlanCardState extends State<PlanCard> {
     );
   }
 
-  void resolveRouteIOS() {
+  Future<void> _processCheckOut(BuildContext context) async {
+    if (await isPlayStoreEnabled()) {
+      final email = sessionModel.userEmail.value;
+      _proceedToGooglePlayPurchase(email!!);
+      return;
+    }
+    final email = sessionModel.userEmail.value;
+    // * Proceed to our own Checkout
+    await context.pushRoute(
+      Checkout(
+        plan: widget.plan,
+        isPro: widget.isPro,
+        email: email,
+      ),
+    );
+  }
+
+  void resolveRoute() {
     if (widget.isPro) {
-      //user is signed in
-      _proceedToCheckoutIOS(context);
+      showSuccessDialog(context, widget.isPro);
     } else {
       signUpFlow();
     }
@@ -263,11 +259,11 @@ class _PlanCardState extends State<PlanCard> {
     try {
       context.loaderOverlay.show();
       appPurchase.startPurchase(
-        email: sessionModel.userEmail.value ?? "",
+        email: sessionModel.userEmail.value ?? '',
         planId: widget.plan.id,
         onSuccess: () {
           context.loaderOverlay.hide();
-          showSuccessDialog(context, widget.isPro);
+          resolveRoute();
         },
         onFailure: (error) {
           context.loaderOverlay.hide();
@@ -285,6 +281,18 @@ class _PlanCardState extends State<PlanCard> {
         error: e,
         description: e.toString(),
       );
+    }
+  }
+
+  Future<void> _proceedToGooglePlayPurchase(String email) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.submitPlayPayment(widget.plan.id, email);
+      context.loaderOverlay.hide();
+      resolveRoute();
+    } catch (e) {
+      context.loaderOverlay.hide();
+      showError(context, error: e);
     }
   }
 }
