@@ -887,13 +887,19 @@ class SessionModel extends Model {
     }).then((value) => value as String);
   }
 
+  Future<String> getPaymentRedirectUrl(arr) async {
+    final res = await lanternFFI.paymentRedirect(arr);
+    if (res != null) return res;
+    return '';
+  }
+
   Future<String> paymentRedirectForDesktop(BuildContext context, String planID,
       String email, Providers provider) async {
     String os = Platform.operatingSystem;
     Locale locale = Localizations.localeOf(context);
     final format = NumberFormat.simpleCurrency(locale: locale.toString());
     final currencyName = format.currencyName ?? "USD";
-    return await lanternFFI.paymentRedirect([planID, currencyName, provider.name, email, os]);
+    return await compute(getPaymentRedirectUrl, [planID, currencyName, provider.name, email, os]);
   }
 
   Future<void> submitApplePlay(

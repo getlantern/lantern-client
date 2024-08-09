@@ -468,14 +468,12 @@ func deviceLinkingCode() *C.char {
 
 //export paymentRedirect
 func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
-	country := a.Settings().GetCountry()
 	resp, err := a.ProClient().PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
-		Plan:        C.GoString(planID),
-		Provider:    C.GoString(provider),
-		Currency:    strings.ToUpper(C.GoString(currency)),
-		Email:       C.GoString(email),
-		DeviceName:  C.GoString(deviceName),
-		CountryCode: country,
+		Plan:       C.GoString(planID),
+		Provider:   C.GoString(provider),
+		Currency:   strings.ToUpper(C.GoString(currency)),
+		Email:      C.GoString(email),
+		DeviceName: C.GoString(deviceName),
 	})
 	if err != nil {
 		return sendError(err)

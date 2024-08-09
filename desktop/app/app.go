@@ -310,6 +310,10 @@ func (app *App) beforeStart(listenAddr string) {
 		return
 	}
 
+	/*if err := app.statsTracker.StartService(app.ws); err != nil {
+		log.Errorf("Unable to serve stats to UI: %v", err)
+	}*/
+
 	isProUser := func() (bool, bool) {
 		return app.IsProUser(context.Background())
 	}
