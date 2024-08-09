@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"sync"
@@ -15,12 +16,12 @@ import (
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/launcher"
 	"github.com/getlantern/timezone"
 	"github.com/getlantern/yaml"
 
 	"github.com/getlantern/lantern-client/desktop/deviceid"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	uicommon "github.com/getlantern/lantern-client/internalsdk/common"
 )
 
 // SettingName is the name of a setting.
@@ -43,6 +44,7 @@ const (
 	SNUserID                    SettingName = "userID"
 	SNUserToken                 SettingName = "userToken"
 	SNUserPro                   SettingName = "userPro"
+	SNReferralCode              SettingName = "referralCode"
 	SNMigratedDeviceIDForUserID SettingName = "migratedDeviceIDForUserID"
 	SNTakenSurveys              SettingName = "takenSurveys"
 	SNPastAnnouncements         SettingName = "pastAnnouncements"
@@ -68,6 +70,7 @@ type settingType byte
 
 const (
 	stBool settingType = iota
+	stBytes
 	stNumber
 	stString
 	stStringArray
@@ -88,7 +91,6 @@ var settingMeta = map[SettingName]struct {
 	SNCountry:        {stString, true, true},
 	SNLocalHTTPToken: {stString, true, true},
 
-	// SNDeviceID: intentionally omit, to avoid setting it from UI
 	SNEmailAddress:              {stString, true, true},
 	SNUserID:                    {stNumber, true, true},
 	SNUserToken:                 {stString, true, true},
@@ -96,6 +98,8 @@ var settingMeta = map[SettingName]struct {
 	SNMigratedDeviceIDForUserID: {stNumber, true, true},
 	SNTakenSurveys:              {stStringArray, true, true},
 	SNPastAnnouncements:         {stStringArray, true, true},
+	SNDeviceID:                  {stString, true, true},
+	SNPaymentMethods:            {stBytes, true, false},
 
 	SNAddr:      {stString, true, true},
 	SNSOCKSAddr: {stString, true, true},
@@ -106,6 +110,7 @@ var settingMeta = map[SettingName]struct {
 	SNRevisionDate: {stString, false, false},
 
 	SNEnabledExperiments: {stStringArray, false, false},
+	SNReferralCode:       {stString, true, true},
 
 	//Auth releated
 	SNUserFirstVisit: {stBool, true, true},
@@ -124,6 +129,19 @@ type Settings struct {
 	filePath string
 
 	log golog.Logger
+}
+
+// LoadSettings loads the initial settings at startup, either from disk or using defaults.
+func LoadSettings(configDir string) *Settings {
+	path := filepath.Join(configDir, "settings.yaml")
+	if uicommon.IsStagingEnvironment() {
+		path = filepath.Join(configDir, "settings-staging.yaml")
+	}
+	settings := LoadSettingsFrom(uicommon.ApplicationVersion, uicommon.RevisionDate, uicommon.BuildDate, path)
+	if uicommon.IsStagingEnvironment() {
+		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
+	}
+	return settings
 }
 
 func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
@@ -156,7 +174,7 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	}
 
 	// Always just sync the auto-launch configuration on startup.
-	go launcher.CreateLaunchFile(sett.IsAutoLaunch())
+	//go launcher.CreateLaunchFile(sett.IsAutoLaunch())
 
 	// always override below 3 attributes as they are not meant to be persisted across versions
 	set[SNVersion] = version
@@ -196,6 +214,12 @@ func newSettings(filePath string) *Settings {
 			SNUserToken:                 "",
 			SNUIAddr:                    "",
 			SNMigratedDeviceIDForUserID: int64(0),
+			SNPaymentMethods:            []byte{},
+			SNEnabledExperiments:        []string{},
+			SNReferralCode:              "",
+			SNCountry:                   "",
+			SNEmailAddress:              "",
+			SNDeviceID:                  "",
 			SNUserPro:                   false,
 			SNUserLoggedIn:              false,
 			SNUserFirstVisit:            false,
@@ -251,6 +275,8 @@ func (s *Settings) read(in <-chan interface{}, out chan<- interface{}) {
 			switch t.sType {
 			case stBool:
 				s.setBool(name, v)
+			case stBytes:
+				s.setBytes(name, v)
 			case stString:
 				s.setString(name, v)
 			case stNumber:
@@ -268,6 +294,15 @@ func (s *Settings) setBool(name SettingName, v interface{}) {
 	b, ok := v.(bool)
 	if !ok {
 		s.log.Errorf("Could not convert %s(%v) to bool", name, v)
+		return
+	}
+	s.setVal(name, b)
+}
+
+func (s *Settings) setBytes(name SettingName, v interface{}) {
+	b, ok := v.([]byte)
+	if !ok {
+		s.log.Errorf("Could not convert %s(%v) to bytes", name, v)
 		return
 	}
 	s.setVal(name, b)
@@ -386,6 +421,10 @@ func (s *Settings) uiMap() map[string]interface{} {
 				if v.(bool) {
 					m[k] = v
 				}
+			case stBytes:
+				if a, ok := v.([]byte); ok {
+					m[k] = a
+				}
 			case stString:
 				if v != "" {
 					m[k] = v
@@ -479,6 +518,16 @@ func (s *Settings) GetLanguage() string {
 	return s.getString(SNLanguage)
 }
 
+// SetLanguage sets the user language
+func (s *Settings) SetReferralCode(referralCode string) {
+	s.setVal(SNReferralCode, referralCode)
+}
+
+// GetLanguage returns the user language
+func (s *Settings) GetReferralCode() string {
+	return s.getString(SNReferralCode)
+}
+
 // SetCountry sets the user's country.
 func (s *Settings) SetCountry(country string) {
 	s.setVal(SNCountry, country)
@@ -569,12 +618,11 @@ func (s *Settings) SetUserIDAndToken(id int64, token string) {
 // SetPaymentMethods sets plans as string
 func (s *Settings) SetPaymentMethodPlans(paymentMethods []byte) {
 	s.setVal(SNPaymentMethods, paymentMethods)
-
 }
 
 // () returns the payment methods
 func (s *Settings) GetPaymentMethods() []byte {
-	return s.getbytes(SNPaymentMethods)
+	return s.getBytes(SNPaymentMethods)
 }
 
 // GetUserID returns the user ID
@@ -642,7 +690,7 @@ func (s *Settings) getString(name SettingName) string {
 	return ""
 }
 
-func (s *Settings) getbytes(name SettingName) []byte {
+func (s *Settings) getBytes(name SettingName) []byte {
 	if val, err := s.getVal(name); err == nil {
 		if v, ok := val.([]byte); ok {
 			return v
@@ -650,6 +698,7 @@ func (s *Settings) getbytes(name SettingName) []byte {
 	}
 	return []byte{}
 }
+
 func (s *Settings) getInt64(name SettingName) int64 {
 	if val, err := s.getVal(name); err == nil {
 		if v, ok := val.(int64); ok {
@@ -760,13 +809,14 @@ func (s *Settings) SetExpirationDate(date string) {
 func (s *Settings) IsUserLoggedIn() bool {
 	return s.getBool(SNUserLoggedIn)
 }
+
 func (s *Settings) SetUserLoggedIn(value bool) {
 	log.Println("Setting user logged in to ", value)
 	s.setVal(SNUserLoggedIn, value)
 }
 
 func (s *Settings) GetSalt() []byte {
-	return s.getbytes(SNSalt)
+	return s.getBytes(SNSalt)
 }
 
 func (s *Settings) SaveSalt(salt []byte) {

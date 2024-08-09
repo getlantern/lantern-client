@@ -11,14 +11,14 @@ class AccountMenu extends StatefulWidget {
 }
 
 class _AccountMenuState extends State<AccountMenu> {
-  Future<void> authorizeDeviceForPro(BuildContext context) async =>
-      await context.pushRoute(AuthorizePro());
+  Future<void> authorizeDeviceForPro(BuildContext context) =>
+       context.pushRoute(AuthorizePro());
 
-  void inviteFriends(BuildContext context) async =>
-      await context.pushRoute(const InviteFriends());
+  void inviteFriends(BuildContext context) =>
+       context.pushRoute(InviteFriends());
 
-  void openDesktopVersion(BuildContext context) async =>
-      await context.pushRoute(const LanternDesktop());
+  void openDesktopVersion(BuildContext context) =>
+       context.pushRoute(const LanternDesktop());
 
   void openSettings(BuildContext context) => context.pushRoute(Settings());
 
@@ -72,8 +72,8 @@ class _AccountMenuState extends State<AccountMenu> {
 
   void openSignIn(BuildContext context) => context.pushRoute(SignIn());
 
-  void upgradeToLanternPro(BuildContext context) async =>
-      await context.pushRoute(const PlansPage());
+  void upgradeToLanternPro(BuildContext context) =>
+     context.pushRoute(const PlansPage());
 
   void showSocialBottomSheet(BuildContext context) {
     showModalBottomSheet(

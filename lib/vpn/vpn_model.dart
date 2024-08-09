@@ -32,11 +32,11 @@ class VpnModel extends Model {
       'vpnStatus',
       defaultValue: '',
       onChanges: (setValue) => sessionModel
-          .listenWebsocket(websocket, "vpnstatus", "connected", (value) {
-        final isConnected = value != null && value.toString() == "true";
+          .listenWebsocket(websocket, "vpnstatus", "connected", (String? value) {
+        final isConnected = value != null && value == "true";
         setValue(isConnected ? "connected" : "disconnected");
       }),
-      ffiVpnStatus,
+      null,
       builder: builder,
     );
   }

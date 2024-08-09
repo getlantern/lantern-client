@@ -68,15 +68,15 @@ class TrayHandler with TrayListener {
         windowManager.setSkipTaskbar(false);
       case 'exit':
         windowManager.destroy();
-        ffiExit();
+        lanternFFI.exit();
       case 'status':
-        final status = ffiVpnStatus().toDartString();
+        final status = lanternFFI.vpnStatus().toDartString();
         bool isConnected = status == "connected";
         if (isConnected) {
-          sysProxyOff();
+          lanternFFI.sysProxyOff();
           setupTray(false);
         } else {
-          sysProxyOn();
+          lanternFFI.sysProxyOn();
           setupTray(true);
         }
     }

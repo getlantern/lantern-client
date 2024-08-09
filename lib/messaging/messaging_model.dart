@@ -316,7 +316,7 @@ class MessagingModel extends Model {
     }
     return ffiValueBuilder<Contact>(
       'chatMe',
-      ffiChatMe,
+      lanternFFI.chatMe,
       defaultValue: null,
       builder: builder,
     );
@@ -531,7 +531,7 @@ class MessagingModel extends Model {
     return ffiValueBuilder<bool?>(
       'onBoardingStatus',
       defaultValue: false,
-      ffiOnBoardingStatus,
+      lanternFFI.onBoardingStatus,
       builder: builder,
     );
   }
@@ -551,7 +551,7 @@ class MessagingModel extends Model {
     return ffiValueBuilder<bool>(
       'onBoardingStatus',
       defaultValue: false,
-      ffiOnBoardingStatus,
+      lanternFFI.onBoardingStatus,
       builder: builder,
     );
   }

@@ -6,6 +6,7 @@ abstract class WebsocketService {
   Stream<Map<String, dynamic>> get messageStream;
   Future<void> connect();
   Future<void> close();
+  bool isConnected();
   void send(String event, Map<String, dynamic> data);
 }
 
@@ -40,7 +41,7 @@ class WebsocketImpl implements WebsocketService {
   // Creates a new Websocket connection
   @override
   Future<void> connect() async {
-    final uri = Uri.parse("ws://" + websocketAddr() + '/data');
+    final uri = Uri.parse("ws://" + lanternFFI.websocketAddr() + '/data');
     if (_isConnected) {
       return;
     }
@@ -64,6 +65,7 @@ class WebsocketImpl implements WebsocketService {
 
     } catch (e) {
       await close();
+
       print("Exception opening websocket connection ${e.toString()}");
     }
   }
@@ -78,6 +80,8 @@ class WebsocketImpl implements WebsocketService {
       reconnect(uri);
     }
   }
+
+  bool isConnected() => _isConnected;
 
   // Close sink for sending values and websocket connection
   @override

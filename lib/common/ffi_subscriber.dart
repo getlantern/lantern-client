@@ -15,36 +15,14 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
     String path,
     T? defaultValue,
     void Function() removeFromCache, {
-    bool details = false,
     void Function(void Function(T?) setValue)? onChanges,
-    WebSocketChannel? channel,
-    T Function(Uint8List serialized)? deserialize,
-    T Function(dynamic json)? fromJsonModel,
   }) : super(defaultValue, removeFromCache) {
     if (onChanges != null) {
       onChanges((newValue) {
         value = newValue;
       });
     }
-    if (ffiFunction == null) return;
-    if (defaultValue is int) {
-        value = null;
-        //value = int.parse(ffiFunction().toDartString()) as T?;
-      } else if (defaultValue is String) {
-        value = ffiFunction().toDartString() as T?;
-      } else if (defaultValue is bool) {
-        value = ffiFunction().toDartString().parseBool() as T?;
-      } else if (fromJsonModel != null) {
-        var res = ffiFunction().toDartString();
-        if (res == '') {
-          value = null;
-        } else {
-          value = fromJsonModel(json.decode(res)) as T?;
-        }
-    }
-    cancel = () {
-      if (channel != null) channel.sink.close(status.goingAway);
-    };
+    value = defaultValue;
   }
 }
 

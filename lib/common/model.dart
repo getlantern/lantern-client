@@ -61,19 +61,11 @@ abstract class Model {
     required ValueWidgetBuilder<T> builder,
     bool details = false,
     void Function(void Function(T?) setValue)? onChanges,
-    WebSocketChannel? channel,
-    T Function(Uint8List serialized)? deserialize,
-    T Function(dynamic json)? fromJsonModel,
   }) {
     var notifier = ffiValueNotifier(
       ffiFunction,
       path,
       defaultValue,
-      details: details,
-      onChanges: onChanges,
-      channel: channel,
-      deserialize: deserialize,
-      fromJsonModel: fromJsonModel,
     );
     return FfiValueBuilder<T>(path, notifier, builder);
   }
@@ -96,7 +88,7 @@ abstract class Model {
 
   ValueNotifier<T?> ffiValueNotifier<T>(
     Pointer<Utf8> Function()? ffiFunction,
-    String path,
+    String path, 
     T? defaultValue, {
       bool details = false,
       void Function(void Function(T?) setValue)? onChanges,
@@ -111,10 +103,7 @@ abstract class Model {
       () {
         _ffiValueNotifierCache.remove(path);
       },
-      details: details,
       onChanges: onChanges,
-      deserialize: deserialize,
-      fromJsonModel: fromJsonModel,
     );
   }
 
@@ -193,7 +182,7 @@ abstract class Model {
 
   ValueListenableBuilder<ChangeTrackingList<T>> ffiListBuilder<T>(
     String path, 
-    Pointer<Utf8> Function() ffiFunction, 
+    dynamic defaultValue,
     T Function(Map<String, dynamic> json) fromJsonModel, {
     required ValueWidgetBuilder<Iterable<PathAndValue<T>>> builder,
     bool details = false,
@@ -202,7 +191,7 @@ abstract class Model {
   }) {
     var notifier = ffiListNotifier(
       path,
-      ffiFunction,
+      defaultValue,
       fromJsonModel,
       details: details,
       compare: compare,
@@ -222,7 +211,7 @@ abstract class Model {
 
   ValueNotifier<ChangeTrackingList<T>> ffiListNotifier<T>(
     String path, 
-    Pointer<Utf8> Function() ffiFunction, 
+    dynamic defaultValue, 
     T Function(Map<String, dynamic> json) fromJsonModel, {
     bool details = false,
     int Function(String key1, String key2)? compare,
@@ -232,7 +221,7 @@ abstract class Model {
     if (result == null) {
       result = FfiListNotifier(
         path,
-        ffiFunction,
+        defaultValue,
         fromJsonModel,
         () {
           _ffiListNotifierCache.remove(path);
