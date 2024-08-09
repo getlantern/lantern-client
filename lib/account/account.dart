@@ -15,7 +15,7 @@ class _AccountMenuState extends State<AccountMenu> {
        context.pushRoute(AuthorizePro());
 
   void inviteFriends(BuildContext context) =>
-       context.pushRoute(const InviteFriends());
+       context.pushRoute(InviteFriends());
 
   void openDesktopVersion(BuildContext context) =>
        context.pushRoute(const LanternDesktop());
@@ -72,8 +72,8 @@ class _AccountMenuState extends State<AccountMenu> {
 
   void openSignIn(BuildContext context) => context.pushRoute(SignIn());
 
-  void upgradeToLanternPro(BuildContext context) async =>
-      await context.pushRoute(const PlansPage());
+  void upgradeToLanternPro(BuildContext context) =>
+     context.pushRoute(const PlansPage());
 
   void showSocialBottomSheet(BuildContext context) {
     showModalBottomSheet(
