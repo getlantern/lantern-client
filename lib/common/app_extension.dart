@@ -29,6 +29,9 @@ extension ErrorX on Object {
         if (description.contains("purchase_not_found")) {
           return "purchase_not_found".i18n;
         }
+        if (description.contains("err_while_sending_code")) {
+          return "err_while_sending_code".i18n;
+        }
 
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;

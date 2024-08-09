@@ -495,6 +495,8 @@ class _CheckoutState extends State<Checkout>
       // TODO: Handle this case.
       case AuthFlow.updateAccount:
       // TODO: Handle this case.
+      case AuthFlow.restoreAccount:
+        // TODO: Handle this case.
     }
   }
 }

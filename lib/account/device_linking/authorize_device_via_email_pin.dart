@@ -73,7 +73,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
   Future<void> onDone(String code, BuildContext context) async {
     try {
       context.loaderOverlay.show();
-      await sessionModel.validateDeviceRecoveryCode(code);
+      await sessionModel.validateDeviceRecoveryCode(code,email);
     //once code is validated, approve the device
       await sessionModel.approveDevice(code);
       pinCodeController.clear();

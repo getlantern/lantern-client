@@ -1782,6 +1782,14 @@ msgstr "No previous purchase found"
 msgid "warning_restore_purchase"
 msgstr "*Make sure you are using the same email you used to make the purchase"
 
+msgid "purchase_restored"
+msgstr "Purchase Restored"
+
+msgid "purchase_restored_message"
+msgstr "Your purchase has been restored successfully"
+
+msgid "err_while_sending_code"
+msgstr "Something went wrong while sending the code, please try again"
 
 
 

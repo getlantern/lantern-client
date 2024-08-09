@@ -568,6 +568,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
           changeEmailArgs: args.changeEmailArgs,
           plan: args.plan,
           tempPassword: args.tempPassword,
+          purchaseToken: args.purchaseToken,
         ),
       );
     },
@@ -2240,6 +2241,7 @@ class Verification extends _i55.PageRouteInfo<VerificationArgs> {
     _i11.ChangeEmailPageArgs? changeEmailArgs,
     _i63.Plan? plan,
     String? tempPassword,
+    String? purchaseToken,
     List<_i55.PageRouteInfo>? children,
   }) : super(
           Verification.name,
@@ -2250,6 +2252,7 @@ class Verification extends _i55.PageRouteInfo<VerificationArgs> {
             changeEmailArgs: changeEmailArgs,
             plan: plan,
             tempPassword: tempPassword,
+            purchaseToken: purchaseToken,
           ),
           initialChildren: children,
         );
@@ -2268,6 +2271,7 @@ class VerificationArgs {
     this.changeEmailArgs,
     this.plan,
     this.tempPassword,
+    this.purchaseToken,
   });
 
   final _i63.Key? key;
@@ -2282,8 +2286,10 @@ class VerificationArgs {
 
   final String? tempPassword;
 
+  final String? purchaseToken;
+
   @override
   String toString() {
-    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow, changeEmailArgs: $changeEmailArgs, plan: $plan, tempPassword: $tempPassword}';
+    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow, changeEmailArgs: $changeEmailArgs, plan: $plan, tempPassword: $tempPassword, purchaseToken: $purchaseToken}';
   }
 }

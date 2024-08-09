@@ -35,6 +35,16 @@ class CDialog extends StatefulWidget {
     ).show(context);
   }
 
+  static void purchaseRestoredDialog (BuildContext context){
+    CDialog(
+      title: ''.i18n,
+      description: ''.i18n,
+      iconPath: ImagePaths.check_green_large,
+      barrierDismissible: false,
+      agreeText: 'OK',
+    ).show(context);
+  }
+
   static void successDialog(
       {required BuildContext context,
       required String title,

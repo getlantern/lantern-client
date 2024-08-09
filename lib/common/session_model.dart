@@ -476,6 +476,16 @@ class SessionModel extends Model {
     return Future(() => null);
   }
 
+  Future<void> userEmailRequest(String email) async {
+    if (isMobile()) {
+      return await methodChannel
+          .invokeMethod('userEmailRequest', <String, dynamic>{
+        'email': email,
+      });
+    }
+     throw Exception("Not supported on desktop");
+  }
+
   Future<void> authorizeViaEmail(String emailAddress) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('authorizeViaEmail', <String, dynamic>{
@@ -485,12 +495,13 @@ class SessionModel extends Model {
     return await compute(ffiAuthorizeEmail, emailAddress);
   }
 
-  Future<String> validateDeviceRecoveryCode(String code) async {
+  Future<void> validateDeviceRecoveryCode(String code,String email) async {
     if (isMobile()) {
       return await methodChannel
           .invokeMethod('validateRecoveryCode', <String, dynamic>{
         'code': code,
-      }).then((value) => value.toString());
+        'email': email,
+      });
     }
     return await compute(ffiUserLinkValidate, code);
   }
@@ -637,6 +648,16 @@ class SessionModel extends Model {
 
   Future<void> restorePurchase() async {
     return methodChannel.invokeMethod('restorePurchase');
+  }
+
+  Future<void> restoreAccount(
+      String email, String code, String purchaseToken) async {
+    return methodChannel.invokeMethod('restoreAccount', <String, dynamic>{
+      "email": email,
+      "code": code,
+      "purchaseToken": purchaseToken,
+      "provider": Platform.isAndroid ? "googleplay" : "applepay"
+    });
   }
 
   Future<void> updatePaymentPlans() async {

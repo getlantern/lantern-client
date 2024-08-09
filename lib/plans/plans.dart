@@ -205,22 +205,11 @@ class PlansPage extends StatelessWidget {
         sl<AppPurchase>().restorePurchases(
           purchase: (purchase) {
             context.loaderOverlay.hide();
-            if (purchase != null) {
+            if (purchase == null) {
               logger.e("no purchase found");
               CDialog.noPurchaseFound(context);
             } else {
-              restorePurchasesVerification(
-                  context,
-                  PurchaseDetails(
-                    productID: '1y',
-                    transactionDate: '2021-09-01',
-                    verificationData: PurchaseVerificationData(
-                        localVerificationData: "12",
-                        serverVerificationData: "dfd",
-                        source: "source"),
-                    purchaseID: '1',
-                    status: PurchaseStatus.purchased,
-                  ));
+              restorePurchasesVerification(context, purchase);
               logger.d("purchase found $purchase");
             }
           },

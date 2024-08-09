@@ -41,11 +41,12 @@ type ProClient interface {
 	UserData(ctx context.Context) (*UserDataResponse, error)
 	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
 	RestorePurchase(ctx context.Context, req *RestorePurchaseRequest) (*OkResponse, error)
+	EmailRequest(ctx context.Context, email string) (*OkResponse, error)
 	//Device Linking
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
 	LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error)
-	UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error)
+	UserLinkCodeRequest(ctx context.Context, deviceId string, email string) (bool, error)
 	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
 	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
 	DeviceAdd(ctx context.Context, deviceName string) (bool, error)
@@ -93,6 +94,17 @@ func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.Base
 	err := c.webclient.GetJSON(ctx, "/email-exists", map[string]interface{}{
 		"email": email,
 	}, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *proClient) EmailRequest(ctx context.Context, email string) (*OkResponse, error) {
+	var resp OkResponse
+	params := c.defaultParams()
+	params["email"] = email
+	err := c.webclient.PostJSONReadingJSON(ctx, "/user-email-request", params, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -297,7 +309,7 @@ func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, devic
 }
 
 // UserLinkCodeRequest returns a code to email register pro account email that can be used to link device to an existing Pro account
-func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error) {
+func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string, email string) (bool, error) {
 	if deviceId == "" {
 		return false, errMissingDeviceName
 	}
@@ -305,10 +317,14 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string) (b
 	uc := c.userConfig()
 	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
 		"deviceName": deviceId,
+		"email":      email,
 		"locale":     uc.GetLanguage(),
 	}, nil, &resp)
 	if err != nil {
 		return false, err
+	}
+	if resp.Error != "" && resp.Status != "ok" {
+		return false, errors.New("err_while_sending_code: %v", resp.ErrorId, resp.Error)
 	}
 
 	return true, nil

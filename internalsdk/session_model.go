@@ -300,11 +300,12 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 
-	case "restorePurchase":
+	case "restoreAccount":
 		email := arguments.Get("email").String()
+		token := arguments.Get("token").String()
 		code := arguments.Get("code").String()
 		provider := arguments.Get("provider").String()
-		err := restorePurchase(m, email, code, provider)
+		err := restorePurchase(m, email, token, code, provider)
 		if err != nil {
 			return nil, err
 		}
@@ -384,6 +385,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "authorizeViaEmail":
 		email := arguments.Get("emailAddress").String()
 		err := requestRecoveryEmail(m, email)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "userEmailRequest":
+		email := arguments.Get("email").String()
+		err := userEmailRequest(m, email)
 		if err != nil {
 			return nil, err
 		}
@@ -1207,19 +1216,18 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 	return setProUser(m.baseModel, true)
 }
 
-func restorePurchase(session *SessionModel, email string, purchaseToken string, code string) error {
+func restorePurchase(session *SessionModel, email string, purchaseToken string, code string, provider string) error {
 	deviceName, err := pathdb.Get[string](session.db, pathDevice)
 	if err != nil {
 		return err
 	}
 	restoreRequest := &pro.RestorePurchaseRequest{
 		Email:      email,
-		Provider:   paymentProviderApplePay,
+		Provider:   provider,
 		Token:      purchaseToken,
 		DeviceName: deviceName,
-		Code:       "",
+		Code:       code,
 	}
-
 	okResponse, err := session.proClient.RestorePurchase(context.Background(), restoreRequest)
 	if err != nil {
 		return err
@@ -1227,6 +1235,7 @@ func restorePurchase(session *SessionModel, email string, purchaseToken string, 
 	if okResponse.Status != "ok" {
 		return errors.New("Restore purchase failed")
 	}
+	setProUser(session.baseModel, true)
 	return nil
 
 }
@@ -1784,6 +1793,17 @@ func userLinkRemove(session *SessionModel, deviceId string) error {
 	return session.userDetail(context.Background())
 }
 
+func userEmailRequest(session *SessionModel, email string) error {
+	okResponse, err := session.proClient.EmailRequest(context.Background(), email)
+	if err != nil {
+		return err
+	}
+	if okResponse.Status != "ok" {
+		return errors.New("Email request failed")
+	}
+	return nil
+}
+
 // Add device for LINK WITH EMAIL method
 func requestRecoveryEmail(session *SessionModel, email string) error {
 	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
@@ -1792,7 +1812,7 @@ func requestRecoveryEmail(session *SessionModel, email string) error {
 		return err
 	}
 
-	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), deviceId)
+	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), deviceId, email)
 	if err != nil {
 		return err
 	}

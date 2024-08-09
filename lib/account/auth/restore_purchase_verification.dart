@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:lantern/plans/utils.dart';
 
 import '../../common/common.dart';
 
@@ -37,7 +38,6 @@ class _RestorePurchaseVerificationState
   Widget _buildBody() {
     return Column(
       children: <Widget>[
-        HeadingText(title: 'verification'.i18n),
         const SizedBox(height: 24),
         Form(
           key: _emailFormKey,
@@ -78,5 +78,21 @@ class _RestorePurchaseVerificationState
     );
   }
 
-  void _onVerifyTap() {}
+  Future<void> _onVerifyTap() async {
+    try {
+      FocusManager.instance.primaryFocus?.unfocus();
+      context.loaderOverlay.show();
+      final email = _emailController.text;
+      await sessionModel.userEmailRequest(email.validateEmail);
+      context.loaderOverlay.hide();
+      context.pushRoute(Verification(
+          email: email.validateEmail,
+          authFlow: AuthFlow.restoreAccount,
+          purchaseToken:
+              widget.purchaseDetails.verificationData.serverVerificationData));
+    } catch (e) {
+      context.loaderOverlay.hide();
+      showError(context, description: e.localizedDescription);
+    }
+  }
 }
