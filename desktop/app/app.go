@@ -175,14 +175,17 @@ func (app *App) Run() {
 			app.Settings().SetCountry(geolookup.GetCountry(0))
 		}
 	}()
-	app.startUpAPICalls(context.Background())
-	flags := app.Flags
-	log.Debug(flags)
-	if flags.Pprof {
-		go startDebugServer()
-	}
-	i18nInit(app)
+
 	go func() {
+
+		app.startUpAPICalls(context.Background())
+		flags := app.Flags
+		log.Debug(flags)
+		if flags.Pprof {
+			go startDebugServer()
+		}
+		i18nInit(app)
+
 		// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
 		// for the first time. User can still quit Lantern through systray menu when it happens.
 		if flags.ProxyAll {
@@ -307,10 +310,6 @@ func (app *App) beforeStart(listenAddr string) {
 		return
 	}
 
-	/*if err := app.statsTracker.StartService(app.ws); err != nil {
-		log.Errorf("Unable to serve stats to UI: %v", err)
-	}*/
-
 	isProUser := func() (bool, bool) {
 		return app.IsProUser(context.Background())
 	}
@@ -432,7 +431,7 @@ func (a *App) startUpAPICalls(ctx context.Context) {
 		}
 		return nil
 	}
-	go fetchOrCreate()
+	fetchOrCreate()
 	a.fetchPayentMethodV4()
 }
 
