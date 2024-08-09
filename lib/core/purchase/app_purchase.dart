@@ -80,11 +80,12 @@ class AppPurchase {
   Future<void> _onPurchaseUpdate(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
-    if(purchaseDetailsList.isEmpty){
-      if(_globalPurchaseCallback != null){
+    if (purchaseDetailsList.isEmpty) {
+      if (_globalPurchaseCallback != null) {
         _globalPurchaseCallback!(null);
       }
     }
+    mainLogger.d("purchase list ${purchaseDetailsList.length}");
     for (var purchaseDetails in purchaseDetailsList) {
       await _handlePurchase(purchaseDetails);
     }
