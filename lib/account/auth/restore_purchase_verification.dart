@@ -34,7 +34,7 @@ class _RestorePurchaseVerificationState
   Widget _buildBody() {
     return Column(
       children: <Widget>[
-        
+
         Center(child: CText("restore_purchase".i18n, style: tsHeading1)),
         const SizedBox(height: 16),
         Form(
