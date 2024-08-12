@@ -8,6 +8,7 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/core/purchase/app_purchase.dart';
 import 'package:lantern/replica/ui/utils.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'catcher_setup.dart';
@@ -63,17 +64,18 @@ Future<void> main() async {
   await Localization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-//Todo if catcher is not picking up error and exception then we should switch to sentryFlutter
-// SentryFlutter.init((options) {
-//   options.debug = true;
-//   options.anrEnabled = true;
-//   options.autoInitializeNativeSdk = true;
-//   options.attachScreenshot = true;
-//   options.dsn = Platform.isAndroid
-//       ? 'https://4753d78f885f4b79a497435907ce4210@o75725.ingest.sentry.io/5850353'
-//       : 'https://c14296fdf5a6be272e1ecbdb7cb23f76@o75725.ingest.sentry.io/4506081382694912';
-// }, appRunner: () => setupCatcherAndRun(LanternApp()));
-  setupCatcherAndRun(const LanternApp());
+  SentryFlutter.init((options) {
+    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+    // We recommend adjusting this value in production.
+    options.tracesSampleRate = 1.0;
+    // The sampling rate for profiling is relative to tracesSampleRate
+    // Setting to 1.0 will profile 100% of sampled transactions:
+    options.profilesSampleRate = 1.0;
+    options.dsn = kReleaseMode ? dnsConfig() : "";
+    options.enableNativeCrashHandling = true;
+  }, appRunner: () => runApp(const LanternApp()));
+
+  // setupCatcherAndRun(const LanternApp());
 }
 
 Future<void> _initGoogleMobileAds() async {
