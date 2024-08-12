@@ -24,7 +24,7 @@ class _RestorePurchaseVerificationState
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: "Restore Purchase",
+      title: "lantern_pro_checkout".i18n,
       padHorizontal: true,
       padVertical: true,
       body: _buildBody(),
@@ -34,7 +34,9 @@ class _RestorePurchaseVerificationState
   Widget _buildBody() {
     return Column(
       children: <Widget>[
-        const SizedBox(height: 24),
+        
+        Center(child: CText("restore_purchase".i18n, style: tsHeading1)),
+        const SizedBox(height: 16),
         Form(
           key: _emailFormKey,
           child: CTextField(
@@ -64,7 +66,7 @@ class _RestorePurchaseVerificationState
         SizedBox(
           width: double.infinity,
           child: Button(
-            text: "verify".i18n,
+            text: "continue".i18n,
             onPressed: _onVerifyTap,
             disabled: _emailController.text.isEmpty ||
                 _emailFormKey?.currentState?.validate() == false,
