@@ -1791,6 +1791,15 @@ msgstr "Your purchase has been restored successfully"
 msgid "err_while_sending_code"
 msgstr "Something went wrong while sending the code, please try again"
 
+msgid "email_hint"
+msgstr "*Email is optional but encouraged"
+
+msgid "email_hint_pro"
+msgstr "Add an email to access your purchases on any device.  Without an email purchases are tied to this device and could be lost. "
+
+msgid "continue_without_email"
+msgstr "Continue without Email"
+
 
 
 

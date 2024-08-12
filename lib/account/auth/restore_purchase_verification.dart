@@ -1,14 +1,10 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:lantern/plans/utils.dart';
-
 import '../../common/common.dart';
 
 @RoutePage(name: "RestorePurchaseVerification")
 class RestorePurchaseVerification extends StatefulWidget {
-  final PurchaseDetails purchaseDetails;
-
-  const RestorePurchaseVerification({super.key, required this.purchaseDetails});
+  const RestorePurchaseVerification({super.key});
 
   @override
   State<RestorePurchaseVerification> createState() =>
@@ -88,8 +84,7 @@ class _RestorePurchaseVerificationState
       context.pushRoute(Verification(
           email: email.validateEmail,
           authFlow: AuthFlow.restoreAccount,
-          purchaseToken:
-              widget.purchaseDetails.verificationData.serverVerificationData));
+          ));
     } catch (e) {
       context.loaderOverlay.hide();
       showError(context, description: e.localizedDescription);

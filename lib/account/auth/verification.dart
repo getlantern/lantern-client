@@ -14,7 +14,6 @@ class Verification extends StatefulWidget {
   final Plan? plan;
   final ChangeEmailPageArgs? changeEmailArgs;
   final String? tempPassword;
-  final String? purchaseToken;
 
   const Verification({
     super.key,
@@ -23,7 +22,6 @@ class Verification extends StatefulWidget {
     this.changeEmailArgs,
     this.plan,
     this.tempPassword,
-    this.purchaseToken,
   });
 
   @override
@@ -379,10 +377,11 @@ class _VerificationState extends State<Verification> {
 
   Future<void> _restoreAccount(String code) async {
     try {
-      assert(widget.purchaseToken != null, 'Purchase token is null');
-      context.loaderOverlay.show();
-      await sessionModel.restoreAccount(widget.email, code, widget.purchaseToken!!);
-      context.loaderOverlay.hide();
+      // assert(widget.purchaseToken != null, 'Purchase token is null');
+      // context.loaderOverlay.show();
+      // await sessionModel.restoreAccount(
+      //     widget.email, code, widget.purchaseToken!!);
+      // context.loaderOverlay.hide();
       CDialog.successDialog(
         context: context,
         title: "purchase_restored".i18n,

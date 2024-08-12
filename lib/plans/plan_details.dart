@@ -164,7 +164,11 @@ class _PlanCardState extends State<PlanCard> {
   Future<void> onPlanTap(BuildContext context) async {
     switch (Platform.operatingSystem) {
       case 'ios':
-        _proceedToCheckoutIOS(context);
+        if (widget.isPro) {
+          _proceedToCheckoutIOS(context);
+          return;
+        }
+        addEmailRoute();
         break;
       default:
         //Support for legacy purchase flow
@@ -189,7 +193,7 @@ class _PlanCardState extends State<PlanCard> {
   Future<void> _processLegacyCheckOut(BuildContext context) async {
     if (await isPlayStoreEnabled()) {
       await context.pushRoute(
-        PlayCheckout(
+        StoreCheckout(
           plan: widget.plan,
           isPro: widget.isPro,
         ),
@@ -294,6 +298,10 @@ class _PlanCardState extends State<PlanCard> {
       context.loaderOverlay.hide();
       showError(context, error: e);
     }
+  }
+
+  void addEmailRoute() {
+    context.pushRoute(StoreCheckout(plan: widget.plan, isPro: widget.isPro));
   }
 }
 

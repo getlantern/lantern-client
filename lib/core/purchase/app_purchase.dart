@@ -129,11 +129,11 @@ class AppPurchase {
     }
   }
 
-  Future<void> restorePurchases({required PurchaseCallback purchase}) async {
-    logger.d("restoring purchase");
-    _globalPurchaseCallback = purchase;
-    _inAppPurchase.restorePurchases(applicationUserName: null);
-  }
+  // Future<void> restorePurchases({required PurchaseCallback purchase}) async {
+  //   logger.d("restoring purchase");
+  //   _globalPurchaseCallback = purchase;
+  //   _inAppPurchase.restorePurchases(applicationUserName: null);
+  // }
 
   void _updateStreamOnDone() {
     _onError = null;

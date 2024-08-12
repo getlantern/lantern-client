@@ -13,7 +13,6 @@ import 'dart:ui' as _i58;
 
 import 'package:auto_route/auto_route.dart' as _i55;
 import 'package:flutter/cupertino.dart' as _i61;
-import 'package:in_app_purchase/in_app_purchase.dart' as _i62;
 import 'package:lantern/account/account.dart' as _i2;
 import 'package:lantern/account/account_management.dart' as _i1;
 import 'package:lantern/account/auth/auth_landing.dart' as _i6;
@@ -21,11 +20,11 @@ import 'package:lantern/account/auth/change_email.dart' as _i11;
 import 'package:lantern/account/auth/confirm_email.dart' as _i17;
 import 'package:lantern/account/auth/create_account_email.dart' as _i20;
 import 'package:lantern/account/auth/create_account_password.dart' as _i21;
-import 'package:lantern/account/auth/reset_password.dart' as _i46;
+import 'package:lantern/account/auth/reset_password.dart' as _i45;
 import 'package:lantern/account/auth/restore_purchase_verification.dart'
-    as _i47;
-import 'package:lantern/account/auth/sign_in.dart' as _i49;
-import 'package:lantern/account/auth/sign_in_password.dart' as _i50;
+    as _i46;
+import 'package:lantern/account/auth/sign_in.dart' as _i48;
+import 'package:lantern/account/auth/sign_in_password.dart' as _i49;
 import 'package:lantern/account/auth/verification.dart' as _i54;
 import 'package:lantern/account/blocked_users.dart' as _i10;
 import 'package:lantern/account/chat_number_account.dart' as _i12;
@@ -41,10 +40,10 @@ import 'package:lantern/account/device_linking/link_device.dart' as _i30;
 import 'package:lantern/account/invite_friends.dart' as _i27;
 import 'package:lantern/account/language.dart' as _i28;
 import 'package:lantern/account/lantern_desktop.dart' as _i29;
-import 'package:lantern/account/recovery_key.dart' as _i34;
-import 'package:lantern/account/report_issue.dart' as _i43;
-import 'package:lantern/account/settings.dart' as _i48;
-import 'package:lantern/account/split_tunneling.dart' as _i51;
+import 'package:lantern/account/recovery_key.dart' as _i33;
+import 'package:lantern/account/report_issue.dart' as _i42;
+import 'package:lantern/account/settings.dart' as _i47;
+import 'package:lantern/account/split_tunneling.dart' as _i50;
 import 'package:lantern/account/support.dart' as _i53;
 import 'package:lantern/common/common.dart' as _i57;
 import 'package:lantern/common/ui/app_webview.dart' as _i5;
@@ -63,20 +62,20 @@ import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i14;
 import 'package:lantern/plans/checkout.dart' as _i15;
 import 'package:lantern/plans/checkout_legacy.dart' as _i16;
 import 'package:lantern/plans/plans.dart' as _i32;
-import 'package:lantern/plans/play_checkout.dart' as _i33;
-import 'package:lantern/plans/reseller_checkout.dart' as _i45;
+import 'package:lantern/plans/reseller_checkout.dart' as _i43;
 import 'package:lantern/plans/reseller_checkout_legacy.dart' as _i44;
+import 'package:lantern/plans/store_checkout.dart' as _i51;
 import 'package:lantern/plans/stripe_checkout.dart' as _i52;
 import 'package:lantern/replica/common.dart' as _i59;
-import 'package:lantern/replica/link_handler.dart' as _i37;
-import 'package:lantern/replica/ui/viewers/audio.dart' as _i35;
-import 'package:lantern/replica/ui/viewers/image.dart' as _i36;
-import 'package:lantern/replica/ui/viewers/misc.dart' as _i38;
-import 'package:lantern/replica/ui/viewers/video.dart' as _i42;
-import 'package:lantern/replica/upload/description.dart' as _i39;
-import 'package:lantern/replica/upload/review.dart' as _i40;
-import 'package:lantern/replica/upload/title.dart' as _i41;
-import 'package:lantern/vpn/vpn.dart' as _i63;
+import 'package:lantern/replica/link_handler.dart' as _i36;
+import 'package:lantern/replica/ui/viewers/audio.dart' as _i34;
+import 'package:lantern/replica/ui/viewers/image.dart' as _i35;
+import 'package:lantern/replica/ui/viewers/misc.dart' as _i37;
+import 'package:lantern/replica/ui/viewers/video.dart' as _i41;
+import 'package:lantern/replica/upload/description.dart' as _i38;
+import 'package:lantern/replica/upload/review.dart' as _i39;
+import 'package:lantern/replica/upload/title.dart' as _i40;
+import 'package:lantern/vpn/vpn.dart' as _i62;
 
 abstract class $AppRouter extends _i55.RootStackRouter {
   $AppRouter({super.navigatorKey});
@@ -337,30 +336,19 @@ abstract class $AppRouter extends _i55.RootStackRouter {
         child: const _i32.PlansPage(),
       );
     },
-    PlayCheckout.name: (routeData) {
-      final args = routeData.argsAs<PlayCheckoutArgs>();
-      return _i55.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i33.PlayCheckout(
-          plan: args.plan,
-          isPro: args.isPro,
-          key: args.key,
-        ),
-      );
-    },
     RecoveryKey.name: (routeData) {
       final args = routeData.argsAs<RecoveryKeyArgs>(
           orElse: () => const RecoveryKeyArgs());
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i34.RecoveryKey(key: args.key),
+        child: _i33.RecoveryKey(key: args.key),
       );
     },
     ReplicaAudioViewer.name: (routeData) {
       final args = routeData.argsAs<ReplicaAudioViewerArgs>();
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i35.ReplicaAudioViewer(
+        child: _i34.ReplicaAudioViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
@@ -371,7 +359,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
       final args = routeData.argsAs<ReplicaImageViewerArgs>();
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i36.ReplicaImageViewer(
+        child: _i35.ReplicaImageViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
@@ -382,7 +370,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
       final args = routeData.argsAs<ReplicaLinkHandlerArgs>();
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i37.ReplicaLinkHandler(
+        child: _i36.ReplicaLinkHandler(
           key: args.key,
           replicaApi: args.replicaApi,
           replicaLink: args.replicaLink,
@@ -393,7 +381,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
       final args = routeData.argsAs<ReplicaMiscViewerArgs>();
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i38.ReplicaMiscViewer(
+        child: _i37.ReplicaMiscViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
@@ -404,7 +392,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
       final args = routeData.argsAs<ReplicaUploadDescriptionArgs>();
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i39.ReplicaUploadDescription(
+        child: _i38.ReplicaUploadDescription(
           key: args.key,
           fileToUpload: args.fileToUpload,
           fileTitle: args.fileTitle,
@@ -416,7 +404,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
       final args = routeData.argsAs<ReplicaUploadReviewArgs>();
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i40.ReplicaUploadReview(
+        child: _i39.ReplicaUploadReview(
           key: args.key,
           fileToUpload: args.fileToUpload,
           fileTitle: args.fileTitle,
@@ -428,7 +416,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
       final args = routeData.argsAs<ReplicaUploadTitleArgs>();
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i41.ReplicaUploadTitle(
+        child: _i40.ReplicaUploadTitle(
           key: args.key,
           fileToUpload: args.fileToUpload,
           fileTitle: args.fileTitle,
@@ -440,7 +428,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
       final args = routeData.argsAs<ReplicaVideoViewerArgs>();
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i42.ReplicaVideoViewer(
+        child: _i41.ReplicaVideoViewer(
           replicaApi: args.replicaApi,
           item: args.item,
           category: args.category,
@@ -452,9 +440,21 @@ abstract class $AppRouter extends _i55.RootStackRouter {
           orElse: () => const ReportIssueArgs());
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i43.ReportIssue(
+        child: _i42.ReportIssue(
           key: args.key,
           description: args.description,
+        ),
+      );
+    },
+    ResellerCodeCheckout.name: (routeData) {
+      final args = routeData.argsAs<ResellerCodeCheckoutArgs>();
+      return _i55.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i43.ResellerCodeCheckout(
+          isPro: args.isPro,
+          email: args.email,
+          otp: args.otp,
+          key: args.key,
         ),
       );
     },
@@ -468,24 +468,12 @@ abstract class $AppRouter extends _i55.RootStackRouter {
         ),
       );
     },
-    ResellerCodeCheckout.name: (routeData) {
-      final args = routeData.argsAs<ResellerCodeCheckoutArgs>();
-      return _i55.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i45.ResellerCodeCheckout(
-          isPro: args.isPro,
-          email: args.email,
-          otp: args.otp,
-          key: args.key,
-        ),
-      );
-    },
     ResetPassword.name: (routeData) {
       final args = routeData.argsAs<ResetPasswordArgs>(
           orElse: () => const ResetPasswordArgs());
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i46.ResetPassword(
+        child: _i45.ResetPassword(
           key: args.key,
           email: args.email,
           code: args.code,
@@ -494,13 +482,9 @@ abstract class $AppRouter extends _i55.RootStackRouter {
       );
     },
     RestorePurchaseVerification.name: (routeData) {
-      final args = routeData.argsAs<RestorePurchaseVerificationArgs>();
       return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i47.RestorePurchaseVerification(
-          key: args.key,
-          purchaseDetails: args.purchaseDetails,
-        ),
+        child: const _i46.RestorePurchaseVerification(),
       );
     },
     Settings.name: (routeData) {
@@ -508,7 +492,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
           routeData.argsAs<SettingsArgs>(orElse: () => const SettingsArgs());
       return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i48.Settings(key: args.key),
+        child: _i47.Settings(key: args.key),
       );
     },
     SignIn.name: (routeData) {
@@ -516,7 +500,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
           routeData.argsAs<SignInArgs>(orElse: () => const SignInArgs());
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i49.SignIn(
+        child: _i48.SignIn(
           key: args.key,
           authFlow: args.authFlow,
         ),
@@ -526,7 +510,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
       final args = routeData.argsAs<SignInPasswordArgs>();
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: _i50.SignInPassword(
+        child: _i49.SignInPassword(
           key: args.key,
           email: args.email,
         ),
@@ -535,7 +519,18 @@ abstract class $AppRouter extends _i55.RootStackRouter {
     SplitTunneling.name: (routeData) {
       return _i55.AutoRoutePage<void>(
         routeData: routeData,
-        child: const _i51.SplitTunneling(),
+        child: const _i50.SplitTunneling(),
+      );
+    },
+    StoreCheckout.name: (routeData) {
+      final args = routeData.argsAs<StoreCheckoutArgs>();
+      return _i55.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: _i51.StoreCheckout(
+          plan: args.plan,
+          isPro: args.isPro,
+          key: args.key,
+        ),
       );
     },
     StripeCheckout.name: (routeData) {
@@ -568,7 +563,6 @@ abstract class $AppRouter extends _i55.RootStackRouter {
           changeEmailArgs: args.changeEmailArgs,
           plan: args.plan,
           tempPassword: args.tempPassword,
-          purchaseToken: args.purchaseToken,
         ),
       );
     },
@@ -1402,50 +1396,7 @@ class PlansPage extends _i55.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i33.PlayCheckout]
-class PlayCheckout extends _i55.PageRouteInfo<PlayCheckoutArgs> {
-  PlayCheckout({
-    required _i57.Plan plan,
-    required bool isPro,
-    _i57.Key? key,
-    List<_i55.PageRouteInfo>? children,
-  }) : super(
-          PlayCheckout.name,
-          args: PlayCheckoutArgs(
-            plan: plan,
-            isPro: isPro,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'PlayCheckout';
-
-  static const _i55.PageInfo<PlayCheckoutArgs> page =
-      _i55.PageInfo<PlayCheckoutArgs>(name);
-}
-
-class PlayCheckoutArgs {
-  const PlayCheckoutArgs({
-    required this.plan,
-    required this.isPro,
-    this.key,
-  });
-
-  final _i57.Plan plan;
-
-  final bool isPro;
-
-  final _i57.Key? key;
-
-  @override
-  String toString() {
-    return 'PlayCheckoutArgs{plan: $plan, isPro: $isPro, key: $key}';
-  }
-}
-
-/// generated route for
-/// [_i34.RecoveryKey]
+/// [_i33.RecoveryKey]
 class RecoveryKey extends _i55.PageRouteInfo<RecoveryKeyArgs> {
   RecoveryKey({
     _i56.Key? key,
@@ -1474,7 +1425,7 @@ class RecoveryKeyArgs {
 }
 
 /// generated route for
-/// [_i35.ReplicaAudioViewer]
+/// [_i34.ReplicaAudioViewer]
 class ReplicaAudioViewer extends _i55.PageRouteInfo<ReplicaAudioViewerArgs> {
   ReplicaAudioViewer({
     required _i59.ReplicaApi replicaApi,
@@ -1517,7 +1468,7 @@ class ReplicaAudioViewerArgs {
 }
 
 /// generated route for
-/// [_i36.ReplicaImageViewer]
+/// [_i35.ReplicaImageViewer]
 class ReplicaImageViewer extends _i55.PageRouteInfo<ReplicaImageViewerArgs> {
   ReplicaImageViewer({
     required _i59.ReplicaApi replicaApi,
@@ -1560,7 +1511,7 @@ class ReplicaImageViewerArgs {
 }
 
 /// generated route for
-/// [_i37.ReplicaLinkHandler]
+/// [_i36.ReplicaLinkHandler]
 class ReplicaLinkHandler extends _i55.PageRouteInfo<ReplicaLinkHandlerArgs> {
   ReplicaLinkHandler({
     _i57.Key? key,
@@ -1603,7 +1554,7 @@ class ReplicaLinkHandlerArgs {
 }
 
 /// generated route for
-/// [_i38.ReplicaMiscViewer]
+/// [_i37.ReplicaMiscViewer]
 class ReplicaMiscViewer extends _i55.PageRouteInfo<ReplicaMiscViewerArgs> {
   ReplicaMiscViewer({
     required _i59.ReplicaApi replicaApi,
@@ -1646,7 +1597,7 @@ class ReplicaMiscViewerArgs {
 }
 
 /// generated route for
-/// [_i39.ReplicaUploadDescription]
+/// [_i38.ReplicaUploadDescription]
 class ReplicaUploadDescription
     extends _i55.PageRouteInfo<ReplicaUploadDescriptionArgs> {
   ReplicaUploadDescription({
@@ -1695,7 +1646,7 @@ class ReplicaUploadDescriptionArgs {
 }
 
 /// generated route for
-/// [_i40.ReplicaUploadReview]
+/// [_i39.ReplicaUploadReview]
 class ReplicaUploadReview extends _i55.PageRouteInfo<ReplicaUploadReviewArgs> {
   ReplicaUploadReview({
     _i57.Key? key,
@@ -1743,7 +1694,7 @@ class ReplicaUploadReviewArgs {
 }
 
 /// generated route for
-/// [_i41.ReplicaUploadTitle]
+/// [_i40.ReplicaUploadTitle]
 class ReplicaUploadTitle extends _i55.PageRouteInfo<ReplicaUploadTitleArgs> {
   ReplicaUploadTitle({
     _i57.Key? key,
@@ -1791,7 +1742,7 @@ class ReplicaUploadTitleArgs {
 }
 
 /// generated route for
-/// [_i42.ReplicaVideoViewer]
+/// [_i41.ReplicaVideoViewer]
 class ReplicaVideoViewer extends _i55.PageRouteInfo<ReplicaVideoViewerArgs> {
   ReplicaVideoViewer({
     required _i59.ReplicaApi replicaApi,
@@ -1834,7 +1785,7 @@ class ReplicaVideoViewerArgs {
 }
 
 /// generated route for
-/// [_i43.ReportIssue]
+/// [_i42.ReportIssue]
 class ReportIssue extends _i55.PageRouteInfo<ReportIssueArgs> {
   ReportIssue({
     _i57.Key? key,
@@ -1872,46 +1823,7 @@ class ReportIssueArgs {
 }
 
 /// generated route for
-/// [_i44.ResellerCodeCheckout]
-class ResellerCodeCheckoutLegacy
-    extends _i55.PageRouteInfo<ResellerCodeCheckoutLegacyArgs> {
-  ResellerCodeCheckoutLegacy({
-    required bool isPro,
-    _i57.Key? key,
-    List<_i55.PageRouteInfo>? children,
-  }) : super(
-          ResellerCodeCheckoutLegacy.name,
-          args: ResellerCodeCheckoutLegacyArgs(
-            isPro: isPro,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ResellerCodeCheckoutLegacy';
-
-  static const _i55.PageInfo<ResellerCodeCheckoutLegacyArgs> page =
-      _i55.PageInfo<ResellerCodeCheckoutLegacyArgs>(name);
-}
-
-class ResellerCodeCheckoutLegacyArgs {
-  const ResellerCodeCheckoutLegacyArgs({
-    required this.isPro,
-    this.key,
-  });
-
-  final bool isPro;
-
-  final _i57.Key? key;
-
-  @override
-  String toString() {
-    return 'ResellerCodeCheckoutLegacyArgs{isPro: $isPro, key: $key}';
-  }
-}
-
-/// generated route for
-/// [_i45.ResellerCodeCheckout]
+/// [_i43.ResellerCodeCheckout]
 class ResellerCodeCheckout
     extends _i55.PageRouteInfo<ResellerCodeCheckoutArgs> {
   ResellerCodeCheckout({
@@ -1960,7 +1872,46 @@ class ResellerCodeCheckoutArgs {
 }
 
 /// generated route for
-/// [_i46.ResetPassword]
+/// [_i44.ResellerCodeCheckout]
+class ResellerCodeCheckoutLegacy
+    extends _i55.PageRouteInfo<ResellerCodeCheckoutLegacyArgs> {
+  ResellerCodeCheckoutLegacy({
+    required bool isPro,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
+  }) : super(
+          ResellerCodeCheckoutLegacy.name,
+          args: ResellerCodeCheckoutLegacyArgs(
+            isPro: isPro,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ResellerCodeCheckoutLegacy';
+
+  static const _i55.PageInfo<ResellerCodeCheckoutLegacyArgs> page =
+      _i55.PageInfo<ResellerCodeCheckoutLegacyArgs>(name);
+}
+
+class ResellerCodeCheckoutLegacyArgs {
+  const ResellerCodeCheckoutLegacyArgs({
+    required this.isPro,
+    this.key,
+  });
+
+  final bool isPro;
+
+  final _i57.Key? key;
+
+  @override
+  String toString() {
+    return 'ResellerCodeCheckoutLegacyArgs{isPro: $isPro, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i45.ResetPassword]
 class ResetPassword extends _i55.PageRouteInfo<ResetPasswordArgs> {
   ResetPassword({
     _i61.Key? key,
@@ -2008,46 +1959,21 @@ class ResetPasswordArgs {
 }
 
 /// generated route for
-/// [_i47.RestorePurchaseVerification]
-class RestorePurchaseVerification
-    extends _i55.PageRouteInfo<RestorePurchaseVerificationArgs> {
-  RestorePurchaseVerification({
-    _i57.Key? key,
-    required _i62.PurchaseDetails purchaseDetails,
-    List<_i55.PageRouteInfo>? children,
-  }) : super(
+/// [_i46.RestorePurchaseVerification]
+class RestorePurchaseVerification extends _i55.PageRouteInfo<void> {
+  const RestorePurchaseVerification({List<_i55.PageRouteInfo>? children})
+      : super(
           RestorePurchaseVerification.name,
-          args: RestorePurchaseVerificationArgs(
-            key: key,
-            purchaseDetails: purchaseDetails,
-          ),
           initialChildren: children,
         );
 
   static const String name = 'RestorePurchaseVerification';
 
-  static const _i55.PageInfo<RestorePurchaseVerificationArgs> page =
-      _i55.PageInfo<RestorePurchaseVerificationArgs>(name);
-}
-
-class RestorePurchaseVerificationArgs {
-  const RestorePurchaseVerificationArgs({
-    this.key,
-    required this.purchaseDetails,
-  });
-
-  final _i57.Key? key;
-
-  final _i62.PurchaseDetails purchaseDetails;
-
-  @override
-  String toString() {
-    return 'RestorePurchaseVerificationArgs{key: $key, purchaseDetails: $purchaseDetails}';
-  }
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i48.Settings]
+/// [_i47.Settings]
 class Settings extends _i55.PageRouteInfo<SettingsArgs> {
   Settings({
     _i57.Key? key,
@@ -2076,7 +2002,7 @@ class SettingsArgs {
 }
 
 /// generated route for
-/// [_i49.SignIn]
+/// [_i48.SignIn]
 class SignIn extends _i55.PageRouteInfo<SignInArgs> {
   SignIn({
     _i57.Key? key,
@@ -2113,7 +2039,7 @@ class SignInArgs {
 }
 
 /// generated route for
-/// [_i50.SignInPassword]
+/// [_i49.SignInPassword]
 class SignInPassword extends _i55.PageRouteInfo<SignInPasswordArgs> {
   SignInPassword({
     _i57.Key? key,
@@ -2151,7 +2077,7 @@ class SignInPasswordArgs {
 }
 
 /// generated route for
-/// [_i51.SplitTunneling]
+/// [_i50.SplitTunneling]
 class SplitTunneling extends _i55.PageRouteInfo<void> {
   const SplitTunneling({List<_i55.PageRouteInfo>? children})
       : super(
@@ -2162,6 +2088,49 @@ class SplitTunneling extends _i55.PageRouteInfo<void> {
   static const String name = 'SplitTunneling';
 
   static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i51.StoreCheckout]
+class StoreCheckout extends _i55.PageRouteInfo<StoreCheckoutArgs> {
+  StoreCheckout({
+    required _i57.Plan plan,
+    required bool isPro,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
+  }) : super(
+          StoreCheckout.name,
+          args: StoreCheckoutArgs(
+            plan: plan,
+            isPro: isPro,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'StoreCheckout';
+
+  static const _i55.PageInfo<StoreCheckoutArgs> page =
+      _i55.PageInfo<StoreCheckoutArgs>(name);
+}
+
+class StoreCheckoutArgs {
+  const StoreCheckoutArgs({
+    required this.plan,
+    required this.isPro,
+    this.key,
+  });
+
+  final _i57.Plan plan;
+
+  final bool isPro;
+
+  final _i57.Key? key;
+
+  @override
+  String toString() {
+    return 'StoreCheckoutArgs{plan: $plan, isPro: $isPro, key: $key}';
+  }
 }
 
 /// generated route for
@@ -2235,13 +2204,12 @@ class Support extends _i55.PageRouteInfo<void> {
 /// [_i54.Verification]
 class Verification extends _i55.PageRouteInfo<VerificationArgs> {
   Verification({
-    _i63.Key? key,
+    _i62.Key? key,
     required String email,
-    _i63.AuthFlow authFlow = _i63.AuthFlow.reset,
+    _i62.AuthFlow authFlow = _i62.AuthFlow.reset,
     _i11.ChangeEmailPageArgs? changeEmailArgs,
-    _i63.Plan? plan,
+    _i62.Plan? plan,
     String? tempPassword,
-    String? purchaseToken,
     List<_i55.PageRouteInfo>? children,
   }) : super(
           Verification.name,
@@ -2252,7 +2220,6 @@ class Verification extends _i55.PageRouteInfo<VerificationArgs> {
             changeEmailArgs: changeEmailArgs,
             plan: plan,
             tempPassword: tempPassword,
-            purchaseToken: purchaseToken,
           ),
           initialChildren: children,
         );
@@ -2267,29 +2234,26 @@ class VerificationArgs {
   const VerificationArgs({
     this.key,
     required this.email,
-    this.authFlow = _i63.AuthFlow.reset,
+    this.authFlow = _i62.AuthFlow.reset,
     this.changeEmailArgs,
     this.plan,
     this.tempPassword,
-    this.purchaseToken,
   });
 
-  final _i63.Key? key;
+  final _i62.Key? key;
 
   final String email;
 
-  final _i63.AuthFlow authFlow;
+  final _i62.AuthFlow authFlow;
 
   final _i11.ChangeEmailPageArgs? changeEmailArgs;
 
-  final _i63.Plan? plan;
+  final _i62.Plan? plan;
 
   final String? tempPassword;
 
-  final String? purchaseToken;
-
   @override
   String toString() {
-    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow, changeEmailArgs: $changeEmailArgs, plan: $plan, tempPassword: $tempPassword, purchaseToken: $purchaseToken}';
+    return 'VerificationArgs{key: $key, email: $email, authFlow: $authFlow, changeEmailArgs: $changeEmailArgs, plan: $plan, tempPassword: $tempPassword}';
   }
 }

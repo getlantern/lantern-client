@@ -1,5 +1,6 @@
 import 'package:lantern/common/common.dart';
 
+
 @AutoRouterConfig(
   replaceInRouteName: 'Page,Route,Screen',
 )
@@ -139,8 +140,8 @@ class AppRouter extends $AppRouter {
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
     CustomRoute(
-        page: PlayCheckout.page,
-        path: '/playcheckout',
+        page: StoreCheckout.page,
+        path: '/store_checkout',
         transitionsBuilder: defaultTransition,
         durationInMilliseconds: defaultTransitionMillis,
         reverseDurationInMilliseconds: defaultTransitionMillis),
