@@ -9,7 +9,7 @@ open class AutoStarter : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         Logger.d(TAG, "Automatically starting Lantern Service on: ${intent.action}")
-        val serviceIntent = Intent(context, LanternService_::class.java)
+        val serviceIntent = Intent(context, LanternService::class.java)
             .putExtra(LanternService.AUTO_BOOTED, intent.action == Intent.ACTION_BOOT_COMPLETED)
         context.startService(serviceIntent)
     }
