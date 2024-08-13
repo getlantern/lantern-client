@@ -459,9 +459,8 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 .PHONY: desktop-lib ffigen
 
 desktop-lib: export GOPRIVATE = github.com/getlantern
-desktop-lib: export CGO_ENABLED = 1
 desktop-lib: echo-build-tags
-	go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
+	CGO_ENABLED=1 go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
 ffigen:
 	dart run ffigen --config ffigen.yaml
@@ -523,8 +522,7 @@ darwin-amd64: $(DARWIN_LIB_AMD64)
 $(DARWIN_LIB_AMD64): export LIB_NAME = $(DARWIN_LIB_AMD64)
 $(DARWIN_LIB_AMD64): export GOOS = darwin
 $(DARWIN_LIB_AMD64): export GOARCH = amd64
-$(DARWIN_LIB_AMD64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
-$(DARWIN_LIB_AMD64): export EXTRA_LDFLAGS += -s
+$(DARWIN_LIB_AMD64): export GO_BUILD_FLAGS += -buildmode=c-shared
 $(DARWIN_LIB_AMD64): desktop-lib
 
 .PHONY: darwin-arm64
@@ -533,7 +531,6 @@ $(DARWIN_LIB_ARM64): export LIB_NAME = $(DARWIN_LIB_ARM64)
 $(DARWIN_LIB_ARM64): export GOOS = darwin
 $(DARWIN_LIB_ARM64): export GOARCH = arm64
 $(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
-$(DARWIN_LIB_ARM64): export EXTRA_LDFLAGS += -s
 $(DARWIN_LIB_ARM64): desktop-lib
 
 .PHONY: darwin
@@ -545,7 +542,6 @@ darwin: darwin-arm64
 		${DESKTOP_LIB_NAME}_amd64.dylib \
 		-output ${DARWIN_LIB_NAME}
 	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" ${DARWIN_LIB_NAME}
-	rm ${DESKTOP_LIB_NAME}_arm64.h && mv ${DESKTOP_LIB_NAME}_amd64.h ${DESKTOP_LIB_NAME}.h
 
 $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
 	@echo "Generating distribution package for darwin/amd64..." && \

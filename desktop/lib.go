@@ -67,7 +67,7 @@ var issueMap = map[string]string{
 }
 
 //export start
-func start() {
+func start() *C.char {
 	runtime.LockOSThread()
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
@@ -167,6 +167,8 @@ func start() {
 		log.Debug("Lantern stopped")
 		os.Exit(0)
 	}()
+
+	return C.CString("")
 }
 
 func fetchUserData() error {

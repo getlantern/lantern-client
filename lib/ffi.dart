@@ -54,7 +54,7 @@ class LanternFFI {
     return _instance!;
   }
 
-  void start() => lanternFFI.start();
+  Future<void> start() async => await lanternFFI.start();
 
   void sysProxyOn() => lanternFFI.sysProxyOn();
 

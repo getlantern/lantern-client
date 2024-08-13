@@ -36,7 +36,7 @@ class VpnModel extends Model {
         final isConnected = value != null && value.toString() == "true";
         setValue(isConnected ? "connected" : "disconnected");
       }),
-      ffiVpnStatus,
+      lanternFFI.vpnStatus,
       builder: builder,
     );
   }
