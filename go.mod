@@ -48,7 +48,7 @@ require (
 	github.com/getlantern/netx v0.0.0-20240124040039-163b1628a66b
 	github.com/getlantern/notifier v0.0.0-20240529182616-a162ef2bc966
 	github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175
-	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
+	github.com/getlantern/pathdb v0.0.0-20240812024914-abec1aaccbc1
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
 	github.com/getlantern/replica v0.14.3
 	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627

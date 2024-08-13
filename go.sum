@@ -441,6 +441,8 @@ github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 h1:pijUoo
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360/go.mod h1:nsJPNYUSY96xB+p7uiDW8O4uiKea+KjeUdS5d6tf9IU=
 github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb h1:rbkflUPjr83ON7c+4LqU2Y/rJzv9P/fmocXDLLm0hWQ=
 github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb/go.mod h1:SFQy+f58IbLpnbq2nVqlq7ccwaUiO7ablKv631WVIuc=
+github.com/getlantern/pathdb v0.0.0-20240812024914-abec1aaccbc1 h1:u+bEondNWksP0DJpxFpU6cQtFUZjhyTl06LMD5VxE9A=
+github.com/getlantern/pathdb v0.0.0-20240812024914-abec1aaccbc1/go.mod h1:XuUdGW3H556TcDhvNilZ1AYHpUVN/5CHEWuYPRBDZeQ=
 github.com/getlantern/preconn v1.0.0 h1:DsY3l/y/BJUj86WyaxXylbJnCC9QbKcc3D6js6rFL60=
 github.com/getlantern/preconn v1.0.0/go.mod h1:i/AnXvx715Fq7HgZLlmQlw3sGfEkku8BQT5hLHMK4+k=
 github.com/getlantern/probe v0.0.0-20191107230642-ed284e08029a/go.mod h1:EPE0nd9YNS2FTIz+2EOkqojCuqaQlJ+fTiLPklsqe/E=
