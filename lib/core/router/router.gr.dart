@@ -21,8 +21,7 @@ import 'package:lantern/account/auth/confirm_email.dart' as _i17;
 import 'package:lantern/account/auth/create_account_email.dart' as _i20;
 import 'package:lantern/account/auth/create_account_password.dart' as _i21;
 import 'package:lantern/account/auth/reset_password.dart' as _i45;
-import 'package:lantern/account/auth/restore_purchase_verification.dart'
-    as _i46;
+import 'package:lantern/account/auth/restore_purchase.dart' as _i46;
 import 'package:lantern/account/auth/sign_in.dart' as _i48;
 import 'package:lantern/account/auth/sign_in_password.dart' as _i49;
 import 'package:lantern/account/auth/verification.dart' as _i54;
@@ -62,8 +61,8 @@ import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i14;
 import 'package:lantern/plans/checkout.dart' as _i15;
 import 'package:lantern/plans/checkout_legacy.dart' as _i16;
 import 'package:lantern/plans/plans.dart' as _i32;
-import 'package:lantern/plans/reseller_checkout.dart' as _i43;
-import 'package:lantern/plans/reseller_checkout_legacy.dart' as _i44;
+import 'package:lantern/plans/reseller_checkout.dart' as _i44;
+import 'package:lantern/plans/reseller_checkout_legacy.dart' as _i43;
 import 'package:lantern/plans/store_checkout.dart' as _i51;
 import 'package:lantern/plans/stripe_checkout.dart' as _i52;
 import 'package:lantern/replica/common.dart' as _i59;
@@ -446,24 +445,24 @@ abstract class $AppRouter extends _i55.RootStackRouter {
         ),
       );
     },
-    ResellerCodeCheckout.name: (routeData) {
-      final args = routeData.argsAs<ResellerCodeCheckoutArgs>();
-      return _i55.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i43.ResellerCodeCheckout(
-          isPro: args.isPro,
-          email: args.email,
-          otp: args.otp,
-          key: args.key,
-        ),
-      );
-    },
     ResellerCodeCheckoutLegacy.name: (routeData) {
       final args = routeData.argsAs<ResellerCodeCheckoutLegacyArgs>();
       return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
+        child: _i43.ResellerCodeCheckout(
+          isPro: args.isPro,
+          key: args.key,
+        ),
+      );
+    },
+    ResellerCodeCheckout.name: (routeData) {
+      final args = routeData.argsAs<ResellerCodeCheckoutArgs>();
+      return _i55.AutoRoutePage<dynamic>(
+        routeData: routeData,
         child: _i44.ResellerCodeCheckout(
           isPro: args.isPro,
+          email: args.email,
+          otp: args.otp,
           key: args.key,
         ),
       );
@@ -481,10 +480,10 @@ abstract class $AppRouter extends _i55.RootStackRouter {
         ),
       );
     },
-    RestorePurchaseVerification.name: (routeData) {
+    RestorePurchase.name: (routeData) {
       return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i46.RestorePurchaseVerification(),
+        child: const _i46.RestorePurchase(),
       );
     },
     Settings.name: (routeData) {
@@ -1824,6 +1823,45 @@ class ReportIssueArgs {
 
 /// generated route for
 /// [_i43.ResellerCodeCheckout]
+class ResellerCodeCheckoutLegacy
+    extends _i55.PageRouteInfo<ResellerCodeCheckoutLegacyArgs> {
+  ResellerCodeCheckoutLegacy({
+    required bool isPro,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
+  }) : super(
+          ResellerCodeCheckoutLegacy.name,
+          args: ResellerCodeCheckoutLegacyArgs(
+            isPro: isPro,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ResellerCodeCheckoutLegacy';
+
+  static const _i55.PageInfo<ResellerCodeCheckoutLegacyArgs> page =
+      _i55.PageInfo<ResellerCodeCheckoutLegacyArgs>(name);
+}
+
+class ResellerCodeCheckoutLegacyArgs {
+  const ResellerCodeCheckoutLegacyArgs({
+    required this.isPro,
+    this.key,
+  });
+
+  final bool isPro;
+
+  final _i57.Key? key;
+
+  @override
+  String toString() {
+    return 'ResellerCodeCheckoutLegacyArgs{isPro: $isPro, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i44.ResellerCodeCheckout]
 class ResellerCodeCheckout
     extends _i55.PageRouteInfo<ResellerCodeCheckoutArgs> {
   ResellerCodeCheckout({
@@ -1868,45 +1906,6 @@ class ResellerCodeCheckoutArgs {
   @override
   String toString() {
     return 'ResellerCodeCheckoutArgs{isPro: $isPro, email: $email, otp: $otp, key: $key}';
-  }
-}
-
-/// generated route for
-/// [_i44.ResellerCodeCheckout]
-class ResellerCodeCheckoutLegacy
-    extends _i55.PageRouteInfo<ResellerCodeCheckoutLegacyArgs> {
-  ResellerCodeCheckoutLegacy({
-    required bool isPro,
-    _i57.Key? key,
-    List<_i55.PageRouteInfo>? children,
-  }) : super(
-          ResellerCodeCheckoutLegacy.name,
-          args: ResellerCodeCheckoutLegacyArgs(
-            isPro: isPro,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ResellerCodeCheckoutLegacy';
-
-  static const _i55.PageInfo<ResellerCodeCheckoutLegacyArgs> page =
-      _i55.PageInfo<ResellerCodeCheckoutLegacyArgs>(name);
-}
-
-class ResellerCodeCheckoutLegacyArgs {
-  const ResellerCodeCheckoutLegacyArgs({
-    required this.isPro,
-    this.key,
-  });
-
-  final bool isPro;
-
-  final _i57.Key? key;
-
-  @override
-  String toString() {
-    return 'ResellerCodeCheckoutLegacyArgs{isPro: $isPro, key: $key}';
   }
 }
 
@@ -1959,15 +1958,15 @@ class ResetPasswordArgs {
 }
 
 /// generated route for
-/// [_i46.RestorePurchaseVerification]
-class RestorePurchaseVerification extends _i55.PageRouteInfo<void> {
-  const RestorePurchaseVerification({List<_i55.PageRouteInfo>? children})
+/// [_i46.RestorePurchase]
+class RestorePurchase extends _i55.PageRouteInfo<void> {
+  const RestorePurchase({List<_i55.PageRouteInfo>? children})
       : super(
-          RestorePurchaseVerification.name,
+          RestorePurchase.name,
           initialChildren: children,
         );
 
-  static const String name = 'RestorePurchaseVerification';
+  static const String name = 'RestorePurchase';
 
   static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }

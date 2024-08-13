@@ -1,3 +1,4 @@
+import 'package:lantern/plans/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../common/common.dart';
@@ -64,13 +65,39 @@ class Support extends StatelessWidget {
           ],
           onTap: () => faqTap(context),
         ),
+
+        sessionModel.proUser(
+          (context, proUser, child) {
+            if (proUser) {
+              return FutureBuilder(
+                future: showRestorePurchaseButton(proUser),
+                builder: (context, snapshot) {
+                  // Show restore purchase button only if user is pro
+                  if (snapshot.hasData && snapshot.data as bool) {
+                    return ListItemFactory.settingsItem(
+                      content: 'restore_purchase'.i18n,
+                      icon: ImagePaths.restore,
+                      onTap: () => restorePurchaseTap(context),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              );
+            }
+            return const SizedBox();
+          },
+        )
       ],
     );
   }
 
   // class methods and utils
 
-  void reportIssue(BuildContext context) async => context.pushRoute(ReportIssue());
+  void reportIssue(BuildContext context) async =>
+      context.pushRoute(ReportIssue());
+
+  void restorePurchaseTap(BuildContext context) async =>
+      context.pushRoute(RestorePurchase());
 
   Future<void> faqTap(BuildContext context) async {
     try {

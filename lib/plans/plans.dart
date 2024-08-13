@@ -196,7 +196,7 @@ class PlansPage extends StatelessWidget {
 
   void restorePurchases(BuildContext context) {
     try {
-      context.pushRoute(RestorePurchaseVerification());
+      context.pushRoute(RestorePurchase());
     } catch (e, stackTrace) {
       showError(context, error: e.localizedDescription, stackTrace: stackTrace);
     }

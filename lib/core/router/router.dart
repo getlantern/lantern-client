@@ -341,8 +341,8 @@ class AppRouter extends $AppRouter {
       reverseDurationInMilliseconds: defaultTransitionMillis,
     ),
     CustomRoute(
-      page: RestorePurchaseVerification.page,
-      path: '/restore_purchase_verification',
+      page: RestorePurchase.page,
+      path: '/restore_purchase',
       transitionsBuilder: defaultTransition,
       durationInMilliseconds: defaultTransitionMillis,
       reverseDurationInMilliseconds: defaultTransitionMillis,

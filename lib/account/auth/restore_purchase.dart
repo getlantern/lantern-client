@@ -2,17 +2,17 @@ import 'package:email_validator/email_validator.dart';
 import 'package:lantern/plans/utils.dart';
 import '../../common/common.dart';
 
-@RoutePage(name: "RestorePurchaseVerification")
-class RestorePurchaseVerification extends StatefulWidget {
-  const RestorePurchaseVerification({super.key});
+@RoutePage(name: "RestorePurchase")
+class RestorePurchase extends StatefulWidget {
+  const RestorePurchase({super.key});
 
   @override
-  State<RestorePurchaseVerification> createState() =>
-      _RestorePurchaseVerificationState();
+  State<RestorePurchase> createState() =>
+      _RestorePurchaseState();
 }
 
-class _RestorePurchaseVerificationState
-    extends State<RestorePurchaseVerification> {
+class _RestorePurchaseState
+    extends State<RestorePurchase> {
   final _emailFormKey = GlobalKey<FormState>();
   late final _emailController = CustomTextEditingController(
     formKey: _emailFormKey,
