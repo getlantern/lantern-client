@@ -28,7 +28,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.activity.WebViewActivity_
+import org.getlantern.lantern.activity.WebViewActivity
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.util.AutoUpdater
@@ -123,7 +123,7 @@ class SessionModel internal constructor(
             "openWebview" -> {
                 val url = call.argument("url") ?: ""
                 if (url.isNotEmpty()) {
-                    val intent = Intent(activity, WebViewActivity_::class.java)
+                    val intent = Intent(activity, WebViewActivity::class.java)
                     intent.putExtra("url", url.trim())
                     activity.startActivity(intent)
                 } else {

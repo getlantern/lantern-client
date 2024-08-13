@@ -7,7 +7,7 @@ import android.content.ServiceConnection
 import android.net.VpnService
 import android.os.IBinder
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.service.LanternService
 import org.getlantern.mobilesdk.Logger
 
 class LanternVpnService : VpnService(), Runnable {
@@ -33,7 +33,7 @@ class LanternVpnService : VpnService(), Runnable {
         super.onCreate()
         Logger.d(TAG, "VpnService created")
         bindService(
-            Intent(this, LanternService_::class.java),
+            Intent(this, LanternService::class.java),
             lanternServiceConnection,
             Context.BIND_AUTO_CREATE,
         )

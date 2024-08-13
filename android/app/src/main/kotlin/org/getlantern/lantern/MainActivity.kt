@@ -27,7 +27,7 @@ import io.lantern.model.ReplicaModel
 import io.lantern.model.SessionModel
 import io.lantern.model.VpnModel
 import kotlinx.coroutines.*
-import org.getlantern.lantern.activity.WebViewActivity_
+import org.getlantern.lantern.activity.WebViewActivity
 import org.getlantern.lantern.event.AppEvent
 import org.getlantern.lantern.event.AppEvent.*
 import org.getlantern.lantern.event.EventHandler
@@ -37,7 +37,7 @@ import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.notification.NotificationHelper
 import org.getlantern.lantern.notification.NotificationReceiver
 import org.getlantern.lantern.plausible.Plausible
-import org.getlantern.lantern.service.LanternService_
+import org.getlantern.lantern.service.LanternService
 import org.getlantern.lantern.util.DeviceUtil
 import org.getlantern.lantern.util.PermissionUtil
 import org.getlantern.lantern.util.showAlertDialog
@@ -128,7 +128,7 @@ class MainActivity :
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
-        val intent = Intent(this, LanternService_::class.java)
+        val intent = Intent(this, LanternService::class.java)
         context.startService(intent)
         Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
         subscribeAppEvents()
@@ -295,7 +295,7 @@ class MainActivity :
     }
 
     private fun showSurvey(survey: Survey) {
-        val intent = Intent(this, WebViewActivity_::class.java)
+        val intent = Intent(this, WebViewActivity::class.java)
         intent.putExtra("url", survey.url)
         startActivity(intent)
         LanternApp.getSession().setSurveyLinkOpened(survey.url)
