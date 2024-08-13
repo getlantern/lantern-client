@@ -20,7 +20,6 @@ import (
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/bandit"
-	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
@@ -74,8 +73,6 @@ type App struct {
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
-
-	chGlobalConfigChanged chan bool
 
 	translations eventual.Value
 
@@ -236,16 +233,6 @@ func (app *App) Run(isMain bool) {
 		}
 		app.beforeStart(listenAddr)
 
-		chProStatusChanged := make(chan bool, 1)
-		onProStatusChange(func(isPro bool) {
-			chProStatusChanged <- isPro
-		})
-		chUserChanged := make(chan bool, 1)
-		app.settings.OnChange(settings.SNUserID, func(v interface{}) {
-			chUserChanged <- true
-		})
-		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
-
 		notifyConfigSaveErrorOnce := new(sync.Once)
 
 		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
@@ -290,18 +277,6 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 		return false
 	}
 	return app.flashlight.EnabledFeatures()[feature]
-}
-
-// startFeaturesService starts a new features service that dispatches features to any relevant listeners.
-func (app *App) startFeaturesService(chans ...<-chan bool) {
-	app.checkEnabledFeatures()
-	for _, ch := range chans {
-		go func(c <-chan bool) {
-			for range c {
-				app.checkEnabledFeatures()
-			}
-		}(ch)
-	}
 }
 
 func (app *App) beforeStart(listenAddr string) {
@@ -439,18 +414,10 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
 	atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
-	autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
+	/*autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
 		return "/img/lantern_logo.png"
-	})
+	})*/
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
-	if len(cfg.GlobalBrowserMarketShareData) > 0 {
-		err := simbrowser.SetMarketShareData(
-			cfg.GlobalBrowserMarketShareData, cfg.RegionalBrowserMarketShareData)
-		if err != nil {
-			log.Errorf("failed to set browser market share data: %v", err)
-		}
-	}
-	app.chGlobalConfigChanged <- true
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {

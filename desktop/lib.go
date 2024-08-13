@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"runtime"
 	"runtime/debug"
 	"strconv"
@@ -47,10 +46,23 @@ const (
 )
 
 var (
-	log        = golog.LoggerFor("lantern-desktop.main")
-	a          *app.App
-	proClient  proclient.ProClient
-	authClient auth.AuthClient
+	log           = golog.LoggerFor("lantern-desktop.main")
+	flags         = flashlight.ParseFlags()
+	cdir          = configDir(&flags)
+	ss            = settings.LoadSettings(cdir)
+	webclientOpts = &webclient.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		},
+		UserConfig: func() common.UserConfig {
+			return userConfig(ss)
+		},
+	}
+	proClient  = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
+
+	a = app.NewApp(flags, cdir, proClient, ss)
 )
 
 var issueMap = map[string]string{
@@ -81,23 +93,6 @@ func start() *C.char {
 		log.Debug("Successfully loaded .env file")
 	}
 
-	flags := flashlight.ParseFlags()
-
-	cdir := configDir(&flags)
-	settings := loadSettings(cdir)
-	webclientOpts := &webclient.Opts{
-		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   30 * time.Second,
-		},
-		UserConfig: func() common.UserConfig {
-			return userConfig(settings)
-		},
-	}
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
-
-	a = app.NewApp(flags, cdir, proClient, settings)
 	go func() {
 		err := fetchOrCreate()
 		if err != nil {
@@ -137,7 +132,7 @@ func start() *C.char {
 	}
 
 	golog.SetPrepender(logging.Timestamped)
-	handleSignals(a)
+	//handleSignals(a)
 
 	if flags.Pprof {
 		addr := "localhost:6060"
@@ -152,21 +147,8 @@ func start() *C.char {
 		}()
 	}
 
-	go func() {
-		if logFile != nil {
-			defer logFile.Close()
-		}
-		// i18nInit(a)
-		a.Run(true)
-
-		err := a.WaitForExit()
-		if err != nil {
-			log.Errorf("Lantern stopped with error %v", err)
-			os.Exit(-1)
-		}
-		log.Debug("Lantern stopped")
-		os.Exit(0)
-	}()
+	// i18nInit(a)
+	a.Run(true)
 
 	return C.CString("")
 }
@@ -821,19 +803,6 @@ func checkUpdates() *C.char {
 	}
 	log.Debugf("Auto-update URL is %s", updateURL)
 	return C.CString(updateURL)
-}
-
-// loadSettings loads the initial settings at startup, either from disk or using defaults.
-func loadSettings(configDir string) *settings.Settings {
-	path := filepath.Join(configDir, "settings.yaml")
-	if common.IsStagingEnvironment() {
-		path = filepath.Join(configDir, "settings-staging.yaml")
-	}
-	settings := settings.LoadSettingsFrom(common.ApplicationVersion, common.RevisionDate, common.BuildDate, path)
-	if common.IsStagingEnvironment() {
-		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
-	}
-	return settings
 }
 
 func configDir(flags *flashlight.Flags) string {

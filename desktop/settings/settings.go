@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"sync"
@@ -15,6 +16,7 @@ import (
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
+	sdkcommon "github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/launcher"
 	"github.com/getlantern/timezone"
 	"github.com/getlantern/yaml"
@@ -124,6 +126,16 @@ type Settings struct {
 	filePath string
 
 	log golog.Logger
+}
+
+// LoadSettings loads the initial settings at startup, either from disk or using defaults.
+func LoadSettings(configDir string) *Settings {
+	path := filepath.Join(configDir, "settings.yaml")
+	settings := LoadSettingsFrom(sdkcommon.ApplicationVersion, sdkcommon.RevisionDate, sdkcommon.BuildDate, path)
+	if sdkcommon.IsStagingEnvironment() {
+		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
+	}
+	return settings
 }
 
 func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
