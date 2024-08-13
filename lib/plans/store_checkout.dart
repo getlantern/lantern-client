@@ -1,15 +1,16 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/core/purchase/app_purchase.dart';
 import 'package:lantern/plans/utils.dart';
+
+enum _CheckOutState { withEmail, withoutEmail }
 
 @RoutePage(name: 'StoreCheckout')
 class StoreCheckout extends StatefulWidget {
   final Plan plan;
-  final bool isPro;
 
   const StoreCheckout({
     required this.plan,
-    required this.isPro,
     super.key,
   });
 
@@ -27,12 +28,13 @@ class _StoreCheckoutState extends State<StoreCheckout>
         : 'please_enter_a_valid_email_address'.i18n,
   );
 
+  _CheckOutState state = _CheckOutState.withEmail;
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
         resizeToAvoidBottomInset: false,
         title: 'lantern_pro_checkout'.i18n,
-
         body: sessionModel.emailAddress((
           BuildContext context,
           String emailAddress,
@@ -50,11 +52,8 @@ class _StoreCheckoutState extends State<StoreCheckout>
                 Form(
                   key: emailFieldKey,
                   child: CTextField(
-                    initialValue: widget.isPro ? emailAddress : '',
                     controller: emailController,
-                    autovalidateMode: widget.isPro
-                        ? AutovalidateMode.always
-                        : AutovalidateMode.disabled,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     label: 'email'.i18n,
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: const CAssetImage(path: ImagePaths.email),
@@ -75,13 +74,19 @@ class _StoreCheckoutState extends State<StoreCheckout>
                   width: double.infinity,
                   child: Button(
                     text: "continue".i18n,
-                    onPressed: () {},
+                    onPressed: () {
+                      state = _CheckOutState.withEmail;
+                      _validateEmailAndContinue();
+                    },
                   ),
                 ),
                 const SizedBox(height: 16.0),
                 Center(
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        state = _CheckOutState.withoutEmail;
+                        startPurchaseFlow();
+                      },
                       child: CText(
                         "continue_without_email".i18n.toUpperCase(),
                         style: tsButtonPink,
@@ -93,23 +98,79 @@ class _StoreCheckoutState extends State<StoreCheckout>
         }));
   }
 
-  void submitPayment() async {
+  void _validateEmailAndContinue() {
+    if (emailFieldKey.currentState?.validate() == false) {
+      showError(context, error: 'please_enter_a_valid_email_address'.i18n);
+      return;
+    }
+    startPurchaseFlow();
+  }
+
+  void startPurchaseFlow() {
+    if (Platform.isAndroid) {
+      submitPlayPayment();
+      return;
+    }
+    _proceedToCheckoutIOS();
+  }
+
+  void submitPlayPayment() async {
     try {
-      if (emailFieldKey.currentState?.validate() == false) {
-        showError(context, error: 'please_enter_a_valid_email_address'.i18n);
-      } else {
-        context.loaderOverlay.show();
-        // Await the result of the payment submission.
-        await sessionModel.submitPlayPayment(
-            widget.plan.id, emailController.value.text);
-        context.loaderOverlay.hide();
-        // ignore: use_build_context_synchronously
-        showSuccessDialog(context, widget.isPro);
-      }
+      context.loaderOverlay.show();
+      // Await the result of the payment submission.
+      await sessionModel.submitPlayPayment(
+          widget.plan.id, emailController.value.text);
+      context.loaderOverlay.hide();
+      resolveRoute();
     } catch (error, stackTrace) {
       // In case of an error, hide the loader and show the error message.
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
+    }
+  }
+
+  void _proceedToCheckoutIOS() {
+    final appPurchase = sl<AppPurchase>();
+    try {
+      context.loaderOverlay.show();
+      appPurchase.startPurchase(
+        email: emailController.text ?? '',
+        planId: widget.plan.id,
+        onSuccess: () {
+          context.loaderOverlay.hide();
+          resolveRoute();
+        },
+        onFailure: (error) {
+          context.loaderOverlay.hide();
+          CDialog.showError(
+            context,
+            error: error,
+            description: error.toString(),
+          );
+        },
+      );
+    } catch (e) {
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        description: e.toString(),
+      );
+    }
+  }
+
+  void resolveRoute() {
+    switch (state) {
+      case _CheckOutState.withEmail:
+        assert(emailController.text.isNotEmpty, "Email should not be empty");
+        context.pushRoute(CreateAccountEmail(
+          plan: widget.plan,
+          email: emailController.text,
+        ));
+        break;
+      case _CheckOutState.withoutEmail:
+        context.router.popUntilRoot();
+        break;
     }
   }
 }

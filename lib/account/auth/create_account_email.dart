@@ -11,11 +11,13 @@ import '../../common/common.dart';
 class CreateAccountEmail extends StatefulWidget {
   final Plan? plan;
   final AuthFlow authFlow;
+  final String? email;
 
   const CreateAccountEmail({
     super.key,
     this.plan,
     this.authFlow = AuthFlow.createAccount,
+    this.email,
   });
 
   @override

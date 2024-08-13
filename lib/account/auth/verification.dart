@@ -189,7 +189,7 @@ class _VerificationState extends State<Verification> {
       case AuthFlow.updateAccount:
         _verifyEmail(code);
       case AuthFlow.restoreAccount:
-        _verifyRestorePurchaseEmail(code);
+        resolveRoute(code);
     }
   }
 
@@ -319,6 +319,9 @@ class _VerificationState extends State<Verification> {
   }
 
   Future<void> resolveRoute(String code) async {
+    //close keyboard
+    FocusManager.instance.primaryFocus?.unfocus();
+
     switch (widget.authFlow) {
       case AuthFlow.signIn:
       // TODO: Handle this case.
@@ -377,11 +380,9 @@ class _VerificationState extends State<Verification> {
 
   Future<void> _restoreAccount(String code) async {
     try {
-      // assert(widget.purchaseToken != null, 'Purchase token is null');
-      // context.loaderOverlay.show();
-      // await sessionModel.restoreAccount(
-      //     widget.email, code, widget.purchaseToken!!);
-      // context.loaderOverlay.hide();
+      context.loaderOverlay.show();
+      await sessionModel.restoreAccount(widget.email, code);
+      context.loaderOverlay.hide();
       CDialog.successDialog(
         context: context,
         title: "purchase_restored".i18n,

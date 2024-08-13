@@ -246,6 +246,7 @@ abstract class $AppRouter extends _i55.RootStackRouter {
           key: args.key,
           plan: args.plan,
           authFlow: args.authFlow,
+          email: args.email,
         ),
       );
     },
@@ -527,7 +528,6 @@ abstract class $AppRouter extends _i55.RootStackRouter {
         routeData: routeData,
         child: _i51.StoreCheckout(
           plan: args.plan,
-          isPro: args.isPro,
           key: args.key,
         ),
       );
@@ -1106,6 +1106,7 @@ class CreateAccountEmail extends _i55.PageRouteInfo<CreateAccountEmailArgs> {
     _i57.Key? key,
     _i57.Plan? plan,
     _i57.AuthFlow authFlow = _i57.AuthFlow.createAccount,
+    String? email,
     List<_i55.PageRouteInfo>? children,
   }) : super(
           CreateAccountEmail.name,
@@ -1113,6 +1114,7 @@ class CreateAccountEmail extends _i55.PageRouteInfo<CreateAccountEmailArgs> {
             key: key,
             plan: plan,
             authFlow: authFlow,
+            email: email,
           ),
           initialChildren: children,
         );
@@ -1128,6 +1130,7 @@ class CreateAccountEmailArgs {
     this.key,
     this.plan,
     this.authFlow = _i57.AuthFlow.createAccount,
+    this.email,
   });
 
   final _i57.Key? key;
@@ -1136,9 +1139,11 @@ class CreateAccountEmailArgs {
 
   final _i57.AuthFlow authFlow;
 
+  final String? email;
+
   @override
   String toString() {
-    return 'CreateAccountEmailArgs{key: $key, plan: $plan, authFlow: $authFlow}';
+    return 'CreateAccountEmailArgs{key: $key, plan: $plan, authFlow: $authFlow, email: $email}';
   }
 }
 
@@ -2094,14 +2099,12 @@ class SplitTunneling extends _i55.PageRouteInfo<void> {
 class StoreCheckout extends _i55.PageRouteInfo<StoreCheckoutArgs> {
   StoreCheckout({
     required _i57.Plan plan,
-    required bool isPro,
     _i57.Key? key,
     List<_i55.PageRouteInfo>? children,
   }) : super(
           StoreCheckout.name,
           args: StoreCheckoutArgs(
             plan: plan,
-            isPro: isPro,
             key: key,
           ),
           initialChildren: children,
@@ -2116,19 +2119,16 @@ class StoreCheckout extends _i55.PageRouteInfo<StoreCheckoutArgs> {
 class StoreCheckoutArgs {
   const StoreCheckoutArgs({
     required this.plan,
-    required this.isPro,
     this.key,
   });
 
   final _i57.Plan plan;
 
-  final bool isPro;
-
   final _i57.Key? key;
 
   @override
   String toString() {
-    return 'StoreCheckoutArgs{plan: $plan, isPro: $isPro, key: $key}';
+    return 'StoreCheckoutArgs{plan: $plan, key: $key}';
   }
 }
 

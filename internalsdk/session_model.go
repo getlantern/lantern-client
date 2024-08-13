@@ -302,10 +302,9 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 
 	case "restoreAccount":
 		email := arguments.Get("email").String()
-		token := arguments.Get("token").String()
 		code := arguments.Get("code").String()
 		provider := arguments.Get("provider").String()
-		err := restorePurchase(m, email, token, code, provider)
+		err := restorePurchase(m, email, code, provider)
 		if err != nil {
 			return nil, err
 		}
@@ -1216,7 +1215,7 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 	return setProUser(m.baseModel, true)
 }
 
-func restorePurchase(session *SessionModel, email string, purchaseToken string, code string, provider string) error {
+func restorePurchase(session *SessionModel, email string, code string, provider string) error {
 	deviceName, err := pathdb.Get[string](session.db, pathDevice)
 	if err != nil {
 		return err
@@ -1224,7 +1223,7 @@ func restorePurchase(session *SessionModel, email string, purchaseToken string, 
 	restoreRequest := &pro.RestorePurchaseRequest{
 		Email:      email,
 		Provider:   provider,
-		Token:      purchaseToken,
+		Token:      "123",
 		DeviceName: deviceName,
 		Code:       code,
 	}
@@ -1446,9 +1445,9 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 
 // This will validate code send by server
 func validateRecoveryByEmail(session *SessionModel, email string, code string) error {
-	lowerCaseEmail := strings.ToLower(email)
+	// lowerCaseEmail := strings.ToLower(email)
 	prepareRequestBody := &protos.ValidateRecoveryCodeRequest{
-		Email: lowerCaseEmail,
+		Email: email,
 		Code:  code,
 	}
 	recovery, err := session.authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
@@ -1456,7 +1455,7 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 		return err
 	}
 	if !recovery.Valid {
-		return log.Errorf("invalid_code Error: %v", err)
+		return log.Errorf("invalid_code Error")
 	}
 	log.Debugf("Validate code response %v", recovery.Valid)
 	return nil

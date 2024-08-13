@@ -651,11 +651,11 @@ class SessionModel extends Model {
   }
 
   Future<void> restoreAccount(
-      String email, String code, String purchaseToken) async {
+      String email, String code) async {
     return methodChannel.invokeMethod('restoreAccount', <String, dynamic>{
       "email": email,
       "code": code,
-      "purchaseToken": purchaseToken,
+      "token": "",
       "provider": Platform.isAndroid ? "googleplay" : "applepay"
     });
   }

@@ -168,7 +168,7 @@ class _PlanCardState extends State<PlanCard> {
           _proceedToCheckoutIOS(context);
           return;
         }
-        addEmailRoute();
+        _storeFlow();
         break;
       default:
         //Support for legacy purchase flow
@@ -181,7 +181,7 @@ class _PlanCardState extends State<PlanCard> {
           return;
         } else {
           if (await isPlayStoreEnabled()) {
-            _proceedToGooglePlayPurchase("");
+            _storeFlow();
             return;
           }
           signUpFlow();
@@ -195,7 +195,6 @@ class _PlanCardState extends State<PlanCard> {
       await context.pushRoute(
         StoreCheckout(
           plan: widget.plan,
-          isPro: widget.isPro,
         ),
       );
       return;
@@ -300,8 +299,10 @@ class _PlanCardState extends State<PlanCard> {
     }
   }
 
-  void addEmailRoute() {
-    context.pushRoute(StoreCheckout(plan: widget.plan, isPro: widget.isPro));
+  void _storeFlow() {
+    context.pushRoute(StoreCheckout(
+      plan: widget.plan,
+    ));
   }
 }
 
