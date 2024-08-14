@@ -283,6 +283,10 @@ func (app *App) beforeStart(listenAddr string) {
 		return app.IsProUser(context.Background())
 	}
 
+	if err := app.statsTracker.StartService(app.ws); err != nil {
+		log.Errorf("Unable to serve stats to UI: %v", err)
+	}
+
 	if err := datacap.ServeDataCap(app.ws, func() string {
 		return "/img/lantern_logo.png"
 	}, func() string { return "" }, isProUser); err != nil {
@@ -368,11 +372,6 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
-
-	if err := app.statsTracker.StartService(app.ws); err != nil {
-		log.Errorf("Unable to serve stats to UI: %v", err)
-	}
-
 	if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
 	}
