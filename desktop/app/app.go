@@ -29,7 +29,6 @@ import (
 	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/memhelper"
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
@@ -41,6 +40,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
 var (
@@ -78,9 +78,8 @@ type App struct {
 
 	issueReporter *issueReporter
 	proClient     proclient.ProClient
-	referralCode  string
-	selectedTab   Tab
-	stats         *stats.Stats
+
+	selectedTab Tab
 
 	connectionStatusCallbacks []func(isConnected bool)
 	_sysproxyOff              func() error
@@ -89,6 +88,9 @@ type App struct {
 	websocketAddr   string
 	websocketServer *http.Server
 	ws              ws.UIChannel
+
+	cachedUserData sync.Map
+	onUserData     []func(current *protos.User, new *protos.User)
 
 	mu sync.Mutex
 }
@@ -116,7 +118,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
-	onProStatusChange(func(isPro bool) {
+	app.onProStatusChange(func(isPro bool) {
 		app.statsTracker.SetIsPro(isPro)
 	})
 	datacap.AddDataCapListener(func(hitDataCap bool) {
@@ -146,10 +148,6 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 // Run starts the app.
 func (app *App) Run(isMain bool) {
 	golog.OnFatal(app.exitOnFatal)
-
-	memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
-		sentry.CaptureException(err)
-	})
 
 	go func() {
 		for <-geolookup.OnRefresh() {
@@ -246,6 +244,9 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 
 func (app *App) beforeStart(listenAddr string) {
 	log.Debug("Got first config")
+
+	go app.fetchOrCreateUser(context.Background())
+
 	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
 		log.Debugf("Start profiling with cpu file %s and mem file %s", app.Flags.CpuProfile, app.Flags.MemProfile)
 		finishProfiling := profiling.Start(app.Flags.CpuProfile, app.Flags.MemProfile)
@@ -280,7 +281,7 @@ func (app *App) beforeStart(listenAddr string) {
 	}
 
 	isProUser := func() (bool, bool) {
-		return app.IsProUser(context.Background())
+		return app.IsProUser(context.Background(), settings.UserConfig(app.Settings()))
 	}
 
 	if err := app.statsTracker.StartService(app.ws); err != nil {
@@ -521,31 +522,95 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.isProUserFast(context.Background())
+	isPro, _ := app.IsProUserFast(settings.UserConfig(app.Settings()))
 	return isPro
 }
 
-// ReferralCode returns a user's unique referral code
-func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
-	referralCode := app.referralCode
-	if referralCode == "" {
-		resp, err := app.proClient.UserData(context.Background())
-		if err != nil {
-			return "", errors.New("error fetching user data: %v", err)
-		} else if resp.User == nil {
-			return "", errors.New("error fetching user data")
-		}
-
-		app.SetReferralCode(resp.User.Code)
-		return resp.User.Code, nil
+func (app *App) fetchOrCreateUser(ctx context.Context) (*protos.User, error) {
+	settings := app.Settings()
+	lang := settings.GetLanguage()
+	if lang == "" {
+		// set default language
+		settings.SetLanguage("en_us")
 	}
-	return referralCode, nil
+	if userID := settings.GetUserID(); userID == 0 {
+		return app.CreateUser(ctx)
+	} else {
+		return app.UserData(ctx)
+	}
 }
 
-func (app *App) SetReferralCode(referralCode string) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.referralCode = referralCode
+func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
+	log.Debug("New user, calling user create")
+	settings := app.Settings()
+	settings.SetUserFirstVisit(true)
+	resp, err := app.proClient.UserCreate(context.Background())
+	if err != nil {
+		return nil, errors.New("Could not create new Pro user: %v", err)
+	}
+	user := resp.User
+	log.Debugf("DEBUG: User created: %v", user)
+	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
+		return nil, errors.New("Could not create new Pro user: %v", err)
+	}
+	app.SetUserData(context.Background(), user.UserId, user)
+	settings.SetReferralCode(user.Referral)
+	settings.SetUserIDAndToken(user.UserId, user.Token)
+	return resp.User, nil
+}
+
+// UserData looks up user data that is associated with the given UserConfig
+func (app *App) UserData(ctx context.Context) (*protos.User, error) {
+	log.Debug("Refreshing user data")
+	resp, err := app.proClient.UserData(context.Background())
+	if err != nil {
+		return nil, errors.New("error fetching user data: %v", err)
+	} else if resp.User == nil {
+		return nil, errors.New("error fetching user data")
+	}
+	userDetail := resp.User
+	settings := app.Settings()
+
+	setProUser := func(isPro bool) {
+		app.Settings().SetProUser(isPro)
+	}
+
+	currentDevice := app.Settings().GetDeviceID()
+
+	log.Debugf("Current device %v", currentDevice)
+
+	// Check if device id is connect to same device if not create new user
+	// this is for the case when user removed device from other device
+	deviceFound := false
+	if userDetail.Devices != nil {
+		for _, device := range userDetail.Devices {
+			if device.Id == currentDevice {
+				deviceFound = true
+				break
+			}
+		}
+	}
+	log.Debugf("Device found %v", deviceFound)
+	/// Check if user has installed app first time
+	firstTime := settings.GetUserFirstVisit()
+	log.Debugf("First time visit %v", firstTime)
+	if userDetail.UserLevel == "pro" && firstTime {
+		log.Debugf("User is pro and first time")
+		setProUser(true)
+	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
+		log.Debugf("User is pro and not first time")
+		setProUser(true)
+	} else {
+		log.Debugf("User is not pro")
+		setProUser(false)
+	}
+	settings.SetExpiration(userDetail.Expiration)
+	settings.SetReferralCode(resp.User.Referral)
+	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
+	log.Debugf("User caching successful: %+v", userDetail)
+	// Save data in userData cache
+	app.SetUserData(ctx, userDetail.UserId, userDetail)
+	return resp.User, nil
 }
 
 // ProxyAddrReachable checks if Lantern's HTTP proxy responds with the correct status
