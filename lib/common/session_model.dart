@@ -121,7 +121,7 @@ class SessionModel extends Model {
     return ffiValueBuilder<bool>(
       'developmentMode',
       defaultValue: false,
-      lanternFFI.developmentMode,
+      null,
       builder: builder,
     );
   }
@@ -153,7 +153,7 @@ class SessionModel extends Model {
     return ffiValueBuilder<int>(
       'accepted_terms_version',
       defaultValue: 0,
-      lanternFFI.acceptedTermsVersion,
+      null,
       builder: builder,
     );
   }
@@ -202,7 +202,7 @@ class SessionModel extends Model {
           listenWebsocket(websocket, "pro", "language", (value) {
         if (value != null && value.toString() != "") setValue(value.toString());
       }),
-      ffiLang,
+      null,
       builder: builder,
     );
   }
@@ -233,7 +233,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'expirydatestr',
-      lanternFFI.expiryDate,
+      null,
       defaultValue: '',
       builder: builder,
     );
@@ -539,7 +539,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'replicaAddr',
-      lanternFFI.replicaAddr,
+      null,
       defaultValue: '',
       builder: builder,
     );
@@ -556,7 +556,7 @@ class SessionModel extends Model {
     return ffiValueBuilder<String>(
       'lang',
       defaultValue: 'US',
-      lanternFFI.lang,
+      ffiLang,
       builder: builder,
     );
   }
@@ -688,6 +688,8 @@ class SessionModel extends Model {
     });
   }
 
+  Pointer<Utf8> ffiPlans() => lanternFFI.plans();
+
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
   }) {
@@ -702,7 +704,7 @@ class SessionModel extends Model {
     }
     return ffiListBuilder<Plan>(
       '/plans/',
-      lanternFFI.plans,
+      ffiPlans,
       planFromJson,
       builder: builder,
       deserialize: (Uint8List serialized) {
@@ -715,6 +717,8 @@ class SessionModel extends Model {
     final res = await lanternFFI.paymentMethodsV4();
     return paymentMethodFromJson(jsonDecode(res.toDartString()));
   }
+
+  Pointer<Utf8> ffiPaymentMethodsV4() => lanternFFI.paymentMethodsV4();
 
   Widget paymentMethods({
     required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
@@ -731,8 +735,7 @@ class SessionModel extends Model {
 
     return ffiValueBuilder<Iterable<PathAndValue<PaymentMethod>>>(
       "/paymentMethods/",
-      lanternFFI.paymentMethodsV4,
-      fromJsonModel: paymentMethodFromJson,
+      null,
       builder: builder,
     );
   }
@@ -775,15 +778,19 @@ class SessionModel extends Model {
 
   Pointer<Utf8> ffiServerInfo() => lanternFFI.serverInfo();
 
-  ServerInfo serverInfoFromJson(dynamic json) {
+  ServerInfo serverInfoFromJson(dynamic? json) {
     final res = ffiServerInfo();
-    var info = ServerInfo.create();
     if (res != null) {
-      final json = res.toDartString();
-      //final json = jsonEncode(jsonDecode(res.toDartString()));
-      info = ServerInfo.fromJson(json);
+      final res2 = jsonDecode(res.toDartString());
+      if (res2 != null) {
+        return ServerInfo.create()..mergeFromProto3Json({
+          'countryCode': res2['countryCode'],
+          'country': res2['country'],
+          'city': res2['city'],
+        });
+      }
     }
-    return info;
+    return ServerInfo.create();
   }
 
   Widget serverInfo(ValueWidgetBuilder<ServerInfo?> builder) {
@@ -800,6 +807,7 @@ class SessionModel extends Model {
       'serverInfo',
       null,
       defaultValue: null,
+      //fromJsonModel: serverInfoFromJson,
       builder: builder,
     );
   }

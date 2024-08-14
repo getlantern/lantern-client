@@ -26,7 +26,10 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
         value = newValue;
       });
     }
-    if (ffiFunction == null && fromJsonModel == null) return;
+    if (ffiFunction == null && fromJsonModel == null) {
+      value = defaultValue;
+      return;
+    }
     if (defaultValue is int) {
         value = null;
         //value = int.parse(ffiFunction().toDartString()) as T?;
