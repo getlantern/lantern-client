@@ -138,7 +138,6 @@ class _PlanCardState extends State<PlanCard> {
           _processLegacyCheckOut(context);
           return;
         }
-
         if (widget.isPro) {
           _processCheckOut(context);
         } else {
@@ -226,6 +225,7 @@ class _PlanCardState extends State<PlanCard> {
       );
       return;
     } else if (isDesktop()) {
+      context.loaderOverlay.show();
       final paymentMethods = await sessionModel.paymentMethodsv4();
       final providers = paymentProvidersFromMethods(paymentMethods);
       // if only one payment provider is returned, bypass the last checkout screen
@@ -239,6 +239,7 @@ class _PlanCardState extends State<PlanCard> {
           "",
           providerName,
         );
+        context.loaderOverlay.hide();
         await openDesktopWebview(
             context: context, provider: providerName, redirectUrl: redirectUrl);
         return;

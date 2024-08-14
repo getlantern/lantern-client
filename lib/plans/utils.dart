@@ -83,7 +83,15 @@ void showSuccessDialog(
   );
 }
 
-enum Providers { shepherd, stripe, btcpay, freekassa, fropay, paymentwall, test }
+enum Providers {
+  shepherd,
+  stripe,
+  btcpay,
+  freekassa,
+  fropay,
+  paymentwall,
+  test
+}
 
 extension ProviderExtension on String {
   Providers toPaymentEnum() {
