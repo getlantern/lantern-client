@@ -63,17 +63,17 @@ class SessionModel extends Model {
         false,
       );
     } else {
-      country = ffiValueNotifier(lanternFFI.lang, 'lang', 'US');
+      country = ffiValueNotifier(ffiLang, 'lang', 'US');
       proxyAvailable = ffiValueNotifier(
-        lanternFFI.hasSucceedingProxy,
+        ffiSucceedingProxy,
         'hasSucceedingProxy',
         false,
       );
-      userEmail = ffiValueNotifier(lanternFFI.emailAddress, 'emailAddress', "");
-      proUserNotifier = ffiValueNotifier(lanternFFI.proUser, 'prouser', false);
+      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
+      proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
       hasUserSignedInNotifier =
-          ffiValueNotifier(lanternFFI.isUserLoggedIn, 'IsUserLoggedIn', false);
-      isAuthEnabled = ffiValueNotifier(lanternFFI.authEnabled, 'authEnabled', false);
+          ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
+      isAuthEnabled = ffiValueNotifier(ffiAuthEnabled, 'authEnabled', false);
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -85,6 +85,11 @@ class SessionModel extends Model {
   ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue) {
     return singleValueNotifier(path, defaultValue);
   }
+
+  Pointer<Utf8> ffiProUser() => lanternFFI.proUser();
+  Pointer<Utf8> ffiAuthEnabled() => lanternFFI.authEnabled();
+  Pointer<Utf8> ffiSucceedingProxy() => lanternFFI.hasSucceedingProxy();
+  Pointer<Utf8> ffiReferralCode() => lanternFFI.referral();
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
@@ -101,7 +106,7 @@ class SessionModel extends Model {
           }
         })
       },
-      lanternFFI.proUser,
+      ffiProUser,
       builder: builder,
     );
   }
@@ -183,6 +188,8 @@ class SessionModel extends Model {
     });
   }
 
+  Pointer<Utf8> ffiLang() => lanternFFI.lang();
+
   Widget language(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
@@ -195,10 +202,12 @@ class SessionModel extends Model {
           listenWebsocket(websocket, "pro", "language", (value) {
         if (value != null && value.toString() != "") setValue(value.toString());
       }),
-      lanternFFI.lang,
+      ffiLang,
       builder: builder,
     );
   }
+
+  Pointer<Utf8> ffiEmailAddress() => lanternFFI.emailAddress();
 
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
@@ -209,7 +218,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'emailAddress',
-      lanternFFI.emailAddress,
+      ffiEmailAddress,
       defaultValue: '',
       builder: builder,
     );
@@ -239,7 +248,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'referral',
-      lanternFFI.referral,
+      ffiReferralCode,
       defaultValue: '',
       builder: builder,
     );
@@ -298,12 +307,14 @@ class SessionModel extends Model {
 
   ///Auth Widgets
 
+  Pointer<Utf8> ffiIsUserLoggedIn() => lanternFFI.isUserLoggedIn();
+
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
     if (isDesktop()) {
       return ffiValueBuilder<bool>(
         'IsUserLoggedIn',
-        lanternFFI.isUserLoggedIn,
+        ffiIsUserLoggedIn,
         defaultValue: false,
         builder: builder,
         onChanges: (setValue) {
@@ -762,9 +773,22 @@ class SessionModel extends Model {
     );
   }
 
-  Widget serverInfo(ValueWidgetBuilder<ServerInfo> builder) {
+  Pointer<Utf8> ffiServerInfo() => lanternFFI.serverInfo();
+
+  ServerInfo serverInfoFromJson(dynamic json) {
+    final res = ffiServerInfo();
+    var info = ServerInfo.create();
+    if (res != null) {
+      final json = res.toDartString();
+      //final json = jsonEncode(jsonDecode(res.toDartString()));
+      info = ServerInfo.fromJson(json);
+    }
+    return info;
+  }
+
+  Widget serverInfo(ValueWidgetBuilder<ServerInfo?> builder) {
     if (isMobile()) {
-      return subscribedSingleValueBuilder<ServerInfo>(
+      return subscribedSingleValueBuilder<ServerInfo?>(
         '/server_info',
         builder: builder,
         deserialize: (Uint8List serialized) {
@@ -772,17 +796,11 @@ class SessionModel extends Model {
         },
       );
     }
-    return ffiValueBuilder<ServerInfo>(
+    return ffiValueBuilder<ServerInfo?>(
       'serverInfo',
-      lanternFFI.serverInfo,
+      null,
+      defaultValue: null,
       builder: builder,
-      fromJsonModel: (dynamic json) {
-        final res = jsonEncode(json);
-        return ServerInfo.create()..mergeFromProto3Json(jsonDecode(res));
-      },
-      deserialize: (Uint8List serialized) {
-        return ServerInfo.fromBuffer(serialized);
-      },
     );
   }
 
@@ -969,6 +987,8 @@ class SessionModel extends Model {
     );
   }
 
+  Pointer<Utf8> ffiProxyAll() => lanternFFI.proxyAll();
+
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<bool>(
@@ -978,7 +998,7 @@ class SessionModel extends Model {
           listenWebsocket(websocket, "settings", "proxyAll", (value) {
         if (value != null) setValue(value as bool);
       }),
-      lanternFFI.proxyAll,
+      ffiProxyAll,
       builder: builder,
     );
   }

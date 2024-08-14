@@ -20,6 +20,8 @@ class VpnModel extends Model {
     });
   }
 
+  Pointer<Utf8> ffiVpnStatus() => LanternFFI().vpnStatus();
+
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
@@ -36,7 +38,7 @@ class VpnModel extends Model {
         final isConnected = value != null && value.toString() == "true";
         setValue(isConnected ? "connected" : "disconnected");
       }),
-      lanternFFI.vpnStatus,
+      ffiVpnStatus,
       builder: builder,
     );
   }

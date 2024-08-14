@@ -215,9 +215,10 @@ class _HomePageState extends State<HomePage> with WindowListener {
             }
 
             if(!Platform.isAndroid){
-              userNew(() {
+              /* disable for now
+              * userNew(() {
                 _checkForFirstTimeVisit();
-              });
+              });*/
             }
 
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
