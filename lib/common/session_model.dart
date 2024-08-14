@@ -86,9 +86,9 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
-  Pointer<Utf8> ffiProUser() => LanternFFI.proUser();
-
   Pointer<Utf8> ffiAuthEnabled() => LanternFFI.authEnabled();
+
+  Pointer<Utf8> ffiProUser() => LanternFFI.proUser();
 
   Pointer<Utf8> ffiSucceedingProxy() => LanternFFI.hasSucceedingProxy();
 
@@ -101,15 +101,17 @@ class SessionModel extends Model {
     final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<bool>(
       'prouser',
+      null,
       defaultValue: false,
       onChanges: (setValue) => {
-        listenWebsocket(websocket, 'pro', 'isProUser', (p0) {
+        listenWebsocket(websocket, 'pro', null, (p0) {
           if (p0 != null) {
-            setValue(p0 as bool);
+            final res = p0 as Map<String, dynamic>;
+            final isPro = res['userStatus'] == 'active' || res['userLevel'] == 'pro';
+            if (isPro) setValue(isPro);
           }
         })
       },
-      ffiProUser,
       builder: builder,
     );
   }
@@ -782,11 +784,9 @@ class SessionModel extends Model {
     );
   }
 
-  //Pointer<Utf8> ffiServerInfo() => LanternFFI.serverInfo();
-
-  ServerInfo serverInfoFromJson(dynamic? json) {
-    if (json != null) {
-      final res2 = jsonDecode(jsonEncode(json));
+  ServerInfo serverInfoFromJson(dynamic? res) {
+    if (res != null) {
+      final res2 = jsonDecode(jsonEncode(res));
       if (res2 != null) {
         return ServerInfo.create()
           ..mergeFromProto3Json({
