@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
                 child: Text('Yes'.i18n),
                 onPressed: () async {
                   await windowManager.destroy();
-                  lanternFFI.exit();
+                  LanternFFI.exit();
                 },
               ),
             ],

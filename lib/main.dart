@@ -33,7 +33,7 @@ Future<void> main() async {
   }
 
   if (isDesktop()) {
-    await lanternFFI.start();
+    await LanternFFI.startDesktopService();
     await WebsocketImpl.instance()!.connect();
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(

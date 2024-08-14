@@ -86,10 +86,13 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
-  Pointer<Utf8> ffiProUser() => lanternFFI.proUser();
-  Pointer<Utf8> ffiAuthEnabled() => lanternFFI.authEnabled();
-  Pointer<Utf8> ffiSucceedingProxy() => lanternFFI.hasSucceedingProxy();
-  Pointer<Utf8> ffiReferralCode() => lanternFFI.referral();
+  Pointer<Utf8> ffiProUser() => LanternFFI.proUser();
+
+  Pointer<Utf8> ffiAuthEnabled() => LanternFFI.authEnabled();
+
+  Pointer<Utf8> ffiSucceedingProxy() => LanternFFI.hasSucceedingProxy();
+
+  Pointer<Utf8> ffiReferralCode() => LanternFFI.referral();
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
@@ -188,7 +191,7 @@ class SessionModel extends Model {
     });
   }
 
-  Pointer<Utf8> ffiLang() => lanternFFI.lang();
+  Pointer<Utf8> ffiLang() => LanternFFI.lang();
 
   Widget language(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
@@ -207,7 +210,7 @@ class SessionModel extends Model {
     );
   }
 
-  Pointer<Utf8> ffiEmailAddress() => lanternFFI.emailAddress();
+  Pointer<Utf8> ffiEmailAddress() => LanternFFI.emailAddress();
 
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
@@ -260,7 +263,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'deviceid',
-      lanternFFI.deviceId,
+      LanternFFI.deviceId,
       defaultValue: '',
       builder: builder,
     );
@@ -292,7 +295,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<Devices>(
       'devices',
-      lanternFFI.devices,
+      LanternFFI.devices,
       fromJsonModel: devicesFromJson,
       defaultValue: null,
       builder: builder,
@@ -302,12 +305,13 @@ class SessionModel extends Model {
   /// This only supports desktop fo now
   Future<void> testProviderRequest(
       String email, String paymentProvider, String planId) {
-    return compute(lanternFFI.testPaymentRequest, [email, paymentProvider, planId]);
+    return compute(
+        LanternFFI.testPaymentRequest, [email, paymentProvider, planId]);
   }
 
   ///Auth Widgets
 
-  Pointer<Utf8> ffiIsUserLoggedIn() => lanternFFI.isUserLoggedIn();
+  Pointer<Utf8> ffiIsUserLoggedIn() => LanternFFI.isUserLoggedIn();
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
@@ -334,7 +338,7 @@ class SessionModel extends Model {
 
   Future<void> signUp(String email, String password) {
     if (isDesktop()) {
-      return compute(lanternFFI.signUp, [email, password]);
+      return compute(LanternFFI.signUp, [email, password]);
     }
     return methodChannel.invokeMethod('signup', <String, dynamic>{
       'email': email,
@@ -359,7 +363,7 @@ class SessionModel extends Model {
 
   Future<void> login(String email, String password) {
     if (isDesktop()) {
-      return compute(lanternFFI.login, [email, password]);
+      return compute(LanternFFI.login, [email, password]);
     }
     return methodChannel.invokeMethod('login', <String, dynamic>{
       'email': email,
@@ -369,7 +373,7 @@ class SessionModel extends Model {
 
   Future<void> startRecoveryByEmail(String email) {
     if (isDesktop()) {
-      return compute(lanternFFI.startRecoveryByEmail, email);
+      return compute(LanternFFI.startRecoveryByEmail, email);
     }
     return methodChannel.invokeMethod('startRecoveryByEmail', <String, dynamic>{
       'email': email,
@@ -379,7 +383,8 @@ class SessionModel extends Model {
   Future<void> completeRecoveryByEmail(
       String email, String password, String code) {
     if (isDesktop()) {
-      return compute(lanternFFI.completeRecoveryByEmail, [email, password, code]);
+      return compute(
+          LanternFFI.completeRecoveryByEmail, [email, password, code]);
     }
     return methodChannel
         .invokeMethod('completeRecoveryByEmail', <String, dynamic>{
@@ -391,7 +396,7 @@ class SessionModel extends Model {
 
   Future<void> validateRecoveryCode(String email, String code) {
     if (isDesktop()) {
-      return compute(lanternFFI.validateRecoveryByEmail, [email, code]);
+      return compute(LanternFFI.validateRecoveryByEmail, [email, code]);
     }
     return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
       'email': email,
@@ -420,14 +425,14 @@ class SessionModel extends Model {
 
   Future<void> signOut() {
     if (isDesktop()) {
-      return compute(lanternFFI.logout, '');
+      return compute(LanternFFI.logout, '');
     }
     return methodChannel.invokeMethod('signOut', <String, dynamic>{});
   }
 
   Future<void> deleteAccount(String password) {
     if (isDesktop()) {
-      return compute(lanternFFI.deleteAccount, password);
+      return compute(LanternFFI.deleteAccount, password);
     }
     return methodChannel.invokeMethod('deleteAccount', <String, dynamic>{
       'password': password,
@@ -436,7 +441,7 @@ class SessionModel extends Model {
 
   Future<bool> isUserFirstTimeVisit() async {
     if (isDesktop()) {
-      return await lanternFFI.userFirstVisit();
+      return await LanternFFI.userFirstVisit();
     }
     final firsTime = await methodChannel
         .invokeMethod<bool>('isUserFirstTimeVisit', <String, dynamic>{});
@@ -445,7 +450,7 @@ class SessionModel extends Model {
 
   Future<void> setFirstTimeVisit() async {
     if (isDesktop()) {
-      return lanternFFI.setUserFirstTimeVisit();
+      return LanternFFI.setUserFirstTimeVisit();
     }
     return methodChannel
         .invokeMethod<void>('setFirstTimeVisit', <String, dynamic>{});
@@ -453,7 +458,7 @@ class SessionModel extends Model {
 
   Future<void> setProxyAll<T>(bool isOn) async {
     if (isDesktop()) {
-      return await compute(lanternFFI.setProxyAll, isOn ? 'true' : 'false');
+      return await compute(LanternFFI.setProxyAll, isOn ? 'true' : 'false');
     }
     throw Exception("Not supported on mobile");
   }
@@ -481,7 +486,7 @@ class SessionModel extends Model {
         'emailAddress': emailAddress,
       }).then((value) => value.toString());
     }
-    return await compute(lanternFFI.authorizeEmail, emailAddress);
+    return await compute(LanternFFI.authorizeEmail, emailAddress);
   }
 
   Future<String> validateDeviceRecoveryCode(String code) async {
@@ -491,7 +496,7 @@ class SessionModel extends Model {
         'code': code,
       }).then((value) => value.toString());
     }
-    return await compute(lanternFFI.userLinkValidate, code);
+    return await compute(LanternFFI.userLinkValidate, code);
   }
 
   Future<void> approveDevice(String code) async {
@@ -500,7 +505,7 @@ class SessionModel extends Model {
         'code': code,
       });
     }
-    return await compute(lanternFFI.approveDevice, code);
+    return await compute(LanternFFI.approveDevice, code);
   }
 
   Future<void> removeDevice(String deviceId) async {
@@ -509,7 +514,7 @@ class SessionModel extends Model {
         'deviceId': deviceId,
       });
     }
-    return await compute(lanternFFI.removeDevice, deviceId);
+    return await compute(LanternFFI.removeDevice, deviceId);
   }
 
   Future<void> resendRecoveryCode() {
@@ -595,7 +600,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<bool>(
       'chatEnabled',
-      lanternFFI.chatEnabled,
+      LanternFFI.chatEnabled,
       defaultValue: false,
       builder: builder,
     );
@@ -612,7 +617,7 @@ class SessionModel extends Model {
     return ffiValueBuilder<String>(
       'sdkVersion',
       defaultValue: 'unknown',
-      lanternFFI.sdkVersion,
+      LanternFFI.sdkVersion,
       builder: builder,
     );
   }
@@ -627,7 +632,7 @@ class SessionModel extends Model {
     if (Platform.isAndroid) {
       return methodChannel.invokeMethod('checkForUpdates');
     } else if (isDesktop()) {
-      await lanternFFI.checkUpdates();
+      await LanternFFI.checkUpdates();
     }
     return;
   }
@@ -638,7 +643,7 @@ class SessionModel extends Model {
   }
 
   Future<bool> hasUpdatePlansOrBuy() async {
-    return compute(lanternFFI.hasPlanUpdateOrBuy, '');
+    return compute(LanternFFI.hasPlanUpdateOrBuy, '');
   }
 
   Plan planFromJson(Map<String, dynamic> item) {
@@ -688,7 +693,7 @@ class SessionModel extends Model {
     });
   }
 
-  Pointer<Utf8> ffiPlans() => lanternFFI.plans();
+  Pointer<Utf8> ffiPlans() => LanternFFI.plans();
 
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
@@ -714,11 +719,11 @@ class SessionModel extends Model {
   }
 
   Future<Iterable<PathAndValue<PaymentMethod>>> paymentMethodsv4() async {
-    final res = await lanternFFI.paymentMethodsV4();
+    final res = LanternFFI.paymentMethodsV4();
     return paymentMethodFromJson(jsonDecode(res.toDartString()));
   }
 
-  Pointer<Utf8> ffiPaymentMethodsV4() => lanternFFI.paymentMethodsV4();
+  Pointer<Utf8> ffiPaymentMethodsV4() => LanternFFI.paymentMethodsV4();
 
   Widget paymentMethods({
     required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
@@ -752,7 +757,7 @@ class SessionModel extends Model {
   Future<void> reportIssue(
       String email, String issue, String description) async {
     if (isDesktop()) {
-      return await compute(lanternFFI.reportIssue, [email, issue, description]);
+      return await compute(LanternFFI.reportIssue, [email, issue, description]);
     }
     return methodChannel.invokeMethod('reportIssue', <String, dynamic>{
       'email': email,
@@ -777,18 +782,19 @@ class SessionModel extends Model {
     );
   }
 
-  Pointer<Utf8> ffiServerInfo() => lanternFFI.serverInfo();
+  Pointer<Utf8> ffiServerInfo() => LanternFFI.serverInfo();
 
   ServerInfo serverInfoFromJson(dynamic? json) {
     final res = ffiServerInfo();
     if (res != null) {
       final res2 = jsonDecode(res.toDartString());
       if (res2 != null) {
-        return ServerInfo.create()..mergeFromProto3Json({
-          'countryCode': res2['countryCode'],
-          'country': res2['country'],
-          'city': res2['city'],
-        });
+        return ServerInfo.create()
+          ..mergeFromProto3Json({
+            'countryCode': res2['countryCode'],
+            'country': res2['country'],
+            'city': res2['city'],
+          });
       }
     }
     return ServerInfo.create();
@@ -848,7 +854,7 @@ class SessionModel extends Model {
     return ffiValueBuilder<String>(
       'deviceLinkingCode',
       defaultValue: '',
-      lanternFFI.deviceLinkingCode,
+      LanternFFI.deviceLinkingCode,
       builder: builder,
     );
   }
@@ -868,8 +874,8 @@ class SessionModel extends Model {
       });
     }
 
-    await compute(
-        lanternFFI.redeemResellerCode, [email, currency, deviceName, resellerCode]);
+    await compute(LanternFFI.redeemResellerCode,
+        [email, currency, deviceName, resellerCode]);
   }
 
   Future<String> submitBitcoinPayment(
@@ -917,8 +923,8 @@ class SessionModel extends Model {
     Locale locale = Localizations.localeOf(context);
     final format = NumberFormat.simpleCurrency(locale: locale.toString());
     final currencyName = format.currencyName ?? "USD";
-    return await compute(
-        lanternFFI.paymentRedirect, [planID, currencyName, provider.name, email, os]);
+    return await compute(LanternFFI.paymentRedirect,
+        [planID, currencyName, provider.name, email, os]);
   }
 
   Future<void> submitApplePlay(
@@ -968,7 +974,7 @@ class SessionModel extends Model {
         'emailAddress': email,
       }).then((value) => value as String);
     }
-    await compute(lanternFFI.emailExists, email);
+    await compute(LanternFFI.emailExists, email);
   }
 
   Future<void> openWebview(String url) {
@@ -990,13 +996,13 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<bool>(
       'splitTunneling',
-      lanternFFI.splitTunneling,
+      LanternFFI.splitTunneling,
       defaultValue: false,
       builder: builder,
     );
   }
 
-  Pointer<Utf8> ffiProxyAll() => lanternFFI.proxyAll();
+  Pointer<Utf8> ffiProxyAll() => LanternFFI.proxyAll();
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();

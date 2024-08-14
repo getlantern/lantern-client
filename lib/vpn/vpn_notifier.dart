@@ -16,7 +16,7 @@ class VPNChangeNotifier extends ChangeNotifier {
   }
 
   (bool, bool, bool) startUpInitCallBacks() {
-    return LanternFFI().startUpInitCallBacks();
+    return LanternFFI.startUpInitCallBacks();
   }
 
   void initCallbacks() {

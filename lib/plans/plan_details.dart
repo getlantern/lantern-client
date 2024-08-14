@@ -134,9 +134,9 @@ class _PlanCardState extends State<PlanCard> {
         resolveRouteIOS();
         break;
       default:
-        if(Platform.isAndroid || !sessionModel.isAuthEnabled.value!){
+        if (Platform.isAndroid || !sessionModel.isAuthEnabled.value!) {
           _processLegacyCheckOut(context);
-        return;
+          return;
         }
 
         if (widget.isPro) {
@@ -164,7 +164,9 @@ class _PlanCardState extends State<PlanCard> {
     final isPlayVersion = sessionModel.isPlayVersion?.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
-    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
+    if (isPlayVersion &&
+        !inRussia &&
+        await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -173,22 +175,28 @@ class _PlanCardState extends State<PlanCard> {
       );
       return;
     } else if (isDesktop()) {
-      final paymentMethods = await sessionModel.paymentMethodsv4();
-      final providers = paymentProvidersFromMethods(paymentMethods);
-      // if only one payment provider is returned, bypass the last checkout screen
-      // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
-      if (providers.length == 1 &&
-          providers[0].name.toPaymentEnum() == Providers.stripe) {
-        final providerName = providers[0].name.toPaymentEnum();
-        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-          context,
-          widget.plan.id,
-          "",
-          providerName,
-        );
-        await openDesktopWebview(
-            context: context, provider: providerName, redirectUrl: redirectUrl);
-        return;
+      try {
+        final paymentMethods = await sessionModel.paymentMethodsv4();
+        final providers = paymentProvidersFromMethods(paymentMethods);
+        // if only one payment provider is returned, bypass the last checkout screen
+        // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
+        if (providers.length == 1 &&
+            providers[0].name.toPaymentEnum() == Providers.stripe) {
+          final providerName = providers[0].name.toPaymentEnum();
+          final redirectUrl = await sessionModel.paymentRedirectForDesktop(
+            context,
+            widget.plan.id,
+            "",
+            providerName,
+          );
+          await openDesktopWebview(
+              context: context,
+              provider: providerName,
+              redirectUrl: redirectUrl);
+          return;
+        }
+      } catch (e, s) {
+        print(e);
       }
     }
 
@@ -207,7 +215,9 @@ class _PlanCardState extends State<PlanCard> {
     final isPlayVersion = sessionModel.isPlayVersion?.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
-    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
+    if (isPlayVersion &&
+        !inRussia &&
+        await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,

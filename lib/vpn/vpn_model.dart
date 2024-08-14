@@ -20,7 +20,7 @@ class VpnModel extends Model {
     });
   }
 
-  Pointer<Utf8> ffiVpnStatus() => LanternFFI().vpnStatus();
+  Pointer<Utf8> ffiVpnStatus() => LanternFFI.vpnStatus();
 
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {

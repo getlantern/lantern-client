@@ -45,7 +45,7 @@ class Settings extends StatelessWidget {
     } else if (Platform.isIOS) {
       AppMethods.openAppstore();
     } else {
-      lanternFFI.checkUpdates();
+      LanternFFI.checkUpdates();
     }
   }
 
