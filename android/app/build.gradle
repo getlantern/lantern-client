@@ -133,7 +133,7 @@ android {
 
     kotlinOptions {
         jvmTarget = '17'
-        freeCompilerArgs = ["-Xallow-result-return-type"]
+        freeCompilerArgs = ["-Xallow-result-return-type", "-Xsuppress-version-warnings"]
     }
 
     lintOptions {
