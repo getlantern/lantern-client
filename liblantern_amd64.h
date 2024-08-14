@@ -119,7 +119,6 @@ extern char* removeDevice(char* deviceId);
 extern char* userLinkValidate(char* code);
 extern char* expiryDate();
 extern char* userData();
-extern char* serverInfo();
 extern char* emailAddress();
 extern char* emailExists(char* email);
 extern char* testProviderRequest(char* email, char* paymentProvider, char* plan);

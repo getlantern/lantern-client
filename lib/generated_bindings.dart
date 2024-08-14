@@ -373,16 +373,6 @@ class NativeLibrary {
   late final _userData =
       _userDataPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> serverInfo() {
-    return _serverInfo();
-  }
-
-  late final _serverInfoPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'serverInfo');
-  late final _serverInfo =
-      _serverInfoPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> emailAddress() {
     return _emailAddress();
   }

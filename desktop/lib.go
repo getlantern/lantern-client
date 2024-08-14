@@ -33,8 +33,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/osversion"
 	"github.com/joho/godotenv"
-
-	"google.golang.org/protobuf/encoding/protojson"
 )
 
 import "C"
@@ -483,21 +481,6 @@ func userData() *C.char {
 		return sendError(err)
 	}
 	b, _ := json.Marshal(user)
-	return C.CString(string(b))
-}
-
-//export serverInfo
-func serverInfo() *C.char {
-	stats := a.Stats()
-	serverInfo := &protos.ServerInfo{}
-	if stats != nil {
-		serverInfo = &protos.ServerInfo{
-			City:        stats.City,
-			Country:     stats.Country,
-			CountryCode: stats.CountryCode,
-		}
-	}
-	b, _ := protojson.Marshal(serverInfo)
 	return C.CString(string(b))
 }
 

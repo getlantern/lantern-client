@@ -105,10 +105,11 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
+		statsTracker:              NewStatsTracker(),
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
-	app.statsTracker = NewStatsTracker(app)
+
 	if err := app.serveWebsocket(); err != nil {
 		log.Error(err)
 	}
@@ -233,13 +234,6 @@ func (app *App) Run(isMain bool) {
 			func(err error) { _ = app.Exit(err) },
 		)
 	}()
-}
-
-// checkEnabledFeatures checks if features are enabled
-func (app *App) checkEnabledFeatures() {
-	enabledFeatures := app.flashlight.EnabledFeatures()
-	log.Debugf("Starting enabled features: %v", enabledFeatures)
-	//go app.startReplicaIfNecessary(enabledFeatures)
 }
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
@@ -374,6 +368,11 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
+
+	if err := app.statsTracker.StartService(app.ws); err != nil {
+		log.Errorf("Unable to serve stats to UI: %v", err)
+	}
+
 	if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
 	}

@@ -205,8 +205,6 @@ class LanternFFI {
   static Pointer<Utf8> onBoardingStatus() =>
       _lanternFFI.onBoardingStatus().cast<Utf8>();
 
-  static Pointer<Utf8> serverInfo() => _lanternFFI.serverInfo().cast<Utf8>();
-
   static Future<void> reportIssue(List<String> list) {
     final email = list[0].toPointerChar();
     final issueType = list[1].toPointerChar();

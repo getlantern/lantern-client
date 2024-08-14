@@ -782,12 +782,11 @@ class SessionModel extends Model {
     );
   }
 
-  Pointer<Utf8> ffiServerInfo() => LanternFFI.serverInfo();
+  //Pointer<Utf8> ffiServerInfo() => LanternFFI.serverInfo();
 
   ServerInfo serverInfoFromJson(dynamic? json) {
-    final res = ffiServerInfo();
-    if (res != null) {
-      final res2 = jsonDecode(res.toDartString());
+    if (json != null) {
+      final res2 = jsonDecode(jsonEncode(json));
       if (res2 != null) {
         return ServerInfo.create()
           ..mergeFromProto3Json({
@@ -810,9 +809,15 @@ class SessionModel extends Model {
         },
       );
     }
+    final websocket = WebsocketImpl.instance();
     return ffiValueBuilder<ServerInfo?>(
       'serverInfo',
       null,
+      onChanges: (setValue) {
+        listenWebsocket(websocket, 'stats', null, (res) {
+          if (res != null) setValue(res as ServerInfo);
+        });
+      },
       defaultValue: null,
       fromJsonModel: serverInfoFromJson,
       builder: builder,
@@ -1025,11 +1030,14 @@ class SessionModel extends Model {
     if (websocket == null) return;
     websocket.messageStream.listen(
       (json) {
-        if (json["type"] == messageType) {
-          if (property != null) {
-            onMessage(json["message"][property]);
-          } else {
-            onMessage(json["message"]);
+        print("websocket message: $json");
+        final jsonMessageType = json["type"];
+        final message = json["message"];
+        if (jsonMessageType != null && jsonMessageType == messageType) {
+          if (message != null && property != null) {
+            onMessage(message[property]);
+          } else if (message != null) {
+            onMessage(message);
           }
         }
       },
