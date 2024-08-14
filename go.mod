@@ -165,7 +165,7 @@ require (
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770 // indirect
 	github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240614175233-0df4a97b806e // indirect
 	github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca // indirect
-	github.com/getlantern/ipproxy v0.0.0-20240813204521-ddba66469a16 // indirect
+	github.com/getlantern/ipproxy v0.0.0-20240814222729-26db0b0199fb // indirect
 	github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 // indirect
 	github.com/getlantern/kcp-go/v5 v5.0.0-20220503142114-f0c1cd6e1b54 // indirect
 	github.com/getlantern/kcpwrapper v0.0.0-20230327091313-c12d7c17c6de // indirect
@@ -304,7 +304,7 @@ require (
 	github.com/vishvananda/netns v0.0.0-20211101163701-50045581ed74 // indirect
 	github.com/wlynxg/anet v0.0.3 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
-	github.com/xjasonlyu/tun2socks/v2 v2.5.2 // indirect
+	github.com/xjasonlyu/tun2socks/v2 v2.5.3-0.20240722005329-e083dafcf534 // indirect
 	github.com/xtaci/smux v1.5.24 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	gitlab.com/yawning/edwards25519-extra.git v0.0.0-20211229043746-2f91fcc9fbdb // indirect
