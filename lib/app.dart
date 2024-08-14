@@ -5,7 +5,7 @@ import 'package:lantern/core/router/router.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn_notifier.dart';
-
+import 'package:lantern/ffi.dart';
 import 'common/ui/custom/internet_checker.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -122,9 +122,7 @@ class _LanternAppState extends State<LanternApp>
         ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
         ChangeNotifierProvider(create: (context) => InternetStatusProvider())
       ],
-      child: ChangeNotifierProvider(
-        create: (context) => BottomBarChangeNotifier(),
-        child: sessionModel.language(
+      child: sessionModel.language(
           (context, lang, child) {
             Localization.locale = lang.startsWith('en') ? "en_us" : lang;
             return GlobalLoaderOverlay(
@@ -187,7 +185,6 @@ class _LanternAppState extends State<LanternApp>
             );
           },
         ),
-      ),
     );
   }
 

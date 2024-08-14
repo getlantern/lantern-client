@@ -93,6 +93,7 @@ class LanternFFI {
     return User.create()..mergeFromProto3Json(jsonDecode(res));
   }
 
+
   (bool, bool, bool) startUpInitCallBacks() {
     final proxy = lanternFFI.hasProxyFected().cast<Utf8>().toDartString();
     final config = lanternFFI.hasConfigFected().cast<Utf8>().toDartString();

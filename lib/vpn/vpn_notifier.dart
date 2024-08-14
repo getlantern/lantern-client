@@ -15,12 +15,16 @@ class VPNChangeNotifier extends ChangeNotifier {
     }
   }
 
+  (bool, bool, bool) startUpInitCallBacks() {
+    return LanternFFI().startUpInitCallBacks();
+  }
+
   void initCallbacks() {
     if (timer != null) {
       return;
     }
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      final result = lanternFFI.startUpInitCallBacks();
+      final result = startUpInitCallBacks();
       if (!result.$1 || !result.$2) {
         flashlightState = 'fetching_configuration'.i18n;
       }

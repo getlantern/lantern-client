@@ -29,9 +29,7 @@ import (
 	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/i18n"
 	"github.com/getlantern/memhelper"
-	notify "github.com/getlantern/notifier"
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
@@ -60,9 +58,9 @@ func init() {
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
 	hasExited            int64
-	fetchedGlobalConfig  int32
-	fetchedProxiesConfig int32
-	hasSucceedingProxy   int32
+	fetchedGlobalConfig  atomic.Bool
+	fetchedProxiesConfig atomic.Bool
+	hasSucceedingProxy   atomic.Bool
 
 	Flags            flashlight.Flags
 	configDir        string
@@ -187,7 +185,7 @@ func (app *App) Run(isMain bool) {
 			go func() {
 				time.AfterFunc(app.Flags.Timeout, func() {
 					app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
-						app.Flags.Timeout, atomic.LoadInt32(&app.fetchedGlobalConfig) == 1, atomic.LoadInt32(&app.fetchedProxiesConfig) == 1))
+						app.Flags.Timeout, app.fetchedGlobalConfig.Load(), app.fetchedProxiesConfig.Load()))
 				})
 			}()
 		}
@@ -218,11 +216,6 @@ func (app *App) Run(isMain bool) {
 			app.analyticsSession.EventWithLabel,
 			flashlight.WithOnConfig(app.onConfigUpdate),
 			flashlight.WithOnProxies(app.onProxiesUpdate),
-			flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
-				if err != nil && !hasSucceeding {
-					app.onSucceedingProxy(hasSucceeding)
-				}
-			}),
 			flashlight.WithOnSucceedingProxy(func() {
 				app.onSucceedingProxy(true)
 			}),
@@ -232,28 +225,6 @@ func (app *App) Run(isMain bool) {
 			return
 		}
 		app.beforeStart(listenAddr)
-
-		notifyConfigSaveErrorOnce := new(sync.Once)
-
-		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
-			switch t {
-			case flashlight.ErrorTypeProxySaveFailure, flashlight.ErrorTypeConfigSaveFailure:
-				log.Errorf("failed to save config (%v): %v", t, err)
-
-				notifyConfigSaveErrorOnce.Do(func() {
-					note := &notify.Notification{
-						Title:      i18n.T("BACKEND_CONFIG_SAVE_ERROR_TITLE"),
-						Message:    i18n.T("BACKEND_CONFIG_SAVE_ERROR_MESSAGE", i18n.T(translationAppName)),
-						ClickLabel: i18n.T("BACKEND_CLICK_LABEL_GOT_IT"),
-						IconURL:    "/img/lantern_logo.png",
-					}
-					_ = notifier.ShowNotification(note, "alert-prompt")
-				})
-
-			default:
-				log.Errorf("flashlight error: %v: %v", t, err)
-			}
-		})
 
 		app.flashlight.Run(
 			listenAddr,
@@ -413,7 +384,7 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
-	atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
+	app.fetchedGlobalConfig.Store(true)
 	/*autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
 		return "/img/lantern_logo.png"
 	})*/
@@ -422,29 +393,25 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
-	atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
+	app.fetchedProxiesConfig.Store(true)
 }
 
 func (app *App) onSucceedingProxy(succeeding bool) {
-	hasSucceedingProxy := int32(0)
-	if succeeding {
-		hasSucceedingProxy = 1
-	}
-	atomic.StoreInt32(&app.hasSucceedingProxy, hasSucceedingProxy)
+	app.hasSucceedingProxy.Store(succeeding)
 	log.Debugf("[Startup Desktop] onSucceedingProxy %v", succeeding)
 }
 
 // HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
 func (app *App) HasSucceedingProxy() bool {
-	return atomic.LoadInt32(&app.hasSucceedingProxy) == 1
+	return app.hasSucceedingProxy.Load()
 }
 
 func (app *App) GetHasConfigFetched() bool {
-	return atomic.LoadInt32(&app.fetchedGlobalConfig) == 1
+	return app.fetchedGlobalConfig.Load()
 }
 
 func (app *App) GetHasProxyFetched() bool {
-	return atomic.LoadInt32(&app.fetchedProxiesConfig) == 1
+	return app.fetchedProxiesConfig.Load()
 }
 
 func (app *App) GetOnSuccess() bool {
@@ -597,6 +564,7 @@ func (app *App) ProxyAddrReachable(ctx context.Context) error {
 	if resp.StatusCode != http.StatusBadRequest {
 		return fmt.Errorf("unexpected HTTP status %v", resp.StatusCode)
 	}
+	app.onSucceedingProxy(true)
 	return nil
 }
 

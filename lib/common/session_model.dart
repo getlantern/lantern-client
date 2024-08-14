@@ -461,8 +461,6 @@ class SessionModel extends Model {
     }
     // Desktop users
     Localization.locale = lang;
-    final newLang = lang.toNativeUtf8();
-    lanternFFI.setLang(newLang);
     return Future(() => null);
   }
 

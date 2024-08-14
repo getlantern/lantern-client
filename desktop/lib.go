@@ -7,12 +7,10 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"os/signal"
 	"runtime"
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/getlantern/appdir"
@@ -46,10 +44,23 @@ const (
 )
 
 var (
-	log        = golog.LoggerFor("lantern-desktop.main")
-	a          *app.App
-	proClient  proclient.ProClient
-	authClient auth.AuthClient
+	log           = golog.LoggerFor("lantern-desktop.main")
+	flags         = flashlight.ParseFlags()
+	cdir          = configDir(&flags)
+	ss            = settings.LoadSettings(cdir)
+	webclientOpts = &webclient.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		},
+		UserConfig: func() common.UserConfig {
+			return userConfig(ss)
+		},
+	}
+	proClient  = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
+
+	a = app.NewApp(flags, cdir, proClient, ss)
 )
 
 var issueMap = map[string]string{
@@ -80,23 +91,6 @@ func start() *C.char {
 		log.Debug("Successfully loaded .env file")
 	}
 
-	flags := flashlight.ParseFlags()
-
-	cdir := configDir(&flags)
-	settings := settings.LoadSettings(cdir)
-	webclientOpts := &webclient.Opts{
-		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   30 * time.Second,
-		},
-		UserConfig: func() common.UserConfig {
-			return userConfig(settings)
-		},
-	}
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
-
-	a = app.NewApp(flags, cdir, proClient, settings)
 	go func() {
 		err := fetchOrCreate()
 		if err != nil {
@@ -136,7 +130,6 @@ func start() *C.char {
 	}
 
 	golog.SetPrepender(logging.Timestamped)
-	handleSignals(a)
 
 	if flags.Pprof {
 		addr := "localhost:6060"
@@ -859,21 +852,6 @@ func useOSLocale() (string, error) {
 // 		}
 // 	}
 // }
-
-// Handle system signals for clean exit
-func handleSignals(a *app.App) {
-	c := make(chan os.Signal, 1)
-	signal.Notify(c,
-		syscall.SIGHUP,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGQUIT)
-	go func() {
-		s := <-c
-		log.Debugf("Got signal \"%s\", exiting...", s)
-		a.Exit(nil)
-	}()
-}
 
 // clearLocalUserData clears the local user data from the settings
 func clearLocalUserData() {
