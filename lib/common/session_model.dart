@@ -735,7 +735,8 @@ class SessionModel extends Model {
 
     return ffiValueBuilder<Iterable<PathAndValue<PaymentMethod>>>(
       "/paymentMethods/",
-      null,
+      ffiPaymentMethodsV4,
+      fromJsonModel: paymentMethodFromJson,
       builder: builder,
     );
   }
@@ -807,7 +808,7 @@ class SessionModel extends Model {
       'serverInfo',
       null,
       defaultValue: null,
-      //fromJsonModel: serverInfoFromJson,
+      fromJsonModel: serverInfoFromJson,
       builder: builder,
     );
   }
