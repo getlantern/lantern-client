@@ -341,6 +341,10 @@ github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db h1:w/Br8vclv
 github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db/go.mod h1:kW4RHAFReMopujQCzcYxjOAg4XZOeuSrybIcM9FNGto=
 github.com/getlantern/ipproxy v0.0.0-20240814222729-26db0b0199fb h1:1FcWCRw3qbQOX5vOiMp56cHWJ/RReWxC+34ZL2qmqbY=
 github.com/getlantern/ipproxy v0.0.0-20240814222729-26db0b0199fb/go.mod h1:HBpifstxisocH2egSW+swGkKkySODJoz4ZQPV+MB+Fk=
+github.com/getlantern/ipproxy v0.0.0-20240814224539-c90e9cc6c448 h1:2yVzLM59VDJu7KvJZhUqRKYOGGbl269hwYKIN4Lukwg=
+github.com/getlantern/ipproxy v0.0.0-20240814224539-c90e9cc6c448/go.mod h1:HBpifstxisocH2egSW+swGkKkySODJoz4ZQPV+MB+Fk=
+github.com/getlantern/ipproxy v0.0.0-20240814224926-09e7b93597a6 h1:5u/JMbi3gMkMDRdVbryMJjMP+LITKJGuw4HOHGsEp9c=
+github.com/getlantern/ipproxy v0.0.0-20240814224926-09e7b93597a6/go.mod h1:HBpifstxisocH2egSW+swGkKkySODJoz4ZQPV+MB+Fk=
 github.com/getlantern/iptool v0.0.0-20210721034953-519bf8ce0147/go.mod h1:hfspzdRcvJ130tpTPL53/L92gG0pFtvQ6ln35ppwhHE=
 github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 h1:D7wbL2Ww6QN5SblEDMiQcFulqz2jgcvawKaNBTzHLvQ=
 github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696/go.mod h1:hfspzdRcvJ130tpTPL53/L92gG0pFtvQ6ln35ppwhHE=
