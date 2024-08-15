@@ -1,3 +1,4 @@
+import 'package:lantern/common/ffi_subscriber.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
 
@@ -29,18 +30,8 @@ class VpnModel extends Model {
         builder: builder,
       );
     }
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<String>(
-      'vpnStatus',
-      defaultValue: '',
-      onChanges: (setValue) => sessionModel
-          .listenWebsocket(websocket, "vpnstatus", "connected", (value) {
-        final isConnected = value != null && value.toString() == "true";
-        setValue(isConnected ? "connected" : "disconnected");
-      }),
-      ffiVpnStatus,
-      builder: builder,
-    );
+    final notifier = WebsocketSubscriber().vpnStatusNotifier;
+    return FfiValueBuilder<String>('vpnStatus', notifier, builder);
   }
 
   Future<bool> isVpnConnected() async {
@@ -58,23 +49,7 @@ class VpnModel extends Model {
         },
       );
     }
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<Bandwidth?>(
-      'bandwidth',
-      defaultValue: null,
-      onChanges: (setValue) =>
-          sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
-        if (value != null) {
-          final res = jsonDecode(jsonEncode(value));
-          if (res != null) setValue(Bandwidth.create()
-            ..mergeFromProto3Json({
-              'allowed': res['mibAllowed'],
-              'remaining': res['mibUsed'],
-            }));
-        }
-      }),
-      null,
-      builder: builder,
-    );
+    final notifier = WebsocketSubscriber().bandwidthNotifier;
+    return FfiValueBuilder<Bandwidth?>('bandwidth', notifier, builder);
   }
 }

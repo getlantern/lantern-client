@@ -59,7 +59,6 @@ const (
 	SNRevisionDate       SettingName = "revisionDate"
 	SNEnabledExperiments SettingName = "enabledExperiments"
 
-	SNPaymentMethods SettingName = "paymentMethods"
 	// Auth methods
 	SNUserFirstVisit SettingName = "userFirstVisit"
 	SNExpiryDate     SettingName = "expirydate"
@@ -604,17 +603,6 @@ func (s *Settings) GetDeviceID() string {
 // SetUserIDAndToken sets the user ID and token atomically
 func (s *Settings) SetUserIDAndToken(id int64, token string) {
 	s.setVals(map[SettingName]interface{}{SNUserID: id, SNUserToken: token})
-}
-
-// SetPaymentMethods sets plans as string
-func (s *Settings) SetPaymentMethodPlans(paymentMethods []byte) {
-	s.setVal(SNPaymentMethods, paymentMethods)
-
-}
-
-// () returns the payment methods
-func (s *Settings) GetPaymentMethods() []byte {
-	return s.getbytes(SNPaymentMethods)
 }
 
 // GetUserID returns the user ID

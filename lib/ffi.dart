@@ -2,6 +2,7 @@ import 'dart:ffi'; // For FFI
 
 import 'package:ffi/src/utf8.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 
 import 'generated_bindings.dart';
 
@@ -26,7 +27,8 @@ class NoPlansUpdate implements Exception {
 
 class LanternFFI {
   static final NativeLibrary _lanternFFI = NativeLibrary(_getLanternLib());
-
+  //static LanternFFI? _lanternFFI;
+  //late final NativeLibrary lib;
   static DynamicLibrary _getLanternLib() {
     if (Platform.isMacOS) {
       return DynamicLibrary.open('$_libName.dylib');

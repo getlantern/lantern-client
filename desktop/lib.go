@@ -90,33 +90,11 @@ func start() *C.char {
 		log.Debug("Successfully loaded .env file")
 	}
 
-	go func() {
-		err := fetchPayentMethodV4()
-		if err != nil {
-			log.Error(err)
-		}
-	}()
-
-	logFile, err := logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+	_, err = logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 	if err != nil {
 		log.Error(err)
 		// Nothing we can do if fails to create log files, leave logFile nil so
 		// the child process writes to standard outputs as usual.
-	}
-	if logFile != nil {
-		go func() {
-			tk := time.NewTicker(time.Minute)
-			for {
-				<-tk.C
-				ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-				if err := a.ProxyAddrReachable(ctx); err != nil {
-					log.Debugf("********* ERROR: Lantern HTTP proxy not working properly: %v\n", err)
-				} else {
-					log.Debugf("DEBUG: Lantern HTTP proxy is working fine")
-				}
-				cancel()
-			}
-		}()
 	}
 
 	// This init needs to be called before the panicwrapper fork so that it has been
@@ -143,7 +121,7 @@ func start() *C.char {
 	}
 
 	// i18nInit(a)
-	a.Run(true)
+	a.Run(context.Background())
 
 	return C.CString("")
 }
@@ -171,26 +149,6 @@ func hasConfigFected() *C.char {
 	return booltoCString(a.GetHasConfigFetched())
 }
 
-func fetchPayentMethodV4() error {
-	settings := a.Settings()
-	userID := settings.GetUserID()
-	if userID == 0 {
-		return errors.New("User ID is not set")
-	}
-	resp, err := proClient.PaymentMethodsV4(context.Background())
-	if err != nil {
-		return errors.New("Could not get payment methods: %v", err)
-	}
-	log.Debugf("DEBUG: Payment methods: %+v", resp)
-	log.Debugf("DEBUG: Payment methods providers: %+v", resp.Providers)
-	bytes, err := json.Marshal(resp)
-	if err != nil {
-		return errors.New("Could not marshal payment methods: %v", err)
-	}
-	settings.SetPaymentMethodPlans(bytes)
-	return nil
-}
-
 //export sysProxyOn
 func sysProxyOn() {
 	go a.SysproxyOn()
@@ -208,44 +166,31 @@ func websocketAddr() *C.char {
 
 //export plans
 func plans() *C.char {
-	settings := a.Settings()
-	plans := settings.GetPaymentMethods()
-	if plans == nil {
+	plans, err := a.Plans(context.Background())
+	if err != nil {
 		return sendError(errors.New("plans not found"))
 	}
-	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
-	err := json.Unmarshal(plans, paymentMethodsResponse)
-	plansByte, err := json.Marshal(paymentMethodsResponse.Plans)
+	plansByte, err := json.Marshal(plans)
 	if err != nil {
-		return sendError(errors.New("error fetching payment methods: %v", err))
+		return sendError(err)
 	}
 	return C.CString(string(plansByte))
 }
 
 //export paymentMethodsV3
 func paymentMethodsV3() *C.char {
-	resp, err := proClient.PaymentMethods(context.Background())
-	if err != nil {
-		return sendError(errors.New("error fetching payment methods: %v", err))
-	}
-	b, _ := json.Marshal(resp.Providers)
-	return C.CString(string(b))
+	return C.CString("")
 }
 
 //export paymentMethodsV4
 func paymentMethodsV4() *C.char {
-	settings := a.Settings()
-	plans := settings.GetPaymentMethods()
-	if plans == nil {
-		return sendError(errors.New("Payment methods not found"))
-	}
-	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
-	err := json.Unmarshal(plans, paymentMethodsResponse)
+	/*resp, err := a.PaymentMethods(context.Background())
 	if err != nil {
 		return sendError(err)
 	}
-	b, _ := json.Marshal(paymentMethodsResponse)
-	return C.CString(string(b))
+	b, _ := json.Marshal(resp)
+	return C.CString(string(b))*/
+	return C.CString("")
 }
 
 func cachedUserData() (*protos.User, bool) {
@@ -302,6 +247,7 @@ func hasPlanUpdatedOrBuy() *C.char {
 
 //export devices
 func devices() *C.char {
+	log.Debug("devices")
 	user, found := cachedUserData()
 	if !found {
 		// for now just return empty array
@@ -343,6 +289,7 @@ func userLinkValidate(code *C.char) *C.char {
 
 //export expiryDate
 func expiryDate() *C.char {
+	log.Debug("expiryDate")
 	user, found := cachedUserData()
 	if !found {
 		return sendError(log.Errorf("User data not found"))
@@ -425,9 +372,12 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 //export referral
 func referral() *C.char {
 	if user, ok := a.GetUserData(a.Settings().GetUserID()); ok {
+		log.Debugf("Got user data from cache, referral is %s", user.Referral)
+		log.Debugf("Got user data from cache, code is %s", user.Code)
 		return C.CString(user.Referral)
 	}
 	referralCode := ss.GetReferralCode()
+	log.Debugf("Got user data from settings, code is %s", referralCode)
 	return C.CString(referralCode)
 }
 
@@ -476,13 +426,6 @@ func lang() *C.char {
 //export setSelectLang
 func setSelectLang(lang *C.char) {
 	a.SetLanguage(C.GoString(lang))
-	// update the payment methods if the language is changed
-	go func() {
-		err := fetchPayentMethodV4()
-		if err != nil {
-			log.Error(err)
-		}
-	}()
 }
 
 //export country
@@ -522,6 +465,7 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
+	log.Debug("proUser")
 	if isProUser, ok := a.IsProUserFast(settings.UserConfig(a.Settings())); isProUser && ok {
 		return C.CString("true")
 	}

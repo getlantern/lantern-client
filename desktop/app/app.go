@@ -35,7 +35,6 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
-	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -58,6 +57,7 @@ func init() {
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
 	hasExited            int64
+	isConnected          atomic.Bool
 	fetchedGlobalConfig  atomic.Bool
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
@@ -82,7 +82,6 @@ type App struct {
 	selectedTab Tab
 
 	connectionStatusCallbacks []func(isConnected bool)
-	_sysproxyOff              func() error
 
 	// Websocket-related settings
 	websocketAddr   string
@@ -90,6 +89,7 @@ type App struct {
 	ws              ws.UIChannel
 
 	cachedUserData sync.Map
+	plansCache     sync.Map
 	onUserData     []func(current *protos.User, new *protos.User)
 
 	mu sync.Mutex
@@ -146,8 +146,8 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 }
 
 // Run starts the app.
-func (app *App) Run(isMain bool) {
-	golog.OnFatal(app.exitOnFatal)
+func (app *App) Run(ctx context.Context) {
+	//golog.OnFatal(app.exitOnFatal)
 
 	go func() {
 		for <-geolookup.OnRefresh() {
@@ -223,7 +223,7 @@ func (app *App) Run(isMain bool) {
 			app.Exit(err)
 			return
 		}
-		app.beforeStart(listenAddr)
+		app.beforeStart(ctx, listenAddr)
 
 		app.flashlight.Run(
 			listenAddr,
@@ -242,10 +242,11 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 	return app.flashlight.EnabledFeatures()[feature]
 }
 
-func (app *App) beforeStart(listenAddr string) {
+func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	log.Debug("Got first config")
 
-	go app.fetchOrCreateUser(context.Background())
+	go app.fetchOrCreateUser(ctx)
+	go app.PaymentMethods(ctx)
 
 	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
 		log.Debugf("Start profiling with cpu file %s and mem file %s", app.Flags.CpuProfile, app.Flags.MemProfile)
@@ -297,7 +298,7 @@ func (app *App) beforeStart(listenAddr string) {
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
 	}))
-	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
+	//app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
 // GetLanguage returns the user language
@@ -383,7 +384,9 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
-	app.fetchedGlobalConfig.Store(true)
+	if src == config.Fetched {
+		app.fetchedGlobalConfig.Store(true)
+	}
 	/*autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
 		return "/img/lantern_logo.png"
 	})*/
@@ -392,7 +395,9 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
-	app.fetchedProxiesConfig.Store(true)
+	if src == config.Fetched {
+		app.fetchedProxiesConfig.Store(true)
+	}
 }
 
 func (app *App) onSucceedingProxy(succeeding bool) {
@@ -540,6 +545,7 @@ func (app *App) fetchOrCreateUser(ctx context.Context) (*protos.User, error) {
 	}
 }
 
+// CreateUser is used when Lantern is run for the first time and creates a new user with the pro server
 func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
 	log.Debug("New user, calling user create")
 	settings := app.Settings()
@@ -553,10 +559,42 @@ func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
 	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
 		return nil, errors.New("Could not create new Pro user: %v", err)
 	}
-	app.SetUserData(context.Background(), user.UserId, user)
+	app.SetUserData(ctx, user.UserId, user)
 	settings.SetReferralCode(user.Referral)
 	settings.SetUserIDAndToken(user.UserId, user.Token)
 	return resp.User, nil
+}
+
+// Plans returns the plans available to a user
+func (app *App) Plans(ctx context.Context) ([]protos.Plan, error) {
+	if v, ok := app.plansCache.Load("plans"); ok {
+		resp := v.([]protos.Plan)
+		log.Debugf("Returning plans from cache %s", v)
+		return resp, nil
+	}
+	resp, err := app.PaymentMethods(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return resp.Plans, nil
+}
+
+// PaymentMethods returns the plans and payment plans available to a user
+func (app *App) PaymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
+	if v, ok := app.plansCache.Load("paymentMethods"); ok {
+		resp := v.(*proclient.PaymentMethodsResponse)
+		log.Debugf("Returning plans from cache %s", v)
+		return resp, nil
+	}
+	resp, err := app.proClient.PaymentMethodsV4(context.Background())
+	if err != nil {
+		return nil, errors.New("Could not get payment methods: %v", err)
+	}
+	log.Debugf("DEBUG: Payment methods plans: %+v", resp.Plans)
+	log.Debugf("DEBUG: Payment methods providers: %+v", resp.Providers)
+	app.plansCache.Store("plans", resp.Plans)
+	app.plansCache.Store("paymentMethods", resp.Providers)
+	return resp, nil
 }
 
 // UserData looks up user data that is associated with the given UserConfig

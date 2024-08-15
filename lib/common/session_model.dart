@@ -63,17 +63,12 @@ class SessionModel extends Model {
         false,
       );
     } else {
-      country = ffiValueNotifier(ffiLang, 'lang', 'US');
-      proxyAvailable = ffiValueNotifier(
-        ffiSucceedingProxy,
-        'hasSucceedingProxy',
-        false,
-      );
-      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
-      proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
-      hasUserSignedInNotifier =
-          ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
-      isAuthEnabled = ffiValueNotifier(ffiAuthEnabled, 'authEnabled', false);
+      country = ValueNotifier('');
+      proxyAvailable = ValueNotifier(false);
+      userEmail = ValueNotifier('');
+      proUserNotifier = ValueNotifier(false);
+      hasUserSignedInNotifier = ValueNotifier(false);
+      isAuthEnabled = ValueNotifier(false);
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -88,32 +83,12 @@ class SessionModel extends Model {
 
   Pointer<Utf8> ffiAuthEnabled() => LanternFFI.authEnabled();
 
-  Pointer<Utf8> ffiProUser() => LanternFFI.proUser();
-
-  Pointer<Utf8> ffiSucceedingProxy() => LanternFFI.hasSucceedingProxy();
-
-  Pointer<Utf8> ffiReferralCode() => LanternFFI.referral();
-
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<bool>(
-      'prouser',
-      null,
-      defaultValue: false,
-      onChanges: (setValue) => {
-        listenWebsocket(websocket, 'pro', null, (p0) {
-          if (p0 != null) {
-            final res = p0 as Map<String, dynamic>;
-            final isPro = res['userStatus'] == 'active' || res['userLevel'] == 'pro';
-            if (isPro) setValue(isPro);
-          }
-        })
-      },
-      builder: builder,
-    );
+    final notifier = WebsocketSubscriber().proUserNotifier;
+    return FfiValueBuilder<bool>('prouser', notifier, builder);
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
@@ -193,23 +168,12 @@ class SessionModel extends Model {
     });
   }
 
-  Pointer<Utf8> ffiLang() => LanternFFI.lang();
-
   Widget language(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<String>(
-      'lang',
-      defaultValue: 'en',
-      onChanges: (setValue) =>
-          listenWebsocket(websocket, "pro", "language", (value) {
-        if (value != null && value.toString() != "") setValue(value.toString());
-      }),
-      null,
-      builder: builder,
-    );
+    final notifier = WebsocketSubscriber().langNotifier;
+    return FfiValueBuilder<String>('lang', notifier, builder);
   }
 
   Pointer<Utf8> ffiEmailAddress() => LanternFFI.emailAddress();
@@ -253,7 +217,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'referral',
-      ffiReferralCode,
+      LanternFFI.referral,
       defaultValue: '',
       builder: builder,
     );
@@ -318,19 +282,8 @@ class SessionModel extends Model {
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
     if (isDesktop()) {
-      return ffiValueBuilder<bool>(
-        'IsUserLoggedIn',
-        ffiIsUserLoggedIn,
-        defaultValue: false,
-        builder: builder,
-        onChanges: (setValue) {
-          listenWebsocket(websocket, 'pro', 'login', (userLoggedIn) {
-            if (userLoggedIn != null) {
-              setValue(userLoggedIn as bool);
-            }
-          });
-        },
-      );
+      final notifier = WebsocketSubscriber().userLoggedInNotifier;
+      return FfiValueBuilder<bool>('isUserLoggedIn', notifier, builder);
     }
     return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
         builder: builder, defaultValue: false);
@@ -560,12 +513,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<String>(
-      'lang',
-      defaultValue: 'US',
-      ffiLang,
-      builder: builder,
-    );
+    final notifier = WebsocketSubscriber().langNotifier;
+    return FfiValueBuilder<String>('lang', notifier, builder);
   }
 
   Future<String> getReplicaAddr() async {
@@ -784,7 +733,7 @@ class SessionModel extends Model {
     );
   }
 
-  ServerInfo serverInfoFromJson(dynamic? res) {
+  ServerInfo? serverInfoFromJson(dynamic? res) {
     if (res != null) {
       final res2 = jsonDecode(jsonEncode(res));
       if (res2 != null) {
@@ -796,7 +745,7 @@ class SessionModel extends Model {
           });
       }
     }
-    return ServerInfo.create();
+    return null;
   }
 
   Widget serverInfo(ValueWidgetBuilder<ServerInfo?> builder) {
@@ -809,19 +758,8 @@ class SessionModel extends Model {
         },
       );
     }
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<ServerInfo?>(
-      'serverInfo',
-      null,
-      onChanges: (setValue) {
-        listenWebsocket(websocket, 'stats', null, (res) {
-          if (res != null) setValue(res as ServerInfo);
-        });
-      },
-      defaultValue: null,
-      fromJsonModel: serverInfoFromJson,
-      builder: builder,
-    );
+    final notifier = WebsocketSubscriber().serverInfoNotifier;
+    return FfiValueBuilder<ServerInfo?>('serverInfo', notifier, builder);
   }
 
   Future<void> trackUserAction(
@@ -1010,39 +948,8 @@ class SessionModel extends Model {
   Pointer<Utf8> ffiProxyAll() => LanternFFI.proxyAll();
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<bool>(
-      'proxyAll',
-      defaultValue: false,
-      onChanges: (setValue) =>
-          listenWebsocket(websocket, "settings", "proxyAll", (value) {
-        if (value != null) setValue(value as bool);
-      }),
-      ffiProxyAll,
-      builder: builder,
-    );
-  }
-
-  // listenWebsocket listens for websocket messages from the server. If a message matches the given message type,
-  // the onMessage callback is triggered with the given property value
-  void listenWebsocket<T>(WebsocketImpl? websocket, String messageType,
-      String? property, void Function(T?) onMessage) {
-    if (websocket == null) return;
-    websocket.messageStream.listen(
-      (json) {
-        print("websocket message: $json");
-        final jsonMessageType = json["type"];
-        final message = json["message"];
-        if (jsonMessageType != null && jsonMessageType == messageType) {
-          if (message != null && property != null) {
-            onMessage(message[property]);
-          } else if (message != null) {
-            onMessage(message);
-          }
-        }
-      },
-      onError: (error) => appLogger.i("websocket error: ${error.description}"),
-    );
+    final notifier = WebsocketSubscriber().proxyAllNotifier;
+    return FfiValueBuilder<bool>('proxyAll', notifier, builder);
   }
 
   Future<void> setSplitTunneling<T>(bool on) async {

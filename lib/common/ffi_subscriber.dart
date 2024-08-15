@@ -21,40 +21,7 @@ class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
     T Function(Uint8List serialized)? deserialize,
     T Function(dynamic json)? fromJsonModel,
   }) : super(defaultValue, removeFromCache) {
-    if (onChanges != null) {
-      onChanges((newValue) {
-        value = newValue;
-      });
-    }
-    if (ffiFunction == null && fromJsonModel == null) {
-      value = defaultValue;
-      return;
-    }
-    if (defaultValue is int) {
-        value = null;
-        //value = int.parse(ffiFunction().toDartString()) as T?;
-    } else if (defaultValue is String && ffiFunction != null) {
-      var res = ffiFunction();
-      if (res != null) value = res.toDartString() as T?;
-    } else if (defaultValue is bool && ffiFunction != null) {
-      var res = ffiFunction();
-      if (res != null) value = res.toDartString().parseBool() as T?;
-    } else if (fromJsonModel != null) {
-      if (ffiFunction != null) {
-        var res = ffiFunction();
-        if (res != null) {
-          value = fromJsonModel(json.decode(res.toDartString())) as T?;
-        }
-      } else {
-        var res = fromJsonModel(null);
-        if (res != null) value = res;
-      }
-    } else {
-      value = defaultValue;
-    }
-    cancel = () {
-      if (channel != null) channel.sink.close(status.goingAway);
-    };
+    value = defaultValue;
   }
 }
 
