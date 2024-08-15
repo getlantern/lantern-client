@@ -30,7 +30,7 @@ require (
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/common v1.2.1-0.20230427204521-6ac18c21db39
 	github.com/getlantern/diagnostics v0.0.0-20230503185158-c2fc28ed22fe
-	github.com/getlantern/dnsgrab v0.0.0-20211216020425-5d5e155a01a8
+	github.com/getlantern/dnsgrab v0.0.0-20240814223941-ee7ecd3e078c
 	github.com/getlantern/errors v1.0.5-0.20240410211607-f268a297d5d1
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
@@ -41,12 +41,12 @@ require (
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
-	github.com/getlantern/ipproxy v0.0.0-20240814222729-26db0b0199fb
+	github.com/getlantern/ipproxy v0.0.0-20240814224926-09e7b93597a6
 	github.com/getlantern/jibber_jabber v0.0.0-20210901195950-68955124cc42
 	github.com/getlantern/launcher v0.0.0-20230622120034-fe87f9bff286
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20240814210628-0984f52e2d18
-	github.com/getlantern/notifier v0.0.0-20240813203752-1707d7ddb129
+	github.com/getlantern/notifier v0.0.0-20240814223611-79e090136934
 	github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
@@ -300,7 +300,7 @@ require (
 	github.com/wlynxg/anet v0.0.3 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xjasonlyu/tun2socks/v2 v2.5.3-0.20240722005329-e083dafcf534 // indirect
-	github.com/xtaci/smux v1.5.24 // indirect
+	github.com/xtaci/smux v1.5.27 // indirect
 	gitlab.com/yawning/edwards25519-extra.git v0.0.0-20211229043746-2f91fcc9fbdb // indirect
 	gitlab.com/yawning/obfs4.git v0.0.0-20220204003609-77af0cba934d // indirect
 	go.etcd.io/bbolt v1.3.10 // indirect
@@ -332,7 +332,7 @@ require (
 	google.golang.org/grpc v1.65.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gvisor.dev/gvisor v0.0.0-20240813190259-4994cedb32a6 // indirect
+	gvisor.dev/gvisor v0.0.0-20240713103206-39d6c232e61d // indirect
 	howett.net/plist v1.0.1 // indirect
 	lukechampine.com/blake3 v1.3.0 // indirect
 	modernc.org/libc v1.59.1 // indirect
