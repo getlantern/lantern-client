@@ -3,8 +3,8 @@ import '../ffi.dart';
 
 class VPNChangeNotifier extends ChangeNotifier {
   Timer? timer;
-  bool isFlashlightInitialized = true;
-  bool isFlashlightInitializedFailed = true;
+  bool isFlashlightInitialized = false;
+  bool isFlashlightInitializedFailed = false;
   String flashlightState = 'fetching_configuration'.i18n;
 
   VPNChangeNotifier() {

@@ -46,9 +46,6 @@ func (app *App) GetUserData(userID int64) (*protos.User, bool) {
 	if !ok {
 		return nil, false
 	}
-	u := res.(*protos.User)
-	b, _ := json.Marshal(u)
-	log.Debugf("Got user data %s", string(b))
 	return res.(*protos.User), true
 }
 
