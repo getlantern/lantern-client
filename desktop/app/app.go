@@ -8,7 +8,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -188,21 +187,14 @@ func (app *App) Run(ctx context.Context) {
 				})
 			}()
 		}
-
-		cacheDir, err := os.UserCacheDir()
-		if err != nil {
-			cacheDir = os.TempDir()
-		}
-		cacheDir = filepath.Join(cacheDir, common.DefaultAppName, "dhtup", "data")
-		os.MkdirAll(cacheDir, 0o700)
-
+		var err error
 		app.flashlight, err = flashlight.New(
 			common.DefaultAppName,
 			common.ApplicationVersion,
 			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
+			func() bool { return app.isConnected.Load() }, // check whether we're disconnected
 			app.settings.GetProxyAll,
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,

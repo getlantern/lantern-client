@@ -644,8 +644,6 @@ class SessionModel extends Model {
     });
   }
 
-  Pointer<Utf8> ffiPlans() => LanternFFI.plans();
-
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
   }) {
@@ -658,14 +656,15 @@ class SessionModel extends Model {
         },
       );
     }
-    return ffiListBuilder<Plan>(
+    return FfiListBuilder<Plan>(
       '/plans/',
-      ffiPlans,
-      planFromJson,
-      builder: builder,
-      deserialize: (Uint8List serialized) {
-        return Plan.fromBuffer(serialized);
-      },
+      WebsocketSubscriber().plansNotifier,
+      (BuildContext context, ChangeTrackingList<Plan> value, Widget? child) =>
+          builder(
+        context,
+        value.map.entries.map((e) => PathAndValue(e.key, e.value)),
+        child,
+      ),
     );
   }
 

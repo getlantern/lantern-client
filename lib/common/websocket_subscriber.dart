@@ -1,7 +1,16 @@
-import 'package:lantern/common/common.dart';
-import 'package:lantern/common/common_desktop.dart';
+import 'common.dart';
+import 'common_desktop.dart';
+import 'package:collection/collection.dart';
+import 'package:lantern/plans/utils.dart';
+import 'package:fixnum/fixnum.dart';
 
 typedef void WebsocketChange();
+
+enum WebsocketMessage {
+  pro,
+  bandwidth,
+  vpnstatus,
+}
 
 class WebsocketSubscriber {
   static WebsocketSubscriber? _instance;
@@ -15,6 +24,7 @@ class WebsocketSubscriber {
   final proxyAllNotifier = ValueNotifier(false);
   final userLoggedInNotifier = ValueNotifier(false);
   final serverInfoNotifier = ValueNotifier<ServerInfo?>(null);
+  final plansNotifier = FfiListNotifier<Plan>('/plans/', LanternFFI.plans, planFromJson, () => {});
 
   late WebsocketImpl _ws;
 
@@ -22,16 +32,17 @@ class WebsocketSubscriber {
     _ws = WebsocketImpl.instance()!;
     _ws.messageStream.listen(
       (json) {
+        if (json["type"] == null) return;
         print("websocket message: $json");
         final message = json["message"];
-        final messageType = json["type"];
+        WebsocketMessage? messageType = WebsocketMessage.values.firstWhereOrNull((e) => e.name == json["type"]);
         if (message != null && messageType != null) {
           switch (messageType) {
-            case "pro":
+            case WebsocketMessage.pro:
               print("pro websocket message: $json");
-            case "bandwidth":
+            case WebsocketMessage.bandwidth:
               print("bandwidth websocket message: $json");
-            case "vpnstatus":
+            case WebsocketMessage.vpnstatus:
               final res = message["connected"];
               if (res != null) {
                 final vpnStatus = res.toString() == "true" ? "connected" : "disconnected"; 

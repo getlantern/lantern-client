@@ -3,15 +3,15 @@ import '../ffi.dart';
 
 class VPNChangeNotifier extends ChangeNotifier {
   Timer? timer;
-  bool isFlashlightInitialized = false;
-  bool isFlashlightInitializedFailed = false;
+  bool isFlashlightInitialized = true;
+  bool isFlashlightInitializedFailed = true;
   String flashlightState = 'fetching_configuration'.i18n;
 
   VPNChangeNotifier() {
     if (isMobile()) {
       initCallbackForMobile();
     } else {
-      initCallbacks();
+      //initCallbacks();
     }
   }
 
@@ -39,7 +39,7 @@ class VPNChangeNotifier extends ChangeNotifier {
         print("flashlight initialized");
         notifyListeners();
         timer?.cancel();
-      } else if (timer!.tick >= 6) {
+      } else if (timer != null && timer!.tick >= 6) {
         // Timer has reached 6 seconds
         // Stop the timer and set isFlashlightInitialized to true
         print("flashlight fail initialized");

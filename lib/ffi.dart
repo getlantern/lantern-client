@@ -64,9 +64,19 @@ class LanternFFI {
     //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
-  static Pointer<Utf8> vpnStatus() => _lanternFFI.vpnStatus().cast<Utf8>();
+  static Pointer<Utf8> vpnStatus() {
+    print("vpnStatus start");
+    final res = _lanternFFI.vpnStatus().cast<Utf8>();
+    print("vpnStatus end");
+    return res;
+  }
 
-  static Pointer<Utf8> lang() => _lanternFFI.lang().cast<Utf8>();
+  static Pointer<Utf8> lang() {
+    print("lang start");
+    final res = _lanternFFI.lang().cast<Utf8>();
+    print("lang end");
+    return res;
+  }
 
   static Pointer<Utf8> proxyAll() => _lanternFFI.proxyAll().cast<Utf8>();
 
@@ -171,7 +181,12 @@ class LanternFFI {
     return Future.value();
   }
 
-  static Pointer<Utf8> referral() => _lanternFFI.referral().cast<Utf8>();
+  static Pointer<Utf8> referral() {
+    print("referral start");
+    final res = _lanternFFI.referral().cast<Utf8>();
+    print("referral end");
+    return res;
+  }
 
   static Pointer<Utf8> deviceId() => _lanternFFI.myDeviceId().cast<Utf8>();
 
@@ -186,7 +201,12 @@ class LanternFFI {
   static Pointer<Utf8> checkUpdates() =>
       _lanternFFI.checkUpdates().cast<Utf8>();
 
-  static Pointer<Utf8> plans() => _lanternFFI.plans().cast<Utf8>();
+  static Pointer<Utf8> plans() {
+    print("plans start");
+    final res = _lanternFFI.plans().cast<Utf8>();
+    print("plans end");
+    return res;
+  }
 
   static Pointer<Utf8> paymentMethods() =>
       _lanternFFI.paymentMethodsV3().cast<Utf8>();
@@ -221,6 +241,7 @@ class LanternFFI {
   }
 
   static Future<String> paymentRedirect(List<String> list) {
+    print("paymentRedirect start");
     final planID = list[0].toPointerChar();
     final currency = list[1].toPointerChar();
     final provider = list[2].toPointerChar();
@@ -257,6 +278,7 @@ class LanternFFI {
 
   /// FFI pointer to the native function
   static Pointer<Utf8> isUserLoggedIn() {
+    print("isUserLoggedIn start");
     final result = _lanternFFI.isUserLoggedIn().cast<Utf8>();
     print(result.toDartString());
     return result;
@@ -264,6 +286,7 @@ class LanternFFI {
 
   /// FFI function
   static Future<bool> userFirstVisit() {
+    print("userFirstVisit start");
     final result = _lanternFFI.isUserFirstTime().cast<Utf8>().toDartString();
     return Future.value(result == 'true');
   }

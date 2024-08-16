@@ -213,15 +213,6 @@ func setProxyAll(value *C.char) {
 	go a.Settings().SetProxyAll(proxyAll)
 }
 
-// tryCacheUserData retrieves the latest user data for the given user.
-// It first checks the cache and if present returns the user data stored there
-// func tryCacheUserData() (*protos.User, error) {
-// 	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
-// 		return cacheUserData, nil
-// 	}
-// 	return getUserData()
-// }
-
 // this method is reposible for checking if the user has updated plan or bought plans
 //
 //export hasPlanUpdatedOrBuy
@@ -442,9 +433,9 @@ func sdkVersion() *C.char {
 
 //export vpnStatus
 func vpnStatus() *C.char {
-	if a.IsSysProxyOn() {
+	/*if a.IsSysProxyOn() {
 		return C.CString("connected")
-	}
+	}*/
 	return C.CString("disconnected")
 }
 
