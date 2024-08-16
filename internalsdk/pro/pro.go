@@ -40,7 +40,7 @@ type ProClient interface {
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
 	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
-	RestorePurchase(ctx context.Context, req *RestorePurchaseRequest) (*OkResponse, error)
+	RestorePurchase(ctx context.Context, req map[string]interface{}) (*OkResponse, error)
 	EmailRequest(ctx context.Context, email string) (*OkResponse, error)
 	//Device Linking
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
@@ -324,7 +324,7 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string, em
 		return false, err
 	}
 	if resp.Error != "" && resp.Status != "ok" {
-		return false, errors.New("err_while_sending_code: %v", resp.ErrorId, resp.Error)
+		return false, errors.New(fmt.Sprintf("err_while_sending_code: %v", resp.ErrorId))
 	}
 
 	return true, nil
@@ -359,7 +359,7 @@ func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interfac
 }
 
 // RestorePurchase is used to restore a purchase for Google and apple play users
-func (c *proClient) RestorePurchase(ctx context.Context, req *RestorePurchaseRequest) (*OkResponse, error) {
+func (c *proClient) RestorePurchase(ctx context.Context, req map[string]interface{}) (*OkResponse, error) {
 	var resp OkResponse
 	err := c.webclient.PostFormReadingJSON(ctx, "/restore-purchase", req, &resp)
 	if err != nil {

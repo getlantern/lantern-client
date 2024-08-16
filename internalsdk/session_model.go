@@ -1220,14 +1220,15 @@ func restorePurchase(session *SessionModel, email string, code string, provider 
 	if err != nil {
 		return err
 	}
-	restoreRequest := &pro.RestorePurchaseRequest{
-		Email:      email,
-		Provider:   provider,
-		Token:      "123",
-		DeviceName: deviceName,
-		Code:       code,
+
+	requData := map[string]interface{}{
+		"verified_email":          email,
+		"provider":                provider,
+		"token":                   "123",
+		"deviceName":              deviceName,
+		"email_verification_code": code,
 	}
-	okResponse, err := session.proClient.RestorePurchase(context.Background(), restoreRequest)
+	okResponse, err := session.proClient.RestorePurchase(context.Background(), requData)
 	if err != nil {
 		return err
 	}
