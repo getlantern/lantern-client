@@ -198,26 +198,7 @@ class _PlanCardState extends State<PlanCard> {
         ),
       );
       return;
-    } else if (isDesktop()) {
-      final paymentMethods = await sessionModel.paymentMethodsv4();
-      final providers = paymentProvidersFromMethods(paymentMethods);
-      // if only one payment provider is returned, bypass the last checkout screen
-      // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
-      if (providers.length == 1 &&
-          providers[0].name.toPaymentEnum() == Providers.stripe) {
-        final providerName = providers[0].name.toPaymentEnum();
-        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-          context,
-          widget.plan.id,
-          "",
-          providerName,
-        );
-        await openDesktopWebview(
-            context: context, provider: providerName, redirectUrl: redirectUrl);
-        return;
-      }
     }
-
     await context.pushRoute(
       CheckoutLegacy(
         plan: widget.plan,
