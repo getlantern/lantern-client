@@ -1233,7 +1233,7 @@ func restorePurchase(session *SessionModel, email string, code string, provider 
 		return err
 	}
 	if okResponse.Status != "ok" {
-		return errors.New("Restore purchase failed")
+		return errors.New("error restoring purchase")
 	}
 	setProUser(session.baseModel, true)
 	return nil

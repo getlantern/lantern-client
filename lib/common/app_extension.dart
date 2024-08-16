@@ -33,6 +33,10 @@ extension ErrorX on Object {
           return "err_while_sending_code".i18n;
         }
 
+        if (description.contains("error restoring purchase")) {
+          return "purchase_restored_error".i18n;
+        }
+        
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;
         } else {

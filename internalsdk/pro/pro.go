@@ -363,7 +363,7 @@ func (c *proClient) RestorePurchase(ctx context.Context, req map[string]interfac
 	var resp OkResponse
 	err := c.webclient.PostFormReadingJSON(ctx, "/restore-purchase", req, &resp)
 	if err != nil {
-		return nil, err
+		return nil, log.Errorf("error restoring purchase: %v", err)
 	}
 	return &resp, nil
 }

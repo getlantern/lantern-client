@@ -1788,6 +1788,9 @@ msgstr "Purchase Restored"
 msgid "purchase_restored_message"
 msgstr "Your purchase has been restored successfully"
 
+msgid "purchase_restored_error"
+msgstr "It looks like something went wrong with the restore purchase. Please double-check that you've entered the correct email or code."
+
 msgid "err_while_sending_code"
 msgstr "Something went wrong while sending the code, please try again"
 
