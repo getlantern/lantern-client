@@ -20,6 +20,7 @@ class SessionModel extends Model {
   late final EventManager eventManager;
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  ValueNotifier<String> referalNotifier = ValueNotifier('');
   ValueNotifier<bool?>? isPlayVersion;
   ValueNotifier<bool?>? isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
@@ -65,6 +66,7 @@ class SessionModel extends Model {
     } else {
       country = ValueNotifier('US');
       proxyAvailable = ValueNotifier(false);
+      referalNotifier.value = LanternFFI.referral().toDartString();
       userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
       proUserNotifier = ValueNotifier(false);
       // TODO re-enable
@@ -216,12 +218,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<String>(
-      'referral',
-      LanternFFI.referral,
-      defaultValue: '',
-      builder: builder,
-    );
+    return FfiValueBuilder<String>('referralCode', referalNotifier, builder);
   }
 
   Widget deviceId(ValueWidgetBuilder<String> builder) {
