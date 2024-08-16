@@ -363,12 +363,9 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 //export referral
 func referral() *C.char {
 	if user, ok := a.GetUserData(a.Settings().GetUserID()); ok {
-		log.Debugf("Got user data from cache, referral is %s", user.Referral)
-		log.Debugf("Got user data from cache, code is %s", user.Code)
 		return C.CString(user.Referral)
 	}
-	referralCode := ss.GetReferralCode()
-	log.Debugf("Got user data from settings, code is %s", referralCode)
+	referralCode := a.Settings().GetReferralCode()
 	return C.CString(referralCode)
 }
 

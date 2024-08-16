@@ -63,10 +63,11 @@ class SessionModel extends Model {
         false,
       );
     } else {
-      country = ValueNotifier('');
+      country = ValueNotifier('US');
       proxyAvailable = ValueNotifier(false);
-      userEmail = ValueNotifier('');
+      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
       proUserNotifier = ValueNotifier(false);
+      // TODO re-enable
       hasUserSignedInNotifier = ValueNotifier(false);
       isAuthEnabled = ValueNotifier(false);
     }
