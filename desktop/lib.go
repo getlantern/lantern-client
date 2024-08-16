@@ -427,7 +427,7 @@ func referral() *C.char {
 	if user, ok := a.GetUserData(a.Settings().GetUserID()); ok {
 		return C.CString(user.Referral)
 	}
-	referralCode := ss.GetReferralCode()
+	referralCode := a.Settings().GetReferralCode()
 	return C.CString(referralCode)
 }
 

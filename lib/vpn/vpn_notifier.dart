@@ -11,7 +11,10 @@ class VPNChangeNotifier extends ChangeNotifier {
     if (isMobile()) {
       initCallbackForMobile();
     } else {
-      initCallbacks();
+      // TODO: change to call initCallbacks again
+      isFlashlightInitialized = true;
+      isFlashlightInitializedFailed = false;
+      //initCallbacks();
     }
   }
 

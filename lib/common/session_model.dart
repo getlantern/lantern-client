@@ -92,8 +92,6 @@ class SessionModel extends Model {
 
   Pointer<Utf8> ffiSucceedingProxy() => LanternFFI.hasSucceedingProxy();
 
-  Pointer<Utf8> ffiReferralCode() => LanternFFI.referral();
-
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -253,7 +251,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'referral',
-      ffiReferralCode,
+      LanternFFI.referral,
       defaultValue: '',
       builder: builder,
     );
