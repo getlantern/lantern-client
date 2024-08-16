@@ -71,9 +71,9 @@ class SessionModel extends Model {
       );
       userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
       proUserNotifier = ffiValueNotifier(ffiProUser, 'prouser', false);
-      hasUserSignedInNotifier =
-          ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
-      isAuthEnabled = ffiValueNotifier(ffiAuthEnabled, 'authEnabled', false);
+      // TODO re-enable
+      hasUserSignedInNotifier = ValueNotifier(false);
+      isAuthEnabled = ValueNotifier(false);
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled

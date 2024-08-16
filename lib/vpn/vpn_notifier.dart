@@ -42,7 +42,7 @@ class VPNChangeNotifier extends ChangeNotifier {
         print("flashlight initialized");
         notifyListeners();
         timer?.cancel();
-      } else if (timer!.tick >= 6) {
+      } else if (timer != null && timer!.tick >= 6) {
         // Timer has reached 6 seconds
         // Stop the timer and set isFlashlightInitialized to true
         print("flashlight fail initialized");
