@@ -20,7 +20,6 @@ class SessionModel extends Model {
   late final EventManager eventManager;
 
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  ValueNotifier<String> referalNotifier = ValueNotifier('');
   ValueNotifier<bool?>? isPlayVersion;
   ValueNotifier<bool?>? isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
@@ -66,7 +65,6 @@ class SessionModel extends Model {
     } else {
       country = ValueNotifier('US');
       proxyAvailable = ValueNotifier(false);
-      referalNotifier.value = LanternFFI.referral().toDartString();
       userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
       proUserNotifier = ValueNotifier(false);
       // TODO re-enable
@@ -90,7 +88,7 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
-    final notifier = WebsocketSubscriber().proUserNotifier;
+    final notifier = WebsocketSubscriber.proUserNotifier;
     return FfiValueBuilder<bool>('prouser', notifier, builder);
   }
 
@@ -175,7 +173,7 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
-    final notifier = WebsocketSubscriber().langNotifier;
+    final notifier = WebsocketSubscriber.langNotifier;
     return FfiValueBuilder<String>('lang', notifier, builder);
   }
 
@@ -218,7 +216,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('referralCode', referalNotifier, builder);
+    return FfiValueBuilder<String>('referralCode', WebsocketSubscriber.referralNotifier, builder);
   }
 
   Widget deviceId(ValueWidgetBuilder<String> builder) {
@@ -280,7 +278,7 @@ class SessionModel extends Model {
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
     if (isDesktop()) {
-      final notifier = WebsocketSubscriber().userLoggedInNotifier;
+      final notifier = WebsocketSubscriber.userLoggedInNotifier;
       return FfiValueBuilder<bool>('isUserLoggedIn', notifier, builder);
     }
     return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
@@ -511,7 +509,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    final notifier = WebsocketSubscriber().langNotifier;
+    final notifier = WebsocketSubscriber.langNotifier;
     return FfiValueBuilder<String>('lang', notifier, builder);
   }
 
@@ -656,7 +654,7 @@ class SessionModel extends Model {
     }
     return FfiListBuilder<Plan>(
       '/plans/',
-      WebsocketSubscriber().plansNotifier,
+      WebsocketSubscriber.plansNotifier,
       (BuildContext context, ChangeTrackingList<Plan> value, Widget? child) =>
           builder(
         context,
@@ -755,7 +753,7 @@ class SessionModel extends Model {
         },
       );
     }
-    final notifier = WebsocketSubscriber().serverInfoNotifier;
+    final notifier = WebsocketSubscriber.serverInfoNotifier;
     return FfiValueBuilder<ServerInfo?>('serverInfo', notifier, builder);
   }
 
@@ -945,7 +943,7 @@ class SessionModel extends Model {
   Pointer<Utf8> ffiProxyAll() => LanternFFI.proxyAll();
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
-    final notifier = WebsocketSubscriber().proxyAllNotifier;
+    final notifier = WebsocketSubscriber.proxyAllNotifier;
     return FfiValueBuilder<bool>('proxyAll', notifier, builder);
   }
 

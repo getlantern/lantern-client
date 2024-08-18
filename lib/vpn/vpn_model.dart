@@ -21,8 +21,6 @@ class VpnModel extends Model {
     });
   }
 
-  Pointer<Utf8> ffiVpnStatus() => LanternFFI.vpnStatus();
-
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
@@ -30,7 +28,7 @@ class VpnModel extends Model {
         builder: builder,
       );
     }
-    final notifier = WebsocketSubscriber().vpnStatusNotifier;
+    final notifier = WebsocketSubscriber.vpnStatusNotifier;
     return FfiValueBuilder<String>('vpnStatus', notifier, builder);
   }
 
@@ -49,7 +47,7 @@ class VpnModel extends Model {
         },
       );
     }
-    final notifier = WebsocketSubscriber().bandwidthNotifier;
+    final notifier = WebsocketSubscriber.bandwidthNotifier;
     return FfiValueBuilder<Bandwidth?>('bandwidth', notifier, builder);
   }
 }
