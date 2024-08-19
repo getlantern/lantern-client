@@ -134,10 +134,11 @@ class _PlanCardState extends State<PlanCard> {
         resolveRouteIOS();
         break;
       default:
-        if (Platform.isAndroid || !sessionModel.isAuthEnabled.value!) {
+        if(Platform.isAndroid || !sessionModel.isAuthEnabled.value!){
           _processLegacyCheckOut(context);
-          return;
+        return;
         }
+
         if (widget.isPro) {
           _processCheckOut(context);
         } else {
@@ -163,9 +164,7 @@ class _PlanCardState extends State<PlanCard> {
     final isPlayVersion = sessionModel.isPlayVersion?.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
-    if (isPlayVersion &&
-        !inRussia &&
-        await sessionModel.isGooglePlayServiceAvailable()) {
+    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -174,7 +173,6 @@ class _PlanCardState extends State<PlanCard> {
       );
       return;
     } else if (isDesktop()) {
-      try {
       final paymentMethods = await sessionModel.paymentMethodsv4();
       final providers = paymentProvidersFromMethods(paymentMethods);
       // if only one payment provider is returned, bypass the last checkout screen
@@ -190,8 +188,6 @@ class _PlanCardState extends State<PlanCard> {
         await openDesktopWebview(
             context: context, provider: providerName, redirectUrl: redirectUrl);
         return;
-      } catch (e, s) {
-        print(e);
       }
     }
 
@@ -210,9 +206,7 @@ class _PlanCardState extends State<PlanCard> {
     final isPlayVersion = sessionModel.isPlayVersion?.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
-    if (isPlayVersion &&
-        !inRussia &&
-        await sessionModel.isGooglePlayServiceAvailable()) {
+    if (isPlayVersion && !inRussia && await sessionModel.isGooglePlayServiceAvailable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -221,7 +215,6 @@ class _PlanCardState extends State<PlanCard> {
       );
       return;
     } else if (isDesktop()) {
-      context.loaderOverlay.show();
       final paymentMethods = await sessionModel.paymentMethodsv4();
       final providers = paymentProvidersFromMethods(paymentMethods);
       // if only one payment provider is returned, bypass the last checkout screen
@@ -233,7 +226,6 @@ class _PlanCardState extends State<PlanCard> {
           "",
           providerName,
         );
-        context.loaderOverlay.hide();
         await openDesktopWebview(
             context: context, provider: providerName, redirectUrl: redirectUrl);
         return;
