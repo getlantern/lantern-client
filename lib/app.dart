@@ -90,10 +90,10 @@ class _LanternAppState extends State<LanternApp>
     if (!hasConnection) {
       return;
     }
-   final vpnConnected = await vpnModel.isVpnConnected();
+    final vpnConnected = await vpnModel.isVpnConnected();
 
     /// If vpn is not connected then we should not show the connectivity warning
-    if(!vpnConnected){
+    if (!vpnConnected) {
       return;
     }
     final shouldShowConnectivityWarning =
@@ -122,77 +122,74 @@ class _LanternAppState extends State<LanternApp>
         ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
         ChangeNotifierProvider(create: (context) => InternetStatusProvider())
       ],
-      child: ChangeNotifierProvider(
-        create: (context) => BottomBarChangeNotifier(),
-        child: sessionModel.language(
-          (context, lang, child) {
-            Localization.locale = lang.startsWith('en') ? "en_us" : lang;
-            return GlobalLoaderOverlay(
-              useDefaultLoading: false,
-              overlayColor: Colors.black.withOpacity(0.5),
-              overlayWidget: Center(
-                child: AnimatedLoadingBorder(
-                  borderWidth: 5,
-                  borderColor: yellow3,
-                  cornerRadius: 100,
-                  child: SvgPicture.asset(
-                    ImagePaths.lantern_logo,
-                  ),
+      child: sessionModel.language(
+        (context, lang, child) {
+          Localization.locale = lang.startsWith('en') ? "en_us" : lang;
+          return GlobalLoaderOverlay(
+            useDefaultLoading: false,
+            overlayColor: Colors.black.withOpacity(0.5),
+            overlayWidget: Center(
+              child: AnimatedLoadingBorder(
+                borderWidth: 5,
+                borderColor: yellow3,
+                cornerRadius: 100,
+                child: SvgPicture.asset(
+                  ImagePaths.lantern_logo,
                 ),
               ),
-              child: I18n(
-                initialLocale: currentLocale(lang),
-                child: MaterialApp.router(
-                  locale: currentLocale(lang),
-                  debugShowCheckedModeBanner: false,
-                  theme: ThemeData(
-                    useMaterial3: false,
-                    fontFamily: _getLocaleBasedFont(currentLocal),
-                    brightness: Brightness.light,
-                    primarySwatch: Colors.grey,
-                    appBarTheme: const AppBarTheme(
-                      systemOverlayStyle: SystemUiOverlayStyle.dark,
-                    ),
-                    colorScheme: ColorScheme.fromSwatch()
-                        .copyWith(secondary: Colors.black),
+            ),
+            child: I18n(
+              initialLocale: currentLocale(lang),
+              child: MaterialApp.router(
+                locale: currentLocale(lang),
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                  useMaterial3: false,
+                  fontFamily: _getLocaleBasedFont(currentLocal),
+                  brightness: Brightness.light,
+                  primarySwatch: Colors.grey,
+                  appBarTheme: const AppBarTheme(
+                    systemOverlayStyle: SystemUiOverlayStyle.dark,
                   ),
-                  title: 'app_name'.i18n,
-                  localizationsDelegates: const [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  routerConfig: globalRouter.config(
-                    deepLinkBuilder: navigateToDeepLink,
-                  ),
-                  supportedLocales: const [
-                    Locale('ar', 'EG'),
-                    Locale('fr', 'FR'),
-                    Locale('en', 'US'),
-                    Locale('fa', 'IR'),
-                    Locale('th', 'TH'),
-                    Locale('ms', 'MY'),
-                    Locale('ru', 'RU'),
-                    Locale('ur', 'IN'),
-                    Locale('zh', 'CN'),
-                    Locale('zh', 'HK'),
-                    Locale('es', 'ES'),
-                    Locale('es', 'CU'),
-                    Locale('tr', 'TR'),
-                    Locale('vi', 'VN'),
-                    Locale('my', 'MM'),
-                  ],
+                  colorScheme: ColorScheme.fromSwatch()
+                      .copyWith(secondary: Colors.black),
                 ),
+                title: 'app_name'.i18n,
+                localizationsDelegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                routerConfig: globalRouter.config(
+                  deepLinkBuilder: navigateToDeepLink,
+                ),
+                supportedLocales: const [
+                  Locale('ar', 'EG'),
+                  Locale('fr', 'FR'),
+                  Locale('en', 'US'),
+                  Locale('fa', 'IR'),
+                  Locale('th', 'TH'),
+                  Locale('ms', 'MY'),
+                  Locale('ru', 'RU'),
+                  Locale('ur', 'IN'),
+                  Locale('zh', 'CN'),
+                  Locale('zh', 'HK'),
+                  Locale('es', 'ES'),
+                  Locale('es', 'CU'),
+                  Locale('tr', 'TR'),
+                  Locale('vi', 'VN'),
+                  Locale('my', 'MM'),
+                ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {
-    if(!Platform.isAndroid){
+    if (!Platform.isAndroid) {
       return DeepLink.defaultPath;
     }
     logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
