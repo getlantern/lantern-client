@@ -177,9 +177,8 @@ class _PlanCardState extends State<PlanCard> {
       final providers = paymentProvidersFromMethods(paymentMethods);
       // if only one payment provider is returned, bypass the last checkout screen
       // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
-      if (providers.length == 1 &&
-          providers[0].name.toPaymentEnum() == Providers.stripe) {
-        final providerName = providers[0].name.toPaymentEnum();
+      if (providers != null && providers.length > 0) {
+        final providerName = Providers.shepherd;
         final redirectUrl = await sessionModel.paymentRedirectForDesktop(
           context,
           widget.plan.id,
@@ -222,7 +221,7 @@ class _PlanCardState extends State<PlanCard> {
       // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
       if (providers.length == 1 &&
           providers[0].name.toPaymentEnum() == Providers.stripe) {
-        final providerName = providers[0].name.toPaymentEnum();
+        final providerName = Providers.shepherd;
         final redirectUrl = await sessionModel.paymentRedirectForDesktop(
           context,
           widget.plan.id,
