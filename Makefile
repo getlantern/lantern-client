@@ -530,7 +530,7 @@ darwin-arm64: $(DARWIN_LIB_ARM64)
 $(DARWIN_LIB_ARM64): export LIB_NAME = $(DARWIN_LIB_ARM64)
 $(DARWIN_LIB_ARM64): export GOOS = darwin
 $(DARWIN_LIB_ARM64): export GOARCH = arm64
-$(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -a -buildmode=c-shared
+$(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -buildmode=c-shared
 $(DARWIN_LIB_ARM64): desktop-lib
 
 .PHONY: darwin

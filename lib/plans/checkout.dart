@@ -232,44 +232,29 @@ class _CheckoutState extends State<Checkout>
   }
 
   Future<void> resolvePaymentMethod() async {
-    switch (selectedPaymentProvider!) {
+    final provider = selectedPaymentProvider!;
+    if (isDesktop() && provider != Providers.test) {
+      _proceedWithPaymentRedirect(provider);
+      return;
+    }
+    switch (provider) {
       case Providers.stripe:
-        if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.stripe);
-          return;
-        }
         _proceedWithStripe();
         break;
       case Providers.btcpay:
-        if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.btcpay);
-          return;
-        }
         _proceedWithBTCPay();
         break;
       case Providers.freekassa:
         _proceedWithFreekassa();
         break;
       case Providers.fropay:
-        if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.fropay);
-          return;
-        }
         _proceedWithFroPay();
       case Providers.shepherd:
-        if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.shepherd);
-          return;
-        }
         _proceedWithShepherd();
         return;
       case Providers.paymentwall:
-        if (isDesktop()) {
-          _proceedWithPaymentRedirect(Providers.paymentwall);
-          return;
-        }
         _proceedWithPaymentWall();
-        break;
+        return;
       case Providers.test:
         if (isDesktop()) {
           _proceedTestRequest();
@@ -325,20 +310,20 @@ class _CheckoutState extends State<Checkout>
   }
 
   void _proceedTestRequest() async {
-      try {
-        context.loaderOverlay.show();
-        final value = await sessionModel.testProviderRequest(
-            widget.email!, Providers.test.name, widget.plan.id);
-        context.loaderOverlay.hide();
-        if (widget.isPro) {
-          showSuccessDialog(context, widget.isPro);
-        } else {
-          resolveRoute();
-        }
-      } catch (error, stackTrace) {
-        context.loaderOverlay.hide();
-        showError(context, error: error, stackTrace: stackTrace);
+    try {
+      context.loaderOverlay.show();
+      final value = await sessionModel.testProviderRequest(
+          widget.email!, Providers.test.name, widget.plan.id);
+      context.loaderOverlay.hide();
+      if (widget.isPro) {
+        showSuccessDialog(context, widget.isPro);
+      } else {
+        resolveRoute();
       }
+    } catch (error, stackTrace) {
+      context.loaderOverlay.hide();
+      showError(context, error: error, stackTrace: stackTrace);
+    }
   }
 
   void _proceedWithShepherd() async {

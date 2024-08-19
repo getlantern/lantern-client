@@ -22,7 +22,6 @@ func (s *statsTracker) StartService(channel ws.UIChannel) (err error) {
 		log.Debugf("Sending Lantern stats to new client")
 		write(s.Latest())
 	}
-
 	s.service, err = channel.Register("stats", helloFn)
 	if err == nil {
 		s.AddListener(func(newStats stats.Stats) {
@@ -36,4 +35,11 @@ func (s *statsTracker) StartService(channel ws.UIChannel) (err error) {
 		})
 	}
 	return
+}
+
+func (app *App) Stats() stats.Stats {
+	if app.statsTracker != nil {
+		return app.statsTracker.Latest()
+	}
+	return stats.Stats{}
 }
