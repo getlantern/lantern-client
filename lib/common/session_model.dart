@@ -645,17 +645,11 @@ class SessionModel extends Model {
   }
 
   // Plans and payment methods
-
-  Future<void> restorePurchase() async {
-    return methodChannel.invokeMethod('restorePurchase');
-  }
-
   Future<void> restoreAccount(
       String email, String code) async {
     return methodChannel.invokeMethod('restoreAccount', <String, dynamic>{
       "email": email,
       "code": code,
-      "token": "",
       "provider": Platform.isAndroid ? "googleplay" : "applepay"
     });
   }

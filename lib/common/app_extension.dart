@@ -33,6 +33,14 @@ extension ErrorX on Object {
           return "err_while_sending_code".i18n;
         }
 
+        if (description.contains("error-wrong-code")) {
+          return "invalid_code".i18n;
+        }
+
+        if (description.contains("error restoring purchase")) {
+          return "purchase_restored_error".i18n;
+        }
+
         if (description.contains("error restoring purchase")) {
           return "purchase_restored_error".i18n;
         }

@@ -151,33 +151,6 @@ class _LanternAppState extends State<LanternApp>
                   appBarTheme: const AppBarTheme(
                     systemOverlayStyle: SystemUiOverlayStyle.dark,
                   ),
-                  title: 'app_name'.i18n,
-                  localizationsDelegates: const [
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  routerConfig: globalRouter.config(
-                    deepLinkBuilder: navigateToDeepLink,
-                  ),
-
-                  supportedLocales: const [
-                    Locale('ar', 'EG'),
-                    Locale('fr', 'FR'),
-                    Locale('en', 'US'),
-                    Locale('fa', 'IR'),
-                    Locale('th', 'TH'),
-                    Locale('ms', 'MY'),
-                    Locale('ru', 'RU'),
-                    Locale('ur', 'IN'),
-                    Locale('zh', 'CN'),
-                    Locale('zh', 'HK'),
-                    Locale('es', 'ES'),
-                    Locale('es', 'CU'),
-                    Locale('tr', 'TR'),
-                    Locale('vi', 'VN'),
-                    Locale('my', 'MM'),
-                  ],
                 ),
                 title: 'app_name'.i18n,
                 localizationsDelegates: const [

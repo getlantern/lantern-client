@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/plans/utils.dart';
+
 import '../../common/common.dart';
 
 @RoutePage(name: "RestorePurchase")
@@ -7,12 +8,10 @@ class RestorePurchase extends StatefulWidget {
   const RestorePurchase({super.key});
 
   @override
-  State<RestorePurchase> createState() =>
-      _RestorePurchaseState();
+  State<RestorePurchase> createState() => _RestorePurchaseState();
 }
 
-class _RestorePurchaseState
-    extends State<RestorePurchase> {
+class _RestorePurchaseState extends State<RestorePurchase> {
   final _emailFormKey = GlobalKey<FormState>();
   late final _emailController = CustomTextEditingController(
     formKey: _emailFormKey,
@@ -34,7 +33,6 @@ class _RestorePurchaseState
   Widget _buildBody() {
     return Column(
       children: <Widget>[
-
         Center(child: CText("restore_purchase".i18n, style: tsHeading1)),
         const SizedBox(height: 16),
         Form(
@@ -84,9 +82,9 @@ class _RestorePurchaseState
       await sessionModel.userEmailRequest(email.validateEmail);
       context.loaderOverlay.hide();
       context.pushRoute(Verification(
-          email: email.validateEmail,
-          authFlow: AuthFlow.restoreAccount,
-          ));
+        email: email.validateEmail,
+        authFlow: AuthFlow.restoreAccount,
+      ));
     } catch (e) {
       context.loaderOverlay.hide();
       showError(context, description: e.localizedDescription);

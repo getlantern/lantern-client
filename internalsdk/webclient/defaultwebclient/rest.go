@@ -62,8 +62,8 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.PreR
 		log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
 
 		if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
-			log.Errorf("Unexpected status code %d\n\n%v", resp.StatusCode(), string(responseBody))
-			return nil, errors.New("Unexpected status code %d", resp.StatusCode())
+			// log.Errorf("Unexpected status code %d\n\n%v", resp.StatusCode(), string(responseBody))
+			return nil, errors.New("%s Unexpected status code %d", string(responseBody), resp.StatusCode())
 		}
 		return responseBody, nil
 	}

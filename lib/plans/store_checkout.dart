@@ -100,7 +100,7 @@ class _StoreCheckoutState extends State<StoreCheckout>
 
   void _validateEmailAndContinue() {
     if (emailFieldKey.currentState?.validate() == false) {
-      showError(context, error: 'please_enter_a_valid_email_address'.i18n);
+      // showError(context, error: 'please_enter_a_valid_email_address'.i18n);
       return;
     }
     startPurchaseFlow();

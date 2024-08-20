@@ -2,7 +2,6 @@
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
-import 'package:lantern/core/purchase/app_purchase.dart';
 import 'package:lantern/plans/utils.dart';
 
 import '../../common/common.dart';
@@ -32,6 +31,24 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
         ? null
         : 'please_enter_a_valid_email_address'.i18n,
   );
+
+  @override
+  void initState() {
+    prePopulateEmailIfNeeded();
+    super.initState();
+  }
+
+  void prePopulateEmailIfNeeded() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        if (mounted) {
+          setState(() {
+            _emailController.text = widget.email ?? '';
+          });
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,6 +180,4 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
       CDialog.showError(context, description: e.localizedDescription);
     }
   }
-
-
 }

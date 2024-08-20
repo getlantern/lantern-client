@@ -50,7 +50,8 @@ class _VerificationState extends State<Verification> {
               const SizedBox(height: 24),
               HeadingText(
                 title: widget.authFlow.isCreateAccount ||
-                        widget.authFlow.isVerifyEmail
+                        widget.authFlow.isVerifyEmail ||
+                        widget.authFlow.isRestoreAccount
                     ? 'confirm_email'.i18n
                     : 'reset_password'.i18n,
               ),

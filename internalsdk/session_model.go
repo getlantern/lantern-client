@@ -1224,7 +1224,6 @@ func restorePurchase(session *SessionModel, email string, code string, provider 
 	requData := map[string]interface{}{
 		"verified_email":          email,
 		"provider":                provider,
-		"token":                   "123",
 		"deviceName":              deviceName,
 		"email_verification_code": code,
 	}
