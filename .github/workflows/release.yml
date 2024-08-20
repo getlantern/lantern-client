@@ -178,7 +178,7 @@ jobs:
           track: beta
 
       - name: Upload Android App bundle to Play Store (production)
-        if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+        if: needs.set-version.outputs.prefix == 'lantern-installer'
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
