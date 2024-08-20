@@ -61,19 +61,8 @@ class LanternFFI {
     //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
-  static Pointer<Utf8> vpnStatus() => _lanternFFI.vpnStatus().cast<Utf8>();
-
-  static Pointer<Utf8> lang() => _lanternFFI.lang().cast<Utf8>();
-
-  static Pointer<Utf8> proxyAll() => _lanternFFI.proxyAll().cast<Utf8>();
-
-  static Pointer<Utf8> ffiStoreVersion() =>
-      _lanternFFI.storeVersion().cast<Utf8>();
-
   static Pointer<Utf8> hasSucceedingProxy() =>
       _lanternFFI.hasSucceedingProxy().cast<Utf8>();
-
-  static Pointer<Utf8> proUser() => _lanternFFI.proUser().cast<Utf8>();
 
   static Future<User> ffiUserData() async {
     final res = await _lanternFFI.userData().cast<Utf8>().toDartString();

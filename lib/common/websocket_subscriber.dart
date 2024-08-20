@@ -46,6 +46,10 @@ class WebsocketSubscriber {
             }
           case WebsocketMessage.pro:
             print("pro websocket message: $json");
+            final userStatus = message['userStatus'];
+            final userLevel = message['userLevel'];
+            if (userStatus != null && userStatus == 'active') sessionModel.proUserNotifier.value = true;
+            if (userLevel != null && userLevel == 'pro') sessionModel.proUserNotifier.value = true;
           case WebsocketMessage.bandwidth:
             print("bandwidth websocket message: $json");
             final Map res = jsonDecode(jsonEncode(json));

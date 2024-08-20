@@ -26,6 +26,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proUserNotifier;
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> referralNotifier;
+  late ValueNotifier<String?> deviceIdNotifier;
   late ValueNotifier<String?> langNotifier;
   late ValueNotifier<bool> proxyAllNotifier;
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
@@ -79,6 +80,7 @@ class SessionModel extends Model {
       serverInfoNotifier = ValueNotifier<ServerInfo?>(null);
       proxyAllNotifier = ValueNotifier(false);
       referralNotifier = ValueNotifier('');
+      deviceIdNotifier = ValueNotifier('');
       isAuthEnabled = ValueNotifier(false);
     }
     if (Platform.isAndroid) {
@@ -185,8 +187,6 @@ class SessionModel extends Model {
     return FfiValueBuilder<String>('lang', langNotifier, builder);
   }
 
-  Pointer<Utf8> ffiEmailAddress() => LanternFFI.emailAddress();
-
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
@@ -194,12 +194,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<String>(
-      'emailAddress',
-      ffiEmailAddress,
-      defaultValue: '',
-      builder: builder,
-    );
+    return FfiValueBuilder<String>('lang', userEmail, builder);
   }
 
   Widget expiryDate(ValueWidgetBuilder<String> builder) {
@@ -231,12 +226,7 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
     }
-    return ffiValueBuilder<String>(
-      'deviceid',
-      LanternFFI.deviceId,
-      defaultValue: '',
-      builder: builder,
-    );
+    return FfiValueBuilder<String>('deviceid', deviceIdNotifier, builder);
   }
 
   Devices devicesFromJson(dynamic item) {
