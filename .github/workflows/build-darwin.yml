@@ -164,4 +164,4 @@ jobs:
         shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
         shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
         cp "$DMG".sha256 ${{ env.prefix }}.dmg.sha256
-        s3cmd put --acl-public "$DMG" "$DMG".sha256 ${{ env.update }} ${{ env.update }}.sha256 ${{ env.version_file }} ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
+        s3cmd put --acl-public ${{ env.update }} ${{ env.update }}.sha256 ${{ env.version_file }} ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
