@@ -1798,10 +1798,13 @@ msgid "email_hint"
 msgstr "*Email is optional but encouraged"
 
 msgid "email_hint_pro"
-msgstr "Add an email to access your purchases on any device.  Without an email purchases are tied to this device and could be lost. "
+msgstr "Add an email to access your purchases on any device. Without an email purchases are tied to this device and could be lost. "
 
 msgid "continue_without_email"
 msgstr "Continue without Email"
+
+msgid "no_purchases_found"
+msgstr "No Purchases Found"
 
 
 

@@ -32,8 +32,11 @@ extension ErrorX on Object {
         if (description.contains("err_while_sending_code")) {
           return "err_while_sending_code".i18n;
         }
+        if (description.contains("no valid purchases for user")) {
+          return "no_purchases_found".i18n;
+        }
 
-        if (description.contains("error-wrong-code")) {
+        if (description.contains("error-wrong-code") || description.contains("<error-email-not-verified>")) {
           return "invalid_code".i18n;
         }
 
@@ -44,7 +47,7 @@ extension ErrorX on Object {
         if (description.contains("error restoring purchase")) {
           return "purchase_restored_error".i18n;
         }
-        
+
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;
         } else {

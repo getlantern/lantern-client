@@ -820,7 +820,11 @@ class SessionModel(
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
                     Logger.error(TAG, "Error restoring purchase", t.toString())
-                    result.error("error restoring purchase", "error restoring purchase", error?.message)
+                    result.error(
+                        "error restoring purchase",
+                        "error restoring purchase",
+                        error?.message
+                    )
                 }
             })
         } catch (t: Throwable) {

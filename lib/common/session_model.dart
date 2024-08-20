@@ -483,7 +483,7 @@ class SessionModel extends Model {
         'email': email,
       });
     }
-     throw Exception("Not supported on desktop");
+    throw Exception("Not supported on desktop");
   }
 
   Future<void> authorizeViaEmail(String emailAddress) async {
@@ -495,7 +495,7 @@ class SessionModel extends Model {
     return await compute(ffiAuthorizeEmail, emailAddress);
   }
 
-  Future<void> validateDeviceRecoveryCode(String code,String email) async {
+  Future<void> validateDeviceRecoveryCode(String code, String email) async {
     if (isMobile()) {
       return await methodChannel
           .invokeMethod('validateRecoveryCode', <String, dynamic>{
@@ -574,11 +574,16 @@ class SessionModel extends Model {
   }
 
   Future<String> getReplicaAddr() async {
-    final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
-    if (replicaAddr == null || replicaAddr == '') {
-      logger.e('Replica not enabled');
+    try {
+      final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
+      if (replicaAddr == null || replicaAddr == '') {
+        logger.e('Replica not enabled');
+      }
+      return replicaAddr;
+    } catch (e) {
+      logger.e('Error getting replica address: $e');
+      return '';
     }
-    return replicaAddr;
   }
 
   // Widget authEnabled(ValueWidgetBuilder<bool> builder) {
@@ -645,8 +650,7 @@ class SessionModel extends Model {
   }
 
   // Plans and payment methods
-  Future<void> restoreAccount(
-      String email, String code) async {
+  Future<void> restoreAccount(String email, String code) async {
     return methodChannel.invokeMethod('restoreAccount', <String, dynamic>{
       "email": email,
       "code": code,

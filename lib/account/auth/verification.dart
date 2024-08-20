@@ -158,7 +158,7 @@ class _VerificationState extends State<Verification> {
   Future<void> resendRestoreEmailVerificationCode() async {
     try {
       context.loaderOverlay.show();
-      await sessionModel.authorizeViaEmail(widget.email);
+      await sessionModel.userEmailRequest(widget.email);
       context.loaderOverlay.hide();
       showSnackbar(context: context, content: 'email_resend_message'.i18n);
     } catch (e, s) {
