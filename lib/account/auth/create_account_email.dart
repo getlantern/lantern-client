@@ -41,10 +41,12 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
   void prePopulateEmailIfNeeded() {
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        if (mounted) {
-          setState(() {
-            _emailController.text = widget.email ?? '';
-          });
+        if (widget.email != null && widget.email != '') {
+          if (mounted) {
+            setState(() {
+              _emailController.text = widget.email ?? '';
+            });
+          }
         }
       },
     );
