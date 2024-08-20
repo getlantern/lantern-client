@@ -933,8 +933,6 @@ class SessionModel extends Model {
     );
   }
 
-  Pointer<Utf8> ffiProxyAll() => LanternFFI.proxyAll();
-
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
     return FfiValueBuilder<bool>('proxyAll', proxyAllNotifier, builder);
   }
