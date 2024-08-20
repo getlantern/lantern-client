@@ -25,9 +25,14 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<bool?> proUserNotifier;
   late ValueNotifier<String?> country;
+  late ValueNotifier<String?> referralNotifier;
+  late ValueNotifier<String?> langNotifier;
+  late ValueNotifier<bool> proxyAllNotifier;
+  late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
   late ValueNotifier<bool?> isAuthEnabled;
+  late FfiListNotifier<Plan> plansNotifier;
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -65,10 +70,15 @@ class SessionModel extends Model {
     } else {
       country = ValueNotifier('US');
       proxyAvailable = ValueNotifier(false);
-      userEmail = ffiValueNotifier(ffiEmailAddress, 'emailAddress', "");
+      userEmail = ValueNotifier("");
       proUserNotifier = ValueNotifier(false);
+      plansNotifier = FfiListNotifier<Plan>('/plans/', LanternFFI.plans, planFromJson, () => {});
       // TODO re-enable
       hasUserSignedInNotifier = ValueNotifier(false);
+      langNotifier = ValueNotifier('en_us');
+      serverInfoNotifier = ValueNotifier<ServerInfo?>(null);
+      proxyAllNotifier = ValueNotifier(false);
+      referralNotifier = ValueNotifier('');
       isAuthEnabled = ValueNotifier(false);
     }
     if (Platform.isAndroid) {
@@ -88,8 +98,7 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
     }
-    final notifier = WebsocketSubscriber.proUserNotifier;
-    return FfiValueBuilder<bool>('prouser', notifier, builder);
+    return FfiValueBuilder<bool>('prouser', proUserNotifier, builder);
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
@@ -173,8 +182,7 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
-    final notifier = WebsocketSubscriber.langNotifier;
-    return FfiValueBuilder<String>('lang', notifier, builder);
+    return FfiValueBuilder<String>('lang', langNotifier, builder);
   }
 
   Pointer<Utf8> ffiEmailAddress() => LanternFFI.emailAddress();
@@ -216,7 +224,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('referralCode', WebsocketSubscriber.referralNotifier, builder);
+    return FfiValueBuilder<String>('referralCode', referralNotifier, builder);
   }
 
   Widget deviceId(ValueWidgetBuilder<String> builder) {
@@ -273,13 +281,10 @@ class SessionModel extends Model {
 
   ///Auth Widgets
 
-  Pointer<Utf8> ffiIsUserLoggedIn() => LanternFFI.isUserLoggedIn();
-
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
     if (isDesktop()) {
-      final notifier = WebsocketSubscriber.userLoggedInNotifier;
-      return FfiValueBuilder<bool>('isUserLoggedIn', notifier, builder);
+      return FfiValueBuilder<bool>('isUserLoggedIn', hasUserSignedInNotifier, builder);
     }
     return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
         builder: builder, defaultValue: false);
@@ -509,8 +514,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    final notifier = WebsocketSubscriber.langNotifier;
-    return FfiValueBuilder<String>('lang', notifier, builder);
+    return FfiValueBuilder<String>('lang', country, builder);
   }
 
   Future<String> getReplicaAddr() async {
@@ -654,7 +658,7 @@ class SessionModel extends Model {
     }
     return FfiListBuilder<Plan>(
       '/plans/',
-      WebsocketSubscriber.plansNotifier,
+      plansNotifier,
       (BuildContext context, ChangeTrackingList<Plan> value, Widget? child) =>
           builder(
         context,
@@ -753,8 +757,7 @@ class SessionModel extends Model {
         },
       );
     }
-    final notifier = WebsocketSubscriber.serverInfoNotifier;
-    return FfiValueBuilder<ServerInfo?>('serverInfo', notifier, builder);
+    return FfiValueBuilder<ServerInfo?>('serverInfo', serverInfoNotifier, builder);
   }
 
   Future<void> trackUserAction(
@@ -943,8 +946,7 @@ class SessionModel extends Model {
   Pointer<Utf8> ffiProxyAll() => LanternFFI.proxyAll();
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
-    final notifier = WebsocketSubscriber.proxyAllNotifier;
-    return FfiValueBuilder<bool>('proxyAll', notifier, builder);
+    return FfiValueBuilder<bool>('proxyAll', proxyAllNotifier, builder);
   }
 
   Future<void> setSplitTunneling<T>(bool on) async {

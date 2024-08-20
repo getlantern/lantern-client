@@ -5,7 +5,16 @@ import 'package:lantern/vpn/vpn.dart';
 final vpnModel = VpnModel();
 
 class VpnModel extends Model {
-  VpnModel() : super('vpn');
+
+  late ValueNotifier<Bandwidth?> bandwidthNotifier;
+  late ValueNotifier<String> vpnStatusNotifier;
+
+  VpnModel() : super('vpn') {
+    if (isDesktop()) {
+      bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
+      vpnStatusNotifier = ValueNotifier("disconnected");
+    }
+  }
 
   Future<void> switchVPN<T>(bool on) async {
     return methodChannel.invokeMethod('switchVPN', <String, dynamic>{
@@ -28,8 +37,7 @@ class VpnModel extends Model {
         builder: builder,
       );
     }
-    final notifier = WebsocketSubscriber.vpnStatusNotifier;
-    return FfiValueBuilder<String>('vpnStatus', notifier, builder);
+    return FfiValueBuilder<String>('vpnStatus', vpnStatusNotifier, builder);
   }
 
   Future<bool> isVpnConnected() async {
@@ -47,7 +55,6 @@ class VpnModel extends Model {
         },
       );
     }
-    final notifier = WebsocketSubscriber.bandwidthNotifier;
-    return FfiValueBuilder<Bandwidth?>('bandwidth', notifier, builder);
+    return FfiValueBuilder<Bandwidth?>('bandwidth', bandwidthNotifier, builder);
   }
 }
