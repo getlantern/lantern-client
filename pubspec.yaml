@@ -40,10 +40,10 @@ dependencies:
   flag: ^7.0.0
 
   #Loogs and crash reporting
-  catcher_2: ^1.2.4
-  sentry_flutter: ^8.3.0
+  catcher_2: ^1.2.6
+  sentry_flutter: ^8.6.0
 
-  badges: ^3.1.1
+  badges: ^3.1.2
   dotted_border: ^2.0.0+3
   styled_text: ^8.1.0
   emoji_picker_flutter: ^1.6.4
@@ -109,7 +109,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
 
   # Notifications & Logging
-  flutter_local_notifications: ^17.1.2
+  flutter_local_notifications: ^17.2.2
   logger: ^2.3.0
 
   # Error handling

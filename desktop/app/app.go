@@ -31,7 +31,6 @@ import (
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
-	"github.com/getlantern/memhelper"
 	notify "github.com/getlantern/notifier"
 	"github.com/getlantern/profiling"
 
@@ -110,10 +109,10 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
+		statsTracker:              NewStatsTracker(),
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
-	app.statsTracker = NewStatsTracker(app)
 	if err := app.serveWebsocket(); err != nil {
 		log.Error(err)
 	}
@@ -150,10 +149,6 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 // Run starts the app.
 func (app *App) Run(isMain bool) {
 	golog.OnFatal(app.exitOnFatal)
-
-	memhelper.Track(15*time.Second, 15*time.Second, func(err error) {
-		sentry.CaptureException(err)
-	})
 
 	go func() {
 		for <-geolookup.OnRefresh() {
@@ -236,16 +231,6 @@ func (app *App) Run(isMain bool) {
 		}
 		app.beforeStart(listenAddr)
 
-		chProStatusChanged := make(chan bool, 1)
-		onProStatusChange(func(isPro bool) {
-			chProStatusChanged <- isPro
-		})
-		chUserChanged := make(chan bool, 1)
-		app.settings.OnChange(settings.SNUserID, func(v interface{}) {
-			chUserChanged <- true
-		})
-		app.startFeaturesService(geolookup.OnRefresh(), chUserChanged, chProStatusChanged, app.chGlobalConfigChanged)
-
 		notifyConfigSaveErrorOnce := new(sync.Once)
 
 		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
@@ -277,31 +262,12 @@ func (app *App) Run(isMain bool) {
 	}()
 }
 
-// checkEnabledFeatures checks if features are enabled
-func (app *App) checkEnabledFeatures() {
-	enabledFeatures := app.flashlight.EnabledFeatures()
-	log.Debugf("Starting enabled features: %v", enabledFeatures)
-	//go app.startReplicaIfNecessary(enabledFeatures)
-}
-
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
 func (app *App) IsFeatureEnabled(feature string) bool {
 	if app.flashlight == nil {
 		return false
 	}
 	return app.flashlight.EnabledFeatures()[feature]
-}
-
-// startFeaturesService starts a new features service that dispatches features to any relevant listeners.
-func (app *App) startFeaturesService(chans ...<-chan bool) {
-	app.checkEnabledFeatures()
-	for _, ch := range chans {
-		go func(c <-chan bool) {
-			for range c {
-				app.checkEnabledFeatures()
-			}
-		}(ch)
-	}
 }
 
 func (app *App) beforeStart(listenAddr string) {
@@ -341,6 +307,10 @@ func (app *App) beforeStart(listenAddr string) {
 
 	isProUser := func() (bool, bool) {
 		return app.IsProUser(context.Background())
+	}
+
+	if err := app.statsTracker.StartService(app.ws); err != nil {
+		log.Errorf("Unable to serve stats to UI: %v", err)
 	}
 
 	if err := datacap.ServeDataCap(app.ws, func() string {
