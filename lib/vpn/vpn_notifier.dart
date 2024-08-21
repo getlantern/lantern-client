@@ -27,13 +27,11 @@ class VPNChangeNotifier extends ChangeNotifier {
       if (result.$1 && result.$2 && !result.$3) {
         flashlightState = 'establish_connection_to_server'.i18n;
       }
-      notifyListeners();
       if (result.$1 && result.$2 && result.$3) {
         // everything is initialized
         isFlashlightInitialized = true;
         isFlashlightInitializedFailed = false;
         print("flashlight initialized");
-        notifyListeners();
         timer?.cancel();
       } else if (timer!.tick >= 6) {
         // Timer has reached 6 seconds
@@ -41,15 +39,15 @@ class VPNChangeNotifier extends ChangeNotifier {
         print("flashlight fail initialized");
         isFlashlightInitialized = true;
         isFlashlightInitializedFailed = true;
-        notifyListeners();
       }
+      notifyListeners();
     });
   }
 
   void initCallbackForMobile() {
     //Since IOS config is fetched from the on native side
     // We just need to make true for all
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       isFlashlightInitialized = true;
       isFlashlightInitializedFailed = false;
       notifyListeners();
@@ -69,9 +67,12 @@ class VPNChangeNotifier extends ChangeNotifier {
         notifyListeners();
       }
     });
-    final configNotifier = sessionModel.pathValueNotifier('hasConfigFetched', false);
-    final proxyNotifier = sessionModel.pathValueNotifier('hasProxyFetched', false);
-    final successNotifier = sessionModel.pathValueNotifier('hasOnSuccess', false);
+    final configNotifier =
+        sessionModel.pathValueNotifier('hasConfigFetched', false);
+    final proxyNotifier =
+        sessionModel.pathValueNotifier('hasProxyFetched', false);
+    final successNotifier =
+        sessionModel.pathValueNotifier('hasOnSuccess', false);
 
     updateStatus(bool proxy, bool config, bool success) {
       if (proxy || config) {
