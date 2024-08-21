@@ -24,7 +24,7 @@ import java.util.Random
 import java.util.concurrent.atomic.AtomicBoolean
 
 @EService
-open class LanternService : Service(), Runnable {
+class LanternService : Service(), Runnable {
 
     companion object {
         private val TAG = LanternService::class.java.simpleName

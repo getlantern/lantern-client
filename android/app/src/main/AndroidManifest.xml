@@ -87,7 +87,7 @@
         </activity>
 
         <service
-            android:name=".service.LanternService_"
+            android:name=".service.LanternService"
             android:enabled="true"
             android:exported="false"
             android:stopWithTask="false" />

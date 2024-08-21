@@ -160,7 +160,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		// because we are not using the flashlight on ios
 		// We need to figure out where to put proxied SetProxyAddr
 		HttpClient: &http.Client{
-			Transport: proxied.Fronted(dialTimeout),
+			Transport: proxied.ParallelPreferChained(),
 			Timeout:   dialTimeout,
 		},
 		UserConfig: func() common.UserConfig {

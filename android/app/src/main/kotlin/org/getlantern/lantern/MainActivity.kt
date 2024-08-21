@@ -124,13 +124,11 @@ class MainActivity :
         )
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
         super.onCreate(savedInstanceState)
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
-        val intent = Intent(this, LanternService::class.java)
-        context.startService(intent)
-        Logger.debug(TAG, "startService finished at ${System.currentTimeMillis() - start}")
         subscribeAppEvents()
     }
 
@@ -173,6 +171,7 @@ class MainActivity :
                 ContextCompat.RECEIVER_NOT_EXPORTED,
             )
         }
+        startLanternService()
     }
 
     override fun onStop() {
@@ -216,6 +215,13 @@ class MainActivity :
 
             else -> result.notImplemented()
         }
+    }
+
+
+    private fun startLanternService() {
+        val intent = Intent(this, LanternService::class.java)
+        context.startService(intent)
+        Logger.debug(TAG, "Lantern service started at ${System.currentTimeMillis()}")
     }
 
     /**
