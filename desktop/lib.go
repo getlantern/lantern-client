@@ -506,9 +506,6 @@ func userData() *C.char {
 //export serverInfo
 func serverInfo() *C.char {
 	stats := a.Stats()
-	if stats == nil {
-		return C.CString("")
-	}
 	serverInfo := &protos.ServerInfo{
 		City:        stats.City,
 		Country:     stats.Country,

@@ -50,7 +50,6 @@ String websocketAddr() => _bindings.websocketAddr().cast<Utf8>().toDartString();
 
 void ffiExit() {
   _bindings.exitApp();
-  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
 }
 
 Pointer<Utf8> ffiVpnStatus() => _bindings.vpnStatus().cast<Utf8>();
