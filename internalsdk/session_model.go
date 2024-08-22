@@ -1259,17 +1259,18 @@ func signup(session *SessionModel, email string, password string) error {
 	lowerCaseEmail := strings.ToLower(email)
 	salt, err := session.authClient.SignUp(email, password)
 	if err != nil {
+		// log.Errorf("Error while signing up %v", err)
 		return err
 	}
 	//Request successfull then save salt
-	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+	dbErr := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:     salt,
 			pathEmailAddress: lowerCaseEmail,
 		})
 	})
-	if err != nil {
-		return err
+	if dbErr != nil {
+		return dbErr
 	}
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
