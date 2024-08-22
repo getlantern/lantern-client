@@ -15,7 +15,7 @@ class AppPurchase {
   Function(dynamic error)? _onError;
   String _planId = "";
   String _email = "";
-  PurchaseCallback? _globalPurchaseCallback;
+
 
   void init() {
     final purchaseUpdated = _inAppPurchase.purchaseStream;
@@ -80,11 +80,7 @@ class AppPurchase {
   Future<void> _onPurchaseUpdate(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
-    if (purchaseDetailsList.isEmpty) {
-      if (_globalPurchaseCallback != null) {
-        _globalPurchaseCallback!(null);
-      }
-    }
+
     mainLogger.d("purchase list ${purchaseDetailsList.length}");
     for (var purchaseDetails in purchaseDetailsList) {
       await _handlePurchase(purchaseDetails);
@@ -96,7 +92,7 @@ class AppPurchase {
     if (purchaseDetails.status == PurchaseStatus.canceled) {
       /// if user cancels purchase and then try to purchase again it will get penning transaction errr
       /// To avoid edge case complete purchase
-      // User has canceled the purchase
+      /// User has canceled the purchase
       await _inAppPurchase.completePurchase(purchaseDetails);
       _onError?.call("Purchase canceled");
       return;
@@ -116,30 +112,16 @@ class AppPurchase {
       }
     }
 
-    /// restore purchase
-    if (purchaseDetails.status == PurchaseStatus.restored) {
-      logger.d("purchase restored successfully ${purchaseDetails}");
-      if (_globalPurchaseCallback != null) {
-        _globalPurchaseCallback!.call(purchaseDetails);
-      }
-      return;
-    }
     if (purchaseDetails.pendingCompletePurchase) {
       await _inAppPurchase.completePurchase(purchaseDetails);
     }
   }
 
-  // Future<void> restorePurchases({required PurchaseCallback purchase}) async {
-  //   logger.d("restoring purchase");
-  //   _globalPurchaseCallback = purchase;
-  //   _inAppPurchase.restorePurchases(applicationUserName: null);
-  // }
 
   void _updateStreamOnDone() {
     _onError = null;
     _onSuccess = null;
     _planId = "";
-    _globalPurchaseCallback = null;
     _subscription?.cancel();
   }
 

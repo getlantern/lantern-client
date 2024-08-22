@@ -22,11 +22,16 @@ class _StoreCheckoutState extends State<StoreCheckout>
     with SingleTickerProviderStateMixin {
   final emailFieldKey = GlobalKey<FormState>();
   late final emailController = CustomTextEditingController(
-    formKey: emailFieldKey,
-    validator: (value) => EmailValidator.validate(value ?? '')
-        ? null
-        : 'please_enter_a_valid_email_address'.i18n,
-  );
+      formKey: emailFieldKey,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return null;
+        }
+        if (value.isNotEmpty && !EmailValidator.validate(value)) {
+          return 'please_enter_a_valid_email_address'.i18n;
+        }
+        return null;
+      });
 
   _CheckOutState state = _CheckOutState.withEmail;
 
@@ -100,9 +105,13 @@ class _StoreCheckoutState extends State<StoreCheckout>
 
   void _validateEmailAndContinue() {
     if (emailFieldKey.currentState?.validate() == false) {
-      // showError(context, error: 'please_enter_a_valid_email_address'.i18n);
       return;
     }
+    if (emailController.text.isEmpty) {
+      showError(context, error: 'please_enter_a_valid_email_address'.i18n);
+      return;
+    }
+
     startPurchaseFlow();
   }
 

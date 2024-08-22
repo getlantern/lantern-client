@@ -575,7 +575,8 @@ class SessionModel extends Model {
 
   Future<String> getReplicaAddr() async {
     try {
-      final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
+      final replicaAddr =
+          await methodChannel.invokeMethod('get', 'replicaAddr');
       if (replicaAddr == null || replicaAddr == '') {
         logger.e('Replica not enabled');
       }
@@ -644,7 +645,7 @@ class SessionModel extends Model {
     if (Platform.isAndroid) {
       return methodChannel.invokeMethod('checkForUpdates');
     } else if (isDesktop()) {
-      await ffiCheckUpdates();
+      ffiCheckUpdates();
     }
     return;
   }
@@ -736,8 +737,8 @@ class SessionModel extends Model {
     );
   }
 
-  Future<Iterable<PathAndValue<PaymentMethod>>> paymentMethodsv4() async {
-    final res = await ffiPaymentMethodsV4();
+  Future<Iterable<PathAndValue<PaymentMethod>>> paymentMethodsV4() async {
+    final res = ffiPaymentMethodsV4();
     return paymentMethodFromJson(jsonDecode(res.toDartString()));
   }
 
