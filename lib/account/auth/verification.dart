@@ -100,6 +100,7 @@ class _VerificationState extends State<Verification> {
 
   /// widget methods
   Future<void> resendConfirmationCode() async {
+    pinCodeController.clear();
     switch (widget.authFlow) {
       case AuthFlow.createAccount:
         resendResetEmailVerificationCode();
@@ -247,16 +248,6 @@ class _VerificationState extends State<Verification> {
     }
   }
 
-  void _verifyRestorePurchaseEmail(String code) {
-    try {
-      context.loaderOverlay.show();
-      sessionModel.validateDeviceRecoveryCode(code, widget.email);
-      context.loaderOverlay.show();
-      resolveRoute(code);
-    } catch (e) {
-      showError(context, description: e.localizedDescription);
-    }
-  }
 
   // Purchase flow
   void startPurchase() {
@@ -395,7 +386,13 @@ class _VerificationState extends State<Verification> {
     } catch (e) {
       context.loaderOverlay.hide();
       mainLogger.e("Error while restoring account", error: e);
-      CDialog.showError(context, description: e.localizedDescription);
+      CDialog.showError(
+        context,
+        description: e.localizedDescription,
+        okAction: () {
+          pinCodeController.clear();
+        },
+      );
     }
   }
 }

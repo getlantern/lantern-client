@@ -12,6 +12,7 @@ class CDialog extends StatefulWidget {
     required String description,
     Object? error,
     StackTrace? stackTrace,
+    VoidCallback? okAction,
   }) {
     if (error != null || stackTrace != null) {
       developer.log(description, error: error, stackTrace: stackTrace);
@@ -22,6 +23,11 @@ class CDialog extends StatefulWidget {
       iconPath: ImagePaths.alert,
       barrierDismissible: false,
       agreeText: 'OK'.i18n,
+      agreeAction: () async {
+        okAction?.call();
+        return true;
+      },
+      includeCancel: false,
     ).show(context);
   }
 
@@ -35,7 +41,7 @@ class CDialog extends StatefulWidget {
     ).show(context);
   }
 
-  static void purchaseRestoredDialog (BuildContext context){
+  static void purchaseRestoredDialog(BuildContext context) {
     CDialog(
       title: ''.i18n,
       description: ''.i18n,
