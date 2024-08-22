@@ -57,43 +57,38 @@ class AppBrowser extends InAppBrowser {
 
   @override
   Future onBrowserCreated() async {
-    print("Browser created");
+    appLogger.i("Browser created");
   }
 
   @override
   Future onLoadStart(url) async {
-    print("Started displaying $url");
+    appLogger.i("Started displaying $url");
   }
 
   @override
   Future onLoadStop(url) async {
-    print("Stopped displaying $url");
+    appLogger.i("Stopped displaying $url");
+    onClose?.call();
   }
 
   @override
   void onReceivedError(WebResourceRequest request, WebResourceError error) {
-    print("Can't load ${request.url}.. Error: ${error.description}");
+    appLogger.i("Can't load ${request.url}.. Error: ${error.description}");
   }
 
   @override
   void onProgressChanged(progress) {
-    print("Progress: $progress");
+    appLogger.i("Progress: $progress");
   }
 
   @override
   void onExit() {
-    print("Browser closed");
-    onClose?.call();
+    appLogger.i("Browser closed");
   }
 
   Future<void> openMacWebview(String url) async {
     await openUrlRequest(
-            urlRequest: URLRequest(url: WebUri(url)), settings: settings)
-        .then(
-      (value) {
-        print("open mac webview");
-      },
-    );
+        urlRequest: URLRequest(url: WebUri(url)), settings: settings);
   }
 
   static Future<void> openWindowsWebview(String url) async {
