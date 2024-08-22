@@ -89,6 +89,7 @@ class _StoreCheckoutState extends State<StoreCheckout>
                 Center(
                   child: TextButton(
                       onPressed: () {
+
                         state = _CheckOutState.withoutEmail;
                         startPurchaseFlow();
                       },
