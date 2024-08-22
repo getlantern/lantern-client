@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"sync"
@@ -15,6 +16,7 @@ import (
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
+	sdkcommon "github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/launcher"
 	"github.com/getlantern/timezone"
 	"github.com/getlantern/yaml"
@@ -43,6 +45,7 @@ const (
 	SNUserID                    SettingName = "userID"
 	SNUserToken                 SettingName = "userToken"
 	SNUserPro                   SettingName = "userPro"
+	SNReferralCode              SettingName = "referralCode"
 	SNMigratedDeviceIDForUserID SettingName = "migratedDeviceIDForUserID"
 	SNTakenSurveys              SettingName = "takenSurveys"
 	SNPastAnnouncements         SettingName = "pastAnnouncements"
@@ -126,6 +129,29 @@ type Settings struct {
 	log golog.Logger
 }
 
+// LoadSettings loads the initial settings at startup, either from disk or using defaults.
+func LoadSettings(configDir string) *Settings {
+	path := filepath.Join(configDir, "settings.yaml")
+	settings := LoadSettingsFrom(sdkcommon.ApplicationVersion, sdkcommon.RevisionDate, sdkcommon.BuildDate, path)
+	if sdkcommon.IsStagingEnvironment() {
+		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
+	}
+	return settings
+}
+
+// UserConfig creates a new user config from the given settings
+func UserConfig(settings *Settings) sdkcommon.UserConfig {
+	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
+	return sdkcommon.NewUserConfig(
+		common.DefaultAppName,
+		deviceID,
+		userID,
+		token,
+		nil,
+		settings.GetLanguage(),
+	)
+}
+
 func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	// Create default settings that may or may not be overridden from an existing file
 	// on disk.
@@ -196,9 +222,13 @@ func newSettings(filePath string) *Settings {
 			SNUserToken:                 "",
 			SNUIAddr:                    "",
 			SNMigratedDeviceIDForUserID: int64(0),
+			SNEnabledExperiments:        []string{},
+			SNCountry:                   "",
+			SNEmailAddress:              "",
 			SNUserPro:                   false,
 			SNUserLoggedIn:              false,
 			SNUserFirstVisit:            false,
+			SNReferralCode:              "",
 			SNSalt:                      "",
 		},
 		filePath:        filePath,
@@ -479,6 +509,16 @@ func (s *Settings) GetLanguage() string {
 	return s.getString(SNLanguage)
 }
 
+// SetReferralCode sets the user referral code
+func (s *Settings) SetReferralCode(referralCode string) {
+	s.setVal(SNReferralCode, referralCode)
+}
+
+// GetReferralCode returns the user referral code
+func (s *Settings) GetReferralCode() string {
+	return s.getString(SNReferralCode)
+}
+
 // SetCountry sets the user's country.
 func (s *Settings) SetCountry(country string) {
 	s.setVal(SNCountry, country)
@@ -755,6 +795,16 @@ func (s *Settings) GetUserFirstVisit() bool {
 
 func (s *Settings) SetExpirationDate(date string) {
 	s.setVal(SNExpiryDate, date)
+}
+
+func (s *Settings) SetExpiration(expiration int64) {
+	if expiration == 0 {
+		return
+	}
+	expiry := time.Unix(0, expiration*int64(time.Second))
+	dateFormat := "01/02/2006"
+	dateStr := expiry.Format(dateFormat)
+	s.SetExpirationDate(dateStr)
 }
 
 func (s *Settings) IsUserLoggedIn() bool {

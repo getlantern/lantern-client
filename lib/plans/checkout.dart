@@ -224,7 +224,7 @@ class _CheckoutState extends State<Checkout>
   }
 
   void checkProUser() async {
-    final res = ffiProUser();
+    final res = LanternFFI.proUser();
     if (!widget.isPro && res.toDartString() == "true") {
       // show success dialog if user becomes Pro during browser session
       showSuccessDialog(context, widget.isPro);

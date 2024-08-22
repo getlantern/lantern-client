@@ -6,8 +6,8 @@ class VPNBandwidth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return vpnModel
-        .bandwidth((BuildContext context, Bandwidth bandwidth, Widget? child) {
-      return bandwidth.allowed > 0
+        .bandwidth((BuildContext context, Bandwidth? bandwidth, Widget? child) {
+      return (bandwidth != null && bandwidth.allowed > 0)
           ? Column(
               children: [
                 Container(
@@ -28,7 +28,7 @@ class VPNBandwidth extends StatelessWidget {
                     ),
                     Expanded(
                       child: CText(
-                        '${bandwidth.allowed - bandwidth.remaining}/${bandwidth.allowed} MB',
+                        '${bandwidth.remaining}/${bandwidth.allowed} MB',
                         textAlign: TextAlign.end,
                         style: tsSubtitle4,
                       ),

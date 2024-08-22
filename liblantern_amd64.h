@@ -97,7 +97,7 @@ extern char* validateRecoveryByEmail(char* email, char* code);
 // This will delete user accoutn and creates new user
 //
 extern char* deleteAccount(char* password);
-extern void start();
+extern char* start();
 extern char* onSuccess();
 extern char* hasProxyFected();
 extern char* hasConfigFected();

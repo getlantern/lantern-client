@@ -8,7 +8,6 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
@@ -103,15 +102,13 @@ func login(email *C.char, password *C.char) *C.char {
 	// but overide there email with login email
 	// old email might be differnt but we want to show latets email
 	userData.Email = C.GoString(email)
-	err = cacheUserDetail(userData)
-	if err != nil {
-		return sendError(err)
-	}
+	a.Settings().SetEmailAddress(userData.Email)
 	return C.CString("true")
 }
 
 //export logout
 func logout() *C.char {
+	ctx := context.Background()
 	email := a.Settings().GetEmailAddress()
 	deviceId := getDeviceID()
 	token := a.Settings().GetToken()
@@ -124,7 +121,7 @@ func logout() *C.char {
 		LegacyUserID: userId,
 	}
 	log.Debugf("Sign out request %+v", signoutData)
-	loggedOut, logoutErr := authClient.SignOut(context.Background(), signoutData)
+	loggedOut, logoutErr := authClient.SignOut(ctx, signoutData)
 	if logoutErr != nil {
 		return sendError(log.Errorf("Error while signing out %v", logoutErr))
 	}
@@ -134,8 +131,7 @@ func logout() *C.char {
 
 	clearLocalUserData()
 	// Create new user
-	err := userCreate()
-	if err != nil {
+	if _, err := a.CreateUser(ctx); err != nil {
 		return sendError(err)
 	}
 	return C.CString("true")
@@ -160,7 +156,7 @@ func deviceLimitFlow(login *protos.LoginResponse) error {
 		Devices: protoDevices,
 	}
 
-	app.SetUserData(context.Background(), login.LegacyID, user)
+	a.SetUserData(context.Background(), login.LegacyID, user)
 	return nil
 }
 
@@ -240,6 +236,7 @@ func validateRecoveryByEmail(email *C.char, code *C.char) *C.char {
 //
 //export deleteAccount
 func deleteAccount(password *C.char) *C.char {
+	ctx := context.Background()
 	email := a.Settings().GetEmailAddress()
 	lowerCaseEmail := strings.ToLower(email)
 	// Get the salt
@@ -315,8 +312,8 @@ func deleteAccount(password *C.char) *C.char {
 	// Set user id and token to nil
 	a.Settings().SetUserIDAndToken(0, "")
 	// Create new user
-	err = userCreate()
-	if err != nil {
+	// Create new user
+	if _, err := a.CreateUser(ctx); err != nil {
 		return sendError(err)
 	}
 	return C.CString("true")
