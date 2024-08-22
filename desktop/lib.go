@@ -466,7 +466,6 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
-	log.Debug("proUser")
 	if isProUser, ok := a.IsProUserFast(settings.UserConfig(a.Settings())); isProUser && ok {
 		return C.CString("true")
 	}

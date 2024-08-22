@@ -271,6 +271,8 @@ class SessionModel extends Model {
 
   ///Auth Widgets
 
+  Pointer<Utf8> ffiIsUserLoggedIn() => LanternFFI.isUserLoggedIn();
+
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
     if (isDesktop()) {
@@ -634,6 +636,8 @@ class SessionModel extends Model {
     });
   }
 
+  Pointer<Utf8> ffiPlans() => LanternFFI.plans();
+
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
   }) {
@@ -720,21 +724,6 @@ class SessionModel extends Model {
       defaultValue: '',
       builder: builder,
     );
-  }
-
-  ServerInfo? serverInfoFromJson(dynamic? res) {
-    if (res != null) {
-      final res2 = jsonDecode(jsonEncode(res));
-      if (res2 != null) {
-        return ServerInfo.create()
-          ..mergeFromProto3Json({
-            'countryCode': res2['countryCode'],
-            'country': res2['country'],
-            'city': res2['city'],
-          });
-      }
-    }
-    return null;
   }
 
   Widget serverInfo(ValueWidgetBuilder<ServerInfo?> builder) {

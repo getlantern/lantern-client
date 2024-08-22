@@ -89,7 +89,8 @@ type App struct {
 
 	cachedUserData sync.Map
 	plansCache     sync.Map
-	onUserData     []func(current *protos.User, new *protos.User)
+
+	onUserData []func(current *protos.User, new *protos.User)
 
 	mu sync.Mutex
 }

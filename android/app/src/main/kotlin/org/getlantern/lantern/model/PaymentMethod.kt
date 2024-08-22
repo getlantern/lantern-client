@@ -38,6 +38,6 @@ data class PaymentMethods(
 
 @Serializable
 data class Icons(
-    @SerialName("paymentwall") val paymentwall: List<String>,
-    @SerialName("stripe") val stripe: List<String>
+    @SerialName("paymentwall") var paymentwall: List<String> = mutableListOf<String>(),
+    @SerialName("stripe") var stripe: List<String> = mutableListOf<String>(),
 )
