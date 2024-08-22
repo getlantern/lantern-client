@@ -29,7 +29,7 @@ func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 
 // Create Purchase Request
 func createPurchaseData(session *SessionModel, email string, paymentProvider string, resellerCode string, purchaseToken string, planId string) (error, map[string]interface{}) {
-	if email == "" {
+	if email == "" && paymentProvider != paymentProviderApplePay {
 		return errors.New("Email is empty"), nil
 	}
 

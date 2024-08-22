@@ -819,16 +819,16 @@ class SessionModel(
                 }
 
                 override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.error(TAG, "Error restoring purchase", t.toString())
+                    Logger.error(TAG, "Error restoring purchase", error?.message)
                     result.error(
-                        "error restoring purchase",
-                        "error restoring purchase",
+                        error!!.id,
+                        error?.message,
                         error?.message
                     )
                 }
             })
         } catch (t: Throwable) {
-            Logger.error(TAG, "Error while restore account", t)
+            Logger.error(TAG, "Error while restore account", t.message)
             result.error(
                 "error restoring purchase", "error restoring purchase", t?.message
 

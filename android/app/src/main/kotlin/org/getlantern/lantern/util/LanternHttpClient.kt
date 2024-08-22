@@ -2,7 +2,6 @@ package org.getlantern.lantern.model
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import kotlinx.serialization.SerializationException
 import okhttp3.CacheControl
 import okhttp3.Call
 import okhttp3.Callback
@@ -164,7 +163,7 @@ open class LanternHttpClient : HttpClient() {
                     response: Response?,
                     result: JsonObject?,
                 ) {
-                    if (result == null || result.get("providers") == null  || result.get("icons") == null) return
+                    if (result == null || result.get("providers") == null || result.get("icons") == null) return
                     Logger.d(TAG, "Plans v3 Response body $result")
                     val methods =
                         JsonUtil.tryParseJson<Map<String, List<PaymentMethods>>>(
@@ -187,7 +186,8 @@ open class LanternHttpClient : HttpClient() {
                             provider.logoUrl = logoUrlsList
                         }
                     }
-                    val fetched = JsonUtil.tryParseJson<List<ProPlan>>(result.get("plans").toString())
+                    val fetched =
+                        JsonUtil.tryParseJson<List<ProPlan>>(result.get("plans").toString())
                     if (fetched != null) {
                         val plans = plansMap(fetched!!)
                         cb.onSuccess(plans, providers)
@@ -221,7 +221,7 @@ open class LanternHttpClient : HttpClient() {
                     response: Response?,
                     result: JsonObject?,
                 ) {
-                    if (result == null || result.get("providers") == null  || result.get("icons") == null) return
+                    if (result == null || result.get("providers") == null || result.get("icons") == null) return
                     Logger.d(TAG, "Plans v3 Response body $result")
                     val methods =
                         JsonUtil.tryParseJson<Map<String, List<PaymentMethods>>>(
@@ -245,7 +245,8 @@ open class LanternHttpClient : HttpClient() {
                             provider.logoUrl = logoUrlsList
                         }
                     }
-                    val fetched = JsonUtil.tryParseJson<List<ProPlan>>(result?.get("plans").toString())
+                    val fetched =
+                        JsonUtil.tryParseJson<List<ProPlan>>(result?.get("plans").toString())
                     if (fetched != null) {
                         val plans = plansMap(fetched)
                         cb.onSuccess(plans, providers)
@@ -254,6 +255,31 @@ open class LanternHttpClient : HttpClient() {
             },
         )
     }
+
+
+    fun restoreAccount(email: String, provider: String, deviceName: String, Code: String) {
+        val body = FormBody.Builder()
+            .add("verified_email", email).add("provider", provider)
+            .add("deviceName", deviceName)
+            .add("email_verification_code", Code)
+            .build()
+
+        proRequest(
+            "POST",
+            createProUrl("/user-restore"),
+            userHeaders(),
+            body,
+            object : ProCallback {
+                override fun onFailure(throwable: Throwable?, error: ProError?) {
+                    Logger.error(TAG, "Unable to restore account", throwable)
+                }
+
+                override fun onSuccess(response: Response?, result: JsonObject?) {
+                    Logger.d(TAG, "Account restored")
+                }
+            })
+    }
+
 
     private fun proRequest(
         method: String,
@@ -287,16 +313,24 @@ open class LanternHttpClient : HttpClient() {
                     call: Call,
                     response: Response,
                 ) {
-                    response.use {
-                        if (!response.isSuccessful) {
-                            val error =
-                                ProError("", "Unexpected response code from server $response")
+                    // response body string should call only once
+                    val responseBody: String? = response.body?.string()
+                    if (response.code != 200) {
+                        try {
+                            val error = ProError(
+                                responseBody ?: "",
+                                responseBody ?: "Unexpected response code ${response.code}"
+                            )
                             cb.onFailure(null, error)
-                            return
+                        } catch (e: Exception) {
+                            cb.onFailure(e, ProError("", e.message ?: ""))
                         }
-                        val responseData = response.body!!.string()
-                        Logger.d(TAG, "Response body " + responseData)
-                        val result = JsonParser().parse(responseData).asJsonObject
+
+                        return
+                    }
+                    try {
+                        Logger.d(TAG, "Response body " + responseBody)
+                        val result = JsonParser().parse(responseBody).asJsonObject
                         if (result == null) {
                             return
                         } else if (result.get("error") != null) {
@@ -307,7 +341,11 @@ open class LanternHttpClient : HttpClient() {
                             return
                         }
                         cb.onSuccess(response, result)
+                    } catch (e: Exception) {
+                        cb.onFailure(e, ProError("", e.message ?: ""))
                     }
+
+
                 }
             },
         )
