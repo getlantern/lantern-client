@@ -292,6 +292,8 @@ github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtA
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/flashlight/v7 v7.6.103 h1:/f+0aBSZjJXYDl2s7F9665p22QIGP5KSu6pQmVBbLNo=
 github.com/getlantern/flashlight/v7 v7.6.103/go.mod h1:XScXIgpu7Vaem0sw1PpIYnM9fekulSZ8B5ULMxjz/2g=
+github.com/getlantern/flashlight/v7 v7.6.106 h1:dCrqKQeohDIc7zZfFOwTN42NLRPPkULnkWqS+pwz9zc=
+github.com/getlantern/flashlight/v7 v7.6.106/go.mod h1:M7KG4/LELzZkk6FiFxucmk0rirlQwD785Y0ee5RyiOM=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc h1:rVEoCLKM16Pfnz8CguT4U75m6o0QDN7stP+MBFUkmNk=
@@ -417,6 +419,8 @@ github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7 h1:47FJ5kTeXc
 github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7/go.mod h1:OOqKCIkspqXtIWEex4uhH1H9l7NGekT9i3Hs591ZDk4=
 github.com/getlantern/replica v0.14.3 h1:vYsUKFAK1RyCjsD3JzotC1teYmaFa936FVZTARnzQjg=
 github.com/getlantern/replica v0.14.3/go.mod h1:Zv4JqQVpIXfHxNDD8QWj0W+GtuwlfZbYnZoahWDt4iA=
+github.com/getlantern/replica v0.14.4 h1:s7rxJHrOxWdw4iFILht0zIbub1pjn0sXx1eElDxICIA=
+github.com/getlantern/replica v0.14.4/go.mod h1:F46ohChSKJ6vAuEvjFmIZMBh50Cc3zEJCPwjbOKzKwU=
 github.com/getlantern/rot13 v0.0.0-20220822172233-370767b2f782 h1:A1+qM0Dqm0no8A5qvWoTCFKME9Sa67xsJ1fcV13PvEY=
 github.com/getlantern/rot13 v0.0.0-20220822172233-370767b2f782/go.mod h1:O0dNqH9hbXlOa9OpVdbACmTBfDPD+ENjbY0cPkzBd9g=
 github.com/getlantern/rotator v0.0.0-20160829164113-013d4f8e36a2 h1:smFR/kESUKlcdyatoOO3HngBzzrUU6S0LRw2vCBYQPg=
