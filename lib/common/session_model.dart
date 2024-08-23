@@ -573,25 +573,6 @@ class SessionModel extends Model {
     return compute(LanternFFI.hasPlanUpdateOrBuy, '');
   }
 
-  Iterable<PathAndValue<PaymentMethod>> paymentMethodFromJson(item) {
-    final Map<String, dynamic> icons = item['icons'];
-    final desktopProviders = item['providers']["desktop"] as List;
-    return desktopProviders.map((method) {
-      final paymentMethod = PaymentMethod()..method = method["method"];
-      final providers = method["providers"].map<PaymentProviders>((provider) {
-        final List<dynamic> logos = icons[provider["name"]];
-        final List<String> stringLogos =
-            logos.map((logo) => logo.toString()).toList();
-        return PaymentProviders.create()
-          ..logoUrls.addAll(stringLogos)
-          ..name = provider["name"];
-      }).toList();
-
-      paymentMethod.providers.addAll(providers);
-      return PathAndValue<PaymentMethod>(paymentMethod.method, paymentMethod);
-    });
-  }
-
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
   }) {

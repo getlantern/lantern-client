@@ -44,7 +44,6 @@ class ConfigOptions {
         plans[id] = planFromJson(item) as Plan;
       }
     }
-    print("payment methods are ${parsedJson['paymentMethods']}");
     final paymentMethods = paymentMethodsFromJson(parsedJson['paymentMethods']);
     print("plans are $plans");
     print("payment methods are $paymentMethods");
