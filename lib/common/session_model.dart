@@ -24,6 +24,7 @@ class SessionModel extends Model {
   ValueNotifier<bool?>? isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<bool?> proUserNotifier;
+  late ValueNotifier<ConfigOptions?> configNotifier;
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> referralNotifier;
   late ValueNotifier<String?> deviceIdNotifier;
@@ -70,6 +71,7 @@ class SessionModel extends Model {
         false,
       );
     } else {
+      configNotifier = ValueNotifier<ConfigOptions?>(null);
       country = ValueNotifier('US');
       proxyAvailable = ValueNotifier(false);
       userEmail = ValueNotifier("");
@@ -110,12 +112,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<bool>(
-      'developmentMode',
-      defaultValue: false,
-      null,
-      builder: builder,
-    );
+    return configValueBuilder('developmentMode', configNotifier, builder, (value) => value?.developmentMode ?? false);
   }
 
   Widget paymentTestMode(ValueWidgetBuilder<bool> builder) {
@@ -541,12 +538,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<String>(
-      'sdkVersion',
-      defaultValue: 'unknown',
-      LanternFFI.sdkVersion,
-      builder: builder,
-    );
+    return configValueBuilder('sdkVersion', configNotifier, builder, (value) => value?.sdkVersion ?? "");
   }
 
   Future<bool> getChatEnabled() async {

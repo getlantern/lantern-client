@@ -60,6 +60,7 @@ class WebsocketSubscriber {
             });
           case WebsocketMessage.config:
             final ConfigOptions config = ConfigOptions.fromJson(message);
+            sessionModel.configNotifier.value = config;
             final plansMessage = config.plans;
             if (plansMessage != null) {
               sessionModel.plansNotifier.value.clearPaths();

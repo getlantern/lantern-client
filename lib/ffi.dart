@@ -163,8 +163,6 @@ class LanternFFI {
 
   static Pointer<Utf8> replicaAddr() => _lanternFFI.replicaAddr().cast<Utf8>();
 
-  static Pointer<Utf8> sdkVersion() => _lanternFFI.sdkVersion().cast<Utf8>();
-
   static Pointer<Utf8> checkUpdates() =>
       _lanternFFI.checkUpdates().cast<Utf8>();
 

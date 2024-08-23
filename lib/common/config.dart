@@ -25,9 +25,9 @@ class ConfigOptions {
     this.developmentMode = false,
     this.replicaAddr = '',
     this.authEnabled = false,
-    this.hasSucceedingProxy = false, 
-    this.fetchedGlobalConfig = false, 
-    this.fetchedProxiesConfig = false, 
+    this.hasSucceedingProxy = false,
+    this.fetchedGlobalConfig = false,
+    this.fetchedProxiesConfig = false,
     this.sdkVersion = '',
     this.plans = null,
     this.paymentMethods = null,
@@ -56,7 +56,7 @@ class ConfigOptions {
       plans: plans,
       paymentMethods: paymentMethods,
       replicaAddr : parsedJson['replicaAddr'].toString(),
-      sdkVersion: parsedJson['sdkVersion'].toString() 
+      sdkVersion: parsedJson['sdkVersion'].toString(),
     );
   }
 }

@@ -94,6 +94,20 @@ abstract class Model {
     return SubscribedSingleValueBuilder<T>(path, notifier, builder);
   }
 
+  Widget configValueBuilder<T>(
+    String path,
+    ValueNotifier<ConfigOptions?> notifier,
+    ValueWidgetBuilder<T> builder,
+    T Function(ConfigOptions? options) onConfigUpdate,
+  ) {
+    return SubscribedSingleValueBuilder<ConfigOptions?>(
+      path,
+      notifier,
+      (BuildContext context, ConfigOptions? value, Widget? child) =>
+              value == null ? const SizedBox() : builder(context, onConfigUpdate(value), child),
+    );
+  }
+
   ValueNotifier<T?> ffiValueNotifier<T>(
     Pointer<Utf8> Function()? ffiFunction,
     String path,
