@@ -169,7 +169,7 @@ Future<bool> showRestorePurchaseButton(bool proUser) async {
     if (await isPlayStoreEnabled()) {
       return true;
     }
-    return true;
+    return false;
   }
   if (Platform.isIOS) {
     return !proUser;
