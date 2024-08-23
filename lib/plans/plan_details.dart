@@ -150,10 +150,10 @@ class _PlanCardState extends State<PlanCard> {
 
   // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
   List<PaymentProviders> paymentProvidersFromMethods(
-      Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+      ChangeTrackingList<PaymentMethod> paymentMethods) {
     var providers = <PaymentProviders>[];
-    for (final paymentMethod in paymentMethods) {
-      for (final provider in paymentMethod.value.providers) {
+    for (final paymentMethod in paymentMethods.map.values) {
+      for (final provider in paymentMethod.providers) {
         providers.add(provider);
       }
     }
@@ -173,7 +173,7 @@ class _PlanCardState extends State<PlanCard> {
       );
       return;
     } else if (isDesktop()) {
-      final paymentMethods = await sessionModel.paymentMethodsv4();
+      final paymentMethods = sessionModel.paymentMethodsNotifier.value;
       final providers = paymentProvidersFromMethods(paymentMethods);
       // if only one payment provider is returned, bypass the last checkout screen
       // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
@@ -215,7 +215,7 @@ class _PlanCardState extends State<PlanCard> {
       );
       return;
     } else if (isDesktop()) {
-      final paymentMethods = await sessionModel.paymentMethodsv4();
+      final paymentMethods = sessionModel.paymentMethodsNotifier.value;
       final providers = paymentProvidersFromMethods(paymentMethods);
       // if only one payment provider is returned, bypass the last checkout screen
       if (providers.length > 0) {

@@ -3,12 +3,6 @@ import 'package:web_socket_channel/status.dart' as status;
 import 'common.dart';
 import 'common_desktop.dart';
 
-extension BoolParsing on String {
-  bool parseBool() {
-    return this.toLowerCase() == 'true';
-  }
-}
-
 class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
   FfiValueNotifier(
     Pointer<Utf8> Function()? ffiFunction,

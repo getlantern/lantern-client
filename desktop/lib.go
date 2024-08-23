@@ -16,7 +16,6 @@ import (
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
@@ -34,7 +33,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/osversion"
 	"github.com/joho/godotenv"
-	"google.golang.org/protobuf/encoding/protojson"
 )
 
 import "C"
@@ -75,6 +73,24 @@ var issueMap = map[string]string{
 	"Application crashes":         "6",
 	"Other":                       "9",
 }
+
+/*func initLantern() *app.App {
+		flags         := flashlight.ParseFlags()
+	cdir          := configDir(&flags)
+	ss            := settings.LoadSettings(cdir)
+	webclientOpts := &webclient.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		},
+		UserConfig: func() common.UserConfig {
+			return settings.UserConfig(ss)
+		},
+	}
+	proClient  := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
+	return app.NewApp(flags, cdir, proClient, ss)
+}*/
 
 //export start
 func start() *C.char {
@@ -163,19 +179,6 @@ func sysProxyOff() {
 //export websocketAddr
 func websocketAddr() *C.char {
 	return C.CString(a.WebsocketAddr())
-}
-
-//export plans
-func plans() *C.char {
-	plans, err := a.Plans(context.Background())
-	if err != nil {
-		return sendError(errors.New("plans not found"))
-	}
-	plansByte, err := json.Marshal(plans)
-	if err != nil {
-		return sendError(err)
-	}
-	return C.CString(string(plansByte))
 }
 
 //export paymentMethodsV3
@@ -302,18 +305,6 @@ func userData() *C.char {
 	return C.CString(string(b))
 }
 
-//export serverInfo
-func serverInfo() *C.char {
-	stats := a.Stats()
-	serverInfo := &protos.ServerInfo{
-		City:        stats.City,
-		Country:     stats.Country,
-		CountryCode: stats.CountryCode,
-	}
-	b, _ := protojson.Marshal(serverInfo)
-	return C.CString(string(b))
-}
-
 //export emailAddress
 func emailAddress() *C.char {
 	return C.CString(a.Settings().GetEmailAddress())
@@ -388,31 +379,6 @@ func myDeviceId() *C.char {
 	return C.CString(deviceId)
 }
 
-//export authEnabled
-func authEnabled() *C.char {
-	authEnabled := a.IsFeatureEnabled(config.FeatureAuth)
-	if ok, err := strconv.ParseBool(os.Getenv("ENABLE_AUTH_FEATURE")); err == nil && ok {
-		authEnabled = true
-	}
-	log.Debugf("DEBUG: Auth enabled: %v", authEnabled)
-	return booltoCString(authEnabled)
-}
-
-//export chatEnabled
-func chatEnabled() *C.char {
-	return C.CString("false")
-}
-
-//export playVersion
-func playVersion() *C.char {
-	return C.CString("false")
-}
-
-//export storeVersion
-func storeVersion() *C.char {
-	return C.CString("false")
-}
-
 //export lang
 func lang() *C.char {
 	lang := a.GetLanguage()
@@ -439,14 +405,6 @@ func country() *C.char {
 func sdkVersion() *C.char {
 	version := common.LibraryVersion
 	return C.CString(version)
-}
-
-//export vpnStatus
-func vpnStatus() *C.char {
-	/*if a.IsSysProxyOn() {
-		return C.CString("connected")
-	}*/
-	return C.CString("disconnected")
 }
 
 //export hasSucceedingProxy

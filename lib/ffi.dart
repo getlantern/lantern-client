@@ -163,16 +163,10 @@ class LanternFFI {
 
   static Pointer<Utf8> replicaAddr() => _lanternFFI.replicaAddr().cast<Utf8>();
 
-  static Pointer<Utf8> chatEnabled() => _lanternFFI.chatEnabled().cast<Utf8>();
-
-  static Pointer<Utf8> authEnabled() => _lanternFFI.authEnabled().cast<Utf8>();
-
   static Pointer<Utf8> sdkVersion() => _lanternFFI.sdkVersion().cast<Utf8>();
 
   static Pointer<Utf8> checkUpdates() =>
       _lanternFFI.checkUpdates().cast<Utf8>();
-
-  static Pointer<Utf8> plans() => _lanternFFI.plans().cast<Utf8>();
 
   static Pointer<Utf8> paymentMethods() =>
       _lanternFFI.paymentMethodsV3().cast<Utf8>();

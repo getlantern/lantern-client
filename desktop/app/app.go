@@ -66,6 +66,7 @@ type App struct {
 	exited           eventual.Value
 	analyticsSession analytics.Session
 	settings         *settings.Settings
+	configService    *configService
 	statsTracker     *statsTracker
 
 	muExitFuncs sync.RWMutex
@@ -107,6 +108,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
+		configService:             new(configService),
 		statsTracker:              NewStatsTracker(),
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
@@ -269,6 +271,11 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 		os.Exit(0)
 	}
 
+	if e := app.configService.StartService(app.ws); e != nil {
+		app.Exit(fmt.Errorf("unable to register config service: %q", e))
+		return
+	}
+
 	if e := app.settings.StartService(app.ws); e != nil {
 		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
 		return
@@ -377,24 +384,20 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
-	if src == config.Fetched {
-		app.fetchedGlobalConfig.Store(true)
-	}
-	/*autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
-		return "/img/lantern_logo.png"
-	})*/
+	app.fetchedGlobalConfig.Store(true)
+	app.sendConfigOptions()
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
-	if src == config.Fetched {
-		app.fetchedProxiesConfig.Store(true)
-	}
+	app.sendConfigOptions()
+	app.fetchedProxiesConfig.Store(true)
 }
 
 func (app *App) onSucceedingProxy(succeeding bool) {
 	app.hasSucceedingProxy.Store(succeeding)
+	app.sendConfigOptions()
 	log.Debugf("[Startup Desktop] onSucceedingProxy %v", succeeding)
 }
 
@@ -565,7 +568,7 @@ func (app *App) Plans(ctx context.Context) ([]protos.Plan, error) {
 		log.Debugf("Returning plans from cache %s", v)
 		return resp, nil
 	}
-	resp, err := app.PaymentMethods(ctx)
+	resp, err := app.paymentMethods(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -573,20 +576,47 @@ func (app *App) Plans(ctx context.Context) ([]protos.Plan, error) {
 }
 
 // PaymentMethods returns the plans and payment plans available to a user
-func (app *App) PaymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
+func (app *App) PaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
 	if v, ok := app.plansCache.Load("paymentMethods"); ok {
-		resp := v.(*proclient.PaymentMethodsResponse)
-		log.Debugf("Returning plans from cache %s", v)
+		resp := v.([]protos.PaymentMethod)
+		log.Debugf("Returning payment methods from cache %s", v)
 		return resp, nil
 	}
+	resp, err := app.paymentMethods(ctx)
+	if err != nil {
+		return nil, err
+	}
+	desktopProviders, ok := resp.Providers["desktop"]
+	if !ok {
+		return nil, errors.New("No desktop payment providers found")
+	}
+	return desktopProviders, nil
+}
+
+// PaymentMethods returns the plans and payment plans available to a user
+func (app *App) paymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
 	resp, err := app.proClient.PaymentMethodsV4(context.Background())
 	if err != nil {
 		return nil, errors.New("Could not get payment methods: %v", err)
 	}
+	desktopPaymentMethods, ok := resp.Providers["desktop"]
+	if !ok {
+		return nil, errors.New("No desktop payment providers found")
+	}
+	for _, paymentMethod := range desktopPaymentMethods {
+		for i, provider := range paymentMethod.Providers {
+			if resp.Logo[provider.Name] != nil {
+				logos := resp.Logo[provider.Name].([]interface{})
+				for _, logo := range logos {
+					paymentMethod.Providers[i].LogoUrls = append(paymentMethod.Providers[i].LogoUrls, logo.(string))
+				}
+			}
+		}
+	}
 	log.Debugf("DEBUG: Payment methods plans: %+v", resp.Plans)
-	log.Debugf("DEBUG: Payment methods providers: %+v", resp.Providers)
+	log.Debugf("DEBUG: Payment methods providers: %+v", desktopPaymentMethods)
 	app.plansCache.Store("plans", resp.Plans)
-	app.plansCache.Store("paymentMethods", resp.Providers)
+	app.plansCache.Store("paymentMethods", desktopPaymentMethods)
 	return resp, nil
 }
 

@@ -34,6 +34,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> hasUserSignedInNotifier;
   late ValueNotifier<bool?> isAuthEnabled;
   late FfiListNotifier<Plan> plansNotifier;
+  late FfiListNotifier<PaymentMethod> paymentMethodsNotifier;
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -73,7 +74,8 @@ class SessionModel extends Model {
       proxyAvailable = ValueNotifier(false);
       userEmail = ValueNotifier("");
       proUserNotifier = ValueNotifier(false);
-      plansNotifier = FfiListNotifier<Plan>('/plans/', LanternFFI.plans, planFromJson, () => {});
+      plansNotifier = FfiListNotifier<Plan>('/plans/', () => {});
+      paymentMethodsNotifier = FfiListNotifier<PaymentMethod>('/paymentMethods/', () => {});
       // TODO re-enable
       hasUserSignedInNotifier = ValueNotifier(false);
       langNotifier = ValueNotifier('en_us');
@@ -93,8 +95,6 @@ class SessionModel extends Model {
   ValueNotifier<T?> pathValueNotifier<T>(String path, T defaultValue) {
     return singleValueNotifier(path, defaultValue);
   }
-
-  Pointer<Utf8> ffiAuthEnabled() => LanternFFI.authEnabled();
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
@@ -517,22 +517,6 @@ class SessionModel extends Model {
     return replicaAddr;
   }
 
-  // Widget authEnabled(ValueWidgetBuilder<bool> builder) {
-  //   if (isMobile()) {
-  //     return subscribedSingleValueBuilder<bool>(
-  //       'authEnabled',
-  //       defaultValue: false,
-  //       builder: builder,
-  //     );
-  //   }
-  //   return ffiValueBuilder<bool>(
-  //     'authEnabled',
-  //     ffiAuthEnabled,
-  //     defaultValue: false,
-  //     builder: builder,
-  //   );
-  // }
-
   Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>(
@@ -543,7 +527,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<bool>(
       'chatEnabled',
-      LanternFFI.chatEnabled,
+      null,
       defaultValue: false,
       builder: builder,
     );
@@ -589,34 +573,6 @@ class SessionModel extends Model {
     return compute(LanternFFI.hasPlanUpdateOrBuy, '');
   }
 
-  Plan planFromJson(Map<String, dynamic> item) {
-    print("called plans $item");
-    final locale = Localization.locale;
-    final formatCurrency = NumberFormat.simpleCurrency(locale: locale);
-    String currency = formatCurrency.currencyName != null
-        ? formatCurrency.currencyName!.toLowerCase()
-        : "usd";
-    final res = jsonEncode(item);
-    final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
-    if (plan.price[currency] == null) {
-      final splitted = plan.id.split('-');
-      if (splitted.length == 3) {
-        currency = splitted[1];
-      }
-    }
-
-    if (plan.price[currency] == null) {
-      return plan;
-    }
-    if (plan.price[currency] != null) {
-      final price = plan.price[currency] as Int64;
-      plan.totalCost = formatCurrency.format(price.toInt() / 100.0).toString();
-      plan.totalCostBilledOneTime =
-          '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
-    }
-    return plan;
-  }
-
   Iterable<PathAndValue<PaymentMethod>> paymentMethodFromJson(item) {
     final Map<String, dynamic> icons = item['icons'];
     final desktopProviders = item['providers']["desktop"] as List;
@@ -635,8 +591,6 @@ class SessionModel extends Model {
       return PathAndValue<PaymentMethod>(paymentMethod.method, paymentMethod);
     });
   }
-
-  Pointer<Utf8> ffiPlans() => LanternFFI.plans();
 
   Widget plans({
     required ValueWidgetBuilder<Iterable<PathAndValue<Plan>>> builder,
@@ -662,13 +616,6 @@ class SessionModel extends Model {
     );
   }
 
-  Future<Iterable<PathAndValue<PaymentMethod>>> paymentMethodsv4() async {
-    final res = LanternFFI.paymentMethodsV4();
-    return paymentMethodFromJson(jsonDecode(res.toDartString()));
-  }
-
-  Pointer<Utf8> ffiPaymentMethodsV4() => LanternFFI.paymentMethodsV4();
-
   Widget paymentMethods({
     required ValueWidgetBuilder<Iterable<PathAndValue<PaymentMethod>>> builder,
   }) {
@@ -681,12 +628,15 @@ class SessionModel extends Model {
         },
       );
     }
-
-    return ffiValueBuilder<Iterable<PathAndValue<PaymentMethod>>>(
-      "/paymentMethods/",
-      ffiPaymentMethodsV4,
-      fromJsonModel: paymentMethodFromJson,
-      builder: builder,
+    return FfiListBuilder<PaymentMethod>(
+      '/paymentMethods/',
+      paymentMethodsNotifier,
+      (BuildContext context, ChangeTrackingList<PaymentMethod> value, Widget? child) =>
+          builder(
+        context,
+        value.map.entries.map((e) => PathAndValue(e.key, e.value)),
+        child,
+      ),
     );
   }
 

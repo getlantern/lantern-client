@@ -177,3 +177,25 @@ Plan planFromJson(Map<String, dynamic> item) {
   }
   return plan;
 }
+
+Map<String, PaymentMethod> paymentMethodsFromJson(List<dynamic> items) {
+  final paymentMethods = Map<String, PaymentMethod>();
+  items.forEach((e) {
+    final json = jsonDecode(jsonEncode(e));
+    final method = json['method'];
+    final paymentMethod = PaymentMethod.create()
+      ..mergeFromProto3Json({
+        'method': method,
+      });
+    final res = jsonDecode(jsonEncode(json['providers']));
+    res.forEach((e) {
+      paymentMethod.providers.add(PaymentProviders.create()
+      ..mergeFromProto3Json({
+        "logoUrls": e['logoUrls'],
+        "name": e['name'],
+      }));
+    });
+  });
+  print("payment methods ----> $paymentMethods");
+  return paymentMethods;
+}

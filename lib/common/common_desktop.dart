@@ -3,6 +3,7 @@ export 'dart:ffi'; // For FFI
 
 export 'package:ffi/ffi.dart';
 export 'package:ffi/src/utf8.dart';
+export 'package:lantern/common/config.dart';
 export 'package:lantern/common/ffi_subscriber.dart';
 export 'package:lantern/common/ffi_list_subscriber.dart';
 export 'package:lantern/common/model.dart';

@@ -7,6 +7,7 @@ import 'package:fixnum/fixnum.dart';
 typedef void WebsocketChange();
 
 enum WebsocketMessage {
+  config,
   pro,
   bandwidth,
   vpnstatus,
@@ -45,18 +46,37 @@ class WebsocketSubscriber {
               });
             }
           case WebsocketMessage.pro:
-            print("pro websocket message: $json");
+            print("pro websocket message: $message");
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
             if (userStatus != null && userStatus == 'active') sessionModel.proUserNotifier.value = true;
             if (userLevel != null && userLevel == 'pro') sessionModel.proUserNotifier.value = true;
           case WebsocketMessage.bandwidth:
-            print("bandwidth websocket message: $json");
-            final Map res = jsonDecode(jsonEncode(json));
+            print("bandwidth websocket message: $message");
+            final Map res = jsonDecode(jsonEncode(message));
             vpnModel.bandwidthNotifier.value = Bandwidth.create()..mergeFromProto3Json({
               'allowed': res['mibAllowed'],
               'remaining': res['mibUsed'],
             });
+          case WebsocketMessage.config:
+            final ConfigOptions config = ConfigOptions.fromJson(message);
+            final plansMessage = config.plans;
+            if (plansMessage != null) {
+              sessionModel.plansNotifier.value.clearPaths();
+              for (String key in plansMessage!.keys) {
+                final plan = config.plans?[key];
+                if (plan != null) sessionModel.plansNotifier.value.map[key] = plan;
+              }
+            }
+            final paymentMethods = config.paymentMethods;
+            if (paymentMethods != null) {
+              sessionModel.paymentMethodsNotifier.value.clearPaths();
+              for (String key in paymentMethods!.keys) {
+                final paymentMethod = config.paymentMethods?[key];
+                if (paymentMethod != null) sessionModel.paymentMethodsNotifier.value.map[key] = paymentMethod;
+              }
+            }
+            if (config.authEnabled) sessionModel.isAuthEnabled.value = config.authEnabled;
           case WebsocketMessage.vpnstatus:
             final res = message["connected"];
             if (res != null) {
