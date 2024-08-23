@@ -150,7 +150,7 @@ Future<void> openDesktopWebview(
 
 Future<bool> isPlayStoreEnabled() async {
   if (!Platform.isAndroid) return false;
-  final isPlayVersion = sessionModel.isPlayVersion.value ?? false;
+  final isPlayVersion = sessionModel.isPlayVersion?.value ?? false;
   final inRussia = sessionModel.country.value == 'RU';
   return (isPlayVersion &&
       !inRussia &&
