@@ -19,8 +19,8 @@ const TAB_DEVELOPER = 'developer';
 class SessionModel extends Model {
   late final EventManager eventManager;
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  ValueNotifier<bool?>? isPlayVersion;
-  ValueNotifier<bool?>? isStoreVersion;
+  late ValueNotifier<bool?> isTestPlayVersion;
+  late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<bool?> proUserNotifier;
   late ValueNotifier<String?> country;
@@ -62,6 +62,11 @@ class SessionModel extends Model {
       );
     } else {
       country = ffiValueNotifier(ffiLang, 'lang', 'US');
+      isStoreVersion = ffiValueNotifier(
+        LanternFFI.ffiStoreVersion,
+        'isStoreVersion',
+        false,
+      );
       proxyAvailable = ffiValueNotifier(
         ffiSucceedingProxy,
         'hasSucceedingProxy',
@@ -73,13 +78,10 @@ class SessionModel extends Model {
           ffiValueNotifier(ffiIsUserLoggedIn, 'IsUserLoggedIn', false);
       isAuthEnabled = ffiValueNotifier(ffiAuthEnabled, 'authEnabled', false);
       isTestPlayVersion = ffiValueNotifier(
-        ffIsPlayVersion,
+        LanternFFI.ffIsPlayVersion,
         'testPlayVersion',
         false,
       );
-      // TODO re-enable
-      hasUserSignedInNotifier = ValueNotifier(false);
-      isAuthEnabled = ValueNotifier(false);
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -95,6 +97,7 @@ class SessionModel extends Model {
   Future<void> updateUserDetails() {
     return methodChannel.invokeMethod('updateUserDetail', {});
   }
+
   Pointer<Utf8> ffiAuthEnabled() => LanternFFI.authEnabled();
 
   Pointer<Utf8> ffiProUser() => LanternFFI.proUser();
@@ -114,7 +117,8 @@ class SessionModel extends Model {
         listenWebsocket(websocket, 'pro', null, (p0) {
           if (p0 != null) {
             final res = p0 as Map<String, dynamic>;
-            final isPro = res['userStatus'] == 'active' || res['userLevel'] == 'pro';
+            final isPro =
+                res['userStatus'] == 'active' || res['userLevel'] == 'pro';
             if (isPro) setValue(isPro);
           }
         })
@@ -361,7 +365,6 @@ class SessionModel extends Model {
         'planId': planId,
       });
     }
-    return compute(ffiTestPaymentRequest, [email, paymentProvider, planId]);
     return compute(
         LanternFFI.testPaymentRequest, [email, paymentProvider, planId]);
   }
@@ -694,15 +697,8 @@ class SessionModel extends Model {
         return "";
       }
     } else {
-      ffiCheckUpdates();
+      LanternFFI.checkUpdates();
       return "";
-    }
-  }
-  Future<void> checkForUpdates() async {
-    if (Platform.isAndroid) {
-      return methodChannel.invokeMethod('checkForUpdates');
-    } else if (isDesktop()) {
-      await LanternFFI.checkUpdates();
     }
   }
 
@@ -818,8 +814,8 @@ class SessionModel extends Model {
   Future<void> applyRefCode(
     String refCode,
   ) async {
-    if(isDesktop()){
-      return await compute(ffiApplyRefCode, refCode);
+    if (isDesktop()) {
+      return await compute(LanternFFI.ffiApplyRefCode, refCode);
     }
     return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
       'refCode': refCode,
