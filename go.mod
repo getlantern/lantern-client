@@ -25,7 +25,7 @@ require (
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/dustin/go-humanize v1.0.1
 	github.com/eycorsican/go-tun2socks v1.16.12-0.20201107203946-301549c435ff
-	github.com/fsnotify/fsnotify v1.6.0
+	github.com/fsnotify/fsnotify v1.7.0
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/common v1.2.1-0.20230427204521-6ac18c21db39
@@ -35,9 +35,10 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.102
-	github.com/getlantern/fronted v0.0.0-20240820124517-697613202173
+	github.com/getlantern/flashlight/v7 v7.6.103
+	github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
+	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
 	github.com/getlantern/ipproxy v0.0.0-20240820014622-25f78a719601
@@ -162,7 +163,6 @@ require (
 	github.com/getlantern/grtrack v0.0.0-20231025115619-bfbfadb228f3 // indirect
 	github.com/getlantern/hellosplitter v0.1.1 // indirect
 	github.com/getlantern/hex v0.0.0-20220104173244-ad7e4b9194dc // indirect
-	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770 // indirect
 	github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240614175233-0df4a97b806e // indirect
 	github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca // indirect
 	github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 // indirect
@@ -229,6 +229,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mdlayher/netlink v1.1.0 // indirect
 	github.com/mholt/archiver/v3 v3.5.1 // indirect
+	github.com/miekg/dns v1.1.59 // indirect
 	github.com/minio/sha256-simd v1.0.1 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-ps v1.0.0 // indirect
@@ -244,7 +245,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.20.0 // indirect
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7 // indirect
 	github.com/oschwald/geoip2-golang v1.9.0 // indirect
-	github.com/oschwald/maxminddb-golang v1.11.0 // indirect
+	github.com/oschwald/maxminddb-golang v1.12.0 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/pierrec/lz4/v4 v4.1.15 // indirect
 	github.com/pion/datachannel v1.5.8 // indirect
@@ -295,6 +296,7 @@ require (
 	github.com/tjfoc/gmsm v1.4.1 // indirect
 	github.com/tkuchiki/go-timezone v0.2.3 // indirect
 	github.com/ulikunitz/xz v0.5.11 // indirect
+	github.com/vishvananda/netns v0.0.0-20211101163701-50045581ed74 // indirect
 	github.com/wlynxg/anet v0.0.3 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xjasonlyu/tun2socks/v2 v2.5.3-0.20240722005329-e083dafcf534 // indirect

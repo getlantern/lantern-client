@@ -5,7 +5,7 @@ import 'package:lantern/core/router/router.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn_notifier.dart';
-
+import 'package:lantern/ffi.dart';
 import 'common/ui/custom/internet_checker.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();

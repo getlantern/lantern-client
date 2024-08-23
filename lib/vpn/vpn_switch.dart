@@ -25,10 +25,10 @@ class _VPNSwitchState extends State<VPNSwitch> {
   Future<void> vpnProcessForDesktop() async {
     bool isConnected = vpnStatus == 'connected';
     if (isConnected) {
-      sysProxyOff();
+      LanternFFI.sysProxyOff();
       await TrayHandler.instance.setupTray(false);
     } else {
-      sysProxyOn();
+      LanternFFI.sysProxyOn();
       await TrayHandler.instance.setupTray(true);
     }
   }

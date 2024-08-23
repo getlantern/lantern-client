@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
               TextButton(
                 child: Text('Yes'.i18n),
                 onPressed: () async {
-                  ffiExit();
+                  LanternFFI.exit();
                   await trayManager.destroy();
                   await windowManager.destroy();
                 },
@@ -212,6 +212,8 @@ class _HomePageState extends State<HomePage> with WindowListener {
             bool isPlayVersion =
                 (sessionModel.isTestPlayVersion.value ?? false);
             bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
+            bool isPlayVersion = (sessionModel.isPlayVersion?.value ?? false);
+            bool isStoreVersion = (sessionModel.isStoreVersion?.value ?? false);
 
             if ((isStoreVersion || isPlayVersion) && version == 0) {
               // show privacy disclosure if it's a Play build and the terms have

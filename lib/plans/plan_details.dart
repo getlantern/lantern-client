@@ -177,6 +177,7 @@ class _PlanCardState extends State<PlanCard> {
 
   Future<void> _processCheckOut(BuildContext context) async {
     final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
+    final isPlayVersion = sessionModel.isPlayVersion?.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
     if (isPlayVersion &&
@@ -221,6 +222,7 @@ class _PlanCardState extends State<PlanCard> {
 
   Future<void> _processLegacyCheckOut(BuildContext context) async {
     final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
+    final isPlayVersion = sessionModel.isPlayVersion?.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';
     // check if google play payment is available
     if (isPlayVersion &&

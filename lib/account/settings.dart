@@ -40,6 +40,14 @@ class Settings extends StatelessWidget {
     if (result != null && result != "" && result == "no_new_update") {
       CDialog.showInfo(context,
           title: "app_name".i18n, description: "no_new_update".i18n);
+    if (Platform.isAndroid) {
+      AppLoadingDialog.showLoadingDialog(context);
+      await sessionModel.checkForUpdates();
+      AppLoadingDialog.dismissLoadingDialog(context);
+    } else if (Platform.isIOS) {
+      AppMethods.openAppstore();
+    } else {
+      LanternFFI.checkUpdates();
     }
   }
 

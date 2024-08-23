@@ -1,7 +1,6 @@
 package app
 
 import (
-	"context"
 	"math"
 	"strconv"
 
@@ -68,8 +67,7 @@ func (reporter *issueReporter) sendIssueReport(msg *issueMessage) error {
 		return err
 	}
 	subscriptionLevel := "free"
-	ctx := context.Background()
-	if isPro, _ := IsProUser(ctx, reporter.proClient, settings); isPro {
+	if settings.IsProUser() {
 		subscriptionLevel = "pro"
 	}
 	var osVersion string
