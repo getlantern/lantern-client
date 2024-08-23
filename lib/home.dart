@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
               TextButton(
                 child: Text('Yes'.i18n),
                 onPressed: () async {
-                  ffiExit();
+                  LanternFFI.exit();
                   await trayManager.destroy();
                   await windowManager.destroy();
                 },
@@ -206,8 +206,8 @@ class _HomePageState extends State<HomePage> with WindowListener {
               Logger.level = Level.error;
             }
 
-            bool isPlayVersion = (sessionModel.isPlayVersion.value ?? false);
-            bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
+            bool isPlayVersion = (sessionModel.isPlayVersion?.value ?? false);
+            bool isStoreVersion = (sessionModel.isStoreVersion?.value ?? false);
 
             if ((isPlayVersion || isStoreVersion) && version == 0) {
               // show privacy disclosure if it's a Play build and the terms have
@@ -216,9 +216,10 @@ class _HomePageState extends State<HomePage> with WindowListener {
             }
 
             if(!Platform.isAndroid){
-              userNew(() {
+              /* disable for now
+              * userNew(() {
                 _checkForFirstTimeVisit();
-              });
+              });*/
             }
 
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {

@@ -174,13 +174,13 @@ class NativeLibrary {
   late final _deleteAccount = _deleteAccountPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
-  void start() {
+  ffi.Pointer<ffi.Char> start() {
     return _start();
   }
 
   late final _startPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('start');
-  late final _start = _startPtr.asFunction<void Function()>();
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('start');
+  late final _start = _startPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> onSuccess() {
     return _onSuccess();

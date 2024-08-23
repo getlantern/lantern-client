@@ -38,22 +38,22 @@ class ServerLocationWidget extends StatelessWidget {
           vpnModel.vpnStatus(
               (BuildContext context, String vpnStatus, Widget? child) {
             return sessionModel.serverInfo(
-                (BuildContext context, ServerInfo serverInfo, Widget? child) {
-              if (vpnStatus == 'connected' || vpnStatus == 'disconnecting') {
+                (BuildContext context, ServerInfo? serverInfo, Widget? child) {
+              if (serverInfo != null && vpnStatus == 'connected' || vpnStatus == 'disconnecting') {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(4)),
                       child: Flag.fromString(
-                        serverInfo.countryCode,
+                        serverInfo!.countryCode,
                         height: 24,
                         width: 36,
                       ),
                     ),
                     const SizedBox(width: 12),
                     CText(
-                      serverInfo.city,
+                      serverInfo!.city,
                       style: tsSubtitle4,
                       textAlign: TextAlign.center,
                     )

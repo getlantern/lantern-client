@@ -153,7 +153,7 @@ class PlansPage extends StatelessWidget {
                 color: black,
               ),
             ),
-            onPressed: () => Navigator.pop(context, null),
+            onPressed: () => Navigator.pop(context),
           ),
         ],
       ),

@@ -54,7 +54,7 @@ class ProBanner extends StatelessWidget {
     );
   }
 
-  void onBannerTap(BuildContext context){
+  void onBannerTap(BuildContext context) {
     //Add event to Plausible
     sessionModel.trackUserAction("User Clicked on ProBanner", 'ProBanner', "ProBanner");
     context.pushRoute(const PlansPage());

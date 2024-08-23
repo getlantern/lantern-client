@@ -7,13 +7,10 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"os/signal"
-	"path/filepath"
 	"runtime"
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/getlantern/appdir"
@@ -28,6 +25,7 @@ import (
 	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	"github.com/getlantern/lantern-client/desktop/sentry"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -36,7 +34,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/osversion"
 	"github.com/joho/godotenv"
-
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -47,10 +44,23 @@ const (
 )
 
 var (
-	log        = golog.LoggerFor("lantern-desktop.main")
-	a          *app.App
-	proClient  proclient.ProClient
-	authClient auth.AuthClient
+	log           = golog.LoggerFor("lantern-desktop.main")
+	flags         = flashlight.ParseFlags()
+	cdir          = configDir(&flags)
+	ss            = settings.LoadSettings(cdir)
+	webclientOpts = &webclient.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		},
+		UserConfig: func() common.UserConfig {
+			return settings.UserConfig(ss)
+		},
+	}
+	proClient  = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
+
+	a = app.NewApp(flags, cdir, proClient, ss)
 )
 
 var issueMap = map[string]string{
@@ -67,7 +77,7 @@ var issueMap = map[string]string{
 }
 
 //export start
-func start() {
+func start() *C.char {
 	runtime.LockOSThread()
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
@@ -80,32 +90,6 @@ func start() {
 	} else {
 		log.Debug("Successfully loaded .env file")
 	}
-
-	flags := flashlight.ParseFlags()
-
-	cdir := configDir(&flags)
-	settings := loadSettings(cdir)
-	webclientOpts := &webclient.Opts{
-		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   30 * time.Second,
-		},
-		UserConfig: func() common.UserConfig {
-			return userConfig(settings)
-		},
-	}
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
-
-	a = app.NewApp(flags, cdir, proClient, settings)
-	go func() {
-		err := fetchOrCreate()
-		if err != nil {
-			log.Error(err)
-		}
-	}()
-
-	go fetchUserData()
 
 	go func() {
 		err := fetchPayentMethodV4()
@@ -136,8 +120,15 @@ func start() {
 		}()
 	}
 
+	// This init needs to be called before the panicwrapper fork so that it has been
+	// defined in the parent process
+	if app.ShouldReportToSentry() {
+		sentry.InitSentry(sentry.Opts{
+			DSN:             common.SentryDSN,
+			MaxMessageChars: common.SentryMaxMessageChars,
+		})
+	}
 	golog.SetPrepender(logging.Timestamped)
-	handleSignals(a)
 
 	if flags.Pprof {
 		addr := "localhost:6060"
@@ -152,104 +143,14 @@ func start() {
 		}()
 	}
 
-	go func() {
-		if logFile != nil {
-			defer logFile.Close()
-		}
-		// i18nInit(a)
-		a.Run(true)
+	// i18nInit(a)
+	a.Run(true)
 
-		err := a.WaitForExit()
-		if err != nil {
-			log.Errorf("Lantern stopped with error %v", err)
-			os.Exit(-1)
-		}
-		log.Debug("Lantern stopped")
-		os.Exit(0)
-	}()
-}
-
-func fetchUserData() error {
-	user, err := getUserData()
-	if err != nil {
-		return log.Errorf("error while fetching user data: %v", err)
-	}
-	return cacheUserDetail(user)
-}
-
-func cacheUserDetail(userDetail *protos.User) error {
-	if userDetail.Email != "" {
-		a.Settings().SetEmailAddress(userDetail.Email)
-	}
-	//Save user refferal code
-	if userDetail.Referral != "" {
-		a.SetReferralCode(userDetail.Referral)
-	}
-	// err := setUserLevel(session.baseModel, userDetail.UserLevel)
-	// if err != nil {
-	// 	return err
-	// }
-
-	err := setExpiration(userDetail.Expiration)
-	if err != nil {
-		return err
-	}
-	currentDevice := getDeviceID()
-	log.Debugf("Current device %v", currentDevice)
-
-	// Check if device id is connect to same device if not create new user
-	// this is for the case when user removed device from other device
-	deviceFound := false
-	if userDetail.Devices != nil {
-		for _, device := range userDetail.Devices {
-			if device.Id == currentDevice {
-				deviceFound = true
-				break
-			}
-		}
-	}
-	log.Debugf("Device found %v", deviceFound)
-	/// Check if user has installed app first time
-	firstTime := a.Settings().GetUserFirstVisit()
-	log.Debugf("First time visit %v", firstTime)
-	if userDetail.UserLevel == "pro" && firstTime {
-		log.Debugf("User is pro and first time")
-		setProUser(true)
-	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
-		log.Debugf("User is pro and not first time")
-		setProUser(true)
-	} else {
-		log.Debugf("User is not pro")
-		setProUser(false)
-	}
-
-	a.Settings().SetUserIDAndToken(userDetail.UserId, userDetail.Token)
-	log.Debugf("User caching successful: %+v", userDetail)
-	// Save data in userData cache
-	app.SetUserData(context.Background(), userDetail.UserId, userDetail)
-	return nil
+	return C.CString("")
 }
 
 func getDeviceID() string {
 	return a.Settings().GetDeviceID()
-}
-
-func setExpiration(expiration int64) error {
-	if expiration == 0 {
-		return log.Errorf("Expiration date is 0")
-	}
-	expiry := time.Unix(0, expiration*int64(time.Second))
-	dateFormat := "01/02/2006"
-	dateStr := expiry.Format(dateFormat)
-	a.Settings().SetExpirationDate(dateStr)
-	return nil
-}
-
-func setProUser(isPro bool) {
-	a.Settings().SetProUser(isPro)
-	a.SendMessageToUI("pro", map[string]interface{}{
-		"isProUser": isPro,
-	})
 }
 
 func saveUserSalt(salt []byte) {
@@ -271,36 +172,6 @@ func hasConfigFected() *C.char {
 	return booltoCString(a.GetHasConfigFetched())
 }
 
-func userCreate() error {
-	// User is new
-	user, err := proClient.UserCreate(context.Background())
-	if err != nil {
-		return errors.New("Could not create new Pro user: %v", err)
-	}
-	log.Debugf("DEBUG: User created: %v", user)
-	if user.BaseResponse != nil && user.BaseResponse.Error != "" {
-		return errors.New("Could not create new Pro user: %v", err)
-	}
-	a.Settings().SetUserIDAndToken(user.UserId, user.Token)
-
-	return nil
-}
-
-func fetchOrCreate() error {
-	settings := a.Settings()
-	settings.SetLanguage("en_us")
-	userID := settings.GetUserID()
-	if userID == 0 {
-		a.Settings().SetUserFirstVisit(true)
-		err := userCreate()
-		if err != nil {
-			return err
-		}
-		// if the user is new mean we need to fetch the payment methods
-		fetchPayentMethodV4()
-	}
-	return nil
-}
 func fetchPayentMethodV4() error {
 	settings := a.Settings()
 	userID := settings.GetUserID()
@@ -379,21 +250,8 @@ func paymentMethodsV4() *C.char {
 }
 
 func cachedUserData() (*protos.User, bool) {
-	uc := userConfig(a.Settings())
-	return app.GetUserDataFast(context.Background(), uc.GetUserID())
-}
-
-func getUserData() (*protos.User, error) {
-	resp, err := proClient.UserData(context.Background())
-	if err != nil {
-		return nil, err
-	}
-	if resp.User == nil {
-		return nil, errors.New("User data not found")
-	}
-	user := resp.User
-	cacheUserDetail(user)
-	return user, nil
+	uc := settings.UserConfig(a.Settings())
+	return a.GetUserData(uc.GetUserID())
 }
 
 //export proxyAll
@@ -436,7 +294,7 @@ func hasPlanUpdatedOrBuy() *C.char {
 		if cacheUserData.Expiration < resp.User.Expiration {
 			// New data has a later expiration
 			// if foud then update the cache
-			cacheUserDetail(resp.User)
+			a.Settings().SetExpiration(resp.User.Expiration)
 			return C.CString(string("true"))
 		}
 	}
@@ -497,10 +355,11 @@ func expiryDate() *C.char {
 
 //export userData
 func userData() *C.char {
-	user, err := getUserData()
-	if err != nil {
-		return sendError(err)
+	user, ok := a.GetUserData(a.Settings().GetUserID())
+	if !ok {
+		return C.CString("")
 	}
+
 	b, _ := json.Marshal(user)
 	return C.CString(string(b))
 }
@@ -533,18 +392,19 @@ func emailExists(email *C.char) *C.char {
 
 //export testProviderRequest
 func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *C.char {
+	ctx := context.Background()
 	puchaseData := map[string]interface{}{
 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
 		"provider":       C.GoString(paymentProvider),
 		"email":          C.GoString(email),
 		"plan":           C.GoString(plan),
 	}
-	_, err := proClient.PurchaseRequest(context.Background(), puchaseData)
+	_, err := proClient.PurchaseRequest(ctx, puchaseData)
 	if err != nil {
 		return sendError(err)
 	}
-	setProUser(true)
-	getUserData()
+	//a.SetProUser(true)
+	go a.UserData(ctx)
 	return C.CString("true")
 }
 
@@ -577,10 +437,10 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 
 //export referral
 func referral() *C.char {
-	referralCode, err := a.ReferralCode(userConfig(a.Settings()))
-	if err != nil {
-		return sendError(err)
+	if user, ok := a.GetUserData(a.Settings().GetUserID()); ok {
+		return C.CString(user.Referral)
 	}
+	referralCode := a.Settings().GetReferralCode()
 	return C.CString(referralCode)
 }
 
@@ -675,15 +535,9 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
-	// // refresh user data when home page is loaded on desktop
-	// go getUserData()
-	uc := a.Settings()
-	if uc.IsProUser() {
+	if isProUser, ok := a.IsProUserFast(settings.UserConfig(a.Settings())); isProUser && ok {
 		return C.CString("true")
 	}
-	// if isProUser, ok := app.IsProUserFast(ctx, uc); isProUser && ok {
-	// 	return C.CString("true")
-	// }
 	return C.CString("false")
 }
 
@@ -743,18 +597,6 @@ func replicaAddr() *C.char {
 	return C.CString("")
 }
 
-func userConfig(settings *settings.Settings) common.UserConfig {
-	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	return common.NewUserConfig(
-		common.DefaultAppName,
-		deviceID,
-		userID,
-		token,
-		nil,
-		settings.GetLanguage(),
-	)
-}
-
 //export reportIssue
 func reportIssue(email, issueType, description *C.char) *C.char {
 	issueTypeStr := C.GoString(issueType)
@@ -765,11 +607,10 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 		log.Errorf("Error converting issue type to int: %v", err)
 		return sendError(err)
 	}
-	ctx := context.Background()
-	uc := userConfig(a.Settings())
+	uc := settings.UserConfig(a.Settings())
 
 	subscriptionLevel := "free"
-	if isProUser, ok := app.IsProUserFast(ctx, uc); ok && isProUser {
+	if isProUser, ok := a.IsProUserFast(uc); ok && isProUser {
 		subscriptionLevel = "pro"
 	}
 
@@ -816,19 +657,6 @@ func checkUpdates() *C.char {
 	}
 	log.Debugf("Auto-update URL is %s", updateURL)
 	return C.CString(updateURL)
-}
-
-// loadSettings loads the initial settings at startup, either from disk or using defaults.
-func loadSettings(configDir string) *settings.Settings {
-	path := filepath.Join(configDir, "settings.yaml")
-	if common.IsStagingEnvironment() {
-		path = filepath.Join(configDir, "settings-staging.yaml")
-	}
-	settings := settings.LoadSettingsFrom(common.ApplicationVersion, common.RevisionDate, common.BuildDate, path)
-	if common.IsStagingEnvironment() {
-		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
-	}
-	return settings
 }
 
 func configDir(flags *flashlight.Flags) string {
@@ -882,28 +710,12 @@ func useOSLocale() (string, error) {
 // 	}
 // }
 
-// Handle system signals for clean exit
-func handleSignals(a *app.App) {
-	c := make(chan os.Signal, 1)
-	signal.Notify(c,
-		syscall.SIGHUP,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGQUIT)
-	go func() {
-		s := <-c
-		log.Debugf("Got signal \"%s\", exiting...", s)
-		a.Exit(nil)
-	}()
-}
-
 // clearLocalUserData clears the local user data from the settings
 func clearLocalUserData() {
 	setting := a.Settings()
 	saveUserSalt([]byte{})
 	setting.SetEmailAddress("")
 	a.SetUserLoggedIn(false)
-	setProUser(false)
 }
 
 func main() {}
