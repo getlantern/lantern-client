@@ -53,7 +53,7 @@ class VPNBandwidth extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        flex: (bandwidth.allowed - bandwidth.remaining).toInt(),
+                        flex: (bandwidth.remaining).toInt(),
                         child: Container(
                           decoration: BoxDecoration(
                             color: usedDataBarColor,
