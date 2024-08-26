@@ -397,7 +397,7 @@ func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 
 func (app *App) onSucceedingProxy(succeeding bool) {
 	app.hasSucceedingProxy.Store(succeeding)
-	app.sendConfigOptions()
+	//app.sendConfigOptions()
 	log.Debugf("[Startup Desktop] onSucceedingProxy %v", succeeding)
 }
 
