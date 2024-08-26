@@ -688,7 +688,6 @@ func (app *App) ProxyAddrReachable(ctx context.Context) error {
 	if resp.StatusCode != http.StatusBadRequest {
 		return fmt.Errorf("unexpected HTTP status %v", resp.StatusCode)
 	}
-	app.onSucceedingProxy(true)
 	return nil
 }
 
