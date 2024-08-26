@@ -210,9 +210,6 @@ func (app *App) Run(ctx context.Context) {
 			app.analyticsSession.EventWithLabel,
 			flashlight.WithOnConfig(app.onConfigUpdate),
 			flashlight.WithOnProxies(app.onProxiesUpdate),
-			flashlight.WithOnSucceedingProxy(func() {
-				app.onSucceedingProxy(true)
-			}),
 		)
 		if err != nil {
 			app.Exit(err)
@@ -393,6 +390,7 @@ func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
 	app.sendConfigOptions()
 	app.fetchedProxiesConfig.Store(true)
+	app.hasSucceedingProxy.Store(true)
 }
 
 func (app *App) onSucceedingProxy(succeeding bool) {
