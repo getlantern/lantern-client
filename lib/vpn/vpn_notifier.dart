@@ -11,8 +11,15 @@ class VPNChangeNotifier extends ChangeNotifier {
     if (isMobile()) {
       initCallbackForMobile();
     } else {
-      initCallbacks();
+      // TODO: change to call initCallbacks again
+      isFlashlightInitialized = true;
+      isFlashlightInitializedFailed = false;
+      //initCallbacks();
     }
+  }
+
+  (bool, bool, bool) startUpInitCallBacks() {
+    return LanternFFI.startUpInitCallBacks();
   }
 
   void initCallbacks() {
@@ -33,7 +40,7 @@ class VPNChangeNotifier extends ChangeNotifier {
         isFlashlightInitializedFailed = false;
         print("flashlight initialized");
         timer?.cancel();
-      } else if (timer!.tick >= 6) {
+      } else if (timer != null && timer!.tick >= 6) {
         // Timer has reached 6 seconds
         // Stop the timer and set isFlashlightInitialized to true
         print("flashlight fail initialized");

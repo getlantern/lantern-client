@@ -160,7 +160,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		// because we are not using the flashlight on ios
 		// We need to figure out where to put proxied SetProxyAddr
 		HttpClient: &http.Client{
-			Transport: proxied.ParallelPreferChained(),
+			Transport: proxied.ParallelForIdempotent(),
 			Timeout:   dialTimeout,
 		},
 		UserConfig: func() common.UserConfig {
@@ -829,23 +829,15 @@ func (m *SessionModel) UpdateStats(serverCity string, serverCountry string, serv
 			CountryCode: serverCountryCode,
 		}
 		log.Debugf("UpdateStats city %v country %v hasSucceedingProxy %v serverInfo %v", serverCity, serverCountry, hasSucceedingProxy, serverInfo)
-		// // tx, err := m.db.Begin()
-		// // if err != nil {
-		// // 	log.Errorf("Error while begining transaction %v", err)
-		// // 	return err
-		// // }
-		// pathdb.Put[*protos.ServerInfo](tx, pathServerInfo, serverInfo, "")
-		// pathdb.Put[bool](tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
-		// return tx.Commit()
 
+		err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
+		})
+		if err != nil {
+			log.Errorf("Error while setting hasSucceedingProxy %v", err)
+		}
 		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			return pathdb.PutAll(tx, map[string]interface{}{
-				// pathServerCountry:     serverCountry,
-				// pathServerCity:        serverCity,
-				// pathServerCountryCode: serverCountryCode,
-				pathServerInfo:         serverInfo,
-				pathHasSucceedingProxy: hasSucceedingProxy,
-			})
+			return pathdb.Put(tx, pathServerInfo, serverInfo, "")
 		})
 	}
 	return nil

@@ -20,7 +20,6 @@ import (
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/bandit"
-	"github.com/getlantern/flashlight/v7/browsers/simbrowser"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
@@ -30,8 +29,6 @@ import (
 	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/i18n"
-	notify "github.com/getlantern/notifier"
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
@@ -43,6 +40,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
 var (
@@ -60,9 +58,9 @@ func init() {
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
 	hasExited            int64
-	fetchedGlobalConfig  int32
-	fetchedProxiesConfig int32
-	hasSucceedingProxy   int32
+	fetchedGlobalConfig  atomic.Bool
+	fetchedProxiesConfig atomic.Bool
+	hasSucceedingProxy   atomic.Bool
 
 	Flags            flashlight.Flags
 	configDir        string
@@ -74,17 +72,14 @@ type App struct {
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
 
-	chGlobalConfigChanged chan bool
-
 	translations eventual.Value
 
 	flashlight *flashlight.Flashlight
 
 	issueReporter *issueReporter
 	proClient     proclient.ProClient
-	referralCode  string
-	selectedTab   Tab
-	stats         *stats.Stats
+
+	selectedTab Tab
 
 	connectionStatusCallbacks []func(isConnected bool)
 	_sysproxyOff              func() error
@@ -93,6 +88,9 @@ type App struct {
 	websocketAddr   string
 	websocketServer *http.Server
 	ws              ws.UIChannel
+
+	cachedUserData sync.Map
+	onUserData     []func(current *protos.User, new *protos.User)
 
 	mu sync.Mutex
 }
@@ -113,13 +111,14 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
+
 	if err := app.serveWebsocket(); err != nil {
 		log.Error(err)
 	}
 	golog.OnFatal(app.exitOnFatal)
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
-	onProStatusChange(func(isPro bool) {
+	app.onProStatusChange(func(isPro bool) {
 		app.statsTracker.SetIsPro(isPro)
 	})
 	datacap.AddDataCapListener(func(hitDataCap bool) {
@@ -185,7 +184,7 @@ func (app *App) Run(isMain bool) {
 			go func() {
 				time.AfterFunc(app.Flags.Timeout, func() {
 					app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
-						app.Flags.Timeout, atomic.LoadInt32(&app.fetchedGlobalConfig) == 1, atomic.LoadInt32(&app.fetchedProxiesConfig) == 1))
+						app.Flags.Timeout, app.fetchedGlobalConfig.Load(), app.fetchedProxiesConfig.Load()))
 				})
 			}()
 		}
@@ -216,11 +215,6 @@ func (app *App) Run(isMain bool) {
 			app.analyticsSession.EventWithLabel,
 			flashlight.WithOnConfig(app.onConfigUpdate),
 			flashlight.WithOnProxies(app.onProxiesUpdate),
-			flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
-				if err != nil && !hasSucceeding {
-					app.onSucceedingProxy(hasSucceeding)
-				}
-			}),
 			flashlight.WithOnSucceedingProxy(func() {
 				app.onSucceedingProxy(true)
 			}),
@@ -230,28 +224,6 @@ func (app *App) Run(isMain bool) {
 			return
 		}
 		app.beforeStart(listenAddr)
-
-		notifyConfigSaveErrorOnce := new(sync.Once)
-
-		app.flashlight.SetErrorHandler(func(t flashlight.HandledErrorType, err error) {
-			switch t {
-			case flashlight.ErrorTypeProxySaveFailure, flashlight.ErrorTypeConfigSaveFailure:
-				log.Errorf("failed to save config (%v): %v", t, err)
-
-				notifyConfigSaveErrorOnce.Do(func() {
-					note := &notify.Notification{
-						Title:      i18n.T("BACKEND_CONFIG_SAVE_ERROR_TITLE"),
-						Message:    i18n.T("BACKEND_CONFIG_SAVE_ERROR_MESSAGE", i18n.T(translationAppName)),
-						ClickLabel: i18n.T("BACKEND_CLICK_LABEL_GOT_IT"),
-						IconURL:    "/img/lantern_logo.png",
-					}
-					_ = notifier.ShowNotification(note, "alert-prompt")
-				})
-
-			default:
-				log.Errorf("flashlight error: %v: %v", t, err)
-			}
-		})
 
 		app.flashlight.Run(
 			listenAddr,
@@ -272,6 +244,9 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 
 func (app *App) beforeStart(listenAddr string) {
 	log.Debug("Got first config")
+
+	go app.fetchOrCreateUser(context.Background())
+
 	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
 		log.Debugf("Start profiling with cpu file %s and mem file %s", app.Flags.CpuProfile, app.Flags.MemProfile)
 		finishProfiling := profiling.Start(app.Flags.CpuProfile, app.Flags.MemProfile)
@@ -306,7 +281,7 @@ func (app *App) beforeStart(listenAddr string) {
 	}
 
 	isProUser := func() (bool, bool) {
-		return app.IsProUser(context.Background())
+		return app.IsProUser(context.Background(), settings.UserConfig(app.Settings()))
 	}
 
 	if err := app.statsTracker.StartService(app.ws); err != nil {
@@ -408,46 +383,34 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
-	atomic.StoreInt32(&app.fetchedGlobalConfig, 1)
-	autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
+	app.fetchedGlobalConfig.Store(true)
+	/*autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
 		return "/img/lantern_logo.png"
-	})
+	})*/
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
-	if len(cfg.GlobalBrowserMarketShareData) > 0 {
-		err := simbrowser.SetMarketShareData(
-			cfg.GlobalBrowserMarketShareData, cfg.RegionalBrowserMarketShareData)
-		if err != nil {
-			log.Errorf("failed to set browser market share data: %v", err)
-		}
-	}
-	app.chGlobalConfigChanged <- true
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
-	atomic.StoreInt32(&app.fetchedProxiesConfig, 1)
+	app.fetchedProxiesConfig.Store(true)
 }
 
 func (app *App) onSucceedingProxy(succeeding bool) {
-	hasSucceedingProxy := int32(0)
-	if succeeding {
-		hasSucceedingProxy = 1
-	}
-	atomic.StoreInt32(&app.hasSucceedingProxy, hasSucceedingProxy)
+	app.hasSucceedingProxy.Store(succeeding)
 	log.Debugf("[Startup Desktop] onSucceedingProxy %v", succeeding)
 }
 
 // HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
 func (app *App) HasSucceedingProxy() bool {
-	return atomic.LoadInt32(&app.hasSucceedingProxy) == 1
+	return app.hasSucceedingProxy.Load()
 }
 
 func (app *App) GetHasConfigFetched() bool {
-	return atomic.LoadInt32(&app.fetchedGlobalConfig) == 1
+	return app.fetchedGlobalConfig.Load()
 }
 
 func (app *App) GetHasProxyFetched() bool {
-	return atomic.LoadInt32(&app.fetchedProxiesConfig) == 1
+	return app.fetchedProxiesConfig.Load()
 }
 
 func (app *App) GetOnSuccess() bool {
@@ -559,31 +522,95 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.isProUserFast(context.Background())
+	isPro, _ := app.IsProUserFast(settings.UserConfig(app.Settings()))
 	return isPro
 }
 
-// ReferralCode returns a user's unique referral code
-func (app *App) ReferralCode(uc common.UserConfig) (string, error) {
-	referralCode := app.referralCode
-	if referralCode == "" {
-		resp, err := app.proClient.UserData(context.Background())
-		if err != nil {
-			return "", errors.New("error fetching user data: %v", err)
-		} else if resp.User == nil {
-			return "", errors.New("error fetching user data")
-		}
-
-		app.SetReferralCode(resp.User.Code)
-		return resp.User.Code, nil
+func (app *App) fetchOrCreateUser(ctx context.Context) (*protos.User, error) {
+	settings := app.Settings()
+	lang := settings.GetLanguage()
+	if lang == "" {
+		// set default language
+		settings.SetLanguage("en_us")
 	}
-	return referralCode, nil
+	if userID := settings.GetUserID(); userID == 0 {
+		return app.CreateUser(ctx)
+	} else {
+		return app.UserData(ctx)
+	}
 }
 
-func (app *App) SetReferralCode(referralCode string) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.referralCode = referralCode
+func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
+	log.Debug("New user, calling user create")
+	settings := app.Settings()
+	settings.SetUserFirstVisit(true)
+	resp, err := app.proClient.UserCreate(context.Background())
+	if err != nil {
+		return nil, errors.New("Could not create new Pro user: %v", err)
+	}
+	user := resp.User
+	log.Debugf("DEBUG: User created: %v", user)
+	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
+		return nil, errors.New("Could not create new Pro user: %v", err)
+	}
+	app.SetUserData(context.Background(), user.UserId, user)
+	settings.SetReferralCode(user.Referral)
+	settings.SetUserIDAndToken(user.UserId, user.Token)
+	return resp.User, nil
+}
+
+// UserData looks up user data that is associated with the given UserConfig
+func (app *App) UserData(ctx context.Context) (*protos.User, error) {
+	log.Debug("Refreshing user data")
+	resp, err := app.proClient.UserData(context.Background())
+	if err != nil {
+		return nil, errors.New("error fetching user data: %v", err)
+	} else if resp.User == nil {
+		return nil, errors.New("error fetching user data")
+	}
+	userDetail := resp.User
+	settings := app.Settings()
+
+	setProUser := func(isPro bool) {
+		app.Settings().SetProUser(isPro)
+	}
+
+	currentDevice := app.Settings().GetDeviceID()
+
+	log.Debugf("Current device %v", currentDevice)
+
+	// Check if device id is connect to same device if not create new user
+	// this is for the case when user removed device from other device
+	deviceFound := false
+	if userDetail.Devices != nil {
+		for _, device := range userDetail.Devices {
+			if device.Id == currentDevice {
+				deviceFound = true
+				break
+			}
+		}
+	}
+	log.Debugf("Device found %v", deviceFound)
+	/// Check if user has installed app first time
+	firstTime := settings.GetUserFirstVisit()
+	log.Debugf("First time visit %v", firstTime)
+	if userDetail.UserLevel == "pro" && firstTime {
+		log.Debugf("User is pro and first time")
+		setProUser(true)
+	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
+		log.Debugf("User is pro and not first time")
+		setProUser(true)
+	} else {
+		log.Debugf("User is not pro")
+		setProUser(false)
+	}
+	settings.SetExpiration(userDetail.Expiration)
+	settings.SetReferralCode(resp.User.Referral)
+	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
+	log.Debugf("User caching successful: %+v", userDetail)
+	// Save data in userData cache
+	app.SetUserData(ctx, userDetail.UserId, userDetail)
+	return resp.User, nil
 }
 
 // ProxyAddrReachable checks if Lantern's HTTP proxy responds with the correct status
@@ -600,6 +627,7 @@ func (app *App) ProxyAddrReachable(ctx context.Context) error {
 	if resp.StatusCode != http.StatusBadRequest {
 		return fmt.Errorf("unexpected HTTP status %v", resp.StatusCode)
 	}
+	app.onSucceedingProxy(true)
 	return nil
 }
 

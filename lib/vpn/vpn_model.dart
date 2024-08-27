@@ -20,6 +20,8 @@ class VpnModel extends Model {
     });
   }
 
+  Pointer<Utf8> ffiVpnStatus() => LanternFFI.vpnStatus();
+
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
@@ -47,4 +49,33 @@ class VpnModel extends Model {
   }
 
 
+  Widget bandwidth(ValueWidgetBuilder<Bandwidth?> builder) {
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<Bandwidth?>(
+        '/bandwidth',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Bandwidth.fromBuffer(serialized);
+        },
+      );
+    }
+    final websocket = WebsocketImpl.instance();
+    return ffiValueBuilder<Bandwidth?>(
+      'bandwidth',
+      defaultValue: null,
+      onChanges: (setValue) =>
+          sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
+        if (value != null) {
+          final res = jsonDecode(jsonEncode(value));
+          if (res != null) setValue(Bandwidth.create()
+            ..mergeFromProto3Json({
+              'allowed': res['mibAllowed'],
+              'remaining': res['mibUsed'],
+            }));
+        }
+      }),
+      null,
+      builder: builder,
+    );
+  }
 }
