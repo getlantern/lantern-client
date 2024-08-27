@@ -127,8 +127,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
 
   Future<void> onRegisterPro() async {
     try {
-
-      if(!resellerCodeFieldKey.currentState!.validate()){
+      if (!resellerCodeFieldKey.currentState!.validate()) {
         return;
       }
       FocusManager.instance.primaryFocus?.unfocus();
@@ -155,12 +154,11 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
       print(stackTrace);
       appLogger.e(error, stackTrace: stackTrace);
       context.loaderOverlay.hide();
-      CDialog.showError(
-        context,
-        error: error,
-        stackTrace: stackTrace,
-        description: error.localizedDescription // This is coming localized
-      );
+      CDialog.showError(context,
+          error: error,
+          stackTrace: stackTrace,
+          description: error.localizedDescription // This is coming localized
+          );
     }
   }
 
