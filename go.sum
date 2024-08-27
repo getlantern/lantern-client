@@ -291,8 +291,8 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight/v7 v7.6.107 h1:fc+wI6nH8uJz1OxhiOFv+vQIGJaFbK4SfJlRqnVVVaQ=
-github.com/getlantern/flashlight/v7 v7.6.107/go.mod h1:M7KG4/LELzZkk6FiFxucmk0rirlQwD785Y0ee5RyiOM=
+github.com/getlantern/flashlight/v7 v7.6.107-0.20240827181531-269540054200 h1:nLDz0bCthau6KC8EVvf4hdkXhI5vnpxY+PpIDnlTDt4=
+github.com/getlantern/flashlight/v7 v7.6.107-0.20240827181531-269540054200/go.mod h1:asFgiKZ7S0DhYhsWs/P7mqicadXMKyvFoK6dgC0bbb0=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc h1:rVEoCLKM16Pfnz8CguT4U75m6o0QDN7stP+MBFUkmNk=
