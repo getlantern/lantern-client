@@ -116,8 +116,7 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
             FutureBuilder(
               future: isPlayStoreEnabled(),
               builder: (context, snapshot) {
-                if (snapshot.hasData &&
-                    (snapshot.data == true || isAppStoreEnabled())) {
+                if (snapshot.hasData && !widget.authFlow.isProCodeActivation && (snapshot.data == true || isAppStoreEnabled())) {
                   return TextButton(
                       onPressed: () {
                         context.router.popUntilRoot();
