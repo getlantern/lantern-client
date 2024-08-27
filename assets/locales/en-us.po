@@ -1780,7 +1780,7 @@ msgid "no_previous_purchase"
 msgstr "No previous purchase found"
 
 msgid "warning_restore_purchase"
-msgstr "*Enter the email you entered during checkout to recover your purchase."
+msgstr "Enter the email you entered during checkout to recover your purchase."
 
 msgid "purchase_restored"
 msgstr "Purchase Restored"

@@ -23,7 +23,7 @@ class _RestorePurchaseState extends State<RestorePurchase> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: "lantern_pro_checkout".i18n,
+      title: const AppBarProHeader(),
       padHorizontal: true,
       padVertical: true,
       body: _buildBody(),
@@ -57,7 +57,7 @@ class _RestorePurchaseState extends State<RestorePurchase> {
           alignment: Alignment.centerLeft,
           child: CText(
             'warning_restore_purchase'.i18n,
-            style: tsBody2.copiedWith(color: grey5),
+            style: tsBody1
           ),
         ),
         const SizedBox(height: 24),

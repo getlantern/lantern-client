@@ -39,7 +39,7 @@ class _StoreCheckoutState extends State<StoreCheckout>
   Widget build(BuildContext context) {
     return BaseScreen(
         resizeToAvoidBottomInset: false,
-        title: 'lantern_pro_checkout'.i18n,
+        title: const AppBarProHeader(),
         body: sessionModel.emailAddress((
           BuildContext context,
           String emailAddress,
@@ -89,7 +89,6 @@ class _StoreCheckoutState extends State<StoreCheckout>
                 Center(
                   child: TextButton(
                       onPressed: () {
-
                         state = _CheckOutState.withoutEmail;
                         startPurchaseFlow();
                       },
