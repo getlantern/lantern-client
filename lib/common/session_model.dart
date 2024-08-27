@@ -704,7 +704,7 @@ class SessionModel extends Model {
 
   // Plans and payment methods
   Future<void> updatePaymentPlans() async {
-    return methodChannel.invokeMethod('updatePaymentPlans');
+    return methodChannel.invokeMethod('updatePaymentPlans', '');
   }
 
   Future<bool> hasUpdatePlansOrBuy() async {

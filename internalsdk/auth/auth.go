@@ -98,7 +98,7 @@ func (c *authClient) signUp(ctx context.Context, signupData *protos.SignupReques
 	var resp protos.EmptyResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/signup", nil, signupData, &resp)
 	if err != nil {
-		return false, log.Errorf("error while sign up %v", err)
+		return false, err
 	}
 	return true, nil
 }
