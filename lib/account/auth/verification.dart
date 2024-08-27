@@ -248,7 +248,6 @@ class _VerificationState extends State<Verification> {
     }
   }
 
-
   // Purchase flow
   void startPurchase() {
     switch (Platform.operatingSystem) {
@@ -391,6 +390,9 @@ class _VerificationState extends State<Verification> {
         description: e.localizedDescription,
         okAction: () {
           pinCodeController.clear();
+          if (e.localizedDescription == "purchase_not_found".i18n) {
+            context.router.maybePop();
+          }
         },
       );
     }

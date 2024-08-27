@@ -26,14 +26,11 @@ extension ErrorX on Object {
         if (description.contains("user already exists")) {
           return "signup_error_user_exists".i18n;
         }
-        if (description.contains("purchase_not_found") || description.contains("user with provided email not found")) {
+        if (description.contains("purchase_not_found") || description.contains("user with provided email not found") || description.contains("no valid purchases for user")){
           return "purchase_not_found".i18n;
         }
         if (description.contains("err_while_sending_code")) {
           return "err_while_sending_code".i18n;
-        }
-        if (description.contains("no valid purchases for user")) {
-          return "no_purchases_found".i18n;
         }
 
         if (description.contains("error-wrong-code") || description.contains("<error-email-not-verified>")) {

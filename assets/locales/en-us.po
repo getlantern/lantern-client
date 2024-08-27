@@ -1803,9 +1803,6 @@ msgstr "Add an email to access your purchases on any device. Without an email pu
 msgid "continue_without_email"
 msgstr "Continue without Email"
 
-msgid "no_purchases_found"
-msgstr "No Purchases Found"
-
 
 
 
