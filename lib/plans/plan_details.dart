@@ -112,7 +112,6 @@ class _PlanCardState extends State<PlanCard> {
                   child: Container(
                     padding: const EdgeInsetsDirectional.only(
                       start: 12.0,
-                      top: 0.0,
                       end: 12.0,
                       bottom: 4.0,
                     ),

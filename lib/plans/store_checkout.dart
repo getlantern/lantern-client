@@ -116,6 +116,7 @@ class _StoreCheckoutState extends State<StoreCheckout>
   }
 
   void startPurchaseFlow() {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (Platform.isAndroid) {
       submitPlayPayment();
       return;
@@ -164,12 +165,12 @@ class _StoreCheckoutState extends State<StoreCheckout>
           );
         },
       );
-    } catch (e) {
+    } catch (error) {
       context.loaderOverlay.hide();
       CDialog.showError(
         context,
-        error: e,
-        description: e.toString(),
+        error: error,
+        description: error.toString(),
       );
     }
   }
