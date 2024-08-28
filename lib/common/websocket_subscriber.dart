@@ -10,7 +10,6 @@ var _webSocketLogger = Logger(
     methodCount: 0,
     errorMethodCount: 8,
     colors: true,
-
   ),
 );
 
@@ -31,6 +30,13 @@ class WebsocketSubscriber {
   WebsocketSubscriber._internal() {
     _ws = WebsocketImpl.instance()!;
     listenMessages();
+  }
+
+  Future<void> connect() async => await _ws.connect();
+
+  factory WebsocketSubscriber() {
+    _instance ??= WebsocketSubscriber._internal();
+    return _instance!;
   }
 
   void listenMessages() {
@@ -61,10 +67,11 @@ class WebsocketSubscriber {
             _webSocketLogger.i("Websocket message[Pro]: $json");
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
-            if (userStatus != null && userStatus == 'active')
+            if (userStatus != null &&
+                (userStatus == 'active' || userLevel == 'pro')) {
               sessionModel.proUserNotifier.value = true;
-            if (userLevel != null && userLevel == 'pro')
-              sessionModel.proUserNotifier.value = true;
+            }
+
           case WebsocketMessage.bandwidth:
             _webSocketLogger.i("Websocket message[Bandwidth]: $json");
             final Map res = jsonDecode(jsonEncode(message));
@@ -75,14 +82,17 @@ class WebsocketSubscriber {
               });
           case WebsocketMessage.config:
             final ConfigOptions config = ConfigOptions.fromJson(message);
+            // Check if auth is enabled
+            sessionModel.isAuthEnabled.value = config.authEnabled;
             sessionModel.configNotifier.value = config;
             final plansMessage = config.plans;
             if (plansMessage != null) {
               sessionModel.plansNotifier.value.clearPaths();
               for (String key in plansMessage!.keys) {
                 final plan = config.plans?[key];
-                if (plan != null)
+                if (plan != null) {
                   sessionModel.plansNotifier.value.map[key] = plan;
+                }
               }
             }
             final paymentMethods = config.paymentMethods;
@@ -90,13 +100,13 @@ class WebsocketSubscriber {
               sessionModel.paymentMethodsNotifier.value.clearPaths();
               for (String key in paymentMethods!.keys) {
                 final paymentMethod = config.paymentMethods?[key];
-                if (paymentMethod != null)
+                if (paymentMethod != null) {
                   sessionModel.paymentMethodsNotifier.value.map[key] =
                       paymentMethod;
+                }
               }
             }
-            if (config.authEnabled)
-              sessionModel.isAuthEnabled.value = config.authEnabled;
+
           case WebsocketMessage.vpnstatus:
             final res = message["connected"];
             if (res != null) {
@@ -110,12 +120,5 @@ class WebsocketSubscriber {
       onError: (error) => _webSocketLogger
           .e("websocket error: ${error.description}", error: error),
     );
-  }
-
-  Future<void> connect() async => await _ws.connect();
-
-  factory WebsocketSubscriber() {
-    _instance ??= WebsocketSubscriber._internal();
-    return _instance!;
   }
 }

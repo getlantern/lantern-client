@@ -1,4 +1,3 @@
-import 'package:fixnum/fixnum.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/plans/utils.dart';
@@ -77,7 +76,8 @@ class SessionModel extends Model {
       userEmail = ValueNotifier("");
       proUserNotifier = ValueNotifier(false);
       plansNotifier = FfiListNotifier<Plan>('/plans/', () => {});
-      paymentMethodsNotifier = FfiListNotifier<PaymentMethod>('/paymentMethods/', () => {});
+      paymentMethodsNotifier =
+          FfiListNotifier<PaymentMethod>('/paymentMethods/', () => {});
       // TODO re-enable
       hasUserSignedInNotifier = ValueNotifier(false);
       langNotifier = ValueNotifier('en_us');
@@ -112,7 +112,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('developmentMode', configNotifier, builder, (value) => value?.developmentMode ?? false);
+    return configValueBuilder('developmentMode', configNotifier, builder,
+        (value) => value?.developmentMode ?? false);
   }
 
   Widget paymentTestMode(ValueWidgetBuilder<bool> builder) {
@@ -203,7 +204,7 @@ class SessionModel extends Model {
     }
     return ffiValueBuilder<String>(
       'expirydatestr',
-      null,
+      LanternFFI.expiryDate,
       defaultValue: '',
       builder: builder,
     );
@@ -273,7 +274,8 @@ class SessionModel extends Model {
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     final websocket = WebsocketImpl.instance();
     if (isDesktop()) {
-      return FfiValueBuilder<bool>('isUserLoggedIn', hasUserSignedInNotifier, builder);
+      return FfiValueBuilder<bool>(
+          'isUserLoggedIn', hasUserSignedInNotifier, builder);
     }
     return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
         builder: builder, defaultValue: false);
@@ -538,7 +540,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('sdkVersion', configNotifier, builder, (value) => value?.sdkVersion ?? "");
+    return configValueBuilder('sdkVersion', configNotifier, builder,
+        (value) => value?.sdkVersion ?? "");
   }
 
   Future<bool> getChatEnabled() async {
@@ -604,7 +607,8 @@ class SessionModel extends Model {
     return FfiListBuilder<PaymentMethod>(
       '/paymentMethods/',
       paymentMethodsNotifier,
-      (BuildContext context, ChangeTrackingList<PaymentMethod> value, Widget? child) =>
+      (BuildContext context, ChangeTrackingList<PaymentMethod> value,
+              Widget? child) =>
           builder(
         context,
         value.map.entries.map((e) => PathAndValue(e.key, e.value)),
@@ -659,7 +663,8 @@ class SessionModel extends Model {
         },
       );
     }
-    return FfiValueBuilder<ServerInfo?>('serverInfo', serverInfoNotifier, builder);
+    return FfiValueBuilder<ServerInfo?>(
+        'serverInfo', serverInfoNotifier, builder);
   }
 
   Future<void> trackUserAction(
