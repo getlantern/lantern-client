@@ -23,6 +23,10 @@ extension ErrorX on Object {
             .contains("we_are_experiencing_technical_difficulties")) {
           return "we_are_experiencing_technical_difficulties".i18n;
         }
+
+        if (description.contains("wrong-reseller-code")){
+          return "wrong_seller_code".i18n;
+        }
         if (description.contains("user already exists")) {
           return "signup_error_user_exists".i18n;
         }

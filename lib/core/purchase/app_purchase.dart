@@ -10,7 +10,7 @@ class AppPurchase {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   List<ProductDetails> plansSku = [];
-  final Set<String> _iosPlansIds = {"1Y", '2Y'};
+  final Set<String> _iosPlansIds = {"1Y", '2Y','1M'};
   VoidCallback? _onSuccess;
   Function(dynamic error)? _onError;
   String _planId = "";

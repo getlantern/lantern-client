@@ -140,10 +140,16 @@ class _StoreCheckoutState extends State<StoreCheckout>
 
   void _proceedToCheckoutIOS() {
     final appPurchase = sl<AppPurchase>();
+    final email = (state == _CheckOutState.withEmail ? emailController.text : "");
+    // Just as safe check
+    if (email.isNotEmpty && !EmailValidator.validate(email)) {
+      showError(context, error: 'please_enter_a_valid_email_address'.i18n);
+      return;
+    }
     try {
       context.loaderOverlay.show();
       appPurchase.startPurchase(
-        email: emailController.text ?? '',
+        email: email,
         planId: widget.plan.id,
         onSuccess: () {
           context.loaderOverlay.hide();

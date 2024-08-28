@@ -461,6 +461,9 @@ msgstr "Something went wrong while fetching your account data."
 msgid "reseller_timeout"
 msgstr "Something went wrong while validating your activation code."
 
+msgid "wrong_reseller_code"
+msgstr "Invalid activation code"
+
 msgid "reseller_success"
 msgstr "Successfully redeemed activation code."
 

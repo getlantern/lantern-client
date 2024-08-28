@@ -896,8 +896,6 @@ class SessionModel extends Model {
       return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
         'email': email,
         'resellerCode': resellerCode,
-      }).then((value) {
-        print('value $value');
       });
     }
 

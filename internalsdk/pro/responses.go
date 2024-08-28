@@ -45,9 +45,10 @@ type LinkCodeRedeemResponse struct {
 }
 
 type PurchaseResponse struct {
-	PaymentStatus string      `json:"paymentStatus"`
-	Plan          protos.Plan `json:"plan"`
-	Status        string      `json:"status"`
+	*protos.BaseResponse `json:",inline"`
+	PaymentStatus        string      `json:"paymentStatus"`
+	Plan                 protos.Plan `json:"plan"`
+	Status               string      `json:"status"`
 }
 
 type UserRecovery struct {
