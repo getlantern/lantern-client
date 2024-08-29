@@ -14,9 +14,12 @@ class ConfigOptions {
   final bool developmentMode;
   final String replicaAddr;
   final bool authEnabled;
+  final bool chatEnabled;
+  final bool splitTunneling;
   final bool hasSucceedingProxy;
   final bool fetchedGlobalConfig;
   final bool fetchedProxiesConfig;
+  final String appVersion;
   final String sdkVersion;
   final Map<String, Plan>? plans;
   final Map<String, PaymentMethod>? paymentMethods;
@@ -25,10 +28,13 @@ class ConfigOptions {
     this.developmentMode = false,
     this.replicaAddr = '',
     this.authEnabled = false,
+    this.chatEnabled = false,
+    this.splitTunneling = false,
     this.hasSucceedingProxy = false,
     this.fetchedGlobalConfig = false,
     this.fetchedProxiesConfig = false,
     this.sdkVersion = '',
+    this.appVersion = '',
     this.plans = null,
     this.paymentMethods = null,
   });
@@ -50,6 +56,8 @@ class ConfigOptions {
     return ConfigOptions(
       developmentMode: parsedJson['developmentMode'],
       authEnabled: parsedJson['authEnabled'],
+      chatEnabled: parsedJson['chatEnabled'],
+      splitTunneling: parsedJson['splitTunneling'],
       hasSucceedingProxy: parsedJson['hasSucceedingProxy'],
       fetchedGlobalConfig: parsedJson['fetchedGlobalConfig'],
       fetchedProxiesConfig: parsedJson['fetchedProxiesConfig'],

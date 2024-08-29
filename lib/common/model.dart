@@ -55,25 +55,16 @@ abstract class Model {
   }
 
   ValueListenableBuilder<T?> ffiValueBuilder<T>(
-    String path, 
-    Pointer<Utf8> Function()? ffiFunction, {
+    String path, {
     T? defaultValue,
     required ValueWidgetBuilder<T> builder,
-    bool details = false,
-    void Function(void Function(T?) setValue)? onChanges,
-    WebSocketChannel? channel,
-    T Function(Uint8List serialized)? deserialize,
-    T Function(dynamic json)? fromJsonModel,
   }) {
-    var notifier = ffiValueNotifier(
-      ffiFunction,
+    var notifier = FfiValueNotifier(
       path,
       defaultValue,
-      details: details,
-      onChanges: onChanges,
-      channel: channel,
-      deserialize: deserialize,
-      fromJsonModel: fromJsonModel,
+      () {
+        _ffiValueNotifierCache.remove(path);
+      },
     );
     return FfiValueBuilder<T>(path, notifier, builder);
   }
@@ -107,31 +98,6 @@ abstract class Model {
               value == null ? const SizedBox() : builder(context, onConfigUpdate(value), child),
     );
   }
-
-  ValueNotifier<T?> ffiValueNotifier<T>(
-    Pointer<Utf8> Function()? ffiFunction,
-    String path,
-    T? defaultValue, {
-      bool details = false,
-      void Function(void Function(T?) setValue)? onChanges,
-      WebSocketChannel? channel,
-      T Function(Uint8List serialized)? deserialize,
-      T Function(dynamic json)? fromJsonModel,
-  }) {
-    return FfiValueNotifier(
-      ffiFunction,
-      path,
-      defaultValue,
-      () {
-        _ffiValueNotifierCache.remove(path);
-      },
-      details: details,
-      onChanges: onChanges,
-      deserialize: deserialize,
-      fromJsonModel: fromJsonModel,
-    );
-  }
-
 
   ValueNotifier<T?> singleValueNotifier<T>(
     String path,

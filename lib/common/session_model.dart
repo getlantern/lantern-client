@@ -31,6 +31,9 @@ class SessionModel extends Model {
   late ValueNotifier<bool> proxyAllNotifier;
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
+  late ValueNotifier<String?> expiryDateNotifier;
+  late ValueNotifier<String?> linkingCodeNotifier;
+  late ValueNotifier<Devices?> devicesNotifier;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
   late ValueNotifier<bool?> isAuthEnabled;
   late FfiListNotifier<Plan> plansNotifier;
@@ -71,7 +74,9 @@ class SessionModel extends Model {
       );
     } else {
       configNotifier = ValueNotifier<ConfigOptions?>(null);
+      expiryDateNotifier = ValueNotifier('');
       country = ValueNotifier('US');
+      linkingCodeNotifier = ValueNotifier('');
       proxyAvailable = ValueNotifier(false);
       userEmail = ValueNotifier("");
       proUserNotifier = ValueNotifier(false);
@@ -140,12 +145,7 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
           builder: builder, defaultValue: 0);
     }
-    return ffiValueBuilder<int>(
-      'accepted_terms_version',
-      defaultValue: 0,
-      null,
-      builder: builder,
-    );
+    return ffiValueBuilder<int>('acceptedTermsVersion', defaultValue: 0, builder: builder);
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -202,12 +202,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<String>(
-      'expirydatestr',
-      LanternFFI.expiryDate,
-      defaultValue: '',
-      builder: builder,
-    );
+    return FfiValueBuilder<String>('lang', expiryDateNotifier, builder);
   }
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
@@ -227,20 +222,6 @@ class SessionModel extends Model {
     return FfiValueBuilder<String>('deviceid', deviceIdNotifier, builder);
   }
 
-  Devices devicesFromJson(dynamic item) {
-    final devices = <Device>[];
-    for (final element in item) {
-      if (element is! Map) continue;
-      try {
-        devices.add(Device.create()..mergeFromProto3Json(element));
-      } on Exception catch (e) {
-        // Handle parsing errors as needed
-        appLogger.i("Error parsing device data: $e");
-      }
-    }
-    return Devices.create()..devices.addAll(devices);
-  }
-
   Widget devices(ValueWidgetBuilder<Devices> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<Devices>(
@@ -251,13 +232,7 @@ class SessionModel extends Model {
         },
       );
     }
-    return ffiValueBuilder<Devices>(
-      'devices',
-      LanternFFI.devices,
-      fromJsonModel: devicesFromJson,
-      defaultValue: null,
-      builder: builder,
-    );
+    return FfiValueBuilder<Devices>('devices', devicesNotifier, builder);
   }
 
   /// This only supports desktop fo now
@@ -489,12 +464,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<String>(
-      'replicaAddr',
-      null,
-      defaultValue: '',
-      builder: builder,
-    );
+    return configValueBuilder('replicaAddr', configNotifier, builder,
+        (value) => value?.replicaAddr ?? '');
   }
 
   Widget countryCode(ValueWidgetBuilder<String> builder) {
@@ -524,12 +495,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<bool>(
-      'chatEnabled',
-      null,
-      defaultValue: false,
-      builder: builder,
-    );
+    return configValueBuilder('chatEnabled', configNotifier, builder,
+        (value) => value?.chatEnabled ?? false);
   }
 
   Widget sdkVersion(ValueWidgetBuilder<String> builder) {
@@ -699,12 +666,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<String>(
-      'deviceLinkingCode',
-      defaultValue: '',
-      LanternFFI.deviceLinkingCode,
-      builder: builder,
-    );
+    return FfiValueBuilder<String>('deviceLinkingCode', linkingCodeNotifier, builder);
   }
 
   Future<void> redeemResellerCode(
@@ -842,12 +804,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<bool>(
-      'splitTunneling',
-      LanternFFI.splitTunneling,
-      defaultValue: false,
-      builder: builder,
-    );
+    return configValueBuilder('splitTunneling', configNotifier, builder,
+        (value) => value?.splitTunneling ?? false);
   }
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {

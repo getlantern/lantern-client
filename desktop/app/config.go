@@ -25,6 +25,8 @@ type ConfigOptions struct {
 	DevelopmentMode      bool                   `json:"developmentMode"`
 	ReplicaAddr          string                 `json:"replicaAddr"`
 	AuthEnabled          bool                   `json:"authEnabled"`
+	ChatEnabled          bool                   `json:"chatEnabled"`
+	SplitTunneling       bool                   `json:"splitTunneling"`
 	HasSucceedingProxy   bool                   `json:"hasSucceedingProxy"`
 	FetchedGlobalConfig  bool                   `json:"fetchedGlobalConfig"`
 	FetchedProxiesConfig bool                   `json:"fetchedProxiesConfig"`
@@ -67,8 +69,11 @@ func (app *App) sendConfigOptions() {
 
 	app.configService.sendConfigOptions(ConfigOptions{
 		DevelopmentMode:      common.IsDevEnvironment(),
+		AppVersion:           common.ApplicationVersion,
 		ReplicaAddr:          "",
 		AuthEnabled:          authEnabled(app),
+		ChatEnabled:          false,
+		SplitTunneling:       false,
 		HasSucceedingProxy:   app.HasSucceedingProxy(),
 		Plans:                plans,
 		PaymentMethods:       paymentMethods,

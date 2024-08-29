@@ -5,16 +5,9 @@ import 'common_desktop.dart';
 
 class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
   FfiValueNotifier(
-    Pointer<Utf8> Function()? ffiFunction,
     String path,
     T? defaultValue,
-    void Function() removeFromCache, {
-    bool details = false,
-    void Function(void Function(T?) setValue)? onChanges,
-    WebSocketChannel? channel,
-    T Function(Uint8List serialized)? deserialize,
-    T Function(dynamic json)? fromJsonModel,
-  }) : super(defaultValue, removeFromCache) {
+    void Function() removeFromCache) : super(defaultValue, removeFromCache) {
     value = defaultValue;
   }
 }

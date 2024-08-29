@@ -122,3 +122,17 @@ class WebsocketSubscriber {
     );
   }
 }
+
+Devices devicesFromJson(dynamic item) {
+  final devices = <Device>[];
+  for (final element in item) {
+    if (element is! Map) continue;
+    try {
+      devices.add(Device.create()..mergeFromProto3Json(element));
+    } on Exception catch (e) {
+      // Handle parsing errors as needed
+      appLogger.i("Error parsing device data: $e");
+    }
+  }
+  return Devices.create()..devices.addAll(devices);
+}
