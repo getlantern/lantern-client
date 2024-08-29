@@ -303,6 +303,20 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	//app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
 }
 
+// Connect turns on proxying
+func (app *App) Connect() {
+	app.analyticsSession.Event("systray-menu", "connect")
+	ops.Begin("connect").End()
+	app.settings.SetDisconnected(false)
+}
+
+// Disconnect turns off proxying
+func (app *App) Disconnect() {
+	app.analyticsSession.Event("systray-menu", "disconnect")
+	ops.Begin("disconnect").End()
+	app.settings.SetDisconnected(true)
+}
+
 // GetLanguage returns the user language
 func (app *App) GetLanguage() string {
 	return app.settings.GetLanguage()
@@ -350,6 +364,15 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	go app.fetchDeviceLinkingCode(context.Background())
+
+	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
+		enable := val.(bool)
+		if enable {
+			app.SysproxyOn()
+		} else {
+			app.SysProxyOff()
+		}
+	})
 
 	app.AddExitFunc("turning off system proxy", func() {
 		app.SysProxyOff()
