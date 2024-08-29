@@ -2,7 +2,7 @@ name: Go Build and Test
 
 on:
   push:
-    branches: [ atavism/go-ci-updates ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   # Allows you to run this workflow manually from the Actions tab
@@ -26,7 +26,7 @@ jobs:
       run: |
           git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
     - name: Build
-      run: make lantern
+      run: LIB_NAME=liblantern.so make lantern
 
     # Install gotestfmt on the VM running the action.
     - name: Set up gotestfmt
