@@ -174,6 +174,14 @@ class _PlanCardState extends State<PlanCard> {
           _proceedToCheckoutIOS(context);
           return;
         }
+
+        /// There is edge case where user is signup with email and password but not pro
+        /// this happens when does restore purchase on other device so older device
+        /// does not have pro status but have email and password
+        if (sessionModel.hasUserSignedInNotifier.value ?? false) {
+          _proceedToCheckoutIOS(context);
+          return;
+        }
         _storeFlow();
         break;
       default:
@@ -234,6 +242,13 @@ class _PlanCardState extends State<PlanCard> {
     if (widget.isPro) {
       showSuccessDialog(context, widget.isPro);
     } else {
+      /// There is edge case where user is signup with email and password but not pro
+      /// this happens when does restore purchase on other device so older device
+      /// does not have pro status but have email and password
+      if (sessionModel.hasUserSignedInNotifier.value ?? false) {
+        showSuccessDialog(context, widget.isPro);
+        return;
+      }
       signUpFlow();
     }
   }

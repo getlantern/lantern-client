@@ -22,10 +22,10 @@ func NewSRPClient(email string, password string, salt []byte) *srp.SRP {
 		log.Errorf("salt, password and email should not be empty %v %v %v", salt, password, email)
 		return nil
 	}
-	log.Debugf("NewSRPClient email %v password %v salt %v", email, password, salt)
+	// log.Debugf("NewSRPClient email %v password %v salt %v", email, password, salt)
 	lowerCaseEmail := strings.ToLower(email)
 	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
-	log.Debugf("Encrypted key %v", encryptedKey)
+	// log.Debugf("Encrypted key %v", encryptedKey)
 	return srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
 }
 
@@ -117,7 +117,7 @@ func (c *authClient) SignUp(email string, password string) ([]byte, error) {
 		Verifier:              verifierKey.Bytes(),
 		SkipEmailConfirmation: true,
 	}
-	log.Debugf("Sign up request email %v, salt %v verifier %v verifiter in bytes %v", lowerCaseEmail, salt, verifierKey, verifierKey.Bytes())
+	// log.Debugf("Sign up request email %v, salt %v verifier %v verifiter in bytes %v", lowerCaseEmail, salt, verifierKey, verifierKey.Bytes())
 	signupResponse, err := c.signUp(context.Background(), signUpRequestBody)
 	if err != nil {
 		return nil, err
@@ -182,7 +182,7 @@ func (c *authClient) Login(email string, password string, deviceId string) (*pro
 		Proof:    clientProof,
 		DeviceId: deviceId,
 	}
-	log.Debugf("Login request body %v", loginRequestBody)
+	// log.Debugf("Login request body %v", loginRequestBody)
 	resp, err := c.login(context.Background(), loginRequestBody)
 	return resp, salt, err
 }
