@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+AuthorizeDeviceEmail// ignore_for_file: use_build_context_synchronously
 
 import 'package:lantern/common/common.dart';
 import 'package:styled_text/styled_text.dart';

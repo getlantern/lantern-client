@@ -15,7 +15,7 @@ class VPNBandwidth extends StatelessWidget {
                     top: 4.0,
                     bottom: 16.0,
                   ),
-                  child: const CDivider(height: 16),
+                  child: const CDivider(height: 10),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,7 +37,6 @@ class VPNBandwidth extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Container(
-                  height: 12,
                   decoration: BoxDecoration(
                     color: unselectedTabColor,
                     border: Border.all(
@@ -50,14 +49,12 @@ class VPNBandwidth extends StatelessWidget {
                   ),
                   child: LinearProgressIndicator(
                     value: bandwidth.remaining.toDouble(),
+                    minHeight: 12,
                     borderRadius:
                         const BorderRadius.all(Radius.circular(borderRadius)),
-                    backgroundColor: grey1,
+                    backgroundColor: unselectedTabColor,
                     valueColor: AlwaysStoppedAnimation(usedDataBarColor),
                   ),
-                ),
-                const SizedBox(
-                  height: 16,
                 ),
               ],
             )

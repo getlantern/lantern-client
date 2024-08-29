@@ -688,12 +688,12 @@ class SessionModel extends Model {
 
   Future<String> requestLinkCode() {
     return methodChannel
-        .invokeMethod('requestLinkCode')
+        .invokeMethod('requestLinkCode','')
         .then((value) => value.toString());
   }
 
   Future<void> redeemLinkCode() {
-    return methodChannel.invokeMethod('redeemLinkCode');
+    return methodChannel.invokeMethod('redeemLinkCode', {});
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
