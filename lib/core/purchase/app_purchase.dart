@@ -10,12 +10,11 @@ class AppPurchase {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   List<ProductDetails> plansSku = [];
-  final Set<String> _iosPlansIds = {"1Y", '2Y','1M'};
+  final Set<String> _iosPlansIds = {"1Y", '2Y', '1M'};
   VoidCallback? _onSuccess;
   Function(dynamic error)? _onError;
   String _planId = "";
   String _email = "";
-
 
   void init() {
     final purchaseUpdated = _inAppPurchase.purchaseStream;
@@ -80,7 +79,6 @@ class AppPurchase {
   Future<void> _onPurchaseUpdate(
     List<PurchaseDetails> purchaseDetailsList,
   ) async {
-
     mainLogger.d("purchase list ${purchaseDetailsList.length}");
     for (var purchaseDetails in purchaseDetailsList) {
       await _handlePurchase(purchaseDetails);
@@ -117,7 +115,6 @@ class AppPurchase {
     }
   }
 
-
   void _updateStreamOnDone() {
     _onError = null;
     _onSuccess = null;
@@ -132,32 +129,14 @@ class AppPurchase {
       _onError?.call(error);
     }
   }
-}
 
-extension PurchaseDetailsExtension on PurchaseDetails {
-  String get toJson {
-    return """
-    {
-      "purchaseID": "$purchaseID",
-      "productID": "$productID",
-      "transactionDate": "$transactionDate",
-      "status": "$status",
-      "error": "$error",
-      "pendingCompletePurchase": "$pendingCompletePurchase"
-      "verificationData": "${verificationData.toJson}"
+  String getPriceFromPlanId(String planId) {
+    final plan = _normalizePlan(planId);
+    for (var sku in plansSku) {
+      if (sku.id.toLowerCase() == plan.id.toLowerCase()) {
+        return sku.price;
+      }
     }
-    """;
-  }
-}
-
-extension PurchaseVerificationDataExtension on PurchaseVerificationData {
-  String get toJson {
-    return """
-    {
-      "localVerificationData": "$localVerificationData",
-      "serverVerificationData": "$serverVerificationData",
-      "source": "$source"
-    }
-    """;
+    return "";
   }
 }

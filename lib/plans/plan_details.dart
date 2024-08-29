@@ -17,6 +17,8 @@ class PlanCard extends StatefulWidget {
 }
 
 class _PlanCardState extends State<PlanCard> {
+  final appPurchase = sl<AppPurchase>();
+
   @override
   Widget build(BuildContext context) {
     final planName = widget.plan.id.split('-')[0];
@@ -77,7 +79,7 @@ class _PlanCardState extends State<PlanCard> {
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         if (Platform.isIOS)
-                          CText(totalCost, style: tsHeading1)
+                          CText(getPrice(totalCost), style: tsHeading1)
                         else
                           CText(formattedPricePerMonth, style: tsHeading1),
                         if (!Platform.isIOS) ...{
@@ -146,6 +148,12 @@ class _PlanCardState extends State<PlanCard> {
         return 'two_year_plan'.i18n;
       }
     }
+  }
+
+  String getPrice(String totalCost) {
+    return totalCost;
+    final appStorePrice = appPurchase.getPriceFromPlanId(widget.plan.id);
+    return appStorePrice == '' ? totalCost : appStorePrice;
   }
 
 // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user

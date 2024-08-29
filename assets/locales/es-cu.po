@@ -1933,3 +1933,22 @@ msgstr "Límite alcanzado"
 
 msgid "file_size_limit_description"
 msgstr "Los tamaños de los archivos adjuntos deben ser menores de 100 MB"
+
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: plan de un año"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: plan de dos años"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: plan de un mes"
+
+msgid "non_renewing_subscription"
+msgstr "Suscripción no renovable"
+
+msgid "restore_purchase"
+msgstr "Restaurar compra"
+
+msgid "skip_for_now"
+msgstr "Saltar por ahora"

@@ -1897,3 +1897,16 @@ msgstr "تم الوصول إلى الحد "
 
 msgid "file_size_limit_description"
 msgstr "يجب أن تكون أحجام المرفقات أقل من 100 ميجابايت"
+
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: خطة لمدة عام واحد"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: Two Year Plan"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: خطة لمدة عامين"
+
+msgid "non_renewing_subscription"
+msgstr "اشتراك غير قابل للتجديد"
