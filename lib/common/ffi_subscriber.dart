@@ -3,58 +3,12 @@ import 'package:web_socket_channel/status.dart' as status;
 import 'common.dart';
 import 'common_desktop.dart';
 
-extension BoolParsing on String {
-  bool parseBool() {
-    return this.toLowerCase() == 'true';
-  }
-}
-
 class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
   FfiValueNotifier(
-    Pointer<Utf8> Function()? ffiFunction,
     String path,
     T? defaultValue,
-    void Function() removeFromCache, {
-    bool details = false,
-    void Function(void Function(T?) setValue)? onChanges,
-    WebSocketChannel? channel,
-    T Function(Uint8List serialized)? deserialize,
-    T Function(dynamic json)? fromJsonModel,
-  }) : super(defaultValue, removeFromCache) {
-    if (onChanges != null) {
-      onChanges((newValue) {
-        value = newValue;
-      });
-    }
-    if (ffiFunction == null && fromJsonModel == null) {
-      value = defaultValue;
-      return;
-    }
-    if (defaultValue is int) {
-        value = null;
-        //value = int.parse(ffiFunction().toDartString()) as T?;
-    } else if (defaultValue is String && ffiFunction != null) {
-      var res = ffiFunction();
-      if (res != null) value = res.toDartString() as T?;
-    } else if (defaultValue is bool && ffiFunction != null) {
-      var res = ffiFunction();
-      if (res != null) value = res.toDartString().parseBool() as T?;
-    } else if (fromJsonModel != null) {
-      if (ffiFunction != null) {
-        var res = ffiFunction();
-        if (res != null) {
-          value = fromJsonModel(json.decode(res.toDartString())) as T?;
-        }
-      } else {
-        var res = fromJsonModel(null);
-        if (res != null) value = res;
-      }
-    } else {
-      value = defaultValue;
-    }
-    cancel = () {
-      if (channel != null) channel.sink.close(status.goingAway);
-    };
+    void Function() removeFromCache) : super(defaultValue, removeFromCache) {
+    value = defaultValue;
   }
 }
 
@@ -104,6 +58,13 @@ class _FfiValueBuilderState<T>
   }
 
   void _valueChanged() {
+    if (!mounted) {
+      return;
+    }
+    if(value == widget.valueListenable.value){
+      mainLogger.i("Listener called but value is same as previous. Ignoring.");
+      return;
+    }
     setState(() {
       value = widget.valueListenable.value;
     });

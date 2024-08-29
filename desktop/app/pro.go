@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"encoding/json"
+	"reflect"
 	"time"
 
 	"github.com/getlantern/errors"
@@ -29,7 +30,17 @@ func (app *App) setOnUserData(onUserData func(*protos.User, *protos.User)) {
 }
 
 func (app *App) SetUserData(ctx context.Context, userID int64, u *protos.User) {
+	current, found := app.GetUserData(userID)
+	if found && reflect.DeepEqual(current, u) {
+		return
+	}
 	app.cachedUserData.Store(u.UserId, u)
+	app.mu.Lock()
+	onUserData := app.onUserData
+	app.mu.Unlock()
+	for _, cb := range onUserData {
+		cb(current, u)
+	}
 }
 
 func (app *App) SetUserDevices(userID int64, devices []*protos.Device) {

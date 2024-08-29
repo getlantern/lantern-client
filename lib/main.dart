@@ -34,7 +34,7 @@ Future<void> main() async {
 
   if (isDesktop()) {
     await LanternFFI.startDesktopService();
-    await WebsocketImpl.instance()!.connect();
+    await WebsocketSubscriber().connect();
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
       size: ui.Size(360, 712),
