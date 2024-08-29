@@ -514,6 +514,9 @@ msgstr "آپ کا اکاؤنٹ ڈیٹا حاصل کرنے کے دوران کچھ
 msgid "reseller_timeout"
 msgstr "آپ کے فعالیتی کوڈ کی توثیق کے دوران کچھ غلط ہو گیا۔"
 
+msgid "wrong_reseller_code"
+msgstr "غلط ایکٹیویشن کوڈ"
+
 msgid "reseller_success"
 msgstr "فعالیتی کوڈ کامیابی سے ریڈیم کر دیا گیا۔"
 
@@ -1910,3 +1913,52 @@ msgstr ""
 "\n"
 " \n"
 " "
+
+msgid "lantern_pro_one_year"
+msgstr "لینٹرن پرو: ایک سال کا پلان"
+
+msgid "lantern_pro_two_year"
+msgstr "لینٹرن پرو: دو سال کا پلان"
+
+msgid "lantern_pro_one_month"
+msgstr "لینٹرن پرو: ایک ماہ کا پلان"
+
+msgid "non_renewing_subscription"
+msgstr "غیر تجدیدی سبسکرپشن"
+
+msgid "restore_purchase"
+msgstr "خریداری بحال کریں"
+
+msgid "skip_for_now"
+msgstr "ابھی کے لیے چھوڑیں"
+
+msgid "purchase_not_found"
+msgstr "فراہم کردہ ای میل سے کوئی خریداری نہیں ملی"
+
+msgid "no_previous_purchase"
+msgstr "کوئی پچھلی خریداری نہیں ملی"
+
+msgid "warning_restore_purchase"
+msgstr "اپنی خریداری کو بازیافت کرنے کے لیے وہ ای میل درج کریں جو آپ نے چیک آؤٹ کے دوران داخل کی تھی۔"
+
+msgid "purchase_restored"
+msgstr "خریداری بحال ہوگئی"
+
+msgid "purchase_restored_message"
+msgstr "آپ کی خریداری کامیابی سے بحال ہوگئی ہے"
+
+msgid "purchase_restored_error"
+msgstr "ایسا لگتا ہے کہ خریداری بحال کرتے وقت کچھ غلط ہوگیا ہے۔ براہ کرم چیک کریں کہ آپ نے صحیح ای میل یا کوڈ درج کیا ہے۔"
+
+msgid "err_while_sending_code"
+msgstr "کوڈ بھیجتے وقت کچھ غلط ہوگیا، براہ کرم دوبارہ کوشش کریں"
+
+msgid "email_hint"
+msgstr "*ای میل اختیاری ہے لیکن اس کی حوصلہ افزائی کی جاتی ہے"
+
+msgid "email_hint_pro"
+msgstr "اپنی خریداریوں تک کسی بھی ڈیوائس پر رسائی کے لیے ای میل شامل کریں۔ بغیر ای میل کے خریداری اس ڈیوائس سے منسلک رہے گی اور ضائع ہو سکتی ہے۔"
+
+msgid "continue_without_email"
+msgstr "بغیر ای میل کے جاری رکھیں"
+

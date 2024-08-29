@@ -524,6 +524,9 @@ msgstr "Hesap verileriniz alınırken bir sorun oluştu."
 msgid "reseller_timeout"
 msgstr "Aktivasyon kodunuz doğrulanırken bir sorun oluştu."
 
+msgid "wrong_reseller_code"
+msgstr "Geçersiz aktivasyon kodu"
+
 msgid "reseller_success"
 msgstr "Aktivasyon kodu başarıyla kullanıldı."
 
@@ -1911,3 +1914,70 @@ msgstr ""
 "\n"
 " \n"
 " "
+
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: Bir Yıllık Plan"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: İki Yıllık Plan"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: Bir Aylık Plan"
+
+msgid "non_renewing_subscription"
+msgstr "Yenilenmeyen Abonelik"
+
+msgid "restore_purchase"
+msgstr "Satın Almayı Geri Yükle"
+
+msgid "skip_for_now"
+msgstr "Şimdilik Atla"
+
+msgid "purchase_not_found"
+msgstr "Sağlanan e-posta ile bir satın alma bulunamadı"
+
+msgid "no_previous_purchase"
+msgstr "Önceki satın alma bulunamadı"
+
+msgid "warning_restore_purchase"
+msgstr "Satın almanızı geri yüklemek için ödeme sırasında girdiğiniz e-postayı girin."
+
+msgid "purchase_restored"
+msgstr "Satın Alma Geri Yüklendi"
+
+msgid "purchase_restored_message"
+msgstr "Satın almanız başarıyla geri yüklendi"
+
+msgid "purchase_restored_error"
+msgstr "Satın alma geri yüklenirken bir sorun oluştu. Lütfen doğru e-posta veya kodu girdiğinizden emin olun."
+
+msgid "err_while_sending_code"
+msgstr "Kod gönderilirken bir hata oluştu, lütfen tekrar deneyin"
+
+msgid "email_hint"
+msgstr "*E-posta isteğe bağlıdır ancak önerilir"
+
+msgid "email_hint_pro"
+msgstr "Satın alımlarınıza herhangi bir cihazdan erişmek için bir e-posta ekleyin. E-posta olmadan, satın alımlar bu cihaza bağlıdır ve kaybolabilir."
+
+msgid "continue_without_email"
+msgstr "E-postasız Devam Et"
+

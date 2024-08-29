@@ -513,6 +513,9 @@ msgstr "Đã xảy ra lỗi khi tìm nạp dữ liệu tài khoản của bạn.
 msgid "reseller_timeout"
 msgstr "Đã xảy ra lỗi khi xác thực mã kích hoạt của bạn."
 
+msgid "wrong_reseller_code"
+msgstr "Mã kích hoạt không hợp lệ"
+
 msgid "reseller_success"
 msgstr "Đổi thành công mã kích hoạt."
 
@@ -1898,3 +1901,52 @@ msgstr "Đã đạt giới hạn "
 
 msgid "file_size_limit_description"
 msgstr "Kích thước tệp đính kèm phải dưới 100 MB"
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: Gói Một Năm"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: Gói Hai Năm"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: Gói Một Tháng"
+
+msgid "non_renewing_subscription"
+msgstr "Gói đăng ký không tự động gia hạn"
+
+msgid "restore_purchase"
+msgstr "Khôi phục mua hàng"
+
+msgid "skip_for_now"
+msgstr "Bỏ qua tạm thời"
+
+msgid "purchase_not_found"
+msgstr "Không tìm thấy mua hàng với email cung cấp"
+
+msgid "no_previous_purchase"
+msgstr "Không tìm thấy mua hàng trước đó"
+
+msgid "warning_restore_purchase"
+msgstr "Nhập email bạn đã sử dụng khi thanh toán để khôi phục mua hàng của bạn."
+
+msgid "purchase_restored"
+msgstr "Mua hàng đã được khôi phục"
+
+msgid "purchase_restored_message"
+msgstr "Mua hàng của bạn đã được khôi phục thành công"
+
+msgid "purchase_restored_error"
+msgstr "Có vẻ như có sự cố khi khôi phục mua hàng. Vui lòng kiểm tra xem bạn đã nhập đúng email hoặc mã."
+
+msgid "err_while_sending_code"
+msgstr "Đã xảy ra lỗi khi gửi mã, vui lòng thử lại"
+
+msgid "email_hint"
+msgstr "*Email là tùy chọn nhưng được khuyến khích"
+
+msgid "email_hint_pro"
+msgstr "Thêm email để truy cập vào các giao dịch mua của bạn trên bất kỳ thiết bị nào. Không có email, các giao dịch mua sẽ gắn liền với thiết bị này và có thể bị mất."
+
+msgid "continue_without_email"
+msgstr "Tiếp tục mà không cần email"
+

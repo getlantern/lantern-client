@@ -10,14 +10,14 @@
 # Rockman Lau <im@rockman.us>, 2024
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
 # YFdyh000 <yfdyh000@gmail.com>, 2024
-# Lantern, 2024
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
 # Aki, 2024
+# Lantern, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Aki, 2024\n"
+"Last-Translator: Lantern, 2024\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/lantern-1/teams/94371/zh_HK/)\n"
 "Language: zh_HK\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -482,6 +482,9 @@ msgstr "获取您的账户数据时报错"
 
 msgid "reseller_timeout"
 msgstr "验证您的激活码时报错"
+
+msgid "wrong_reseller_code"
+msgstr "Invalid activation code"
 
 msgid "reseller_success"
 msgstr "激活码兑换成功！"
@@ -1794,3 +1797,51 @@ msgstr ""
 "\n"
 " \n"
 " "
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: 一年計劃"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: 兩年計劃"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: 一個月計劃"
+
+msgid "non_renewing_subscription"
+msgstr "不可續訂的訂閱"
+
+msgid "restore_purchase"
+msgstr "恢復購買"
+
+msgid "skip_for_now"
+msgstr "暫時跳過"
+
+msgid "purchase_not_found"
+msgstr "未找到與提供的電子郵件相關的購買"
+
+msgid "no_previous_purchase"
+msgstr "未找到之前的購買記錄"
+
+msgid "warning_restore_purchase"
+msgstr "請輸入您在結帳時使用的電子郵件以恢復購買。"
+
+msgid "purchase_restored"
+msgstr "購買已恢復"
+
+msgid "purchase_restored_message"
+msgstr "您的購買已成功恢復"
+
+msgid "purchase_restored_error"
+msgstr "恢復購買時出現問題。請檢查您是否輸入了正確的電子郵件或代碼。"
+
+msgid "err_while_sending_code"
+msgstr "發送代碼時出現錯誤，請重試"
+
+msgid "email_hint"
+msgstr "*電子郵件是可選的，但建議填寫"
+
+msgid "email_hint_pro"
+msgstr "添加電子郵件以便在任何設備上訪問您的購買。沒有電子郵件，購買將綁定到此設備，可能會丟失。"
+
+msgid "continue_without_email"
+msgstr "不使用電子郵件繼續"
