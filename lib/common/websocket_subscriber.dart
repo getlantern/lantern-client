@@ -13,7 +13,7 @@ var _webSocketLogger = Logger(
   ),
 );
 
-enum WebsocketMessage {
+enum _WebsocketMessageType {
   config,
   pro,
   bandwidth,
@@ -45,16 +45,16 @@ class WebsocketSubscriber {
       (json) {
         if (json["type"] == null) return;
         final message = json["message"];
-        WebsocketMessage? messageType = WebsocketMessage.values
+        _WebsocketMessageType? messageType = _WebsocketMessageType.values
             .firstWhereOrNull((e) => e.name == json["type"]);
         if (message == null || messageType == null) return;
         switch (messageType) {
-          case WebsocketMessage.settings:
+          case _WebsocketMessageType.settings:
             _webSocketLogger.i("websocket message[Setting]: $json");
             final referralCode = message['referralCode'];
             if (referralCode != null)
               sessionModel.referralNotifier.value = referralCode;
-          case WebsocketMessage.stats:
+          case _WebsocketMessageType.stats:
             if (message['countryCode'] != null) {
               sessionModel.serverInfoNotifier.value = ServerInfo.create()
                 ..mergeFromProto3Json({
@@ -63,7 +63,7 @@ class WebsocketSubscriber {
                   'countryCode': message['countryCode'],
                 });
             }
-          case WebsocketMessage.pro:
+          case _WebsocketMessageType.pro:
             _webSocketLogger.i("Websocket message[Pro]: $json");
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
@@ -72,7 +72,7 @@ class WebsocketSubscriber {
               sessionModel.proUserNotifier.value = true;
             }
 
-          case WebsocketMessage.bandwidth:
+          case _WebsocketMessageType.bandwidth:
             _webSocketLogger.i("Websocket message[Bandwidth]: $json");
             final Map res = jsonDecode(jsonEncode(message));
             vpnModel.bandwidthNotifier.value = Bandwidth.create()
@@ -80,7 +80,7 @@ class WebsocketSubscriber {
                 'allowed': res['mibAllowed'],
                 'remaining': res['mibUsed'],
               });
-          case WebsocketMessage.config:
+          case _WebsocketMessageType.config:
             final ConfigOptions config = ConfigOptions.fromJson(message);
             // Check if auth is enabled
             sessionModel.isAuthEnabled.value = config.authEnabled;
@@ -107,7 +107,7 @@ class WebsocketSubscriber {
               }
             }
 
-          case WebsocketMessage.vpnstatus:
+          case _WebsocketMessageType.vpnstatus:
             final res = message["connected"];
             if (res != null) {
               final vpnStatus =

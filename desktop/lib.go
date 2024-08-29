@@ -74,24 +74,6 @@ var issueMap = map[string]string{
 	"Other":                       "9",
 }
 
-/*func initLantern() *app.App {
-		flags         := flashlight.ParseFlags()
-	cdir          := configDir(&flags)
-	ss            := settings.LoadSettings(cdir)
-	webclientOpts := &webclient.Opts{
-		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   30 * time.Second,
-		},
-		UserConfig: func() common.UserConfig {
-			return settings.UserConfig(ss)
-		},
-	}
-	proClient  := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
-	return app.NewApp(flags, cdir, proClient, ss)
-}*/
-
 //export start
 func start() *C.char {
 	runtime.LockOSThread()
