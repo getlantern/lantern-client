@@ -41,111 +41,57 @@ func setUpSysproxyTool() error {
 	return nil
 }
 
-func (app *App) IsSysProxyOn() bool {
-	app.mu.Lock()
-	off := app._sysproxyOff
-	app.mu.Unlock()
-	return off != nil
-}
-
-func (app *App) onConnectionStatus(cb func(isConnected bool)) {
-	app.mu.Lock()
-	app.connectionStatusCallbacks = append(app.connectionStatusCallbacks, cb)
-	app.mu.Unlock()
+func (app *App) sendConnectionStatus(isConnected bool) {
+	app.isConnected.Store(isConnected)
+	app.SendMessageToUI("vpnstatus", map[string]interface{}{
+		"type":      "vpnstatus",
+		"connected": isConnected,
+	})
 }
 
 // serveConnectionStatus registers a websocket channel for communicating connection status changes
 func (app *App) serveConnectionStatus(channel ws.UIChannel) error {
-	service, err := channel.Register("vpnstatus", nil)
-	app.onConnectionStatus(func(isConnected bool) {
-		log.Debugf("Sending updated connection status to all clients: %v", isConnected)
-		service.Out <- map[string]interface{}{
-			"connected": isConnected,
-		}
-	})
+	_, err := channel.Register("vpnstatus", nil)
 	return err
 }
 
-// notifyConnectionStatus notifies listeners when the connection status changes
-func (app *App) notifyConnectionStatus(isConnected bool) {
-	app.mu.Lock()
-	cbs := app.connectionStatusCallbacks
-	app.mu.Unlock()
-	for _, cb := range cbs {
-		cb(isConnected)
-	}
-}
-
-func (app *App) SetSysProxy(_sysproxyOff func() error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app._sysproxyOff = _sysproxyOff
-}
-
-func (app *App) SysProxyOff() (err error) {
-	defer func() {
-		if err == nil {
-			app.notifyConnectionStatus(false)
-		}
-	}()
-	app.mu.Lock()
-	off := app._sysproxyOff
-	app._sysproxyOff = nil
-	app.mu.Unlock()
-
-	if off != nil {
-		doSysproxyOff(off)
-	}
-
+func (app *App) SysProxyOff() error {
 	op := ops.Begin("sysproxy_off_force")
 	defer op.End()
 	log.Debug("Force clearing system proxy directly, just in case")
 	addr, found := getProxyAddr()
 	if !found {
-		err = fmt.Errorf("Unable to find proxy address, can't force clear system proxy")
+		err := fmt.Errorf("Unable to find proxy address, can't force clear system proxy")
 		op.FailIf(log.Error(err))
-		return
+		return err
 	}
-	doSysproxyClear(op, addr)
-	return
+	log.Debugf("Clearing lantern as system proxy at: %v", addr)
+	if err := doSysproxyClear(op, addr); err != nil {
+		return err
+	}
+	app.sendConnectionStatus(false)
+	return nil
 }
 
-func (app *App) SysproxyOn() (err error) {
+func (app *App) SysproxyOn() error {
 	op := ops.Begin("sysproxy_on")
 	defer op.End()
-	defer func() {
-		if err == nil {
-			app.notifyConnectionStatus(true)
-		}
-	}()
 	addr, found := getProxyAddr()
 	if !found {
-		err = errors.New("Unable to set lantern as system proxy, no proxy address available")
+		err := errors.New("Unable to set lantern as system proxy, no proxy address available")
 		op.FailIf(log.Error(err))
-		return
+		return err
 	}
 	log.Debugf("Setting lantern as system proxy at: %v", addr)
-	off, e := sysproxy.On(addr)
-	if e != nil {
-		err = errors.New("Unable to set lantern as system proxy: %v", e)
-		op.FailIf(log.Error(err))
-		return
-	}
-	app.SetSysProxy(off)
-	log.Debug("Finished setting lantern as system proxy")
-	return
-}
-
-func doSysproxyOff(off func() error) {
-	op := ops.Begin("sysproxy_off")
-	defer op.End()
-	log.Debug("Unsetting lantern as system proxy using off function")
-	err := off()
+	_, err := sysproxy.On(addr)
 	if err != nil {
-		op.FailIf(log.Errorf("Unable to unset lantern as system proxy using off function: %v", err))
-		return
+		err = errors.New("Unable to set lantern as system proxy: %v", err)
+		op.FailIf(log.Error(err))
+		return err
 	}
-	log.Debug("Unset lantern as system proxy using off function")
+	log.Debug("Finished setting lantern as system proxy")
+	app.sendConnectionStatus(true)
+	return nil
 }
 
 // clearSysproxyFor is like sysproxyOffFor, but records its activity under the
@@ -156,7 +102,7 @@ func clearSysproxyFor(addr string) {
 	op.End()
 }
 
-func doSysproxyClear(op *ops.Op, addr string) {
+func doSysproxyClear(op *ops.Op, addr string) error {
 	log.Debugf("Clearing lantern as system proxy at: %v", addr)
 	err := sysproxy.Off(addr)
 	if err != nil {
@@ -164,6 +110,7 @@ func doSysproxyClear(op *ops.Op, addr string) {
 	} else {
 		log.Debug("Cleared lantern as system proxy")
 	}
+	return err
 }
 
 func getProxyAddr() (addr string, found bool) {

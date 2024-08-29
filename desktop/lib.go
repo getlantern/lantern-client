@@ -16,7 +16,6 @@ import (
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
@@ -34,7 +33,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/osversion"
 	"github.com/joho/godotenv"
-	"google.golang.org/protobuf/encoding/protojson"
 )
 
 import "C"
@@ -91,33 +89,11 @@ func start() *C.char {
 		log.Debug("Successfully loaded .env file")
 	}
 
-	go func() {
-		err := fetchPayentMethodV4()
-		if err != nil {
-			log.Error(err)
-		}
-	}()
-
-	logFile, err := logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+	_, err = logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 	if err != nil {
 		log.Error(err)
 		// Nothing we can do if fails to create log files, leave logFile nil so
 		// the child process writes to standard outputs as usual.
-	}
-	if logFile != nil {
-		go func() {
-			tk := time.NewTicker(time.Minute)
-			for {
-				<-tk.C
-				ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-				if err := a.ProxyAddrReachable(ctx); err != nil {
-					log.Debugf("********* ERROR: Lantern HTTP proxy not working properly: %v\n", err)
-				} else {
-					log.Debugf("DEBUG: Lantern HTTP proxy is working fine")
-				}
-				cancel()
-			}
-		}()
 	}
 
 	// This init needs to be called before the panicwrapper fork so that it has been
@@ -144,7 +120,7 @@ func start() *C.char {
 	}
 
 	// i18nInit(a)
-	a.Run(true)
+	a.Run(context.Background())
 
 	return C.CString("")
 }
@@ -172,26 +148,6 @@ func hasConfigFected() *C.char {
 	return booltoCString(a.GetHasConfigFetched())
 }
 
-func fetchPayentMethodV4() error {
-	settings := a.Settings()
-	userID := settings.GetUserID()
-	if userID == 0 {
-		return errors.New("User ID is not set")
-	}
-	resp, err := proClient.PaymentMethodsV4(context.Background())
-	if err != nil {
-		return errors.New("Could not get payment methods: %v", err)
-	}
-	log.Debugf("DEBUG: Payment methods: %+v", resp)
-	log.Debugf("DEBUG: Payment methods providers: %+v", resp.Providers)
-	bytes, err := json.Marshal(resp)
-	if err != nil {
-		return errors.New("Could not marshal payment methods: %v", err)
-	}
-	settings.SetPaymentMethodPlans(bytes)
-	return nil
-}
-
 //export sysProxyOn
 func sysProxyOn() {
 	go a.SysproxyOn()
@@ -207,46 +163,20 @@ func websocketAddr() *C.char {
 	return C.CString(a.WebsocketAddr())
 }
 
-//export plans
-func plans() *C.char {
-	settings := a.Settings()
-	plans := settings.GetPaymentMethods()
-	if plans == nil {
-		return sendError(errors.New("plans not found"))
-	}
-	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
-	err := json.Unmarshal(plans, paymentMethodsResponse)
-	plansByte, err := json.Marshal(paymentMethodsResponse.Plans)
-	if err != nil {
-		return sendError(errors.New("error fetching payment methods: %v", err))
-	}
-	return C.CString(string(plansByte))
-}
-
 //export paymentMethodsV3
 func paymentMethodsV3() *C.char {
-	resp, err := proClient.PaymentMethods(context.Background())
-	if err != nil {
-		return sendError(errors.New("error fetching payment methods: %v", err))
-	}
-	b, _ := json.Marshal(resp.Providers)
-	return C.CString(string(b))
+	return C.CString("")
 }
 
 //export paymentMethodsV4
 func paymentMethodsV4() *C.char {
-	settings := a.Settings()
-	plans := settings.GetPaymentMethods()
-	if plans == nil {
-		return sendError(errors.New("Payment methods not found"))
-	}
-	paymentMethodsResponse := &proclient.PaymentMethodsResponse{}
-	err := json.Unmarshal(plans, paymentMethodsResponse)
+	/*resp, err := a.PaymentMethods(context.Background())
 	if err != nil {
 		return sendError(err)
 	}
-	b, _ := json.Marshal(paymentMethodsResponse)
-	return C.CString(string(b))
+	b, _ := json.Marshal(resp)
+	return C.CString(string(b))*/
+	return C.CString("")
 }
 
 func cachedUserData() (*protos.User, bool) {
@@ -268,15 +198,6 @@ func setProxyAll(value *C.char) {
 	proxyAll, _ := strconv.ParseBool(C.GoString(value))
 	go a.Settings().SetProxyAll(proxyAll)
 }
-
-// tryCacheUserData retrieves the latest user data for the given user.
-// It first checks the cache and if present returns the user data stored there
-// func tryCacheUserData() (*protos.User, error) {
-// 	if cacheUserData, isOldFound := cachedUserData(); isOldFound {
-// 		return cacheUserData, nil
-// 	}
-// 	return getUserData()
-// }
 
 // this method is reposible for checking if the user has updated plan or bought plans
 //
@@ -303,6 +224,7 @@ func hasPlanUpdatedOrBuy() *C.char {
 
 //export devices
 func devices() *C.char {
+	log.Debug("devices")
 	user, found := cachedUserData()
 	if !found {
 		// for now just return empty array
@@ -344,6 +266,7 @@ func userLinkValidate(code *C.char) *C.char {
 
 //export expiryDate
 func expiryDate() *C.char {
+	log.Debug("expiryDate")
 	user, found := cachedUserData()
 	if !found {
 		return sendError(log.Errorf("User data not found"))
@@ -361,18 +284,6 @@ func userData() *C.char {
 	}
 
 	b, _ := json.Marshal(user)
-	return C.CString(string(b))
-}
-
-//export serverInfo
-func serverInfo() *C.char {
-	stats := a.Stats()
-	serverInfo := &protos.ServerInfo{
-		City:        stats.City,
-		Country:     stats.Country,
-		CountryCode: stats.CountryCode,
-	}
-	b, _ := protojson.Marshal(serverInfo)
 	return C.CString(string(b))
 }
 
@@ -450,31 +361,6 @@ func myDeviceId() *C.char {
 	return C.CString(deviceId)
 }
 
-//export authEnabled
-func authEnabled() *C.char {
-	authEnabled := a.IsFeatureEnabled(config.FeatureAuth)
-	if ok, err := strconv.ParseBool(os.Getenv("ENABLE_AUTH_FEATURE")); err == nil && ok {
-		authEnabled = true
-	}
-	log.Debugf("DEBUG: Auth enabled: %v", authEnabled)
-	return booltoCString(authEnabled)
-}
-
-//export chatEnabled
-func chatEnabled() *C.char {
-	return C.CString("false")
-}
-
-//export playVersion
-func playVersion() *C.char {
-	return C.CString("false")
-}
-
-//export storeVersion
-func storeVersion() *C.char {
-	return C.CString("false")
-}
-
 //export lang
 func lang() *C.char {
 	lang := a.GetLanguage()
@@ -489,13 +375,6 @@ func lang() *C.char {
 //export setSelectLang
 func setSelectLang(lang *C.char) {
 	a.SetLanguage(C.GoString(lang))
-	// update the payment methods if the language is changed
-	go func() {
-		err := fetchPayentMethodV4()
-		if err != nil {
-			log.Error(err)
-		}
-	}()
 }
 
 //export country
@@ -508,14 +387,6 @@ func country() *C.char {
 func sdkVersion() *C.char {
 	version := common.LibraryVersion
 	return C.CString(version)
-}
-
-//export vpnStatus
-func vpnStatus() *C.char {
-	if a.IsSysProxyOn() {
-		return C.CString("connected")
-	}
-	return C.CString("disconnected")
 }
 
 //export hasSucceedingProxy

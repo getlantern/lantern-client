@@ -2,6 +2,7 @@ import 'dart:ffi'; // For FFI
 
 import 'package:ffi/src/utf8.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 
 import 'generated_bindings.dart';
 
@@ -41,9 +42,7 @@ class LanternFFI {
     throw Exception("Platform is not supported");
   }
 
-  static startDesktopService() {
-    _lanternFFI.start();
-  }
+  static startDesktopService() => _lanternFFI.start();
 
   static void sysProxyOn() => _lanternFFI.sysProxyOn();
 
@@ -62,19 +61,8 @@ class LanternFFI {
     //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
-  static Pointer<Utf8> vpnStatus() => _lanternFFI.vpnStatus().cast<Utf8>();
-
-  static Pointer<Utf8> lang() => _lanternFFI.lang().cast<Utf8>();
-
-  static Pointer<Utf8> proxyAll() => _lanternFFI.proxyAll().cast<Utf8>();
-
-  static Pointer<Utf8> ffiStoreVersion() =>
-      _lanternFFI.storeVersion().cast<Utf8>();
-
   static Pointer<Utf8> hasSucceedingProxy() =>
       _lanternFFI.hasSucceedingProxy().cast<Utf8>();
-
-  static Pointer<Utf8> proUser() => _lanternFFI.proUser().cast<Utf8>();
 
   static Future<User> ffiUserData() async {
     final res = await _lanternFFI.userData().cast<Utf8>().toDartString();
@@ -175,16 +163,8 @@ class LanternFFI {
 
   static Pointer<Utf8> replicaAddr() => _lanternFFI.replicaAddr().cast<Utf8>();
 
-  static Pointer<Utf8> chatEnabled() => _lanternFFI.chatEnabled().cast<Utf8>();
-
-  static Pointer<Utf8> authEnabled() => _lanternFFI.authEnabled().cast<Utf8>();
-
-  static Pointer<Utf8> sdkVersion() => _lanternFFI.sdkVersion().cast<Utf8>();
-
   static Pointer<Utf8> checkUpdates() =>
       _lanternFFI.checkUpdates().cast<Utf8>();
-
-  static Pointer<Utf8> plans() => _lanternFFI.plans().cast<Utf8>();
 
   static Pointer<Utf8> paymentMethods() =>
       _lanternFFI.paymentMethodsV3().cast<Utf8>();
