@@ -28,6 +28,7 @@ import (
 	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
@@ -292,6 +293,10 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 		log.Errorf("Unable to serve bandwidth to UI: %v", err)
 	}
 
+	if err := app.serveConnectionStatus(app.ws); err != nil {
+		log.Errorf("Unable to serve connection status: %v", err)
+	}
+
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
 	}))
@@ -307,21 +312,17 @@ func (app *App) GetLanguage() string {
 func (app *App) SetLanguage(lang string) {
 	app.settings.SetLanguage(lang)
 	log.Debugf("Setting language to %v", lang)
-	if app.ws != nil {
-		app.ws.SendMessage("pro", map[string]interface{}{
-			"type":     "pro",
-			"language": lang,
-		})
-	}
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"type":     "pro",
+		"language": lang,
+	})
 }
 
 func (app *App) SetUserLoggedIn(value bool) {
 	app.settings.SetUserLoggedIn(value)
-	if app.ws != nil {
-		app.ws.SendMessage("pro", map[string]interface{}{
-			"login": value,
-		})
-	}
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"login": value,
+	})
 }
 
 func (app *App) IsUserLoggedIn() bool {
@@ -348,14 +349,7 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
-	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
-		enable := val.(bool)
-		if enable {
-			app.SysproxyOn()
-		} else {
-			app.SysProxyOff()
-		}
-	})
+	go app.fetchDeviceLinkingCode(context.Background())
 
 	app.AddExitFunc("turning off system proxy", func() {
 		app.SysProxyOff()
@@ -373,9 +367,6 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	}
 	if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
-	}
-	if err := app.serveConnectionStatus(app.ws); err != nil {
-		log.Errorf("Unable to serve connection status: %v", err)
 	}
 }
 
@@ -395,7 +386,6 @@ func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 
 func (app *App) onSucceedingProxy(succeeding bool) {
 	app.hasSucceedingProxy.Store(succeeding)
-	//app.sendConfigOptions()
 	log.Debugf("[Startup Desktop] onSucceedingProxy %v", succeeding)
 }
 
@@ -539,12 +529,28 @@ func (app *App) fetchOrCreateUser(ctx context.Context) (*protos.User, error) {
 	}
 }
 
+func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
+	deviceName := func() string {
+		deviceName, _ := osversion.GetHumanReadable()
+		return deviceName
+	}
+	resp, err := app.proClient.LinkCodeRequest(ctx, deviceName())
+	if err != nil {
+		return "", errors.New("Could not create new Pro user: %v", err)
+	}
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"type":              "pro",
+		"deviceLinkingCode": resp.Code,
+	})
+	return resp.Code, nil
+}
+
 // CreateUser is used when Lantern is run for the first time and creates a new user with the pro server
 func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
 	log.Debug("New user, calling user create")
 	settings := app.Settings()
 	settings.SetUserFirstVisit(true)
-	resp, err := app.proClient.UserCreate(context.Background())
+	resp, err := app.proClient.UserCreate(ctx)
 	if err != nil {
 		return nil, errors.New("Could not create new Pro user: %v", err)
 	}

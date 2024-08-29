@@ -67,10 +67,12 @@ class WebsocketSubscriber {
             _webSocketLogger.i("Websocket message[Pro]: $json");
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
+            final deviceLinkingCode = message['deviceLinkingCode'];
             if (userStatus != null &&
                 (userStatus == 'active' || userLevel == 'pro')) {
               sessionModel.proUserNotifier.value = true;
             }
+            if (deviceLinkingCode != null) sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
 
           case _WebsocketMessageType.bandwidth:
             _webSocketLogger.i("Websocket message[Bandwidth]: $json");
