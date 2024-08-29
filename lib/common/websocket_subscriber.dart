@@ -6,7 +6,7 @@ import 'package:fixnum/fixnum.dart';
 
 typedef void WebsocketChange();
 
-enum WebsocketMessage {
+enum _WebsocketMessageType {
   config,
   pro,
   bandwidth,
@@ -30,14 +30,14 @@ class WebsocketSubscriber {
       (json) {
         if (json["type"] == null) return;
         final message = json["message"];
-        WebsocketMessage? messageType = WebsocketMessage.values.firstWhereOrNull((e) => e.name == json["type"]);
+        _WebsocketMessageType? messageType = _WebsocketMessageType.values.firstWhereOrNull((e) => e.name == json["type"]);
         if (message == null || messageType == null) return;
         switch (messageType) {
-          case WebsocketMessage.settings:
+          case _WebsocketMessageType.settings:
             print("settings websocket message: $json");
             final referralCode = message['referralCode'];
             if (referralCode != null) sessionModel.referralNotifier.value = referralCode;
-          case WebsocketMessage.stats:
+          case _WebsocketMessageType.stats:
             if (message['countryCode'] != null) {
               sessionModel.serverInfoNotifier.value = ServerInfo.create()..mergeFromProto3Json({
                 'city': message['city'],
@@ -45,20 +45,20 @@ class WebsocketSubscriber {
                 'countryCode': message['countryCode'],
               });
             }
-          case WebsocketMessage.pro:
+          case _WebsocketMessageType.pro:
             print("pro websocket message: $message");
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
             if (userStatus != null && userStatus == 'active') sessionModel.proUserNotifier.value = true;
             if (userLevel != null && userLevel == 'pro') sessionModel.proUserNotifier.value = true;
-          case WebsocketMessage.bandwidth:
+          case _WebsocketMessageType.bandwidth:
             print("bandwidth websocket message: $message");
             final Map res = jsonDecode(jsonEncode(message));
             vpnModel.bandwidthNotifier.value = Bandwidth.create()..mergeFromProto3Json({
               'allowed': res['mibAllowed'],
               'remaining': res['mibUsed'],
             });
-          case WebsocketMessage.config:
+          case _WebsocketMessageType.config:
             final ConfigOptions config = ConfigOptions.fromJson(message);
             sessionModel.configNotifier.value = config;
             final plansMessage = config.plans;
@@ -78,7 +78,7 @@ class WebsocketSubscriber {
               }
             }
             if (config.authEnabled) sessionModel.isAuthEnabled.value = config.authEnabled;
-          case WebsocketMessage.vpnstatus:
+          case _WebsocketMessageType.vpnstatus:
             final res = message["connected"];
             if (res != null) {
               final vpnStatus = res.toString() == "true" ? "connected" : "disconnected";
