@@ -2,7 +2,7 @@ name: Go Build and Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ atavism/go-ci-updates ]
   pull_request:
     branches: [ main ]
   # Allows you to run this workflow manually from the Actions tab
@@ -16,22 +16,45 @@ jobs:
     - uses: actions/checkout@v4
     - name: Install libpcap
       run: sudo apt-get install libpcap-dev
+
     - name: Set up Go
       uses: actions/setup-go@v5
       with:
         go-version-file: "go.mod"
+
     - name: Granting private modules access
       run: |
           git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-    - name: Run Unit tests
-      env:
-        GOPRIVATE: github.com/getlantern
+    - name: Build
+      run: make lantern
+
+    # Install gotestfmt on the VM running the action.
+    - name: Set up gotestfmt
+      uses: GoTestTools/gotestfmt-action@v2
+      with:
+        # Optional: pass GITHUB_TOKEN to avoid rate limiting.
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    # Run tests with nice formatting. Save the original log in /tmp/gotest.log
+    - name: Run tests
       run: |
-        go mod tidy
-        go test -failfast -coverprofile=profile.cov ./...
+        set -euo pipefail
+        go test -json -failfast -tags="headless,integration" -coverprofile=profile.cov -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt -nofail
+
+    - name: Granting private modules access
+      run: |
+          git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      # Upload the original go test log as an artifact for later review.
+    - name: Upload test log
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: test-log
+        path: /tmp/gotest.log
+        if-no-files-found: error
+
     - name: Install goveralls
-      env:
-        GO111MODULE: auto
       run: go install github.com/mattn/goveralls@latest
     - name: Send coverage
       env:
