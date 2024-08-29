@@ -37,6 +37,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> isAuthEnabled;
   late FfiListNotifier<Plan> plansNotifier;
   late FfiListNotifier<PaymentMethod> paymentMethodsNotifier;
+  late ValueNotifier<Bandwidth?> bandwidthNotifier;
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -101,6 +102,10 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
+  Future<void> updateUserDetails() {
+    return methodChannel.invokeMethod('updateUserDetail', {});
+  }
+
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -118,24 +123,7 @@ class SessionModel extends Model {
         },
       );
     }
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<Bandwidth>(
-      'bandwidth',
-      defaultValue: null,
-      onChanges: (setValue) =>
-          sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
-        if (value != null) {
-          final Map res = jsonDecode(jsonEncode(value));
-          setValue(Bandwidth.create()
-            ..mergeFromProto3Json({
-              'allowed': res['mibAllowed'],
-              'remaining': res['mibUsed'],
-            }));
-        }
-      }),
-      null,
-      builder: builder,
-    );
+    return FfiValueBuilder<Bandwidth>('bandwidth', bandwidthNotifier, builder);
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
@@ -173,7 +161,8 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
           builder: builder, defaultValue: 0);
     }
-    return ffiValueBuilder<int>('acceptedTermsVersion', defaultValue: 0, builder: builder);
+    return ffiValueBuilder<int>('acceptedTermsVersion',
+        defaultValue: 0, builder: builder);
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -196,9 +185,6 @@ class SessionModel extends Model {
     );
   }
 
-  // Widget playVersion(ValueWidgetBuilder<bool> builder) {
-  //   return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
-  // }
 
   Widget storeVersion(ValueWidgetBuilder<bool> builder) {
     return subscribedSingleValueBuilder<bool>('storeVersion', builder: builder);
@@ -292,7 +278,6 @@ class SessionModel extends Model {
   Pointer<Utf8> ffiIsUserLoggedIn() => LanternFFI.isUserLoggedIn();
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
-    final websocket = WebsocketImpl.instance();
     if (isDesktop()) {
       return FfiValueBuilder<bool>(
           'isUserLoggedIn', hasUserSignedInNotifier, builder);
@@ -719,7 +704,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('deviceLinkingCode', linkingCodeNotifier, builder);
+    return FfiValueBuilder<String>(
+        'deviceLinkingCode', linkingCodeNotifier, builder);
   }
 
   Future<void> redeemResellerCode(
