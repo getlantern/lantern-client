@@ -275,7 +275,7 @@ class _VerificationState extends State<Verification> {
 
   Future<void> _processCheckOut() async {
     /// All the check has been moved to isPlayStoreEnable method
-    if (AppMethods.isPlayStoreEnable()) {
+    if (await AppMethods.isPlayStoreEnable()) {
       _startGoogleCheckout();
       return;
     }
