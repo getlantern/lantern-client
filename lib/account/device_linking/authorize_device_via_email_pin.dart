@@ -1,4 +1,4 @@
-AuthorizeDeviceEmail// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:lantern/common/common.dart';
 import 'package:styled_text/styled_text.dart';
@@ -8,10 +8,9 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
   final String email;
 
   AuthorizeDeviceViaEmailPin({
-    Key? key,
+    super.key,
     required this.email,
-  }) : super(key: key);
-
+  });
   final pinCodeController = TextEditingController();
 
   @override
@@ -73,7 +72,7 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
   Future<void> onDone(String code, BuildContext context) async {
     try {
       context.loaderOverlay.show();
-      await sessionModel.validateDeviceRecoveryCode(code);
+      await sessionModel.validateDeviceRecoveryCode(code,email);
     //once code is validated, approve the device
       await sessionModel.approveDevice(code);
       pinCodeController.clear();

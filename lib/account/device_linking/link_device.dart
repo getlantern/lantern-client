@@ -51,6 +51,8 @@ class _LinkDeviceState extends State<LinkDevice> {
         },
         delayFactor: const Duration(seconds: 1),
         retryIf: (e) => e is PlatformException,
+        maxAttempts: 10,
+
       );
     } catch (e) {
       appLogger.e("error while requesting link code: $e", error: e);
