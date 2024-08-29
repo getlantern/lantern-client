@@ -28,7 +28,7 @@ class _PlanCardState extends State<PlanCard> {
     final isBestValue = widget.plan.bestValue;
 
     return Padding(
-      padding: const EdgeInsetsDirectional.only(bottom: 16.0),
+      padding: const EdgeInsetsDirectional.only(bottom: 14.0),
       child: CInkWell(
         onTap: () => onPlanTap(context),
         child: Stack(
@@ -151,7 +151,6 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   String getPrice(String totalCost) {
-    return totalCost;
     final appStorePrice = appPurchase.getPriceFromPlanId(widget.plan.id);
     return appStorePrice == '' ? totalCost : appStorePrice;
   }
