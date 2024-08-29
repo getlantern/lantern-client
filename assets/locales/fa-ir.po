@@ -6,7 +6,6 @@
 # 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
 # Sina <sina@asl19.org>, 2023
 # Pedram Azizallahi <pedram672004@yahoo.com>, 2023
-# zar24 <zarghamjan@yahoo.com>, 2023
 # Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2023
 # ali jafarizadeh <ebrahimigv@gmail.com>, 2024
 # Evan <alireza.firoozi68@gmail.com>, 2024
@@ -22,10 +21,11 @@
 # Derek F <derek@getlantern.org>, 2024
 # AHMAD MASOUD BARAKZAI, 2024
 # Mersen M, 2024
+# zar24 <zarghamjan@yahoo.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Mersen M, 2024\n"
+"Last-Translator: zar24 <zarghamjan@yahoo.com>, 2024\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -523,6 +523,9 @@ msgstr "در هنگام دریافت داده‌های کاربر خطا دری�
 
 msgid "reseller_timeout"
 msgstr "در هنگام تایید کد معرف خطا دریافت شد."
+
+msgid "wrong_reseller_code"
+msgstr "کد فعالسازی نامعتبر است"
 
 msgid "reseller_success"
 msgstr "کد معرف با موفقیت اعمال شد."
@@ -1896,3 +1899,51 @@ msgstr "محدودیت رسیده است "
 
 msgid "file_size_limit_description"
 msgstr "اندازه پیوست‌ها باید کمتر از 100 مگابایت باشد"
+
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""

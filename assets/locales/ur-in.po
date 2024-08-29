@@ -514,6 +514,9 @@ msgstr "آپ کا اکاؤنٹ ڈیٹا حاصل کرنے کے دوران کچھ
 msgid "reseller_timeout"
 msgstr "آپ کے فعالیتی کوڈ کی توثیق کے دوران کچھ غلط ہو گیا۔"
 
+msgid "wrong_reseller_code"
+msgstr "غلط ایکٹیویشن کوڈ"
+
 msgid "reseller_success"
 msgstr "فعالیتی کوڈ کامیابی سے ریڈیم کر دیا گیا۔"
 
@@ -1910,3 +1913,51 @@ msgstr ""
 "\n"
 " \n"
 " "
+
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""
