@@ -5,7 +5,7 @@ import '../common/common.dart';
 
 @RoutePage<void>(name: 'Support')
 class Support extends StatelessWidget {
-  const Support({Key? key}) : super(key: key);
+  const Support({super.key});
 
   final faqUrl = 'https://lantern.io/faq';
   final forumsUrl = 'https://lantern.io/forums';
@@ -68,23 +68,19 @@ class Support extends StatelessWidget {
 
         sessionModel.proUser(
           (context, proUser, child) {
-            if (proUser) {
-              return FutureBuilder(
-                future: showRestorePurchaseButton(proUser),
-                builder: (context, snapshot) {
-                  // Show restore purchase button only if user is pro
-                  if (snapshot.hasData && snapshot.data as bool) {
-                    return ListItemFactory.settingsItem(
-                      content: 'restore_purchase'.i18n,
-                      icon: ImagePaths.restore,
-                      onTap: () => restorePurchaseTap(context),
-                    );
-                  }
-                  return const SizedBox();
-                },
-              );
-            }
-            return const SizedBox();
+            return FutureBuilder<bool>(
+              future: showRestorePurchaseButton(proUser),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data as bool) {
+                  return ListItemFactory.settingsItem(
+                    content: 'restore_purchase'.i18n,
+                    icon: ImagePaths.restore,
+                    onTap: () => restorePurchaseTap(context),
+                  );
+                }
+                return const SizedBox();
+              },
+            );
           },
         )
       ],

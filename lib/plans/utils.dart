@@ -161,18 +161,16 @@ bool isAppStoreEnabled() {
   return Platform.isIOS;
 }
 
+/// Show restore purchase button only if user is not pro and play store is enabled
 Future<bool> showRestorePurchaseButton(bool proUser) async {
   if (Platform.isAndroid) {
     if (proUser) {
       return false;
     }
-    if (await isPlayStoreEnabled()) {
-      return true;
-    }
-    return false;
+    return await isPlayStoreEnabled();
   }
-  if (Platform.isIOS) {
-    return !proUser;
+  if (isAppStoreEnabled()) {
+    return (proUser==false);
   }
   return false;
 }
