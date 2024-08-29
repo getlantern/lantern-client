@@ -388,9 +388,9 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
-	app.sendConfigOptions()
 	app.fetchedProxiesConfig.Store(true)
 	app.hasSucceedingProxy.Store(true)
+	app.sendConfigOptions()
 }
 
 func (app *App) onSucceedingProxy(succeeding bool) {

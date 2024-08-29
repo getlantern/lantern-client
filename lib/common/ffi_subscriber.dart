@@ -65,6 +65,13 @@ class _FfiValueBuilderState<T>
   }
 
   void _valueChanged() {
+    if (!mounted) {
+      return;
+    }
+    if(value == widget.valueListenable.value){
+      mainLogger.i("Listener called but value is same as previous. Ignoring.");
+      return;
+    }
     setState(() {
       value = widget.valueListenable.value;
     });

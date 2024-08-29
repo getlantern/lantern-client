@@ -141,4 +141,10 @@ bool isDesktop() {
 }
 
 final mainLogger = Logger(
-    printer: PrettyPrinter(), filter: DevelopmentFilter(), level: Level.debug);
+    printer: PrettyPrinter(
+      methodCount: 0,
+      errorMethodCount: 10,
+      colors: true,
+      printEmojis: true,
+      printTime: true,
+    ), filter: DevelopmentFilter(), level: Level.debug);
