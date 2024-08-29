@@ -7,7 +7,7 @@ class VPNBandwidth extends StatelessWidget {
   Widget build(BuildContext context) {
     return sessionModel
         .bandwidth((BuildContext context, Bandwidth bandwidth, Widget? child) {
-      return bandwidth.allowed > 0
+      return bandwidth.remaining > 0
           ? Column(
               children: [
                 Container(
@@ -35,9 +35,7 @@ class VPNBandwidth extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
+                const SizedBox(height: 8),
                 Container(
                   height: 12,
                   decoration: BoxDecoration(
@@ -50,24 +48,12 @@ class VPNBandwidth extends StatelessWidget {
                       Radius.circular(borderRadius),
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: (bandwidth.remaining).toInt(),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: usedDataBarColor,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(borderRadius),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: bandwidth.remaining.toInt(),
-                        child: Container(),
-                      ),
-                    ],
+                  child: LinearProgressIndicator(
+                    value: bandwidth.remaining.toDouble(),
+                    borderRadius:
+                        const BorderRadius.all(Radius.circular(borderRadius)),
+                    backgroundColor: grey1,
+                    valueColor: AlwaysStoppedAnimation(usedDataBarColor),
                   ),
                 ),
                 const SizedBox(
