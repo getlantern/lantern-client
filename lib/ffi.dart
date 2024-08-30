@@ -130,12 +130,6 @@ class LanternFFI {
 
   static Pointer<Utf8> devices() => _lanternFFI.devices().cast<Utf8>();
 
-  static Pointer<Utf8> developmentMode() =>
-      _lanternFFI.developmentMode().cast<Utf8>();
-
-  static Pointer<Utf8> acceptedTermsVersion() =>
-      _lanternFFI.acceptedTermsVersion().cast<Utf8>();
-
   static Pointer<Utf8> emailAddress() =>
       _lanternFFI.emailAddress().cast<Utf8>();
 
@@ -161,8 +155,6 @@ class LanternFFI {
 
   static Pointer<Utf8> deviceId() => _lanternFFI.myDeviceId().cast<Utf8>();
 
-  static Pointer<Utf8> replicaAddr() => _lanternFFI.replicaAddr().cast<Utf8>();
-
   static Pointer<Utf8> checkUpdates() =>
       _lanternFFI.checkUpdates().cast<Utf8>();
 
@@ -176,14 +168,6 @@ class LanternFFI {
       _lanternFFI.deviceLinkingCode().cast<Utf8>();
 
   static Pointer<Utf8> expiryDate() => _lanternFFI.expiryDate().cast<Utf8>();
-
-  static Pointer<Utf8> splitTunneling() =>
-      _lanternFFI.splitTunneling().cast<Utf8>();
-
-  static Pointer<Utf8> chatMe() => _lanternFFI.chatMe().cast<Utf8>();
-
-  static Pointer<Utf8> onBoardingStatus() =>
-      _lanternFFI.onBoardingStatus().cast<Utf8>();
 
   static Future<void> reportIssue(List<String> list) {
     final email = list[0].toPointerChar();

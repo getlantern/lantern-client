@@ -10,6 +10,23 @@ extension BoolParsing on String {
   }
 }
 
+class _ChatOptions {
+  final bool onBoardingStatus;
+  final int acceptedTermsVersion;
+
+  const _ChatOptions({
+    this.onBoardingStatus = true,
+    this.acceptedTermsVersion = 0,
+  });
+
+  factory _ChatOptions.fromJson(Map<String, dynamic> parsedJson) {
+    return _ChatOptions(
+      onBoardingStatus: parsedJson['onBoardingStatus'],
+      acceptedTermsVersion: parsedJson['acceptedTermsVersion'],
+    );
+  }
+}
+
 class ConfigOptions {
   final bool developmentMode;
   final String replicaAddr;
@@ -23,6 +40,7 @@ class ConfigOptions {
   final String sdkVersion;
   final Map<String, Plan>? plans;
   final Map<String, PaymentMethod>? paymentMethods;
+  final _ChatOptions chat;
 
   ConfigOptions({
     this.developmentMode = false,
@@ -37,9 +55,11 @@ class ConfigOptions {
     this.appVersion = '',
     this.plans = null,
     this.paymentMethods = null,
+    this.chat = const _ChatOptions(),
   });
 
-  bool get startupReady => hasSucceedingProxy && fetchedGlobalConfig && fetchedProxiesConfig;
+  bool get startupReady =>
+      hasSucceedingProxy && fetchedGlobalConfig && fetchedProxiesConfig;
 
   factory ConfigOptions.fromJson(Map<String, dynamic> parsedJson) {
     final Map<String, Plan> plans = {};
@@ -62,8 +82,9 @@ class ConfigOptions {
       fetchedGlobalConfig: parsedJson['fetchedGlobalConfig'],
       fetchedProxiesConfig: parsedJson['fetchedProxiesConfig'],
       plans: plans,
+      chat: _ChatOptions.fromJson(parsedJson['chat']),
       paymentMethods: paymentMethods,
-      replicaAddr : parsedJson['replicaAddr'].toString(),
+      replicaAddr: parsedJson['replicaAddr'].toString(),
       sdkVersion: parsedJson['sdkVersion'].toString(),
     );
   }

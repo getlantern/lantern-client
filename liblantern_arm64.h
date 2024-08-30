@@ -140,10 +140,6 @@ extern char* proUser();
 extern char* deviceLinkingCode();
 extern char* paymentRedirect(char* planID, char* currency, char* provider, char* email, char* deviceName);
 extern void exitApp();
-extern char* developmentMode();
-extern char* splitTunneling();
-extern char* chatMe();
-extern char* replicaAddr();
 extern char* reportIssue(char* email, char* issueType, char* description);
 extern char* checkUpdates();
 

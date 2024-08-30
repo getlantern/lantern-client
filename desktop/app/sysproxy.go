@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/getlantern/errors"
@@ -14,7 +15,11 @@ import (
 	"github.com/getlantern/sysproxy"
 
 	"github.com/getlantern/lantern-client/desktop/icons"
-	"github.com/getlantern/lantern-client/desktop/ws"
+)
+
+var (
+	_sysproxyOff  func() error
+	sysproxyOffMx sync.Mutex
 )
 
 func setUpSysproxyTool() error {
@@ -41,39 +46,40 @@ func setUpSysproxyTool() error {
 	return nil
 }
 
-func (app *App) sendConnectionStatus(isConnected bool) {
-	app.isConnected.Store(isConnected)
-	app.SendMessageToUI("vpnstatus", map[string]interface{}{
-		"type":      "vpnstatus",
-		"connected": isConnected,
-	})
-}
+func sysProxyOff() {
+	sysproxyOffMx.Lock()
+	off := _sysproxyOff
+	_sysproxyOff = nil
+	sysproxyOffMx.Unlock()
 
-// serveConnectionStatus registers a websocket channel for communicating connection status changes
-func (app *App) serveConnectionStatus(channel ws.UIChannel) error {
-	_, err := channel.Register("vpnstatus", nil)
-	return err
-}
+	if off != nil {
+		doSysproxyOff(off)
+	}
 
-func (app *App) SysProxyOff() error {
 	op := ops.Begin("sysproxy_off_force")
 	defer op.End()
 	log.Debug("Force clearing system proxy directly, just in case")
 	addr, found := getProxyAddr()
 	if !found {
-		err := fmt.Errorf("Unable to find proxy address, can't force clear system proxy")
-		op.FailIf(log.Error(err))
-		return err
+		op.FailIf(log.Error("Unable to find proxy address, can't force clear system proxy"))
+		return
 	}
-	log.Debugf("Clearing lantern as system proxy at: %v", addr)
-	if err := doSysproxyClear(op, addr); err != nil {
-		return err
-	}
-	app.sendConnectionStatus(false)
-	return nil
+	doSysproxyClear(op, addr)
 }
 
-func (app *App) SysproxyOn() error {
+func doSysproxyOff(off func() error) {
+	op := ops.Begin("sysproxy_off")
+	defer op.End()
+	log.Debug("Unsetting lantern as system proxy using off function")
+	err := off()
+	if err != nil {
+		op.FailIf(log.Errorf("Unable to unset lantern as system proxy using off function: %v", err))
+		return
+	}
+	log.Debug("Unset lantern as system proxy using off function")
+}
+
+func sysproxyOn() error {
 	op := ops.Begin("sysproxy_on")
 	defer op.End()
 	addr, found := getProxyAddr()
@@ -83,14 +89,16 @@ func (app *App) SysproxyOn() error {
 		return err
 	}
 	log.Debugf("Setting lantern as system proxy at: %v", addr)
-	_, err := sysproxy.On(addr)
+	off, err := sysproxy.On(addr)
 	if err != nil {
 		err = errors.New("Unable to set lantern as system proxy: %v", err)
 		op.FailIf(log.Error(err))
 		return err
 	}
+	sysproxyOffMx.Lock()
+	_sysproxyOff = off
+	sysproxyOffMx.Unlock()
 	log.Debug("Finished setting lantern as system proxy")
-	app.sendConnectionStatus(true)
 	return nil
 }
 
