@@ -35,7 +35,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.103
+	github.com/getlantern/flashlight/v7 v7.6.107
 	github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
@@ -50,7 +50,7 @@ require (
 	github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
-	github.com/getlantern/replica v0.14.3
+	github.com/getlantern/replica v0.14.4
 	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627
 	github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
@@ -64,7 +64,6 @@ require (
 	github.com/jackpal/gateway v1.0.13
 	github.com/joho/godotenv v1.5.1
 	github.com/leekchan/accounting v1.0.0
-	github.com/moul/http2curl v1.0.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/crypto v0.26.0

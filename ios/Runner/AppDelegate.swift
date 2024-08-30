@@ -31,7 +31,7 @@ import UIKit
     try! setupAppComponents()
     GeneratedPluginRegistrant.register(with: self)
     NSSetUncaughtExceptionHandler { exception in
-        print(exception.reason)
+      print(exception.reason)
       print(exception.callStackSymbols)
     }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

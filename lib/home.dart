@@ -215,13 +215,13 @@ class _HomePageState extends State<HomePage> with WindowListener {
               return const PrivacyDisclosure();
             }
 
-            if(!Platform.isAndroid){
-              /* disable for now
-              * userNew(() {
+            if (Platform.isIOS) {
+              // disable for now
+              userNew(() {
                 _checkForFirstTimeVisit();
-              });*/
+              });
             }
-
+            print('developmentMode enabled for $developmentMode');
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
               return Scaffold(

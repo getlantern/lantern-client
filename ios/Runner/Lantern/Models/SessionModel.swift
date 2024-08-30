@@ -28,14 +28,13 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     let systemName = device.systemName
     opts.deviceID = deviceId
     opts.lang = Locale.current.identifier
-    opts.developmentMode = !isRunningFromAppStore() && !isRunningInTestFlightEnvironment()
-    opts.playVersion = (isRunningFromAppStore() || isRunningInTestFlightEnvironment())
-
+    opts.developmentMode = false
+    opts.playVersion = true
     opts.timeZone = TimeZone.current.identifier
     opts.device = modelName
     opts.model = modelName
     opts.osVersion = systemVersion
-    opts.paymentTestMode = AppEnvironment.current == AppEnvironment.appiumTest
+    opts.paymentTestMode = false
     opts.platform = "ios"
     var error: NSError?
     guard
