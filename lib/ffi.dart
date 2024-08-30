@@ -56,8 +56,8 @@ class LanternFFI {
   static String websocketAddr() =>
       _lanternFFI.websocketAddr().cast<Utf8>().toDartString();
 
-  static void exit() {
-    _lanternFFI.exitApp();
+  static Future<void> exit() async {
+    await _lanternFFI.exitApp();
     //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 

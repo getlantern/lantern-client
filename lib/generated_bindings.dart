@@ -584,13 +584,14 @@ class NativeLibrary {
           ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>)>();
 
-  void exitApp() {
+  ffi.Pointer<ffi.Char> exitApp() {
     return _exitApp();
   }
 
   late final _exitAppPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('exitApp');
-  late final _exitApp = _exitAppPtr.asFunction<void Function()>();
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('exitApp');
+  late final _exitApp =
+      _exitAppPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> reportIssue(
     ffi.Pointer<ffi.Char> email,

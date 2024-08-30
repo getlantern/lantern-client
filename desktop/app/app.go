@@ -56,7 +56,7 @@ func init() {
 
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
-	hasExited            int64
+	hasExited            atomic.Bool
 	fetchedGlobalConfig  atomic.Bool
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
@@ -442,7 +442,7 @@ func (app *App) AddExitFunc(label string, exitFunc func()) {
 // the exit. Returns true if the app is actually exiting, false if exit has
 // already been requested.
 func (app *App) Exit(err error) bool {
-	if atomic.CompareAndSwapInt64(&app.hasExited, 0, 1) {
+	if app.hasExited.CompareAndSwap(false, true) {
 		app.doExit(err)
 		return true
 	}

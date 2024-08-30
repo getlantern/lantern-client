@@ -444,8 +444,9 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 }
 
 //export exitApp
-func exitApp() {
+func exitApp() *C.char {
 	a.Exit(nil)
+	return C.CString("")
 }
 
 //export reportIssue
