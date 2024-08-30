@@ -5,13 +5,13 @@
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2024
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2024
 # axel <axel+transifex@axelsimon.net>, 2024
+# AO <ao@localizationlab.org>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024
-# AO <ao@localizationlab.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: AO <ao@localizationlab.org>, 2024\n"
+"Last-Translator: e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2024\n"
 "Language-Team: French (Canada) (https://app.transifex.com/lantern-1/teams/94371/fr_CA/)\n"
 "Language: fr_CA\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -528,9 +528,6 @@ msgstr ""
 msgid "reseller_timeout"
 msgstr ""
 "Une erreur est survenue lors de la validation de votre code d’activation."
-
-msgid "wrong_reseller_code"
-msgstr "Le code d’activation est invalide"
 
 msgid "reseller_success"
 msgstr "Le code d’activation a bien été utilisé."
@@ -1953,51 +1950,3 @@ msgstr "Limite atteinte "
 
 msgid "file_size_limit_description"
 msgstr "Les tailles des pièces jointes doivent être inférieures à 100 Mo"
-
-msgid "lantern_pro_one_year"
-msgstr ""
-
-msgid "lantern_pro_two_year"
-msgstr ""
-
-msgid "lantern_pro_one_month"
-msgstr ""
-
-msgid "non_renewing_subscription"
-msgstr ""
-
-msgid "restore_purchase"
-msgstr ""
-
-msgid "skip_for_now"
-msgstr ""
-
-msgid "purchase_not_found"
-msgstr ""
-
-msgid "no_previous_purchase"
-msgstr ""
-
-msgid "warning_restore_purchase"
-msgstr ""
-
-msgid "purchase_restored"
-msgstr ""
-
-msgid "purchase_restored_message"
-msgstr ""
-
-msgid "purchase_restored_error"
-msgstr ""
-
-msgid "err_while_sending_code"
-msgstr ""
-
-msgid "email_hint"
-msgstr ""
-
-msgid "email_hint_pro"
-msgstr ""
-
-msgid "continue_without_email"
-msgstr ""

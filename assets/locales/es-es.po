@@ -2,6 +2,7 @@
 # Translators:
 # Giorgio Maone <giorgio@maone.net>, 2021
 # e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2022
+# Emerson Castaneda, 2023
 # fffw <fffw@getlantern.org>, 2023
 # Lantern, 2023
 # e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2023
@@ -12,11 +13,10 @@
 # tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
-# Emerson Castaneda, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Emerson Castaneda, 2024\n"
+"Last-Translator: e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -524,9 +524,6 @@ msgstr "Algo ha fallado al obtener los datos de su cuenta."
 
 msgid "reseller_timeout"
 msgstr "Algo ha fallado al validar su código de activación."
-
-msgid "wrong_reseller_code"
-msgstr "Código de activación  invalido"
 
 msgid "reseller_success"
 msgstr "Se ha canjeado el código de activación."
@@ -1939,51 +1936,3 @@ msgstr "Límite alcanzado"
 
 msgid "file_size_limit_description"
 msgstr "Los tamaños de los archivos adjuntos deben ser menores de 100 MB"
-
-msgid "lantern_pro_one_year"
-msgstr ""
-
-msgid "lantern_pro_two_year"
-msgstr ""
-
-msgid "lantern_pro_one_month"
-msgstr ""
-
-msgid "non_renewing_subscription"
-msgstr ""
-
-msgid "restore_purchase"
-msgstr ""
-
-msgid "skip_for_now"
-msgstr ""
-
-msgid "purchase_not_found"
-msgstr ""
-
-msgid "no_previous_purchase"
-msgstr ""
-
-msgid "warning_restore_purchase"
-msgstr ""
-
-msgid "purchase_restored"
-msgstr ""
-
-msgid "purchase_restored_message"
-msgstr ""
-
-msgid "purchase_restored_error"
-msgstr ""
-
-msgid "err_while_sending_code"
-msgstr ""
-
-msgid "email_hint"
-msgstr ""
-
-msgid "email_hint_pro"
-msgstr ""
-
-msgid "continue_without_email"
-msgstr ""

@@ -2,13 +2,13 @@
 # Translators:
 # Lantern, 2023
 # Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2024
+# code smite <codesmite@gmail.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2024
-# code smite <codesmite@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: code smite <codesmite@gmail.com>, 2024\n"
+"Last-Translator: tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2024\n"
 "Language-Team: Bengali (https://app.transifex.com/lantern-1/teams/94371/bn/)\n"
 "Language: bn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -515,9 +515,6 @@ msgstr "আপনার অ্যাকাউন্ট আনার সময় �
 
 msgid "reseller_timeout"
 msgstr "আপনার সক্রিয়করণ কোড যাচাই করার সময় কিছু সমস্যা হয়েছে।"
-
-msgid "wrong_reseller_code"
-msgstr "এক্টিভেশন কোড সঠিক নয়"
 
 msgid "reseller_success"
 msgstr "সক্রিয়করণ কোড সফলভাবে রিডিম করা হয়েছে।"
@@ -1913,51 +1910,3 @@ msgstr "সীমা পৌঁছেছে "
 
 msgid "file_size_limit_description"
 msgstr "সংযুক্তি আকার 100 এমবি-এর নিচে হওয়া উচিত"
-
-msgid "lantern_pro_one_year"
-msgstr ""
-
-msgid "lantern_pro_two_year"
-msgstr ""
-
-msgid "lantern_pro_one_month"
-msgstr ""
-
-msgid "non_renewing_subscription"
-msgstr ""
-
-msgid "restore_purchase"
-msgstr ""
-
-msgid "skip_for_now"
-msgstr ""
-
-msgid "purchase_not_found"
-msgstr ""
-
-msgid "no_previous_purchase"
-msgstr ""
-
-msgid "warning_restore_purchase"
-msgstr ""
-
-msgid "purchase_restored"
-msgstr ""
-
-msgid "purchase_restored_message"
-msgstr ""
-
-msgid "purchase_restored_error"
-msgstr ""
-
-msgid "err_while_sending_code"
-msgstr ""
-
-msgid "email_hint"
-msgstr ""
-
-msgid "email_hint_pro"
-msgstr ""
-
-msgid "continue_without_email"
-msgstr ""
