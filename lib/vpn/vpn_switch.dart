@@ -81,7 +81,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
             enabled: (internetStatusProvider.isConnected &&
                 !vpnNotifier.isFlashlightInitializedFailed),
             initialValue:
-                vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+                vpnStatus == 'connected' || vpnStatus == 'disconnecting' ||vpnStatus == 'connecting',
             activeColor: onSwitchColor,
             inactiveColor: (internetStatusProvider.isConnected &&
                     !vpnNotifier.isFlashlightInitializedFailed)
