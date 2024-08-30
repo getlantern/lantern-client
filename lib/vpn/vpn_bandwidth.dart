@@ -7,7 +7,7 @@ class VPNBandwidth extends StatelessWidget {
   Widget build(BuildContext context) {
     return sessionModel
         .bandwidth((BuildContext context, Bandwidth bandwidth, Widget? child) {
-      return bandwidth.allowed > 0
+      return bandwidth.remaining > 0
           ? Column(
               children: [
                 Container(
@@ -15,7 +15,7 @@ class VPNBandwidth extends StatelessWidget {
                     top: 4.0,
                     bottom: 16.0,
                   ),
-                  child: const CDivider(height: 16),
+                  child: const CDivider(height: 10),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,11 +35,8 @@ class VPNBandwidth extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
+                const SizedBox(height: 8),
                 Container(
-                  height: 12,
                   decoration: BoxDecoration(
                     color: unselectedTabColor,
                     border: Border.all(
@@ -50,28 +47,14 @@ class VPNBandwidth extends StatelessWidget {
                       Radius.circular(borderRadius),
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: (bandwidth.allowed - bandwidth.remaining).toInt(),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: usedDataBarColor,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(borderRadius),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: bandwidth.remaining.toInt(),
-                        child: Container(),
-                      ),
-                    ],
+                  child: LinearProgressIndicator(
+                    value: bandwidth.remaining.toDouble(),
+                    minHeight: 12,
+                    borderRadius:
+                        const BorderRadius.all(Radius.circular(borderRadius)),
+                    backgroundColor: unselectedTabColor,
+                    valueColor: AlwaysStoppedAnimation(usedDataBarColor),
                   ),
-                ),
-                const SizedBox(
-                  height: 16,
                 ),
               ],
             )

@@ -462,6 +462,13 @@ desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: echo-build-tags
 	CGO_ENABLED=1 go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
+# This runs a development build for lantern. For production builds, see
+# 'lantern-prod' target
+.PHONY: lantern
+lantern: export ENVIRONMENT = development
+lantern: ## Build lantern without REPLICA enabled
+	@make desktop-lib
+
 ffigen:
 	dart run ffigen --config ffigen.yaml
 

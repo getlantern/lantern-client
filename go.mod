@@ -35,7 +35,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.103
+	github.com/getlantern/flashlight/v7 v7.6.106
 	github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
@@ -47,13 +47,15 @@ require (
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20240814210628-0984f52e2d18
 	github.com/getlantern/notifier v0.0.0-20240814223611-79e090136934
+	github.com/getlantern/ops v0.0.0-20231025133620-f368ab734534
 	github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175
 	github.com/getlantern/pathdb v0.0.0-20240812024914-abec1aaccbc1
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
-	github.com/getlantern/replica v0.14.3
+	github.com/getlantern/replica v0.14.4
 	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627
 	github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
+	github.com/getlantern/waitforserver v1.0.1
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426
 	github.com/getsentry/sentry-go v0.28.1
 	github.com/go-ping/ping v1.1.0
@@ -175,7 +177,6 @@ require (
 	github.com/getlantern/measured v0.0.0-20230919230611-3d9e3776a6cd // indirect
 	github.com/getlantern/meta-scrubber v0.0.1 // indirect
 	github.com/getlantern/multipath v0.0.0-20230510135141-717ed305ef50 // indirect
-	github.com/getlantern/ops v0.0.0-20231025133620-f368ab734534 // indirect
 	github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 // indirect
 	github.com/getlantern/preconn v1.0.0 // indirect
 	github.com/getlantern/proxy/v3 v3.0.0-20240328103708-9185589b6a99 // indirect
@@ -193,7 +194,6 @@ require (
 	github.com/getlantern/tlsresumption v0.0.0-20211216020551-6a3f901d86b9 // indirect
 	github.com/getlantern/tlsutil v0.5.3 // indirect
 	github.com/getlantern/uuid v1.2.0 // indirect
-	github.com/getlantern/waitforserver v1.0.1 // indirect
 	github.com/getlantern/winsvc v0.0.0-20160824205134-8bb3a5dbcc1d // indirect
 	github.com/getlantern/withtimeout v0.0.0-20160829163843-511f017cd913 // indirect
 	github.com/go-errors/errors v1.5.1 // indirect

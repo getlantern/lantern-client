@@ -469,7 +469,9 @@ class MainActivity :
                 // this mean user has already given
                 // system permissions
                 LanternApp.getSession().setHasAllNetworkPermissions(true)
-//                sessionModel.checkAdsAvailability()
+            } else {
+                Logger.debug(PERMISSIONS_TAG, "User denied vpn permission")
+                vpnModel.updateStatus(false)
             }
         }
     }

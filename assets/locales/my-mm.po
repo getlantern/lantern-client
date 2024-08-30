@@ -6,10 +6,11 @@
 # e2f <projects@e2f.com>, 2024
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2024
 # tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2024
+# Tun Tun Aung <tuntunaung@codingclassroom.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2024\n"
+"Last-Translator: Tun Tun Aung <tuntunaung@codingclassroom.org>, 2024\n"
 "Language-Team: Burmese (https://app.transifex.com/lantern-1/teams/94371/my/)\n"
 "Language: my\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -466,7 +467,7 @@ msgid "pro_plan"
 msgstr "Pro အစီအစဉ် "
 
 msgid "one_month_plan"
-msgstr ""
+msgstr "၁-လ အစီအစဉ်"
 
 msgid "one_year_plan"
 msgstr "၁ နှစ်အစီအစဉ် "
@@ -1813,7 +1814,7 @@ msgid "recovery_not_found"
 msgstr "စက်ကို ဤအသုံးပြုသူနှင့် တွဲဖက်ထားခြင်းမရှိပါ"
 
 msgid "device_added"
-msgstr ""
+msgstr "စက်ပစ္စည်းကို ထည့်ထားသည်"
 
 msgid "device_added_message"
 msgstr "ပြန်လည်ရယူရန်ကုဒ် ပေးပို့ပြီးပြီ "

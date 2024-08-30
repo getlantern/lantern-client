@@ -198,9 +198,15 @@ class InAppBilling(
                     return@queryProductDetailsAsync
                 }
                 Logger.d(TAG, "Got ${skuDetailsList.size} skus")
+                synchronized(this) {
+                    skus.clear()
+                    skuDetailsList.forEach {
+                        val id = it.productId
+                        skus[id] = it
+                    }
+                }
             }
         }
-
     }
 
     private inline fun Boolean.then(crossinline block: () -> Unit) {

@@ -2155,7 +2155,7 @@ func requestRecoveryEmail(session *SessionModel, email string) error {
 		return err
 	}
 
-	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), deviceId)
+	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), deviceId, email)
 	if err != nil {
 		return err
 	}

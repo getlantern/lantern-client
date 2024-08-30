@@ -132,7 +132,7 @@ class _PlanCardState extends State<PlanCard> {
     switch (Platform.operatingSystem) {
       case 'ios':
         if (!sessionModel.isAuthEnabled.value!) {
-          //Legacy checkout flow
+          ///Legacy checkout flow
           context.pushRoute(
             PlayCheckout(
               plan: widget.plan,
@@ -159,13 +159,9 @@ class _PlanCardState extends State<PlanCard> {
 
   // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
   List<PaymentProviders> paymentProvidersFromMethods(
-      Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+      Iterable<PaymentMethod> paymentMethods) {
     var providers = <PaymentProviders>[];
-    for (final paymentMethod in paymentMethods) {
-      for (final provider in paymentMethod.value.providers) {
-        providers.add(provider);
-      }
-    }
+    paymentMethods.forEach((value) => providers.addAll(value.providers));
     return providers;
   }
 
@@ -176,12 +172,7 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   Future<void> _processCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
-    final inRussia = sessionModel.country.value == 'RU';
-    // check if google play payment is available
-    if (isPlayVersion &&
-        !inRussia &&
-        await sessionModel.isGooglePlayServiceAvailable()) {
+    if (await AppMethods.isPlayStoreEnable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -189,23 +180,6 @@ class _PlanCardState extends State<PlanCard> {
         ),
       );
       return;
-    } else if (isDesktop()) {
-      final paymentMethods = await sessionModel.paymentMethodsv4();
-      final providers = paymentProvidersFromMethods(paymentMethods);
-      // if only one payment provider is returned, bypass the last checkout screen
-      // Note: as of now, we only do this for Stripe since it is the only payment provider that collects email
-      if (providers.length > 0) {
-        final providerName = providers[0].name.toPaymentEnum();
-        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-          context,
-          widget.plan.id,
-          "",
-          providerName,
-        );
-        await openDesktopWebview(
-            context: context, provider: providerName, redirectUrl: redirectUrl);
-        return;
-      }
     }
 
     final email = sessionModel.userEmail.value;
@@ -220,12 +194,7 @@ class _PlanCardState extends State<PlanCard> {
   }
 
   Future<void> _processLegacyCheckOut(BuildContext context) async {
-    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
-    final inRussia = sessionModel.country.value == 'RU';
-    // check if google play payment is available
-    if (isPlayVersion &&
-        !inRussia &&
-        await sessionModel.isGooglePlayServiceAvailable()) {
+    if (await AppMethods.isPlayStoreEnable()) {
       await context.pushRoute(
         PlayCheckout(
           plan: widget.plan,
@@ -233,24 +202,7 @@ class _PlanCardState extends State<PlanCard> {
         ),
       );
       return;
-    } else if (isDesktop()) {
-      final paymentMethods = await sessionModel.paymentMethodsv4();
-      final providers = paymentProvidersFromMethods(paymentMethods);
-      // if only one payment provider is returned, bypass the last checkout screen
-      if (providers.length > 0) {
-        final providerName = providers[0].name.toPaymentEnum();
-        final redirectUrl = await sessionModel.paymentRedirectForDesktop(
-          context,
-          widget.plan.id,
-          "",
-          providerName,
-        );
-        await openDesktopWebview(
-            context: context, provider: providerName, redirectUrl: redirectUrl);
-        return;
-      }
     }
-
     await context.pushRoute(
       CheckoutLegacy(
         plan: widget.plan,

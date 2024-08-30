@@ -1,10 +1,15 @@
 name: Publish releases
 
 on:
+  # Triggers the workflow on push when pushing to a version tag
   push:
-    branches: [ main ]
     tags:
-      - '*'
+      - 'lantern-*'
+  workflow_run:
+    workflows: [ "go" ]
+    types:
+      - completed
+  workflow_dispatch:
 
 permissions:
   contents: "read"
@@ -162,10 +167,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: osx-build
-      - name: Download the linux build output
+      - name: Download the linux deb build output
         uses: actions/download-artifact@v4
         with:
-          name: linux-build
+          name: linux-rpm-build
+      - name: Download the linux rpm build output
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-deb-build
 
       - name: Download the windows64 build output
         uses: actions/download-artifact@v4
@@ -225,6 +234,7 @@ jobs:
           diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
           diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
           mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
+          mv "lantern_${{env.version}}_x64.rpm" ${{ env.prefix }}.rpm
           mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
           diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
           mv -f Lantern.ipa ${{ env.prefix }}.ipa

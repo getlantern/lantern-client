@@ -70,10 +70,6 @@ func signup(email *C.char, password *C.char) *C.char {
 	saveUserSalt(salt)
 	setting.SetEmailAddress(C.GoString(email))
 	a.SetUserLoggedIn(true)
-
-	// Todo remove this once we complete teting auth flow
-	// we don't need this on prod
-	fetchPayentMethodV4()
 	return C.CString("true")
 }
 
