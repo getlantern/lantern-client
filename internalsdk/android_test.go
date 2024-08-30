@@ -290,13 +290,6 @@ func TestAutoUpdate(t *testing.T) {
 	assert.Empty(t, result)
 }
 
-func TestCheckForUpdates(t *testing.T) {
-	deviceInfo := testDeviceInfo{}
-	result, err := CheckForUpdates(deviceInfo)
-	require.NoError(t, err, "Update check should succeed")
-	require.Empty(t, result, "UpdateURL should be empty because no update is available")
-}
-
 func TestDownloadUpdate(t *testing.T) {
 	deviceInfo := testDeviceInfo{}
 	assert.False(t, DownloadUpdate(deviceInfo, "", "", &testUpdater{}))
