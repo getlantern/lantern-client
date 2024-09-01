@@ -150,12 +150,12 @@ func hasConfigFected() *C.char {
 
 //export sysProxyOn
 func sysProxyOn() {
-	a.Connect()
+	go a.SysproxyOn()
 }
 
 //export sysProxyOff
 func sysProxyOff() {
-	a.Disconnect()
+	go a.SysProxyOff()
 }
 
 //export websocketAddr
@@ -444,9 +444,8 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 }
 
 //export exitApp
-func exitApp() *C.char {
+func exitApp() {
 	a.Exit(nil)
-	return C.CString("")
 }
 
 //export reportIssue

@@ -57,6 +57,7 @@ func init() {
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
 	hasExited            atomic.Bool
+	isConnected          atomic.Bool
 	fetchedGlobalConfig  atomic.Bool
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
@@ -99,6 +100,7 @@ type App struct {
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
 func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, ss *settings.Settings) *App {
 	analyticsSession := newAnalyticsSession(ss)
+	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
@@ -109,7 +111,7 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
 		configService:             new(configService),
-		statsTracker:              NewStatsTracker(),
+		statsTracker:              statsTracker,
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
@@ -121,21 +123,13 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
 	app.onProStatusChange(func(isPro bool) {
-		app.statsTracker.SetIsPro(isPro)
+		statsTracker.SetIsPro(isPro)
 	})
 
-	app.settings.OnChange(settings.SNDisconnected, func(disconnected interface{}) {
-		isDisconnected := disconnected.(bool)
-		app.statsTracker.SetDisconnected(isDisconnected)
-		if isDisconnected {
-			sysProxyOff()
-		} else {
-			sysproxyOn()
-		}
-	})
 	datacap.AddDataCapListener(func(hitDataCap bool) {
-		app.statsTracker.SetHitDataCap(hitDataCap)
+		statsTracker.SetHitDataCap(hitDataCap)
 	})
+
 	log.Debugf("Using configdir: %v", configDir)
 
 	app.issueReporter = newIssueReporter(app)
@@ -158,7 +152,7 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 
 // Run starts the app.
 func (app *App) Run(ctx context.Context) {
-	//golog.OnFatal(app.exitOnFatal)
+	golog.OnFatal(app.exitOnFatal)
 
 	go func() {
 		for <-geolookup.OnRefresh() {
@@ -206,7 +200,7 @@ func (app *App) Run(ctx context.Context) {
 			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
+			func() bool { return app.isConnected.Load() }, // check whether we're disconnected
 			app.settings.GetProxyAll,
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
@@ -301,6 +295,10 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 		log.Errorf("Unable to serve bandwidth to UI: %v", err)
 	}
 
+	if err := app.serveConnectionStatus(app.ws); err != nil {
+		log.Errorf("Unable to serve connection status: %v", err)
+	}
+
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
 	}))
@@ -369,8 +367,17 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	go app.fetchDeviceLinkingCode(context.Background())
 
+	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
+		enable := val.(bool)
+		if enable {
+			app.SysproxyOn()
+		} else {
+			app.SysProxyOff()
+		}
+	})
+
 	app.AddExitFunc("turning off system proxy", func() {
-		sysProxyOff()
+		app.SysProxyOff()
 	})
 	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
 	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {

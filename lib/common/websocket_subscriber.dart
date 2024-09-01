@@ -17,6 +17,7 @@ enum _WebsocketMessageType {
   config,
   pro,
   bandwidth,
+  vpnstatus,
   settings,
   stats,
 }
@@ -53,12 +54,6 @@ class WebsocketSubscriber {
             final referralCode = message['referralCode'];
             if (referralCode != null)
               sessionModel.referralNotifier.value = referralCode;
-            final res = message["disconnected"];
-            if (res != null) {
-              final vpnStatus =
-                  res.toString() == "true" ? "disconnected" : "connected";
-              vpnModel.vpnStatusNotifier.value = vpnStatus;
-            }
           case _WebsocketMessageType.stats:
             if (message['countryCode'] != null) {
               sessionModel.serverInfoNotifier.value = ServerInfo.create()
@@ -112,6 +107,15 @@ class WebsocketSubscriber {
                       paymentMethod;
                 }
               }
+            }
+
+          case _WebsocketMessageType.vpnstatus:
+            final res = message["connected"];
+            if (res != null) {
+              final vpnStatus =
+                  res.toString() == "true" ? "connected" : "disconnected";
+              _webSocketLogger.i("Websocket message[VPNStatus]: $vpnStatus");
+              vpnModel.vpnStatusNotifier.value = vpnStatus;
             }
         }
       },
