@@ -56,7 +56,7 @@ func init() {
 
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
-	hasExited            int64
+	hasExited            atomic.Bool
 	isConnected          atomic.Bool
 	fetchedGlobalConfig  atomic.Bool
 	fetchedProxiesConfig atomic.Bool
@@ -98,19 +98,20 @@ type App struct {
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, settings *settings.Settings) *App {
-	analyticsSession := newAnalyticsSession(settings)
+func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, ss *settings.Settings) *App {
+	analyticsSession := newAnalyticsSession(ss)
+	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
 		proClient:                 proClient,
-		settings:                  settings,
+		settings:                  ss,
 		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
 		configService:             new(configService),
-		statsTracker:              NewStatsTracker(),
+		statsTracker:              statsTracker,
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
@@ -122,10 +123,11 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
 	app.onProStatusChange(func(isPro bool) {
-		app.statsTracker.SetIsPro(isPro)
+		statsTracker.SetIsPro(isPro)
 	})
+
 	datacap.AddDataCapListener(func(hitDataCap bool) {
-		app.statsTracker.SetHitDataCap(hitDataCap)
+		statsTracker.SetHitDataCap(hitDataCap)
 	})
 
 	log.Debugf("Using configdir: %v", configDir)
@@ -150,7 +152,7 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 
 // Run starts the app.
 func (app *App) Run(ctx context.Context) {
-	//golog.OnFatal(app.exitOnFatal)
+	golog.OnFatal(app.exitOnFatal)
 
 	go func() {
 		for <-geolookup.OnRefresh() {
@@ -395,6 +397,9 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
+	autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
+		return "/img/lantern_logo.png"
+	})
 	app.fetchedGlobalConfig.Store(true)
 	app.sendConfigOptions()
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
@@ -444,7 +449,7 @@ func (app *App) AddExitFunc(label string, exitFunc func()) {
 // the exit. Returns true if the app is actually exiting, false if exit has
 // already been requested.
 func (app *App) Exit(err error) bool {
-	if atomic.CompareAndSwapInt64(&app.hasExited, 0, 1) {
+	if app.hasExited.CompareAndSwap(false, true) {
 		app.doExit(err)
 		return true
 	}

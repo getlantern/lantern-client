@@ -8,6 +8,7 @@ final messagingModel = MessagingModel();
 class MessagingModel extends Model {
   late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;
   // late Signaling signaling;
+  late ValueNotifier<bool?> copiedRecoveryStatusNotifier;
 
   MessagingModel() : super('messaging') {
     _thumbnailCache = LRUCache<StoredAttachment, Uint8List>(
@@ -36,6 +37,9 @@ class MessagingModel extends Model {
             break;
         }
       });
+    }
+    if (isDesktop()) {
+      copiedRecoveryStatusNotifier = ValueNotifier(false);
     }
   }
 
@@ -314,11 +318,7 @@ class MessagingModel extends Model {
         },
       );
     }
-    return ffiValueBuilder<Contact>(
-      'chatMe',
-      defaultValue: null,
-      builder: builder,
-    );
+    return SizedBox();
   }
 
   Future<void> recover(String recoveryCode) async => methodChannel
@@ -527,11 +527,7 @@ class MessagingModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<bool?>(
-      'onBoardingStatus',
-      defaultValue: false,
-      builder: builder,
-    );
+    return sessionModel.configValueBuilder('onBoardingStatus', builder, (value) => value?.chat.onBoardingStatus ?? null);
   }
 
   Future<void> markCopiedRecoveryKey<T>() async {
@@ -546,11 +542,7 @@ class MessagingModel extends Model {
         builder: builder,
       );
     }
-    return ffiValueBuilder<bool>(
-      'onBoardingStatus',
-      defaultValue: false,
-      builder: builder,
-    );
+    return FfiValueBuilder<bool>('copiedRecoveryStatus', copiedRecoveryStatusNotifier, builder);
   }
 
   Future<void> saveNotificationsTS<T>() async {

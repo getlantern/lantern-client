@@ -103,6 +103,19 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
+  Widget configValueBuilder<T>(
+    String path,
+    ValueWidgetBuilder<T> builder,
+    T Function(ConfigOptions? options) onConfigUpdate,
+  ) {
+    return SubscribedSingleValueBuilder<ConfigOptions?>(
+      path,
+      configNotifier,
+      (BuildContext context, ConfigOptions? value, Widget? child) =>
+              value == null ? const SizedBox() : builder(context, onConfigUpdate(value), child),
+    );
+  }
+
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
@@ -117,8 +130,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('developmentMode', configNotifier, builder,
-        (value) => value?.developmentMode ?? false);
+    return configValueBuilder('developmentMode', builder, (value) => value?.developmentMode ?? false);
   }
 
   Widget paymentTestMode(ValueWidgetBuilder<bool> builder) {
@@ -145,7 +157,7 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
           builder: builder, defaultValue: 0);
     }
-    return ffiValueBuilder<int>('acceptedTermsVersion', defaultValue: 0, builder: builder);
+    return configValueBuilder('accepted_terms_version', builder, (value) => value?.chat.acceptedTermsVersion ?? 0);
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -192,7 +204,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('lang', userEmail, builder);
+    return FfiValueBuilder<String>('emailAddress', userEmail, builder);
   }
 
   Widget expiryDate(ValueWidgetBuilder<String> builder) {
@@ -202,7 +214,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('lang', expiryDateNotifier, builder);
+    return FfiValueBuilder<String>('expirydatestr', expiryDateNotifier, builder);
   }
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
@@ -464,8 +476,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('replicaAddr', configNotifier, builder,
-        (value) => value?.replicaAddr ?? '');
+    return configValueBuilder('replicaAddr', builder, (value) => value?.replicaAddr ?? '');
   }
 
   Widget countryCode(ValueWidgetBuilder<String> builder) {
@@ -495,8 +506,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('chatEnabled', configNotifier, builder,
-        (value) => value?.chatEnabled ?? false);
+    return configValueBuilder('chatEnabled', builder, (value) => value?.chatEnabled ?? false);
   }
 
   Widget sdkVersion(ValueWidgetBuilder<String> builder) {
@@ -507,8 +517,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('sdkVersion', configNotifier, builder,
-        (value) => value?.sdkVersion ?? "");
+    return configValueBuilder('sdkVersion', builder, (value) => value?.sdkVersion ?? "");
   }
 
   Future<bool> getChatEnabled() async {
@@ -804,8 +813,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('splitTunneling', configNotifier, builder,
-        (value) => value?.splitTunneling ?? false);
+    return configValueBuilder('splitTunneling', builder, (value) => value?.splitTunneling ?? false);
   }
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {

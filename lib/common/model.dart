@@ -11,11 +11,11 @@ abstract class Model {
   late ModelEventChannel _updatesChannel;
   final Map<String, SubscribedSingleValueNotifier> _singleValueNotifierCache =
       HashMap();
-  final Map<String, FfiValueNotifier> _ffiValueNotifierCache =
-      HashMap();
   final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
   Event? event;
   final Map<String, FfiListNotifier> _ffiListNotifierCache = HashMap();
+
+  late ValueNotifier<ConfigOptions?> configNotifier;
 
   Model(String name) {
     if (isMobile()) {
@@ -54,21 +54,6 @@ abstract class Model {
     return result;
   }
 
-  ValueListenableBuilder<T?> ffiValueBuilder<T>(
-    String path, {
-    T? defaultValue,
-    required ValueWidgetBuilder<T> builder,
-  }) {
-    var notifier = FfiValueNotifier(
-      path,
-      defaultValue,
-      () {
-        _ffiValueNotifierCache.remove(path);
-      },
-    );
-    return FfiValueBuilder<T>(path, notifier, builder);
-  }
-
   ValueListenableBuilder<T?> subscribedSingleValueBuilder<T>(
     String path, {
     T? defaultValue,
@@ -83,20 +68,6 @@ abstract class Model {
       deserialize: deserialize,
     );
     return SubscribedSingleValueBuilder<T>(path, notifier, builder);
-  }
-
-  Widget configValueBuilder<T>(
-    String path,
-    ValueNotifier<ConfigOptions?> notifier,
-    ValueWidgetBuilder<T> builder,
-    T Function(ConfigOptions? options) onConfigUpdate,
-  ) {
-    return SubscribedSingleValueBuilder<ConfigOptions?>(
-      path,
-      notifier,
-      (BuildContext context, ConfigOptions? value, Widget? child) =>
-              value == null ? const SizedBox() : builder(context, onConfigUpdate(value), child),
-    );
   }
 
   ValueNotifier<T?> singleValueNotifier<T>(

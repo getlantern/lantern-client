@@ -61,9 +61,6 @@ class LanternFFI {
     //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
-  static Pointer<Utf8> hasSucceedingProxy() =>
-      _lanternFFI.hasSucceedingProxy().cast<Utf8>();
-
   static Future<User> ffiUserData() async {
     final res = await _lanternFFI.userData().cast<Utf8>().toDartString();
     // it's necessary to use mergeFromProto3Json here instead of fromJson; otherwise, a FormatException with
@@ -128,17 +125,6 @@ class LanternFFI {
     return json == 'true' ? true : throw NoPlansUpdate("No Plans update");
   }
 
-  static Pointer<Utf8> devices() => _lanternFFI.devices().cast<Utf8>();
-
-  static Pointer<Utf8> developmentMode() =>
-      _lanternFFI.developmentMode().cast<Utf8>();
-
-  static Pointer<Utf8> acceptedTermsVersion() =>
-      _lanternFFI.acceptedTermsVersion().cast<Utf8>();
-
-  static Pointer<Utf8> emailAddress() =>
-      _lanternFFI.emailAddress().cast<Utf8>();
-
   static Future<String> emailExists(String email) async => await _lanternFFI
       .emailExists(email.toPointerChar())
       .cast<Utf8>()
@@ -157,12 +143,6 @@ class LanternFFI {
     return Future.value();
   }
 
-  static Pointer<Utf8> referral() => _lanternFFI.referral().cast<Utf8>();
-
-  static Pointer<Utf8> deviceId() => _lanternFFI.myDeviceId().cast<Utf8>();
-
-  static Pointer<Utf8> replicaAddr() => _lanternFFI.replicaAddr().cast<Utf8>();
-
   static Pointer<Utf8> checkUpdates() =>
       _lanternFFI.checkUpdates().cast<Utf8>();
 
@@ -171,19 +151,6 @@ class LanternFFI {
 
   static Pointer<Utf8> paymentMethodsV4() =>
       _lanternFFI.paymentMethodsV4().cast<Utf8>();
-
-  static Pointer<Utf8> deviceLinkingCode() =>
-      _lanternFFI.deviceLinkingCode().cast<Utf8>();
-
-  static Pointer<Utf8> expiryDate() => _lanternFFI.expiryDate().cast<Utf8>();
-
-  static Pointer<Utf8> splitTunneling() =>
-      _lanternFFI.splitTunneling().cast<Utf8>();
-
-  static Pointer<Utf8> chatMe() => _lanternFFI.chatMe().cast<Utf8>();
-
-  static Pointer<Utf8> onBoardingStatus() =>
-      _lanternFFI.onBoardingStatus().cast<Utf8>();
 
   static Future<void> reportIssue(List<String> list) {
     final email = list[0].toPointerChar();

@@ -3,15 +3,6 @@ import 'package:web_socket_channel/status.dart' as status;
 import 'common.dart';
 import 'common_desktop.dart';
 
-class FfiValueNotifier<T> extends SubscribedNotifier<T?> {
-  FfiValueNotifier(
-    String path,
-    T? defaultValue,
-    void Function() removeFromCache) : super(defaultValue, removeFromCache) {
-    value = defaultValue;
-  }
-}
-
 /// A ValueListenableBuilder that obtains its single value by subscribing to a
 /// path in the database.
 class FfiValueBuilder<T> extends ValueListenableBuilder<T?> {
