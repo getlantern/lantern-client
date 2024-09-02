@@ -74,6 +74,7 @@ Future<void> main() async {
     options.environment = kReleaseMode ? "production" : "development";
     options.dsn = kReleaseMode ? dnsConfig() : "";
     options.enableNativeCrashHandling = true;
+    options.attachStacktrace = true;
   }, appRunner: () => runApp(const LanternApp()));
 }
 
