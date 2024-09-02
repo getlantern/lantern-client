@@ -20,6 +20,11 @@ type configService struct {
 	listenersMx sync.RWMutex
 }
 
+type ChatOptions struct {
+	OnBoardingStatus     bool `json:"onBoardingStatus"`
+	AcceptedTermsVersion int  `json:"acceptedTermsVersion"`
+}
+
 // ConfigOptions are the config options that Lantern is running with
 type ConfigOptions struct {
 	DevelopmentMode      bool                   `json:"developmentMode"`
@@ -34,6 +39,7 @@ type ConfigOptions struct {
 	PaymentMethods       []protos.PaymentMethod `json:"paymentMethods"`
 	SdkVersion           string                 `json:"sdkVersion"`
 	AppVersion           string                 `json:"appVersion"`
+	Chat                 ChatOptions            `json:"chat"`
 }
 
 func (s *configService) StartService(channel ws.UIChannel) (err error) {
@@ -80,5 +86,9 @@ func (app *App) sendConfigOptions() {
 		FetchedGlobalConfig:  app.fetchedGlobalConfig.Load(),
 		FetchedProxiesConfig: app.fetchedProxiesConfig.Load(),
 		SdkVersion:           fcommon.LibraryVersion,
+		Chat: ChatOptions{
+			AcceptedTermsVersion: 0,
+			OnBoardingStatus:     true,
+		},
 	})
 }

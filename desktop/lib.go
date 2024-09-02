@@ -457,26 +457,6 @@ func exitApp() {
 	a.Exit(nil)
 }
 
-//export developmentMode
-func developmentMode() *C.char {
-	return C.CString("false")
-}
-
-//export splitTunneling
-func splitTunneling() *C.char {
-	return C.CString("false")
-}
-
-//export chatMe
-func chatMe() *C.char {
-	return C.CString("false")
-}
-
-//export replicaAddr
-func replicaAddr() *C.char {
-	return C.CString("")
-}
-
 //export reportIssue
 func reportIssue(email, issueType, description *C.char) *C.char {
 	issueTypeStr := C.GoString(issueType)
@@ -522,9 +502,9 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 //export checkUpdates
 func checkUpdates() *C.char {
 	log.Debug("Checking for updates")
-	settings := a.Settings()
-	userID := settings.GetUserID()
-	deviceID := settings.GetDeviceID()
+	ss := settings.LoadSettings(configDir(nil))
+	userID := ss.GetUserID()
+	deviceID := ss.GetDeviceID()
 	op := ops.Begin("check_update").
 		Set("user_id", userID).
 		Set("device_id", deviceID).
@@ -540,9 +520,9 @@ func checkUpdates() *C.char {
 }
 
 func configDir(flags *flashlight.Flags) string {
-	cdir := flags.ConfigDir
-	if cdir == "" {
-		cdir = appdir.General(common.DefaultAppName)
+	cdir := appdir.General(common.DefaultAppName)
+	if flags != nil && flags.ConfigDir != "" {
+		cdir = flags.ConfigDir
 	}
 	log.Debugf("Using config dir %v", cdir)
 	if _, err := os.Stat(cdir); err != nil {

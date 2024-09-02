@@ -605,45 +605,6 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('exitApp');
   late final _exitApp = _exitAppPtr.asFunction<void Function()>();
 
-  ffi.Pointer<ffi.Char> developmentMode() {
-    return _developmentMode();
-  }
-
-  late final _developmentModePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'developmentMode');
-  late final _developmentMode =
-      _developmentModePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> splitTunneling() {
-    return _splitTunneling();
-  }
-
-  late final _splitTunnelingPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'splitTunneling');
-  late final _splitTunneling =
-      _splitTunnelingPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> chatMe() {
-    return _chatMe();
-  }
-
-  late final _chatMePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('chatMe');
-  late final _chatMe =
-      _chatMePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> replicaAddr() {
-    return _replicaAddr();
-  }
-
-  late final _replicaAddrPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'replicaAddr');
-  late final _replicaAddr =
-      _replicaAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> reportIssue(
     ffi.Pointer<ffi.Char> email,
     ffi.Pointer<ffi.Char> issueType,

@@ -1,6 +1,7 @@
 package autoupdate
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -64,10 +65,14 @@ func enableAutoupdate() {
 }
 
 func CheckUpdates() (string, error) {
+	hc := httpClient.Load()
+	if hc == nil {
+		return "", errors.New("autoupdate not configured")
+	}
 	return autoupdate.CheckMobileUpdate(&autoupdate.Config{
 		CurrentVersion: Version,
 		URL:            getUpdateURL(),
-		HTTPClient: 	httpClient.Load().(*http.Client),
+		HTTPClient:     hc.(*http.Client),
 		PublicKey:      PublicKey,
 	})
 }

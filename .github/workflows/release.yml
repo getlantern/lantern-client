@@ -4,7 +4,7 @@ on:
   # Triggers the workflow on push when pushing to a version tag
   push:
     tags:
-      - 'lantern-*'
+      - '*lantern-*'
   workflow_run:
     workflows: [ "go" ]
     types:

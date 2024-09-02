@@ -1,6 +1,8 @@
 module github.com/getlantern/lantern-client
 
-go 1.23.0
+go 1.22.3
+
+toolchain go1.22.4
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
 // replace github.com/getlantern/fronted => ../fronted
@@ -28,30 +30,30 @@ require (
 	github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7
 	github.com/getlantern/common v1.2.1-0.20230427204521-6ac18c21db39
 	github.com/getlantern/diagnostics v0.0.0-20230503185158-c2fc28ed22fe
-	github.com/getlantern/dnsgrab v0.0.0-20240814223941-ee7ecd3e078c
+	github.com/getlantern/dnsgrab v0.0.0-20240830183253-5c3e2386c39e
 	github.com/getlantern/errors v1.0.5-0.20240410211607-f268a297d5d1
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.106
+	github.com/getlantern/flashlight/v7 v7.6.107
 	github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
-	github.com/getlantern/ipproxy v0.0.0-20240820014622-25f78a719601
+	github.com/getlantern/ipproxy v0.0.0-20240830181845-d9c4fb61bdfc
 	github.com/getlantern/jibber_jabber v0.0.0-20210901195950-68955124cc42
 	github.com/getlantern/launcher v0.0.0-20230622120034-fe87f9bff286
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
-	github.com/getlantern/netx v0.0.0-20240814210628-0984f52e2d18
-	github.com/getlantern/notifier v0.0.0-20240814223611-79e090136934
-	github.com/getlantern/ops v0.0.0-20231025133620-f368ab734534
+	github.com/getlantern/netx v0.0.0-20240830183145-c257516187f0
+	github.com/getlantern/notifier v0.0.0-20240830181717-11f4c6c3fa95
+	github.com/getlantern/ops v0.0.0-20230519221840-1283e026181c
 	github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175
-	github.com/getlantern/pathdb v0.0.0-20240819174901-c4ae4d619654
+	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
 	github.com/getlantern/replica v0.14.4
 	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627
-	github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb
+	github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
 	github.com/getlantern/waitforserver v1.0.1
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426
