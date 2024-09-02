@@ -106,7 +106,7 @@ STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= 9999.99.99
 # Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
-LDFLAGS := -checklinkname=0 -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDate=$(REVISION_DATE) \
+LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDate=$(REVISION_DATE) \
 -X github.com/getlantern/lantern-client/internalsdk/common.ApplicationVersion=$(VERSION) \
 -X github.com/getlantern/lantern-client/internalsdk/common.BuildDate=$(BUILD_DATE)
 
