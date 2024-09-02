@@ -57,7 +57,7 @@ class AppPurchase {
     _onSuccess = onSuccess;
     _onError = onFailure;
 
-    final plan = await _normalizePlan(planId);
+    final plan = _normalizePlan(planId);
     final purchaseParam = PurchaseParam(productDetails: plan);
     try {
       await _inAppPurchase.buyConsumable(purchaseParam: purchaseParam);
@@ -148,10 +148,10 @@ class AppPurchase {
           return sku.price;
         }
       }
-    } catch (Exception) {
+    } catch (e, stacktrace) {
+      Sentry.captureException(e, stackTrace: stacktrace);
       mainLogger.e('Failed to get price from plan');
     }
-
     return "";
   }
 }
