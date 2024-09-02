@@ -7,6 +7,10 @@ class VPNBandwidth extends StatelessWidget {
   Widget build(BuildContext context) {
     return sessionModel
         .bandwidth((BuildContext context, Bandwidth bandwidth, Widget? child) {
+      // User does not have bandwidth cap off
+      if (bandwidth.remaining > 0) {
+        return const SizedBox();
+      }
       return Column(
         children: [
           Container(
