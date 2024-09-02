@@ -31,9 +31,14 @@ class AppPurchase {
   }
 
   Future<void> getAvailablePlans() async {
-    final response = await _inAppPurchase.queryProductDetails(_iosPlansIds);
-    plansSku.clear();
-    plansSku.addAll(response.productDetails);
+    try {
+      final response = await _inAppPurchase.queryProductDetails(_iosPlansIds);
+      plansSku.clear();
+      plansSku.addAll(response.productDetails);
+    } catch (e) {
+      Sentry.captureException(e);
+      mainLogger.e('Error getting available');
+    }
   }
 
   Future<void> startPurchase({
@@ -51,7 +56,8 @@ class AppPurchase {
     _planId = planId;
     _onSuccess = onSuccess;
     _onError = onFailure;
-    final plan = _normalizePlan(planId);
+
+    final plan = await _normalizePlan(planId);
     final purchaseParam = PurchaseParam(productDetails: plan);
     try {
       await _inAppPurchase.buyConsumable(purchaseParam: purchaseParam);
@@ -66,9 +72,13 @@ class AppPurchase {
   }
 
   ProductDetails _normalizePlan(String planId) {
+    if (plansSku.isEmpty) {
+      getAvailablePlans();
+    }
+
     ///  We have different ids for IOS, Android And servers
     ///  Convert Server plan to App Store plans
-    ///  For ios we are using plans such as 1Y, 2Y, but server plan is 1y-xx-xx
+    ///  For ios we are using plans such as 1Y, 2Y, 1M but server plan is 1y-xx-xx
     ///  So we split and compare with lowercase
     final newPlanId = planId.split('-')[0];
     return plansSku.firstWhere(
@@ -131,12 +141,17 @@ class AppPurchase {
   }
 
   String getPriceFromPlanId(String planId) {
-    final plan = _normalizePlan(planId);
-    for (var sku in plansSku) {
-      if (sku.id.toLowerCase() == plan.id.toLowerCase()) {
-        return sku.price;
+    try {
+      final plan = _normalizePlan(planId);
+      for (var sku in plansSku) {
+        if (sku.id.toLowerCase() == plan.id.toLowerCase()) {
+          return sku.price;
+        }
       }
+    } catch (Exception) {
+      mainLogger.e('Failed to get price from plan');
     }
+
     return "";
   }
 }
