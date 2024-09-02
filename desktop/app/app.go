@@ -706,6 +706,16 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 	return resp.User, nil
 }
 
+func (app *App) devices() protos.Devices {
+	user, found := app.GetUserData(app.Settings().GetUserID())
+	if !found {
+		return protos.Devices{}
+	}
+	return protos.Devices{
+		Devices: user.Devices,
+	}
+}
+
 // ProxyAddrReachable checks if Lantern's HTTP proxy responds with the correct status
 // within the deadline.
 func (app *App) ProxyAddrReachable(ctx context.Context) error {

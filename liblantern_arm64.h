@@ -108,6 +108,9 @@ extern char* paymentMethodsV3();
 extern char* paymentMethodsV4();
 extern char* proxyAll();
 extern void setProxyAll(char* value);
+
+// this method is reposible for checking if the user has updated plan or bought plans
+//
 extern char* hasPlanUpdatedOrBuy();
 extern char* applyRef(char* referralCode);
 extern char* devices();

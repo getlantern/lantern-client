@@ -201,8 +201,10 @@ func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
 	err := c.webclient.GetJSON(ctx, "/user-data", nil, &resp)
 	if err != nil {
+		log.Errorf("Failed to fetch user data: %v", err)
 		return nil, errors.New("error fetching user data: %v", err)
 	}
+	log.Debugf("UserData response is %v", resp)
 	return &resp, nil
 }
 

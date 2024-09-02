@@ -281,6 +281,7 @@ class NativeLibrary {
   late final _setProxyAll =
       _setProxyAllPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
 
+  /// this method is reposible for checking if the user has updated plan or bought plans
   ffi.Pointer<ffi.Char> hasPlanUpdatedOrBuy() {
     return _hasPlanUpdatedOrBuy();
   }

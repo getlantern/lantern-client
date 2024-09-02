@@ -36,6 +36,9 @@ class AppMethods {
   }
 
   static Future<bool> isPlayStoreEnable() async {
+    if(!Platform.isAndroid){
+      return false;
+    }
     final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
     final isTestPlayVersion = sessionModel.isTestPlayVersion.value ?? false;
     final inRussia = sessionModel.country.value == 'RU';

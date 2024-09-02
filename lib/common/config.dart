@@ -1,8 +1,6 @@
-import 'common.dart';
-import 'common_desktop.dart';
-import 'package:collection/collection.dart';
 import 'package:lantern/plans/utils.dart';
-import 'package:fixnum/fixnum.dart';
+
+import 'common.dart';
 
 extension BoolParsing on String {
   bool parseBool() {
@@ -15,7 +13,7 @@ class _ChatOptions {
   final int acceptedTermsVersion;
 
   const _ChatOptions({
-    this.onBoardingStatus = true,
+    this.onBoardingStatus = false,
     this.acceptedTermsVersion = 0,
   });
 
@@ -36,9 +34,15 @@ class ConfigOptions {
   final bool hasSucceedingProxy;
   final bool fetchedGlobalConfig;
   final bool fetchedProxiesConfig;
-  final String appVersion;
+
+  // final String appVersion;
   final String sdkVersion;
+  final String deviceId;
+  final String expirationDate;
+
   final Map<String, Plan>? plans;
+  Devices devices = Devices();
+
   final Map<String, PaymentMethod>? paymentMethods;
   final _ChatOptions chat;
 
@@ -51,10 +55,12 @@ class ConfigOptions {
     this.hasSucceedingProxy = false,
     this.fetchedGlobalConfig = false,
     this.fetchedProxiesConfig = false,
+    this.expirationDate = '',
     this.sdkVersion = '',
-    this.appVersion = '',
+    this.deviceId = '',
     this.plans = null,
     this.paymentMethods = null,
+    required this.devices,
     this.chat = const _ChatOptions(),
   });
 
@@ -73,6 +79,12 @@ class ConfigOptions {
     final paymentMethods = paymentMethodsFromJson(parsedJson['paymentMethods']);
     print("plans are $plans");
     print("payment methods are $paymentMethods");
+
+    final deviceList = parsedJson['devices'] as Map;
+    final devices = Devices();
+    for (var device in deviceList.values) {
+      devices.devices.add(Device.create()..mergeFromProto3Json(device));
+    }
     return ConfigOptions(
       developmentMode: parsedJson['developmentMode'],
       authEnabled: parsedJson['authEnabled'],
@@ -84,7 +96,10 @@ class ConfigOptions {
       plans: plans,
       chat: _ChatOptions.fromJson(parsedJson['chat']),
       paymentMethods: paymentMethods,
+      devices: devices,
       replicaAddr: parsedJson['replicaAddr'].toString(),
+      deviceId: parsedJson['deviceId'].toString(),
+      expirationDate: parsedJson['expirationDate'].toString(),
       sdkVersion: parsedJson['sdkVersion'].toString(),
     );
   }
