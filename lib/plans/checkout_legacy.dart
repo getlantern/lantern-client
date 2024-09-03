@@ -484,7 +484,4 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     selectedPaymentProvider = paymentMethod.providers[0].name.toPaymentEnum();
   }
 
-
-
-
 }

@@ -322,7 +322,6 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string, em
 		"deviceName": deviceId,
 		"email":      email,
 		"locale":     uc.GetLanguage(),
-		"email":      email,
 	}, nil, &resp)
 	if err != nil {
 		return false, err

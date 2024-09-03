@@ -34,7 +34,6 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.device = modelName
     opts.model = modelName
     opts.osVersion = systemVersion
-    opts.paymentTestMode = false
     opts.platform = "ios"
     var error: NSError?
     guard

@@ -11,6 +11,7 @@ class AppPurchase {
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   List<ProductDetails> plansSku = [];
   final Set<String> _iosPlansIds = {"1Y", '2Y', '1M'};
+  final Set<String> _androidPlansIds = {"1y", '2y', '1m'};
   VoidCallback? _onSuccess;
   Function(dynamic error)? _onError;
   String _planId = "";
@@ -32,7 +33,8 @@ class AppPurchase {
 
   Future<void> getAvailablePlans() async {
     try {
-      final response = await _inAppPurchase.queryProductDetails(_iosPlansIds);
+      final response = await _inAppPurchase.queryProductDetails(
+          Platform.isAndroid ? _androidPlansIds : _iosPlansIds);
       plansSku.clear();
       plansSku.addAll(response.productDetails);
     } catch (e) {
@@ -140,11 +142,14 @@ class AppPurchase {
     }
   }
 
-  String getPriceFromPlanId(String planId) {
+  String getPriceFromPlanId(String planId, {bool perMonthCost = false}) {
     try {
       final plan = _normalizePlan(planId);
       for (var sku in plansSku) {
         if (sku.id.toLowerCase() == plan.id.toLowerCase()) {
+          if (perMonthCost) {
+            return sku.perMonthCost;
+          }
           return sku.price;
         }
       }

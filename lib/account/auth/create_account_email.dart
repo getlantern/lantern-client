@@ -114,9 +114,9 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
             ),
             const SizedBox(height: 16),
             FutureBuilder(
-              future: isPlayStoreEnabled(),
+              future: AppMethods.isPlayStoreEnable(),
               builder: (context, snapshot) {
-                if (snapshot.hasData && !widget.authFlow.isProCodeActivation && (snapshot.data == true || isAppStoreEnabled())) {
+                if (snapshot.hasData && !widget.authFlow.isProCodeActivation && (snapshot.data == true || AppMethods.isAppStoreEnabled())) {
                   return TextButton(
                       onPressed: () {
                         context.router.popUntilRoot();

@@ -78,7 +78,7 @@ class PlansPage extends StatelessWidget {
                             ),
                           ),
                       FutureBuilder<bool>(
-                        future: showRestorePurchaseButton(proUser),
+                        future: AppMethods.showRestorePurchaseButton(proUser),
                         builder: (context, snapshot) {
                           if (snapshot.hasData && snapshot.data as bool) {
                             return Row(

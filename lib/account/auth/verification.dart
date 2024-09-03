@@ -347,7 +347,7 @@ class _VerificationState extends State<Verification> {
       case AuthFlow.createAccount:
 
         ///Check if user is from app store or play store build
-        if (isAppStoreEnabled() || (await isPlayStoreEnabled())) {
+        if (AppMethods.isAppStoreEnabled() || (await AppMethods.isPlayStoreEnable())) {
           openPassword();
           return;
         }

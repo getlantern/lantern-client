@@ -1,10 +1,21 @@
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_webview.dart';
-import 'package:intl/intl.dart';
-import 'package:fixnum/fixnum.dart';
 
 const defaultTimeoutDuration = Duration(seconds: 10);
+
+bool isProdPlay() {
+  const String? appFlavor = String.fromEnvironment('FLUTTER_APP_FLAVOR') != ''
+      ? String.fromEnvironment('FLUTTER_APP_FLAVOR')
+      : null;
+
+  if (appFlavor != null) {
+    return appFlavor == 'prodPlay';
+  }
+  return false;
+}
 
 const lanternStarLogo = CAssetImage(
   path: ImagePaths.lantern_star,
@@ -150,34 +161,6 @@ Future<void> openDesktopWebview(
   }
 }
 
-Future<bool> isPlayStoreEnabled() async {
-  if (!Platform.isAndroid) return false;
-  final isPlayVersion = sessionModel.isPlayVersion?.value ?? false;
-  final inRussia = sessionModel.country.value == 'RU';
-  return (isPlayVersion &&
-      !inRussia &&
-      await sessionModel.isGooglePlayServiceAvailable());
-}
-
-bool isAppStoreEnabled() {
-  return Platform.isIOS;
-}
-
-/// Show restore purchase button only if user is not pro and play store is enabled
-Future<bool> showRestorePurchaseButton(bool proUser) async {
-  if (Platform.isAndroid) {
-    if (proUser) {
-      return false;
-    }
-    return await isPlayStoreEnabled();
-  }
-  if (isAppStoreEnabled()) {
-    return (proUser==false);
-  }
-  return false;
-}
-
-
 Plan planFromJson(Map<String, dynamic> item) {
   print("called plans $item");
   final locale = Localization.locale;
@@ -217,10 +200,10 @@ Map<String, PaymentMethod> paymentMethodsFromJson(List<dynamic> items) {
       });
     json['providers']?.forEach((e) {
       paymentMethod.providers.add(PaymentProviders.create()
-      ..mergeFromProto3Json({
-        "logoUrls": e['logoUrls'],
-        "name": e['name'],
-      }));
+        ..mergeFromProto3Json({
+          "logoUrls": e['logoUrls'],
+          "name": e['name'],
+        }));
     });
     paymentMethods[method] = paymentMethod;
   });

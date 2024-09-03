@@ -69,7 +69,7 @@ class Support extends StatelessWidget {
         sessionModel.proUser(
           (context, proUser, child) {
             return FutureBuilder<bool>(
-              future: showRestorePurchaseButton(proUser),
+              future: AppMethods.showRestorePurchaseButton(proUser),
               builder: (context, snapshot) {
                 if (snapshot.hasData && snapshot.data as bool) {
                   return ListItemFactory.settingsItem(

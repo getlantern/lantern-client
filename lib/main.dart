@@ -51,14 +51,12 @@ Future<void> main() async {
     });
   } else {
     await _initGoogleMobileAds();
+    // Inject all the services
+    init();
+    sl<AppPurchase>().init();
     // Due to replica we are using lot of cache
     // clear if goes to above limit
     CustomCacheManager().clearCacheIfExceeded();
-    if (Platform.isIOS) {
-      // Inject all the services
-      init();
-      sl<AppPurchase>().init();
-    }
   }
 
   await Localization.ensureInitialized();

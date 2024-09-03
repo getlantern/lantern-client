@@ -28,16 +28,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
-import org.getlantern.lantern.R
-import org.getlantern.lantern.activity.FreeKassaActivity_
-import org.getlantern.lantern.activity.WebViewActivity_
-import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.LanternHttpClient.ProCallback
-import org.getlantern.lantern.model.LanternHttpClient.ProUserCallback
-import org.getlantern.lantern.model.PaymentMethods
-import org.getlantern.lantern.model.ProError
-import org.getlantern.lantern.model.ProPlan
-import org.getlantern.lantern.model.ProUser
 import org.getlantern.lantern.activity.WebViewActivity
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.Utils
@@ -160,25 +150,6 @@ class SessionModel internal constructor(
             "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
             }
-
-            "restoreAccount" -> {
-                val email = call.argument<String>("email")
-                val provider = call.argument<String>("provider")
-                val code = call.argument<String>("code")
-                restoreAccount(
-                    email!!,
-                    provider!!,
-                    LanternApp.getSession().deviceName(),
-                    code!!,
-                    result
-                )
-            }
-
-            "userEmailRequest" -> {
-                val email = call.argument<String>("email")
-                userRequestEmail(email!!, result)
-            }
-
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -482,64 +453,64 @@ class SessionModel internal constructor(
         return result.toJava().toString() == "true"
     }
 
-    private fun userRequestEmail(email: String, result: MethodChannel.Result) {
-        try {
-            val url = LanternHttpClient.createProUrl("/user-email-request")
-            val body = FormBody.Builder().add("email", email).build()
-            lanternClient.post(url, body, object : ProCallback {
-                override fun onSuccess(response: Response?, json: JsonObject?) {
-                    result.success("emailSent")
-                }
-
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    result.error("emailError", error?.id, null)
-                }
-            })
-        } catch (t: Throwable) {
-            Logger.error(TAG, "Error caching user status", t)
-            result.error(
-                "unknownError", "Unable to send user request email", null
-            )
-        }
-    }
-
-    private fun restoreAccount(
-        email: String,
-        provider: String,
-        deviceName: String,
-        Code: String,
-        result: MethodChannel.Result
-    ) {
-        try {
-            val url = LanternHttpClient.createProUrl("/restore-purchase")
-            val body = FormBody.Builder()
-                .add("verified_email", email).add("provider", provider)
-                .add("deviceName", deviceName)
-                .add("email_verification_code", Code)
-                .build()
-
-            lanternClient.post(url, body, object : ProCallback {
-                override fun onSuccess(response: Response?, json: JsonObject?) {
-                    LanternApp.getSession().setIsProUser(true)
-                    result.success("restore purchase success")
-                }
-
-                override fun onFailure(t: Throwable?, error: ProError?) {
-                    Logger.error(TAG, "Error restoring purchase", error?.message)
-                    result.error(
-                        error!!.id,
-                        error?.message,
-                        error?.message
-                    )
-                }
-            })
-        } catch (t: Throwable) {
-            Logger.error(TAG, "Error while restore account", t.message)
-            result.error(
-                "error restoring purchase", "error restoring purchase", t?.message
-
-            )
-        }
-    }
+//    private fun userRequestEmail(email: String, result: MethodChannel.Result) {
+//        try {
+//            val url = LanternHttpClient.createProUrl("/user-email-request")
+//            val body = FormBody.Builder().add("email", email).build()
+//            lanternClient.post(url, body, object : ProCallback {
+//                override fun onSuccess(response: Response?, json: JsonObject?) {
+//                    result.success("emailSent")
+//                }
+//
+//                override fun onFailure(t: Throwable?, error: ProError?) {
+//                    result.error("emailError", error?.id, null)
+//                }
+//            })
+//        } catch (t: Throwable) {
+//            Logger.error(TAG, "Error caching user status", t)
+//            result.error(
+//                "unknownError", "Unable to send user request email", null
+//            )
+//        }
+//    }
+//
+//    private fun restoreAccount(
+//        email: String,
+//        provider: String,
+//        deviceName: String,
+//        Code: String,
+//        result: MethodChannel.Result
+//    ) {
+//        try {
+//            val url = LanternHttpClient.createProUrl("/restore-purchase")
+//            val body = FormBody.Builder()
+//                .add("verified_email", email).add("provider", provider)
+//                .add("deviceName", deviceName)
+//                .add("email_verification_code", Code)
+//                .build()
+//
+//            lanternClient.post(url, body, object : ProCallback {
+//                override fun onSuccess(response: Response?, json: JsonObject?) {
+//                    LanternApp.getSession().setIsProUser(true)
+//                    result.success("restore purchase success")
+//                }
+//
+//                override fun onFailure(t: Throwable?, error: ProError?) {
+//                    Logger.error(TAG, "Error restoring purchase", error?.message)
+//                    result.error(
+//                        error!!.id,
+//                        error?.message,
+//                        error?.message
+//                    )
+//                }
+//            })
+//        } catch (t: Throwable) {
+//            Logger.error(TAG, "Error while restore account", t.message)
+//            result.error(
+//                "error restoring purchase", "error restoring purchase", t?.message
+//
+//            )
+//        }
+//    }
 }
-}
+

@@ -715,10 +715,6 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	}()
 	go checkSplitTunneling(m)
 	m.surveyModel, _ = NewSurveyModel(*m)
-	// By defautl on ios  auth flow enabled
-	if opts.Platform == "ios" {
-		m.SetAuthEnabled(false)
-	}
 	return checkAdsEnabled(m)
 }
 
@@ -752,7 +748,7 @@ func (session *SessionModel) setSplitTunneling(tunneling bool) error {
 func (session *SessionModel) paymentMethods() error {
 	plans, err := session.proClient.PaymentMethodsV4(context.Background())
 	if err != nil {
-		log.Debugf("Plans V3 error: %v", err)
+		log.Debugf("Plans V4 error: %v", err)
 		return err
 	}
 	log.Debugf("Plans V4 response: %+v", plans)
@@ -1671,6 +1667,7 @@ func signup(session *SessionModel, email string, password string) error {
 	if dbErr != nil {
 		return dbErr
 	}
+	go session.paymentMethods()
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
 	})
