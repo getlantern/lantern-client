@@ -5,14 +5,14 @@
 # Lantern, 2023
 # tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2023
 # Kalyan Dikshit <dikshitrocks93@gmail.com>, 2024
-# e2f <projects@e2f.com>, 2024
 # tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2024
+# e2f <projects@e2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: E2F_HI T1 <tx_e2f_hi_t1@ate2f.com>, 2024\n"
+"Last-Translator: e2f <projects@e2f.com>, 2024\n"
 "Language-Team: Hindi (India) (https://app.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
 "Language: hi_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1895,3 +1895,9 @@ msgstr "सीमा पूरी हो गई है "
 
 msgid "file_size_limit_description"
 msgstr "संलग्नक का आकार 100 एमबी से कम होना चाहिए"
+
+msgid "no_new_update"
+msgstr "आप अद्यतित हैं!"
+
+msgid "error_referral"
+msgstr "आपका रेफरल कोड लागू करते समय कुछ गड़बड़ हुई।"

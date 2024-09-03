@@ -9,14 +9,14 @@
 # Aimara pena, 2024
 # e2f <projects@e2f.com>, 2024
 # tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2024
-# strel, 2024
 # tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
+# strel, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024\n"
+"Last-Translator: strel, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -1936,3 +1936,9 @@ msgstr "Límite alcanzado"
 
 msgid "file_size_limit_description"
 msgstr "Los tamaños de los archivos adjuntos deben ser menores de 100 MB"
+
+msgid "no_new_update"
+msgstr "¡Está actualizado!"
+
+msgid "error_referral"
+msgstr "Algo ha fallado al aplicar su código de recomendación."

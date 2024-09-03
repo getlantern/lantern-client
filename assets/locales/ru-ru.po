@@ -2,7 +2,6 @@
 # Translators:
 # Vitaliy Grishenko, 2022
 # Lowrider <pams@imail.ru>, 2022
-# Николай Кочкин <urfiner@gmail.com>, 2022
 # Helen R <helen.russel88@gmail.com>, 2022
 # e2f <projects@e2f.com>, 2022
 # e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023
@@ -18,10 +17,11 @@
 # tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2024
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024
 # Deanna D, 2024
+# Николай Кочкин <urfiner@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Deanna D, 2024\n"
+"Last-Translator: Николай Кочкин <urfiner@gmail.com>, 2024\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -1912,3 +1912,9 @@ msgstr "Лимит достигнут "
 
 msgid "file_size_limit_description"
 msgstr "Размер вложений должен быть менее 100 МБ"
+
+msgid "no_new_update"
+msgstr "Нет новых обновлений!"
+
+msgid "error_referral"
+msgstr "Что-то пошло не так, попробуйте ещё раз. "

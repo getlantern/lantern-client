@@ -1,16 +1,16 @@
 # 
 # Translators:
-# Acclaro Thailand <bkk-project@acclaro.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # Thai Localization, 2024
 # Amazing Nev <nev@nevagency.com>, 2024
 # Lantern, 2024
 # e2f <projects@e2f.com>, 2024
 # tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2024
+# Acclaro Thailand <bkk-project@acclaro.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2024\n"
+"Last-Translator: Acclaro Thailand <bkk-project@acclaro.com>, 2024\n"
 "Language-Team: Thai (https://app.transifex.com/lantern-1/teams/94371/th/)\n"
 "Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1879,3 +1879,9 @@ msgstr "ถึงขีดจำกัดแล้ว "
 
 msgid "file_size_limit_description"
 msgstr "ขนาดไฟล์แนบต้องต่ำกว่า 100 MB"
+
+msgid "no_new_update"
+msgstr "คุณมีการอัปเดตล่าสุดแล้ว"
+
+msgid "error_referral"
+msgstr "เกิดข้อผิดพลาดบางอย่างระหว่างการใส่รหัสอ้างอิงของคุณ"
