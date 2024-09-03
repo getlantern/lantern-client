@@ -100,6 +100,7 @@ func login(email *C.char, password *C.char) *C.char {
 	// old email might be differnt but we want to show latets email
 	userData.Email = C.GoString(email)
 	a.Settings().SetEmailAddress(userData.Email)
+	a.SetUserData(context.Background(), user.LegacyID, userData)
 	return C.CString("true")
 }
 

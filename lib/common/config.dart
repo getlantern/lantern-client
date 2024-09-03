@@ -77,14 +77,7 @@ class ConfigOptions {
       }
     }
     final paymentMethods = paymentMethodsFromJson(parsedJson['paymentMethods']);
-    print("plans are $plans");
-    print("payment methods are $paymentMethods");
 
-    final deviceList = parsedJson['devices'] as Map;
-    final devices = Devices();
-    for (var device in deviceList.values) {
-      devices.devices.add(Device.create()..mergeFromProto3Json(device));
-    }
     return ConfigOptions(
       developmentMode: parsedJson['developmentMode'],
       authEnabled: parsedJson['authEnabled'],
@@ -96,11 +89,24 @@ class ConfigOptions {
       plans: plans,
       chat: _ChatOptions.fromJson(parsedJson['chat']),
       paymentMethods: paymentMethods,
-      devices: devices,
+      devices: _parseDevices(parsedJson),
       replicaAddr: parsedJson['replicaAddr'].toString(),
       deviceId: parsedJson['deviceId'].toString(),
       expirationDate: parsedJson['expirationDate'].toString(),
       sdkVersion: parsedJson['sdkVersion'].toString(),
     );
+  }
+
+  static Devices _parseDevices(Map json) {
+    final deviceObj = json['devices'] as Map;
+    final devices = Devices();
+    if (deviceObj.values.isNotEmpty) {
+      final deviceList = deviceObj['devices'] as List;
+      for (var device in deviceList) {
+        final protoDevice = Device.create()..mergeFromProto3Json(device);
+        devices.devices.add(protoDevice);
+      }
+    }
+    return devices;
   }
 }

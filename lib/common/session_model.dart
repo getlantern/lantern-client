@@ -36,7 +36,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> isAuthEnabled;
   late FfiListNotifier<Plan> plansNotifier;
   late FfiListNotifier<PaymentMethod> paymentMethodsNotifier;
-  late ValueNotifier<Bandwidth?> bandwidthNotifier;
+  ValueNotifier<Bandwidth?> bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
 
   SessionModel() : super('session') {
     if (isMobile()) {

@@ -576,6 +576,7 @@ func clearLocalUserData() {
 	saveUserSalt([]byte{})
 	setting.SetEmailAddress("")
 	a.SetUserLoggedIn(false)
+	setting.SetProUser(false)
 }
 
 func main() {}

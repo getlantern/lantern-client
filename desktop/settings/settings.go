@@ -108,7 +108,7 @@ var settingMeta = map[SettingName]struct {
 	SNRevisionDate: {stString, false, false},
 
 	SNEnabledExperiments: {stStringArray, false, false},
-
+	SNExpiryDate:         {stString, true, true},
 	//Auth releated
 	SNUserFirstVisit: {stBool, true, true},
 	SNUserLoggedIn:   {stBool, true, true},

@@ -83,9 +83,9 @@ class _CheckoutState extends State<Checkout>
             Widget? child,
           ) {
             if (paymentMethods.isEmpty) {
-              return SizedBox();
+              return const SizedBox();
             }
-            print("paymentMethods: $paymentMethods");
+
             defaultProviderIfNecessary(paymentMethods.toList());
             return Column(
               children: [

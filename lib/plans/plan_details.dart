@@ -154,13 +154,13 @@ class _PlanCardState extends State<PlanCard> {
           );
         }
         return CText(
-          widget.plan.totalCostBilledOneTime,
+          '${widget.plan.totalCost} ${'billed_one_time'.i18n}',
           style: tsBody2.copiedWith(color: grey5),
         );
       }
     } else {
       return CText(
-        widget.plan.totalCostBilledOneTime,
+          '${widget.plan.totalCost} ${'billed_one_time'.i18n}',
         style: tsBody2.copiedWith(color: grey5),
       );
     }

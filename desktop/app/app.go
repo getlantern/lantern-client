@@ -393,6 +393,14 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
 	}
+	// send configs to UI
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"login": app.settings.IsUserLoggedIn(),
+	})
+}
+
+func (app *App) SendConfig() {
+	app.sendConfigOptions()
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
@@ -590,6 +598,7 @@ func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
 	app.SetUserData(ctx, user.UserId, user)
 	settings.SetReferralCode(user.Referral)
 	settings.SetUserIDAndToken(user.UserId, user.Token)
+	go app.UserData(ctx)
 	return resp.User, nil
 }
 
@@ -703,14 +712,17 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 	log.Debugf("User caching successful: %+v", userDetail)
 	// Save data in userData cache
 	app.SetUserData(ctx, userDetail.UserId, userDetail)
+	app.sendConfigOptions()
 	return resp.User, nil
 }
 
 func (app *App) devices() protos.Devices {
 	user, found := app.GetUserData(app.Settings().GetUserID())
-	if !found {
+
+	if !found && user == nil {
 		return protos.Devices{}
 	}
+	log.Debugf("Devices: %v", user.Devices)
 	return protos.Devices{
 		Devices: user.Devices,
 	}

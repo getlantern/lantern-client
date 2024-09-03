@@ -3,12 +3,9 @@ package app
 import (
 	"context"
 	"encoding/json"
-	"os"
-	"strconv"
 	"sync"
 
 	fcommon "github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -64,25 +61,26 @@ func (s *configService) AddListener(f func(ConfigOptions)) {
 }
 
 func (app *App) sendConfigOptions() {
-	authEnabled := func(a *App) bool {
-		authEnabled := a.IsFeatureEnabled(config.FeatureAuth)
-		if ok, err := strconv.ParseBool(os.Getenv("ENABLE_AUTH_FEATURE")); err == nil && ok {
-			authEnabled = true
-		}
-		log.Debugf("DEBUG: Auth enabled: %v", authEnabled)
-		return authEnabled
-	}
+	// authEnabled := func(a *App) bool {
+	// 	authEnabled := a.IsFeatureEnabled(config.FeatureAuth)
+	// 	if ok, err := strconv.ParseBool(os.Getenv("ENABLE_AUTH_FEATURE")); err == nil && ok {
+	// 		authEnabled = true
+	// 	}
+	// 	log.Debugf("DEBUG: Auth enabled: %v", authEnabled)
+	// 	return authEnabled
+	// }
 	ctx := context.Background()
 	plans, _ := app.Plans(ctx)
 	paymentMethods, _ := app.PaymentMethods(ctx)
 	devices, _ := json.Marshal(app.devices())
 	log.Debugf("DEBUG: Devices: %s", string(devices))
+	log.Debugf("Expiration date: %s", app.settings.GetExpirationDate())
 
 	app.configService.sendConfigOptions(ConfigOptions{
 		DevelopmentMode:      common.IsDevEnvironment(),
 		AppVersion:           common.ApplicationVersion,
 		ReplicaAddr:          "",
-		AuthEnabled:          authEnabled(app),
+		AuthEnabled:          true,
 		ChatEnabled:          false,
 		SplitTunneling:       false,
 		HasSucceedingProxy:   app.HasSucceedingProxy(),
