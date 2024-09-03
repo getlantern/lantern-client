@@ -186,6 +186,17 @@ class LanternFFI {
     }
   }
 
+  static Pointer<Utf8> ffIsPlayVersion() => "false".toPointerChar().cast<Utf8>();
+
+
+  static Future<void> ffiApplyRefCode(String refCode) {
+    final code = refCode.toPointerChar();
+    final result = _lanternFFI.applyRef(code).cast<Utf8>().toDartString();
+    checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
+    return Future.value();
+  }
+
+
   static Future<void> testPaymentRequest(List<String> params) {
     final email = params[0].toPointerChar();
     final paymentProvider = params[1].toPointerChar();

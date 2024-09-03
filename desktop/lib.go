@@ -222,6 +222,15 @@ func hasPlanUpdatedOrBuy() *C.char {
 	return C.CString(string("false"))
 }
 
+//export applyRef
+func applyRef(referralCode *C.char) *C.char {
+	_, err := proClient.ReferralAttach(context.Background(), C.GoString(referralCode))
+	if err != nil {
+		return sendError(err)
+	}
+	return C.CString("true")
+}
+
 //export devices
 func devices() *C.char {
 	log.Debug("devices")

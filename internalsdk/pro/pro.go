@@ -40,11 +40,12 @@ type ProClient interface {
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
 	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
+	ReferralAttach(ctx context.Context, refCode string) (bool, error)
 	//Device Linking
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
 	LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error)
-	UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error)
+	UserLinkCodeRequest(ctx context.Context, deviceId string, email string) (bool, error)
 	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
 	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
 	DeviceAdd(ctx context.Context, deviceName string) (bool, error)
@@ -200,8 +201,10 @@ func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
 	err := c.webclient.GetJSON(ctx, "/user-data", nil, &resp)
 	if err != nil {
+		log.Errorf("Failed to fetch user data: %v", err)
 		return nil, errors.New("error fetching user data: %v", err)
 	}
+	log.Debugf("UserData response is %v", resp)
 	return &resp, nil
 }
 
@@ -296,7 +299,7 @@ func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, devic
 }
 
 // UserLinkCodeRequest returns a code to email register pro account email that can be used to link device to an existing Pro account
-func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string) (bool, error) {
+func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string, email string) (bool, error) {
 	if deviceId == "" {
 		return false, errMissingDeviceName
 	}
@@ -305,11 +308,14 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string) (b
 	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
 		"deviceName": deviceId,
 		"locale":     uc.GetLanguage(),
+		"email":      email,
 	}, nil, &resp)
 	if err != nil {
 		return false, err
 	}
-
+	if resp.BaseResponse != nil && resp.Status != "ok" {
+		return false, errors.New("error requesting link code: %v", resp.Error)
+	}
 	return true, nil
 }
 
@@ -338,5 +344,23 @@ func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interfac
 	if err != nil {
 		return nil, err
 	}
+	if resp.Status != "ok" {
+		return nil, errors.New("wrong_seller_code: %v", resp.Status)
+	}
 	return &resp, nil
+}
+
+// PurchaseRequest is used to request a purchase of a Pro plan is will be used for all most all the payment providers
+func (c *proClient) ReferralAttach(ctx context.Context, refCode string) (bool, error) {
+	var resp protos.BaseResponse
+	params := c.defaultParams()
+	params["code"] = refCode
+	err := c.webclient.PostFormReadingJSON(ctx, "/referral-attach", params, &resp)
+	if err != nil {
+		return false, err
+	}
+	if resp.Status != "ok" {
+		return false, errors.New("error_referral: %v", resp.Status)
+	}
+	return true, nil
 }

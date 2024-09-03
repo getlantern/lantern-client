@@ -37,8 +37,11 @@ type ConfigOptions struct {
 	FetchedProxiesConfig bool                   `json:"fetchedProxiesConfig"`
 	Plans                []protos.Plan          `json:"plans"`
 	PaymentMethods       []protos.PaymentMethod `json:"paymentMethods"`
+	Devices              protos.Devices         `json:"devices"`
 	SdkVersion           string                 `json:"sdkVersion"`
 	AppVersion           string                 `json:"appVersion"`
+	DeviceId             string                 `json:"deviceId"`
+	ExpirationDate       string                 `json:"expirationDate"`
 	Chat                 ChatOptions            `json:"chat"`
 }
 
@@ -72,6 +75,8 @@ func (app *App) sendConfigOptions() {
 	ctx := context.Background()
 	plans, _ := app.Plans(ctx)
 	paymentMethods, _ := app.PaymentMethods(ctx)
+	devices, _ := json.Marshal(app.devices())
+	log.Debugf("DEBUG: Devices: %s", string(devices))
 
 	app.configService.sendConfigOptions(ConfigOptions{
 		DevelopmentMode:      common.IsDevEnvironment(),
@@ -86,9 +91,12 @@ func (app *App) sendConfigOptions() {
 		FetchedGlobalConfig:  app.fetchedGlobalConfig.Load(),
 		FetchedProxiesConfig: app.fetchedProxiesConfig.Load(),
 		SdkVersion:           fcommon.LibraryVersion,
+		DeviceId:             app.settings.GetDeviceID(),
+		ExpirationDate:       app.settings.GetExpirationDate(),
+		Devices:              app.devices(),
 		Chat: ChatOptions{
 			AcceptedTermsVersion: 0,
-			OnBoardingStatus:     true,
+			OnBoardingStatus:     false,
 		},
 	})
 }

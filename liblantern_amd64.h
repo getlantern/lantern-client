@@ -112,6 +112,7 @@ extern void setProxyAll(char* value);
 // this method is reposible for checking if the user has updated plan or bought plans
 //
 extern char* hasPlanUpdatedOrBuy();
+extern char* applyRef(char* referralCode);
 extern char* devices();
 extern char* approveDevice(char* code);
 extern char* removeDevice(char* deviceId);

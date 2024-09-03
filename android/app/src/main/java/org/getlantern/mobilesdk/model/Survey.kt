@@ -26,19 +26,19 @@ class Survey {
 
     @Expose
     @SerializedName("url")
-    var url: String? = null
+    var url: String = ""
 
     @Expose
     @SerializedName("message")
-    var message: String? = null
+    var message: String = ""
 
     @Expose
     @SerializedName("thanks")
-    var thanks: String? = null
+    var thanks: String = ""
 
     @Expose
     @SerializedName("button")
-    var button: String? = null
+    var button: String = ""
     override fun toString(): String {
         return String.format(
             "URL: %s userType: %s Thanks:%s  Message:%s",

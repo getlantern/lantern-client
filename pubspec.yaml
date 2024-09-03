@@ -113,7 +113,7 @@ dependencies:
   logger: ^2.3.0
 
   # Error handling
-  device_info_plus: ^10.1.0
+  device_info_plus: ^10.1.2
 
   # Package information
   package_info_plus: ^8.0.0

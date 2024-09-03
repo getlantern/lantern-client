@@ -94,6 +94,7 @@ type Session interface {
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
 	SetOnSuccess(bool)
+	ChatEnable() bool
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
@@ -139,6 +140,7 @@ type PanickingSession interface {
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
 	SetOnSuccess(bool)
+	ChatEnable() bool
 
 	Wrapped() Session
 }
@@ -146,10 +148,6 @@ type PanickingSession interface {
 // panickingSessionImpl implements PanickingSession
 type panickingSessionImpl struct {
 	wrapped Session
-}
-
-func NewPanickingSession(s *SessionModel) PanickingSession {
-	return &panickingSessionImpl{s}
 }
 
 func (s *panickingSessionImpl) Wrapped() Session {
@@ -202,6 +200,9 @@ func (s *panickingSessionImpl) SplitTunnelingEnabled() bool {
 	result, err := s.wrapped.SplitTunnelingEnabled()
 	panicIfNecessary(err)
 	return result
+}
+func (s *panickingSessionImpl) ChatEnable() bool {
+	return s.wrapped.ChatEnable()
 }
 
 func (s *panickingSessionImpl) BandwidthUpdate(percent, remaining, allowed, ttlSeconds int) {
@@ -520,7 +521,6 @@ func ReverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 }
 
 func run(configDir, locale string, settings Settings, session PanickingSession) {
-
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(false)
 
@@ -625,18 +625,15 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		authEnabled := runner.FeatureEnabled("auth", common.ApplicationVersion)
 		log.Debugf("Auth enabled? %v", authEnabled)
 		session.SetAuthEnabled(authEnabled)
-
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
 			showAdsEnabled := runner.FeatureEnabled("interstitialads", common.ApplicationVersion)
 			log.Debugf("Show ads enabled? %v", showAdsEnabled)
 			session.SetShowInterstitialAdsEnabled(showAdsEnabled)
-
 		} else {
 			// Explicitly disable ads for Pro users.
 			session.SetShowInterstitialAdsEnabled(false)
 		}
-
 	}
 
 	// When features are enabled/disabled, the UI changes. To minimize this, we only check features once on startup, preferring

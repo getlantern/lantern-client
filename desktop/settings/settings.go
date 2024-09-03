@@ -785,14 +785,18 @@ func (s *Settings) SetExpirationDate(date string) {
 	s.setVal(SNExpiryDate, date)
 }
 
+func (s *Settings) GetExpirationDate() string {
+	return s.getString(SNExpiryDate)
+}
+
 func (s *Settings) SetExpiration(expiration int64) {
 	if expiration == 0 {
 		return
 	}
-	expiry := time.Unix(0, expiration*int64(time.Second))
-	dateFormat := "01/02/2006"
-	dateStr := expiry.Format(dateFormat)
+	tm := time.Unix(expiration, 0)
+	dateStr := tm.Format("01/02/2006")
 	s.SetExpirationDate(dateStr)
+
 }
 
 func (s *Settings) IsUserLoggedIn() bool {

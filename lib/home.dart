@@ -31,7 +31,10 @@ class _HomePageState extends State<HomePage> with WindowListener {
 
   @override
   void initState() {
-    _startupSequence();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _startupSequence();
+    });
+
     super.initState();
   }
 
@@ -206,21 +209,18 @@ class _HomePageState extends State<HomePage> with WindowListener {
               Logger.level = Level.error;
             }
 
-            bool isPlayVersion = (sessionModel.isPlayVersion?.value ?? false);
-            bool isStoreVersion = (sessionModel.isStoreVersion?.value ?? false);
+            bool isPlayVersion = (sessionModel.isTestPlayVersion.value ?? false);
+            bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
 
-            if ((isPlayVersion || isStoreVersion) && version == 0) {
+            if ((isStoreVersion || isPlayVersion) && version == 0) {
               // show privacy disclosure if it's a Play build and the terms have
               // not already been accepted
               return const PrivacyDisclosure();
             }
 
-            if(!Platform.isAndroid){
-              /* disable for now
-              * userNew(() {
-                _checkForFirstTimeVisit();
-              });*/
-            }
+            userNew(() {
+              _checkForFirstTimeVisit();
+            });
 
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;

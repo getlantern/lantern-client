@@ -45,7 +45,6 @@ class _VPNSwitchState extends State<VPNSwitch> {
         await Future.delayed(const Duration(seconds: 5));
       }
     }
-
     await vpnModel.switchVPN(newValue);
 
     //add delayed to avoid flickering
@@ -82,7 +81,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
             enabled: (internetStatusProvider.isConnected &&
                 !vpnNotifier.isFlashlightInitializedFailed),
             initialValue:
-                vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+                vpnStatus == 'connected' || vpnStatus == 'disconnecting' ||vpnStatus == 'connecting',
             activeColor: onSwitchColor,
             inactiveColor: (internetStatusProvider.isConnected &&
                     !vpnNotifier.isFlashlightInitializedFailed)

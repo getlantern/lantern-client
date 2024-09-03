@@ -2,11 +2,13 @@ package internalsdk
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"math/big"
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/1Password/srp"
@@ -26,8 +28,9 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
-	authClient auth.AuthClient
-	proClient  pro.ProClient
+	authClient  auth.AuthClient
+	proClient   pro.ProClient
+	surveyModel *SurveyModel
 }
 
 // Expose payment providers
@@ -63,6 +66,7 @@ const (
 	pathServerCity             = "server_city"
 	pathHasSucceedingProxy     = "hasSucceedingProxy"
 	pathLatestBandwith         = "latest_bandwidth"
+	pathBandwidth              = "/bandwidth"
 	pathTimezoneID             = "timezone_id"
 	pathReferralCode           = "referral"
 	pathForceCountry           = "forceCountry"
@@ -71,36 +75,43 @@ const (
 	pathEmailAddress           = "emailAddress"
 	pathCurrencyCode           = "currency_Code"
 	pathReplicaAddr            = "replicaAddr"
-	pathSplitTunneling         = "splitTunneling"
+	pathSplitTunneling         = "/splitTunneling"
 	pathLang                   = "lang"
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
 	pathStoreVersion           = "storeVersion"
+	pathTestPlayVersion        = "testPlayVersion"
 	pathServerInfo             = "/server_info"
 	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
-	pathShouldShowGoogleAds    = "shouldShowGoogleAds"
-	currentTermsVersion        = 1
-	pathUserSalt               = "user_salt"
+	pathPrefVPN                = "pref_vpn"
 
-	pathPlans        = "/plans/"
-	pathResellerCode = "resellercode"
-	pathExpirydate   = "expirydate"
-	pathExpirystr    = "expirydatestr"
+	pathShouldShowGoogleAds = "shouldShowGoogleAds"
+	currentTermsVersion     = 1
+	pathUserSalt            = "user_salt"
+
+	pathPlans          = "/plans/"
+	pathPaymentMethods = "/paymentMethods/"
+	pathResellerCode   = "resellercode"
+	pathExpirydate     = "expirydate"
+	pathExpirystr      = "expirydatestr"
 
 	pathIsUserLoggedIn    = "IsUserLoggedIn"
 	pathIsFirstTime       = "isFirstTime"
 	pathDeviceLinkingCode = "devicelinkingcode"
 	pathDeviceCodeExp     = "devicecodeexp"
+	pathStripePubKey      = "stripe_api_key"
 
 	group            = srp.RFC5054Group3072
 	pathHasConfig    = "hasConfigFetched"
 	pathHasProxy     = "hasProxyFetched"
 	pathHasonSuccess = "hasOnSuccess"
+	pathPlatform     = "platform"
+	//Split Tunneling
+	pathAppsData = "/appsData/"
 )
 
 type SessionModelOpts struct {
 	DevelopmentMode bool
-	// ProUser         bool
 	DeviceID        string
 	Device          string
 	Model           string
@@ -108,9 +119,12 @@ type SessionModelOpts struct {
 	PlayVersion     bool
 	Lang            string
 	TimeZone        string
-	PaymentTestMode bool
 	Platform        string
 }
+
+var (
+	stasMutex sync.Mutex
+)
 
 // NewSessionModel initializes a new SessionModel instance.
 func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, error) {
@@ -126,6 +140,17 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(3000, &protos.Plan{})
 		base.db.RegisterType(4000, &protos.Plans{})
+	} else {
+		base.db.RegisterType(1000, &protos.ServerInfo{})
+		base.db.RegisterType(2000, &protos.Devices{})
+		base.db.RegisterType(5000, &protos.Device{})
+		base.db.RegisterType(3000, &protos.Plan{})
+		base.db.RegisterType(4000, &protos.Plans{})
+		base.db.RegisterType(5000, &protos.AppData{})
+		base.db.RegisterType(6000, &protos.PaymentProviders{})
+		base.db.RegisterType(7000, &protos.PaymentMethod{})
+		base.db.RegisterType(8000, &protos.Bandwidth{})
+
 	}
 
 	m := &SessionModel{baseModel: base}
@@ -135,7 +160,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		// because we are not using the flashlight on ios
 		// We need to figure out where to put proxied SetProxyAddr
 		HttpClient: &http.Client{
-			Transport: proxied.Fronted(dialTimeout),
+			Transport: proxied.ParallelForIdempotent(),
 			Timeout:   dialTimeout,
 		},
 		UserConfig: func() common.UserConfig {
@@ -196,7 +221,6 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "setProUser":
-		// Todo Implement setCurrency server
 		err := setProUser(m.baseModel, arguments.Scalar().Bool())
 		if err != nil {
 			return nil, err
@@ -217,7 +241,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "setStoreVersion":
-		err := setStoreVersion(m.baseModel, arguments.Scalar().Bool())
+		value := arguments.Get("on").Bool()
+		err := setStoreVersion(m.baseModel, value)
 		if err != nil {
 			return nil, err
 		}
@@ -254,6 +279,12 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			log.Error(err)
 		}
 		return true, nil
+	case "updateUserDetail":
+		err := m.userDetail(context.Background())
+		if err != nil {
+			log.Error(err)
+		}
+		return true, nil
 	case "hasAllNetworkPermssion":
 		err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 			return pathdb.Put[bool](tx, pathHasAllNetworkPermssion, true, "")
@@ -261,7 +292,15 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		if err != nil {
 			return nil, err
 		}
-		return true, nil // Add return statement here
+		checkAdsEnabled(m)
+		return true, nil
+	case "setDeviceId":
+		deviceId := arguments.Get("deviceID").String()
+		err := m.setDeviceId(deviceId)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	case "signupEmailResendCode":
 		email := arguments.Get("email").String()
 		err := signupEmailResend(m, email)
@@ -410,6 +449,15 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "isUserFirstTimeVisit":
 		return checkFirstTimeVisit(m.baseModel)
+
+	case "updateVpnPref":
+		useVpn := arguments.Get("useVpn").Bool()
+		err := m.updateVpnPref(useVpn)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 	case "setFirstTimeVisit":
 		err := isShowFirstTimeUserVisit(m.baseModel)
 		if err != nil {
@@ -423,6 +471,133 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+
+		//SplitTunneling
+
+	case "appsAllowedAccess":
+		apps, err := m.appsAllowedAccess()
+		if err != nil {
+			return nil, err
+		}
+		return apps, nil
+	case "updateAppsData":
+		appsData := arguments.Get("appsList").String()
+		err := m.updateAppsData(appsData)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "refreshAppsList":
+		appsData := arguments.Get("appsList").String()
+		err := m.updateAppsData(appsData)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "setSplitTunneling":
+		tunneling := arguments.Get("on").Bool()
+		err := m.setSplitTunneling(tunneling)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "denyAppAccess":
+		appName := arguments.Get("packageName").String()
+		err := m.updateAppData(appName, false)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "allowAppAccess":
+		appName := arguments.Get("packageName").String()
+		err := m.updateAppData(appName, true)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "chatEnabled":
+		return m.ChatEnable(), nil
+
+	case "applyRefCode":
+		refCode := arguments.Get("refCode").String()
+		err := m.applyRefCode(refCode)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "getStripePubKey":
+		return m.getStripePubKey()
+
+	case "submitGooglePlayPayment":
+		email := arguments.Get("email").String()
+		plandId := arguments.Get("planID").String()
+		purchaseToken := arguments.Get("purchaseToken").String()
+		err := submitGooglePlayPayment(m, email, plandId, purchaseToken)
+		if err != nil {
+			log.Errorf("Error while submitting google play payment %v", err)
+			return nil, err
+		}
+		return true, nil
+
+	case "submitStripePlayPayment":
+		email := arguments.Get("email").String()
+		plandId := arguments.Get("planID").String()
+		purchaseToken := arguments.Get("purchaseToken").String()
+		err := submitStripePlayPayment(m, email, plandId, purchaseToken)
+		if err != nil {
+			log.Errorf("Error while submitting google play payment %v", err)
+			return nil, err
+		}
+		return true, nil
+	case "generatePaymentRedirectUrl":
+		email := arguments.Get("email").String()
+		plandId := arguments.Get("planID").String()
+		provider := arguments.Get("provider").String()
+		url, err := generatePaymentRedirectUrl(m, email, plandId, provider)
+		if err != nil {
+			log.Errorf("Error while genrating url %v", err)
+			return nil, err
+		}
+		return url, nil
+
+	case "testProviderRequest":
+		email := arguments.Get("email").String()
+		plandId := arguments.Get("planId").String()
+		provider := arguments.Get("provider").String()
+		err := testProviderRequest(m, email, provider, plandId)
+		if err != nil {
+			log.Errorf("Error while calling testProvider %v", err)
+			return nil, err
+		}
+		return true, nil
+
+	case "setTestPlayVesion":
+		value := arguments.Get("on").Bool()
+		err := m.setTestPlayVesion(value)
+		if err != nil {
+			return nil, err
+
+		}
+		return true, nil
+	case "getSurvey":
+		surveyString, err := m.getSurvey()
+		if err != nil {
+			return nil, err
+		}
+		log.Debugf("Survey String %v", surveyString)
+		return surveyString, nil
+
+	case "setSurveyLink":
+		err := m.setSurveyLink(arguments.Scalar().String())
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "checkIfSurveyLinkOpened":
+		return m.checkIfSurveyLinkOpened(arguments.Scalar().String())
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -448,20 +623,18 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	err = pathdb.PutAll(tx, map[string]interface{}{
 		pathDevelopmentMode: opts.DevelopmentMode,
 		pathDeviceID:        opts.DeviceID,
-		pathStoreVersion:    opts.PlayVersion,
 		pathTimezoneID:      opts.TimeZone,
 		pathDevice:          opts.Device,
 		pathModel:           opts.Model,
 		pathOSVersion:       opts.OsVersion,
+		pathStoreVersion:    opts.PlayVersion,
 		pathSDKVersion:      SDKVersion(),
+		pathPlatform:        opts.Platform,
 	})
 	if err != nil {
 		return err
 	}
-	err = pathdb.Put(tx, pathPaymentTestMode, opts.PaymentTestMode, "")
-	if err != nil {
-		return err
-	}
+
 	// Check if lang is already added or not
 	// If yes then do not add it
 	// This is used for only when user is new
@@ -476,10 +649,17 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 			return err
 		}
 	}
+	forceCountry, err := pathdb.Get[string](tx, pathForceCountry)
+	if err != nil {
+		return err
+	}
+	countryErr := pathdb.Put(tx, pathForceCountry, forceCountry, "")
+	if countryErr != nil {
+		log.Errorf("Error while setting force country %v", countryErr)
+	}
 
 	err = tx.Commit()
 	if err != nil {
-		log.Debugf("Error while commiting transaction %v", err)
 		return err
 	}
 	// Check if user is already registered or not
@@ -512,8 +692,40 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 			// return err
 		}
 	}()
-
+	go checkSplitTunneling(m)
+	m.surveyModel, _ = NewSurveyModel(*m)
+	// By defautl on ios  auth flow enabled
+	if opts.Platform == "ios" {
+		m.SetAuthEnabled(false)
+	}
 	return checkAdsEnabled(m)
+}
+
+func (m *SessionModel) platform() (string, error) {
+	return pathdb.Get[string](m.db, pathPlatform)
+}
+
+func checkSplitTunneling(m *SessionModel) error {
+	tunneling, err := pathdb.Get[bool](m.db, pathSplitTunneling)
+	if err != nil {
+		log.Errorf("Error while getting split tunneling value %v", err)
+		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathSplitTunneling, false, "")
+		})
+	}
+	if !tunneling {
+		log.Debugf("Split Tunneling value is %v", tunneling)
+		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathSplitTunneling, false, "")
+		})
+	}
+	return nil
+}
+
+func (session *SessionModel) setSplitTunneling(tunneling bool) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathSplitTunneling, tunneling, "")
+	})
 }
 
 func (session *SessionModel) paymentMethods() error {
@@ -528,6 +740,13 @@ func (session *SessionModel) paymentMethods() error {
 	err = storePlanDetail(session.baseModel, plans)
 	if err != nil {
 		return err
+	}
+	platform, err := session.platform()
+	if err != nil {
+		return err
+	}
+	if platform != "ios" {
+		storePaymentProviders(session, *plans)
 	}
 	return nil
 }
@@ -590,6 +809,10 @@ func (m *SessionModel) SetIP(ipAddress string) error {
 	})
 }
 
+func (m *SessionModel) IpAddress() (string, error) {
+	return pathdb.Get[string](m.db, pathIPAddress)
+}
+
 func (m *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 	// Not using these ads anymore
 	return nil
@@ -598,25 +821,23 @@ func (m *SessionModel) UpdateAdSettings(adsetting AdSettings) error {
 // Note - the names of these parameters have to match what's defined on the `Session` interface
 func (m *SessionModel) UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error {
 	if serverCity != "" && serverCountry != "" && serverCountryCode != "" {
-
+		stasMutex.Lock()
+		defer stasMutex.Unlock()
 		serverInfo := &protos.ServerInfo{
 			City:        serverCity,
 			Country:     serverCountry,
 			CountryCode: serverCountryCode,
 		}
 		log.Debugf("UpdateStats city %v country %v hasSucceedingProxy %v serverInfo %v", serverCity, serverCountry, hasSucceedingProxy, serverInfo)
+
+		err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
+		})
+		if err != nil {
+			log.Errorf("Error while setting hasSucceedingProxy %v", err)
+		}
 		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			err := pathdb.Put[bool](tx, pathHasSucceedingProxy, hasSucceedingProxy, "")
-			if err != nil {
-				log.Debugf("Error while adding hasSucceedingProxy %v", err)
-				return err
-			}
-			return pathdb.PutAll(tx, map[string]interface{}{
-				pathServerCountry:     serverCountry,
-				pathServerCity:        serverCity,
-				pathServerCountryCode: serverCountryCode,
-				pathServerInfo:        serverInfo,
-			})
+			return pathdb.Put(tx, pathServerInfo, serverInfo, "")
 		})
 	}
 	return nil
@@ -627,11 +848,17 @@ func (m *SessionModel) SetStaging(staging bool) error {
 	return nil
 }
 
-// Keep name as p1,p2,p3.....
+// Keep name as p1,p2,p3..... percent: Long, remaining: Long, allowed: Long, ttlSeconds: Long
 // Name become part of Objective c so this is important
 func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
+	bandwidth := &protos.Bandwidth{
+		Percent:    int64(p1),
+		Remaining:  int64(p2),
+		Allowed:    int64(p3),
+		TtlSeconds: int64(p4),
+	}
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathLatestBandwith, p1, "")
+		return pathdb.Put(tx, pathBandwidth, bandwidth, "")
 	})
 }
 
@@ -644,9 +871,12 @@ func setExpiration(m *baseModel, expiration int64) error {
 	if expiration == 0 {
 		return nil
 	}
-	expiry := time.Unix(0, expiration*int64(time.Second))
+	log.Debugf("Expiration value %v", expiration)
+	expiry := time.Unix(expiration, 0)
+	log.Debugf("Expiration value %v", expiry)
 	dateFormat := "01/02/2006"
 	dateStr := expiry.Format(dateFormat)
+	log.Debugf("Expiration value %v", dateStr)
 
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		err := pathdb.Put[string](tx, pathExpirystr, dateStr, "")
@@ -719,6 +949,62 @@ func storePlanDetail(m *baseModel, plan *pro.PaymentMethodsResponse) error {
 	}
 	log.Debugf("Plan details stored successful")
 	return nil
+}
+
+func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMethodsResponse) error {
+	log.Debugf("Storing Payment Providers")
+
+	logos, err := convertLogoToMapStringSlice(paymentMethodsResponse.Logo)
+	if err != nil {
+		log.Errorf("Error while converting logo to map %v", err)
+		return err
+	}
+	providers := paymentMethodsResponse.Providers["android"]
+	if providers == nil {
+		return log.Errorf("Android Providers not found")
+	}
+	var paymentProviders []*protos.PaymentProviders
+	for index, provider := range providers {
+		paymentProviders = nil
+		path := pathPaymentMethods + ToString(int64(index))
+		for _, paymentMethod := range provider.Providers {
+			if paymentMethod.Name == paymentProviderStripe {
+				m.setStripePubKey(paymentMethod.Data)
+			}
+			paymentProviders = append(paymentProviders, &protos.PaymentProviders{
+				Name:     paymentMethod.Name,
+				LogoUrls: logos[paymentMethod.Name],
+			})
+		}
+		payment := &protos.PaymentMethod{
+			Method:    provider.Method,
+			Providers: paymentProviders,
+		}
+
+		log.Debugf("Provider Values %+v path %v", &payment, path)
+		if err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+			return pathdb.Put[*protos.PaymentMethod](tx, path, payment, "")
+		}); err != nil {
+			log.Errorf("Error while adding payment method", err)
+			return err
+		}
+	}
+	return nil
+}
+
+func (session *SessionModel) setStripePubKey(args map[string]string) error {
+	pubKey := args["pubKey"]
+	if pubKey == "" {
+		return log.Errorf("Stripe public key is empty")
+	}
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathStripePubKey, pubKey, "")
+	})
+}
+
+func (session *SessionModel) getStripePubKey() (string, error) {
+	return pathdb.Get[string](session.db, pathStripePubKey)
+
 }
 
 func setPlans(m *baseModel, plans []protos.Plan) error {
@@ -822,6 +1108,12 @@ func (m *SessionModel) DeviceOS() (string, error) {
 	return "IOS", nil
 }
 
+func (m *SessionModel) setDeviceId(deviceId string) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathDeviceID, deviceId, "")
+	})
+}
+
 func (m *SessionModel) IsProUser() (bool, error) {
 	return pathdb.Get[bool](m.db, pathProUser)
 }
@@ -833,9 +1125,9 @@ func setProUser(m *baseModel, isPro bool) error {
 }
 
 func (m *SessionModel) SetReplicaAddr(replicaAddr string) {
+	log.Debugf("Setting replica address %v", replicaAddr)
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		//For now force replicate to disbale it
-		return pathdb.Put(tx, pathReplicaAddr, "", "")
+		return pathdb.Put(tx, pathReplicaAddr, replicaAddr, "")
 	}))
 }
 
@@ -856,9 +1148,16 @@ func (m *SessionModel) SetChatEnabled(chatEnabled bool) {
 	}))
 }
 
+func (m *SessionModel) ChatEnable() bool {
+	chat, err := pathdb.Get[bool](m.db, pathChatEnabled)
+	if err != nil {
+		return false
+	}
+	return chat
+}
+
 func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
-	// Return static for now
-	return true, nil
+	return pathdb.Get[bool](m.db, pathSplitTunneling)
 }
 
 func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
@@ -872,6 +1171,12 @@ func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 	// Return static for now
 	// Todo implement this method
 	return "", nil
+}
+
+func (m *SessionModel) setTestPlayVesion(value bool) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathTestPlayVersion, value, "")
+	})
 }
 
 func saveUserSalt(m *baseModel, salt []byte) error {
@@ -905,6 +1210,12 @@ func acceptTerms(m *baseModel) error {
 func setStoreVersion(m *baseModel, isStoreVersion bool) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathStoreVersion, isStoreVersion, "")
+	})
+}
+
+func (session *SessionModel) updateVpnPref(prefVPN bool) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathPrefVPN, prefVPN, "")
 	})
 }
 
@@ -995,8 +1306,6 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 		return errors.New("User data not found")
 	}
 	userDetail := resp.User
-	log.Debugf("User detail: %+v", userDetail)
-
 	logged, err := session.isUserLoggedIn()
 	if err != nil {
 		log.Errorf("Error while checking user login status %v", err)
@@ -1006,12 +1315,7 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	if logged {
 		userDetail.Email = ""
 	}
-	log.Debugf("User detail: %+v", userDetail)
-	err = cacheUserDetail(session, userDetail)
-	if err != nil {
-		return err
-	}
-	return nil
+	return cacheUserDetail(session, userDetail)
 }
 
 func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
@@ -1115,6 +1419,18 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 
 func checkAdsEnabled(session *SessionModel) error {
 	log.Debugf("Check ads enabled")
+	// Check if ads is enable or not
+	adsEnable, err := pathdb.Get[bool](session.db, pathAdsEnabled)
+	if err != nil {
+		return log.Errorf("Error while getting ads enabled %v", err)
+	}
+	if !adsEnable {
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
+		})
+	}
+
+	// if enable
 	hasAllPermisson, err := pathdb.Get[bool](session.db, pathHasAllNetworkPermssion)
 	if err != nil {
 		return err
@@ -1173,6 +1489,8 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 	return setProUser(m.baseModel, true)
 }
 
+// Payment Methods
+
 func submitApplePayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
 	log.Debugf("Submit Apple Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
 	err, purchaseData := createPurchaseData(m, email, paymentProviderApplePay, "", purchaseToken, planId)
@@ -1192,6 +1510,88 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 	}
 	// Set user to pro
 	return setProUser(m.baseModel, true)
+}
+
+func submitGooglePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
+	log.Debugf("Submit Google Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
+	err, purchaseData := createPurchaseData(m, email, paymentProviderGooglePlay, "", purchaseToken, planId)
+	if err != nil {
+		log.Errorf("Error while creating  purchase data %v", err)
+		return err
+	}
+	log.Debugf("Purchase data %+v", purchaseData)
+	purchase, err := m.proClient.PurchaseRequest(context.Background(), purchaseData)
+	if err != nil {
+		return err
+	}
+	if purchase.Status != "ok" {
+		return errors.New("Purchase Request failed")
+	}
+	log.Debugf("Purchase response %v", purchase)
+
+	// Set user to pro
+	return setProUser(m.baseModel, true)
+}
+
+func submitStripePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
+	log.Debugf("Submit Stripe Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
+	err, purchaseData := createPurchaseData(m, email, paymentProviderStripe, "", purchaseToken, planId)
+	if err != nil {
+		log.Errorf("Error while creating  purchase data %v", err)
+		return err
+	}
+	log.Debugf("Purchase data %+v", purchaseData)
+	purchase, err := m.proClient.PurchaseRequest(context.Background(), purchaseData)
+	if err != nil {
+		return err
+	}
+
+	if purchase.Status != "ok" {
+		return errors.New("Purchase Request failed")
+	}
+	log.Debugf("Purchase response %v", purchase)
+	// Set user to pro
+	return setProUser(m.baseModel, true)
+}
+
+func (session *SessionModel) applyRefCode(refCode string) error {
+	_, err := session.proClient.ReferralAttach(context.Background(), refCode)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func generatePaymentRedirectUrl(m *SessionModel, email string, planId string, provider string) (string, error) {
+	deviceModel, err := pathdb.Get[string](m.db, pathModel)
+	if err != nil {
+		return "", err
+	}
+
+	redirectUrl, err := m.proClient.PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
+		Plan:       planId,
+		Provider:   provider,
+		Email:      email,
+		DeviceName: deviceModel,
+	})
+	if err != nil {
+		return "", err
+	}
+	return redirectUrl.Redirect, nil
+}
+
+func testProviderRequest(session *SessionModel, email string, paymentProvider string, plan string) error {
+	puchaseData := map[string]interface{}{
+		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
+		"provider":       paymentProvider,
+		"email":          email,
+		"plan":           plan,
+	}
+	_, err := session.proClient.PurchaseRequest(context.Background(), puchaseData)
+	if err != nil {
+		return err
+	}
+	return setProUser(session.baseModel, true)
 }
 
 /// Auth APIS
@@ -1755,7 +2155,7 @@ func requestRecoveryEmail(session *SessionModel, email string) error {
 		return err
 	}
 
-	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), deviceId)
+	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), deviceId, email)
 	if err != nil {
 		return err
 	}
@@ -1785,4 +2185,96 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 	})
 	// Update user detail to reflact on UI
 	return session.userDetail(context.Background())
+}
+
+//Split Tunneling
+
+func (session *SessionModel) appsAllowedAccess() (string, error) {
+	// Get the list of apps that are allowed to access the network.
+	installedApps, err := pathdb.List[*protos.AppData](session.db, &pathdb.QueryParams{
+		Path: pathAppsData + "%",
+	})
+	if err != nil {
+		return "", err
+	}
+	strSlice := make([]string, len(installedApps))
+	for i, v := range installedApps {
+		strSlice[i] = fmt.Sprint(v.Value.PackageName)
+	}
+	return strings.Join(strSlice, ","), nil
+
+}
+
+// Define the struct to match the JSON structure
+type AppInfo struct {
+	PackageName string `json:"packageName"`
+	Name        string `json:"name"`
+	Icon        string `json:"icon"`
+}
+
+func (session *SessionModel) updateAppsData(appsList string) error {
+	var apps []AppInfo
+	err := json.Unmarshal([]byte(appsList), &apps)
+	if err != nil {
+		log.Fatalf("Error decoding JSON: %v", err)
+	}
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		for _, app := range apps {
+			path := pathAppsData + app.PackageName
+			list, _ := convertStringArrayToIntArray(strings.Split(app.Icon, ", "))
+			imagebyte, _ := convertIntArrayToByteArray(list)
+			vpn := &protos.AppData{
+				PackageName: app.PackageName,
+				Name:        app.Name,
+				Icon:        imagebyte,
+			}
+			pathdb.PutIfAbsent(tx, path, vpn, "")
+		}
+		return nil
+	})
+}
+
+func (session *SessionModel) updateAppData(appName string, allowedAccess bool) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		appData, err := pathdb.Get[*protos.AppData](session.db, pathAppsData+appName)
+		if err != nil {
+			log.Errorf("error getting app data: %v", err)
+			return err
+		}
+		return pathdb.Put[*protos.AppData](tx, pathAppsData+appName, &protos.AppData{
+			PackageName:   appData.PackageName,
+			Name:          appData.Name,
+			Icon:          appData.Icon,
+			AllowedAccess: allowedAccess,
+		}, "")
+	})
+}
+
+// Surveys
+func (session *SessionModel) getSurvey() (string, error) {
+	availableSurvey, err := session.surveyModel.IsSurveyAvalible()
+	if err != nil {
+		return "", err
+	}
+	surveyMap := map[string]string{
+		"url":     availableSurvey.URL,
+		"message": availableSurvey.Message,
+		"button":  availableSurvey.Button,
+	}
+	surveyJSON, err := json.Marshal(surveyMap)
+	if err != nil {
+		log.Errorf("Error while marshalling survey %v", err)
+		return "", err
+	}
+	return string(surveyJSON), nil
+}
+
+func (session *SessionModel) setSurveyLink(surveyLink string) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, surveyLink, true, "")
+	})
+}
+func (session *SessionModel) checkIfSurveyLinkOpened(surveyLink string) (bool, error) {
+	return pathdb.Get[bool](session.db, surveyLink)
+
 }

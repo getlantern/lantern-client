@@ -17,10 +17,9 @@ const TAB_DEVELOPER = 'developer';
 
 class SessionModel extends Model {
   late final EventManager eventManager;
-
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  ValueNotifier<bool?>? isPlayVersion;
-  ValueNotifier<bool?>? isStoreVersion;
+  late ValueNotifier<bool?> isTestPlayVersion;
+  late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<bool?> proUserNotifier;
   late ValueNotifier<ConfigOptions?> configNotifier;
@@ -31,26 +30,26 @@ class SessionModel extends Model {
   late ValueNotifier<bool> proxyAllNotifier;
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
-  late ValueNotifier<String?> expiryDateNotifier;
   late ValueNotifier<String?> linkingCodeNotifier;
   late ValueNotifier<Devices?> devicesNotifier;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
   late ValueNotifier<bool?> isAuthEnabled;
   late FfiListNotifier<Plan> plansNotifier;
   late FfiListNotifier<PaymentMethod> paymentMethodsNotifier;
+  late ValueNotifier<Bandwidth?> bandwidthNotifier;
 
   SessionModel() : super('session') {
     if (isMobile()) {
       eventManager = EventManager('lantern_event_channel');
-
       isStoreVersion = singleValueNotifier(
         'storeVersion',
         false,
       );
-      isPlayVersion = singleValueNotifier(
-        'playVersion',
+      isTestPlayVersion = singleValueNotifier(
+        'testPlayVersion',
         false,
       );
+
       /*Note
       * Make proxyAvailable default value to true on IOS it take some to get data from go side
       * So show banner only if proxyAvailable is false
@@ -63,7 +62,6 @@ class SessionModel extends Model {
       /// We don't user create account if email address is not verified
       hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
       proUserNotifier = singleValueNotifier('prouser', false);
-
       userEmail = singleValueNotifier(
         'emailAddress',
         "",
@@ -74,7 +72,6 @@ class SessionModel extends Model {
       );
     } else {
       configNotifier = ValueNotifier<ConfigOptions?>(null);
-      expiryDateNotifier = ValueNotifier('');
       country = ValueNotifier('US');
       linkingCodeNotifier = ValueNotifier('');
       proxyAvailable = ValueNotifier(false);
@@ -83,7 +80,6 @@ class SessionModel extends Model {
       plansNotifier = FfiListNotifier<Plan>('/plans/', () => {});
       paymentMethodsNotifier =
           FfiListNotifier<PaymentMethod>('/paymentMethods/', () => {});
-      // TODO re-enable
       hasUserSignedInNotifier = ValueNotifier(false);
       langNotifier = ValueNotifier('en_us');
       serverInfoNotifier = ValueNotifier<ServerInfo?>(null);
@@ -91,6 +87,8 @@ class SessionModel extends Model {
       referralNotifier = ValueNotifier('');
       deviceIdNotifier = ValueNotifier('');
       isAuthEnabled = ValueNotifier(false);
+      isStoreVersion = ValueNotifier(false);
+      isTestPlayVersion = ValueNotifier(false);
     }
     if (Platform.isAndroid) {
       // By default when user starts the app we need to make sure that screenshot is disabled
@@ -103,6 +101,10 @@ class SessionModel extends Model {
     return singleValueNotifier(path, defaultValue);
   }
 
+  Future<void> updateUserDetails() {
+    return methodChannel.invokeMethod('updateUserDetail', {});
+  }
+
   Widget configValueBuilder<T>(
     String path,
     ValueWidgetBuilder<T> builder,
@@ -112,7 +114,9 @@ class SessionModel extends Model {
       path,
       configNotifier,
       (BuildContext context, ConfigOptions? value, Widget? child) =>
-              value == null ? const SizedBox() : builder(context, onConfigUpdate(value), child),
+          value == null
+              ? const SizedBox()
+              : builder(context, onConfigUpdate(value), child),
     );
   }
 
@@ -123,6 +127,19 @@ class SessionModel extends Model {
     return FfiValueBuilder<bool>('prouser', proUserNotifier, builder);
   }
 
+  Widget bandwidth(ValueWidgetBuilder<Bandwidth> builder) {
+    if (isMobile()) {
+      return subscribedSingleValueBuilder<Bandwidth>(
+        '/bandwidth',
+        builder: builder,
+        deserialize: (Uint8List serialized) {
+          return Bandwidth.fromBuffer(serialized);
+        },
+      );
+    }
+    return FfiValueBuilder<Bandwidth>('bandwidth', bandwidthNotifier, builder);
+  }
+
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>(
@@ -130,7 +147,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('developmentMode', builder, (value) => value?.developmentMode ?? false);
+    return configValueBuilder(
+        'developmentMode', builder, (value) => value?.developmentMode ?? false);
   }
 
   Widget paymentTestMode(ValueWidgetBuilder<bool> builder) {
@@ -157,7 +175,8 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
           builder: builder, defaultValue: 0);
     }
-    return configValueBuilder('accepted_terms_version', builder, (value) => value?.chat.acceptedTermsVersion ?? 0);
+    return configValueBuilder('accepted_terms_version', builder,
+        (value) => value?.chat.acceptedTermsVersion ?? 0);
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -180,12 +199,17 @@ class SessionModel extends Model {
     );
   }
 
-  Widget playVersion(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('playVersion', builder: builder);
+  Widget storeVersion(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('storeVersion', builder: builder);
   }
 
-  Future<void> setPlayVersion(bool on) {
-    return methodChannel.invokeMethod('setPlayVersion', <String, dynamic>{
+  Widget testPlayVersion(ValueWidgetBuilder<bool> builder) {
+    return subscribedSingleValueBuilder<bool>('testPlayVersion',
+        builder: builder, defaultValue: false);
+  }
+
+  Future<void> setTestPlayVersion(bool on) {
+    return methodChannel.invokeMethod('setTestPlayVesion', <String, dynamic>{
       'on': on,
     });
   }
@@ -214,7 +238,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('expirydatestr', expiryDateNotifier, builder);
+    return configValueBuilder(
+        'expirydatestr', builder, (value) => value?.expirationDate ?? '');
   }
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
@@ -244,12 +269,22 @@ class SessionModel extends Model {
         },
       );
     }
-    return FfiValueBuilder<Devices>('devices', devicesNotifier, builder);
+    // update the logic of devices
+    return configValueBuilder(
+        'devices', builder, (options) => options!.devices);
   }
 
   /// This only supports desktop fo now
   Future<void> testProviderRequest(
       String email, String paymentProvider, String planId) {
+    if (isMobile()) {
+      return methodChannel
+          .invokeMethod('testProviderRequest', <String, dynamic>{
+        'email': email,
+        'provider': paymentProvider,
+        'planId': planId,
+      });
+    }
     return compute(
         LanternFFI.testPaymentRequest, [email, paymentProvider, planId]);
   }
@@ -259,7 +294,6 @@ class SessionModel extends Model {
   Pointer<Utf8> ffiIsUserLoggedIn() => LanternFFI.isUserLoggedIn();
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
-    final websocket = WebsocketImpl.instance();
     if (isDesktop()) {
       return FfiValueBuilder<bool>(
           'isUserLoggedIn', hasUserSignedInNotifier, builder);
@@ -423,11 +457,12 @@ class SessionModel extends Model {
     return await compute(LanternFFI.authorizeEmail, emailAddress);
   }
 
-  Future<String> validateDeviceRecoveryCode(String code) async {
+  Future<String> validateDeviceRecoveryCode(String code, String email) async {
     if (isMobile()) {
       return await methodChannel
           .invokeMethod('validateRecoveryCode', <String, dynamic>{
         'code': code,
+        'email': email,
       }).then((value) => value.toString());
     }
     return await compute(LanternFFI.userLinkValidate, code);
@@ -476,7 +511,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('replicaAddr', builder, (value) => value?.replicaAddr ?? '');
+    return configValueBuilder(
+        'replicaAddr', builder, (value) => value?.replicaAddr ?? '');
   }
 
   Widget countryCode(ValueWidgetBuilder<String> builder) {
@@ -506,7 +542,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('chatEnabled', builder, (value) => value?.chatEnabled ?? false);
+    return configValueBuilder(
+        'chatEnabled', builder, (value) => value?.chatEnabled ?? false);
   }
 
   Widget sdkVersion(ValueWidgetBuilder<String> builder) {
@@ -517,27 +554,33 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('sdkVersion', builder, (value) => value?.sdkVersion ?? "");
+    return configValueBuilder(
+        'sdkVersion', builder, (value) => value?.sdkVersion ?? "");
   }
 
   Future<bool> getChatEnabled() async {
     return methodChannel
-        .invokeMethod('get', 'chatEnabled')
+        .invokeMethod('chatEnabled', '')
         .then((enabled) => enabled == true);
   }
 
-  Future<void> checkForUpdates() async {
-    if (Platform.isAndroid) {
-      return methodChannel.invokeMethod('checkForUpdates');
-    } else if (isDesktop()) {
-      await LanternFFI.checkUpdates();
+  Future<String?> checkForUpdates() async {
+    if (isMobile()) {
+      if (Platform.isAndroid) {
+        return methodChannel.invokeMethod('checkForUpdates');
+      } else {
+        AppMethods.openAppstore();
+        return "";
+      }
+    } else {
+      LanternFFI.checkUpdates();
+      return "";
     }
-    return;
   }
 
   // Plans and payment methods
   Future<void> updatePaymentPlans() async {
-    return methodChannel.invokeMethod('updatePaymentPlans');
+    return methodChannel.invokeMethod('updatePaymentPlans', '');
   }
 
   Future<bool> hasUpdatePlansOrBuy() async {
@@ -596,6 +639,9 @@ class SessionModel extends Model {
   Future<void> applyRefCode(
     String refCode,
   ) async {
+    if (isDesktop()) {
+      return await compute(LanternFFI.ffiApplyRefCode, refCode);
+    }
     return methodChannel.invokeMethod('applyRefCode', <String, dynamic>{
       'refCode': refCode,
     }).then((value) => value as String);
@@ -659,12 +705,12 @@ class SessionModel extends Model {
 
   Future<String> requestLinkCode() {
     return methodChannel
-        .invokeMethod('requestLinkCode')
+        .invokeMethod('requestLinkCode', '')
         .then((value) => value.toString());
   }
 
   Future<void> redeemLinkCode() {
-    return methodChannel.invokeMethod('redeemLinkCode');
+    return methodChannel.invokeMethod('redeemLinkCode', {});
   }
 
   Widget deviceLinkingCode(ValueWidgetBuilder<String> builder) {
@@ -675,7 +721,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('deviceLinkingCode', linkingCodeNotifier, builder);
+    return FfiValueBuilder<String>(
+        'deviceLinkingCode', linkingCodeNotifier, builder);
   }
 
   Future<void> redeemResellerCode(
@@ -813,7 +860,8 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder('splitTunneling', builder, (value) => value?.splitTunneling ?? false);
+    return configValueBuilder(
+        'splitTunneling', builder, (value) => value?.splitTunneling ?? false);
   }
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
