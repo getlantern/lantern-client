@@ -82,6 +82,10 @@ class _CheckoutState extends State<Checkout>
             Iterable<PathAndValue<PaymentMethod>> paymentMethods,
             Widget? child,
           ) {
+            if (paymentMethods.isEmpty) {
+              return SizedBox();
+            }
+            print("paymentMethods: $paymentMethods");
             defaultProviderIfNecessary(paymentMethods.toList());
             return Column(
               children: [
@@ -224,8 +228,8 @@ class _CheckoutState extends State<Checkout>
   }
 
   void checkProUser() async {
-    final res = LanternFFI.proUser();
-    if (!widget.isPro && res.toDartString() == "true") {
+    final res = sessionModel.proUserNotifier.value ?? false;
+    if (!widget.isPro && res) {
       // show success dialog if user becomes Pro during browser session
       showSuccessDialog(context, widget.isPro);
     }
@@ -256,10 +260,8 @@ class _CheckoutState extends State<Checkout>
         _proceedWithPaymentWall();
         return;
       case Providers.test:
-        if (isDesktop()) {
-          _proceedTestRequest();
-          return;
-        }
+        _proceedTestRequest();
+        return;
     }
   }
 
@@ -343,6 +345,7 @@ class _CheckoutState extends State<Checkout>
       showError(context, error: error, stackTrace: stackTrace);
     }
   }
+
 
   // This methods is responsible for polling for user data
   // so if user has done payment or renew plans and show
@@ -453,7 +456,7 @@ class _CheckoutState extends State<Checkout>
         refCodeController.error = 'invalid_or_incomplete_referral_code'.i18n;
         return;
       }
-      showError(context, error: e);
+      showError(context, error: e.localizedDescription);
     }
   }
 

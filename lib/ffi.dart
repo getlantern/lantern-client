@@ -2,6 +2,7 @@ import 'dart:ffi'; // For FFI
 
 import 'package:ffi/src/utf8.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 
 import 'generated_bindings.dart';
 
@@ -41,9 +42,7 @@ class LanternFFI {
     throw Exception("Platform is not supported");
   }
 
-  static startDesktopService() {
-    _lanternFFI.start();
-  }
+  static startDesktopService() => _lanternFFI.start();
 
   static void sysProxyOn() => _lanternFFI.sysProxyOn();
 
@@ -61,20 +60,6 @@ class LanternFFI {
     _lanternFFI.exitApp();
     //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
-
-  static Pointer<Utf8> vpnStatus() => _lanternFFI.vpnStatus().cast<Utf8>();
-
-  static Pointer<Utf8> lang() => _lanternFFI.lang().cast<Utf8>();
-
-  static Pointer<Utf8> proxyAll() => _lanternFFI.proxyAll().cast<Utf8>();
-
-  static Pointer<Utf8> ffiStoreVersion() =>
-      _lanternFFI.storeVersion().cast<Utf8>();
-
-  static Pointer<Utf8> hasSucceedingProxy() =>
-      _lanternFFI.hasSucceedingProxy().cast<Utf8>();
-
-  static Pointer<Utf8> proUser() => _lanternFFI.proUser().cast<Utf8>();
 
   static Future<User> ffiUserData() async {
     final res = await _lanternFFI.userData().cast<Utf8>().toDartString();
@@ -140,17 +125,6 @@ class LanternFFI {
     return json == 'true' ? true : throw NoPlansUpdate("No Plans update");
   }
 
-  static Pointer<Utf8> devices() => _lanternFFI.devices().cast<Utf8>();
-
-  static Pointer<Utf8> developmentMode() =>
-      _lanternFFI.developmentMode().cast<Utf8>();
-
-  static Pointer<Utf8> acceptedTermsVersion() =>
-      _lanternFFI.acceptedTermsVersion().cast<Utf8>();
-
-  static Pointer<Utf8> emailAddress() =>
-      _lanternFFI.emailAddress().cast<Utf8>();
-
   static Future<String> emailExists(String email) async => await _lanternFFI
       .emailExists(email.toPointerChar())
       .cast<Utf8>()
@@ -169,41 +143,14 @@ class LanternFFI {
     return Future.value();
   }
 
-  static Pointer<Utf8> referral() => _lanternFFI.referral().cast<Utf8>();
-
-  static Pointer<Utf8> deviceId() => _lanternFFI.myDeviceId().cast<Utf8>();
-
-  static Pointer<Utf8> replicaAddr() => _lanternFFI.replicaAddr().cast<Utf8>();
-
-  static Pointer<Utf8> chatEnabled() => _lanternFFI.chatEnabled().cast<Utf8>();
-
-  static Pointer<Utf8> authEnabled() => _lanternFFI.authEnabled().cast<Utf8>();
-
-  static Pointer<Utf8> sdkVersion() => _lanternFFI.sdkVersion().cast<Utf8>();
-
   static Pointer<Utf8> checkUpdates() =>
       _lanternFFI.checkUpdates().cast<Utf8>();
-
-  static Pointer<Utf8> plans() => _lanternFFI.plans().cast<Utf8>();
 
   static Pointer<Utf8> paymentMethods() =>
       _lanternFFI.paymentMethodsV3().cast<Utf8>();
 
   static Pointer<Utf8> paymentMethodsV4() =>
       _lanternFFI.paymentMethodsV4().cast<Utf8>();
-
-  static Pointer<Utf8> deviceLinkingCode() =>
-      _lanternFFI.deviceLinkingCode().cast<Utf8>();
-
-  static Pointer<Utf8> expiryDate() => _lanternFFI.expiryDate().cast<Utf8>();
-
-  static Pointer<Utf8> splitTunneling() =>
-      _lanternFFI.splitTunneling().cast<Utf8>();
-
-  static Pointer<Utf8> chatMe() => _lanternFFI.chatMe().cast<Utf8>();
-
-  static Pointer<Utf8> onBoardingStatus() =>
-      _lanternFFI.onBoardingStatus().cast<Utf8>();
 
   static Future<void> reportIssue(List<String> list) {
     final email = list[0].toPointerChar();
@@ -238,6 +185,17 @@ class LanternFFI {
       throw e;
     }
   }
+
+  static Pointer<Utf8> ffIsPlayVersion() => "false".toPointerChar().cast<Utf8>();
+
+
+  static Future<void> ffiApplyRefCode(String refCode) {
+    final code = refCode.toPointerChar();
+    final result = _lanternFFI.applyRef(code).cast<Utf8>().toDartString();
+    checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
+    return Future.value();
+  }
+
 
   static Future<void> testPaymentRequest(List<String> params) {
     final email = params[0].toPointerChar();

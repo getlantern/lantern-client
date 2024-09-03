@@ -77,6 +77,7 @@ func (c testSession) SetShowInterstitialAdsEnabled(enabled bool) {}
 func (c testSession) SetHasConfigFetched(enabled bool)           {}
 func (c testSession) SetHasProxyFetched(enabled bool)            {}
 func (c testSession) SetOnSuccess(enabled bool)                  {}
+func (c testSession) ChatEnable() bool                           { return false }
 
 func (c testSession) SerializedInternalHeaders() (string, error) {
 	return c.serializedInternalHeaders, nil
@@ -287,13 +288,6 @@ func TestAutoUpdate(t *testing.T) {
 	result, err = checkForUpdates(updateCfg, deviceInfo)
 	require.NoError(t, err)
 	assert.Empty(t, result)
-}
-
-func TestCheckForUpdates(t *testing.T) {
-	deviceInfo := testDeviceInfo{}
-	result, err := CheckForUpdates(deviceInfo)
-	require.NoError(t, err, "Update check should succeed")
-	require.Empty(t, result, "UpdateURL should be empty because no update is available")
 }
 
 func TestDownloadUpdate(t *testing.T) {

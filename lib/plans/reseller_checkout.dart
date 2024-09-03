@@ -127,6 +127,9 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
 
   Future<void> onRegisterPro() async {
     try {
+      if (!resellerCodeFieldKey.currentState!.validate()) {
+        return;
+      }
       FocusManager.instance.primaryFocus?.unfocus();
       context.loaderOverlay.show();
       Locale locale = Localizations.localeOf(context);

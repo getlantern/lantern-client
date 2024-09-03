@@ -50,7 +50,6 @@ class _ReplicaHomeScreenState extends State<ReplicaHomeScreen> {
 
   @override
   void dispose() {
-    _textEditingController?.dispose();
     _formKey.currentState?.dispose();
     super.dispose();
   }

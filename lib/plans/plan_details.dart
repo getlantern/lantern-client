@@ -157,13 +157,9 @@ class _PlanCardState extends State<PlanCard> {
 
 // paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
   List<PaymentProviders> paymentProvidersFromMethods(
-      Iterable<PathAndValue<PaymentMethod>> paymentMethods) {
+      Iterable<PaymentMethod> paymentMethods) {
     var providers = <PaymentProviders>[];
-    for (final paymentMethod in paymentMethods) {
-      for (final provider in paymentMethod.value.providers) {
-        providers.add(provider);
-      }
-    }
+    paymentMethods.forEach((value) => providers.addAll(value.providers));
     return providers;
   }
 
@@ -206,6 +202,14 @@ class _PlanCardState extends State<PlanCard> {
 
   Future<void> _processLegacyCheckOut(BuildContext context) async {
     if (await isPlayStoreEnabled()) {
+  void signUpFlow() {
+    // If user is new we need to send plans id to create account flow
+    context.pushRoute(CreateAccountEmail(
+        authFlow: AuthFlow.createAccount, plan: widget.plan));
+  }
+
+  Future<void> _processCheckOut(BuildContext context) async {
+    if (await AppMethods.isPlayStoreEnable()) {
       await context.pushRoute(
         StoreCheckout(
           plan: widget.plan,
@@ -249,14 +253,31 @@ class _PlanCardState extends State<PlanCard> {
         showSuccessDialog(context, widget.isPro);
         return;
       }
-      signUpFlow();
+  Future<void> _processLegacyCheckOut(BuildContext context) async {
+    if (await AppMethods.isPlayStoreEnable()) {
+      await context.pushRoute(
+        PlayCheckout(
+          plan: widget.plan,
+          isPro: widget.isPro,
+        ),
+      );
+      return;
     }
+    await context.pushRoute(
+      CheckoutLegacy(
+        plan: widget.plan,
+        isPro: widget.isPro,
+      ),
+    );
   }
 
-  void signUpFlow() {
-    // If user is new we need to send plans id to create account flow
-    context.pushRoute(CreateAccountEmail(
-        authFlow: AuthFlow.createAccount, plan: widget.plan));
+  void resolveRouteIOS() {
+    if (widget.isPro) {
+      //user is signed in
+      _proceedToCheckoutIOS(context);
+    } else {
+      signUpFlow();
+    }
   }
 
   void _proceedToCheckoutIOS(BuildContext context) {
@@ -305,6 +326,29 @@ class _PlanCardState extends State<PlanCard> {
     context.pushRoute(StoreCheckout(
       plan: widget.plan,
     ));
+  }
+  // Make sure this google play flow is only for play version
+  // it will take care of purchase flow and also calling /purchase api on native end
+  Future<void> _processGooglePlayPayment() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.submitPlayPayment(
+          widget.plan!.id, sessionModel.userEmail.value!);
+      context.loaderOverlay.hide();
+      sessionModel.updateUserDetails();
+      Future.delayed(const Duration(milliseconds: 400), () {
+        context.loaderOverlay.hide();
+        showSuccessDialog(context, widget.isPro);
+      });
+    } catch (e) {
+      mainLogger.e("Error while purchase flow", error: e);
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        description: e.localizedDescription,
+      );
+    }
   }
 }
 

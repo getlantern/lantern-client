@@ -47,6 +47,11 @@ extension ErrorX on Object {
 
         if (description.contains("error restoring purchase")) {
           return "purchase_restored_error".i18n;
+        if (description.contains("wrong_seller_code")) {
+          return "wrong_seller_code".i18n;
+        }
+        if (description.contains("error_referral")) {
+          return "error_referral".i18n;
         }
 
         if (description.contains("error while sign up")) {

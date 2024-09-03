@@ -17,7 +17,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:8.4.0'
+        classpath 'com.android.tools.build:gradle:8.5.0'
         classpath "com.google.protobuf:protobuf-gradle-plugin:0.9.1"
         classpath 'com.google.gms:google-services:4.4.0'
         classpath("org.jlleitschuh.gradle:ktlint-gradle:11.3.1")
@@ -55,8 +55,14 @@ allprojects {
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
+
     // This code fixes a 'namespace not specified' error upgrading AGP to >= 8.x.x.
-    subprojects {
+    subprojects { subproject ->
+        subproject.tasks.whenTaskAdded {
+            if (it.name.contains("kapt")) {
+                it.enabled = false
+            }
+        }
         afterEvaluate { project ->
             if (project.hasProperty('android')) {
                 project.android {

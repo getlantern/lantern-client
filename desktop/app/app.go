@@ -8,7 +8,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -29,13 +28,13 @@ import (
 	"github.com/getlantern/flashlight/v7/otel"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
 
 	"github.com/getlantern/lantern-client/desktop/analytics"
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
-	"github.com/getlantern/lantern-client/desktop/notifier"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -57,7 +56,8 @@ func init() {
 
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
-	hasExited            int64
+	hasExited            atomic.Bool
+	isConnected          atomic.Bool
 	fetchedGlobalConfig  atomic.Bool
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
@@ -67,6 +67,7 @@ type App struct {
 	exited           eventual.Value
 	analyticsSession analytics.Session
 	settings         *settings.Settings
+	configService    *configService
 	statsTracker     *statsTracker
 
 	muExitFuncs sync.RWMutex
@@ -82,7 +83,6 @@ type App struct {
 	selectedTab Tab
 
 	connectionStatusCallbacks []func(isConnected bool)
-	_sysproxyOff              func() error
 
 	// Websocket-related settings
 	websocketAddr   string
@@ -90,24 +90,28 @@ type App struct {
 	ws              ws.UIChannel
 
 	cachedUserData sync.Map
-	onUserData     []func(current *protos.User, new *protos.User)
+	plansCache     sync.Map
+
+	onUserData []func(current *protos.User, new *protos.User)
 
 	mu sync.Mutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, settings *settings.Settings) *App {
-	analyticsSession := newAnalyticsSession(settings)
+func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, ss *settings.Settings) *App {
+	analyticsSession := newAnalyticsSession(ss)
+	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
 		proClient:                 proClient,
-		settings:                  settings,
+		settings:                  ss,
 		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
-		statsTracker:              NewStatsTracker(),
+		configService:             new(configService),
+		statsTracker:              statsTracker,
 		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
@@ -119,10 +123,11 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 
 	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
 	app.onProStatusChange(func(isPro bool) {
-		app.statsTracker.SetIsPro(isPro)
+		statsTracker.SetIsPro(isPro)
 	})
+
 	datacap.AddDataCapListener(func(hitDataCap bool) {
-		app.statsTracker.SetHitDataCap(hitDataCap)
+		statsTracker.SetHitDataCap(hitDataCap)
 	})
 
 	log.Debugf("Using configdir: %v", configDir)
@@ -146,7 +151,7 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 }
 
 // Run starts the app.
-func (app *App) Run(isMain bool) {
+func (app *App) Run(ctx context.Context) {
 	golog.OnFatal(app.exitOnFatal)
 
 	go func() {
@@ -188,21 +193,14 @@ func (app *App) Run(isMain bool) {
 				})
 			}()
 		}
-
-		cacheDir, err := os.UserCacheDir()
-		if err != nil {
-			cacheDir = os.TempDir()
-		}
-		cacheDir = filepath.Join(cacheDir, common.DefaultAppName, "dhtup", "data")
-		os.MkdirAll(cacheDir, 0o700)
-
+		var err error
 		app.flashlight, err = flashlight.New(
 			common.DefaultAppName,
 			common.ApplicationVersion,
 			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
+			func() bool { return app.isConnected.Load() }, // check whether we're disconnected
 			app.settings.GetProxyAll,
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
@@ -215,15 +213,12 @@ func (app *App) Run(isMain bool) {
 			app.analyticsSession.EventWithLabel,
 			flashlight.WithOnConfig(app.onConfigUpdate),
 			flashlight.WithOnProxies(app.onProxiesUpdate),
-			flashlight.WithOnSucceedingProxy(func() {
-				app.onSucceedingProxy(true)
-			}),
 		)
 		if err != nil {
 			app.Exit(err)
 			return
 		}
-		app.beforeStart(listenAddr)
+		app.beforeStart(ctx, listenAddr)
 
 		app.flashlight.Run(
 			listenAddr,
@@ -242,10 +237,11 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 	return app.flashlight.EnabledFeatures()[feature]
 }
 
-func (app *App) beforeStart(listenAddr string) {
+func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	log.Debug("Got first config")
 
-	go app.fetchOrCreateUser(context.Background())
+	go app.fetchOrCreateUser(ctx)
+	go app.PaymentMethods(ctx)
 
 	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
 		log.Debugf("Start profiling with cpu file %s and mem file %s", app.Flags.CpuProfile, app.Flags.MemProfile)
@@ -275,6 +271,11 @@ func (app *App) beforeStart(listenAddr string) {
 		os.Exit(0)
 	}
 
+	if e := app.configService.StartService(app.ws); e != nil {
+		app.Exit(fmt.Errorf("unable to register config service: %q", e))
+		return
+	}
+
 	if e := app.settings.StartService(app.ws); e != nil {
 		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
 		return
@@ -294,10 +295,28 @@ func (app *App) beforeStart(listenAddr string) {
 		log.Errorf("Unable to serve bandwidth to UI: %v", err)
 	}
 
+	if err := app.serveConnectionStatus(app.ws); err != nil {
+		log.Errorf("Unable to serve connection status: %v", err)
+	}
+
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
 	}))
-	app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
+	//app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
+}
+
+// Connect turns on proxying
+func (app *App) Connect() {
+	app.analyticsSession.Event("systray-menu", "connect")
+	ops.Begin("connect").End()
+	app.settings.SetDisconnected(false)
+}
+
+// Disconnect turns off proxying
+func (app *App) Disconnect() {
+	app.analyticsSession.Event("systray-menu", "disconnect")
+	ops.Begin("disconnect").End()
+	app.settings.SetDisconnected(true)
 }
 
 // GetLanguage returns the user language
@@ -309,21 +328,17 @@ func (app *App) GetLanguage() string {
 func (app *App) SetLanguage(lang string) {
 	app.settings.SetLanguage(lang)
 	log.Debugf("Setting language to %v", lang)
-	if app.ws != nil {
-		app.ws.SendMessage("pro", map[string]interface{}{
-			"type":     "pro",
-			"language": lang,
-		})
-	}
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"type":     "pro",
+		"language": lang,
+	})
 }
 
 func (app *App) SetUserLoggedIn(value bool) {
 	app.settings.SetUserLoggedIn(value)
-	if app.ws != nil {
-		app.ws.SendMessage("pro", map[string]interface{}{
-			"login": value,
-		})
-	}
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"login": value,
+	})
 }
 
 func (app *App) IsUserLoggedIn() bool {
@@ -350,6 +365,8 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
+	go app.fetchDeviceLinkingCode(context.Background())
+
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
 		if enable {
@@ -376,23 +393,23 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
 	}
-	if err := app.serveConnectionStatus(app.ws); err != nil {
-		log.Errorf("Unable to serve connection status: %v", err)
-	}
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	log.Debugf("[Startup Desktop] Got config update from %v", src)
-	app.fetchedGlobalConfig.Store(true)
-	/*autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
+	autoupdate.Configure(cfg.UpdateServerURL, cfg.AutoUpdateCA, func() string {
 		return "/img/lantern_logo.png"
-	})*/
+	})
+	app.fetchedGlobalConfig.Store(true)
+	app.sendConfigOptions()
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
 }
 
 func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
 	app.fetchedProxiesConfig.Store(true)
+	app.hasSucceedingProxy.Store(true)
+	app.sendConfigOptions()
 }
 
 func (app *App) onSucceedingProxy(succeeding bool) {
@@ -432,7 +449,7 @@ func (app *App) AddExitFunc(label string, exitFunc func()) {
 // the exit. Returns true if the app is actually exiting, false if exit has
 // already been requested.
 func (app *App) Exit(err error) bool {
-	if atomic.CompareAndSwapInt64(&app.hasExited, 0, 1) {
+	if app.hasExited.CompareAndSwap(false, true) {
 		app.doExit(err)
 		return true
 	}
@@ -540,11 +557,28 @@ func (app *App) fetchOrCreateUser(ctx context.Context) (*protos.User, error) {
 	}
 }
 
+func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
+	deviceName := func() string {
+		deviceName, _ := osversion.GetHumanReadable()
+		return deviceName
+	}
+	resp, err := app.proClient.LinkCodeRequest(ctx, deviceName())
+	if err != nil {
+		return "", errors.New("Could not create new Pro user: %v", err)
+	}
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"type":              "pro",
+		"deviceLinkingCode": resp.Code,
+	})
+	return resp.Code, nil
+}
+
+// CreateUser is used when Lantern is run for the first time and creates a new user with the pro server
 func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
 	log.Debug("New user, calling user create")
 	settings := app.Settings()
 	settings.SetUserFirstVisit(true)
-	resp, err := app.proClient.UserCreate(context.Background())
+	resp, err := app.proClient.UserCreate(ctx)
 	if err != nil {
 		return nil, errors.New("Could not create new Pro user: %v", err)
 	}
@@ -553,10 +587,69 @@ func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
 	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
 		return nil, errors.New("Could not create new Pro user: %v", err)
 	}
-	app.SetUserData(context.Background(), user.UserId, user)
+	app.SetUserData(ctx, user.UserId, user)
 	settings.SetReferralCode(user.Referral)
 	settings.SetUserIDAndToken(user.UserId, user.Token)
 	return resp.User, nil
+}
+
+// Plans returns the plans available to a user
+func (app *App) Plans(ctx context.Context) ([]protos.Plan, error) {
+	if v, ok := app.plansCache.Load("plans"); ok {
+		resp := v.([]protos.Plan)
+		log.Debugf("Returning plans from cache %s", v)
+		return resp, nil
+	}
+	resp, err := app.paymentMethods(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return resp.Plans, nil
+}
+
+// PaymentMethods returns the plans and payment plans available to a user
+func (app *App) PaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
+	if v, ok := app.plansCache.Load("paymentMethods"); ok {
+		resp := v.([]protos.PaymentMethod)
+		log.Debugf("Returning payment methods from cache %s", v)
+		return resp, nil
+	}
+	resp, err := app.paymentMethods(ctx)
+	if err != nil {
+		return nil, err
+	}
+	desktopProviders, ok := resp.Providers["desktop"]
+	if !ok {
+		return nil, errors.New("No desktop payment providers found")
+	}
+	return desktopProviders, nil
+}
+
+// PaymentMethods returns the plans and payment plans available to a user
+func (app *App) paymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
+	resp, err := app.proClient.PaymentMethodsV4(context.Background())
+	if err != nil {
+		return nil, errors.New("Could not get payment methods: %v", err)
+	}
+	desktopPaymentMethods, ok := resp.Providers["desktop"]
+	if !ok {
+		return nil, errors.New("No desktop payment providers found")
+	}
+	for _, paymentMethod := range desktopPaymentMethods {
+		for i, provider := range paymentMethod.Providers {
+			if resp.Logo[provider.Name] != nil {
+				logos := resp.Logo[provider.Name].([]interface{})
+				for _, logo := range logos {
+					paymentMethod.Providers[i].LogoUrls = append(paymentMethod.Providers[i].LogoUrls, logo.(string))
+				}
+			}
+		}
+	}
+	log.Debugf("DEBUG: Payment methods plans: %+v", resp.Plans)
+	log.Debugf("DEBUG: Payment methods providers: %+v", desktopPaymentMethods)
+	app.plansCache.Store("plans", resp.Plans)
+	app.plansCache.Store("paymentMethods", desktopPaymentMethods)
+	return resp, nil
 }
 
 // UserData looks up user data that is associated with the given UserConfig
@@ -613,6 +706,16 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 	return resp.User, nil
 }
 
+func (app *App) devices() protos.Devices {
+	user, found := app.GetUserData(app.Settings().GetUserID())
+	if !found {
+		return protos.Devices{}
+	}
+	return protos.Devices{
+		Devices: user.Devices,
+	}
+}
+
 // ProxyAddrReachable checks if Lantern's HTTP proxy responds with the correct status
 // within the deadline.
 func (app *App) ProxyAddrReachable(ctx context.Context) error {
@@ -627,7 +730,6 @@ func (app *App) ProxyAddrReachable(ctx context.Context) error {
 	if resp.StatusCode != http.StatusBadRequest {
 		return fmt.Errorf("unexpected HTTP status %v", resp.StatusCode)
 	}
-	app.onSucceedingProxy(true)
 	return nil
 }
 

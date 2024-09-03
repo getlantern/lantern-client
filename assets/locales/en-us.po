@@ -1809,6 +1809,11 @@ msgstr "Continue without Email"
 
 
 
+msgid "no_new_update"
+msgstr "You're up to date!"
+
+msgid "error_referral"
+msgstr "Something went wrong while applying your referral code."
 
 
 

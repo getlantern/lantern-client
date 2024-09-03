@@ -3,9 +3,6 @@ import 'package:flutter/gestures.dart';
 
 import '../../common/common.dart';
 
-/// Test users
-// jigar+iosa@getlantern.org
-// Jigar@123
 @RoutePage<void>(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final AuthFlow authFlow;

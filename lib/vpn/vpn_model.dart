@@ -1,10 +1,20 @@
+import 'package:lantern/common/ffi_subscriber.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 final vpnModel = VpnModel();
 
 class VpnModel extends Model {
-  VpnModel() : super('vpn');
+
+  late ValueNotifier<Bandwidth?> bandwidthNotifier;
+  late ValueNotifier<String> vpnStatusNotifier;
+
+  VpnModel() : super('vpn') {
+    if (isDesktop()) {
+      bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
+      vpnStatusNotifier = ValueNotifier("disconnected");
+    }
+  }
 
   Future<void> switchVPN<T>(bool on) async {
     return methodChannel.invokeMethod('switchVPN', <String, dynamic>{
@@ -20,8 +30,6 @@ class VpnModel extends Model {
     });
   }
 
-  Pointer<Utf8> ffiVpnStatus() => LanternFFI.vpnStatus();
-
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(
@@ -29,24 +37,14 @@ class VpnModel extends Model {
         builder: builder,
       );
     }
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<String>(
-      'vpnStatus',
-      defaultValue: '',
-      onChanges: (setValue) => sessionModel
-          .listenWebsocket(websocket, "vpnstatus", "connected", (value) {
-        final isConnected = value != null && value.toString() == "true";
-        setValue(isConnected ? "connected" : "disconnected");
-      }),
-      ffiVpnStatus,
-      builder: builder,
-    );
+    return FfiValueBuilder<String>('vpnStatus', vpnStatusNotifier, builder);
   }
 
   Future<bool> isVpnConnected() async {
-    final vpnStatus = await methodChannel.invokeMethod('getVpnStatus');
+    final vpnStatus = await methodChannel.invokeMethod('getVpnStatus',{});
     return vpnStatus == 'connected';
   }
+
 
   Widget bandwidth(ValueWidgetBuilder<Bandwidth?> builder) {
     if (isMobile()) {
@@ -58,23 +56,6 @@ class VpnModel extends Model {
         },
       );
     }
-    final websocket = WebsocketImpl.instance();
-    return ffiValueBuilder<Bandwidth?>(
-      'bandwidth',
-      defaultValue: null,
-      onChanges: (setValue) =>
-          sessionModel.listenWebsocket(websocket, "bandwidth", null, (value) {
-        if (value != null) {
-          final res = jsonDecode(jsonEncode(value));
-          if (res != null) setValue(Bandwidth.create()
-            ..mergeFromProto3Json({
-              'allowed': res['mibAllowed'],
-              'remaining': res['mibUsed'],
-            }));
-        }
-      }),
-      null,
-      builder: builder,
-    );
+    return FfiValueBuilder<Bandwidth?>('bandwidth', bandwidthNotifier, builder);
   }
 }

@@ -1,17 +1,15 @@
 package org.getlantern.lantern
 
 //import org.getlantern.lantern.util.SentryUtil
+//import org.getlantern.lantern.model.LanternHttpClient
 import android.app.Application
 import android.content.Context
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
+import io.lantern.model.SessionModel
 import org.getlantern.lantern.model.InAppBilling
-import org.getlantern.lantern.model.LanternHttpClient
-import org.getlantern.lantern.model.LanternSessionManager
 import org.getlantern.lantern.model.MessagingHolder
-import org.getlantern.lantern.util.LanternProxySelector
 import org.getlantern.lantern.util.debugOnly
-import org.getlantern.mobilesdk.util.HttpClient
 
 open class LanternApp : Application() {
 
@@ -45,25 +43,22 @@ open class LanternApp : Application() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         appContext = applicationContext
         messaging.init(this)
-        session = LanternSessionManager(this)
+//        session = LanternSessionManager(this)
+//        // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
+//        // about proxies being unavailable.
+//        session.resetHasSucceedingProxy()
+//        LanternProxySelector(session)
 
-        LanternProxySelector(session)
+//        lanternHttpClient = LanternHttpClient()
 
-        lanternHttpClient = LanternHttpClient()
-
-        // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
-        // about proxies being unavailable.
-        session.resetHasSucceedingProxy()
-
-        inAppBilling = InAppBilling(this)
     }
 
     companion object {
         private val TAG = LanternApp::class.java.simpleName
         private lateinit var appContext: Context
         private lateinit var inAppBilling: InAppBilling
-        private lateinit var lanternHttpClient: LanternHttpClient
-        private lateinit var session: LanternSessionManager
+        private lateinit var session: SessionModel
+        private lateinit var goSession: internalsdk.SessionModel
         var messaging: MessagingHolder = MessagingHolder()
 
         @JvmStatic
@@ -72,23 +67,32 @@ open class LanternApp : Application() {
         }
 
         @JvmStatic
-        fun getHttpClient(): HttpClient {
-            return lanternHttpClient
-        }
-
-        @JvmStatic
         fun getInAppBilling(): InAppBilling {
             return inAppBilling
         }
+        @JvmStatic
+        fun setInAppBilling(inAppBilling: InAppBilling)  {
+             this.inAppBilling= inAppBilling
+        }
+
 
         @JvmStatic
-        fun getLanternHttpClient(): LanternHttpClient {
-            return lanternHttpClient
+        fun getGoSession(): internalsdk.SessionModel {
+            return goSession
         }
 
         @JvmStatic
-        fun getSession(): LanternSessionManager {
+        fun getSession(): SessionModel {
             return session
+        }
+
+        @JvmStatic
+        fun setSession(sessionModel :SessionModel) {
+            session= sessionModel
+        }
+        @JvmStatic
+        fun setGoSession(sessionModel :internalsdk.SessionModel) {
+            goSession= sessionModel
         }
     }
 }

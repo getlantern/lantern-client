@@ -63,7 +63,6 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.PreR
 		cleanedResponseBody := sanitizeResponseBody(responseBody)
 		log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
 		if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
-			// Filter non-printable characters from the response body
 			return nil, errors.New("%s status code %d", string(cleanedResponseBody), resp.StatusCode())
 		}
 		return responseBody, nil

@@ -59,7 +59,6 @@ const (
 	SNRevisionDate       SettingName = "revisionDate"
 	SNEnabledExperiments SettingName = "enabledExperiments"
 
-	SNPaymentMethods SettingName = "paymentMethods"
 	// Auth methods
 	SNUserFirstVisit SettingName = "userFirstVisit"
 	SNExpiryDate     SettingName = "expirydate"
@@ -606,17 +605,6 @@ func (s *Settings) SetUserIDAndToken(id int64, token string) {
 	s.setVals(map[SettingName]interface{}{SNUserID: id, SNUserToken: token})
 }
 
-// SetPaymentMethods sets plans as string
-func (s *Settings) SetPaymentMethodPlans(paymentMethods []byte) {
-	s.setVal(SNPaymentMethods, paymentMethods)
-
-}
-
-// () returns the payment methods
-func (s *Settings) GetPaymentMethods() []byte {
-	return s.getbytes(SNPaymentMethods)
-}
-
 // GetUserID returns the user ID
 func (s *Settings) GetUserID() int64 {
 	return s.getInt64(SNUserID)
@@ -797,14 +785,18 @@ func (s *Settings) SetExpirationDate(date string) {
 	s.setVal(SNExpiryDate, date)
 }
 
+func (s *Settings) GetExpirationDate() string {
+	return s.getString(SNExpiryDate)
+}
+
 func (s *Settings) SetExpiration(expiration int64) {
 	if expiration == 0 {
 		return
 	}
-	expiry := time.Unix(0, expiration*int64(time.Second))
-	dateFormat := "01/02/2006"
-	dateStr := expiry.Format(dateFormat)
+	tm := time.Unix(expiration, 0)
+	dateStr := tm.Format("01/02/2006")
 	s.SetExpirationDate(dateStr)
+
 }
 
 func (s *Settings) IsUserLoggedIn() bool {

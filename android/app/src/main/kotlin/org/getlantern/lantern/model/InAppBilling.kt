@@ -18,8 +18,6 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.gson.JsonObject
-import okhttp3.Response
 import org.getlantern.lantern.LanternApp
 import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.ConcurrentHashMap
@@ -32,29 +30,23 @@ class InAppBilling(
 ) : PurchasesUpdatedListener, InAppBillingInterface {
     companion object {
         private val TAG = InAppBilling::class.java.simpleName
-        private val lanternClient: LanternHttpClient = LanternApp.getLanternHttpClient()
-
     }
-
-    init {
-        initConnection()
-    }
-
 
     @get:Synchronized
     @set:Synchronized
     @Volatile
     private var billingClient: BillingClient? = null
-
     private var billingResult: BillingResult? = null
-
     private val skus: ConcurrentHashMap<String, ProductDetails> = ConcurrentHashMap()
     private val handler = Handler(Looper.getMainLooper())
 
-    val plans: ConcurrentHashMap<String, ProPlan> = ConcurrentHashMap()
-
     @Volatile
     private var purchasesUpdated: PurchasesUpdatedListener? = null
+
+
+    init {
+        initConnection()
+    }
 
 
     fun isPlayStoreAvailable(): Boolean {
@@ -144,8 +136,8 @@ class InAppBilling(
             activity,
             BillingFlowParams.newBuilder()
                 .setProductDetailsParamsList(productDetailsParamsList)
-                .setObfuscatedAccountId(LanternApp.getSession().getDeviceID())// add device-od
-                .setObfuscatedProfileId(LanternApp.getSession().userID.toString())
+                .setObfuscatedAccountId(LanternApp.getSession().deviceID())// add device-od
+                .setObfuscatedProfileId(LanternApp.getSession().userId().toString())
                 .build(),
         )
     }
@@ -207,32 +199,12 @@ class InAppBilling(
                 }
                 Logger.d(TAG, "Got ${skuDetailsList.size} skus")
                 synchronized(this) {
-                    plans.clear()
                     skus.clear()
                     skuDetailsList.forEach {
-                        val currency =
-                            it.oneTimePurchaseOfferDetails!!.priceCurrencyCode.lowercase()
                         val id = it.productId
-                        val years = it.productId.substring(0, 1)
-                        val price = it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
-                        // Todo no originalPriceAmountMicros found in latest lib
-                        val priceWithoutTax =
-                            it.oneTimePurchaseOfferDetails!!.priceAmountMicros / 10000
-                        val proModel = ProPlan(
-                            id,
-                            it.description,
-                            hashMapOf(currency to price.toLong()),
-                            hashMapOf(currency to priceWithoutTax.toLong()),
-                            "2" == years,
-                            hashMapOf("years" to years.toInt()),
-                        )
-                        proModel.description = it.description
-
-                        plans[id] = proModel
                         skus[id] = it
                     }
                 }
-
             }
         }
     }
@@ -292,14 +264,18 @@ class InAppBilling(
                         * if the purchase are not acknowledged from server
                         * then make purchase request it mark purchase as isAcknowledged
                         */
-                        val currency = LanternApp.getSession().deviceCurrencyCode()
-                        val planID = "${purchase.products[0]}-$currency"
-
-                        addAcknowledgePurchase(
-                            planID = planID,
-                            currency = currency,
-                            token = purchase.purchaseToken
-                        )
+                        try {
+                            Logger.debug(TAG, "Purchase is not acknowledgement yet: $purchase")
+                            val currency = LanternApp.getSession().deviceCurrencyCode()
+                            val planID = "${purchase.products[0]}-$currency"
+                            LanternApp.getSession().submitGooglePlayPayment(
+                                email = LanternApp.getSession().email(),
+                                planId = planID,
+                                purchaseToken = purchase.purchaseToken
+                            )
+                        } catch (e: Exception) {
+                            Logger.e(TAG, "Error while submitting purchase to server: ${e.message}")
+                        }
                     }
                 }
 
@@ -320,6 +296,7 @@ class InAppBilling(
                     "Consuming already acknowledged purchase ${purchase.purchaseToken}"
                 )
                 consumeAsync(consumeParams, listener)
+
             }
         }
     }
@@ -369,35 +346,5 @@ class InAppBilling(
         }
     }
 
-    private fun addAcknowledgePurchase(planID: String, currency: String, token: String) {
-        val session = LanternApp.getSession()
-        val json = JsonObject()
-        json.addProperty("idempotencyKey", System.currentTimeMillis().toString())
-        json.addProperty("provider", PaymentProvider.GooglePlay.toString().lowercase())
-        json.addProperty("email", session.email())
-        json.addProperty("plan", planID)
-        json.addProperty("currency", currency.lowercase())
-        json.addProperty("deviceName", session.deviceName())
-        json.addProperty("token", token)
 
-        lanternClient.post(
-            LanternHttpClient.createProUrl("/purchase"),
-            LanternHttpClient.createJsonBody(json),
-            object : LanternHttpClient.ProCallback {
-                override fun onSuccess(
-                    response: Response?,
-                    result: JsonObject?,
-                ) {
-                    Logger.debug(TAG, "Making server acknowledgement response: $response")
-                }
-
-                override fun onFailure(
-                    t: Throwable?,
-                    error: ProError?,
-                ) {
-                    Logger.error(TAG, "Error while making server acknowledgement: $error")
-                }
-            },
-        )
-    }
 }

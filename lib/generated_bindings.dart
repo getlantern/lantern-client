@@ -238,14 +238,6 @@ class NativeLibrary {
   late final _websocketAddr =
       _websocketAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> plans() {
-    return _plans();
-  }
-
-  late final _plansPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('plans');
-  late final _plans = _plansPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> paymentMethodsV3() {
     return _paymentMethodsV3();
   }
@@ -299,6 +291,20 @@ class NativeLibrary {
           'hasPlanUpdatedOrBuy');
   late final _hasPlanUpdatedOrBuy =
       _hasPlanUpdatedOrBuyPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  ffi.Pointer<ffi.Char> applyRef(
+    ffi.Pointer<ffi.Char> referralCode,
+  ) {
+    return _applyRef(
+      referralCode,
+    );
+  }
+
+  late final _applyRefPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>>('applyRef');
+  late final _applyRef = _applyRefPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
   ffi.Pointer<ffi.Char> devices() {
     return _devices();
@@ -372,16 +378,6 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('userData');
   late final _userData =
       _userDataPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> serverInfo() {
-    return _serverInfo();
-  }
-
-  late final _serverInfoPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'serverInfo');
-  late final _serverInfo =
-      _serverInfoPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> emailAddress() {
     return _emailAddress();
@@ -480,46 +476,6 @@ class NativeLibrary {
   late final _myDeviceId =
       _myDeviceIdPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> authEnabled() {
-    return _authEnabled();
-  }
-
-  late final _authEnabledPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'authEnabled');
-  late final _authEnabled =
-      _authEnabledPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> chatEnabled() {
-    return _chatEnabled();
-  }
-
-  late final _chatEnabledPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'chatEnabled');
-  late final _chatEnabled =
-      _chatEnabledPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> playVersion() {
-    return _playVersion();
-  }
-
-  late final _playVersionPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'playVersion');
-  late final _playVersion =
-      _playVersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> storeVersion() {
-    return _storeVersion();
-  }
-
-  late final _storeVersionPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'storeVersion');
-  late final _storeVersion =
-      _storeVersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> lang() {
     return _lang();
   }
@@ -560,16 +516,6 @@ class NativeLibrary {
           'sdkVersion');
   late final _sdkVersion =
       _sdkVersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> vpnStatus() {
-    return _vpnStatus();
-  }
-
-  late final _vpnStatusPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'vpnStatus');
-  late final _vpnStatus =
-      _vpnStatusPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> hasSucceedingProxy() {
     return _hasSucceedingProxy();
@@ -659,45 +605,6 @@ class NativeLibrary {
   late final _exitAppPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('exitApp');
   late final _exitApp = _exitAppPtr.asFunction<void Function()>();
-
-  ffi.Pointer<ffi.Char> developmentMode() {
-    return _developmentMode();
-  }
-
-  late final _developmentModePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'developmentMode');
-  late final _developmentMode =
-      _developmentModePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> splitTunneling() {
-    return _splitTunneling();
-  }
-
-  late final _splitTunnelingPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'splitTunneling');
-  late final _splitTunneling =
-      _splitTunnelingPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> chatMe() {
-    return _chatMe();
-  }
-
-  late final _chatMePtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('chatMe');
-  late final _chatMe =
-      _chatMePtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> replicaAddr() {
-    return _replicaAddr();
-  }
-
-  late final _replicaAddrPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'replicaAddr');
-  late final _replicaAddr =
-      _replicaAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> reportIssue(
     ffi.Pointer<ffi.Char> email,

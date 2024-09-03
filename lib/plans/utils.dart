@@ -1,6 +1,8 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_webview.dart';
+import 'package:intl/intl.dart';
+import 'package:fixnum/fixnum.dart';
 
 const defaultTimeoutDuration = Duration(seconds: 10);
 
@@ -173,4 +175,54 @@ Future<bool> showRestorePurchaseButton(bool proUser) async {
     return (proUser==false);
   }
   return false;
+}
+
+
+Plan planFromJson(Map<String, dynamic> item) {
+  print("called plans $item");
+  final locale = Localization.locale;
+  final formatCurrency = NumberFormat.simpleCurrency(locale: locale);
+  String currency = formatCurrency.currencyName != null
+      ? formatCurrency.currencyName!.toLowerCase()
+      : "usd";
+  final res = jsonEncode(item);
+  final plan = Plan.create()..mergeFromProto3Json(jsonDecode(res));
+  if (plan.price[currency] == null) {
+    final splitted = plan.id.split('-');
+    if (splitted.length == 3) {
+      currency = splitted[1];
+    }
+  }
+
+  if (plan.price[currency] == null) {
+    return plan;
+  }
+  if (plan.price[currency] != null) {
+    final price = plan.price[currency] as Int64;
+    plan.totalCost = formatCurrency.format(price.toInt() / 100.0).toString();
+    plan.totalCostBilledOneTime =
+        '${formatCurrency.format(price.toInt() / 100)} ${'billed_one_time'.i18n}';
+  }
+  return plan;
+}
+
+Map<String, PaymentMethod> paymentMethodsFromJson(List<dynamic> items) {
+  final paymentMethods = Map<String, PaymentMethod>();
+  items.forEach((value) {
+    final json = jsonDecode(jsonEncode(value));
+    final method = json['method'];
+    final paymentMethod = PaymentMethod.create()
+      ..mergeFromProto3Json({
+        'method': method,
+      });
+    json['providers']?.forEach((e) {
+      paymentMethod.providers.add(PaymentProviders.create()
+      ..mergeFromProto3Json({
+        "logoUrls": e['logoUrls'],
+        "name": e['name'],
+      }));
+    });
+    paymentMethods[method] = paymentMethod;
+  });
+  return paymentMethods;
 }

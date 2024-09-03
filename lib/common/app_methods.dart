@@ -31,7 +31,19 @@ class AppMethods {
     const allChars =
         'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789!@#\$%^&*()-=+{};:,<.>/?';
     final random = Random.secure();
-   return List.generate(8, (i) => allChars[random.nextInt(allChars.length)])
+    return List.generate(8, (i) => allChars[random.nextInt(allChars.length)])
         .join();
+  }
+
+  static Future<bool> isPlayStoreEnable() async {
+    if(!Platform.isAndroid){
+      return false;
+    }
+    final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
+    final isTestPlayVersion = sessionModel.isTestPlayVersion.value ?? false;
+    final inRussia = sessionModel.country.value == 'RU';
+    final isPlayStoreAvailable =
+        await sessionModel.isGooglePlayServiceAvailable();
+    return ((isPlayVersion || isTestPlayVersion) && isPlayStoreAvailable && !inRussia);
   }
 }

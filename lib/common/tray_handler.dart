@@ -70,7 +70,7 @@ class TrayHandler with TrayListener {
         windowManager.destroy();
         LanternFFI.exit();
       case 'status':
-        final status = LanternFFI.vpnStatus().toDartString();
+        final status = vpnModel.vpnStatusNotifier.value;
         bool isConnected = status == "connected";
         if (isConnected) {
           LanternFFI.sysProxyOff();

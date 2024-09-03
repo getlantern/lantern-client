@@ -8,10 +8,9 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
   final String email;
 
   AuthorizeDeviceViaEmailPin({
-    Key? key,
+    super.key,
     required this.email,
-  }) : super(key: key);
-
+  });
   final pinCodeController = TextEditingController();
 
   @override

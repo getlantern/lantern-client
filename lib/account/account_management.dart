@@ -313,7 +313,7 @@ class _AccountManagementState extends State<AccountManagement>
           );
         }),
 
-        if( sessionModel.isAuthEnabled.value! && !Platform.isAndroid)
+        if( sessionModel.isAuthEnabled.value!)
         ListItemFactory.settingsItem(
           header: 'password'.i18n,
           icon: ImagePaths.lockFiled,
@@ -339,7 +339,7 @@ class _AccountManagementState extends State<AccountManagement>
         }),
         //Disable device linking in IOS
         const UserDevices(),
-        if(sessionModel.isAuthEnabled.value! && !Platform.isAndroid)
+        if(sessionModel.isAuthEnabled.value!)
         ListItemFactory.settingsItem(
           header: 'danger_zone'.i18n,
           icon: ImagePaths.alert,

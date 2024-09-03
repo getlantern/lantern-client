@@ -255,7 +255,7 @@ class _VerificationState extends State<Verification> {
         _proceedToCheckoutIOS();
         break;
       default:
-        _proceedToCheckout();
+        _processCheckOut();
     }
   }
 
@@ -292,14 +292,40 @@ class _VerificationState extends State<Verification> {
     }
   }
 
-  void _proceedToCheckout() {
-    context.pushRoute(Checkout(
-      plan: widget.plan!,
-      isPro: false,
-      authFlow: widget.authFlow,
-      email: widget.email,
-      verificationPin: pinCodeController.text,
-    ));
+  Future<void> _processCheckOut() async {
+    /// All the check has been moved to isPlayStoreEnable method
+    if (await AppMethods.isPlayStoreEnable()) {
+      _startGoogleCheckout();
+      return;
+    }
+    final email = sessionModel.userEmail.value;
+    // * Proceed to our own Checkout
+    await context.pushRoute(
+      Checkout(
+        plan: widget.plan!,
+        isPro: false,
+        email: email,
+      ),
+    );
+  }
+
+  // Make sure this google play flow is only for play version
+  // it will take care of purchase flow and also calling /purchase api on native end
+  Future<void> _startGoogleCheckout() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.submitPlayPayment(widget.plan!.id, widget.email);
+      context.loaderOverlay.hide();
+      Future.delayed(const Duration(milliseconds: 400), openPassword);
+    } catch (e) {
+      mainLogger.e("Error while purchase flow", error: e);
+      context.loaderOverlay.hide();
+      CDialog.showError(
+        context,
+        error: e,
+        description: e.toString(),
+      );
+    }
   }
 
   void openPassword() {
