@@ -21,15 +21,15 @@ func newHTTPClient(opts *webclient.Opts) *http.Client {
 		timeout = 30 * time.Second
 	}
 	log.Debug("Creating new HTTP client")
+	rt, err := proxied.ChainedNonPersistent("")
+	if err != nil {
+		log.Fatal(err)
+	}
 	return &http.Client{
 		Transport: proxied.AsRoundTripper(
 			func(req *http.Request) (*http.Response, error) {
 				log.Tracef("Pro client processing request to: %v (%v)", req.Host, req.URL.Host)
-				chained, err := proxied.ChainedNonPersistent("")
-				if err != nil {
-					return nil, log.Errorf("connecting to proxy: %w", err)
-				}
-				return chained.RoundTrip(req)
+				return rt.RoundTrip(req)
 			},
 		),
 		Timeout: timeout,

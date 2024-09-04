@@ -240,9 +240,6 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	log.Debug("Got first config")
 
-	go app.fetchOrCreateUser(ctx)
-	go app.PaymentMethods(ctx)
-
 	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
 		log.Debugf("Start profiling with cpu file %s and mem file %s", app.Flags.CpuProfile, app.Flags.MemProfile)
 		finishProfiling := profiling.Start(app.Flags.CpuProfile, app.Flags.MemProfile)
@@ -365,6 +362,8 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
+	go app.fetchOrCreateUser(ctx)
+	go app.PaymentMethods(ctx)
 	go app.fetchDeviceLinkingCode(context.Background())
 
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
