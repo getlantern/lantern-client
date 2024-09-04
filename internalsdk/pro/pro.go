@@ -54,26 +54,27 @@ type ProClient interface {
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	httpClient := GetHTTPClient(opts)
-	client := &proClient{
+	wc := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL,
+		func(client *resty.Client, req *http.Request) error {
+			prepareProRequest(req, opts.UserConfig())
+			return nil
+		}, nil))
+	return &proClient{
 		userConfig: opts.UserConfig,
+		webclient:  wc,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareProRequest(opts.UserConfig), nil))
-	return client
 }
 
 // prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
-func prepareProRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
-	return func(client *resty.Client, req *http.Request) error {
-		uc := userConfig()
-		req.URL.Host = common.ProAPIHost
-		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
-			common.DeviceIdHeader,
-			common.ProTokenHeader,
-			common.UserIdHeader,
-		}, ", "))
-		common.AddCommonHeadersWithOptions(uc, req, false)
-		return nil
-	}
+func prepareProRequest(r *http.Request, userConfig common.UserConfig) {
+	r.URL.Host = common.ProAPIHost
+	r.RequestURI = "" // http: Request.RequestURI can't be set in client requests.
+	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
+		common.DeviceIdHeader,
+		common.ProTokenHeader,
+		common.UserIdHeader,
+	}, ", "))
+	common.AddCommonHeadersWithOptions(userConfig, r, false)
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {
