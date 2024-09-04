@@ -35,7 +35,7 @@ func newHTTPClient(opts *webclient.Opts) *http.Client {
 	}
 }
 
-// GetHTTPClient creates a new http.Client that uses a proxied.AsRoundTripper to process requests
+// GetHTTPClient returns an http.Client that uses a proxied.AsRoundTripper to process requests
 func GetHTTPClient(opts *webclient.Opts) *http.Client {
 	if httpClient == nil {
 		once.Do(func() {
