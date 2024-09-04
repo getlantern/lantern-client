@@ -43,6 +43,7 @@ const (
 
 var (
 	log        = golog.LoggerFor("lantern-desktop.main")
+	flags      = flashlight.ParseFlags()
 	proClient  proclient.ProClient
 	authClient auth.AuthClient
 	a          *app.App
@@ -62,7 +63,6 @@ var issueMap = map[string]string{
 }
 
 func init() {
-	flags := flashlight.ParseFlags()
 	cdir := configDir(&flags)
 	ss := settings.LoadSettings(cdir)
 	t, err := proxied.ChainedNonPersistent("")
