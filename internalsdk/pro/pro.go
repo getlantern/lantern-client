@@ -55,6 +55,16 @@ type ProClient interface {
 
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
+	httpClient := NewHTTPClient(baseURL, opts)
+	client := &proClient{
+		userConfig: opts.UserConfig,
+	}
+	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareProRequest(opts.UserConfig), nil))
+	return client
+}
+
+// NewHTTPClient creates a new http.Client that uses a proxied.AsRoundTripper to process requests
+func NewHTTPClient(baseURL string, opts *webclient.Opts) *http.Client {
 	httpClient := opts.HttpClient
 	timeout := opts.Timeout
 	if timeout == 0 {
@@ -75,11 +85,7 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 			Timeout: timeout,
 		}
 	}
-	client := &proClient{
-		userConfig: opts.UserConfig,
-	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareProRequest(opts.UserConfig), nil))
-	return client
+	return httpClient
 }
 
 // prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.

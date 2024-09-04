@@ -7,6 +7,7 @@ import (
 
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 
@@ -51,7 +52,7 @@ type AuthClient interface {
 func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	httpClient := opts.HttpClient
 	if httpClient == nil {
-		httpClient = &http.Client{}
+		httpClient = pro.NewHTTPClient(baseURL, opts)
 	}
 	authClient := &authClient{
 		userConfig: opts.UserConfig,
