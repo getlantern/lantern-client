@@ -52,7 +52,7 @@ type AuthClient interface {
 func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	httpClient := opts.HttpClient
 	if httpClient == nil {
-		httpClient = pro.NewHTTPClient(baseURL, opts)
+		httpClient = pro.GetHTTPClient(opts)
 	}
 	authClient := &authClient{
 		userConfig: opts.UserConfig,

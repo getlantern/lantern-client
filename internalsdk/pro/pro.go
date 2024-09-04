@@ -6,10 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -55,7 +53,7 @@ type ProClient interface {
 
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
-	httpClient := NewHTTPClient(baseURL, opts)
+	httpClient := GetHTTPClient(opts)
 	client := &proClient{
 		userConfig: opts.UserConfig,
 	}
@@ -63,35 +61,11 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	return client
 }
 
-// NewHTTPClient creates a new http.Client that uses a proxied.AsRoundTripper to process requests
-func NewHTTPClient(baseURL string, opts *webclient.Opts) *http.Client {
-	httpClient := opts.HttpClient
-	timeout := opts.Timeout
-	if timeout == 0 {
-		timeout = 30 * time.Second
-	}
-	if httpClient == nil {
-		httpClient = &http.Client{
-			Transport: proxied.AsRoundTripper(
-				func(req *http.Request) (*http.Response, error) {
-					log.Tracef("Pro client processing request to: %v (%v)", req.Host, req.URL.Host)
-					chained, err := proxied.ChainedNonPersistent("")
-					if err != nil {
-						return nil, log.Errorf("connecting to proxy: %w", err)
-					}
-					return chained.RoundTrip(req)
-				},
-			),
-			Timeout: timeout,
-		}
-	}
-	return httpClient
-}
-
 // prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
 func prepareProRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
 	return func(client *resty.Client, req *http.Request) error {
 		uc := userConfig()
+		req.URL.Host = common.ProAPIHost
 		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 			common.DeviceIdHeader,
 			common.ProTokenHeader,
