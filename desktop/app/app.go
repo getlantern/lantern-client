@@ -362,9 +362,10 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
+	ctx := context.Background()
 	go app.fetchOrCreateUser(ctx)
 	go app.PaymentMethods(ctx)
-	go app.fetchDeviceLinkingCode(context.Background())
+	go app.fetchDeviceLinkingCode(ctx)
 
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
