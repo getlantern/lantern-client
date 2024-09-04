@@ -15,7 +15,7 @@ type Opts struct {
 	HttpClient *http.Client
 	// UserConfig is a function that returns the user config associated with a Lantern user
 	UserConfig func() common.UserConfig
-	// Timeout represents a time limit for requests made by the pro client
+	// Timeout represents a time limit for requests made by the web client
 	Timeout time.Duration
 }
 
