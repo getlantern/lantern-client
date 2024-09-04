@@ -3,6 +3,7 @@ package webclient
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/go-resty/resty/v2"
@@ -14,6 +15,8 @@ type Opts struct {
 	HttpClient *http.Client
 	// UserConfig is a function that returns the user config associated with a Lantern user
 	UserConfig func() common.UserConfig
+	// The dial timeout to use for the http.Client used by the pro client
+	DialTimeout time.Duration
 }
 
 // AddCommonUserHeaders adds all common headers that are user or device specific.

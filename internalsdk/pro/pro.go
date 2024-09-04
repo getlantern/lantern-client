@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -54,8 +56,24 @@ type ProClient interface {
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	httpClient := opts.HttpClient
+	dialTimeout := opts.DialTimeout
+	if dialTimeout == 0 {
+		dialTimeout = 30 * time.Second
+	}
 	if httpClient == nil {
-		httpClient = &http.Client{}
+		httpClient = &http.Client{
+			Transport: proxied.AsRoundTripper(
+				func(req *http.Request) (*http.Response, error) {
+					log.Tracef("Pro client processing request to: %v (%v)", req.Host, req.URL.Host)
+					chained, err := proxied.ChainedNonPersistent("")
+					if err != nil {
+						return nil, log.Errorf("connecting to proxy: %w", err)
+					}
+					return chained.RoundTrip(req)
+				},
+			),
+			Timeout: dialTimeout,
+		}
 	}
 	client := &proClient{
 		userConfig: opts.UserConfig,
