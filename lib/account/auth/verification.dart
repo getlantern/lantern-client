@@ -305,6 +305,8 @@ class _VerificationState extends State<Verification> {
         plan: widget.plan!,
         isPro: false,
         email: email,
+        authFlow: widget.authFlow,
+        verificationPin: pinCodeController.text,
       ),
     );
   }

@@ -219,7 +219,6 @@ class _PlanCardState extends State<PlanCard> {
         _storeFlow();
         break;
       default:
-
         ///Support for legacy purchase flow
         if (!sessionModel.isAuthEnabled.value!) {
           _processLegacyCheckOut(context);

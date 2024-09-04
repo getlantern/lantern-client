@@ -641,6 +641,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		return err
 	}
 	log.Debugf("my device id %v", opts.DeviceID)
+	log.Debugf("Store version %v", opts.PlayVersion)
 	err = pathdb.PutAll(tx, map[string]interface{}{
 		pathDevelopmentMode: opts.DevelopmentMode,
 		pathDeviceID:        opts.DeviceID,
