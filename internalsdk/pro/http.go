@@ -20,6 +20,7 @@ func newHTTPClient(opts *webclient.Opts) *http.Client {
 	if timeout == 0 {
 		timeout = 30 * time.Second
 	}
+	log.Debug("Creating new HTTP client")
 	return &http.Client{
 		Transport: proxied.AsRoundTripper(
 			func(req *http.Request) (*http.Response, error) {
@@ -37,10 +38,10 @@ func newHTTPClient(opts *webclient.Opts) *http.Client {
 
 // GetHTTPClient returns an http.Client that uses a proxied.AsRoundTripper to process requests
 func GetHTTPClient(opts *webclient.Opts) *http.Client {
-	if httpClient == nil {
-		once.Do(func() {
+	once.Do(func() {
+		if httpClient == nil {
 			httpClient = newHTTPClient(opts)
-		})
-	}
+		}
+	})
 	return httpClient
 }
