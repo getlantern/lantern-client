@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/fs"
@@ -351,6 +352,19 @@ func (app *App) SendMessageToUI(service string, message interface{}) {
 	if app.ws != nil {
 		app.ws.SendMessage(service, message)
 	}
+}
+
+func (app *App) SendUpdateUserDataToUI() {
+	user, found := app.GetUserData(app.Settings().GetUserID())
+	if !found {
+		return
+	}
+	if user.UserLevel == "" {
+		user.UserLevel = "free"
+	}
+	b, _ := json.Marshal(user)
+	log.Debugf("SendUpdateUserDataToUI: %s", string(b))
+	app.ws.SendMessage("pro", user)
 }
 
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
@@ -706,13 +720,13 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 		log.Debugf("User is not pro")
 		setProUser(false)
 	}
+	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
 	settings.SetExpiration(userDetail.Expiration)
 	settings.SetReferralCode(resp.User.Referral)
-	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
 	log.Debugf("User caching successful: %+v", userDetail)
 	// Save data in userData cache
 	app.SetUserData(ctx, userDetail.UserId, userDetail)
-	app.sendConfigOptions()
+	app.SendUpdateUserDataToUI()
 	return resp.User, nil
 }
 

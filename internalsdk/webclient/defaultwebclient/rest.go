@@ -4,11 +4,13 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 	"unicode"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
+	"github.com/moul/http2curl"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -53,11 +55,13 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.PreR
 
 		resp, err := req.Execute(method, path)
 		if err != nil {
+			command, _ := http2curl.GetCurlCommand(req.RawRequest)
+			log.Debugf("curl command:- %v", command)
 			return nil, err
 		}
 
-		// command, _ := http2curl.GetCurlCommand(req.RawRequest)
-		// log.Debugf("curl command: %v", command)
+		command, _ := http2curl.GetCurlCommand(req.RawRequest)
+		log.Debugf("curl command:- %v", command)
 		responseBody := resp.Body()
 		// on some cases, we are getting non-printable characters in the response body
 		cleanedResponseBody := sanitizeResponseBody(responseBody)
@@ -67,6 +71,26 @@ func SendToURL(httpClient *http.Client, baseURL string, beforeRequest resty.PreR
 		}
 		return responseBody, nil
 	}
+}
+func printCurlCommand(req *resty.Request) {
+	curlCommand := "curl -X " + req.Method + " "
+
+	// Add headers to the curl command
+	for key, value := range req.Header {
+		curlCommand += fmt.Sprintf("-H '%s: %s' ", key, strings.Join(value, ","))
+	}
+
+	// Add body if it's a POST or PUT request
+	if req.Method == resty.MethodPost || req.Method == resty.MethodPut {
+		if req.Body != nil {
+			curlCommand += fmt.Sprintf("-d '%s' ", req.Body)
+		}
+	}
+
+	// Add the URL
+	curlCommand += req.URL
+
+	fmt.Println(curlCommand)
 }
 func sanitizeResponseBody(data []byte) []byte {
 	var cleaned []byte

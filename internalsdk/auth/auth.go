@@ -139,6 +139,7 @@ func (c *authClient) LoginPrepare(ctx context.Context, loginData *protos.Prepare
 
 // Login is used to login a user with the LoginRequest
 func (c *authClient) login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
+	log.Debugf("login request is %v", loginData)
 	var resp protos.LoginResponse
 	err := c.webclient.PostPROTOC(ctx, "/users/login", nil, loginData, &resp)
 	if err != nil {

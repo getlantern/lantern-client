@@ -1,11 +1,13 @@
 import 'package:collection/collection.dart';
-import 'package:lantern/common/session_model.dart';
 import 'package:logger/logger.dart';
 
 import 'common.dart';
 import 'common_desktop.dart';
 
 var _webSocketLogger = Logger(
+  level: Level.all,
+  filter:DevelopmentFilter(),
+  output: ConsoleOutput(),
   printer: PrettyPrinter(
     printEmojis: true,
     methodCount: 0,
@@ -44,6 +46,7 @@ class WebsocketSubscriber {
     _webSocketLogger.i("Listening to websocket messages");
     _ws.messageStream.listen(
       (json) {
+        _webSocketLogger.d("websocket message: $json");
         if (json["type"] == null) return;
         final message = json["message"];
         _WebsocketMessageType? messageType = _WebsocketMessageType.values
@@ -66,7 +69,6 @@ class WebsocketSubscriber {
               sessionModel.deviceIdNotifier.value = deviceID;
             }
 
-
           case _WebsocketMessageType.stats:
             if (message['countryCode'] != null) {
               sessionModel.serverInfoNotifier.value = ServerInfo.create()
@@ -81,14 +83,17 @@ class WebsocketSubscriber {
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
             final deviceLinkingCode = message['deviceLinkingCode'];
-            if (userStatus != null &&
-                (userStatus == 'active' || userLevel == 'pro')) {
-              sessionModel.proUserNotifier.value = true;
+            if (userLevel != null) {
+              if (userLevel == 'pro' || userStatus == 'active') {
+                sessionModel.proUserNotifier.value = true;
+              } else {
+                sessionModel.proUserNotifier.value = false;
+              }
             }
+
             if (deviceLinkingCode != null) {
               sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
             }
-
             final userSignedIn = message['login'];
             if (userSignedIn != null) {
               sessionModel.hasUserSignedInNotifier.value = userSignedIn as bool;
