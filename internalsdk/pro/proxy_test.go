@@ -29,7 +29,7 @@ func TestProxy(t *testing.T) {
 	addr := l.Addr()
 	url := fmt.Sprintf("http://%s/pro/abc", addr)
 	t.Logf("Test server listening at %s", url)
-	go http.Serve(l, APIHandler(uc))
+	go http.Serve(l, APIHandler(addr.String(), uc))
 
 	req, err := http.NewRequest("OPTIONS", url, nil)
 	if !assert.NoError(t, err) {

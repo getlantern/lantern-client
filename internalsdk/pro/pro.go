@@ -56,7 +56,7 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	httpClient := GetHTTPClient(opts)
 	wc := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL,
 		func(client *resty.Client, req *http.Request) error {
-			prepareProRequest(req, opts.UserConfig())
+			prepareProRequest(req, common.ProAPIHost, opts.UserConfig())
 			return nil
 		}, nil))
 	return &proClient{
@@ -66,8 +66,8 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 }
 
 // prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
-func prepareProRequest(r *http.Request, userConfig common.UserConfig) {
-	r.URL.Host = common.ProAPIHost
+func prepareProRequest(r *http.Request, proAPIHost string, userConfig common.UserConfig) {
+	r.URL.Host = proAPIHost
 	r.RequestURI = "" // http: Request.RequestURI can't be set in client requests.
 	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 		common.DeviceIdHeader,
