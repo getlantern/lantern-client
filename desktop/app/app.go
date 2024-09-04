@@ -57,7 +57,6 @@ func init() {
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
 	hasExited            atomic.Bool
-	isConnected          atomic.Bool
 	fetchedGlobalConfig  atomic.Bool
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
@@ -200,7 +199,7 @@ func (app *App) Run(ctx context.Context) {
 			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.isConnected.Load() }, // check whether we're disconnected
+			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
 			app.settings.GetProxyAll,
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
