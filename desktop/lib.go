@@ -41,7 +41,7 @@ const (
 )
 
 var (
-	log        = golog.LoggerFor("lantern-desktop.main")
+	log        = golog.LoggerFor("lantern-client.main")
 	flags      = flashlight.ParseFlags()
 	proClient  proclient.ProClient
 	authClient auth.AuthClient

@@ -54,29 +54,31 @@ func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	if httpClient == nil {
 		httpClient = pro.GetHTTPClient(opts)
 	}
-	authClient := &authClient{
+
+	wc := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL,
+		func(client *resty.Client, req *http.Request) error {
+			prepareUserRequest(req, opts.UserConfig())
+			return nil
+		}, nil))
+
+	return &authClient{
 		userConfig: opts.UserConfig,
+		webclient:  wc,
 	}
-	authClient.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareUserRequest(opts.UserConfig), nil))
-	return authClient
 }
 
-func prepareUserRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
-	return func(client *resty.Client, req *http.Request) error {
-		req.Header.Set(common.ContentType, "application/x-protobuf")
-		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
-			common.DeviceIdHeader,
-			common.ProTokenHeader,
-			common.UserIdHeader,
-		}, ", "))
-		uc := userConfig()
-		if req.URL != nil && strings.HasSuffix(req.URL.Path, "/users/signup") {
-			// for the /users/signup endpoint, we do need to pass all default headers
-			common.AddCommonHeadersWithOptions(uc, req, false)
-		} else {
-			common.AddCommonNonUserHeaders(uc, req)
-		}
-		return nil
+func prepareUserRequest(r *http.Request, uc common.UserConfig) {
+	r.Header.Set(common.ContentType, "application/x-protobuf")
+	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
+		common.DeviceIdHeader,
+		common.ProTokenHeader,
+		common.UserIdHeader,
+	}, ", "))
+	if r.URL != nil && strings.HasSuffix(r.URL.Path, "/users/signup") {
+		// for the /users/signup endpoint, we do need to pass all default headers
+		common.AddCommonHeadersWithOptions(uc, r, false)
+	} else {
+		common.AddCommonNonUserHeaders(uc, r)
 	}
 }
 
