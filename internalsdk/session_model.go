@@ -153,7 +153,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m := &SessionModel{baseModel: base}
 	webclientOpts := &webclient.Opts{
-		DialTimeout: dialTimeout,
+		Timeout: dialTimeout,
 		UserConfig: func() common.UserConfig {
 			deviceID, _ := m.GetDeviceID()
 			userID, _ := m.GetUserID()

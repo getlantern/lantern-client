@@ -56,9 +56,9 @@ type ProClient interface {
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	httpClient := opts.HttpClient
-	dialTimeout := opts.DialTimeout
-	if dialTimeout == 0 {
-		dialTimeout = 30 * time.Second
+	timeout := opts.Timeout
+	if timeout == 0 {
+		timeout = 30 * time.Second
 	}
 	if httpClient == nil {
 		httpClient = &http.Client{
@@ -72,7 +72,7 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 					return chained.RoundTrip(req)
 				},
 			),
-			Timeout: dialTimeout,
+			Timeout: timeout,
 		}
 	}
 	client := &proClient{

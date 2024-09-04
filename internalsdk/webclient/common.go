@@ -15,8 +15,8 @@ type Opts struct {
 	HttpClient *http.Client
 	// UserConfig is a function that returns the user config associated with a Lantern user
 	UserConfig func() common.UserConfig
-	// The dial timeout to use for the http.Client used by the pro client
-	DialTimeout time.Duration
+	// Timeout represents a time limit for requests made by the pro client
+	Timeout time.Duration
 }
 
 // AddCommonUserHeaders adds all common headers that are user or device specific.
