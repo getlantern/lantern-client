@@ -53,10 +53,9 @@ type AuthClient interface {
 func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	httpClient := opts.HttpClient
 	if httpClient == nil {
-		rt, err := proxied.ChainedNonPersistent("")
-		if err != nil {
-			log.Fatal(err)
-		}
+		// The default http.RoundTripper is ChainedNonPersistent which proxies requests through chained servers
+		// and does not use keep alive connections. Since no root CA is specified, we do not need to check for an error.
+		rt, _ := proxied.ChainedNonPersistent("")
 		httpClient = pro.NewHTTPClient(rt, opts)
 	}
 
