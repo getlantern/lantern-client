@@ -26,7 +26,7 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> referralNotifier;
   late ValueNotifier<String?> deviceIdNotifier;
-  late ValueNotifier<String?> langNotifier;
+   ValueNotifier<String?> langNotifier=ValueNotifier('en_us');
   late ValueNotifier<bool> proxyAllNotifier;
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
@@ -81,7 +81,6 @@ class SessionModel extends Model {
       paymentMethodsNotifier =
           FfiListNotifier<PaymentMethod>('/paymentMethods/', () => {});
       hasUserSignedInNotifier = ValueNotifier(false);
-      langNotifier = ValueNotifier('en_us');
       serverInfoNotifier = ValueNotifier<ServerInfo?>(null);
       proxyAllNotifier = ValueNotifier(false);
       referralNotifier = ValueNotifier('');
@@ -437,15 +436,14 @@ class SessionModel extends Model {
         .invokeMethod('getCountryCode', <String, dynamic>{});
   }
 
-  Future<void> setLanguage(String lang) {
+  Future<void> setLanguage(String lang) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
         'lang': lang,
       });
     }
-    // Desktop users
     Localization.locale = lang;
-    return Future(() => null);
+    return await compute(LanternFFI.setLang, lang);
   }
 
   Future<void> userEmailRequest(String email) async {

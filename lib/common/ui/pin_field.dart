@@ -28,6 +28,7 @@ class PinField extends StatelessWidget {
             onDone!(text);
           }
         },
+
         autofocus: true,
         highlight: true,
         highlightColor: blue4,

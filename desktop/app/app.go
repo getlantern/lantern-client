@@ -242,7 +242,7 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	log.Debug("Got first config")
 
 	go app.fetchOrCreateUser(ctx)
-	go app.PaymentMethods(ctx)
+	go app.GetPaymentMethods(ctx)
 
 	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
 		log.Debugf("Start profiling with cpu file %s and mem file %s", app.Flags.CpuProfile, app.Flags.MemProfile)
@@ -330,7 +330,6 @@ func (app *App) SetLanguage(lang string) {
 	app.settings.SetLanguage(lang)
 	log.Debugf("Setting language to %v", lang)
 	app.SendMessageToUI("pro", map[string]interface{}{
-		"type":     "pro",
 		"language": lang,
 	})
 }
@@ -623,21 +622,22 @@ func (app *App) Plans(ctx context.Context) ([]protos.Plan, error) {
 		log.Debugf("Returning plans from cache %s", v)
 		return resp, nil
 	}
-	resp, err := app.paymentMethods(ctx)
+	resp, err := app.FetchPaymentMethods(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return resp.Plans, nil
 }
 
-// PaymentMethods returns the plans and payment plans available to a user
-func (app *App) PaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
+// GetPaymentMethods returns the plans and payment from cache if available
+// if not then call FetchPaymentMethods
+func (app *App) GetPaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
 	if v, ok := app.plansCache.Load("paymentMethods"); ok {
 		resp := v.([]protos.PaymentMethod)
 		log.Debugf("Returning payment methods from cache %s", v)
 		return resp, nil
 	}
-	resp, err := app.paymentMethods(ctx)
+	resp, err := app.FetchPaymentMethods(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -648,8 +648,8 @@ func (app *App) PaymentMethods(ctx context.Context) ([]protos.PaymentMethod, err
 	return desktopProviders, nil
 }
 
-// PaymentMethods returns the plans and payment plans available to a user
-func (app *App) paymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
+// FetchPaymentMethods returns the plans and payment plans available to a user
+func (app *App) FetchPaymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
 	resp, err := app.proClient.PaymentMethodsV4(context.Background())
 	if err != nil {
 		return nil, errors.New("Could not get payment methods: %v", err)
@@ -672,6 +672,7 @@ func (app *App) paymentMethods(ctx context.Context) (*proclient.PaymentMethodsRe
 	log.Debugf("DEBUG: Payment methods providers: %+v", desktopPaymentMethods)
 	app.plansCache.Store("plans", resp.Plans)
 	app.plansCache.Store("paymentMethods", desktopPaymentMethods)
+	app.sendConfigOptions()
 	return resp, nil
 }
 

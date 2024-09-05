@@ -71,7 +71,7 @@ func (app *App) sendConfigOptions() {
 	// }
 	ctx := context.Background()
 	plans, _ := app.Plans(ctx)
-	paymentMethods, _ := app.PaymentMethods(ctx)
+	paymentMethods, _ := app.GetPaymentMethods(ctx)
 	devices, _ := json.Marshal(app.devices())
 	log.Debugf("DEBUG: Devices: %s", string(devices))
 	log.Debugf("Expiration date: %s", app.settings.GetExpirationDate())

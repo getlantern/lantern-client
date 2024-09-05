@@ -6,7 +6,7 @@ import 'common_desktop.dart';
 
 var _webSocketLogger = Logger(
   level: Level.all,
-  filter:DevelopmentFilter(),
+  filter: DevelopmentFilter(),
   output: ConsoleOutput(),
   printer: PrettyPrinter(
     printEmojis: true,
@@ -90,13 +90,16 @@ class WebsocketSubscriber {
                 sessionModel.proUserNotifier.value = false;
               }
             }
-
             if (deviceLinkingCode != null) {
               sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
             }
             final userSignedIn = message['login'];
             if (userSignedIn != null) {
               sessionModel.hasUserSignedInNotifier.value = userSignedIn as bool;
+            }
+            final language = message['language'];
+            if (language != null) {
+              sessionModel.langNotifier.value = language;
             }
 
           case _WebsocketMessageType.bandwidth:
