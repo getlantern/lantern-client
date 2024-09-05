@@ -28,9 +28,10 @@ extension ErrorX on Object {
         if (description.contains("wrong-reseller-code")) {
           return "wrong_seller_code".i18n;
         }
-        if (description.contains("user already exists")) {
+        if (description.contains("user already exists") || description.contains("user with this legacy user ID already exists")) {
           return "signup_error_user_exists".i18n;
         }
+
         if (description.contains("purchase_not_found") ||
             description.contains("user with provided email not found") ||
             description.contains("no valid purchases for user")) {

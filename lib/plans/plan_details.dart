@@ -278,6 +278,7 @@ class _PlanCardState extends State<PlanCard> {
       CheckoutLegacy(
         plan: widget.plan,
         isPro: widget.isPro,
+
       ),
     );
   }
@@ -295,6 +296,7 @@ class _PlanCardState extends State<PlanCard> {
         plan: widget.plan,
         isPro: widget.isPro,
         email: email,
+        authFlow: AuthFlow.createAccount,
       ),
     );
   }

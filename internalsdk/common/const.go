@@ -42,7 +42,7 @@ var (
 
 	ProAPIHost = "api.getiantem.org"
 
-	V1BaseUrl = "df.iantem.io/api/v1"
+	V1BaseUrl = "iantem.io/api/v1"
 
 	log = golog.LoggerFor("flashlight.common")
 
