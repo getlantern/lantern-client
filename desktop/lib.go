@@ -42,23 +42,11 @@ const (
 )
 
 var (
-	log           = golog.LoggerFor("lantern-desktop.main")
-	flags         = flashlight.ParseFlags()
-	cdir          = configDir(&flags)
-	ss            = settings.LoadSettings(cdir)
-	webclientOpts = &webclient.Opts{
-		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   30 * time.Second,
-		},
-		UserConfig: func() common.UserConfig {
-			return settings.UserConfig(ss)
-		},
-	}
-	proClient  = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
-
-	a = app.NewApp(flags, cdir, proClient, ss)
+	log        = golog.LoggerFor("lantern-client.main")
+	flags      = flashlight.ParseFlags()
+	proClient  proclient.ProClient
+	authClient auth.AuthClient
+	a          *app.App
 )
 
 var issueMap = map[string]string{
@@ -72,6 +60,45 @@ var issueMap = map[string]string{
 	"Cannot link device":          "5",
 	"Application crashes":         "6",
 	"Other":                       "9",
+}
+
+func init() {
+	cdir := configDir(&flags)
+	ss := settings.LoadSettings(cdir)
+	webclientOpts := &webclient.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		},
+		UserConfig: func() common.UserConfig {
+			return settings.UserConfig(ss)
+		},
+	}
+
+	rt, err := proxied.ChainedNonPersistent("")
+	if err != nil {
+		log.Errorf("Error creating chained non-persistent transport", err)
+	}
+
+	userAPIWebclientOpts := &webclient.Opts{
+		HttpClient: &http.Client{
+			Transport: proxied.AsRoundTripper(
+				func(req *http.Request) (*http.Response, error) {
+					log.Tracef("Pro client processing request to: %v (%v)", req.Host, req.URL.Host)
+					return rt.RoundTrip(req)
+				},
+			),
+			Timeout: 30 * time.Second,
+		},
+		UserConfig: func() common.UserConfig {
+			return settings.UserConfig(ss)
+		},
+	}
+
+	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), userAPIWebclientOpts)
+
+	a = app.NewApp(flags, cdir, proClient, ss)
 }
 
 //export start
