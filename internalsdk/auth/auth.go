@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
@@ -52,7 +53,11 @@ type AuthClient interface {
 func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	httpClient := opts.HttpClient
 	if httpClient == nil {
-		httpClient = pro.GetHTTPClient(opts)
+		rt, err := proxied.ChainedNonPersistent("")
+		if err != nil {
+			log.Fatal(err)
+		}
+		httpClient = pro.NewHTTPClient(rt, opts)
 	}
 
 	wc := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL,

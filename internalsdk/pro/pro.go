@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -53,7 +54,10 @@ type ProClient interface {
 
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
-	httpClient := GetHTTPClient(opts)
+	httpClient := opts.HttpClient
+	if httpClient == nil {
+		httpClient = NewHTTPClient(proxied.ParallelForIdempotent(), opts)
+	}
 	wc := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL,
 		func(client *resty.Client, req *http.Request) error {
 			prepareProRequest(req, common.ProAPIHost, opts.UserConfig())
