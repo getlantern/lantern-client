@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
-	"net/http"
 	"strconv"
 	"strings"
 	"sync"
@@ -14,7 +13,6 @@ import (
 	"github.com/1Password/srp"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
@@ -154,15 +152,8 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 
 	m := &SessionModel{baseModel: base}
-
 	webclientOpts := &webclient.Opts{
-		// Use proxied.Fronted for IOS client since ChainedThenFronted it does not work with ios due to (chained proxy unavailable)
-		// because we are not using the flashlight on ios
-		// We need to figure out where to put proxied SetProxyAddr
-		HttpClient: &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   dialTimeout,
-		},
+		Timeout: dialTimeout,
 		UserConfig: func() common.UserConfig {
 			deviceID, _ := m.GetDeviceID()
 			userID, _ := m.GetUserID()
