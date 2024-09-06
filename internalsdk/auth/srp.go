@@ -117,7 +117,7 @@ func (c *authClient) SignUp(email string, password string) ([]byte, error) {
 		Verifier:              verifierKey.Bytes(),
 		SkipEmailConfirmation: true,
 	}
-	// log.Debugf("Sign up request email %v, salt %v verifier %v verifiter in bytes %v", lowerCaseEmail, salt, verifierKey, verifierKey.Bytes())
+	log.Debugf("Sign up request email %v, salt %v verifier %v verifiter in bytes %v", lowerCaseEmail, salt, verifierKey, verifierKey.Bytes())
 	signupResponse, err := c.signUp(context.Background(), signUpRequestBody)
 	if err != nil {
 		return nil, err
