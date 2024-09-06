@@ -11,6 +11,9 @@ import (
 
 // Opts are common Opts that instances of RESTClient may be configured with
 type Opts struct {
+	AfterResponse resty.ResponseMiddleware
+	BaseURL       string
+	BeforeRequest resty.PreRequestHook
 	// HttpClient represents an http.Client that should be used by the resty client
 	HttpClient *http.Client
 	// UserConfig is a function that returns the user config associated with a Lantern user

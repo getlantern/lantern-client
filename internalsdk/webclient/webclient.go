@@ -3,9 +3,16 @@ package webclient
 import (
 	"context"
 	"encoding/json"
-	"net/http"
 
+	"fmt"
+	"net/http"
+	"unicode"
+
+	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
+	"github.com/go-resty/resty/v2"
+
+	"github.com/moul/http2curl"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
@@ -38,12 +45,80 @@ type RESTClient interface {
 type SendRequest func(ctx context.Context, method string, path string, params any, body []byte) ([]byte, error)
 
 type restClient struct {
+	*resty.Client
 	send SendRequest
 }
 
 // Construct a REST client using the given SendRequest function
-func NewRESTClient(send SendRequest) RESTClient {
-	return &restClient{send}
+func NewRESTClient(opts *Opts) RESTClient {
+	if opts.HttpClient == nil {
+		opts.HttpClient = &http.Client{}
+	}
+	c := resty.NewWithClient(opts.HttpClient)
+	return &restClient{c, sendToURL(c, opts)}
+}
+
+// sendToURL is a function that sends requests to the given URL, optionally sending them through a proxy, optionally processing requests
+// with the given beforeRequest middleware and/or responses with the given afterResponse middleware.
+func sendToURL(c *resty.Client, opts *Opts) SendRequest {
+	if opts.BeforeRequest != nil {
+		c.SetPreRequestHook(opts.BeforeRequest)
+	}
+	if opts.AfterResponse != nil {
+		c.OnAfterResponse(opts.AfterResponse)
+	}
+	c.SetBaseURL(opts.BaseURL)
+
+	return func(ctx context.Context, method string, path string, reqParams any, body []byte) ([]byte, error) {
+		req := c.R().SetContext(ctx)
+		if reqParams != nil {
+			switch reqParams.(type) {
+			case map[string]interface{}:
+				params := reqParams.(map[string]interface{})
+				stringParams := make(map[string]string, len(params))
+				for key, value := range params {
+					stringParams[key] = fmt.Sprint(value)
+				}
+				if method == http.MethodGet {
+					req.SetQueryParams(stringParams)
+				} else {
+					req.SetFormData(stringParams)
+				}
+			default:
+				req.SetBody(reqParams)
+			}
+		} else if body != nil {
+			req.Body = body
+		}
+
+		resp, err := req.Execute(method, path)
+		if err != nil {
+			return nil, err
+		}
+
+		command, _ := http2curl.GetCurlCommand(req.RawRequest)
+		log.Debugf("curl command: %v", command)
+		responseBody := resp.Body()
+		// on some cases, we are getting non-printable characters in the response body
+		cleanedResponseBody := sanitizeResponseBody(responseBody)
+
+		log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
+
+		if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
+			return nil, errors.New("%s status code %d", string(cleanedResponseBody), resp.StatusCode())
+		}
+		return responseBody, nil
+	}
+}
+
+func sanitizeResponseBody(data []byte) []byte {
+	var cleaned []byte
+	for _, b := range data {
+		if unicode.IsPrint(rune(b)) {
+			cleaned = append(cleaned, b)
+		}
+	}
+	return cleaned
 }
 
 func (c *restClient) GetJSON(ctx context.Context, path string, params, target any) error {
