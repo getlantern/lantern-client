@@ -46,6 +46,8 @@ type AuthClient interface {
 
 	//Logout
 	SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error)
+
+	Healthz(ctx context.Context) (bool, error)
 }
 
 // NewClient creates a new instance of AuthClient
@@ -78,6 +80,15 @@ func prepareUserRequest(userConfig func() common.UserConfig) func(client *resty.
 		}
 		return nil
 	}
+}
+
+// healthz is used to check the health of the auth service
+func (c *authClient) Healthz(ctx context.Context) (bool, error) {
+	err := c.webclient.GetJSON(ctx, "/healthz", nil, nil)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 // Auth APIS

@@ -668,6 +668,9 @@ func (app *App) FetchPaymentMethods(ctx context.Context) (*proclient.PaymentMeth
 			}
 		}
 	}
+	//clear previous store cache
+	app.plansCache.Delete("plans")
+	app.plansCache.Delete("paymentMethods")
 	log.Debugf("DEBUG: Payment methods plans: %+v", resp.Plans)
 	log.Debugf("DEBUG: Payment methods providers: %+v", desktopPaymentMethods)
 	app.plansCache.Store("plans", resp.Plans)
@@ -694,8 +697,6 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 
 	currentDevice := app.Settings().GetDeviceID()
 
-	log.Debugf("Current device %v", currentDevice)
-
 	// Check if device id is connect to same device if not create new user
 	// this is for the case when user removed device from other device
 	deviceFound := false
@@ -707,7 +708,7 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 			}
 		}
 	}
-	log.Debugf("Device found %v", deviceFound)
+
 	/// Check if user has installed app first time
 	firstTime := settings.GetUserFirstVisit()
 	log.Debugf("First time visit %v", firstTime)
