@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 
@@ -54,31 +56,36 @@ type AuthClient interface {
 func NewClient(baseURL string, opts *webclient.Opts) AuthClient {
 	httpClient := opts.HttpClient
 	if httpClient == nil {
-		httpClient = &http.Client{}
+		// The default http.RoundTripper is ChainedNonPersistent which proxies requests through chained servers
+		// and does not use keep alive connections. Since no root CA is specified, we do not need to check for an error.
+		rt, _ := proxied.ChainedNonPersistent("")
+		httpClient = pro.NewHTTPClient(rt, opts)
 	}
-	authClient := &authClient{
+
+	wc := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL,
+		func(client *resty.Client, req *http.Request) error {
+			prepareUserRequest(req, opts.UserConfig())
+			return nil
+		}, nil))
+
+	return &authClient{
 		userConfig: opts.UserConfig,
+		webclient:  wc,
 	}
-	authClient.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareUserRequest(opts.UserConfig), nil))
-	return authClient
 }
 
-func prepareUserRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
-	return func(client *resty.Client, req *http.Request) error {
-		req.Header.Set(common.ContentType, "application/x-protobuf")
-		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
-			common.DeviceIdHeader,
-			common.ProTokenHeader,
-			common.UserIdHeader,
-		}, ", "))
-		uc := userConfig()
-		if req.URL != nil && strings.HasSuffix(req.URL.Path, "/users/signup") {
-			// for the /users/signup endpoint, we do need to pass all default headers
-			common.AddCommonHeadersWithOptions(uc, req, false)
-		} else {
-			common.AddCommonNonUserHeaders(uc, req)
-		}
-		return nil
+func prepareUserRequest(r *http.Request, uc common.UserConfig) {
+	r.Header.Set(common.ContentType, "application/x-protobuf")
+	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
+		common.DeviceIdHeader,
+		common.ProTokenHeader,
+		common.UserIdHeader,
+	}, ", "))
+	if r.URL != nil && strings.HasSuffix(r.URL.Path, "/users/signup") {
+		// for the /users/signup endpoint, we do need to pass all default headers
+		common.AddCommonHeadersWithOptions(uc, r, false)
+	} else {
+		common.AddCommonNonUserHeaders(uc, r)
 	}
 }
 

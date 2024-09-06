@@ -71,6 +71,7 @@ class SessionModel extends Model {
         false,
       );
     } else {
+      bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
       configNotifier = ValueNotifier<ConfigOptions?>(null);
       country = ValueNotifier('US');
       linkingCodeNotifier = ValueNotifier('');

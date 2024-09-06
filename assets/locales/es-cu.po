@@ -1,18 +1,17 @@
 # 
 # Translators:
 # Adriano Gomes, 2024
-# Katherine Mojena, 2024
 # e2f <projects@e2f.com>, 2024
 # Aimara pena, 2024
-# strel, 2024
 # tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
-# Emerson Castaneda, 2024
+# Katherine Mojena, 2024
+# strel, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Emerson Castaneda, 2024\n"
+"Last-Translator: strel, 2024\n"
 "Language-Team: Spanish (Cuba) (https://app.transifex.com/lantern-1/teams/94371/es_CU/)\n"
 "Language: es_CU\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -1937,6 +1936,7 @@ msgstr "Límite alcanzado"
 
 msgid "file_size_limit_description"
 msgstr "Los tamaños de los archivos adjuntos deben ser menores de 100 MB"
+
 msgid "lantern_pro_one_year"
 msgstr "Lantern Pro: Plan de un año"
 
@@ -1984,3 +1984,9 @@ msgstr "Añade un correo electrónico para acceder a tus compras en cualquier di
 
 msgid "continue_without_email"
 msgstr "Continuar sin correo electrónico"
+
+msgid "no_new_update"
+msgstr "¡Está actualizado!"
+
+msgid "error_referral"
+msgstr "Algo ha fallado al aplicar tu código de recomendación."

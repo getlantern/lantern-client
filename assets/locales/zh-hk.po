@@ -6,18 +6,17 @@
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
-# Ox Cart <ox@getlantern.org>, 2024
 # Rockman Lau <im@rockman.us>, 2024
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
 # YFdyh000 <yfdyh000@gmail.com>, 2024
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
 # Aki, 2024
-# Lantern, 2024
+# Ox Cart <ox@getlantern.org>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2024\n"
+"Last-Translator: Ox Cart <ox@getlantern.org>, 2024\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/lantern-1/teams/94371/zh_HK/)\n"
 "Language: zh_HK\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1845,3 +1844,8 @@ msgstr "添加電子郵件以便在任何設備上訪問您的購買。沒有電
 
 msgid "continue_without_email"
 msgstr "不使用電子郵件繼續"
+msgid "no_new_update"
+msgstr "已更新為最新狀態！"
+
+msgid "error_referral"
+msgstr "使用您的推荐码时报错"

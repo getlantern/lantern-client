@@ -1961,3 +1961,8 @@ msgstr ""
 
 msgid "continue_without_email"
 msgstr ""
+msgid "no_new_update"
+msgstr "আপনি আপ টু ডেট!"
+
+msgid "error_referral"
+msgstr "আপনার রেফারেল কোড প্রয়োগ করার সময় কিছু সমস্যা হয়েছে।"

@@ -9,16 +9,16 @@
 # Gökhan Kalayci <gkmediagokhan@gmail.com>, 2023
 # Lantern, 2023
 # Teo Westbrook, 2024
-# efe kerem sözeri <eksozeri@hotmail.com>, 2024
 # Volkan Gezer <volkangezer@gmail.com>, 2024
 # Aşkın Özgür <askin@askin.ws>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # e2f <projects@e2f.com>, 2024
 # e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2024
+# efe kerem sözeri <eksozeri@hotmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2024\n"
+"Last-Translator: efe kerem sözeri <eksozeri@hotmail.com>, 2024\n"
 "Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -1981,3 +1981,8 @@ msgstr "Satın alımlarınıza herhangi bir cihazdan erişmek için bir e-posta 
 msgid "continue_without_email"
 msgstr "E-postasız Devam Et"
 
+msgid "no_new_update"
+msgstr "En güncel sürümü kullanıyorsunuz!"
+
+msgid "error_referral"
+msgstr "Referans kodu uygulanırken bir sorun oluştu."

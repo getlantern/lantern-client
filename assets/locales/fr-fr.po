@@ -2005,3 +2005,9 @@ msgstr "Ajoutez un courriel pour accéder à vos achats sur n'importe quel appar
 msgid "continue_without_email"
 msgstr "Continuer sans courriel"
 
+msgid "no_new_update"
+msgstr "Lantern est à jour."
+
+msgid "error_referral"
+msgstr ""
+"Une erreur est survenue lors de l’application de votre code de parrainage."

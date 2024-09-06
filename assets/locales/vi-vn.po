@@ -3,15 +3,15 @@
 # Lantern, 2023
 # Yen Le Van <yenlevanbk@gmail.com>, 2024
 # Ngoc Hoang <ngocit09@gmail.com>, 2024
-# Nathan Tran, 2024
 # Anh Phan <vietnamesel10n@gmail.com>, 2024
 # e2f <projects@e2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024
+# Nathan Tran, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024\n"
+"Last-Translator: Nathan Tran, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1950,3 +1950,8 @@ msgstr "Thêm email để truy cập vào các giao dịch mua của bạn trên
 msgid "continue_without_email"
 msgstr "Tiếp tục mà không cần email"
 
+msgid "no_new_update"
+msgstr "Bạn có phiên bản mới nhất!"
+
+msgid "error_referral"
+msgstr "Đã xảy ra lỗi khi áp dụng mã giới thiệu của bạn."

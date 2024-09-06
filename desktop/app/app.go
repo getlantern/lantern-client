@@ -58,7 +58,6 @@ func init() {
 // App is the core of the Lantern desktop application, in the form of a library.
 type App struct {
 	hasExited            atomic.Bool
-	isConnected          atomic.Bool
 	fetchedGlobalConfig  atomic.Bool
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
@@ -201,7 +200,7 @@ func (app *App) Run(ctx context.Context) {
 			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.isConnected.Load() }, // check whether we're disconnected
+			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
 			app.settings.GetProxyAll,
 			func() bool { return false }, // on desktop, we do not allow private hosts
 			app.settings.IsAutoReport,
@@ -240,9 +239,6 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 
 func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	log.Debug("Got first config")
-
-	go app.fetchOrCreateUser(ctx)
-	go app.GetPaymentMethods(ctx)
 
 	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
 		log.Debugf("Start profiling with cpu file %s and mem file %s", app.Flags.CpuProfile, app.Flags.MemProfile)
@@ -378,7 +374,10 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
-	go app.fetchDeviceLinkingCode(context.Background())
+	ctx := context.Background()
+	go app.fetchOrCreateUser(ctx)
+	go app.PaymentMethods(ctx)
+	go app.fetchDeviceLinkingCode(ctx)
 
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)

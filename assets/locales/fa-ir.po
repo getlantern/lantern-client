@@ -10,7 +10,6 @@
 # ali jafarizadeh <ebrahimigv@gmail.com>, 2024
 # Evan <alireza.firoozi68@gmail.com>, 2024
 # Mary Sol <salar.adlparvar@gmail.com>, 2024
-# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024
 # NoProfile, 2024
 # Lantern, 2024
 # Vaseto Nora <n.nouri67@gmail.com>, 2024
@@ -21,11 +20,11 @@
 # Derek F <derek@getlantern.org>, 2024
 # AHMAD MASOUD BARAKZAI, 2024
 # Mersen M, 2024
-# zar24 <zarghamjan@yahoo.com>, 2024
+# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: zar24 <zarghamjan@yahoo.com>, 2024\n"
+"Last-Translator: Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -1899,6 +1898,7 @@ msgstr "محدودیت رسیده است "
 
 msgid "file_size_limit_description"
 msgstr "اندازه پیوست‌ها باید کمتر از 100 مگابایت باشد"
+
 msgid "lantern_pro_one_year"
 msgstr "لنترن پرو: طرح یک ساله"
 
@@ -1947,3 +1947,9 @@ msgstr "ایمیل را اضافه کنید تا بتوانید به خریده�
 msgid "continue_without_email"
 msgstr "ادامه بدون ایمیل"
 
+
+msgid "no_new_update"
+msgstr "شما به روز هستید!"
+
+msgid "error_referral"
+msgstr "هنگام اعمال کد معرف خطا دریافت شد"

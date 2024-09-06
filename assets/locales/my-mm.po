@@ -2,14 +2,15 @@
 # Translators:
 # tx_e2f_bu r4 <tx_e2f_bu_r4@ate2f.com>, 2022
 # Lantern, 2023
-# Derek F <derek@getlantern.org>, 2024
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2024
 # tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2024
 # Tun Tun Aung <tuntunaung@codingclassroom.org>, 2024
+# Derek F <derek@getlantern.org>, 2024
+# e2f <projects@e2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Tun Tun Aung <tuntunaung@codingclassroom.org>, 2024\n"
+"Last-Translator: e2f <projects@e2f.com>, 2024\n"
 "Language-Team: Burmese (https://app.transifex.com/lantern-1/teams/94371/my/)\n"
 "Language: my\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1994,3 +1995,8 @@ msgstr ""
 
 msgid "continue_without_email"
 msgstr ""
+msgid "no_new_update"
+msgstr "သင်နောက်ဆုံးပေါ်အဆင့်ရောက်နေပါပြီ"
+
+msgid "error_referral"
+msgstr "သင့်ရဲ့ရည်ညွှန်းကုဒ်ကိုအသုံးပြုရာတွင် အမှားတစ်ခုဖြစ်ပွားခဲ့သည်။ "

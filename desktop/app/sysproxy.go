@@ -42,7 +42,7 @@ func setUpSysproxyTool() error {
 }
 
 func (app *App) sendConnectionStatus(isConnected bool) {
-	app.isConnected.Store(isConnected)
+	app.settings.SetDisconnected(!isConnected)
 	app.SendMessageToUI("vpnstatus", map[string]interface{}{
 		"type":      "vpnstatus",
 		"connected": isConnected,

@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -57,27 +58,32 @@ type ProClient interface {
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	httpClient := opts.HttpClient
 	if httpClient == nil {
-		httpClient = &http.Client{}
+		// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
+		// attempts to send requests through both chained and direct fronted routes in parallel
+		// for HEAD and GET requests and ChainedThenFronted for all others.
+		httpClient = NewHTTPClient(proxied.ParallelForIdempotent(), opts)
 	}
-	client := &proClient{
+	wc := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL,
+		func(client *resty.Client, req *http.Request) error {
+			prepareProRequest(req, common.ProAPIHost, opts.UserConfig())
+			return nil
+		}, nil))
+	return &proClient{
 		userConfig: opts.UserConfig,
+		webclient:  wc,
 	}
-	client.webclient = webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL, prepareProRequest(opts.UserConfig), nil))
-	return client
 }
 
 // prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
-func prepareProRequest(userConfig func() common.UserConfig) func(client *resty.Client, req *http.Request) error {
-	return func(client *resty.Client, req *http.Request) error {
-		uc := userConfig()
-		req.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
-			common.DeviceIdHeader,
-			common.ProTokenHeader,
-			common.UserIdHeader,
-		}, ", "))
-		common.AddCommonHeadersWithOptions(uc, req, false)
-		return nil
-	}
+func prepareProRequest(r *http.Request, proAPIHost string, userConfig common.UserConfig) {
+	r.URL.Host = proAPIHost
+	r.RequestURI = "" // http: Request.RequestURI can't be set in client requests.
+	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
+		common.DeviceIdHeader,
+		common.ProTokenHeader,
+		common.UserIdHeader,
+	}, ", "))
+	common.AddCommonHeadersWithOptions(userConfig, r, false)
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {

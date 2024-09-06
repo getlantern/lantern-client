@@ -19,16 +19,15 @@
 # Rockman Lau <im@rockman.us>, 2024
 # 苏培 喻 <ysp90@hotmail.com>, 2024
 # 5ffb0e30c16f79bca37af5baff50ee52_58bd05a <18e9486319e95596cee4e2007f6eede0_4750>, 2024
-# YFdyh000 <yfdyh000@gmail.com>, 2024
 # Lantern, 2024
 # e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
 # Aki, 2024
-# wwj402 <wwj402@gmail.com>, 2024
+# YFdyh000 <yfdyh000@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: wwj402 <wwj402@gmail.com>, 2024\n"
+"Last-Translator: YFdyh000 <yfdyh000@gmail.com>, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/lantern-1/teams/94371/zh_CN/)\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1851,3 +1850,8 @@ msgstr "添加电子邮件以便在任何设备上访问您的购买。没有电
 msgid "continue_without_email"
 msgstr "不使用电子邮件继续"
 
+msgid "no_new_update"
+msgstr "您已在使用最新版！"
+
+msgid "error_referral"
+msgstr "使用您的推荐码时报错"
