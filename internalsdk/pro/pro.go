@@ -58,7 +58,7 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 		// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
 		// attempts to send requests through both chained and direct fronted routes in parallel
 		// for HEAD and GET requests and ChainedThenFronted for all others.
-		opts.HttpClient = getHTTPClient(proxied.ParallelForIdempotent(), opts.Timeout)
+		opts.HttpClient = NewHTTPClient(proxied.ParallelForIdempotent(), opts.Timeout)
 	}
 	if opts.OnBeforeRequest == nil {
 		opts.OnBeforeRequest = func(client *resty.Client, req *http.Request) error {
