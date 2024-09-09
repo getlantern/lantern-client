@@ -4,12 +4,9 @@ import (
 	"context"
 	"net/http"
 	"strings"
-	"time"
 
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
-	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 
@@ -52,14 +49,15 @@ type AuthClient interface {
 func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 	// The default http.RoundTripper is ChainedNonPersistent which proxies requests through chained servers
 	// and does not use keep alive connections. Since no root CA is specified, we do not need to check for an error.
-	rt, _ := proxied.ChainedNonPersistent("")
+	// Temporarily disable use of ChainedNonPersistent
+	// rt, _ := proxied.ChainedNonPersistent("")
 	rc := webclient.NewRESTClient(&webclient.Opts{
 		BaseURL: baseURL,
 		OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
 			prepareUserRequest(req, userConfig())
 			return nil
 		},
-		HttpClient: pro.NewHTTPClient(rt, 30*time.Second),
+		//HttpClient: pro.NewHTTPClient(rt, 30*time.Second),
 		UserConfig: userConfig,
 	})
 
