@@ -194,7 +194,7 @@ func startApp(t *testing.T, helper *integrationtest.Helper) (*App, error) {
 		Timeout:            time.Duration(0),
 	}
 
-	ss := settings.EmptySettings()
+	ss := settings.LoadSettings(helper.ConfigDir)
 	webclientOpts := &webclient.Opts{
 		UserConfig: func() uicommon.UserConfig {
 			return settings.UserConfig(ss)
