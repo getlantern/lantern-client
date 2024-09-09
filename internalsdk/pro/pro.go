@@ -74,6 +74,9 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 
 // prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
 func prepareProRequest(r *http.Request, proAPIHost string, userConfig common.UserConfig) {
+	if r.URL.Scheme == "" {
+		r.URL.Scheme = "http"
+	}
 	r.URL.Host = proAPIHost
 	r.RequestURI = "" // http: Request.RequestURI can't be set in client requests.
 	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
