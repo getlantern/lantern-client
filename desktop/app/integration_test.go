@@ -194,7 +194,7 @@ func startApp(t *testing.T, helper *integrationtest.Helper) (*App, error) {
 		Timeout:            time.Duration(0),
 	}
 
-	ss := settings.LoadSettings(helper.ConfigDir)
+	ss := settings.EmptySettings()
 	webclientOpts := &webclient.Opts{
 		UserConfig: func() uicommon.UserConfig {
 			return settings.UserConfig(ss)
@@ -203,11 +203,6 @@ func startApp(t *testing.T, helper *integrationtest.Helper) (*App, error) {
 	proClient := pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
 
 	a := NewApp(flags, helper.ConfigDir, proClient, ss)
-	id := ss.GetUserID()
-	if id == 0 {
-		ss.SetUserIDAndToken(1, "token")
-	}
-
 	go a.Run(ctx)
 
 	return a, waitforserver.WaitForServer("tcp", LocalProxyAddr, 10*time.Second)
