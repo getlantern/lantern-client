@@ -3,6 +3,7 @@ package webclient
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"fmt"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/go-resty/resty/v2"
 
 	"github.com/moul/http2curl"
@@ -20,6 +22,22 @@ import (
 var (
 	log = golog.LoggerFor("webclient")
 )
+
+// Opts are common options that RESTClient may be configured with
+type Opts struct {
+	// The OnAfterResponse option sets response middleware
+	OnAfterResponse resty.ResponseMiddleware
+	// BaseURL is the primary URL the client is configured with
+	BaseURL string
+	// The OnBeforeRequest option appends the given request middleware into the before request chain.
+	OnBeforeRequest resty.PreRequestHook
+	// HttpClient represents an http.Client that should be used by the resty client
+	HttpClient *http.Client
+	// UserConfig is a function that returns the user config associated with a Lantern user
+	UserConfig func() common.UserConfig
+	// Timeout represents a time limit for requests made by the web client
+	Timeout time.Duration
+}
 
 type RESTClient interface {
 	// Gets a JSON document from the given path with the given querystring parameters, reading the result into target.
@@ -61,11 +79,11 @@ func NewRESTClient(opts *Opts) RESTClient {
 // sendToURL is a function that sends requests to the given URL, optionally sending them through a proxy, optionally processing requests
 // with the given beforeRequest middleware and/or responses with the given afterResponse middleware.
 func sendToURL(c *resty.Client, opts *Opts) SendRequest {
-	if opts.BeforeRequest != nil {
-		c.SetPreRequestHook(opts.BeforeRequest)
+	if opts.OnBeforeRequest != nil {
+		c.SetPreRequestHook(opts.OnBeforeRequest)
 	}
-	if opts.AfterResponse != nil {
-		c.OnAfterResponse(opts.AfterResponse)
+	if opts.OnAfterResponse != nil {
+		c.OnAfterResponse(opts.OnAfterResponse)
 	}
 	c.SetBaseURL(opts.BaseURL)
 

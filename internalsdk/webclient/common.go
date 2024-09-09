@@ -1,29 +1,11 @@
 package webclient
 
 import (
-	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/go-resty/resty/v2"
 )
-
-// Opts are common Opts that instances of RESTClient may be configured with
-type Opts struct {
-	// The AfterResponse option sets response middleware
-	AfterResponse resty.ResponseMiddleware
-	// BaseURL is the primary URL the client is configured with
-	BaseURL string
-	// OnBeforeRequest method appends the given request middleware into the before request chain.
-	OnBeforeRequest resty.PreRequestHook
-	// HttpClient represents an http.Client that should be used by the resty client
-	HttpClient *http.Client
-	// UserConfig is a function that returns the user config associated with a Lantern user
-	UserConfig func() common.UserConfig
-	// Timeout represents a time limit for requests made by the web client
-	Timeout time.Duration
-}
 
 // AddCommonUserHeaders adds all common headers that are user or device specific.
 func AddCommonUserHeaders(uc common.UserConfig, req *resty.Request) {

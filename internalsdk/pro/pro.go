@@ -60,8 +60,8 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 		// for HEAD and GET requests and ChainedThenFronted for all others.
 		opts.HttpClient = getHTTPClient(proxied.ParallelForIdempotent(), opts.Timeout)
 	}
-	if opts.BeforeRequest == nil {
-		opts.BeforeRequest = func(client *resty.Client, req *http.Request) error {
+	if opts.OnBeforeRequest == nil {
+		opts.OnBeforeRequest = func(client *resty.Client, req *http.Request) error {
 			prepareProRequest(req, common.ProAPIHost, opts.UserConfig())
 			return nil
 		}

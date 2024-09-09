@@ -55,7 +55,7 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 	rt, _ := proxied.ChainedNonPersistent("")
 	rc := webclient.NewRESTClient(&webclient.Opts{
 		BaseURL: baseURL,
-		BeforeRequest: func(client *resty.Client, req *http.Request) error {
+		OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
 			prepareUserRequest(req, userConfig())
 			return nil
 		},
