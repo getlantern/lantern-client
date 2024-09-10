@@ -197,7 +197,7 @@ func startApp(t *testing.T, helper *integrationtest.Helper) (*App, error) {
 
 	ss := settings.EmptySettings()
 	webclientOpts := &webclient.Opts{
-		HttpClient: NewHTTPClient(proxied.ParallelForIdempotent(), 0),
+		HttpClient: pro.NewHTTPClient(proxied.ParallelForIdempotent(), 0),
 		UserConfig: func() uicommon.UserConfig {
 			return settings.UserConfig(ss)
 		},
