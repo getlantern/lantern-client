@@ -29,7 +29,6 @@ type AuthClient interface {
 	SignUp(email string, password string) ([]byte, error)
 	SignupEmailResendCode(ctx context.Context, data *protos.SignupEmailResendRequest) (bool, error)
 	SignupEmailConfirmation(ctx context.Context, data *protos.ConfirmSignupRequest) (bool, error)
-
 	//Login methods
 	GetSalt(ctx context.Context, email string) (*protos.GetSaltResponse, error)
 	LoginPrepare(ctx context.Context, loginData *protos.PrepareRequest) (*protos.PrepareResponse, error)
@@ -43,7 +42,6 @@ type AuthClient interface {
 	// Complete change email methods
 	CompleteChangeEmail(ctx context.Context, loginData *protos.CompleteChangeEmailRequest) (bool, error)
 	DeleteAccount(ctc context.Context, loginData *protos.DeleteUserRequest) (bool, error)
-
 	//Logout
 	SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error)
 }
