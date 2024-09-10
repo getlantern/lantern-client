@@ -13,7 +13,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
-	"github.com/getlantern/lantern-client/internalsdk/webclient/defaultwebclient"
 	"github.com/go-resty/resty/v2"
 
 	"github.com/leekchan/accounting"
@@ -27,11 +26,12 @@ var (
 )
 
 type proClient struct {
+	webclient.RESTClient
 	userConfig func() common.UserConfig
-	webclient  webclient.RESTClient
 }
 
 type ProClient interface {
+	webclient.RESTClient
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
@@ -54,26 +54,29 @@ type ProClient interface {
 
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
-	httpClient := opts.HttpClient
-	if httpClient == nil {
+	if opts.HttpClient == nil {
 		// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
 		// attempts to send requests through both chained and direct fronted routes in parallel
 		// for HEAD and GET requests and ChainedThenFronted for all others.
-		httpClient = NewHTTPClient(proxied.ParallelForIdempotent(), opts)
+		opts.HttpClient = NewHTTPClient(proxied.ParallelForIdempotent(), opts.Timeout)
 	}
-	wc := webclient.NewRESTClient(defaultwebclient.SendToURL(httpClient, baseURL,
-		func(client *resty.Client, req *http.Request) error {
+	if opts.OnBeforeRequest == nil {
+		opts.OnBeforeRequest = func(client *resty.Client, req *http.Request) error {
 			prepareProRequest(req, common.ProAPIHost, opts.UserConfig())
 			return nil
-		}, nil))
+		}
+	}
 	return &proClient{
 		userConfig: opts.UserConfig,
-		webclient:  wc,
+		RESTClient: webclient.NewRESTClient(opts),
 	}
 }
 
 // prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
 func prepareProRequest(r *http.Request, proAPIHost string, userConfig common.UserConfig) {
+	if r.URL.Scheme == "" {
+		r.URL.Scheme = "http"
+	}
 	r.URL.Host = proAPIHost
 	r.RequestURI = "" // http: Request.RequestURI can't be set in client requests.
 	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
@@ -96,7 +99,7 @@ func (c *proClient) defaultParams() map[string]interface{} {
 // XXX Deprecated: See https://github.com/getlantern/lantern-internal/issues/4377
 func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error) {
 	var resp protos.BaseResponse
-	err := c.webclient.GetJSON(ctx, "/email-exists", map[string]interface{}{
+	err := c.GetJSON(ctx, "/email-exists", map[string]interface{}{
 		"email": email,
 	}, &resp)
 	if err != nil {
@@ -113,7 +116,7 @@ func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedi
 	b, _ := protojson.Marshal(req)
 	params := make(map[string]interface{})
 	json.Unmarshal(b, &params)
-	err := c.webclient.GetJSON(ctx, "/payment-redirect", params, &resp)
+	err := c.GetJSON(ctx, "/payment-redirect", params, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +127,7 @@ func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedi
 // This methods has been deparacted in flavor of PaymentMethodsV4
 func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error) {
 	var resp PaymentMethodsResponse
-	err := c.webclient.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
+	err := c.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +137,7 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 // PaymentMethods returns a list of plans, payment providers and logo available payment methods
 func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error) {
 	var resp PaymentMethodsResponse
-	err := c.webclient.GetJSON(ctx, "/plans-v4", c.defaultParams(), &resp)
+	err := c.GetJSON(ctx, "/plans-v4", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +170,7 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 // Plans is used to hit the legacy /plans endpoint. Deprecated.
 func (c *proClient) Plans(ctx context.Context) (*PlansResponse, error) {
 	var resp PlansResponse
-	err := c.webclient.GetJSON(ctx, "/plans", c.defaultParams(), &resp)
+	err := c.GetJSON(ctx, "/plans", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -191,7 +194,7 @@ func (c *proClient) Plans(ctx context.Context) (*PlansResponse, error) {
 // UserCreate creates a new user
 func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
-	err := c.webclient.PostFormReadingJSON(ctx, "/user-create", nil, &resp)
+	err := c.PostFormReadingJSON(ctx, "/user-create", nil, &resp)
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
 	}
@@ -205,7 +208,7 @@ func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 // UserData returns data associated with a user
 func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 	var resp UserDataResponse
-	err := c.webclient.GetJSON(ctx, "/user-data", nil, &resp)
+	err := c.GetJSON(ctx, "/user-data", nil, &resp)
 	if err != nil {
 		log.Errorf("Failed to fetch user data: %v", err)
 		return nil, errors.New("error fetching user data: %v", err)
@@ -217,7 +220,7 @@ func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 // RedeemResellerCode redeems a reseller code for the given user
 func (c *proClient) RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error) {
 	var resp protos.BaseResponse
-	if err := c.webclient.PostFormReadingJSON(ctx, "/purchase", req, &resp); err != nil {
+	if err := c.PostFormReadingJSON(ctx, "/purchase", req, &resp); err != nil {
 		log.Errorf("Failed to redeem reseller code: %v", err)
 		return nil, err
 	}
@@ -232,7 +235,7 @@ func (c *proClient) DeviceRemove(ctx context.Context, deviceId string) (*LinkRes
 	var resp LinkResponse
 	params := c.defaultParams()
 	params["deviceID"] = deviceId
-	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-remove", params, nil, &resp)
+	err := c.PostJSONReadingJSON(ctx, "/user-link-remove", params, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -245,7 +248,7 @@ func (c *proClient) DeviceAdd(ctx context.Context, deviceName string) (bool, err
 	var resp protos.BaseResponse
 	params := c.defaultParams()
 	params["deviceName"] = deviceName
-	err := c.webclient.PostJSONReadingJSON(ctx, "/device-add", params, nil, &resp)
+	err := c.PostJSONReadingJSON(ctx, "/device-add", params, nil, &resp)
 	if err != nil {
 		return false, err
 	}
@@ -260,7 +263,7 @@ func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.B
 	var resp protos.BaseResponse
 	params := c.defaultParams()
 	params["code"] = code
-	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-approve", params, nil, &resp)
+	err := c.PostJSONReadingJSON(ctx, "/link-code-approve", params, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -278,7 +281,7 @@ func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*Li
 	}
 	var resp LinkCodeResponse
 	uc := c.userConfig()
-	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-request", map[string]interface{}{
+	err := c.PostJSONReadingJSON(ctx, "/link-code-request", map[string]interface{}{
 		"deviceName": deviceName,
 		"locale":     uc.GetLanguage(),
 	}, nil, &resp)
@@ -291,7 +294,7 @@ func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*Li
 // LinkCodeRequest returns a code that can be used to link a device to an existing Pro account
 func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error) {
 	var resp LinkCodeRedeemResponse
-	err := c.webclient.PostJSONReadingJSON(ctx, "/link-code-redeem", map[string]interface{}{
+	err := c.PostJSONReadingJSON(ctx, "/link-code-redeem", map[string]interface{}{
 		"deviceName": deviceName,
 		"code":       deviceCode,
 	}, nil, &resp)
@@ -311,7 +314,7 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string, em
 	}
 	var resp LinkCodeResponse
 	uc := c.userConfig()
-	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
+	err := c.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
 		"deviceName": deviceId,
 		"locale":     uc.GetLanguage(),
 		"email":      email,
@@ -329,7 +332,7 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string, em
 func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error) {
 	var resp UserRecovery
 	uc := c.userConfig()
-	err := c.webclient.PostJSONReadingJSON(ctx, "/user-link-validate", map[string]interface{}{
+	err := c.PostJSONReadingJSON(ctx, "/user-link-validate", map[string]interface{}{
 		"code":   code,
 		"locale": uc.GetLanguage(),
 	}, nil, &resp)
@@ -346,7 +349,7 @@ func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRec
 // PurchaseRequest is used to request a purchase of a Pro plan is will be used for all most all the payment providers
 func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interface{}) (*PurchaseResponse, error) {
 	var resp PurchaseResponse
-	err := c.webclient.PostFormReadingJSON(ctx, "/purchase", req, &resp)
+	err := c.PostFormReadingJSON(ctx, "/purchase", req, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -361,7 +364,7 @@ func (c *proClient) ReferralAttach(ctx context.Context, refCode string) (bool, e
 	var resp protos.BaseResponse
 	params := c.defaultParams()
 	params["code"] = refCode
-	err := c.webclient.PostFormReadingJSON(ctx, "/referral-attach", params, &resp)
+	err := c.PostFormReadingJSON(ctx, "/referral-attach", params, &resp)
 	if err != nil {
 		return false, err
 	}
