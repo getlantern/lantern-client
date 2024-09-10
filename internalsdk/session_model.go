@@ -174,7 +174,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		},
 	}
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
+	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts.UserConfig)
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	go m.initSessionModel(context.Background(), opts)
