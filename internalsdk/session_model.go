@@ -438,7 +438,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-	case "bandwidthUpdate":
+	case "updateBandwidth":
 		percent := arguments.Get("percent").Int()
 		remaining := arguments.Get("remaining").Int()
 		allowed := arguments.Get("allowed").Int()
@@ -852,6 +852,8 @@ func (m *SessionModel) SetStaging(staging bool) error {
 // Keep name as p1,p2,p3..... percent: Long, remaining: Long, allowed: Long, ttlSeconds: Long
 // Name become part of Objective c so this is important
 func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
+	log.Debugf("BandwidthUpdate percent %v remaining %v allowed %v ttl %v", p1, p2, p3, p4)
+
 	bandwidth := &protos.Bandwidth{
 		Percent:    int64(p1),
 		Remaining:  int64(p2),

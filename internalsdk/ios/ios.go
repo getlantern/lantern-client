@@ -278,7 +278,7 @@ func bandwidthUpdates(bt BandwidthTracker) {
 			if quota == nil || quota.MiBAllowed > 50000000 {
 				continue
 			}
-			var percent, remaining, allowed int
+			var percent, remaining int
 			if quota.MiBUsed >= quota.MiBAllowed {
 				percent = 100
 				remaining = 0
@@ -287,7 +287,7 @@ func bandwidthUpdates(bt BandwidthTracker) {
 				remaining = int(quota.MiBAllowed - quota.MiBUsed)
 			}
 
-			bt.BandwidthUpdate("", percent, remaining, allowed, int(quota.TTLSeconds))
+			bt.BandwidthUpdate("", percent, remaining, int(quota.MiBAllowed), int(quota.TTLSeconds))
 		}
 	}()
 }
