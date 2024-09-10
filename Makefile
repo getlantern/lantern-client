@@ -327,6 +327,15 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
+# Note from https://github.com/wlynxg/anet?tab=readme-ov-file#how-to-build-with-go-1230-or-later
+# The `anet` library internally relies on `//go:linkname` directive. Since the usage of `//go:linkname` has been
+# restricted since Go 1.23.0 ([Go 1.23 Release Notes](https://tip.golang.org/doc/go1.23#linker)), it is
+# necessary to specify the `-checklinkname=0` linker flag when building the `anet` package with Go 1.23.0 or later.
+# Without this flag, the following linker error will occur:
+# ```
+# link: github.com/wlynxg/anet: invalid reference to net.zoneCache
+# ```
+$(ANDROID_LIB): export LDFLAGS += -checklinkname=0
 $(ANDROID_LIB): $(GO_SOURCES)
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	go install golang.org/x/mobile/cmd/gomobile && \
