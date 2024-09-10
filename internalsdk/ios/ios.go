@@ -13,6 +13,7 @@ import (
 	"github.com/getlantern/dnsgrab/persistentcache"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/bandit"
+	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/chained"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/ipproxy"
@@ -107,6 +108,10 @@ type StatsTracker interface {
 	UpdateStats(string, string, string, int, int, bool)
 }
 
+type BandwidthTracker interface {
+	BandwidthUpdate(string, int, int, int, int)
+}
+
 type cw struct {
 	ipStack        io.WriteCloser
 	client         *iosClient
@@ -160,13 +165,15 @@ type iosClient struct {
 	tcpHandler      *proxiedTCPHandler
 	udpHandler      *directUDPHandler
 
-	clientWriter    *cw
-	memoryAvailable int64
-	started         time.Time
-	statsTracker    StatsTracker
+	clientWriter     *cw
+	memoryAvailable  int64
+	started          time.Time
+	bandwidthTracker BandwidthTracker
+	statsTracker     StatsTracker
 }
 
-func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, configDir string, mtu int, capturedDNSHost, realDNSHost string, statsTracker StatsTracker) (ClientWriter, error) {
+func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, configDir string, mtu int,
+	capturedDNSHost, realDNSHost string, bandwidthTracker BandwidthTracker, statsTracker StatsTracker) (ClientWriter, error) {
 	log.Debug("Creating new iOS client")
 	if mtu <= 0 {
 		log.Debug("Defaulting MTU to 1500")
@@ -178,12 +185,13 @@ func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, confi
 		memChecker: memChecker,
 		configDir:  configDir,
 		//ipp:             ipp,
-		mtu:             mtu,
-		udpDialer:       udpDialer,
-		capturedDNSHost: capturedDNSHost,
-		realDNSHost:     realDNSHost,
-		started:         time.Now(),
-		statsTracker:    statsTracker,
+		mtu:              mtu,
+		udpDialer:        udpDialer,
+		capturedDNSHost:  capturedDNSHost,
+		realDNSHost:      realDNSHost,
+		started:          time.Now(),
+		bandwidthTracker: bandwidthTracker,
+		statsTracker:     statsTracker,
 	}
 	optimizeMemoryUsage(&c.memoryAvailable)
 	go c.gcPeriodically()
@@ -224,6 +232,9 @@ func (c *iosClient) start() (ClientWriter, error) {
 		})
 	}()
 
+	// get bandwidth updates
+	go bandwidthUpdates(c.bandwidthTracker)
+
 	// We use a persistent cache for dnsgrab because some clients seem to hang on to our fake IP addresses for a while, even though we set a TTL of 1 second.
 	// That can be a problem when the network extension is automatically restarted. Caching the dns cache on disk allows us to successfully reverse look up
 	// those IP addresses even after a restart.
@@ -259,6 +270,26 @@ func (c *iosClient) start() (ClientWriter, error) {
 	}
 
 	return c.clientWriter, nil
+}
+
+func bandwidthUpdates(bt BandwidthTracker) {
+	go func() {
+		for quota := range bandwidth.Updates {
+			if quota == nil || quota.MiBAllowed > 50000000 {
+				continue
+			}
+			var percent, remaining, allowed int
+			if quota.MiBUsed >= quota.MiBAllowed {
+				percent = 100
+				remaining = 0
+			} else {
+				percent = int(100 * (float64(quota.MiBUsed) / float64(quota.MiBAllowed)))
+				remaining = int(quota.MiBAllowed - quota.MiBUsed)
+			}
+
+			bt.BandwidthUpdate("", percent, remaining, allowed, int(quota.TTLSeconds))
+		}
+	}()
 }
 
 func (c *iosClient) loadUserConfig() error {

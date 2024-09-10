@@ -438,6 +438,16 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "bandwidthUpdate":
+		percent := arguments.Get("percent").Int()
+		remaining := arguments.Get("remaining").Int()
+		allowed := arguments.Get("allowed").Int()
+		ttlSeconds := arguments.Get("ttlSeconds").Int()
+		err := m.BandwidthUpdate(percent, remaining, allowed, ttlSeconds)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	case "isUserFirstTimeVisit":
 		return checkFirstTimeVisit(m.baseModel)
 
