@@ -168,6 +168,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   deinit {
     // Remove observer when the observer is deallocated
     Constants.appGroupDefaults.removeObserver(self, forKeyPath: Constants.statsData)
+    Constants.appGroupDefaults.removeObserver(self, forKeyPath: Constants.bandwidthData)
   }
 
 }
