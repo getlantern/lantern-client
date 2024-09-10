@@ -17,7 +17,6 @@ import (
 
 	"github.com/getlantern/flashlight/v7"
 	flashops "github.com/getlantern/flashlight/v7/ops"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/golog/testlog"
 	"github.com/getlantern/ops"
@@ -197,7 +196,6 @@ func startApp(t *testing.T, helper *integrationtest.Helper) (*App, error) {
 
 	ss := settings.EmptySettings()
 	webclientOpts := &webclient.Opts{
-		HttpClient: pro.NewHTTPClient(proxied.ParallelForIdempotent(), 0),
 		UserConfig: func() uicommon.UserConfig {
 			return settings.UserConfig(ss)
 		},
