@@ -50,14 +50,27 @@ type AuthClient interface {
 func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 	// The default http.RoundTripper is ChainedNonPersistent which proxies requests through chained servers
 	// and does not use keep alive connections. Since no root CA is specified, we do not need to check for an error.
-	rt, _ := proxied.ChainedNonPersistent("")
+
+	var httpClient *http.Client
+
+	if strings.HasSuffix(baseURL, common.APIBaseUrl) {
+		log.Debug("using proxied.Fronted")
+		//this is ios version
+		httpClient = &http.Client{
+			Transport: proxied.Fronted(30 * time.Second),
+		}
+	} else {
+		rt, _ := proxied.ChainedNonPersistent("")
+		httpClient = pro.NewHTTPClient(rt, 30*time.Second)
+	}
+
 	rc := webclient.NewRESTClient(&webclient.Opts{
 		BaseURL: baseURL,
 		OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
 			prepareUserRequest(req, userConfig())
 			return nil
 		},
-		HttpClient: pro.NewHTTPClient(rt, 30*time.Second),
+		HttpClient: httpClient,
 		UserConfig: userConfig,
 	})
 

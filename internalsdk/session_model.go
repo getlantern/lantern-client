@@ -175,7 +175,12 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		},
 	}
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts.UserConfig)
+
+	authUrl := common.DFBaseUrl
+	if opts.Platform == "ios" {
+		authUrl = common.APIBaseUrl
+	}
+	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), webclientOpts.UserConfig)
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	go m.initSessionModel(context.Background(), opts)
@@ -698,7 +703,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	m.surveyModel, _ = NewSurveyModel(*m)
 	// By defautl on ios  auth flow enabled
 	if opts.Platform == "ios" {
-		m.SetAuthEnabled(false)
+		m.SetAuthEnabled(true)
 	}
 	return checkAdsEnabled(m)
 }
