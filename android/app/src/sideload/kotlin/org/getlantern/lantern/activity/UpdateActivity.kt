@@ -1,6 +1,7 @@
 package org.getlantern.lantern.activity
 
 import android.os.Bundle
+import android.widget.Button
 import android.Manifest
 import android.app.Activity
 import android.content.Context
@@ -51,6 +52,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     lateinit var progressBar: ProgressBar
     lateinit var updateButtons: RelativeLayout
     lateinit var percentage: TextView
+    lateinit var installUpdate: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +63,10 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         progressBar = findViewById(R.id.progressBar)
         updateButtons = findViewById(R.id.updateButtons)
         percentage = findViewById(R.id.percentage)
+        installUpdate = findViewById(R.id.installUpdate)
+        installUpdate.setOnClickListener {
+            installUpdate()
+        }
         subTitle.setText(getString(R.string.update_available, getString(R.string.app_name)))
     }
 
