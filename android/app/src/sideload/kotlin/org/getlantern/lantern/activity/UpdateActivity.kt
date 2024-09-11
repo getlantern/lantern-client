@@ -36,7 +36,6 @@ import org.getlantern.lantern.util.SignatureVerificationException
 import org.getlantern.mobilesdk.Logger
 import java.io.File
 
-@EActivity(R.layout.update_dialog)
 open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListener {
 
     companion object {
@@ -46,26 +45,22 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
 
     private var apkInstaller: ApkInstaller? = null
 
-    @ViewById
     lateinit var title: TextView
-
-    @ViewById
     lateinit var subTitle: TextView
-
-    @ViewById
     lateinit var progressBarLayout: LinearLayout
-
-    @ViewById
     lateinit var progressBar: ProgressBar
-
-    @ViewById
     lateinit var updateButtons: RelativeLayout
-
-    @ViewById
     lateinit var percentage: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.update_dialog)
+        title = findViewById(R.id.title)
+        subTitle = findViewById(R.id.subTitle)
+        progressBarLayout = findViewById(R.id.progressBarLayout)
+        progressBar = findViewById(R.id.progressBar)
+        updateButtons = findViewById(R.id.updateButtons)
+        percentage = findViewById(R.id.percentage)
         subTitle.setText(getString(R.string.update_available, getString(R.string.app_name)))
     }
 
