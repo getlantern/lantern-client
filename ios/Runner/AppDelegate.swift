@@ -11,7 +11,7 @@ import UIKit
 
 // For IOS App Lunch time issue
 //https://developer.apple.com/videos/play/wwdc2019/423/?time=305
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
   // Flutter Properties
   var flutterViewController: FlutterViewController!
