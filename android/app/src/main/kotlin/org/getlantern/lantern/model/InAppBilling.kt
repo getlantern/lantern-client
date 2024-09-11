@@ -136,8 +136,8 @@ class InAppBilling(
             activity,
             BillingFlowParams.newBuilder()
                 .setProductDetailsParamsList(productDetailsParamsList)
-                .setObfuscatedAccountId(LanternApp.getSession().deviceID())// add device-od
-                .setObfuscatedProfileId(LanternApp.getSession().userId().toString())
+                .setObfuscatedAccountId(LanternApp.session.deviceID())// add device-od
+                .setObfuscatedProfileId(LanternApp.session.userId().toString())
                 .build(),
         )
     }
@@ -265,10 +265,10 @@ class InAppBilling(
                         */
                         try {
                             Logger.debug(TAG, "Purchase is not acknowledgement yet: $purchase")
-                            val currency = LanternApp.getSession().deviceCurrencyCode()
+                            val currency = LanternApp.session.deviceCurrencyCode()
                             val planID = "${purchase.products[0]}-$currency"
-                            LanternApp.getSession().submitGooglePlayPayment(
-                                email = LanternApp.getSession().email(),
+                            LanternApp.session.submitGooglePlayPayment(
+                                email = LanternApp.session.email(),
                                 planId = planID,
                                 purchaseToken = purchase.purchaseToken
                             )

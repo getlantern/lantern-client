@@ -62,7 +62,7 @@ class LanternVpnService : VpnService(), Runnable {
             stop()
             START_NOT_STICKY
         } else {
-            LanternApp.getSession().updateVpnPreference(true)
+            LanternApp.session.updateVpnPreference(true)
             connect()
             START_STICKY
         }
@@ -79,8 +79,8 @@ class LanternVpnService : VpnService(), Runnable {
             getOrInitProvider()?.run(
                 this,
                 Builder(),
-                LanternApp.getSession().sOCKS5Addr,
-                LanternApp.getSession().dNSGrabAddr,
+                LanternApp.session.sOCKS5Addr,
+                LanternApp.session.dNSGrabAddr,
             )
         } catch (e: Exception) {
             Logger.error(TAG, "Error running VPN", e)
@@ -108,7 +108,7 @@ class LanternVpnService : VpnService(), Runnable {
         }
         try {
             Logger.d(TAG, "updating vpn preference")
-            LanternApp.getSession().updateVpnPreference(false)
+            LanternApp.session.updateVpnPreference(false)
         } catch (t: Throwable) {
             Logger.e(TAG, "error updating vpn preference", t)
         }
@@ -121,8 +121,8 @@ class LanternVpnService : VpnService(), Runnable {
             Logger.d(TAG, "Using Go tun2socks")
             provider = GoTun2SocksProvider(
                 packageManager,
-                LanternApp.getSession().splitTunnelingEnabled(),
-                HashSet(LanternApp.getSession().appsAllowedAccess()),
+                LanternApp.session.splitTunnelingEnabled(),
+                HashSet(LanternApp.session.appsAllowedAccess()),
             )
         }
         return provider

@@ -1,5 +1,6 @@
 package org.getlantern.lantern.activity
 
+import android.os.Bundle
 import android.Manifest
 import android.app.Activity
 import android.content.Context
@@ -63,8 +64,8 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     @ViewById
     lateinit var percentage: TextView
 
-    override fun onStart() {
-        super.onStart()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         subTitle.setText(getString(R.string.update_available, getString(R.string.app_name)))
     }
 

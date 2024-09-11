@@ -137,7 +137,7 @@ internal class NetworkFirstPlausibleClient(
             Logger.e("Plausible", "Plausible disabled, not sending event: $event")
             return
         }
-        val session = LanternApp.getSession()
+        val session = LanternApp.session
         Logger.d(TAG, "Sending event ${event.toJson()}")
         val body = event.toJson().toRequestBody("application/json".toMediaType())
         val url =
@@ -193,7 +193,7 @@ internal class NetworkFirstPlausibleClient(
     }
 
     val okHttpClient: OkHttpClient by lazy {
-        val session = LanternApp.getSession()
+        val session = LanternApp.session
         val hTTPAddr = session.hTTPAddr
         val uri = URI("http://" + hTTPAddr)
         Logger.d(TAG, "Setting http proxy address to $uri")
