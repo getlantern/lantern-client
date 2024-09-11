@@ -47,6 +47,7 @@
 		03FAF1B42AA1E9F40063580C /* VpnModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FAF1B32AA1E9F40063580C /* VpnModel.swift */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		5F3433342C90B4B200EF797D /* BandwidthTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F3433332C90B4B200EF797D /* BandwidthTracker.swift */; };
 		5FA8BFF12BFB34F80097D1B9 /* FlashlightManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA8BFF02BFB34F80097D1B9 /* FlashlightManagerExtension.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
@@ -144,6 +145,7 @@
 		40CA215A5360960236859E29 /* Pods-Runner.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-prod.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-prod.xcconfig"; sourceTree = "<group>"; };
 		41DDE2A6029CFDB93A269403 /* Pods-LanternTests.debug-runner-appium-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.debug-runner-appium-test.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.debug-runner-appium-test.xcconfig"; sourceTree = "<group>"; };
 		4C199F107C36A050FA0BD82A /* Pods-Runner.debug-appium-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-appium-test.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-appium-test.xcconfig"; sourceTree = "<group>"; };
+		5F3433332C90B4B200EF797D /* BandwidthTracker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BandwidthTracker.swift; sourceTree = "<group>"; };
 		5FA8BFF02BFB34F80097D1B9 /* FlashlightManagerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashlightManagerExtension.swift; sourceTree = "<group>"; };
 		607A0530FA4F0B857B847CC5 /* Pods-Runner.profile-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-prod.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-prod.xcconfig"; sourceTree = "<group>"; };
 		639C2FD1FB8C2B8BA0BC8FA2 /* Pods-LanternTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LanternTests.profile.xcconfig"; path = "Target Support Files/Pods-LanternTests/Pods-LanternTests.profile.xcconfig"; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		03A1AB332AA890AB00FB41B2 /* Tunnel */ = {
 			isa = PBXGroup;
 			children = (
+				5F3433332C90B4B200EF797D /* BandwidthTracker.swift */,
 				03567DC52AA9F82F00A233EA /* UDPConn.swift */,
 				03567DC22AA9F77000A233EA /* NEProviderStopReason.swift */,
 				03A1AB342AA890AB00FB41B2 /* PacketTunnelProvider.swift */,
@@ -679,6 +682,7 @@
 			files = (
 				03567DBE2AA9F31200A233EA /* Logger.swift in Sources */,
 				0308A13E2AAF43A10086157A /* UserNotificationsManager.swift in Sources */,
+				5F3433342C90B4B200EF797D /* BandwidthTracker.swift in Sources */,
 				0308A1312AAEF3B00086157A /* Event.swift in Sources */,
 				0332DD612BFF809C0007240D /* StatsTracker.swift in Sources */,
 				03A1AB352AA890AB00FB41B2 /* PacketTunnelProvider.swift in Sources */,

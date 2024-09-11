@@ -70,7 +70,7 @@ func init() {
 	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
 		UserConfig: userConfig,
 	})
-	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), userConfig)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
 
 	a = app.NewApp(flags, cdir, proClient, ss)
 }

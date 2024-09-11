@@ -138,6 +138,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(3000, &protos.Plan{})
 		base.db.RegisterType(4000, &protos.Plans{})
+		base.db.RegisterType(5000, &protos.Bandwidth{})
 	} else {
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
@@ -174,7 +175,12 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		},
 	}
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts.UserConfig)
+
+	authUrl := common.DFBaseUrl
+	if opts.Platform == "ios" {
+		authUrl = common.APIBaseUrl
+	}
+	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), webclientOpts.UserConfig)
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	go m.initSessionModel(context.Background(), opts)
@@ -438,6 +444,16 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "updateBandwidth":
+		percent := arguments.Get("percent").Int()
+		remaining := arguments.Get("remaining").Int()
+		allowed := arguments.Get("allowed").Int()
+		ttlSeconds := arguments.Get("ttlSeconds").Int()
+		err := m.BandwidthUpdate(percent, remaining, allowed, ttlSeconds)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	case "isUserFirstTimeVisit":
 		return checkFirstTimeVisit(m.baseModel)
 
@@ -687,7 +703,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	m.surveyModel, _ = NewSurveyModel(*m)
 	// By defautl on ios  auth flow enabled
 	if opts.Platform == "ios" {
-		m.SetAuthEnabled(false)
+		m.SetAuthEnabled(true)
 	}
 	return checkAdsEnabled(m)
 }
@@ -842,6 +858,8 @@ func (m *SessionModel) SetStaging(staging bool) error {
 // Keep name as p1,p2,p3..... percent: Long, remaining: Long, allowed: Long, ttlSeconds: Long
 // Name become part of Objective c so this is important
 func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
+	log.Debugf("BandwidthUpdate percent %v remaining %v allowed %v ttl %v", p1, p2, p3, p4)
+
 	bandwidth := &protos.Bandwidth{
 		Percent:    int64(p1),
 		Remaining:  int64(p2),
