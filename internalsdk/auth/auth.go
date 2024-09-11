@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -53,13 +54,14 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 
 	var httpClient *http.Client
 
-	if strings.HasSuffix(baseURL, common.APIBaseUrl) {
+	if baseURL == fmt.Sprintf("https://%s", common.APIBaseUrl) {
 		log.Debug("using proxied.Fronted")
 		//this is ios version
 		httpClient = &http.Client{
 			Transport: proxied.Fronted(30 * time.Second),
 		}
 	} else {
+		log.Debug("using proxied.ChainedNonPersistent")
 		rt, _ := proxied.ChainedNonPersistent("")
 		httpClient = pro.NewHTTPClient(rt, 30*time.Second)
 	}
