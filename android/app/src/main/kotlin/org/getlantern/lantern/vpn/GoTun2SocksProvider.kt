@@ -112,8 +112,9 @@ class GoTun2SocksProvider(
             val intf: ParcelFileDescriptor? = createBuilder(vpnService, builder)
             Logger.debug(TAG, "Running tun2socks")
             if (intf != null) {
+                val tunFd = intf!!.detachFd()
                 Internalsdk.tun2Socks(
-                    intf.fd.toLong(),
+                    tunFd.toLong(),
                     socksAddr,
                     dnsGrabAddr,
                     VPN_MTU.toLong(),
