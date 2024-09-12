@@ -123,42 +123,42 @@ jobs:
           path: |
             lantern-installer.aab
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install s3cmd
-        run: pip install s3cmd
-
-      - name: Set s3cmd permissions
-        run: |
-          echo "[default]" > "$HOME/.s3cfg"
-          echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
-          echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
-
-      - name: Push binaries to s3
-        env:
-          VERSION: "${{ env.version }}"
-          APK: "${{ env.prefix }}-${{ env.version }}.apk"
-          AAB: "${{ env.prefix }}-${{ env.version }}.aab"
-          update: "lantern_update_android_arm-${{inputs.version}}.bz2"
-          update_source: lantern_update_android_arm.bz2
-        run: |
-          mv ${{ env.update_source }} ${{ env.update }}
-          mv lantern-installer.apk "$APK"
-          mv lantern-installer.aab "$AAB"
-          cp "$APK" ${{ env.prefix }}.apk
-          cp "$AAB" ${{ env.prefix }}.aab
-          echo ${{ env.version }} > ${{ env.version_file }}
-          shasum -a 256 "$APK" | cut -d " " -f 1 > "$APK".sha256
-          shasum -a 256 "$AAB" | cut -d " " -f 1 > "$AAB".sha256
-          shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
-          cp "$APK".sha256 ${{ env.prefix }}.apk.sha256
-          cp "$AAB".sha256 ${{ env.prefix }}.aab.sha256
-          s3cmd put --acl-public "$APK" "$APK".sha256 ${{ env.update }} ${{ env.update }}.sha256 ${{ env.version_file }} ${{ env.prefix }}.apk.sha256 ${{ env.prefix }}.apk "s3://$S3_BUCKET"
-          s3cmd put --acl-public "$AAB" "$AAB".sha256 ${{ env.prefix }}.aab.sha256 ${{ env.prefix }}.aab "s3://$S3_BUCKET"
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$APK"
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.apk"
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$AAB"
-          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
+#      - uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.12'
+#
+#      - name: Install s3cmd
+#        run: pip install s3cmd
+#
+#      - name: Set s3cmd permissions
+#        run: |
+#          echo "[default]" > "$HOME/.s3cfg"
+#          echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
+#          echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
+#
+#      - name: Push binaries to s3
+#        env:
+#          VERSION: "${{ env.version }}"
+#          APK: "${{ env.prefix }}-${{ env.version }}.apk"
+#          AAB: "${{ env.prefix }}-${{ env.version }}.aab"
+#          update: "lantern_update_android_arm-${{inputs.version}}.bz2"
+#          update_source: lantern_update_android_arm.bz2
+#        run: |
+#          mv ${{ env.update_source }} ${{ env.update }}
+#          mv lantern-installer.apk "$APK"
+#          mv lantern-installer.aab "$AAB"
+#          cp "$APK" ${{ env.prefix }}.apk
+#          cp "$AAB" ${{ env.prefix }}.aab
+#          echo ${{ env.version }} > ${{ env.version_file }}
+#          shasum -a 256 "$APK" | cut -d " " -f 1 > "$APK".sha256
+#          shasum -a 256 "$AAB" | cut -d " " -f 1 > "$AAB".sha256
+#          shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
+#          cp "$APK".sha256 ${{ env.prefix }}.apk.sha256
+#          cp "$AAB".sha256 ${{ env.prefix }}.aab.sha256
+#          s3cmd put --acl-public "$APK" "$APK".sha256 ${{ env.update }} ${{ env.update }}.sha256 ${{ env.version_file }} ${{ env.prefix }}.apk.sha256 ${{ env.prefix }}.apk "s3://$S3_BUCKET"
+#          s3cmd put --acl-public "$AAB" "$AAB".sha256 ${{ env.prefix }}.aab.sha256 ${{ env.prefix }}.aab "s3://$S3_BUCKET"
+#          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$APK"
+#          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.apk"
+#          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/$AAB"
+#          s3cmd modify --add-header='content-type':'application/vnd.android.package-archive' "s3://$S3_BUCKET/${{ env.prefix }}.aab"
 
