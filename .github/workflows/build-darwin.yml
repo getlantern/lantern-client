@@ -150,18 +150,18 @@ jobs:
         path: |
           lantern-installer.dmg
 
-#    - name: Push binaries to s3
-#      env:
-#        VERSION: "${{ env.version }}"
-#        DMG: "${{ env.prefix }}-${{ env.version }}.dmg"
-#        update: "lantern_update_darwin-${{inputs.version}}.bz2"
-#        update_source: lantern_update_darwin.bz2
-#      run: |
-#        mv ${{ env.update_source }} ${{ env.update }}
-#        mv lantern-installer.dmg "$DMG"
-#        cp "$DMG" ${{ env.prefix }}.dmg
-#        echo ${{ env.version }} > ${{ env.version_file }}
-#        shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
-#        shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
-#        cp "$DMG".sha256 ${{ env.prefix }}.dmg.sha256
-#        s3cmd put --acl-public "$DMG" "$DMG".sha256 ${{ env.update }} ${{ env.update }}.sha256 ${{ env.version_file }} ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
+    - name: Push binaries to s3
+      env:
+        VERSION: "${{ env.version }}"
+        DMG: "${{ env.prefix }}-${{ env.version }}.dmg"
+        update: "lantern_update_darwin-${{inputs.version}}.bz2"
+        update_source: lantern_update_darwin.bz2
+      run: |
+        mv ${{ env.update_source }} ${{ env.update }}
+        mv lantern-installer.dmg "$DMG"
+        cp "$DMG" ${{ env.prefix }}.dmg
+        echo ${{ env.version }} > ${{ env.version_file }}
+        shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
+        shasum -a 256 ${{ env.update }} | cut -d " " -f 1 > ${{ env.update }}.sha256
+        cp "$DMG".sha256 ${{ env.prefix }}.dmg.sha256
+        s3cmd put --acl-public "$DMG" "$DMG".sha256 ${{ env.update }} ${{ env.update }}.sha256 ${{ env.version_file }} ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
