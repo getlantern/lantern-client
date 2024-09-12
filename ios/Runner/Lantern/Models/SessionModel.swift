@@ -44,6 +44,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     }
     try super.init(flutterBinary, model)
     observeStatsUpdates()
+    observeBandwidthUpdates()
     getUserId()
     getProToken()
   }
@@ -101,9 +102,15 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   }
 
   func observeStatsUpdates() {
-    logger.debug("observesing stats udpates")
+    logger.debug("observing stats udpates")
     Constants.appGroupDefaults.addObserver(
       self, forKeyPath: Constants.statsData, options: [.new], context: nil)
+  }
+
+  func observeBandwidthUpdates() {
+    logger.debug("observing bandwidth udpates")
+    Constants.appGroupDefaults.addObserver(
+      self, forKeyPath: Constants.bandwidthData, options: [.new], context: nil)
   }
 
   // System method that observe value user default path
@@ -112,11 +119,34 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     context: UnsafeMutableRawPointer?
   ) {
     logger.debug("observeValue call with key \(keyPath)")
-    if keyPath == Constants.statsData {
-      logger.debug("Message comming from tunnel")
-      if let statsData = change![.newKey] as? Data {
-        updateStats(stats: statsData)
+    switch keyPath {
+      case Constants.statsData:
+        if let statsData = change![.newKey] as? Data {
+          logger.debug("Stats message coming from tunnel")
+          updateStats(stats: statsData)
+        }
+      case Constants.bandwidthData:
+        if let bandwidthData = change![.newKey] as? Data {
+          logger.debug("Bandwidth message coming from tunnel")
+          updateBandwidth(bandwidth: bandwidthData)
+        }
+      default:
+        logger.debug("Unknown message \(keyPath)")
+    }
+  }
+
+  func updateBandwidth(bandwidth: Data) {
+    do {
+      // Convert the JSON data back to a dictionary
+      if let dataDict = try JSONSerialization.jsonObject(with: bandwidth, options: [])
+        as? [String: Any]
+      {
+        try invoke(
+          "updateBandwidth", arguments: dataDict, completion: emptyCompletion)
+        logger.debug("updateBandwidth data received: \(dataDict)")
       }
+    } catch {
+      logger.debug("Failed to deserialize JSON data: \(error)")
     }
   }
 
@@ -138,6 +168,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   deinit {
     // Remove observer when the observer is deallocated
     Constants.appGroupDefaults.removeObserver(self, forKeyPath: Constants.statsData)
+    Constants.appGroupDefaults.removeObserver(self, forKeyPath: Constants.bandwidthData)
   }
 
 }

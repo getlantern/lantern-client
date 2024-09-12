@@ -5,13 +5,11 @@ import (
 	"time"
 
 	"github.com/getlantern/flashlight/v7/proxied"
-	"github.com/getlantern/lantern-client/internalsdk/webclient"
 )
 
 // NewHTTPClient creates a new http.Client that is configured to use the given options and http.RoundTripper wrapped with
 // proxied.AsRoundTripper to process requests
-func NewHTTPClient(rt http.RoundTripper, opts *webclient.Opts) *http.Client {
-	timeout := opts.Timeout
+func NewHTTPClient(rt http.RoundTripper, timeout time.Duration) *http.Client {
 	if timeout == 0 {
 		timeout = 30 * time.Second
 	}

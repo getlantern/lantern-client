@@ -64,13 +64,13 @@ var issueMap = map[string]string{
 func init() {
 	cdir := configDir(&flags)
 	ss := settings.LoadSettings(cdir)
-	webclientOpts := &webclient.Opts{
-		UserConfig: func() common.UserConfig {
-			return settings.UserConfig(ss)
-		},
+	userConfig := func() common.UserConfig {
+		return settings.UserConfig(ss)
 	}
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.V1BaseUrl), webclientOpts)
+	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
+		UserConfig: userConfig,
+	})
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
 
 	a = app.NewApp(flags, cdir, proClient, ss)
 }
