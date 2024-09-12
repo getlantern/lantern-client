@@ -82,14 +82,6 @@ android {
 
         multiDexEnabled = true
 
-        // Include this CMakeLists.txt file in the build pipeline
-        externalNativeBuild {
-            cmake {
-                cppFlags ''
-                arguments '-DANDROID_STL=c++_shared'
-            }
-        }
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ['resourcePackageName': 'org.getlantern.lantern', "androidManifestFile": "$projectDir/src/main/AndroidManifest.xml".toString()]
@@ -116,13 +108,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
-    }
-
-    externalNativeBuild {
-        cmake {
-            path file('cmake/CMakeLists.txt')
-            version '3.22.1'
-        }
     }
 
     compileOptions {
