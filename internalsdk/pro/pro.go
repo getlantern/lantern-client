@@ -114,7 +114,7 @@ func (c *proClient) EmailRequest(ctx context.Context, email string) (*OkResponse
 	var resp OkResponse
 	params := c.defaultParams()
 	params["email"] = email
-	err := c.webclient.PostJSONReadingJSON(ctx, "/user-email-request", params, nil, &resp)
+	err := c.PostJSONReadingJSON(ctx, "/user-email-request", params, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -375,7 +375,7 @@ func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interfac
 // RestorePurchase is used to restore a purchase for Google and apple play users
 func (c *proClient) RestorePurchase(ctx context.Context, req map[string]interface{}) (*OkResponse, error) {
 	var resp OkResponse
-	err := c.webclient.PostFormReadingJSON(ctx, "/restore-purchase", req, &resp)
+	err := c.PostFormReadingJSON(ctx, "/restore-purchase", req, &resp)
 	if err != nil {
 		return nil, log.Errorf("%v", err)
 	}

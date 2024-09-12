@@ -7,7 +7,13 @@ import 'package:lantern/common/ui/app_webview.dart';
 const defaultTimeoutDuration = Duration(seconds: 10);
 
 bool isProdPlay() {
-  return sessionModel.isStoreVersion.value ?? false;
+  if (sessionModel.isStoreVersion.value ??false) {
+    return true;
+  }
+  if (sessionModel.isTestPlayVersion.value ??false) {
+    return true;
+  }
+ return  false;
 }
 
 const lanternStarLogo = CAssetImage(

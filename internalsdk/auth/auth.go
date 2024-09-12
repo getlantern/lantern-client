@@ -99,7 +99,7 @@ func prepareUserRequest(r *http.Request, uc common.UserConfig) {
 
 // healthz is used to check the health of the auth service
 func (c *authClient) Healthz(ctx context.Context) (bool, error) {
-	err := c.webclient.GetJSON(ctx, "/healthz", nil, nil)
+	err := c.GetJSON(ctx, "/healthz", nil, nil)
 	if err != nil {
 		return false, err
 	}
