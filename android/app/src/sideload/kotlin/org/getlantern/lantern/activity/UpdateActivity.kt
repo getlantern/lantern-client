@@ -24,9 +24,6 @@ import internalsdk.Internalsdk
 import internalsdk.Updater
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import org.androidannotations.annotations.Click
-import org.androidannotations.annotations.EActivity
-import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.R
@@ -53,6 +50,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
     lateinit var updateButtons: RelativeLayout
     lateinit var percentage: TextView
     lateinit var installUpdate: Button
+    lateinit var notNow: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +62,12 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         updateButtons = findViewById(R.id.updateButtons)
         percentage = findViewById(R.id.percentage)
         installUpdate = findViewById(R.id.installUpdate)
+        notNow = findViewById(R.id.notNow)
         installUpdate.setOnClickListener {
             installUpdate()
+        }
+        notNow.setOnClickListener {
+            finish()
         }
         subTitle.setText(getString(R.string.update_available, getString(R.string.app_name)))
     }
@@ -160,11 +162,6 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
 
     private fun manualUpdateHTML(): CharSequence {
         return Html.fromHtml("<span>" + getString(R.string.manual_update) + "</span>")
-    }
-
-    @Click(R.id.notNow)
-    fun notNowClicked() {
-        finish()
     }
 
     private fun hasInstallPackagesPermission(): Boolean {
