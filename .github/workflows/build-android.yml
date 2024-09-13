@@ -22,7 +22,7 @@ jobs:
       version: ${{ inputs.version }}
       version_file: ${{ inputs.version_file }}
       prefix: ${{ inputs.prefix }}
-    runs-on: macos-latest-xlarge
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -61,10 +61,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          cache: 'gradle'
 
       - name: Generate ffi bindings
         run: |
-          make darwin
+          make linux-amd64
           make ffigen
 
       - name: Setup protoc
