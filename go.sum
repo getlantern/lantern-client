@@ -299,8 +299,6 @@ github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc h1:rVEoCLKM16Pf
 github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc/go.mod h1:WByj7b55hNRpeuIaES521Poebt0ABOdzG/9g+bS4BiQ=
 github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9 h1:mSg57/+t59Q08AqArlhW+3N1AVPn5ox0dTOYonRps6w=
 github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9/go.mod h1:RjQ0krF8NTCc5xo2Q1995/vZBnYg33h8svn15do7dLg=
-github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 h1:Ju9l1RretVWJTNo2vpl/xAW8Dcuiyg5kJC6LRBpCigw=
-github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4/go.mod h1:4UNvIsawdB8WclVxqYv46Oe1zzWJ8wMhUO+q6tUzATo=
 github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 h1:RBKofGGMt2k6eGBwX8mky9qunjL+KnAp9JdzXjiRkRw=
 github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5/go.mod h1:kGHRXch95rnGLHjER/GhhFiHvfnqNz7KqWD9kGfATHY=
 github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93 h1:CFLw2b6vgOmpxsRWRiTd46tiR6YKg2crIuTu4cINYcY=
@@ -950,8 +948,8 @@ github.com/ulikunitz/xz v0.5.9/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oW
 github.com/ulikunitz/xz v0.5.11 h1:kpFauv27b6ynzBNT/Xy+1k+fK4WswhN/6PN5WhFAGw8=
 github.com/ulikunitz/xz v0.5.11/go.mod h1:nbz6k7qbPmH4IRqmfOplQw/tblSgqTqBwxkY0oWt/14=
 github.com/vishvananda/netns v0.0.0-20180720170159-13995c7128cc/go.mod h1:ZjcWmFBXmLKZu9Nxj3WKYEafiSqer2rnvPr0en9UNpI=
-github.com/vishvananda/netns v0.0.0-20200728191858-db3c7e526aae h1:4hwBBUfQCFe3Cym0ZtKyq7L16eZUtYKs+BaHDN6mAns=
-github.com/vishvananda/netns v0.0.0-20200728191858-db3c7e526aae/go.mod h1:DD4vA1DwXk04H54A1oHXtwZmA0grkVMdPxx/VGLCah0=
+github.com/vishvananda/netns v0.0.1 h1:JDkWS7Axy5ziNM3svylLhpSgqjPDb+BgVUbXoDo+iPw=
+github.com/vishvananda/netns v0.0.1/go.mod h1:DD4vA1DwXk04H54A1oHXtwZmA0grkVMdPxx/VGLCah0=
 github.com/vulcand/oxy v1.4.2 h1:KibUVdKrwy7eXR3uHS2pYoZ9dCzKVcgDNHD2jkPZmxU=
 github.com/vulcand/oxy v1.4.2/go.mod h1:Yq8OBb0XWU/7nPSglwUH5LS2Pcp4yvad8SVayobZbSo=
 github.com/willf/bitset v1.1.9/go.mod h1:RjeCKbqT1RxIR/KWY6phxZiaY1IyutSBfGjNPySAYV4=

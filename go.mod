@@ -162,7 +162,6 @@ require (
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
 	github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9 // indirect
-	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 // indirect
 	github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 // indirect
 	github.com/getlantern/go-update v0.0.0-20230221120840-8d795213a8bc // indirect
 	github.com/getlantern/gonat v0.0.0-20201001145726-634575ba87fb // indirect
