@@ -38,7 +38,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.108-0.20240910221338-8d10c8647379
+	github.com/getlantern/flashlight/v7 v7.6.108-0.20240913180121-f87926b5399a
 	github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
