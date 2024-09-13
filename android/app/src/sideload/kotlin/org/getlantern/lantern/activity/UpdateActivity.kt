@@ -64,7 +64,7 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         installUpdate = findViewById(R.id.installUpdate)
         notNow = findViewById(R.id.notNow)
         installUpdate.setOnClickListener {
-            installUpdate()
+            installUpdateClicked()
         }
         notNow.setOnClickListener {
             finish()
@@ -184,7 +184,6 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         }
     }
 
-    @Click(R.id.installUpdate)
     fun installUpdateClicked() {
         when {
             Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 -> installUpdate()
