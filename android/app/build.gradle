@@ -4,15 +4,13 @@ plugins {
     id 'kotlinx-serialization'
     id 'dev.flutter.flutter-gradle-plugin'
     id 'org.jlleitschuh.gradle.ktlint'
-    id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
-    id 'kotlin-kapt'
     id 'com.google.protobuf'
     id "io.sentry.android.gradle" version "4.9.0"
 }
 
 android {
-    ndkVersion "26.1.10909125"
+    ndkVersion "27.0.12077973"
 
     bundle {
         density {
@@ -32,34 +30,6 @@ android {
     flavorDimensions "versionCode"
 
     useLibrary 'org.apache.http.legacy'
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES.txt'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/MANIFEST.MF'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/dependencies.txt'
-        exclude 'META-INF/LGPL2.1'
-        exclude 'META-INF/maven/commons-io/commons-io/pom.xml'
-        exclude 'META-INF/maven/commons-io/commons-io/pom.properties'
-        exclude("META-INF/*.kotlin_module")
-        exclude 'README.txt'
-
-        jniLibs {
-            useLegacyPackaging true
-        }
-    }
-
-
-//    buildFeatures {
-//        viewBinding true
-//        dataBinding true
-//    }
 
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
@@ -82,14 +52,6 @@ android {
 
         multiDexEnabled = true
 
-        // Include this CMakeLists.txt file in the build pipeline
-        externalNativeBuild {
-            cmake {
-                cppFlags ''
-                arguments '-DANDROID_STL=c++_shared'
-            }
-        }
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ['resourcePackageName': 'org.getlantern.lantern', "androidManifestFile": "$projectDir/src/main/AndroidManifest.xml".toString()]
@@ -104,6 +66,7 @@ android {
         ndk {
             // Specifies the ABI configurations of native libraries Gradle should build and package with the app.
             abiFilters = ["x86_64", "arm64-v8a"]
+            debugSymbolLevel 'FULL'
         }
 
         versionCode code
@@ -116,13 +79,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
-    }
-
-    externalNativeBuild {
-        cmake {
-            path file('cmake/CMakeLists.txt')
-            version '3.30.3'
-        }
     }
 
     kotlin {
