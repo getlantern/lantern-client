@@ -1702,16 +1702,16 @@ msgid "follow_us"
 msgstr "Follow Us"
 
 msgid "follow_us_telegram"
-msgstr "Follow us Telegram "
+msgstr "Follow us on Telegram"
 
 msgid "follow_us_instagram"
-msgstr "Follow us Instagram"
+msgstr "Follow us on Instagram"
 
 msgid "follow_us_facebook"
-msgstr "Follow us Facebook "
+msgstr "Follow us on Facebook"
 
 msgid "follow_us_x"
-msgstr "Follow us X "
+msgstr "Follow us on X"
 
 msgid "report_issue_error"
 msgstr "We're experiencing technical difficulties. Try again later."

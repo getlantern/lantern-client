@@ -1,6 +1,5 @@
-import 'package:url_launcher/url_launcher.dart';
-
 import '../common/common.dart';
+import '../common/ui/app_webview.dart';
 
 enum _Social {
   facebook,
@@ -121,12 +120,12 @@ class _FollowUsState extends State<FollowUs> {
     final currentSocialMap = countryMap[countryCode] ?? countryMap['all']!;
     // Retrieve the URL for the selected social media platform
     final url = currentSocialMap[social]!;
-    shareTap(Uri.parse(url));
+    shareTap(url);
   }
 
-  Future<void> shareTap(Uri url) async {
+  Future<void> shareTap(String url) async {
     context.maybePop();
-    if (url.hasEmptyPath) {
+    if (url.isEmpty) {
       showSnackbar(
           context: context,
           content:
@@ -134,6 +133,6 @@ class _FollowUsState extends State<FollowUs> {
           duration: const Duration(seconds: 2));
       return;
     }
-    await launchUrl(url, mode: LaunchMode.externalApplication);
+    await AppBrowser.openWebview(url);
   }
 }

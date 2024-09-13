@@ -420,7 +420,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
         provider,
       );
       context.loaderOverlay.hide();
-      openDesktopWebview(
+      openDesktopPaymentWebview(
           context: context,
           provider: provider,
           redirectUrl: redirectUrl,

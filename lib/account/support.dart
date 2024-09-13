@@ -1,5 +1,4 @@
-import 'package:lantern/plans/utils.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:lantern/common/ui/app_webview.dart';
 
 import '../common/common.dart';
 
@@ -97,7 +96,7 @@ class Support extends StatelessWidget {
 
   Future<void> faqTap(BuildContext context) async {
     try {
-      await launchUrl(Uri.parse(faqUrl), mode: LaunchMode.externalApplication);
+      await AppBrowser.openWebview(faqUrl);
     } catch (e) {
       showSnackbar(context: context, content: 'Fail to open link ');
     }
@@ -105,10 +104,7 @@ class Support extends StatelessWidget {
 
   Future<void> forumTap(BuildContext context) async {
     try {
-      await launchUrl(
-        Uri.parse(forumsUrl),
-        mode: LaunchMode.externalApplication,
-      );
+      await AppBrowser.openWebview(forumsUrl);
     } catch (e) {
       showSnackbar(context: context, content: 'Fail to open link ');
     }

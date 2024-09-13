@@ -136,7 +136,7 @@ extension PlansExtension on Plan {
   }
 }
 
-Future<void> openDesktopWebview(
+Future<void> openDesktopPaymentWebview(
     {required BuildContext context,
     required String redirectUrl,
     required Providers provider,
@@ -159,6 +159,9 @@ Future<void> openDesktopWebview(
           AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
   }
 }
+
+
+
 
 Plan planFromJson(Map<String, dynamic> item) {
   print("called plans $item");
