@@ -1400,17 +1400,10 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
 		log.Debugf("User is pro and not first time")
 		setProUser(session.baseModel, true)
+	} else if userDetail.UserLevel == "pro" {
+		log.Debugf("user is pro and device not found")
+		setProUser(session.baseModel, true)
 	} else {
-		log.Debugf("User is not pro")
-		// check if user is logged in or  not
-		// loggedIn, err := session.isUserLoggedIn()
-		// if err != nil {
-		// 	log.Errorf("Error while checking user login status %v", err)
-		// }
-		// if loggedIn {
-		// 	// mean user removed devie or user has done restore purchase on other device
-		// 	clearLocalUserData(*session)
-		// }
 		setProUser(session.baseModel, false)
 	}
 
