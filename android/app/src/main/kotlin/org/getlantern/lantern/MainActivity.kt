@@ -82,7 +82,6 @@ class MainActivity :
         opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
         opts.timeZone = TimeZone.getDefault().displayName
         sessionModel = SessionModel(this, flutterEngine, opts)
-        LanternApp.session = sessionModel
         replicaModel = ReplicaModel(this, flutterEngine)
         receiver = NotificationReceiver()
         notifications = NotificationHelper(this, receiver)
