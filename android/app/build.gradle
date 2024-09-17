@@ -71,11 +71,6 @@ android {
 
         applicationId "org.getlantern.lantern"
 
-        ndk {
-            // Specifies the ABI configurations of native libraries Gradle should build and package with the app.
-            abiFilters = ["x86_64", "arm64-v8a"]
-        }
-
         versionCode code
 
         if (project.hasProperty('lanternVersion')) {
