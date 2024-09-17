@@ -298,6 +298,12 @@ protobuf {
     }
 }
 
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        output.versionCodeOverride = android.defaultConfig.versionCode
+    }
+}
+
 flutter {
     source '../..'
 }
@@ -322,8 +328,8 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
 
     // Google Play libraries
     implementation 'com.android.billingclient:billing:7.0.0'
@@ -335,7 +341,7 @@ dependencies {
     implementation 'com.github.getlantern:db-android:d92368c7f'
     implementation 'com.github.getlantern:messaging-android:3f23f07b4e'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
     //Test implementation
     androidTestImplementation 'androidx.test:rules:1.6.1'
     androidTestImplementation 'androidx.annotation:annotation:1.8.2'
