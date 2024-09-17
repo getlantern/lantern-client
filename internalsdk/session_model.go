@@ -77,6 +77,8 @@ const (
 	pathLang                   = "lang"
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
+	pathShowAds                = "showAds"
+	pathTapSellAdsEnabled      = "tapsellAdsEnabled"
 	pathStoreVersion           = "storeVersion"
 	pathTestPlayVersion        = "testPlayVersion"
 	pathServerInfo             = "/server_info"
@@ -727,7 +729,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	if opts.Platform == "ios" {
 		m.SetAuthEnabled(true)
 	}
-	return checkAdsEnabled(m)
+	return nil
 }
 
 func (m *SessionModel) platform() (string, error) {
@@ -1191,11 +1193,20 @@ func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 	return pathdb.Get[bool](m.db, pathSplitTunneling)
 }
 
-func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
-	log.Debugf("SetShowInterstitialAdsEnabled %v", adsEnable)
+func (m *SessionModel) SetShowGoogleAds(adsEnable bool) {
+	log.Debugf("SetShowGoogleAds %v", adsEnable)
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathAdsEnabled, adsEnable, "")
+		return pathdb.Put(tx, pathShouldShowGoogleAds, adsEnable, "")
 	}))
+	checkAdsEnabled(m)
+}
+
+func (m *SessionModel) SetShowTapSellAds(adsEnable bool) {
+	log.Debugf("SetShowTapSellAds %v", adsEnable)
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathTapSellAdsEnabled, adsEnable, "")
+	}))
+	checkAdsEnabled(m)
 }
 
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
@@ -1453,17 +1464,16 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 func checkAdsEnabled(session *SessionModel) error {
 	log.Debugf("Check ads enabled")
 	// Check if ads is enable or not
-	adsEnable, err := pathdb.Get[bool](session.db, pathAdsEnabled)
+	isPro, err := session.IsProUser()
 	if err != nil {
-		return log.Errorf("Error while getting ads enabled %v", err)
+		return err
 	}
-	if !adsEnable {
+	if isPro {
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
+			return pathdb.Put[string](tx, pathShowAds, "", "")
 		})
 	}
-
-	// if enable
+	// if user is not pro check if user provdied all permission
 	hasAllPermisson, err := pathdb.Get[bool](session.db, pathHasAllNetworkPermssion)
 	if err != nil {
 		return err
@@ -1471,26 +1481,26 @@ func checkAdsEnabled(session *SessionModel) error {
 	// If the user doesn't have all permissions, disable Google ads:
 	if !hasAllPermisson {
 		log.Debugf("User has not given all permission")
-
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
-		})
-	}
-	log.Debugf("User has given all permission")
-	isPro, err := session.IsProUser()
-	if err != nil {
-		return err
-	}
-	if isPro {
-		log.Debugf("Is user pro %v", isPro)
-		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
+			return pathdb.Put[string](tx, pathShowAds, "", "")
 		})
 	}
 	// If the user has all permissions but is not a pro user, enable ads:
-	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathShouldShowGoogleAds, true, "")
-	})
+	googleAdsEnable, _ := pathdb.Get[bool](session.db, pathShouldShowGoogleAds)
+	tapSellAdsEnable, _ := pathdb.Get[bool](session.db, pathTapSellAdsEnabled)
+	if googleAdsEnable {
+		log.Debug("Google Ads is enabled")
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put[string](tx, pathShowAds, "google", "")
+		})
+	}
+	if tapSellAdsEnable {
+		log.Debug("TapSell Ads is enabled")
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put[string](tx, pathShowAds, "tapsell", "")
+		})
+	}
+	return nil
 
 }
 func redeemResellerCode(m *SessionModel, email string, resellerCode string) error {

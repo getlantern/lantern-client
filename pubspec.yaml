@@ -94,7 +94,7 @@ dependencies:
 
   # URL & Sharing utilities
   url_launcher: ^6.2.5
-  share_plus: ^9.0.0
+  share_plus: ^10.0.0
   flutter_inappwebview: ^6.0.0
   flutter_windows_webview:
     git:
@@ -128,6 +128,8 @@ dependencies:
 
   # Ads
   google_mobile_ads: ^5.1.0
+#  tapsell_plus: ^2.2.7
+
   retry: ^3.1.2
   # Generate bindings to native libraries
   ffi: ^2.1.3

@@ -5,16 +5,74 @@ import 'package:logger/logger.dart';
 
 enum AdType { Google }
 
-const privacyPolicy = 'https://lantern.io/privacy';
+abstract class AdsProvider {
+  Future<void> initialize(); // Initialize the ad provider.
 
-const googleAttributes = {
-  'provider': "Google",
-};
+  Future<void> loadInterstitialAd();
 
+  Future<void> showInterstitialAd();
+
+  Future<void> dispose(); // Cleanup resources when no longer needed.
+}
+
+class GoogleAdsProvider implements AdsProvider {
+  @override
+  Future<void> dispose() {
+    // TODO: implement dispose
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> initialize() {
+    // TODO: implement initialize
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> loadInterstitialAd() {
+    // TODO: implement loadInterstitialAd
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> showInterstitialAd() {
+    // TODO: implement showInterstitialAd
+    throw UnimplementedError();
+  }
+}
+
+class TapSellAdsProvider implements AdsProvider {
+  @override
+  Future<void> initialize() {
+    // TODO: implement initialize
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> loadInterstitialAd() {
+    // TODO: implement loadInterstitialAd
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> showInterstitialAd() {
+    // TODO: implement showInterstitialAd
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> dispose() {
+    // TODO: implement dispose
+    throw UnimplementedError();
+  }
+}
 
 var logger = Logger(printer: PrettyPrinter(), level: Level.debug);
 
 class AdHelper {
+  final googleAdsService = GoogleAdsProvider();
+  final tapSellAdsService = TapSellAdsProvider();
+
   static final AdHelper _instance = AdHelper._internal();
 
   AdHelper._internal();
@@ -23,7 +81,6 @@ class AdHelper {
     return _instance;
   }
 
-
   InterstitialAd? _interstitialAd;
   int _failedLoadAttempts = 0;
 
@@ -31,6 +88,7 @@ class AdHelper {
   // Just try 5 times
   final int _maxFailAttempts = 5;
   bool isAdsLoading = false;
+
   //Google Test ID if needed to test
   // return 'ca-app-pub-3940256099942544/1033173712';
   String get interstitialAdUnitId {
@@ -63,7 +121,7 @@ class AdHelper {
 
   Future<void> _loadInterstitialAd() async {
     //To avoid calling multiple ads request repeatedly
-    isAdsLoading= true;
+    isAdsLoading = true;
     assert(interstitialAdUnitId != "",
         "interstitialAdUnitId should not be null or empty");
     if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
@@ -74,7 +132,7 @@ class AdHelper {
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) {
             _failedLoadAttempts = 0;
-            isAdsLoading= false;
+            isAdsLoading = false;
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdClicked: (ad) {
                 logger.i('[Ads Manager] onAdClicked callback');
@@ -124,7 +182,7 @@ class AdHelper {
   Future<void> loadAds({
     required bool shouldShowGoogleAds,
   }) async {
-    if(isAdsLoading) {
+    if (isAdsLoading) {
       logger.i('[Ads Manager] Request: Ads already loading. Ignoring request.');
       return;
     }

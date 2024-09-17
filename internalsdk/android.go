@@ -90,7 +90,8 @@ type Session interface {
 	SetAuthEnabled(bool)
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
-	SetShowInterstitialAdsEnabled(bool)
+	SetShowGoogleAds(bool)
+	SetShowTapSellAds(bool)
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
 	SetOnSuccess(bool)
@@ -99,13 +100,6 @@ type Session interface {
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() (string, error)
-}
-
-// Callback that updates ui
-type InitCallback struct {
-	hasConfigFected bool
-	hasProxyFected  bool
-	onSuccess       bool
 }
 
 // PanickingSession wraps the Session interface but panics instead of returning errors
@@ -132,7 +126,8 @@ type PanickingSession interface {
 	SetChatEnabled(bool)
 	SetIP(string)
 	SplitTunnelingEnabled() bool
-	SetShowInterstitialAdsEnabled(bool)
+	SetShowGoogleAds(bool)
+	SetShowTapSellAds(bool)
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
@@ -289,8 +284,12 @@ func (s *panickingSessionImpl) SetAuthEnabled(enabled bool) {
 	s.wrapped.SetAuthEnabled(enabled)
 }
 
-func (s *panickingSessionImpl) SetShowInterstitialAdsEnabled(enabled bool) {
-	s.wrapped.SetShowInterstitialAdsEnabled(enabled)
+func (s *panickingSessionImpl) SetShowGoogleAds(enabled bool) {
+	s.wrapped.SetShowGoogleAds(enabled)
+}
+
+func (s *panickingSessionImpl) SetShowTapSellAds(enabled bool) {
+	s.wrapped.SetShowTapSellAds(enabled)
 }
 
 func (s *panickingSessionImpl) SerializedInternalHeaders() string {
@@ -629,10 +628,15 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		if !session.IsProUser() {
 			showAdsEnabled := runner.FeatureEnabled("interstitialads", common.ApplicationVersion)
 			log.Debugf("Show ads enabled? %v", showAdsEnabled)
-			session.SetShowInterstitialAdsEnabled(showAdsEnabled)
+			session.SetShowGoogleAds(showAdsEnabled)
+
+			showTapSellAdsEnabled := runner.FeatureEnabled("tapsellads", common.ApplicationVersion)
+			log.Debugf("Show ads enabled? %v", showAdsEnabled)
+			session.SetShowTapSellAds(showTapSellAdsEnabled)
+
 		} else {
 			// Explicitly disable ads for Pro users.
-			session.SetShowInterstitialAdsEnabled(false)
+			session.SetShowGoogleAds(false)
 		}
 	}
 
