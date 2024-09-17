@@ -52,6 +52,14 @@ android {
 
         multiDexEnabled = true
 
+        // Include this CMakeLists.txt file in the build pipeline
+        externalNativeBuild {
+            cmake {
+                cppFlags ''
+                arguments '-DANDROID_STL=c++_shared'
+            }
+        }
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ['resourcePackageName': 'org.getlantern.lantern', "androidManifestFile": "$projectDir/src/main/AndroidManifest.xml".toString()]
@@ -66,7 +74,6 @@ android {
         ndk {
             // Specifies the ABI configurations of native libraries Gradle should build and package with the app.
             abiFilters = ["x86_64", "arm64-v8a"]
-            debugSymbolLevel 'FULL'
         }
 
         versionCode code
@@ -187,6 +194,8 @@ android {
             enable !bool("playVersion")
             reset()
             include androidArchJava()
+
+            universalApk true
         }
     }
 
