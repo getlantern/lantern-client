@@ -63,10 +63,11 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
-      - name: Generate ffi bindings
+      - name: Clean up disk space
         run: |
-          make linux-amd64
-          make ffigen
+          df -h  # Check disk space
+          sudo apt-get clean
+          sudo apt-get autoremove
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
