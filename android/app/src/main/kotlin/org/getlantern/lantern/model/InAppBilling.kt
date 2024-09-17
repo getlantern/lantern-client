@@ -209,6 +209,7 @@ class InAppBilling(
         }
     }
 
+
     private inline fun Boolean.then(crossinline block: () -> Unit) {
         if (this) {
             handler.postDelayed(
@@ -299,6 +300,7 @@ class InAppBilling(
             }
         }
     }
+
 
     private fun isRetriable(billingResult: BillingResult): Boolean {
         val responseCode = billingResult.responseCode

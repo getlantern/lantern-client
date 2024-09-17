@@ -187,7 +187,7 @@ func (c *restClient) PostPROTOC(ctx context.Context, path string, params, body p
 	}
 	bo, err := c.send(ctx, http.MethodPost, path, params, bodyBytes)
 	if err != nil {
-		log.Debugf("Error in sending request: %v", err)
+		// log.Debugf("Error in sending request: %v", err)
 		return err
 	}
 	err1 := proto.Unmarshal(bo, target)

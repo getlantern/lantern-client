@@ -51,14 +51,12 @@ Future<void> main() async {
     });
   } else {
     await _initGoogleMobileAds();
+    // Inject all the services
+    init();
+    sl<AppPurchase>().init();
     // Due to replica we are using lot of cache
     // clear if goes to above limit
     CustomCacheManager().clearCacheIfExceeded();
-    if (Platform.isIOS) {
-      // Inject all the services
-      init();
-      sl<AppPurchase>().init();
-    }
   }
 
   await Localization.ensureInitialized();
@@ -71,11 +69,11 @@ Future<void> main() async {
     // The sampling rate for profiling is relative to tracesSampleRate
     // Setting to 1.0 will profile 100% of sampled transactions:
     options.profilesSampleRate = 1.0;
+    options.environment = kReleaseMode ? "production" : "development";
     options.dsn = kReleaseMode ? dnsConfig() : "";
     options.enableNativeCrashHandling = true;
+    options.attachStacktrace = true;
   }, appRunner: () => runApp(const LanternApp()));
-
-  // setupCatcherAndRun(const LanternApp());
 }
 
 Future<void> _initGoogleMobileAds() async {

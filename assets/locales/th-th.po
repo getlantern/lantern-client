@@ -4,13 +4,13 @@
 # Thai Localization, 2024
 # Amazing Nev <nev@nevagency.com>, 2024
 # Lantern, 2024
-# e2f <projects@e2f.com>, 2024
 # tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2024
 # Acclaro Thailand <bkk-project@acclaro.com>, 2024
+# e2f <projects@e2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Acclaro Thailand <bkk-project@acclaro.com>, 2024\n"
+"Last-Translator: e2f <projects@e2f.com>, 2024\n"
 "Language-Team: Thai (https://app.transifex.com/lantern-1/teams/94371/th/)\n"
 "Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -506,6 +506,9 @@ msgstr "เกิดข้อผิดพลาดบางอย่างระ
 
 msgid "reseller_timeout"
 msgstr "เกิดข้อผิดพลาดบางอย่างระหว่างการตรวจสอบรหัสเปิดใช้งานของคุณ"
+
+msgid "wrong_reseller_code"
+msgstr "รหัสเปิดใช้งานไม่ถูกต้อง"
 
 msgid "reseller_success"
 msgstr "แลกรับรหัสเปิดใช้งานเรียบร้อยแล้ว"
@@ -1822,16 +1825,16 @@ msgid "follow_us"
 msgstr "ติดตามเรา "
 
 msgid "follow_us_telegram"
-msgstr "ติดตามเราบน Telegram "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "ติดตามเราบน Instagram "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "ติดตามเราบน Facebook "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "ติดตามเราบน X "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "เรากำลังพบปัญหาทางเทคนิค กรุณาลองใหม่ภายหลัง "
@@ -1879,6 +1882,54 @@ msgstr "ถึงขีดจำกัดแล้ว "
 
 msgid "file_size_limit_description"
 msgstr "ขนาดไฟล์แนบต้องต่ำกว่า 100 MB"
+
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "คุณมีการอัปเดตล่าสุดแล้ว"

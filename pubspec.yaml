@@ -110,7 +110,7 @@ dependencies:
 
   # Notifications & Logging
   flutter_local_notifications: ^17.2.2
-  logger: ^2.3.0
+  logger: ^2.4.0
 
   # Error handling
   device_info_plus: ^10.1.2

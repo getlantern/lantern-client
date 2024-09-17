@@ -1,10 +1,10 @@
-import 'package:url_launcher/url_launcher.dart';
+import 'package:lantern/common/ui/app_webview.dart';
 
 import '../common/common.dart';
 
 @RoutePage<void>(name: 'Support')
 class Support extends StatelessWidget {
-  const Support({Key? key}) : super(key: key);
+  const Support({super.key});
 
   final faqUrl = 'https://lantern.io/faq';
   final forumsUrl = 'https://lantern.io/forums';
@@ -64,17 +64,39 @@ class Support extends StatelessWidget {
           ],
           onTap: () => faqTap(context),
         ),
+
+        sessionModel.proUser(
+          (context, proUser, child) {
+            return FutureBuilder<bool>(
+              future: AppMethods.showRestorePurchaseButton(proUser),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data as bool) {
+                  return ListItemFactory.settingsItem(
+                    content: 'restore_purchase'.i18n,
+                    icon: ImagePaths.restore,
+                    onTap: () => restorePurchaseTap(context),
+                  );
+                }
+                return const SizedBox();
+              },
+            );
+          },
+        )
       ],
     );
   }
 
   // class methods and utils
 
-  void reportIssue(BuildContext context) async => context.pushRoute(ReportIssue());
+  void reportIssue(BuildContext context) async =>
+      context.pushRoute(ReportIssue());
+
+  void restorePurchaseTap(BuildContext context) async =>
+      context.pushRoute(RestorePurchase());
 
   Future<void> faqTap(BuildContext context) async {
     try {
-      await launchUrl(Uri.parse(faqUrl), mode: LaunchMode.externalApplication);
+      await AppBrowser.openWebview(faqUrl);
     } catch (e) {
       showSnackbar(context: context, content: 'Fail to open link ');
     }
@@ -82,10 +104,7 @@ class Support extends StatelessWidget {
 
   Future<void> forumTap(BuildContext context) async {
     try {
-      await launchUrl(
-        Uri.parse(forumsUrl),
-        mode: LaunchMode.externalApplication,
-      );
+      await AppBrowser.openWebview(forumsUrl);
     } catch (e) {
       showSnackbar(context: context, content: 'Fail to open link ');
     }

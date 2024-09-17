@@ -19,11 +19,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.5.21</string>
+	<string>8.0.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>38</string>
+	<string>50</string>
 	<key>CURRENT_SCHEME_NAME</key>
 	<string>$(CURRENT_SCHEME_NAME)</string>
 	<key>GADApplicationIdentifier</key>
@@ -39,8 +39,6 @@
 	<string>Lantern require access to your photo library for essential functionality.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Lantern require access to your photo library for essential functionality.</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>This identifier will be used to deliver personalized ads to you.</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>

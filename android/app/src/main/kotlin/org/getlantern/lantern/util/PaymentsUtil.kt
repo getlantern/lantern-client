@@ -110,7 +110,6 @@ class PaymentsUtil(private val activity: Activity) {
         planID: String,
         methodCallResult: MethodChannel.Result,
     ) {
-        assert(email.isNotEmpty(), { "Email cannot be empty" })
         assert(planID.isNotEmpty(), { "PlanId cannot be empty" })
         val inAppBilling = LanternApp.getInAppBilling()
         val plan = getPlanYear(planID)

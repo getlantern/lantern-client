@@ -491,8 +491,6 @@ class MainActivity :
 
     private fun updateStatus(useVpn: Boolean) {
         Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
-//        LanternApp.session.updateVpnPreference(useVpn)
-//        LanternApp.session.updateBootUpVpnPreference(useVpn)
         vpnModel.updateStatus(useVpn)
     }
 

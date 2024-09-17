@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:lantern/core/purchase/app_purchase.dart';
+import 'package:lantern/plans/utils.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 import '../../common/common.dart';
@@ -49,7 +50,8 @@ class _VerificationState extends State<Verification> {
               const SizedBox(height: 24),
               HeadingText(
                 title: widget.authFlow.isCreateAccount ||
-                        widget.authFlow.isVerifyEmail
+                        widget.authFlow.isVerifyEmail ||
+                        widget.authFlow.isRestoreAccount
                     ? 'confirm_email'.i18n
                     : 'reset_password'.i18n,
               ),
@@ -98,6 +100,7 @@ class _VerificationState extends State<Verification> {
 
   /// widget methods
   Future<void> resendConfirmationCode() async {
+    pinCodeController.clear();
     switch (widget.authFlow) {
       case AuthFlow.createAccount:
         resendResetEmailVerificationCode();
@@ -119,6 +122,8 @@ class _VerificationState extends State<Verification> {
       /// there is no verification flow for sign in
       case AuthFlow.updateAccount:
         resendResetEmailVerificationCode();
+      case AuthFlow.restoreAccount:
+        resendRestoreEmailVerificationCode();
     }
   }
 
@@ -151,6 +156,18 @@ class _VerificationState extends State<Verification> {
     }
   }
 
+  Future<void> resendRestoreEmailVerificationCode() async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.userEmailRequest(widget.email);
+      context.loaderOverlay.hide();
+      showSnackbar(context: context, content: 'email_resend_message'.i18n);
+    } catch (e, s) {
+      context.loaderOverlay.hide();
+      CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
   void onDone(String code) {
     switch (widget.authFlow) {
       case AuthFlow.createAccount:
@@ -173,6 +190,8 @@ class _VerificationState extends State<Verification> {
         _changeEmail(code);
       case AuthFlow.updateAccount:
         _verifyEmail(code);
+      case AuthFlow.restoreAccount:
+        resolveRoute(code);
     }
   }
 
@@ -286,6 +305,8 @@ class _VerificationState extends State<Verification> {
         plan: widget.plan!,
         isPro: false,
         email: email,
+        authFlow: widget.authFlow,
+        verificationPin: pinCodeController.text,
       ),
     );
   }
@@ -316,13 +337,22 @@ class _VerificationState extends State<Verification> {
     ));
   }
 
-  void resolveRoute(String code) {
+  Future<void> resolveRoute(String code) async {
+    //close keyboard
+    FocusManager.instance.primaryFocus?.unfocus();
+
     switch (widget.authFlow) {
       case AuthFlow.signIn:
       // TODO: Handle this case.
       case AuthFlow.reset:
         openResetPassword(code);
       case AuthFlow.createAccount:
+
+        ///Check if user is from app store or play store build
+        if (AppMethods.isAppStoreEnabled() || (await AppMethods.isPlayStoreEnable())) {
+          openPassword();
+          return;
+        }
         startPurchase();
       case AuthFlow.verifyEmail:
         context.router.maybePop();
@@ -336,6 +366,8 @@ class _VerificationState extends State<Verification> {
       // TODO: Handle this case.
       case AuthFlow.updateAccount:
         openResetPassword(code);
+      case AuthFlow.restoreAccount:
+        _restoreAccount(code);
     }
   }
 
@@ -362,6 +394,35 @@ class _VerificationState extends State<Verification> {
       context.loaderOverlay.hide();
       mainLogger.e("Error while deleting account", error: e);
       CDialog.showError(context, description: e.localizedDescription);
+    }
+  }
+
+  Future<void> _restoreAccount(String code) async {
+    try {
+      context.loaderOverlay.show();
+      await sessionModel.restoreAccount(widget.email, code);
+      context.loaderOverlay.hide();
+      CDialog.successDialog(
+        context: context,
+        title: "purchase_restored".i18n,
+        description: "purchase_restored_message".i18n,
+        successCallback: () {
+          context.router.popUntilRoot();
+        },
+      );
+    } catch (e) {
+      context.loaderOverlay.hide();
+      mainLogger.e("Error while restoring account", error: e);
+      CDialog.showError(
+        context,
+        description: e.localizedDescription,
+        okAction: () {
+          pinCodeController.clear();
+          if (e.localizedDescription == "purchase_not_found".i18n) {
+            context.router.maybePop();
+          }
+        },
+      );
     }
   }
 }

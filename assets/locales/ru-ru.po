@@ -3,7 +3,6 @@
 # Vitaliy Grishenko, 2022
 # Lowrider <pams@imail.ru>, 2022
 # Helen R <helen.russel88@gmail.com>, 2022
-# e2f <projects@e2f.com>, 2022
 # e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023
 # Serg <sergkoshkin@yandex.ru>, 2023
 # e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2023
@@ -18,10 +17,11 @@
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024
 # Deanna D, 2024
 # Николай Кочкин <urfiner@gmail.com>, 2024
+# e2f <projects@e2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Николай Кочкин <urfiner@gmail.com>, 2024\n"
+"Last-Translator: e2f <projects@e2f.com>, 2024\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -525,6 +525,9 @@ msgstr "Что-то пошло не так с загрузкой данных а
 
 msgid "reseller_timeout"
 msgstr "Что-то пошло не так с подтверждением кода активации. "
+
+msgid "wrong_reseller_code"
+msgstr "Неверный код активации"
 
 msgid "reseller_success"
 msgstr "Код активации добавлен успешно."
@@ -1855,16 +1858,16 @@ msgid "follow_us"
 msgstr "Подпишитесь на нас "
 
 msgid "follow_us_telegram"
-msgstr "Следуйте за нами в Telegram "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "Следуйте за нами в Instagram "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "Следуйте за нами в Facebook "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "Следуйте за нами в X "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "Мы испытываем технические трудности. Попробуйте позже. "
@@ -1912,6 +1915,54 @@ msgstr "Лимит достигнут "
 
 msgid "file_size_limit_description"
 msgstr "Размер вложений должен быть менее 100 МБ"
+
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "Нет новых обновлений!"

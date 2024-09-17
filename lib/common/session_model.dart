@@ -26,7 +26,7 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> referralNotifier;
   late ValueNotifier<String?> deviceIdNotifier;
-  late ValueNotifier<String?> langNotifier;
+   ValueNotifier<String?> langNotifier=ValueNotifier('en_us');
   late ValueNotifier<bool> proxyAllNotifier;
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
@@ -36,7 +36,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> isAuthEnabled;
   late FfiListNotifier<Plan> plansNotifier;
   late FfiListNotifier<PaymentMethod> paymentMethodsNotifier;
-  late ValueNotifier<Bandwidth?> bandwidthNotifier;
+  ValueNotifier<Bandwidth?> bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
 
   SessionModel() : super('session') {
     if (isMobile()) {
@@ -82,7 +82,6 @@ class SessionModel extends Model {
       paymentMethodsNotifier =
           FfiListNotifier<PaymentMethod>('/paymentMethods/', () => {});
       hasUserSignedInNotifier = ValueNotifier(false);
-      langNotifier = ValueNotifier('en_us');
       serverInfoNotifier = ValueNotifier<ServerInfo?>(null);
       proxyAllNotifier = ValueNotifier(false);
       referralNotifier = ValueNotifier('');
@@ -438,15 +437,24 @@ class SessionModel extends Model {
         .invokeMethod('getCountryCode', <String, dynamic>{});
   }
 
-  Future<void> setLanguage(String lang) {
+  Future<void> setLanguage(String lang) async {
     if (isMobile()) {
       return methodChannel.invokeMethod('setLanguage', <String, dynamic>{
         'lang': lang,
       });
     }
-    // Desktop users
     Localization.locale = lang;
-    return Future(() => null);
+    return await compute(LanternFFI.setLang, lang);
+  }
+
+  Future<void> userEmailRequest(String email) async {
+    if (isMobile()) {
+      return await methodChannel
+          .invokeMethod('userEmailRequest', <String, dynamic>{
+        'email': email,
+      });
+    }
+    throw Exception("Not supported on desktop");
   }
 
   Future<void> authorizeViaEmail(String emailAddress) async {
@@ -458,7 +466,7 @@ class SessionModel extends Model {
     return await compute(LanternFFI.authorizeEmail, emailAddress);
   }
 
-  Future<String> validateDeviceRecoveryCode(String code, String email) async {
+  Future<void> validateDeviceRecoveryCode(String code, String email) async {
     if (isMobile()) {
       return await methodChannel
           .invokeMethod('validateRecoveryCode', <String, dynamic>{
@@ -528,11 +536,17 @@ class SessionModel extends Model {
   }
 
   Future<String> getReplicaAddr() async {
-    final replicaAddr = await methodChannel.invokeMethod('get', 'replicaAddr');
-    if (replicaAddr == null || replicaAddr == '') {
-      logger.e('Replica not enabled');
+    try {
+      final replicaAddr =
+          await methodChannel.invokeMethod('get', 'replicaAddr');
+      if (replicaAddr == null || replicaAddr == '') {
+        logger.e('Replica not enabled');
+      }
+      return replicaAddr;
+    } catch (e) {
+      logger.e('Error getting replica address: $e');
+      return '';
     }
-    return replicaAddr;
   }
 
   Widget chatEnabled(ValueWidgetBuilder<bool> builder) {
@@ -580,6 +594,14 @@ class SessionModel extends Model {
   }
 
   // Plans and payment methods
+  Future<void> restoreAccount(String email, String code) async {
+    return methodChannel.invokeMethod('restoreAccount', <String, dynamic>{
+      "email": email,
+      "code": code,
+      "provider": Platform.isAndroid ? "googleplay" : "applepay"
+    });
+  }
+
   Future<void> updatePaymentPlans() async {
     return methodChannel.invokeMethod('updatePaymentPlans', '');
   }
@@ -736,8 +758,6 @@ class SessionModel extends Model {
       return methodChannel.invokeMethod('redeemResellerCode', <String, dynamic>{
         'email': email,
         'resellerCode': resellerCode,
-      }).then((value) {
-        print('value $value');
       });
     }
 

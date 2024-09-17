@@ -420,7 +420,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
         provider,
       );
       context.loaderOverlay.hide();
-      openDesktopWebview(
+      openDesktopPaymentWebview(
           context: context,
           provider: provider,
           redirectUrl: redirectUrl,
@@ -483,8 +483,5 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     //If needed to change default value changing to from server
     selectedPaymentProvider = paymentMethod.providers[0].name.toPaymentEnum();
   }
-
-
-
 
 }

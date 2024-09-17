@@ -165,7 +165,6 @@ class VpnHelper: NSObject {
     onError: ((Error) -> Void)? = nil,
     onSuccess: (() -> Void)? = nil
   ) {
-    guard state.isIdle else { return }
     if !hasConfiguredThisSession {
       initiateConfigFetching(onError: onError, onSuccess: onSuccess)
     } else {
@@ -182,6 +181,7 @@ class VpnHelper: NSObject {
         self?.configuring = false
         guard let state = self?.state, state.isIdle else { return }
         if result.isSuccess {
+          self?.hasConfiguredThisSession = true
           self?.startVPN(onError: onError, onSuccess: onSuccess)
         } else {
           self?.state = .idle(.unableToFetchConfig)

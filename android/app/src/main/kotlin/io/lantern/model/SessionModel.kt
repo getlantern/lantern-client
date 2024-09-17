@@ -150,7 +150,6 @@ class SessionModel internal constructor(
             "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
             }
-
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -453,5 +452,5 @@ class SessionModel internal constructor(
         val result = model.invokeMethod("checkIfSurveyLinkOpened", Arguments(surveyLink))
         return result.toJava().toString() == "true"
     }
-
 }
+
