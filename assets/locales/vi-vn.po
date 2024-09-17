@@ -6,12 +6,12 @@
 # Anh Phan <vietnamesel10n@gmail.com>, 2024
 # e2f <projects@e2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
-# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024
 # Nathan Tran, 2024
+# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Nathan Tran, 2024\n"
+"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -512,6 +512,9 @@ msgstr "Đã xảy ra lỗi khi tìm nạp dữ liệu tài khoản của bạn.
 
 msgid "reseller_timeout"
 msgstr "Đã xảy ra lỗi khi xác thực mã kích hoạt của bạn."
+
+msgid "wrong_reseller_code"
+msgstr "Mã kích hoạt không hợp lệ"
 
 msgid "reseller_success"
 msgstr "Đổi thành công mã kích hoạt."
@@ -1843,16 +1846,16 @@ msgid "follow_us"
 msgstr "Theo dõi chúng tôi "
 
 msgid "follow_us_telegram"
-msgstr "Theo dõi chúng tôi "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "Theo dõi chúng tôi trên Instagram "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "Theo dõi chúng tôi trên Facebook "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "Theo dõi chúng tôi trên X "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "Chúng tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau. "
@@ -1898,6 +1901,54 @@ msgstr "Đã đạt giới hạn "
 
 msgid "file_size_limit_description"
 msgstr "Kích thước tệp đính kèm phải dưới 100 MB"
+
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "Bạn có phiên bản mới nhất!"

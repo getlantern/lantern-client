@@ -184,6 +184,9 @@ open class BaseModel<M: InternalsdkModelProtocol>: NSObject, FlutterStreamHandle
     } catch let error as NSException {
       result(
         FlutterError(code: error.name.rawValue, message: error.reason, details: nil))
+    } catch {
+      result(
+        FlutterError(code: "UNKNOWN_ERROR", message: "An unknown error occurred.", details: nil))
     }
   }
 

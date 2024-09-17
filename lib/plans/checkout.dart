@@ -83,9 +83,9 @@ class _CheckoutState extends State<Checkout>
             Widget? child,
           ) {
             if (paymentMethods.isEmpty) {
-              return SizedBox();
+              return const SizedBox();
             }
-            print("paymentMethods: $paymentMethods");
+
             defaultProviderIfNecessary(paymentMethods.toList());
             return Column(
               children: [
@@ -380,7 +380,7 @@ class _CheckoutState extends State<Checkout>
         provider,
       );
       context.loaderOverlay.hide();
-      openDesktopWebview(
+      openDesktopPaymentWebview(
           context: context,
           provider: provider,
           redirectUrl: redirectUrl,
@@ -461,8 +461,17 @@ class _CheckoutState extends State<Checkout>
   }
 
   void resolveRoute() {
+    assert(widget.authFlow != null, 'authFlow is null');
     switch (widget.authFlow!) {
       case AuthFlow.createAccount:
+      /// There is edge case where user is signup with email and password but not pro
+      /// this happens when does restore purchase on other device so older device
+      /// does not have pro status but have email and password
+        if (sessionModel.hasUserSignedInNotifier.value ?? false) {
+          showSuccessDialog(context, widget.isPro);
+          return;
+        }
+
         context.pushRoute(CreateAccountPassword(
           email: widget.email.validateEmail,
           code: widget.verificationPin!,
@@ -483,6 +492,8 @@ class _CheckoutState extends State<Checkout>
       // TODO: Handle this case.
       case AuthFlow.updateAccount:
       // TODO: Handle this case.
+      case AuthFlow.restoreAccount:
+        // TODO: Handle this case.
     }
   }
 }

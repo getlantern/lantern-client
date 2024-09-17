@@ -8,7 +8,6 @@
 # e2f <projects@e2f.com>, 2023
 # Chi-Hsun Tsai, 2023
 # 刘位, 2023
-# wwj402 <wwj402@gmail.com>, 2023
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
 # Mingye Wang <arthur200126@gmail.com>, 2024
@@ -25,10 +24,11 @@
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
 # Aki, 2024
 # YFdyh000 <yfdyh000@gmail.com>, 2024
+# wwj402 <wwj402@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: YFdyh000 <yfdyh000@gmail.com>, 2024\n"
+"Last-Translator: wwj402 <wwj402@gmail.com>, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/lantern-1/teams/94371/zh_CN/)\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -487,6 +487,9 @@ msgstr "获取您的账户数据时报错"
 
 msgid "reseller_timeout"
 msgstr "验证您的激活码时报错"
+
+msgid "wrong_reseller_code"
+msgstr "激活码无效"
 
 msgid "reseller_success"
 msgstr "激活码兑换成功！"
@@ -1740,16 +1743,16 @@ msgid "follow_us"
 msgstr "关注我们 "
 
 msgid "follow_us_telegram"
-msgstr "在Telegram上关注我们 "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "在Instagram上关注我们 "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "在Facebook上关注我们 "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "在X上关注我们 "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "我们遇到了技术问题。请稍后再试。 "
@@ -1799,6 +1802,54 @@ msgstr ""
 "\n"
 " \n"
 " "
+
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "您已在使用最新版！"

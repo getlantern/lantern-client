@@ -104,11 +104,11 @@ jobs:
           echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
 
       - name: Build Android installers
-        run: make package-android
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
+        run: make package-android
 
       - uses: actions/upload-artifact@v4
         with:

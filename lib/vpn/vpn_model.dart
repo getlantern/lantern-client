@@ -1,17 +1,13 @@
-import 'package:lantern/common/ffi_subscriber.dart';
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
 
 final vpnModel = VpnModel();
 
 class VpnModel extends Model {
-
-  late ValueNotifier<Bandwidth?> bandwidthNotifier;
   late ValueNotifier<String> vpnStatusNotifier;
 
   VpnModel() : super('vpn') {
     if (isDesktop()) {
-      bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
       vpnStatusNotifier = ValueNotifier("disconnected");
     }
   }
@@ -41,21 +37,7 @@ class VpnModel extends Model {
   }
 
   Future<bool> isVpnConnected() async {
-    final vpnStatus = await methodChannel.invokeMethod('getVpnStatus',{});
+    final vpnStatus = await methodChannel.invokeMethod('getVpnStatus', {});
     return vpnStatus == 'connected';
-  }
-
-
-  Widget bandwidth(ValueWidgetBuilder<Bandwidth?> builder) {
-    if (isMobile()) {
-      return subscribedSingleValueBuilder<Bandwidth?>(
-        '/bandwidth',
-        builder: builder,
-        deserialize: (Uint8List serialized) {
-          return Bandwidth.fromBuffer(serialized);
-        },
-      );
-    }
-    return FfiValueBuilder<Bandwidth?>('bandwidth', bandwidthNotifier, builder);
   }
 }

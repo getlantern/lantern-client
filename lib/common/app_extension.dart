@@ -1,3 +1,4 @@
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:lantern/common/common.dart';
 
 extension ErrorX on Object {
@@ -23,8 +24,34 @@ extension ErrorX on Object {
             .contains("we_are_experiencing_technical_difficulties")) {
           return "we_are_experiencing_technical_difficulties".i18n;
         }
-        if (description.contains("user already exists")) {
+
+        if (description.contains("wrong-reseller-code")) {
+          return "wrong_seller_code".i18n;
+        }
+        if (description.contains("user already exists") || description.contains("user with this legacy user ID already exists")) {
           return "signup_error_user_exists".i18n;
+        }
+
+        if (description.contains("purchase_not_found") ||
+            description.contains("user with provided email not found") ||
+            description.contains("no valid purchases for user")) {
+          return "purchase_not_found".i18n;
+        }
+        if (description.contains("err_while_sending_code")) {
+          return "err_while_sending_code".i18n;
+        }
+
+        if (description.contains("error-wrong-code") ||
+            description.contains("<error-email-not-verified>")) {
+          return "invalid_code".i18n;
+        }
+
+        if (description.contains("error restoring purchase")) {
+          return "purchase_restored_error".i18n;
+        }
+
+        if (description.contains("error restoring purchase")) {
+          return "purchase_restored_error".i18n;
         }
         if (description.contains("wrong_seller_code")) {
           return "wrong_seller_code".i18n;
@@ -68,5 +95,20 @@ extension PasswordValidations on String {
         hasLowercase &&
         hasNumber &&
         hasSpecialCharacter;
+  }
+}
+
+extension PlanExtensions on ProductDetails {
+  String get perMonthCost {
+    if (id.toLowerCase() == "1m") {
+      return price;
+    } else if (id.toLowerCase() == "1y") {
+      final cost = (rawPrice / 12).toStringAsFixed(2);
+      return currencySymbol + cost;
+    } else if (id.toLowerCase() == "2y") {
+      final cost = (rawPrice / 24).toStringAsFixed(2);
+      return currencySymbol + cost;
+    }
+    return "";
   }
 }

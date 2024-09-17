@@ -48,7 +48,7 @@ class LanternFFI {
 
   static void sysProxyOff() => _lanternFFI.sysProxyOff();
 
-  static void setLang(lang) => _lanternFFI.setSelectLang(lang);
+  static void setLang(String lang) => _lanternFFI.setSelectLang(lang.toPointerChar());
 
   static void setProxyAll(String isOn) =>
       _lanternFFI.setProxyAll(isOn.toPointerChar());

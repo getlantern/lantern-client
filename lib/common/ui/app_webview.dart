@@ -1,6 +1,7 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:lantern/common/common.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -98,5 +99,24 @@ class AppBrowser extends InAppBrowser {
 
   static Future<void> openWindowsWebview(String url) async {
     FlutterWindowsWebview().launchWebview(url);
+  }
+
+  static Future<void> openWebview(String url) async {
+    switch (Platform.operatingSystem) {
+      case 'windows':
+        await openWindowsWebview(url);
+        break;
+      case 'macos':
+
+        ///**Officially Supported Platforms/Implementations**:
+        ///- Android native WebView
+        ///- iOS
+        ///- MacOS
+        InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+        break;
+      default:
+        await launchUrl(Uri.parse(url), mode: LaunchMode.platformDefault);
+        break;
+    }
   }
 }

@@ -1,10 +1,20 @@
+import 'package:fixnum/fixnum.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_webview.dart';
-import 'package:intl/intl.dart';
-import 'package:fixnum/fixnum.dart';
 
 const defaultTimeoutDuration = Duration(seconds: 10);
+
+bool isProdPlay() {
+  if (sessionModel.isStoreVersion.value ??false) {
+    return true;
+  }
+  if (sessionModel.isTestPlayVersion.value ??false) {
+    return true;
+  }
+ return  false;
+}
 
 const lanternStarLogo = CAssetImage(
   path: ImagePaths.lantern_star,
@@ -126,7 +136,7 @@ extension PlansExtension on Plan {
   }
 }
 
-Future<void> openDesktopWebview(
+Future<void> openDesktopPaymentWebview(
     {required BuildContext context,
     required String redirectUrl,
     required Providers provider,
@@ -149,6 +159,9 @@ Future<void> openDesktopWebview(
           AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
   }
 }
+
+
+
 
 Plan planFromJson(Map<String, dynamic> item) {
   print("called plans $item");
@@ -189,10 +202,10 @@ Map<String, PaymentMethod> paymentMethodsFromJson(List<dynamic> items) {
       });
     json['providers']?.forEach((e) {
       paymentMethod.providers.add(PaymentProviders.create()
-      ..mergeFromProto3Json({
-        "logoUrls": e['logoUrls'],
-        "name": e['name'],
-      }));
+        ..mergeFromProto3Json({
+          "logoUrls": e['logoUrls'],
+          "name": e['name'],
+        }));
     });
     paymentMethods[method] = paymentMethod;
   });

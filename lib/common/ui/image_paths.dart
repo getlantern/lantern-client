@@ -157,6 +157,7 @@ class ImagePaths {
   static const lantern_pro_logotype = 'assets/images/lantern_pro_logotype.svg';
   static const addAccountIllustration = 'assets/images/add_account_illustration.svg';
   static const cloudOff = 'assets/images/cloud_off.svg';
+  static const restore = 'assets/images/restore.svg';
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';

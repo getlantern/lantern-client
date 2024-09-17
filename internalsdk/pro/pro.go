@@ -41,6 +41,8 @@ type ProClient interface {
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
 	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
+	RestorePurchase(ctx context.Context, req map[string]interface{}) (*OkResponse, error)
+	EmailRequest(ctx context.Context, email string) (*OkResponse, error)
 	ReferralAttach(ctx context.Context, refCode string) (bool, error)
 	//Device Linking
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
@@ -102,6 +104,17 @@ func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.Base
 	err := c.GetJSON(ctx, "/email-exists", map[string]interface{}{
 		"email": email,
 	}, &resp)
+	if err != nil {
+		return nil, err
+	}
+	return &resp, nil
+}
+
+func (c *proClient) EmailRequest(ctx context.Context, email string) (*OkResponse, error) {
+	var resp OkResponse
+	params := c.defaultParams()
+	params["email"] = email
+	err := c.PostJSONReadingJSON(ctx, "/user-email-request", params, nil, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -316,8 +329,8 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string, em
 	uc := c.userConfig()
 	err := c.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
 		"deviceName": deviceId,
-		"locale":     uc.GetLanguage(),
 		"email":      email,
+		"locale":     uc.GetLanguage(),
 	}, nil, &resp)
 	if err != nil {
 		return false, err
@@ -353,10 +366,24 @@ func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interfac
 	if err != nil {
 		return nil, err
 	}
+	if resp.BaseResponse != nil && resp.Status != "ok" {
+		return nil, errors.New("error purchasing pro plan: %v", resp.Error)
+	}
+	return &resp, nil
+}
+
+// RestorePurchase is used to restore a purchase for Google and apple play users
+func (c *proClient) RestorePurchase(ctx context.Context, req map[string]interface{}) (*OkResponse, error) {
+	var resp OkResponse
+	err := c.PostFormReadingJSON(ctx, "/restore-purchase", req, &resp)
+	if err != nil {
+		return nil, log.Errorf("%v", err)
+	}
 	if resp.Status != "ok" {
 		return nil, errors.New("wrong_seller_code: %v", resp.Status)
 	}
 	return &resp, nil
+
 }
 
 // PurchaseRequest is used to request a purchase of a Pro plan is will be used for all most all the payment providers

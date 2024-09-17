@@ -2,7 +2,7 @@
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
-import 'package:lantern/common/ui/custom/email_tag.dart';
+import 'package:lantern/plans/utils.dart';
 
 import '../../common/common.dart';
 
@@ -10,11 +10,13 @@ import '../../common/common.dart';
 class CreateAccountEmail extends StatefulWidget {
   final Plan? plan;
   final AuthFlow authFlow;
+  final String? email;
 
   const CreateAccountEmail({
     super.key,
     this.plan,
     this.authFlow = AuthFlow.createAccount,
+    this.email,
   });
 
   @override
@@ -29,6 +31,26 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
         ? null
         : 'please_enter_a_valid_email_address'.i18n,
   );
+
+  @override
+  void initState() {
+    prePopulateEmailIfNeeded();
+    super.initState();
+  }
+
+  void prePopulateEmailIfNeeded() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        if (widget.email != null && widget.email != '') {
+          if (mounted) {
+            setState(() {
+              _emailController.text = widget.email ?? '';
+            });
+          }
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +112,21 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
                 ],
               ),
             ),
+            const SizedBox(height: 16),
+            FutureBuilder(
+              future: AppMethods.isPlayStoreEnable(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && !widget.authFlow.isProCodeActivation && (snapshot.data == true || AppMethods.isAppStoreEnabled())) {
+                  return TextButton(
+                      onPressed: () {
+                        context.router.popUntilRoot();
+                      },
+                      child: CText("skip_for_now".i18n.toUpperCase(),
+                          style: tsButtonPink));
+                }
+                return const SizedBox();
+              },
+            )
           ],
         ),
       ),
@@ -106,7 +143,6 @@ class _CreateAccountEmailState extends State<CreateAccountEmail> {
     FocusManager.instance.primaryFocus?.unfocus();
     createAccount();
   }
-
 
   /// Process for creating account
   /// Create new temp account with random password
