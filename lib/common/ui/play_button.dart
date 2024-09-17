@@ -1,4 +1,4 @@
-import '../common.dart';
+import '../../core/utils/common.dart';
 
 class PlayButton extends StatelessWidget {
   final double size;

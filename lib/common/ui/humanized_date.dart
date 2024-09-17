@@ -1,4 +1,4 @@
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 /// This widget dynamically humanizes a date value, updating the displayed
 /// humanization when necessary as time marches on. It follows the below rules:

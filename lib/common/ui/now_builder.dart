@@ -1,4 +1,4 @@
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 /// callback that receives the current time
 mixin _NowCallback {

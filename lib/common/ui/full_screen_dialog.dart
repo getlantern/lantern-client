@@ -1,4 +1,4 @@
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 /// Shows the supplied widget as a full screen dialog
 @RoutePage(name: 'FullScreenDialogPage')

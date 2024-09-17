@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/models/search_category.dart';
+import 'package:lantern/features/replica/logic/api.dart';
+import 'package:lantern/features/replica/models/search_category.dart';
 import 'package:logger/logger.dart';
 
 Future<String> runDummyServer(String ip, String port) async {

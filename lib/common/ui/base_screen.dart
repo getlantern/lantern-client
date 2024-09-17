@@ -1,5 +1,5 @@
 import 'package:lantern/app.dart';
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 var forceRTL = false; // set to true to force RTL for testing
 
