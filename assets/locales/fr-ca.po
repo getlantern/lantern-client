@@ -529,6 +529,9 @@ msgid "reseller_timeout"
 msgstr ""
 "Une erreur est survenue lors de la validation de votre code d’activation."
 
+msgid "wrong_reseller_code"
+msgstr "Le code d’activation est invalide"
+
 msgid "reseller_success"
 msgstr "Le code d’activation a bien été utilisé."
 
@@ -1950,6 +1953,54 @@ msgstr "Limite atteinte "
 
 msgid "file_size_limit_description"
 msgstr "Les tailles des pièces jointes doivent être inférieures à 100 Mo"
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro : Plan d'un an"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro : Plan de deux ans"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro : Plan d'un mois"
+
+msgid "non_renewing_subscription"
+msgstr "Abonnement non renouvelable"
+
+msgid "restore_purchase"
+msgstr "Restaurer l'achat"
+
+msgid "skip_for_now"
+msgstr "Passer pour l'instant"
+
+msgid "purchase_not_found"
+msgstr "Achat non trouvé avec l'email fourni"
+
+msgid "no_previous_purchase"
+msgstr "Aucun achat précédent trouvé"
+
+msgid "warning_restore_purchase"
+msgstr "Entrez l'email que vous avez utilisé lors du paiement pour récupérer votre achat."
+
+msgid "purchase_restored"
+msgstr "Achat restauré"
+
+msgid "purchase_restored_message"
+msgstr "Votre achat a été restauré avec succès"
+
+msgid "purchase_restored_error"
+msgstr "Il semble que quelque chose s'est mal passé lors de la restauration de l'achat. Veuillez vérifier que vous avez entré le bon email ou code."
+
+msgid "err_while_sending_code"
+msgstr "Une erreur est survenue lors de l'envoi du code, veuillez réessayer"
+
+msgid "email_hint"
+msgstr "*Le courriel est optionnel mais recommandé"
+
+msgid "email_hint_pro"
+msgstr "Ajoutez un courriel pour accéder à vos achats sur n'importe quel appareil. Sans courriel, les achats sont liés à cet appareil et pourraient être perdus."
+
+msgid "continue_without_email"
+msgstr "Continuer sans courriel"
 
 msgid "no_new_update"
 msgstr "Lantern est à jour."

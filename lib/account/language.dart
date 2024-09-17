@@ -39,8 +39,13 @@ class Language extends StatelessWidget {
   }
 
   Future<void> onLocalChange(String newLocal, BuildContext context) async {
-    await sessionModel.setLanguage(newLocal);
-    Navigator.pop(context);
+    try {
+      await sessionModel.setLanguage(newLocal);
+      Navigator.pop(context);
+    }catch(e,stack){
+      mainLogger.e("Error changing language: $e",stackTrace: stack);
+    }
+
   }
 
 

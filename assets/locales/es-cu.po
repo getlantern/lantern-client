@@ -522,6 +522,9 @@ msgstr "Algo ha fallado al obtener los datos de tu cuenta."
 msgid "reseller_timeout"
 msgstr "Algo ha fallado al validar tu código de activación."
 
+msgid "wrong_reseller_code"
+msgstr "Código de activación  invalido"
+
 msgid "reseller_success"
 msgstr "Se ha cambiado el código de activación."
 
@@ -1933,6 +1936,54 @@ msgstr "Límite alcanzado"
 
 msgid "file_size_limit_description"
 msgstr "Los tamaños de los archivos adjuntos deben ser menores de 100 MB"
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: Plan de un año"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: Plan de dos años"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: Plan de un mes"
+
+msgid "non_renewing_subscription"
+msgstr "Suscripción no renovable"
+
+msgid "restore_purchase"
+msgstr "Restaurar compra"
+
+msgid "skip_for_now"
+msgstr "Saltar por ahora"
+
+msgid "purchase_not_found"
+msgstr "No se encontró ninguna compra con el correo electrónico proporcionado"
+
+msgid "no_previous_purchase"
+msgstr "No se encontró ninguna compra previa"
+
+msgid "warning_restore_purchase"
+msgstr "Introduce el correo electrónico que utilizaste durante el pago para recuperar tu compra."
+
+msgid "purchase_restored"
+msgstr "Compra restaurada"
+
+msgid "purchase_restored_message"
+msgstr "Tu compra ha sido restaurada exitosamente"
+
+msgid "purchase_restored_error"
+msgstr "Parece que algo salió mal al restaurar la compra. Por favor, verifica que has introducido el correo electrónico o el código correcto."
+
+msgid "err_while_sending_code"
+msgstr "Algo salió mal al enviar el código, por favor intenta de nuevo"
+
+msgid "email_hint"
+msgstr "*El correo electrónico es opcional, pero recomendado"
+
+msgid "email_hint_pro"
+msgstr "Añade un correo electrónico para acceder a tus compras en cualquier dispositivo. Sin un correo electrónico, las compras están vinculadas a este dispositivo y podrían perderse."
+
+msgid "continue_without_email"
+msgstr "Continuar sin correo electrónico"
 
 msgid "no_new_update"
 msgstr "¡Está actualizado!"

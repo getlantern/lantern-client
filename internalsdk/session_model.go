@@ -183,6 +183,9 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), webclientOpts.UserConfig)
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
+	if opts.Platform == "ios" {
+		m.SetAuthEnabled(true)
+	}
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
 }
@@ -333,6 +336,16 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 
+	case "restoreAccount":
+		email := arguments.Get("email").String()
+		code := arguments.Get("code").String()
+		provider := arguments.Get("provider").String()
+		err := restorePurchase(m, email, code, provider)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
 		//Recovery
 	case "startRecoveryByEmail":
 		email := arguments.Get("email").String()
@@ -407,6 +420,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "authorizeViaEmail":
 		email := arguments.Get("emailAddress").String()
 		err := requestRecoveryEmail(m, email)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "userEmailRequest":
+		email := arguments.Get("email").String()
+		err := userEmailRequest(m, email)
 		if err != nil {
 			return nil, err
 		}
@@ -627,6 +648,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		return err
 	}
 	log.Debugf("my device id %v", opts.DeviceID)
+	log.Debugf("Store version %v", opts.PlayVersion)
 	err = pathdb.PutAll(tx, map[string]interface{}{
 		pathDevelopmentMode: opts.DevelopmentMode,
 		pathDeviceID:        opts.DeviceID,
@@ -738,7 +760,7 @@ func (session *SessionModel) setSplitTunneling(tunneling bool) error {
 func (session *SessionModel) paymentMethods() error {
 	plans, err := session.proClient.PaymentMethodsV4(context.Background())
 	if err != nil {
-		log.Debugf("Plans V3 error: %v", err)
+		log.Debugf("Plans V4 error: %v", err)
 		return err
 	}
 	log.Debugf("Plans V4 response: %+v", plans)
@@ -1378,8 +1400,10 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
 		log.Debugf("User is pro and not first time")
 		setProUser(session.baseModel, true)
+	} else if userDetail.UserLevel == "pro" {
+		log.Debugf("user is pro and device not found")
+		setProUser(session.baseModel, true)
 	} else {
-		log.Debugf("User is not pro")
 		setProUser(session.baseModel, false)
 	}
 
@@ -1521,6 +1545,29 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 	return setProUser(m.baseModel, true)
 }
 
+func restorePurchase(session *SessionModel, email string, code string, provider string) error {
+	deviceName, err := pathdb.Get[string](session.db, pathDevice)
+	if err != nil {
+		return err
+	}
+
+	requData := map[string]interface{}{
+		"verified_email":          email,
+		"provider":                provider,
+		"deviceName":              deviceName,
+		"email_verification_code": code,
+	}
+	okResponse, err := session.proClient.RestorePurchase(context.Background(), requData)
+	if err != nil {
+		return err
+	}
+	if okResponse.Status != "ok" {
+		return errors.New("error restoring purchase")
+	}
+	setProUser(session.baseModel, true)
+	return nil
+}
+
 func submitGooglePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
 	log.Debugf("Submit Google Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
 	err, purchaseData := createPurchaseData(m, email, paymentProviderGooglePlay, "", purchaseToken, planId)
@@ -1614,18 +1661,20 @@ func signup(session *SessionModel, email string, password string) error {
 	lowerCaseEmail := strings.ToLower(email)
 	salt, err := session.authClient.SignUp(email, password)
 	if err != nil {
+		// log.Errorf("Error while signing up %v", err)
 		return err
 	}
 	//Request successfull then save salt
-	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+	dbErr := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:     salt,
 			pathEmailAddress: lowerCaseEmail,
 		})
 	})
-	if err != nil {
-		return err
+	if dbErr != nil {
+		return dbErr
 	}
+	go session.paymentMethods()
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
 	})
@@ -1809,9 +1858,9 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 
 // This will validate code send by server
 func validateRecoveryByEmail(session *SessionModel, email string, code string) error {
-	lowerCaseEmail := strings.ToLower(email)
+	// lowerCaseEmail := strings.ToLower(email)
 	prepareRequestBody := &protos.ValidateRecoveryCodeRequest{
-		Email: lowerCaseEmail,
+		Email: email,
 		Code:  code,
 	}
 	recovery, err := session.authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
@@ -1819,7 +1868,7 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 		return err
 	}
 	if !recovery.Valid {
-		return log.Errorf("invalid_code Error: %v", err)
+		return log.Errorf("invalid_code Error")
 	}
 	log.Debugf("Validate code response %v", recovery.Valid)
 	return nil
@@ -2154,6 +2203,17 @@ func userLinkRemove(session *SessionModel, deviceId string) error {
 	}
 	log.Debugf("UserLink Remove response %v", linkResponse)
 	return session.userDetail(context.Background())
+}
+
+func userEmailRequest(session *SessionModel, email string) error {
+	okResponse, err := session.proClient.EmailRequest(context.Background(), email)
+	if err != nil {
+		return err
+	}
+	if okResponse.Status != "ok" {
+		return errors.New("Email request failed")
+	}
+	return nil
 }
 
 // Add device for LINK WITH EMAIL method

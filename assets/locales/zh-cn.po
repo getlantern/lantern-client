@@ -8,7 +8,6 @@
 # e2f <projects@e2f.com>, 2023
 # Chi-Hsun Tsai, 2023
 # 刘位, 2023
-# wwj402 <wwj402@gmail.com>, 2023
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
 # Mingye Wang <arthur200126@gmail.com>, 2024
@@ -487,6 +486,9 @@ msgstr "获取您的账户数据时报错"
 
 msgid "reseller_timeout"
 msgstr "验证您的激活码时报错"
+
+msgid "wrong_reseller_code"
+msgstr "激活码无效"
 
 msgid "reseller_success"
 msgstr "激活码兑换成功！"
@@ -1799,6 +1801,54 @@ msgstr ""
 "\n"
 " \n"
 " "
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: 一年计划"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: 两年计划"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: 一个月计划"
+
+msgid "non_renewing_subscription"
+msgstr "不可续订的订阅"
+
+msgid "restore_purchase"
+msgstr "恢复购买"
+
+msgid "skip_for_now"
+msgstr "暂时跳过"
+
+msgid "purchase_not_found"
+msgstr "未找到与提供的电子邮件相关的购买"
+
+msgid "no_previous_purchase"
+msgstr "未找到之前的购买记录"
+
+msgid "warning_restore_purchase"
+msgstr "请输入您在结账时使用的电子邮件以恢复购买。"
+
+msgid "purchase_restored"
+msgstr "购买已恢复"
+
+msgid "purchase_restored_message"
+msgstr "您的购买已成功恢复"
+
+msgid "purchase_restored_error"
+msgstr "恢复购买时出现问题。请检查您是否输入了正确的电子邮件或代码。"
+
+msgid "err_while_sending_code"
+msgstr "发送代码时出现错误，请重试"
+
+msgid "email_hint"
+msgstr "*电子邮件是可选的，但推荐填写"
+
+msgid "email_hint_pro"
+msgstr "添加电子邮件以便在任何设备上访问您的购买。没有电子邮件，购买将绑定到此设备，可能会丢失。"
+
+msgid "continue_without_email"
+msgstr "不使用电子邮件继续"
 
 msgid "no_new_update"
 msgstr "您已在使用最新版！"

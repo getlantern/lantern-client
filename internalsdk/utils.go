@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 	"math/big"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -17,6 +18,8 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
 	"golang.org/x/crypto/pbkdf2"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 func BytesToFloat64LittleEndian(b []byte) (float64, error) {
@@ -29,7 +32,7 @@ func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 
 // Create Purchase Request
 func createPurchaseData(session *SessionModel, email string, paymentProvider string, resellerCode string, purchaseToken string, planId string) (error, map[string]interface{}) {
-	if email == "" {
+	if email == "" && paymentProvider != paymentProviderApplePay {
 		return errors.New("Email is empty"), nil
 	}
 
@@ -244,4 +247,18 @@ func convertLogoToMapStringSlice(logo map[string]interface{}) (map[string][]stri
 		}
 	}
 	return convertedLogo, nil
+}
+
+// create binary data from proto
+func CreateBinaryFile(name string, data protoreflect.ProtoMessage) error {
+	b, err := proto.Marshal(data)
+	if err != nil {
+		return err
+	}
+
+	fileName := fmt.Sprintf("%s.bin", name)
+	if err := os.WriteFile(fileName, b, 0644); err != nil {
+		return err
+	}
+	return nil
 }

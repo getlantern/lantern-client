@@ -4,7 +4,6 @@
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2023
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2023
 # Lantern, 2024
-# e2f <projects@e2f.com>, 2024
 # e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2024
@@ -516,6 +515,9 @@ msgstr "Ada kesilapan berlaku semasa mendapatkan data akaun anda."
 
 msgid "reseller_timeout"
 msgstr "Ada kesilapan berlaku semasa mengesahkan kod pengaktifan anda."
+
+msgid "wrong_reseller_code"
+msgstr "Kod pengaktifan tidak sah"
 
 msgid "reseller_success"
 msgstr "Berjaya menebus kod pengaktifan."
@@ -1917,6 +1919,53 @@ msgstr "Had Tercapai "
 msgid "file_size_limit_description"
 msgstr "Saiz lampiran hendaklah di bawah 100 MB"
 
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""
 msgid "no_new_update"
 msgstr "Anda mengikut masa terkini!"
 

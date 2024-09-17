@@ -36,7 +36,7 @@ class AppMethods {
   }
 
   static Future<bool> isPlayStoreEnable() async {
-    if(!Platform.isAndroid){
+    if (!Platform.isAndroid) {
       return false;
     }
     final isPlayVersion = sessionModel.isStoreVersion.value ?? false;
@@ -44,6 +44,30 @@ class AppMethods {
     final inRussia = sessionModel.country.value == 'RU';
     final isPlayStoreAvailable =
         await sessionModel.isGooglePlayServiceAvailable();
-    return ((isPlayVersion || isTestPlayVersion) && isPlayStoreAvailable && !inRussia);
+    return ((isPlayVersion || isTestPlayVersion) &&
+        isPlayStoreAvailable &&
+        !inRussia);
+  }
+
+  static bool isAppStoreEnabled() {
+    return Platform.isIOS;
+  }
+
+  /// Show restore purchase button only if user is not pro and play store is enabled
+  static Future<bool> showRestorePurchaseButton(bool proUser) async {
+    if (Platform.isAndroid) {
+      if (proUser) {
+        return false;
+      }
+      // check if auth is enabled
+      if (!(sessionModel.isAuthEnabled.value ?? false)) {
+        return false;
+      }
+      return await AppMethods.isPlayStoreEnable();
+    }
+    if (isAppStoreEnabled()) {
+      return (proUser == false);
+    }
+    return false;
   }
 }

@@ -8,7 +8,6 @@
 # Abdulaziz AlObaili <dr.alobaili@gmail.com>, 2023
 # Lantern, 2023
 # dc64c51d94429ef6835e68b9062d8713_f0bbcb2 <c1f4e6afa4193d416d7a55f63ee75536_721142>, 2023
-# 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2024
 # Rima Sghaier, 2024
 # lamine Kacimi <k_lamine27@yahoo.fr>, 2024
 # Abed Abedd <abderrahman.younis@gmail.com>, 2024
@@ -516,6 +515,9 @@ msgstr "حدث خطأ ما أثناء إحضار بيانات حسابك."
 
 msgid "reseller_timeout"
 msgstr "حدث خطأ ما أثناء التحقق من صحة رمز التنشيط الذي أدخلته."
+
+msgid "wrong_reseller_code"
+msgstr "رمز تنشيط غير صالح"
 
 msgid "reseller_success"
 msgstr "نجح استرداد رمز التنشيط."
@@ -1898,6 +1900,53 @@ msgstr "تم الوصول إلى الحد "
 msgid "file_size_limit_description"
 msgstr "يجب أن تكون أحجام المرفقات أقل من 100 ميجابايت"
 
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: خطة لمدة عام واحد"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: خطة لمدة عامين"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: خطة شهرية"
+
+msgid "non_renewing_subscription"
+msgstr "اشتراك غير قابل للتجديد"
+
+msgid "restore_purchase"
+msgstr "استعادة الشراء"
+
+msgid "skip_for_now"
+msgstr "استعادة الشراء"
+
+msgid "purchase_not_found"
+msgstr "لم يتم العثور على عملية شراء باستخدام البريد الإلكتروني المقدم"
+
+msgid "no_previous_purchase"
+msgstr "لم يتم العثور على عملية شراء سابقة"
+
+msgid "warning_restore_purchase"
+msgstr "أدخل البريد الإلكتروني الذي أدخلته أثناء الدفع لاستعادة عملية الشراء الخاصة بك"
+
+msgid "purchase_restored"
+msgstr "شراء تم استعادته"
+
+msgid "purchase_restored_message"
+msgstr "لقد تم استعادة عملية الشراء الخاصة بك بنجاح"
+
+msgid "purchase_restored_error"
+msgstr "لقد تم استعادة عملية الشراء الخاصة بك بنجاح"
+
+msgid "err_while_sending_code"
+msgstr "حدث خطأ أثناء إرسال الرمز، يرجى المحاولة مرة أخرى"
+
+msgid "email_hint"
+msgstr "*البريد الإلكتروني اختياري ولكن ينصح به"
+
+msgid "email_hint_pro"
+msgstr "Add an email to access your purchases on any device. Without an email purchases are tied to this device and could be lost. "
+
+msgid "continue_without_email"
+msgstr "متابعة بدون بريد إلكتروني"
 msgid "no_new_update"
 msgstr "لديك آخر التحديثات! "
 

@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/fs"
@@ -325,7 +326,6 @@ func (app *App) SetLanguage(lang string) {
 	app.settings.SetLanguage(lang)
 	log.Debugf("Setting language to %v", lang)
 	app.SendMessageToUI("pro", map[string]interface{}{
-		"type":     "pro",
 		"language": lang,
 	})
 }
@@ -349,6 +349,19 @@ func (app *App) SendMessageToUI(service string, message interface{}) {
 	}
 }
 
+func (app *App) SendUpdateUserDataToUI() {
+	user, found := app.GetUserData(app.Settings().GetUserID())
+	if !found {
+		return
+	}
+	if user.UserLevel == "" {
+		user.UserLevel = "free"
+	}
+	b, _ := json.Marshal(user)
+	log.Debugf("SendUpdateUserDataToUI: %s", string(b))
+	app.ws.SendMessage("pro", user)
+}
+
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
 func (app *App) OnSettingChange(attr settings.SettingName, cb func(interface{})) {
@@ -363,7 +376,7 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	ctx := context.Background()
 	go app.fetchOrCreateUser(ctx)
-	go app.PaymentMethods(ctx)
+	go app.GetPaymentMethods(ctx)
 	go app.fetchDeviceLinkingCode(ctx)
 
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
@@ -392,6 +405,14 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
 	}
+	// send configs to UI
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"login": app.settings.IsUserLoggedIn(),
+	})
+}
+
+func (app *App) SendConfig() {
+	app.sendConfigOptions()
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
@@ -589,6 +610,7 @@ func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
 	app.SetUserData(ctx, user.UserId, user)
 	settings.SetReferralCode(user.Referral)
 	settings.SetUserIDAndToken(user.UserId, user.Token)
+	go app.UserData(ctx)
 	return resp.User, nil
 }
 
@@ -599,21 +621,22 @@ func (app *App) Plans(ctx context.Context) ([]protos.Plan, error) {
 		log.Debugf("Returning plans from cache %s", v)
 		return resp, nil
 	}
-	resp, err := app.paymentMethods(ctx)
+	resp, err := app.FetchPaymentMethods(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return resp.Plans, nil
 }
 
-// PaymentMethods returns the plans and payment plans available to a user
-func (app *App) PaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
+// GetPaymentMethods returns the plans and payment from cache if available
+// if not then call FetchPaymentMethods
+func (app *App) GetPaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
 	if v, ok := app.plansCache.Load("paymentMethods"); ok {
 		resp := v.([]protos.PaymentMethod)
 		log.Debugf("Returning payment methods from cache %s", v)
 		return resp, nil
 	}
-	resp, err := app.paymentMethods(ctx)
+	resp, err := app.FetchPaymentMethods(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -624,8 +647,8 @@ func (app *App) PaymentMethods(ctx context.Context) ([]protos.PaymentMethod, err
 	return desktopProviders, nil
 }
 
-// PaymentMethods returns the plans and payment plans available to a user
-func (app *App) paymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
+// FetchPaymentMethods returns the plans and payment plans available to a user
+func (app *App) FetchPaymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
 	resp, err := app.proClient.PaymentMethodsV4(context.Background())
 	if err != nil {
 		return nil, errors.New("Could not get payment methods: %v", err)
@@ -644,10 +667,14 @@ func (app *App) paymentMethods(ctx context.Context) (*proclient.PaymentMethodsRe
 			}
 		}
 	}
+	//clear previous store cache
+	app.plansCache.Delete("plans")
+	app.plansCache.Delete("paymentMethods")
 	log.Debugf("DEBUG: Payment methods plans: %+v", resp.Plans)
 	log.Debugf("DEBUG: Payment methods providers: %+v", desktopPaymentMethods)
 	app.plansCache.Store("plans", resp.Plans)
 	app.plansCache.Store("paymentMethods", desktopPaymentMethods)
+	app.sendConfigOptions()
 	return resp, nil
 }
 
@@ -669,8 +696,6 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 
 	currentDevice := app.Settings().GetDeviceID()
 
-	log.Debugf("Current device %v", currentDevice)
-
 	// Check if device id is connect to same device if not create new user
 	// this is for the case when user removed device from other device
 	deviceFound := false
@@ -682,7 +707,7 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 			}
 		}
 	}
-	log.Debugf("Device found %v", deviceFound)
+
 	/// Check if user has installed app first time
 	firstTime := settings.GetUserFirstVisit()
 	log.Debugf("First time visit %v", firstTime)
@@ -696,20 +721,23 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 		log.Debugf("User is not pro")
 		setProUser(false)
 	}
+	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
 	settings.SetExpiration(userDetail.Expiration)
 	settings.SetReferralCode(resp.User.Referral)
-	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
 	log.Debugf("User caching successful: %+v", userDetail)
 	// Save data in userData cache
 	app.SetUserData(ctx, userDetail.UserId, userDetail)
+	app.SendUpdateUserDataToUI()
 	return resp.User, nil
 }
 
 func (app *App) devices() protos.Devices {
 	user, found := app.GetUserData(app.Settings().GetUserID())
-	if !found {
+
+	if !found && user == nil {
 		return protos.Devices{}
 	}
+	log.Debugf("Devices: %v", user.Devices)
 	return protos.Devices{
 		Devices: user.Devices,
 	}

@@ -45,13 +45,27 @@ type LinkCodeRedeemResponse struct {
 }
 
 type PurchaseResponse struct {
-	PaymentStatus string      `json:"paymentStatus"`
-	Plan          protos.Plan `json:"plan"`
-	Status        string      `json:"status"`
+	*protos.BaseResponse `json:",inline"`
+	PaymentStatus        string      `json:"paymentStatus"`
+	Plan                 protos.Plan `json:"plan"`
+	Status               string      `json:"status"`
 }
 
 type UserRecovery struct {
 	Status string `json:"status"`
 	UserID int64  `json:"userID"`
 	Token  string `json:"token"`
+}
+
+type OkResponse struct {
+	Status string `json:"status"`
+}
+
+// Request
+type RestorePurchaseRequest struct {
+	Provider   string
+	Token      string
+	DeviceName string
+	Email      string
+	Code       string
 }

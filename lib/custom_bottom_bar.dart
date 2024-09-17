@@ -5,6 +5,7 @@ import 'package:lantern/replica/common.dart';
 class CustomBottomBar extends StatelessWidget {
   final String selectedTab;
   final bool isDevelop;
+
   // final bool isTesting;
 
   const CustomBottomBar({
@@ -16,51 +17,53 @@ class CustomBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return sessionModel.chatEnabled((context, chatEnabled, _) {
-        return sessionModel.replicaAddr((context, replicaAddr, child) {
-          final replicaEnabled = replicaAddr != '';
+      return sessionModel.replicaAddr((context, replicaAddr, child) {
+        final replicaEnabled = replicaAddr != '';
 
-          final indexToTab = <int, String>{};
-          final tabToIndex = <String, int>{};
+        final indexToTab = <int, String>{};
+        final tabToIndex = <String, int>{};
 
-          var nextIndex = 0;
-          if (chatEnabled) {
-            indexToTab[nextIndex] = TAB_CHATS;
-            tabToIndex[TAB_CHATS] = nextIndex++;
-          }
-          indexToTab[nextIndex] = TAB_VPN;
-          tabToIndex[TAB_VPN] = nextIndex++;
-          if (replicaEnabled) {
-            indexToTab[nextIndex] = TAB_REPLICA;
-            tabToIndex[TAB_REPLICA] = nextIndex++;
-          }
-          indexToTab[nextIndex] = TAB_ACCOUNT;
-          tabToIndex[TAB_ACCOUNT] = nextIndex++;
-          if (isDevelop ) {
+        var nextIndex = 0;
+        if (chatEnabled) {
+          indexToTab[nextIndex] = TAB_CHATS;
+          tabToIndex[TAB_CHATS] = nextIndex++;
+        }
+        indexToTab[nextIndex] = TAB_VPN;
+        tabToIndex[TAB_VPN] = nextIndex++;
+        if (replicaEnabled) {
+          indexToTab[nextIndex] = TAB_REPLICA;
+          tabToIndex[TAB_REPLICA] = nextIndex++;
+        }
+        indexToTab[nextIndex] = TAB_ACCOUNT;
+        tabToIndex[TAB_ACCOUNT] = nextIndex++;
+        if (isDevelop) {
+          /// Just to be safe here
+          /// Dev tab should not be visible in release mode
+          if (!kReleaseMode) {
             indexToTab[nextIndex] = TAB_DEVELOPER;
             tabToIndex[TAB_DEVELOPER] = nextIndex++;
           }
-
-          final currentIndex = tabToIndex[selectedTab] ?? tabToIndex[TAB_VPN]!;
-          return BottomNavigationBar(
-            currentIndex: currentIndex,
-            elevation: 0.0,
-            unselectedFontSize: 0,
-            selectedFontSize: 0,
-            showSelectedLabels: false,
-            type: BottomNavigationBarType.fixed,
-            items: buildItems(
-              indexToTab,
-              tabToIndex,
-              currentIndex,
-              chatEnabled,
-              replicaEnabled,
-              true,
-              isDevelop,
-
-              replicaAddr,
-            ),
-          );
-        });
+        }
+        final currentIndex = tabToIndex[selectedTab] ?? tabToIndex[TAB_VPN]!;
+        return BottomNavigationBar(
+          currentIndex: currentIndex,
+          elevation: 0.0,
+          unselectedFontSize: 0,
+          selectedFontSize: 0,
+          showSelectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          items: buildItems(
+            indexToTab,
+            tabToIndex,
+            currentIndex,
+            chatEnabled,
+            replicaEnabled,
+            true,
+            isDevelop,
+            replicaAddr,
+          ),
+        );
+      });
     });
   }
 

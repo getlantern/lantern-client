@@ -3,7 +3,6 @@
 # Vitaliy Grishenko, 2022
 # Lowrider <pams@imail.ru>, 2022
 # Helen R <helen.russel88@gmail.com>, 2022
-# e2f <projects@e2f.com>, 2022
 # e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2023
 # Serg <sergkoshkin@yandex.ru>, 2023
 # e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2023
@@ -525,6 +524,9 @@ msgstr "Что-то пошло не так с загрузкой данных а
 
 msgid "reseller_timeout"
 msgstr "Что-то пошло не так с подтверждением кода активации. "
+
+msgid "wrong_reseller_code"
+msgstr "Неверный код активации"
 
 msgid "reseller_success"
 msgstr "Код активации добавлен успешно."
@@ -1912,6 +1914,54 @@ msgstr "Лимит достигнут "
 
 msgid "file_size_limit_description"
 msgstr "Размер вложений должен быть менее 100 МБ"
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: Годовой план"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: Двухлетний план"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: Месячный план"
+
+msgid "non_renewing_subscription"
+msgstr "Не продлеваемая подписка"
+
+msgid "restore_purchase"
+msgstr "Восстановить покупку"
+
+msgid "skip_for_now"
+msgstr "Пропустить пока"
+
+msgid "purchase_not_found"
+msgstr "Покупка с указанным email не найдена"
+
+msgid "no_previous_purchase"
+msgstr "Предыдущие покупки не найдены"
+
+msgid "warning_restore_purchase"
+msgstr "Введите email, который вы указали при оплате, чтобы восстановить покупку."
+
+msgid "purchase_restored"
+msgstr "Покупка восстановлена"
+
+msgid "purchase_restored_message"
+msgstr "Ваша покупка успешно восстановлена"
+
+msgid "purchase_restored_error"
+msgstr "Похоже, что-то пошло не так при восстановлении покупки. Пожалуйста, проверьте, правильно ли вы ввели email или код."
+
+msgid "err_while_sending_code"
+msgstr "Произошла ошибка при отправке кода, попробуйте снова"
+
+msgid "email_hint"
+msgstr "*Email не обязателен, но рекомендуется"
+
+msgid "email_hint_pro"
+msgstr "Добавьте email, чтобы получить доступ к покупкам на любом устройстве. Без email покупки привязаны к этому устройству и могут быть потеряны."
+
+msgid "continue_without_email"
+msgstr "Продолжить без email"
 
 msgid "no_new_update"
 msgstr "Нет новых обновлений!"

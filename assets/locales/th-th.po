@@ -4,7 +4,6 @@
 # Thai Localization, 2024
 # Amazing Nev <nev@nevagency.com>, 2024
 # Lantern, 2024
-# e2f <projects@e2f.com>, 2024
 # tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2024
 # Acclaro Thailand <bkk-project@acclaro.com>, 2024
 # 
@@ -506,6 +505,9 @@ msgstr "เกิดข้อผิดพลาดบางอย่างระ
 
 msgid "reseller_timeout"
 msgstr "เกิดข้อผิดพลาดบางอย่างระหว่างการตรวจสอบรหัสเปิดใช้งานของคุณ"
+
+msgid "wrong_reseller_code"
+msgstr "รหัสเปิดใช้งานไม่ถูกต้อง"
 
 msgid "reseller_success"
 msgstr "แลกรับรหัสเปิดใช้งานเรียบร้อยแล้ว"
@@ -1879,6 +1881,54 @@ msgstr "ถึงขีดจำกัดแล้ว "
 
 msgid "file_size_limit_description"
 msgstr "ขนาดไฟล์แนบต้องต่ำกว่า 100 MB"
+
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: แผนหนึ่งปี"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: แผนสองปี"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: แผนหนึ่งเดือน"
+
+msgid "non_renewing_subscription"
+msgstr "การสมัครสมาชิกที่ไม่ต่ออายุ"
+
+msgid "restore_purchase"
+msgstr "กู้คืนการซื้อ"
+
+msgid "skip_for_now"
+msgstr "ข้ามตอนนี้"
+
+msgid "purchase_not_found"
+msgstr "ไม่พบการซื้อด้วยอีเมลที่ให้ไว้"
+
+msgid "no_previous_purchase"
+msgstr "ไม่พบการซื้อก่อนหน้านี้"
+
+msgid "warning_restore_purchase"
+msgstr "ป้อนอีเมลที่คุณใช้ในระหว่างการชำระเงินเพื่อกู้คืนการซื้อของคุณ"
+
+msgid "purchase_restored"
+msgstr "กู้คืนการซื้อเรียบร้อยแล้ว"
+
+msgid "purchase_restored_message"
+msgstr "การซื้อของคุณได้รับการกู้คืนเรียบร้อยแล้ว"
+
+msgid "purchase_restored_error"
+msgstr "ดูเหมือนว่ามีบางอย่างผิดพลาดในการกู้คืนการซื้อ โปรดตรวจสอบว่าคุณป้อนอีเมลหรือรหัสที่ถูกต้อง"
+
+msgid "err_while_sending_code"
+msgstr "เกิดข้อผิดพลาดขณะส่งรหัส โปรดลองอีกครั้ง"
+
+msgid "email_hint"
+msgstr "*อีเมลเป็นตัวเลือกแต่แนะนำให้กรอก"
+
+msgid "email_hint_pro"
+msgstr "เพิ่มอีเมลเพื่อเข้าถึงการซื้อของคุณบนอุปกรณ์ใดก็ได้ หากไม่มีอีเมล การซื้อจะผูกกับอุปกรณ์นี้และอาจสูญหายได้"
+
+msgid "continue_without_email"
+msgstr "ดำเนินการต่อโดยไม่ใช้อีเมล"
 
 msgid "no_new_update"
 msgstr "คุณมีการอัปเดตล่าสุดแล้ว"

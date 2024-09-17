@@ -70,6 +70,7 @@ func signup(email *C.char, password *C.char) *C.char {
 	saveUserSalt(salt)
 	setting.SetEmailAddress(C.GoString(email))
 	a.SetUserLoggedIn(true)
+	a.FetchPaymentMethods(context.Background())
 	return C.CString("true")
 }
 
@@ -99,6 +100,7 @@ func login(email *C.char, password *C.char) *C.char {
 	// old email might be differnt but we want to show latets email
 	userData.Email = C.GoString(email)
 	a.Settings().SetEmailAddress(userData.Email)
+	a.SetUserData(context.Background(), user.LegacyID, userData)
 	return C.CString("true")
 }
 

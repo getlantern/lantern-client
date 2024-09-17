@@ -40,10 +40,15 @@ public class DatabaseManager: NSObject, MinisqlDBProtocol, MinisqlTxProtocol {
   }
 
   public func commit() throws {
-    if let savepointName = savepointName {
-      try connection.run("RELEASE '\(savepointName)'")
+    do {
+      if let savepointName = savepointName {
+        try connection.run("RELEASE '\(savepointName)'")
+      }
+      savepointName = nil
+    } catch {
+      print("Failed to commit: \(error)")
     }
-    savepointName = nil
+
   }
 
   public func rollback() throws {

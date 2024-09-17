@@ -512,6 +512,9 @@ msgstr "आपका खाता डेटा लाते समय कुछ 
 msgid "reseller_timeout"
 msgstr "आपके एक्टिवेशन कोड को सत्यापित करते समय कुछ गड़बड़ हुई।"
 
+msgid "wrong_reseller_code"
+msgstr "अमान्य सक्रियण कोड"
+
 msgid "reseller_success"
 msgstr "एक्टिवेशन कोड सफलतापूर्वक रीडीम किया गया।"
 
@@ -1895,6 +1898,54 @@ msgstr "सीमा पूरी हो गई है "
 
 msgid "file_size_limit_description"
 msgstr "संलग्नक का आकार 100 एमबी से कम होना चाहिए"
+
+msgid "lantern_pro_one_year"
+msgstr "लैंटर्न प्रो: एक साल का प्लान"
+
+msgid "lantern_pro_two_year"
+msgstr "लैंटर्न प्रो: दो साल का प्लान"
+
+msgid "lantern_pro_one_month"
+msgstr "लैंटर्न प्रो: एक महीने का प्लान"
+
+msgid "non_renewing_subscription"
+msgstr "गैर-नवीकरणीय सब्सक्रिप्शन"
+
+msgid "restore_purchase"
+msgstr "खरीदारी बहाल करें"
+
+msgid "skip_for_now"
+msgstr "फिलहाल छोड़ें"
+
+msgid "purchase_not_found"
+msgstr "प्रदान किए गए ईमेल से कोई खरीदारी नहीं मिली"
+
+msgid "no_previous_purchase"
+msgstr "कोई पिछली खरीदारी नहीं मिली"
+
+msgid "warning_restore_purchase"
+msgstr "अपनी खरीदारी को पुनर्प्राप्त करने के लिए वह ईमेल दर्ज करें जो आपने चेकआउट के दौरान दर्ज किया था।"
+
+msgid "purchase_restored"
+msgstr "खरीदारी बहाल हो गई"
+
+msgid "purchase_restored_message"
+msgstr "आपकी खरीदारी सफलतापूर्वक बहाल हो गई है"
+
+msgid "purchase_restored_error"
+msgstr "ऐसा लगता है कि खरीदारी बहाल करते समय कुछ गलत हो गया है। कृपया जांच लें कि आपने सही ईमेल या कोड दर्ज किया है।"
+
+msgid "err_while_sending_code"
+msgstr "कोड भेजते समय कुछ गलत हुआ, कृपया फिर से प्रयास करें"
+
+msgid "email_hint"
+msgstr "*ईमेल वैकल्पिक है लेकिन अनुशंसित है"
+
+msgid "email_hint_pro"
+msgstr "अपने खरीदारी को किसी भी डिवाइस पर एक्सेस करने के लिए एक ईमेल जोड़ें। बिना ईमेल के खरीदारी इस डिवाइस से जुड़ी रहेगी और खो भी सकती है।"
+
+msgid "continue_without_email"
+msgstr "बिना ईमेल जारी रखें"
 
 msgid "no_new_update"
 msgstr "आप अद्यतित हैं!"
