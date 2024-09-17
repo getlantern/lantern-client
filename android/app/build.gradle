@@ -193,9 +193,7 @@ android {
         abi {
             enable !bool("playVersion")
             reset()
-            include androidArchJava()
-
-            universalApk true
+            include 'x86_64', 'arm64-v8a'
         }
     }
 
