@@ -71,7 +71,7 @@ class SessionModel internal constructor(
     private val autoUpdater = AutoUpdater(activity, activity)
 
     init {
-        LanternApp.setSession(this)
+        LanternApp.session = this
         LanternApp.setGoSession(model)
         LanternApp.setInAppBilling(inAppBilling)
         updateAppsData()
