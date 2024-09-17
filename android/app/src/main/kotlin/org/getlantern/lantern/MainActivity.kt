@@ -88,13 +88,13 @@ class MainActivity :
         eventManager =
             object : EventManager("lantern_event_channel", flutterEngine) {
                 override fun onListen(event: Event) {
-                    if (LanternApp.getSession().lanternDidStart()) {
+                    if (LanternApp.session.lanternDidStart()) {
                         Plausible.init(applicationContext)
                         Plausible.enable(true)
                         Logger.debug(TAG, "Plausible initialized")
                         checkIfSurveyAvailable()
                     }
-                    LanternApp.getSession().dnsDetector.publishNetworkAvailability()
+                    LanternApp.session.dnsDetector.publishNetworkAvailability()
                 }
             }
         MethodChannel(
@@ -284,7 +284,7 @@ class MainActivity :
     private fun sendSurveyEvent(survey: Survey) {
         val url = survey.url
         if (url != "") {
-            if (LanternApp.getSession().checkIfSurveyLinkOpened(url)) {
+            if (LanternApp.session.checkIfSurveyLinkOpened(url)) {
                 Logger.debug(
                     TAG,
                     "User already opened link to survey; not displaying snackbar",
@@ -304,7 +304,7 @@ class MainActivity :
         val intent = Intent(this, WebViewActivity::class.java)
         intent.putExtra("url", survey.url)
         startActivity(intent)
-        LanternApp.getSession().setSurveyLinkOpened(survey.url)
+        LanternApp.session.setSurveyLinkOpened(survey.url)
     }
 
     @Throws(Exception::class)
@@ -400,7 +400,7 @@ class MainActivity :
                 )
                 // If user come here it mean user has all permissions needed
                 // Also user given permission for VPN service dialog as well
-                LanternApp.getSession().setHasAllNetworkPermissions(true)
+                LanternApp.session.setHasAllNetworkPermissions(true)
                 updateStatus(true)
                 startVpnService()
             }
@@ -468,7 +468,7 @@ class MainActivity :
                 // This check is for new user that will start app first time
                 // this mean user has already given
                 // system permissions
-                LanternApp.getSession().setHasAllNetworkPermissions(true)
+                LanternApp.session.setHasAllNetworkPermissions(true)
             } else {
                 Logger.debug(PERMISSIONS_TAG, "User denied vpn permission")
                 vpnModel.updateStatus(false)

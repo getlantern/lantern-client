@@ -28,7 +28,7 @@ class AutoUpdater(val context: Context, val activity: Activity? = null) {
             Intent().apply {
                 component = ComponentName(
                     context.packageName,
-                    "org.getlantern.lantern.activity.UpdateActivity_",
+                    "org.getlantern.lantern.activity.UpdateActivity",
                 )
                 putExtra("updateUrl", updateURL)
                 setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -46,7 +46,7 @@ class AutoUpdater(val context: Context, val activity: Activity? = null) {
     }
 
     fun checkForUpdates(result: MethodChannel.Result?) {
-        if (LanternApp.getSession().isStoreVersion() && activity != null) {
+        if (LanternApp.session.isStoreVersion() && activity != null) {
             Utils.openPlayStore(context)
             return
         }

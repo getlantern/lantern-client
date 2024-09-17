@@ -46,7 +46,7 @@ open class WebViewActivity : BaseFragmentActivity() {
     }
 
     private fun openWebview(url: String) {
-        val proxyAddr: String = LanternApp.getSession().hTTPAddr
+        val proxyAddr: String = LanternApp.session.hTTPAddr
         val parts = proxyAddr.split(":").toTypedArray()
         if (parts.size == 2) {
             val proxyHost = parts[0]
