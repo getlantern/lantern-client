@@ -16,3 +16,4 @@ export 'ui/list_item/video_list_item.dart';
 export 'ui/list_view/common_list.dart';
 export 'ui/list_view/list_layout.dart';
 export 'ui/utils.dart';
+export 'package:dio/dio.dart';

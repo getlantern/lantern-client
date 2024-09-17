@@ -154,7 +154,7 @@ class ContactConnectionCard extends StatelessWidget {
                 description: 'introductions_error_description_accepting'.i18n,
               );
             } finally {
-              await context.router.pop();
+              await context.router.maybePop();
               await context.pushRoute(Conversation(contactId: introduction.to));
             }
           },
@@ -174,7 +174,7 @@ class ContactConnectionCard extends StatelessWidget {
                   contact.contactId.id,
                   introduction.to.id,
                 );
-                await context.router.pop();
+                await context.router.maybePop();
                 return true;
               } catch (e, s) {
                 CDialog.showError(

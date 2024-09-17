@@ -1,7 +1,7 @@
 import 'package:lantern/messaging/introductions/introduction_extension.dart';
 import 'package:lantern/messaging/messaging.dart';
 
-@RoutePage<void>(name: 'Introductions')
+@RoutePage(name: 'Introductions')
 class Introductions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

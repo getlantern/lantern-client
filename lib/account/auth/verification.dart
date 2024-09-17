@@ -7,7 +7,7 @@ import 'package:lantern/vpn/vpn.dart';
 import '../../common/common.dart';
 import 'change_email.dart';
 
-@RoutePage<void>(name: 'Verification')
+@RoutePage(name: 'Verification')
 class Verification extends StatefulWidget {
   final String email;
   final AuthFlow authFlow;

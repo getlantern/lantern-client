@@ -3,7 +3,7 @@ import 'package:retry/retry.dart';
 
 import 'explanation_step.dart';
 
-@RoutePage<void>(name: 'LinkDevice')
+@RoutePage(name: 'LinkDevice')
 class LinkDevice extends StatefulWidget {
   const LinkDevice({
     Key? key,

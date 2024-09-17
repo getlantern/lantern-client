@@ -2,7 +2,7 @@ import 'package:lantern/account/follow_us.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/messaging/messaging_model.dart';
 
-@RoutePage<void>(name: 'Account')
+@RoutePage(name: 'Account')
 class AccountMenu extends StatefulWidget {
   const AccountMenu({Key? key}) : super(key: key);
 

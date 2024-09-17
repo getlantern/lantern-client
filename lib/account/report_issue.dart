@@ -3,7 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/common/ui/app_loading_dialog.dart';
 
-@RoutePage<void>(name: 'ReportIssue')
+@RoutePage(name: 'ReportIssue')
 class ReportIssue extends StatefulWidget {
   final String? description;
 

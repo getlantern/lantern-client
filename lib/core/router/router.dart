@@ -4,7 +4,8 @@ import 'package:lantern/common/common.dart';
 @AutoRouterConfig(
   replaceInRouteName: 'Page,Route,Screen',
 )
-class AppRouter extends $AppRouter {
+
+class AppRouter extends RootStackRouter {
   @override
   RouteType get defaultRouteType => const RouteType.adaptive();
   @override

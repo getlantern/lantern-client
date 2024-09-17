@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 
 import '../../common/common.dart';
 
-@RoutePage<void>(name: 'SignInPassword')
+@RoutePage(name: 'SignInPassword')
 class SignInPassword extends StatefulWidget {
   final String email;
 

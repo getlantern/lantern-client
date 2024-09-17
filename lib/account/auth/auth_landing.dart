@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 
 import '../../common/common.dart';
 
-@RoutePage<void>(name: 'AuthLanding')
+@RoutePage(name: 'AuthLanding')
 class AuthLanding extends StatelessWidget {
   const AuthLanding({super.key});
 

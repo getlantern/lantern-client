@@ -4,7 +4,7 @@ import 'package:email_validator/email_validator.dart';
 
 import '../../common/common.dart';
 
-@RoutePage<void>(name: 'ChangeEmail')
+@RoutePage(name: 'ChangeEmail')
 class ChangeEmail extends StatefulWidget {
   final String email;
 

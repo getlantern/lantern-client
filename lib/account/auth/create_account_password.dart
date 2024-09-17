@@ -6,7 +6,7 @@ import 'package:lantern/common/ui/password_criteria.dart';
 import '../../common/common.dart';
 import '../../plans/utils.dart';
 
-@RoutePage<void>(name: 'CreateAccountPassword')
+@RoutePage(name: 'CreateAccountPassword')
 class CreateAccountPassword extends StatefulWidget {
   final String email;
   final String code;

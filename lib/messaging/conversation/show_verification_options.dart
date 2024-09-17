@@ -37,7 +37,7 @@ void showVerificationOptions({
           icon: ImagePaths.qr_code_scanner,
           content: 'verify_in_person'.i18n,
           onTap: () async {
-            await bottomModalContext.router.pop();
+            await bottomModalContext.router.maybePop();
             await context.router
                 .push(
               FullScreenDialogPage(widget: AddViaQR(me: me)),
@@ -76,7 +76,7 @@ void showVerificationOptions({
           onTap: () async {
             await messagingModel
                 .dismissVerificationReminder(contact.contactId.id);
-            await bottomModalContext.router.pop();
+            await bottomModalContext.router.maybePop();
             CDialog(
               title: 'contact_verification'.i18n,
               iconPath: ImagePaths.verified_user,

@@ -1,6 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 
-@RoutePage<void>(name: 'ChatNumberMessaging')
+@RoutePage(name: 'ChatNumberMessaging')
 class ChatNumberMessaging extends StatelessWidget {
   ChatNumberMessaging() : super() {
     messagingModel.dismissTryLanternChatBadge();

@@ -4,7 +4,7 @@ import 'package:lantern/messaging/messaging.dart';
 
 import 'long_tap_menu.dart';
 
-@RoutePage<void>(name: 'NewChat')
+@RoutePage(name: 'NewChat')
 class NewChat extends StatefulWidget {
   @override
   _NewChatState createState() => _NewChatState();

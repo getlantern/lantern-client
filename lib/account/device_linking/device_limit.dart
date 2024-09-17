@@ -2,7 +2,7 @@
 
 import '../../common/common.dart';
 
-@RoutePage<void>(name: 'DeviceLimit')
+@RoutePage(name: 'DeviceLimit')
 class DeviceLimit extends StatefulWidget {
   const DeviceLimit({super.key});
 
@@ -79,7 +79,7 @@ class _DeviceLimitState extends State<DeviceLimit> {
       context.loaderOverlay.hide();
       // Once device has been removed
       // Pop routes and continue with sign in
-      context.popRoute(true);
+      context.maybePop(true);
     } catch (e) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);

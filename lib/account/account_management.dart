@@ -1,7 +1,7 @@
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/plans/utils.dart';
 
-@RoutePage<void>(name: 'AccountManagement')
+@RoutePage(name: 'AccountManagement')
 class AccountManagement extends StatefulWidget {
   const AccountManagement({Key? key, required this.isPro}) : super(key: key);
   final bool isPro;
@@ -276,7 +276,7 @@ class _AccountManagementState extends State<AccountManagement>
                   agreeText: 'delete'.i18n,
                   agreeAction: () async {
                     await messagingModel.wipeData();
-                    await context.router.pop();
+                    await context.router.maybePop();
                     return true;
                   },
                 ).show(context),
@@ -366,7 +366,7 @@ class _AccountManagementState extends State<AccountManagement>
       context.loaderOverlay.show();
       await sessionModel.removeDevice(deviceId);
       context.loaderOverlay.hide();
-      context.popRoute();
+      context.maybePop();
     } catch (e) {
       context.loaderOverlay.hide();
       showError(context, error: e);
@@ -414,7 +414,7 @@ class UserDevices extends StatelessWidget {
       context.loaderOverlay.show();
       await sessionModel.removeDevice(deviceId);
       context.loaderOverlay.hide();
-      context.popRoute();
+      context.maybePop();
     } catch (e) {
       context.loaderOverlay.hide();
       CDialog.showError(context, description: e.localizedDescription);

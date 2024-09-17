@@ -3,7 +3,7 @@
 import 'package:lantern/common/common.dart';
 import 'package:styled_text/styled_text.dart';
 
-@RoutePage<void>(name: 'AuthorizeDeviceEmailPin')
+@RoutePage(name: 'AuthorizeDeviceEmailPin')
 class AuthorizeDeviceViaEmailPin extends StatelessWidget {
   final String email;
 

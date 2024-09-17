@@ -2,7 +2,7 @@ import 'package:lantern/common/ui/app_webview.dart';
 
 import '../common/common.dart';
 
-@RoutePage<void>(name: 'Support')
+@RoutePage(name: 'Support')
 class Support extends StatelessWidget {
   const Support({super.key});
 

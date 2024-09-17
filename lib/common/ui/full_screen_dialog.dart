@@ -1,7 +1,7 @@
 import 'package:lantern/common/common.dart';
 
 /// Shows the supplied widget as a full screen dialog
-@RoutePage<void>(name: 'FullScreenDialogPage')
+@RoutePage(name: 'FullScreenDialogPage')
 class FullScreenDialog extends StatelessWidget {
   final Widget widget;
   final Color? bgColor;

@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/i18n/localization_constants.dart';
 
-@RoutePage<void>(name: 'Language')
+@RoutePage(name: 'Language')
 class Language extends StatelessWidget {
   const Language({Key? key}) : super(key: key);
 

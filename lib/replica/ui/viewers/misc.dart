@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 /// 2. Apps
 /// 3. Unknown
 /// It does not offer a full screen option unless we have a PDF
-@RoutePage<void>(name: 'ReplicaMiscViewer')
+@RoutePage(name: 'ReplicaMiscViewer')
 class ReplicaMiscViewer extends ReplicaViewerLayout {
   ReplicaMiscViewer({
     required ReplicaApi replicaApi,

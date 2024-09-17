@@ -3,7 +3,7 @@ import 'package:lantern/plans/utils.dart';
 
 import 'explanation_step.dart';
 
-@RoutePage<void>(name: 'ApproveDevice')
+@RoutePage(name: 'ApproveDevice')
 class AddDevice extends StatelessWidget {
   AddDevice({Key? key}) : super(key: key);
 

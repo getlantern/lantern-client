@@ -1,7 +1,7 @@
 import 'package:lantern/messaging/contacts/grouped_contact_list.dart';
 import 'package:lantern/messaging/messaging.dart';
 
-@RoutePage<void>(name: 'Introduce')
+@RoutePage(name: 'Introduce')
 class Introduce extends StatefulWidget {
   final bool singleIntro;
   final Contact? contactToIntro;
@@ -147,7 +147,7 @@ class _IntroduceState extends State<Introduce> {
                                     context: context,
                                     content: 'introductions_sent'.i18n,
                                   );
-                                  await context.router.pop();
+                                  await context.router.maybePop();
                                 }
                               },
                             ),
@@ -172,7 +172,7 @@ class _IntroduceState extends State<Introduce> {
                                         context: context,
                                         content: 'introductions_sent'.i18n,
                                       );
-                                      await context.router.pop();
+                                      await context.router.maybePop();
                                     },
                                   ),
                                 ],

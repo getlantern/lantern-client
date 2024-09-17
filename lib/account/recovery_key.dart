@@ -1,6 +1,6 @@
 import 'package:lantern/messaging/messaging.dart';
 
-@RoutePage<void>(name: 'RecoveryKey')
+@RoutePage(name: 'RecoveryKey')
 class RecoveryKey extends StatelessWidget {
   RecoveryKey({Key? key}) : super(key: key);
 
@@ -42,7 +42,7 @@ class RecoveryKey extends StatelessWidget {
                 onPressed: () async {
                   await messagingModel.markCopiedRecoveryKey();
                   copyText(context, snapshot.data.toString());
-                  await context.router.pop();
+                  await context.router.maybePop();
                 },
               ),
             );

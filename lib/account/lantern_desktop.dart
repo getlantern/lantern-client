@@ -4,7 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 const SHARE_LINK = 'https://github.com/getlantern/lantern';
 
-@RoutePage<void>(name: 'LanternDesktop')
+@RoutePage(name: 'LanternDesktop')
 class LanternDesktop extends StatelessWidget {
   const LanternDesktop({super.key});
 

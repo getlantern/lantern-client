@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/vpn/vpn.dart';
 
-@RoutePage<void>(name: 'SplitTunneling')
+@RoutePage(name: 'SplitTunneling')
 class SplitTunneling extends StatefulWidget {
   const SplitTunneling({super.key});
 

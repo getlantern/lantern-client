@@ -3,7 +3,7 @@ import 'package:lantern/replica/common.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 
-@RoutePage<void>(name: 'ReplicaUploadReview')
+@RoutePage(name: 'ReplicaUploadReview')
 class ReplicaUploadReview extends StatefulWidget {
   final File fileToUpload;
   final String fileTitle;

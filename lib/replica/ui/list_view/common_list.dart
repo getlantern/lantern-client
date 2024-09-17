@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';

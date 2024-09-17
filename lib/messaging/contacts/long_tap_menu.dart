@@ -17,7 +17,7 @@ SizedBox renderLongTapMenu({
               icon: ImagePaths.user,
               content: 'view_contact_info'.i18n,
               onTap: () async {
-                await context.router.pop();
+                await context.router.maybePop();
                 await context.pushRoute(ContactInfo(contact: contact));
               },
             ),
@@ -26,7 +26,7 @@ SizedBox renderLongTapMenu({
                 icon: ImagePaths.people,
                 content: 'introduce_contact'.i18n,
                 onTap: () async {
-                  await context.router.pop();
+                  await context.router.maybePop();
                   await context.pushRoute(
                     Introduce(singleIntro: true, contactToIntro: contact),
                   );

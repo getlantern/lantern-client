@@ -38,7 +38,7 @@ class _ContactNameDialogState extends State<ContactNameDialog> {
         unsafeId: widget.contact.contactId.id,
         displayName: value,
       );
-      await context.router.pop();
+      await context.router.maybePop();
     }
   }
 

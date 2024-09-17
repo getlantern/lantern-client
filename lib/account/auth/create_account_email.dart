@@ -6,7 +6,7 @@ import 'package:lantern/plans/utils.dart';
 
 import '../../common/common.dart';
 
-@RoutePage<void>(name: 'CreateAccountEmail')
+@RoutePage(name: 'CreateAccountEmail')
 class CreateAccountEmail extends StatefulWidget {
   final Plan? plan;
   final AuthFlow authFlow;

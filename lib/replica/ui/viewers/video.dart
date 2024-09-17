@@ -5,7 +5,7 @@ import 'package:video_player/video_player.dart';
 
 /// Renders an embedded video player with fullscreen option
 /// wrapped by our reusable ReplicaViewer layout
-@RoutePage<void>(name: 'ReplicaVideoViewer')
+@RoutePage(name: 'ReplicaVideoViewer')
 class ReplicaVideoViewer extends ReplicaViewerLayout {
   ReplicaVideoViewer({
     required ReplicaApi replicaApi,

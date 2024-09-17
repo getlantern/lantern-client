@@ -1,6 +1,6 @@
 import 'package:lantern/common/common.dart';
 import 'package:share_plus/share_plus.dart';
-@RoutePage<void>(name: 'InviteFriends')
+@RoutePage(name: 'InviteFriends')
 class InviteFriends extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

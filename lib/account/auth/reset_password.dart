@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import '../../common/common.dart';
 import '../../common/ui/password_criteria.dart';
 
-@RoutePage<void>(name: 'ResetPassword')
+@RoutePage(name: 'ResetPassword')
 class ResetPassword extends StatefulWidget {
   final String? email;
   final String? code;

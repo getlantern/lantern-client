@@ -4,7 +4,7 @@ import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:lantern/replica/ui/viewers/layout.dart';
 
-@RoutePage<void>(name: 'ReplicaAudioViewer')
+@RoutePage(name: 'ReplicaAudioViewer')
 class ReplicaAudioViewer extends ReplicaViewerLayout {
   ReplicaAudioViewer({
     required ReplicaApi replicaApi,

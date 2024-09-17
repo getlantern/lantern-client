@@ -1,5 +1,5 @@
 import '../../common/common.dart';
-@RoutePage<void>(name: 'ConfirmEmail')
+@RoutePage(name: 'ConfirmEmail')
 class ConfirmEmail extends StatefulWidget {
   const ConfirmEmail({super.key});
 

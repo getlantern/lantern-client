@@ -4,7 +4,7 @@ import 'package:lantern/replica/ui/viewers/layout.dart';
 
 /// Renders an embedded image preview with fullscreen option
 /// wrapped by our reusable ReplicaViewer layout
-@RoutePage<void>(name: 'ReplicaImageViewer')
+@RoutePage(name: 'ReplicaImageViewer')
 class ReplicaImageViewer extends ReplicaViewerLayout {
   ReplicaImageViewer({
     required ReplicaApi replicaApi,

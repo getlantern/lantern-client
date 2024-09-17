@@ -143,7 +143,7 @@ class _ChatsState extends State<Chats> {
                         icon: ImagePaths.account,
                         content: 'account_management'.i18n,
                         onTap: () async {
-                          await context.router.pop();
+                          await context.router.maybePop();
                           await context.router
                               .push(AccountManagement(isPro: isPro));
                         },
@@ -153,7 +153,7 @@ class _ChatsState extends State<Chats> {
                       icon: ImagePaths.people,
                       content: 'introduce_contacts'.i18n,
                       onTap: () async {
-                        await context.router.pop();
+                        await context.router.maybePop();
                         await context.router
                             .push(Introduce(singleIntro: false));
                       },

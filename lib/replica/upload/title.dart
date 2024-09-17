@@ -4,7 +4,7 @@ import 'package:path/path.dart' as path;
 
 // ReplicaUploadTitle renders a single-item ListView with the contents of
 // 'fileToUpload', allowing the user to change the display name of the upload.
-@RoutePage<void>(name: 'ReplicaUploadTitle')
+@RoutePage(name: 'ReplicaUploadTitle')
 class ReplicaUploadTitle extends StatefulWidget {
   final File fileToUpload;
   final String? fileTitle;

@@ -21,7 +21,7 @@ import 'show_conversation_options.dart';
 import 'show_verification_options.dart';
 import 'stopwatch_timer.dart';
 
-@RoutePage<void>(name: 'Conversation')
+@RoutePage(name: 'Conversation')
 class Conversation extends StatefulWidget {
   final ContactId contactId;
   final int? initialScrollIndex;

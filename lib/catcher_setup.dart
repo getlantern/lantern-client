@@ -1,49 +1,49 @@
 import 'dart:io';
 
-import 'package:catcher_2/catcher_2.dart';
+// import 'package:catcher_2/catcher_2.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-
-final debugOption = Catcher2Options(
-  SilentReportMode(),
-  [
-    ConsoleHandler(
-      enableApplicationParameters: true,
-      enableDeviceParameters: true,
-      enableCustomParameters: true,
-      enableStackTrace: true,
-    ),
-  ],
-);
-
-final releaseOption = Catcher2Options(
-  SilentReportMode(),
-  [
-    ConsoleHandler(
-      enableApplicationParameters: true,
-      enableDeviceParameters: true,
-      enableCustomParameters: true,
-      enableStackTrace: true,
-    ),
-    SentryHandler(
-      SentryClient(
-        SentryOptions(
-          dsn: dnsConfig(),
-        ),
-      ),
-      printLogs: true,
-      enableApplicationParameters: true,
-    ),
-  ],
-);
-
-Catcher2 setupCatcherAndRun(Widget root) {
-  return Catcher2(
-    rootWidget: root,
-    debugConfig: debugOption,
-    releaseConfig: releaseOption,
-  );
-}
+//
+// final debugOption = Catcher2Options(
+//   SilentReportMode(),
+//   [
+//     ConsoleHandler(
+//       enableApplicationParameters: true,
+//       enableDeviceParameters: true,
+//       enableCustomParameters: true,
+//       enableStackTrace: true,
+//     ),
+//   ],
+// );
+//
+// final releaseOption = Catcher2Options(
+//   SilentReportMode(),
+//   [
+//     ConsoleHandler(
+//       enableApplicationParameters: true,
+//       enableDeviceParameters: true,
+//       enableCustomParameters: true,
+//       enableStackTrace: true,
+//     ),
+//     SentryHandler(
+//       SentryClient(
+//         SentryOptions(
+//           dsn: dnsConfig(),
+//         ),
+//       ),
+//       printLogs: true,
+//       enableApplicationParameters: true,
+//     ),
+//   ],
+// );
+//
+// Catcher2 setupCatcherAndRun(Widget root) {
+//   return Catcher2(
+//     rootWidget: root,
+//     debugConfig: debugOption,
+//     releaseConfig: releaseOption,
+//   );
+// }
 
 String dnsConfig() {
   if (Platform.isAndroid) {

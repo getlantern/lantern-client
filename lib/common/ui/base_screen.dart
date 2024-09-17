@@ -155,7 +155,7 @@ class ConnectivityWarning extends StatelessWidget {
         description: 'connection_error_des'.i18n,
         agreeText: 'connection_error_button'.i18n,
         agreeAction: () async {
-          context.popRoute();
+          context.maybePop();
           await context.pushRoute(ReportIssue());
           return true;
         },

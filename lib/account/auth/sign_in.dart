@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 
 import '../../common/common.dart';
 
-@RoutePage<void>(name: 'SignIn')
+@RoutePage(name: 'SignIn')
 class SignIn extends StatefulWidget {
   final AuthFlow authFlow;
 

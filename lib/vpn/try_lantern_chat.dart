@@ -38,7 +38,7 @@ class TryLanternChat extends StatelessWidget {
                     color: black,
                   ),
                   onPressed: () async {
-                    await context.router.pop();
+                    await context.router.maybePop();
                   },
                 ),
               ),
@@ -151,7 +151,7 @@ class TryLanternChat extends StatelessWidget {
                           children: [
                             TextButton(
                               onPressed: () async {
-                                await context.router.pop();
+                                await context.router.maybePop();
                               },
                               child: CText(
                                 'maybe_later'.i18n.toUpperCase(),

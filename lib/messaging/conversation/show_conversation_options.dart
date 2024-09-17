@@ -23,7 +23,7 @@ Future showConversationOptions({
           icon: ImagePaths.user,
           content: 'view_contact_info'.i18n,
           onTap: () async {
-            await bottomContext.router.pop();
+            await bottomContext.router.maybePop();
             await bottomContext.pushRoute(ContactInfo(contact: contact));
           },
         ),
@@ -34,7 +34,7 @@ Future showConversationOptions({
             final scrollController = ScrollController();
             final seconds = <int>[5, 60, 3600, 10800, 21600, 86400, 604800, 0];
             var selectedPosition = -1;
-            await bottomContext.router.pop();
+            await bottomContext.router.maybePop();
 
             return showDialog(
               context: bottomContext,
@@ -243,7 +243,7 @@ Future showConversationOptions({
                                         ),
                                       ),
                                     ),
-                                    onPressed: () async => context.router.pop(),
+                                    onPressed: () async => context.router.maybePop(),
                                     child: CText(
                                       'cancel'.i18n.toUpperCase(),
                                       style: tsButtonGrey,
@@ -267,7 +267,7 @@ Future showConversationOptions({
                                           seconds[selectedPosition],
                                         );
                                       }
-                                      await context.router.pop();
+                                      await context.router.maybePop();
                                     },
                                     child: CText(
                                       'set'.i18n.toUpperCase(),
@@ -292,7 +292,7 @@ Future showConversationOptions({
             icon: ImagePaths.people,
             content: 'introduce_contact'.i18n,
             onTap: () async {
-              await bottomContext.router.pop();
+              await bottomContext.router.maybePop();
               await bottomContext.pushRoute(
                 Introduce(
                   singleIntro: true,
@@ -306,7 +306,7 @@ Future showConversationOptions({
             icon: ImagePaths.verified_user,
             content: 'contact_verification'.i18n,
             onTap: () async {
-              await bottomContext.router.pop();
+              await bottomContext.router.maybePop();
               showVerificationOptions(
                 contact: contact,
                 bottomModalContext: parentContext,
