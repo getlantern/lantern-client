@@ -1841,16 +1841,16 @@ msgid "follow_us"
 msgstr "हमें फॉलो करें "
 
 msgid "follow_us_telegram"
-msgstr "हमें Telegram पर फॉलो करें "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "हमें Instagram पर फॉलो करें "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "हमें Facebook पर फॉलो करें "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "हमें X पर फॉलो करें "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "हम तकनीकी कठिनाइयों का सामना कर रहे हैं। बाद में पुनः प्रयास करें। "
@@ -1900,52 +1900,52 @@ msgid "file_size_limit_description"
 msgstr "संलग्नक का आकार 100 एमबी से कम होना चाहिए"
 
 msgid "lantern_pro_one_year"
-msgstr "लैंटर्न प्रो: एक साल का प्लान"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "लैंटर्न प्रो: दो साल का प्लान"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "लैंटर्न प्रो: एक महीने का प्लान"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "गैर-नवीकरणीय सब्सक्रिप्शन"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "खरीदारी बहाल करें"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "फिलहाल छोड़ें"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "प्रदान किए गए ईमेल से कोई खरीदारी नहीं मिली"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "कोई पिछली खरीदारी नहीं मिली"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "अपनी खरीदारी को पुनर्प्राप्त करने के लिए वह ईमेल दर्ज करें जो आपने चेकआउट के दौरान दर्ज किया था।"
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "खरीदारी बहाल हो गई"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "आपकी खरीदारी सफलतापूर्वक बहाल हो गई है"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "ऐसा लगता है कि खरीदारी बहाल करते समय कुछ गलत हो गया है। कृपया जांच लें कि आपने सही ईमेल या कोड दर्ज किया है।"
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "कोड भेजते समय कुछ गलत हुआ, कृपया फिर से प्रयास करें"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*ईमेल वैकल्पिक है लेकिन अनुशंसित है"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "अपने खरीदारी को किसी भी डिवाइस पर एक्सेस करने के लिए एक ईमेल जोड़ें। बिना ईमेल के खरीदारी इस डिवाइस से जुड़ी रहेगी और खो भी सकती है।"
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "बिना ईमेल जारी रखें"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "आप अद्यतित हैं!"

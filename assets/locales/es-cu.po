@@ -8,10 +8,11 @@
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
 # Katherine Mojena, 2024
 # strel, 2024
+# Emerson Castaneda, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: strel, 2024\n"
+"Last-Translator: Emerson Castaneda, 2024\n"
 "Language-Team: Spanish (Cuba) (https://app.transifex.com/lantern-1/teams/94371/es_CU/)\n"
 "Language: es_CU\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -1877,16 +1878,16 @@ msgid "follow_us"
 msgstr "Síguenos"
 
 msgid "follow_us_telegram"
-msgstr "Síguenos en Telegram"
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "Síguenos en Telegram"
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "Síguenos en Facebook"
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "Síguenos en X"
+msgstr ""
 
 msgid "report_issue_error"
 msgstr ""
@@ -1938,52 +1939,52 @@ msgid "file_size_limit_description"
 msgstr "Los tamaños de los archivos adjuntos deben ser menores de 100 MB"
 
 msgid "lantern_pro_one_year"
-msgstr "Lantern Pro: Plan de un año"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "Lantern Pro: Plan de dos años"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "Lantern Pro: Plan de un mes"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "Suscripción no renovable"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "Restaurar compra"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "Saltar por ahora"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "No se encontró ninguna compra con el correo electrónico proporcionado"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "No se encontró ninguna compra previa"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "Introduce el correo electrónico que utilizaste durante el pago para recuperar tu compra."
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "Compra restaurada"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "Tu compra ha sido restaurada exitosamente"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "Parece que algo salió mal al restaurar la compra. Por favor, verifica que has introducido el correo electrónico o el código correcto."
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "Algo salió mal al enviar el código, por favor intenta de nuevo"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*El correo electrónico es opcional, pero recomendado"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "Añade un correo electrónico para acceder a tus compras en cualquier dispositivo. Sin un correo electrónico, las compras están vinculadas a este dispositivo y podrían perderse."
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "Continuar sin correo electrónico"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "¡Está actualizado!"
