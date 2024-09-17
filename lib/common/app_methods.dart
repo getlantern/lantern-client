@@ -59,6 +59,10 @@ class AppMethods {
       if (proUser) {
         return false;
       }
+      // check if auth is enabled
+      if (!(sessionModel.isAuthEnabled.value ?? false)) {
+        return false;
+      }
       return await AppMethods.isPlayStoreEnable();
     }
     if (isAppStoreEnabled()) {
