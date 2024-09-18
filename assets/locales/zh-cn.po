@@ -24,10 +24,11 @@
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
 # Aki, 2024
 # YFdyh000 <yfdyh000@gmail.com>, 2024
+# wwj402 <wwj402@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: YFdyh000 <yfdyh000@gmail.com>, 2024\n"
+"Last-Translator: wwj402 <wwj402@gmail.com>, 2024\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/lantern-1/teams/94371/zh_CN/)\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1742,16 +1743,16 @@ msgid "follow_us"
 msgstr "关注我们 "
 
 msgid "follow_us_telegram"
-msgstr "在Telegram上关注我们 "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "在Instagram上关注我们 "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "在Facebook上关注我们 "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "在X上关注我们 "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "我们遇到了技术问题。请稍后再试。 "
@@ -1803,52 +1804,52 @@ msgstr ""
 " "
 
 msgid "lantern_pro_one_year"
-msgstr "Lantern Pro: 一年计划"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "Lantern Pro: 两年计划"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "Lantern Pro: 一个月计划"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "不可续订的订阅"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "恢复购买"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "暂时跳过"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "未找到与提供的电子邮件相关的购买"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "未找到之前的购买记录"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "请输入您在结账时使用的电子邮件以恢复购买。"
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "购买已恢复"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "您的购买已成功恢复"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "恢复购买时出现问题。请检查您是否输入了正确的电子邮件或代码。"
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "发送代码时出现错误，请重试"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*电子邮件是可选的，但推荐填写"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "添加电子邮件以便在任何设备上访问您的购买。没有电子邮件，购买将绑定到此设备，可能会丢失。"
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "不使用电子邮件继续"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "您已在使用最新版！"

@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.annotation.Nullable
-import org.androidannotations.annotations.EService
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
@@ -23,7 +22,6 @@ import org.getlantern.mobilesdk.StartResult
 import java.util.Random
 import java.util.concurrent.atomic.AtomicBoolean
 
-@EService
 open class LanternService : Service(), Runnable {
 
     companion object {
@@ -38,7 +36,7 @@ open class LanternService : Service(), Runnable {
     private val createUserHandler: Handler = Handler(Looper.getMainLooper())
     private val createUserRunnable: CreateUser = CreateUser(this)
     private val random: Random = Random()
-    private val serviceIcon: Int = if (LanternApp.getSession().chatEnabled()) {
+    private val serviceIcon: Int = if (LanternApp.session.chatEnabled()) {
         R.drawable.status_chat
     } else {
         R.drawable.status_plain
@@ -77,13 +75,13 @@ open class LanternService : Service(), Runnable {
     override fun run() {
         // move the current thread of the service to the background
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND)
-        val locale = LanternApp.getSession().language
-        val settings = LanternApp.getSession().settings
+        val locale = LanternApp.session.language
+        val settings = LanternApp.session.settings
         try {
             Logger.debug(TAG, "Successfully loaded config: $settings")
             val result: StartResult =
                 Lantern.enable(this, locale, settings, LanternApp.getGoSession())
-            LanternApp.getSession().setStartResult(result)
+            LanternApp.session.setStartResult(result)
             afterStart()
         } catch (lnre: LanternNotRunningException) {
             Logger.e(TAG, "Unable to start LanternService", lnre)
@@ -92,7 +90,7 @@ open class LanternService : Service(), Runnable {
     }
 
     private fun afterStart() {
-        if (LanternApp.getSession().userId().toInt() == 0) {
+        if (LanternApp.session.userId().toInt() == 0) {
             // create a user if no user id is stored
             EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING)
             createUser(0)
@@ -138,7 +136,7 @@ open class LanternService : Service(), Runnable {
 
         override fun run() {
             try {
-                val userCreated = LanternApp.getSession().createUser()
+                val userCreated = LanternApp.session.createUser()
                 if (userCreated) {
                     service.createUserHandler.removeCallbacks(service.createUserRunnable)
                     EventHandler.postStatusEvent(LanternStatus(Status.ON))

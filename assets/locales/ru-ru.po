@@ -17,10 +17,11 @@
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024
 # Deanna D, 2024
 # Николай Кочкин <urfiner@gmail.com>, 2024
+# e2f <projects@e2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Николай Кочкин <urfiner@gmail.com>, 2024\n"
+"Last-Translator: e2f <projects@e2f.com>, 2024\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -1857,16 +1858,16 @@ msgid "follow_us"
 msgstr "Подпишитесь на нас "
 
 msgid "follow_us_telegram"
-msgstr "Следуйте за нами в Telegram "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "Следуйте за нами в Instagram "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "Следуйте за нами в Facebook "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "Следуйте за нами в X "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "Мы испытываем технические трудности. Попробуйте позже. "
@@ -1916,52 +1917,52 @@ msgid "file_size_limit_description"
 msgstr "Размер вложений должен быть менее 100 МБ"
 
 msgid "lantern_pro_one_year"
-msgstr "Lantern Pro: Годовой план"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "Lantern Pro: Двухлетний план"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "Lantern Pro: Месячный план"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "Не продлеваемая подписка"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "Восстановить покупку"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "Пропустить пока"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "Покупка с указанным email не найдена"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "Предыдущие покупки не найдены"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "Введите email, который вы указали при оплате, чтобы восстановить покупку."
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "Покупка восстановлена"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "Ваша покупка успешно восстановлена"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "Похоже, что-то пошло не так при восстановлении покупки. Пожалуйста, проверьте, правильно ли вы ввели email или код."
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "Произошла ошибка при отправке кода, попробуйте снова"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*Email не обязателен, но рекомендуется"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "Добавьте email, чтобы получить доступ к покупкам на любом устройстве. Без email покупки привязаны к этому устройству и могут быть потеряны."
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "Продолжить без email"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "Нет новых обновлений!"

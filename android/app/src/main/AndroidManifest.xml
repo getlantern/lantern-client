@@ -103,19 +103,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".activity.FreeKassaActivity_"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.WelcomeActivity_"
-            android:noHistory="true"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait" />
-
         <!-- It's required to update Lantern on API 24+ -->
         <provider
             android:name="androidx.core.content.FileProvider"

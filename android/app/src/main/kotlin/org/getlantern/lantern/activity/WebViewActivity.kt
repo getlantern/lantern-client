@@ -1,37 +1,32 @@
 package org.getlantern.lantern.activity
 
+import android.os.Bundle
 import android.app.ProgressDialog
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.WebSettings.PluginState
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import org.androidannotations.annotations.AfterViews
-import org.androidannotations.annotations.EActivity
-import org.androidannotations.annotations.Extra
-import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
 import org.getlantern.lantern.model.ProxySettings
 import org.getlantern.mobilesdk.Logger
 
-@EActivity(R.layout.webview)
 open class WebViewActivity : BaseFragmentActivity() {
 
     private var dialog: ProgressDialog? = null
 
-    @Extra
-    @JvmField
     protected var url: String? = null
 
-    @ViewById
     lateinit var webView: WebView
 
-    @AfterViews
-    fun afterViews() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.webview)
+        webView = findViewById(R.id.webView)
         dialog = ProgressDialog(this)
-
-        url?.let { openWebview(url!!) }
+        url = intent.getStringExtra("url").toString()
+        url?.let { openWebview(it) }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -51,7 +46,7 @@ open class WebViewActivity : BaseFragmentActivity() {
     }
 
     private fun openWebview(url: String) {
-        val proxyAddr: String = LanternApp.getSession().hTTPAddr
+        val proxyAddr: String = LanternApp.session.hTTPAddr
         val parts = proxyAddr.split(":").toTypedArray()
         if (parts.size == 2) {
             val proxyHost = parts[0]

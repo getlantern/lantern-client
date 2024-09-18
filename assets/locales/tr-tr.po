@@ -13,12 +13,12 @@
 # Aşkın Özgür <askin@askin.ws>, 2024
 # Derek F <derek@getlantern.org>, 2024
 # e2f <projects@e2f.com>, 2024
-# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2024
 # efe kerem sözeri <eksozeri@hotmail.com>, 2024
+# e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: efe kerem sözeri <eksozeri@hotmail.com>, 2024\n"
+"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2024\n"
 "Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -1853,16 +1853,16 @@ msgid "follow_us"
 msgstr "Bizi Takip Edin "
 
 msgid "follow_us_telegram"
-msgstr "Telegram'da bizi takip edin "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "Instagram'da bizi takip edin "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "Facebook'ta bizi takip edin "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "X'te bizi takip edin "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "Teknik zorluklar yaşıyoruz. Daha sonra tekrar deneyin. "
@@ -1933,53 +1933,35 @@ msgstr ""
 msgid "skip_for_now"
 msgstr ""
 
-msgid "lantern_pro_one_year"
-msgstr "Lantern Pro: Bir Yıllık Plan"
-
-msgid "lantern_pro_two_year"
-msgstr "Lantern Pro: İki Yıllık Plan"
-
-msgid "lantern_pro_one_month"
-msgstr "Lantern Pro: Bir Aylık Plan"
-
-msgid "non_renewing_subscription"
-msgstr "Yenilenmeyen Abonelik"
-
-msgid "restore_purchase"
-msgstr "Satın Almayı Geri Yükle"
-
-msgid "skip_for_now"
-msgstr "Şimdilik Atla"
-
 msgid "purchase_not_found"
-msgstr "Sağlanan e-posta ile bir satın alma bulunamadı"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "Önceki satın alma bulunamadı"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "Satın almanızı geri yüklemek için ödeme sırasında girdiğiniz e-postayı girin."
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "Satın Alma Geri Yüklendi"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "Satın almanız başarıyla geri yüklendi"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "Satın alma geri yüklenirken bir sorun oluştu. Lütfen doğru e-posta veya kodu girdiğinizden emin olun."
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "Kod gönderilirken bir hata oluştu, lütfen tekrar deneyin"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*E-posta isteğe bağlıdır ancak önerilir"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "Satın alımlarınıza herhangi bir cihazdan erişmek için bir e-posta ekleyin. E-posta olmadan, satın alımlar bu cihaza bağlıdır ve kaybolabilir."
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "E-postasız Devam Et"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "En güncel sürümü kullanıyorsunuz!"

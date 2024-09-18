@@ -1896,16 +1896,16 @@ msgid "follow_us"
 msgstr "Suivez-nous "
 
 msgid "follow_us_telegram"
-msgstr "Suivez-nous sur Telegram "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "Suivez-nous sur Telegram "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "Suivez-nous sur Telegram "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "Suivez-nous sur X "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "Nous rencontrons des difficultés techniques. Réessayez plus tard. "
@@ -1955,52 +1955,52 @@ msgid "file_size_limit_description"
 msgstr "Les tailles des pièces jointes doivent être inférieures à 100 Mo"
 
 msgid "lantern_pro_one_year"
-msgstr "Lantern Pro : Plan d'un an"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "Lantern Pro : Plan de deux ans"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "Lantern Pro : Plan d'un mois"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "Abonnement non renouvelable"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "Restaurer l'achat"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "Passer pour l'instant"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "Achat non trouvé avec l'email fourni"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "Aucun achat précédent trouvé"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "Entrez l'email que vous avez utilisé lors du paiement pour récupérer votre achat."
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "Achat restauré"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "Votre achat a été restauré avec succès"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "Il semble que quelque chose s'est mal passé lors de la restauration de l'achat. Veuillez vérifier que vous avez entré le bon email ou code."
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "Une erreur est survenue lors de l'envoi du code, veuillez réessayer"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*Le courriel est optionnel mais recommandé"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "Ajoutez un courriel pour accéder à vos achats sur n'importe quel appareil. Sans courriel, les achats sont liés à cet appareil et pourraient être perdus."
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "Continuer sans courriel"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "Lantern est à jour."

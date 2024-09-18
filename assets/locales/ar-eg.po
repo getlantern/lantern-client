@@ -16,10 +16,11 @@
 # tx_e2f_ar_r5 tx_e2f_ar_r5, 2024
 # 6ad90dadbe5d08991a98500e1efbdbb4_9d79615 <7392e61add82b364ab0393a04573af48_721156>, 2024
 # Amin Jobran, 2024
+# 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Amin Jobran, 2024\n"
+"Last-Translator: 160565ee57b988ee904d03fec374ff93_4f79b8c <73ec7ace4de62e6bb6454cb54e990a4d_721149>, 2024\n"
 "Language-Team: Arabic (https://app.transifex.com/lantern-1/teams/94371/ar/)\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
@@ -1842,16 +1843,16 @@ msgid "follow_us"
 msgstr "تابعنا "
 
 msgid "follow_us_telegram"
-msgstr "تابعنا على Telegram "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "تابعنا على Instagram "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "تابعنا على Facebook "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "تابعنا على X "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "نواجه صعوبات تقنية. حاول مرة أخرى لاحقًا. "
@@ -1901,52 +1902,53 @@ msgid "file_size_limit_description"
 msgstr "يجب أن تكون أحجام المرفقات أقل من 100 ميجابايت"
 
 msgid "lantern_pro_one_year"
-msgstr "Lantern Pro: خطة لمدة عام واحد"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "Lantern Pro: خطة لمدة عامين"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "Lantern Pro: خطة شهرية"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "اشتراك غير قابل للتجديد"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "استعادة الشراء"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "استعادة الشراء"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "لم يتم العثور على عملية شراء باستخدام البريد الإلكتروني المقدم"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "لم يتم العثور على عملية شراء سابقة"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "أدخل البريد الإلكتروني الذي أدخلته أثناء الدفع لاستعادة عملية الشراء الخاصة بك"
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "شراء تم استعادته"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "لقد تم استعادة عملية الشراء الخاصة بك بنجاح"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "لقد تم استعادة عملية الشراء الخاصة بك بنجاح"
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "حدث خطأ أثناء إرسال الرمز، يرجى المحاولة مرة أخرى"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*البريد الإلكتروني اختياري ولكن ينصح به"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "Add an email to access your purchases on any device. Without an email purchases are tied to this device and could be lost. "
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "متابعة بدون بريد إلكتروني"
+msgstr ""
+
 msgid "no_new_update"
 msgstr "لديك آخر التحديثات! "
 
