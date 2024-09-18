@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import androidx.annotation.Nullable
-import org.androidannotations.annotations.EService
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.R
@@ -23,7 +22,6 @@ import org.getlantern.mobilesdk.StartResult
 import java.util.Random
 import java.util.concurrent.atomic.AtomicBoolean
 
-@EService
 open class LanternService : Service(), Runnable {
 
     companion object {

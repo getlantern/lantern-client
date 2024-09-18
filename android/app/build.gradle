@@ -4,15 +4,13 @@ plugins {
     id 'kotlinx-serialization'
     id 'dev.flutter.flutter-gradle-plugin'
     id 'org.jlleitschuh.gradle.ktlint'
-    id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
-    id 'kotlin-kapt'
     id 'com.google.protobuf'
-    id "io.sentry.android.gradle" version "4.9.0"
+    id "io.sentry.android.gradle" version "4.11.0"
 }
 
 android {
-    ndkVersion "26.1.10909125"
+    ndkVersion "27.0.12077973"
 
     bundle {
         density {
@@ -32,34 +30,6 @@ android {
     flavorDimensions "versionCode"
 
     useLibrary 'org.apache.http.legacy'
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES.txt'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/MANIFEST.MF'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/dependencies.txt'
-        exclude 'META-INF/LGPL2.1'
-        exclude 'META-INF/maven/commons-io/commons-io/pom.xml'
-        exclude 'META-INF/maven/commons-io/commons-io/pom.properties'
-        exclude("META-INF/*.kotlin_module")
-        exclude 'README.txt'
-
-        jniLibs {
-            useLegacyPackaging true
-        }
-    }
-
-
-//    buildFeatures {
-//        viewBinding true
-//        dataBinding true
-//    }
 
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
@@ -82,14 +52,6 @@ android {
 
         multiDexEnabled = true
 
-        // Include this CMakeLists.txt file in the build pipeline
-        externalNativeBuild {
-            cmake {
-                cppFlags ''
-                arguments '-DANDROID_STL=c++_shared'
-            }
-        }
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ['resourcePackageName': 'org.getlantern.lantern', "androidManifestFile": "$projectDir/src/main/AndroidManifest.xml".toString()]
@@ -104,6 +66,7 @@ android {
         ndk {
             // Specifies the ABI configurations of native libraries Gradle should build and package with the app.
             abiFilters = ["x86_64", "arm64-v8a"]
+            debugSymbolLevel 'FULL'
         }
 
         versionCode code
@@ -118,22 +81,14 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    externalNativeBuild {
-        cmake {
-            path file('cmake/CMakeLists.txt')
-            version '3.22.1'
-        }
+    kotlin {
+        jvmToolchain(17)
     }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
         coreLibraryDesugaringEnabled = true
-    }
-
-    kotlinOptions {
-        jvmTarget = '17'
-        freeCompilerArgs = ["-Xallow-result-return-type", "-Xsuppress-version-warnings"]
     }
 
     lintOptions {
@@ -343,6 +298,12 @@ protobuf {
     }
 }
 
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        output.versionCodeOverride = android.defaultConfig.versionCode
+    }
+}
+
 flutter {
     source '../..'
 }
@@ -352,57 +313,50 @@ configurations {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.5"
+    implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.8"
     implementation "com.google.protobuf:protobuf-javalite:$protoc_version"
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.2'
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugarJdk"
     implementation fileTree(dir: "libs", include: "liblantern-${androidArch()}.aar")
     implementation fileTree(dir: 'libs', include: '*.jar')
-    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
-    implementation 'androidx.webkit:webkit:1.8.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'androidx.webkit:webkit:1.11.0'
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
     // https://mvnrepository.com/artifact/joda-time/joda-time
     implementation group: 'joda-time', name: 'joda-time', version: '2.8.2'
 
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
 
     // Google Play libraries
-    implementation 'com.android.billingclient:billing:6.2.0'
+    implementation 'com.android.billingclient:billing:7.0.0'
 
     implementation 'com.stripe:stripe-android:20.17.0'
-    annotationProcessor "org.androidannotations:androidannotations:$androidAnnotationsVersion"
-    implementation("org.androidannotations:androidannotations-api:$androidAnnotationsVersion")
-    kapt "org.androidannotations:androidannotations:$androidAnnotationsVersion"
 
-//    implementation "com.github.YarikSOffice:lingver:1.3.0"
-    // from https://github.com/getlantern/opus_android
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
     implementation 'com.github.getlantern:db-android:d92368c7f'
     implementation 'com.github.getlantern:messaging-android:3f23f07b4e'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
     //Test implementation
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation 'androidx.annotation:annotation:1.6.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.annotation:annotation:1.8.2'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
 
-    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-//    androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
     androidTestImplementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.mockk:mockk:1.13.5"
 }
 
-apply plugin: 'com.google.gms.google-services'
 
 sentry {
 
