@@ -864,12 +864,6 @@ class SessionModel extends Model {
     await compute(LanternFFI.emailExists, email);
   }
 
-  Future<void> openWebview(String url) {
-    return methodChannel.invokeMethod('openWebview', <String, dynamic>{
-      'url': url,
-    });
-  }
-
   Future<void> refreshAppsList() async {
     await methodChannel.invokeMethod('refreshAppsList');
   }

@@ -55,6 +55,7 @@ export 'once.dart';
 export 'session_model.dart';
 export 'single_value_subscriber.dart';
 export 'ui/app_buttons.dart';
+export 'ui/app_webview.dart';
 export 'ui/audio.dart';
 export 'ui/base_screen.dart';
 export 'ui/basic_memory_image.dart';

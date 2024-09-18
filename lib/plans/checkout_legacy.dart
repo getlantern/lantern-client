@@ -222,12 +222,13 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
       Iterable<PathAndValue<PaymentMethod>> paymentMethods,
       ) {
     var widgets = <Widget>[];
-    for (final paymentMethod in paymentMethods) {
+    for (final pathAndValue in paymentMethods) {
+      final paymentMethod = pathAndValue.value;
       if (widgets.length == 2) {
         widgets.add(options());
         if (!showMoreOptions) break;
       }
-      widgets.addAll(paymentProviders(paymentMethod.value));
+      widgets.addAll(paymentProviders(paymentMethod));
     }
     return widgets;
   }
@@ -343,7 +344,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
-      await sessionModel.openWebview(btcPayURL);
+      await AppBrowser.openWebview(btcPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -361,7 +362,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
 
       context.loaderOverlay.hide();
       final froPayURL = value;
-      await sessionModel.openWebview(froPayURL);
+      await AppBrowser.openWebview(froPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -380,7 +381,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
 
       context.loaderOverlay.hide();
       final shepherdURL = value;
-      await sessionModel.openWebview(shepherdURL);
+      await AppBrowser.openWebview(shepherdURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -443,7 +444,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
-      await sessionModel.openWebview(btcPayURL);
+      await AppBrowser.openWebview(btcPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
