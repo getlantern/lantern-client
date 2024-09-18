@@ -2,92 +2,91 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/common/common.dart';
 import 'package:lantern/replica/common.dart';
 import 'package:logger/logger.dart';
+import 'package:tapsell_mediation/tapsell.dart';
 
-enum AdType { Google }
+enum _AdsProvider { tapsell, admob }
+
+var logger = Logger(printer: PrettyPrinter(), level: Level.debug);
 
 abstract class AdsProvider {
+  // int _failedLoadAttempts = 0;
+
+  //If ads are getting failed to load we want to make lot of calls
+  // Just try 5 times
+  final int _maxFailAttempts = 5;
+
   Future<void> initialize(); // Initialize the ad provider.
 
   Future<void> loadInterstitialAd();
 
   Future<void> showInterstitialAd();
 
-  Future<void> dispose(); // Cleanup resources when no longer needed.
+  Future<void> dispose();
+
+  bool isAdReady();
 }
 
 class GoogleAdsProvider implements AdsProvider {
-  @override
-  Future<void> dispose() {
-    // TODO: implement dispose
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> initialize() {
-    // TODO: implement initialize
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> loadInterstitialAd() {
-    // TODO: implement loadInterstitialAd
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> showInterstitialAd() {
-    // TODO: implement showInterstitialAd
-    throw UnimplementedError();
-  }
-}
-
-class TapSellAdsProvider implements AdsProvider {
-  @override
-  Future<void> initialize() {
-    // TODO: implement initialize
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> loadInterstitialAd() {
-    // TODO: implement loadInterstitialAd
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> showInterstitialAd() {
-    // TODO: implement showInterstitialAd
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> dispose() {
-    // TODO: implement dispose
-    throw UnimplementedError();
-  }
-}
-
-var logger = Logger(printer: PrettyPrinter(), level: Level.debug);
-
-class AdHelper {
-  final googleAdsService = GoogleAdsProvider();
-  final tapSellAdsService = TapSellAdsProvider();
-
-  static final AdHelper _instance = AdHelper._internal();
-
-  AdHelper._internal();
-
-  factory AdHelper() {
-    return _instance;
-  }
-
   InterstitialAd? _interstitialAd;
   int _failedLoadAttempts = 0;
 
-  //If ads are getting failed to load we want to make lot of calls
-  // Just try 5 times
-  final int _maxFailAttempts = 5;
-  bool isAdsLoading = false;
+  @override
+  Future<void> initialize() {
+    // TODO: implement initialize
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> loadInterstitialAd() async {
+    assert(interstitialAdUnitId != "",
+        "interstitialAdUnitId should not be null or empty");
+    if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
+      logger.i('[Ads Manager] Request: Making Google Ad request.');
+      await InterstitialAd.load(
+        adUnitId: interstitialAdUnitId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            _failedLoadAttempts = 0;
+            ad.fullScreenContentCallback = FullScreenContentCallback(
+              onAdClicked: (ad) {
+                logger.i('[Ads Manager] onAdClicked callback');
+              },
+              onAdShowedFullScreenContent: (ad) {
+                logger.i('[Ads Manager] Showing Ads');
+              },
+              onAdFailedToShowFullScreenContent: (ad, error) {
+                logger.i(
+                    '[Ads Manager] onAdFailedToShowFullScreenContent callback');
+              },
+              onAdDismissedFullScreenContent: (ad) {
+                logger.i('[Ads Manager] fullScreenContentCallback callback');
+              },
+            );
+            _interstitialAd = ad;
+            logger.i('[Ads Manager] to loaded $ad');
+          },
+          onAdFailedToLoad: (err) {
+            _failedLoadAttempts++; // increment the count on failure
+            logger.i('[Ads Manager] failed to load $err');
+            loadInterstitialAd();
+          },
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<void> showInterstitialAd() async {
+    if (_interstitialAd != null) {
+      await _interstitialAd?.show();
+    }
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _interstitialAd?.dispose();
+  }
 
   //Google Test ID if needed to test
   // return 'ca-app-pub-3940256099942544/1033173712';
@@ -99,97 +98,9 @@ class AdHelper {
     }
   }
 
-  // Private methods to decide whether to load or show Google Ads or CAS ads based on conditions
-  Future<void> _decideAndLoadAds({required bool shouldShowGoogleAds}) async {
-    checkForConsent();
-    logger.d('[Ads Manager] Google Ads enable $shouldShowGoogleAds:');
-    if (shouldShowGoogleAds) {
-      logger.i('[Ads Manager] Decision: Loading Google Ads.');
-      await _loadInterstitialAd();
-    }
-  }
-
-  Future<bool> isAdsReadyToShow() async {
+  @override
+  bool isAdReady() {
     return _interstitialAd != null;
-  }
-
-  Future<void> _decideAndShowAds() async {
-    if (_interstitialAd != null) {
-      await _showInterstitialAd();
-    }
-  }
-
-  Future<void> _loadInterstitialAd() async {
-    //To avoid calling multiple ads request repeatedly
-    isAdsLoading = true;
-    assert(interstitialAdUnitId != "",
-        "interstitialAdUnitId should not be null or empty");
-    if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
-      logger.i('[Ads Manager] Request: Making Google Ad request.');
-      await InterstitialAd.load(
-        adUnitId: interstitialAdUnitId,
-        request: const AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (ad) {
-            _failedLoadAttempts = 0;
-            isAdsLoading = false;
-            ad.fullScreenContentCallback = FullScreenContentCallback(
-              onAdClicked: (ad) {
-                logger.i('[Ads Manager] onAdClicked callback');
-              },
-              onAdShowedFullScreenContent: (ad) {
-                logger.i('[Ads Manager] Showing Ads');
-              },
-              onAdFailedToShowFullScreenContent: (ad, error) {
-                logger.i(
-                    '[Ads Manager] onAdFailedToShowFullScreenContent callback');
-                //if ads fail to load let user turn on VPN
-                _postShowingAds();
-              },
-              onAdDismissedFullScreenContent: (ad) {
-                logger.i('[Ads Manager] fullScreenContentCallback callback');
-                _postShowingAds();
-              },
-            );
-            _interstitialAd = ad;
-            logger.i('[Ads Manager] to loaded $ad');
-          },
-          onAdFailedToLoad: (err) {
-            _failedLoadAttempts++; // increment the count on failure
-            logger.i('[Ads Manager] failed to load $err');
-            _postShowingAds();
-          },
-        ),
-      );
-    }
-  }
-
-  void _postShowingAds() {
-    _interstitialAd?.dispose();
-    _interstitialAd = null;
-    logger.i(
-        '[Ads Manager] Post-show: Google Ad displayed. Resetting failed load attempts and requesting a new ad.');
-    _loadInterstitialAd();
-  }
-
-  Future<void> _showInterstitialAd() async {
-    if (_interstitialAd != null) {
-      await _interstitialAd?.show();
-    }
-  }
-
-  // Public methods
-  Future<void> loadAds({
-    required bool shouldShowGoogleAds,
-  }) async {
-    if (isAdsLoading) {
-      logger.i('[Ads Manager] Request: Ads already loading. Ignoring request.');
-      return;
-    }
-
-    await _decideAndLoadAds(
-      shouldShowGoogleAds: shouldShowGoogleAds,
-    );
   }
 
   Future<void> checkForConsent() async {
@@ -227,7 +138,117 @@ class AdHelper {
     });
   }
 
+  @override
+  int get _maxFailAttempts => 5;
+}
+
+class TapSellAdsProvider implements AdsProvider {
+  String appId = '';
+  int _failedLoadAttempts = 0;
+
+  @override
+  Future<void> initialize() {
+    // TODO: implement initialize
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> loadInterstitialAd() async {
+    if (appId == '' && _failedLoadAttempts < _maxFailAttempts) {
+      try {
+        appId = (await Tapsell.requestInterstitialAd(AppSecret.interstitialZoneId) ?? '');
+      } catch (e) {
+        logger.e("requesting tapsell ad failed $e", error: e);
+        _failedLoadAttempts++;
+        loadInterstitialAd();
+      }
+    }
+  }
+
+  @override
+  Future<void> showInterstitialAd() async {
+    if (appId.isEmpty) {
+      logger.d("Tapsell ad is not ready");
+      return;
+    }
+    await Tapsell.showInterstitialAd(
+      appId,
+      onAdClicked: () {
+        logger.d("Tapsell ad clicked");
+      },
+      onAdFailed: (message) {
+        logger.e("Tapsell ad failed to show $message");
+      },
+      onAdClosed: (completionState) {
+        logger.d("Tapsell ad closed $completionState");
+      },
+      onAdImpression: () {
+        logger.d("Tapsell ad impression");
+      },
+    );
+  }
+
+  @override
+  Future<void> dispose() {
+    appId = '';
+    return Future.value();
+  }
+
+  @override
+  bool isAdReady() {
+    return appId.isNotEmpty;
+  }
+
+  @override
+  int get _maxFailAttempts => 5;
+}
+
+class AdHelper {
+  final googleAdsService = GoogleAdsProvider();
+  final tapSellAdsService = TapSellAdsProvider();
+
+  static final AdHelper _instance = AdHelper._internal();
+
+  AdHelper._internal();
+
+  factory AdHelper() {
+    return _instance;
+  }
+
+  Future<bool> isAdsReadyToShow() async {
+    if (googleAdsService.isAdReady()) {
+      return true;
+    }
+    if (tapSellAdsService.isAdReady()) {
+      return true;
+    }
+    return false;
+  }
+
+  /// This is only used for android and ios
+  /// if string value is "" then it will not show ads
+  /// if string value is "tapsell" then it will show tapsell ads
+  /// if string value is "admob" then it will show admob ads
+  // Public methods
+  Future<void> loadAds({
+    required String provider,
+  }) async {
+    if (provider == _AdsProvider.admob.name) {
+      googleAdsService.loadInterstitialAd();
+    } else if (provider == _AdsProvider.tapsell.name) {
+      tapSellAdsService.loadInterstitialAd();
+    }
+  }
+
   Future<void> showAds() async {
-    await _decideAndShowAds();
+    ///while showing ads only one of the service will have the ads
+    ///we don't need to check service type here
+    if (googleAdsService.isAdReady()) {
+      await googleAdsService.showInterstitialAd();
+      return;
+    }
+    if (tapSellAdsService.isAdReady()) {
+      await tapSellAdsService.showInterstitialAd();
+    }
   }
 }

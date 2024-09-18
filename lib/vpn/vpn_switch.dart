@@ -39,7 +39,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     //if ads is not ready then wait for at least 5 seconds and then show ads
     //if ads is ready then show ads immediately
 
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       if (vpnStatus != 'connected' && userHasPermission) {
         if (!await adHelper.isAdsReadyToShow()) {
           await vpnModel.connectingDelay(newValue);
@@ -65,13 +65,11 @@ class _VPNSwitchState extends State<VPNSwitch> {
     final internetStatusProvider = context.watch<InternetStatusProvider>();
     final vpnNotifier = context.watch<VPNChangeNotifier>();
     if (isMobile()) {
-      return sessionModel
-          .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
+      return sessionModel.shouldShowAds((context, provider, child) {
         //Since we don't have feature flag on ios at the moment
         // disable ads'
-        if (Platform.isAndroid) {
-          adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
-        }
+        adHelper.loadAds(provider: 'tapsell');
+
         return vpnModel
             .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
           // Changes scale on mobile due to hit target
@@ -82,15 +80,16 @@ class _VPNSwitchState extends State<VPNSwitch> {
             disabledOpacity: 1,
             enabled: (internetStatusProvider.isConnected &&
                 !vpnNotifier.isFlashlightInitializedFailed),
-            initialValue:
-                vpnStatus == 'connected' || vpnStatus == 'disconnecting' ||vpnStatus == 'connecting',
+            initialValue: vpnStatus == 'connected' ||
+                vpnStatus == 'disconnecting' ||
+                vpnStatus == 'connecting',
             activeColor: onSwitchColor,
             inactiveColor: (internetStatusProvider.isConnected &&
                     !vpnNotifier.isFlashlightInitializedFailed)
                 ? offSwitchColor
                 : grey3,
             onChanged: (newValue) =>
-                vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
+                vpnProcessForMobile(newValue, vpnStatus, provider.isNotEmpty),
           );
         });
       });

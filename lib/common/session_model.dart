@@ -512,6 +512,19 @@ class SessionModel extends Model {
     );
   }
 
+  /// this is only used for android and ios
+  /// if string value is "" then it will not show ads
+  /// if string value is "tapsell" then it will show tapsell ads
+  /// if string value is "admob" then it will show admob ads
+  Widget shouldShowAds(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'showAds',
+      builder: builder,
+    );
+  }
+
+
+
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>(

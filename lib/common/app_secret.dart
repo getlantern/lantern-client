@@ -7,5 +7,7 @@ class AppSecret {
   static String privacyPolicy = 'https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf';
   static String privacyPolicyV2 = 'https://lantern.io/privacy';
   static String tosV2 = 'https://lantern.io/terms';
+  static String videoInterstitialZoneId = dotenv.get('VideoInterstitialZoneId');
+  static String interstitialZoneId =dotenv.get('InterstitialZoneId');
 
 }
