@@ -407,7 +407,7 @@ class MainActivity :
         } else {
             sendBroadcast(notifications.disconnectIntent())
             // Update VPN status
-            updateStatus(false)
+            vpnModel.updateStatus(false)
         }
     }
 
