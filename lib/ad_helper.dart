@@ -112,14 +112,15 @@ class TapSellAdsProvider implements AdsProvider {
   @override
   Future<void> loadInterstitialAd(VoidCallback adLoadedCallback) async {
     if (isAdLoading || isAdsShown || appId.isNotEmpty) {
-      logger.i("[Ads Manager] Tapsell ad is already loading $isAdLoading or shown $isAdsShown");
+      logger.i(
+          "[Ads Manager] Tapsell ad is already loading $isAdLoading or shown $isAdsShown");
       return;
     }
     if (_failedLoadAttempts < _maxFailAttempts) {
       try {
         isAdLoading = true;
         appId = (await Tapsell.requestInterstitialAd(
-                AppSecret.interstitialZoneId)) ??
+                AppSecret.videoInterstitialZoneId)) ??
             '';
         logger.i("[Ads Manager] Tapsell ad loaded $appId");
         isAdLoading = false;
@@ -141,7 +142,8 @@ class TapSellAdsProvider implements AdsProvider {
   @override
   Future<void> showInterstitialAd() async {
     if (appId.isEmpty || isAdsShown) {
-      logger.i("[Ads Manager] Tapsell ad is not ready or already shown $isAdsShown");
+      logger.i(
+          "[Ads Manager] Tapsell ad is not ready or already shown $isAdsShown");
       return;
     }
     await Tapsell.showInterstitialAd(
@@ -191,7 +193,7 @@ class AdHelper {
   }
 
   Future<void> loadAds({required String provider}) async {
-    if (Platform.isIOS || provider == _AdsProvider.google.name) {
+    if (provider == _AdsProvider.google.name) {
       logger.i("[Ads Manager] Loading Google Ads");
       await googleAdsService.loadInterstitialAd(showAds);
     } else if (provider == _AdsProvider.tapsell.name) {

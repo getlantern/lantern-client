@@ -520,6 +520,7 @@ class SessionModel extends Model {
     return subscribedSingleValueBuilder<String>(
       'showAds',
       builder: builder,
+      defaultValue: ''
     );
   }
 
