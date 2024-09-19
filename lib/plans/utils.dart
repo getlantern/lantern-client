@@ -160,6 +160,12 @@ Future<void> openDesktopPaymentWebview(
   }
 }
 
+List<PathAndValue<PaymentMethod>> sortProviders(
+  Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+) =>
+    paymentMethods.toList()
+      ..sort((a, b) => a.value.method.compareTo(b.value.method));
+
 Plan planFromJson(Map<String, dynamic> item) {
   print("called plans $item");
   final locale = Localization.locale;

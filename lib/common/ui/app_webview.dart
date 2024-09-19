@@ -20,7 +20,7 @@ class AppWebView extends StatefulWidget {
 
 class _AppWebViewState extends State<AppWebView> {
   final InAppWebViewSettings settings = InAppWebViewSettings(
-    isInspectable: false,
+    isInspectable: kDebugMode,
     javaScriptEnabled: true,
     mediaPlaybackRequiresUserGesture: false,
     allowsInlineMediaPlayback: false,

@@ -187,7 +187,7 @@ class _CheckoutState extends State<Checkout>
     Iterable<PathAndValue<PaymentMethod>> paymentMethods,
   ) {
     var widgets = <Widget>[];
-    for (final pathAndValue in paymentMethods) {
+    for (final pathAndValue in sortProviders(paymentMethods)) {
       final paymentMethod = pathAndValue.value;
       if (widgets.length == 2) {
         if (paymentMethods.length != 2) widgets.add(options());
@@ -347,7 +347,6 @@ class _CheckoutState extends State<Checkout>
     }
   }
 
-
   // This methods is responsible for polling for user data
   // so if user has done payment or renew plans and show
   void hasPlansUpdateOrBuy() {
@@ -465,9 +464,10 @@ class _CheckoutState extends State<Checkout>
     assert(widget.authFlow != null, 'authFlow is null');
     switch (widget.authFlow!) {
       case AuthFlow.createAccount:
-      /// There is edge case where user is signup with email and password but not pro
-      /// this happens when does restore purchase on other device so older device
-      /// does not have pro status but have email and password
+
+        /// There is edge case where user is signup with email and password but not pro
+        /// this happens when does restore purchase on other device so older device
+        /// does not have pro status but have email and password
         if (sessionModel.hasUserSignedInNotifier.value ?? false) {
           showSuccessDialog(context, widget.isPro);
           return;
@@ -494,7 +494,7 @@ class _CheckoutState extends State<Checkout>
       case AuthFlow.updateAccount:
       // TODO: Handle this case.
       case AuthFlow.restoreAccount:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
     }
   }
 }

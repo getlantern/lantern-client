@@ -23,7 +23,6 @@ class CheckoutLegacy extends StatefulWidget {
 
 class _CheckoutLegacyState extends State<CheckoutLegacy>
     with SingleTickerProviderStateMixin {
-  
   bool showMoreOptions = false;
   bool showContinueButton = false;
 
@@ -34,20 +33,20 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     validator: (value) => value!.isEmpty
         ? null
         : EmailValidator.validate(value ?? '')
-        ? null
-        : 'please_enter_a_valid_email_address'.i18n,
+            ? null
+            : 'please_enter_a_valid_email_address'.i18n,
   );
   late final refCodeController = CustomTextEditingController(
     formKey: refCodeFieldKey,
     validator: (value) =>
-    // only allow letters and numbers as well as 6 <= length <= 13
-    value == null ||
-        value.characters.isEmpty ||
-        RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value) &&
-            (6 <= value.characters.length &&
-                value.characters.length <= 13)
-        ? null
-        : 'invalid_or_incomplete_referral_code'.i18n,
+        // only allow letters and numbers as well as 6 <= length <= 13
+        value == null ||
+                value.characters.isEmpty ||
+                RegExp(r'^[a-zA-Z0-9]*$').hasMatch(value) &&
+                    (6 <= value.characters.length &&
+                        value.characters.length <= 13)
+            ? null
+            : 'invalid_or_incomplete_referral_code'.i18n,
   );
 
   var isRefCodeFieldShowing = false;
@@ -84,13 +83,13 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
         padVertical: true,
         body: sessionModel.paymentMethods(
           builder: (
-              context,
-              Iterable<PathAndValue<PaymentMethod>> paymentMethods,
-              Widget? child,
-              ) {
+            context,
+            Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+            Widget? child,
+          ) {
             defaultProviderIfNecessary(paymentMethods.toList());
-            return sessionModel.emailAddress((context, emailAddress, child) =>
-             Column(
+            return sessionModel.emailAddress(
+              (context, emailAddress, child) => Column(
                 children: [
                   PlanStep(
                     stepNum: '2',
@@ -127,7 +126,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
                   ),
                   Container(
                     padding:
-                    const EdgeInsetsDirectional.only(top: 16, bottom: 16),
+                        const EdgeInsetsDirectional.only(top: 16, bottom: 16),
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,37 +191,37 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
   }
 
   Widget options() => CInkWell(
-    onTap: () {
-      setState(() {
-        showMoreOptions = !showMoreOptions;
-      });
-    },
-    child: Container(
-      padding: const EdgeInsetsDirectional.only(bottom: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CText(
-            showMoreOptions ? 'fewer_options'.i18n : 'more_options'.i18n,
-            style: tsBody1,
+        onTap: () {
+          setState(() {
+            showMoreOptions = !showMoreOptions;
+          });
+        },
+        child: Container(
+          padding: const EdgeInsetsDirectional.only(bottom: 24),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CText(
+                showMoreOptions ? 'fewer_options'.i18n : 'more_options'.i18n,
+                style: tsBody1,
+              ),
+              const Padding(
+                padding: EdgeInsetsDirectional.only(start: 8),
+                child: CAssetImage(
+                  path: ImagePaths.down_arrow,
+                ),
+              ),
+            ],
           ),
-          const Padding(
-            padding: EdgeInsetsDirectional.only(start: 8),
-            child: CAssetImage(
-              path: ImagePaths.down_arrow,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 
   List<Widget> paymentOptions(
-      Iterable<PathAndValue<PaymentMethod>> paymentMethods,
-      ) {
+    Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+  ) {
     var widgets = <Widget>[];
-    for (final pathAndValue in paymentMethods) {
+    for (final pathAndValue in sortProviders(paymentMethods)) {
       final paymentMethod = pathAndValue.value;
       if (widgets.length == 2) {
         widgets.add(options());
@@ -235,6 +234,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
 
   List<PaymentProvider> paymentProviders(PaymentMethod paymentMethods) {
     var providers = <PaymentProvider>[];
+
     for (final provider in paymentMethods.providers) {
       providers.add(
         PaymentProvider(
@@ -264,10 +264,9 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
   //Class methods
   void selectPaymentProvider(Providers provider) {
     setState(
-          () => selectedPaymentProvider = provider,
+      () => selectedPaymentProvider = provider,
     );
   }
-
 
   Future<void> onContinueTapped() async {
     var refCode = refCodeController.value;
@@ -369,7 +368,6 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     }
   }
 
-
   void _proceedWithShepherd() async {
     try {
       context.loaderOverlay.show();
@@ -394,7 +392,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     appLogger.i("calling hasPlansUpdateOrBuy to update plans or buy");
     try {
       retry(
-            () async {
+        () async {
           /// Polling for userData that user has updates plans or buy
           final plansUpdated = await sessionModel.hasUpdatePlansOrBuy();
           if (plansUpdated) {
@@ -484,5 +482,4 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     //If needed to change default value changing to from server
     selectedPaymentProvider = paymentMethod.providers[0].name.toPaymentEnum();
   }
-
 }
