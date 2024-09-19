@@ -134,6 +134,8 @@ class SessionModel internal constructor(
 
             }
 
+            "proxyAddr" -> result.success(LanternApp.session.hTTPAddr)
+
             "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
             }
@@ -249,6 +251,7 @@ class SessionModel internal constructor(
         } else {
             startResult!!.httpAddr
         }
+
     val sOCKS5Addr: String
         get() = if (startResult == null) {
             ""

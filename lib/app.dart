@@ -90,6 +90,7 @@ class _LanternAppState extends State<LanternApp>
     if (!hasConnection) {
       return;
     }
+
     final vpnConnected = await vpnModel.isVpnConnected();
 
     /// If vpn is not connected then we should not show the connectivity warning
