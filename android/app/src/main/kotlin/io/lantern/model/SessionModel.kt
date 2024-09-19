@@ -249,6 +249,7 @@ class SessionModel internal constructor(
         } else {
             startResult!!.httpAddr
         }
+
     val sOCKS5Addr: String
         get() = if (startResult == null) {
             ""

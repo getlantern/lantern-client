@@ -15,6 +15,7 @@ import org.getlantern.lantern.model.AccountInitializationStatus
 import org.getlantern.lantern.model.LanternStatus
 import org.getlantern.lantern.model.LanternStatus.Status
 import org.getlantern.lantern.util.AutoUpdater
+import org.getlantern.lantern.webview.ProxyManager
 import org.getlantern.mobilesdk.Lantern
 import org.getlantern.mobilesdk.LanternNotRunningException
 import org.getlantern.mobilesdk.Logger
@@ -95,6 +96,9 @@ open class LanternService : Service(), Runnable {
             EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING)
             createUser(0)
         }
+        // Configure the Android webview to use the local HTTP proxy
+        ProxyManager.setWebViewProxy(LanternApp.session.hTTPAddr)
+
         if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
             // check if an update is available
             autoUpdater.checkForUpdates(null)
@@ -115,6 +119,8 @@ open class LanternService : Service(), Runnable {
             Logger.debug(TAG, "Service never started, exit immediately")
             return
         }
+        // Clear proxed used by Android webview ProxyController
+        ProxyManager.clearProxy()
         helper.onDestroy()
         thread?.interrupt()
         try {

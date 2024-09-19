@@ -56,6 +56,21 @@ class AppBrowser extends InAppBrowser {
     required this.onClose,
   });
 
+  static Future setProxyAddr() async {
+    var proxyAvailable =
+        await WebViewFeature.isFeatureSupported(WebViewFeature.PROXY_OVERRIDE);
+    if (proxyAvailable) {
+      ProxyController proxyController = ProxyController.instance();
+      final httpProxyAddr = sessionModel.configNotifier.value?.httpProxyAddr;
+      print("httpProxyAddr is $httpProxyAddr");
+      // await proxyController.clearProxyOverride();
+      await proxyController.setProxyOverride(
+          settings: ProxySettings(proxyRules: [
+        ProxyRule(url: "${InternetAddress.loopbackIPv4.address}:$httpProxyAddr")
+      ], bypassRules: []));
+    }
+  }
+
   @override
   Future onBrowserCreated() async {
     print("Browser created");
