@@ -39,14 +39,13 @@ class _VPNSwitchState extends State<VPNSwitch> {
     //if ads is not ready then wait for at least 5 seconds and then show ads
     //if ads is ready then show ads immediately
 
-    if (Platform.isAndroid) {
-      if (vpnStatus != 'connected' && userHasPermission) {
-        if (!await adHelper.isAdsReadyToShow()) {
-          await vpnModel.connectingDelay(newValue);
-          await Future.delayed(const Duration(seconds: 5));
-        }
+    if (vpnStatus != 'connected' && userHasPermission) {
+      if (!await adHelper.isAdsReadyToShow()) {
+        await vpnModel.connectingDelay(newValue);
+        await Future.delayed(const Duration(seconds: 5));
       }
     }
+
     await vpnModel.switchVPN(newValue);
 
     //add delayed to avoid flickering
@@ -68,7 +67,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
       return sessionModel.shouldShowAds((context, provider, child) {
         //Since we don't have feature flag on ios at the moment
         // disable ads'
-        adHelper.loadAds(provider: 'tapsell');
+        adHelper.loadAds(provider: provider);
 
         return vpnModel
             .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
