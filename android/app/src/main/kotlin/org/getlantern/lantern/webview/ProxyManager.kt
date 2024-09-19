@@ -20,6 +20,7 @@ class ProxyManager {
                             addProxyRule(host, ProxyConfig.MATCH_HTTP)
                             addProxyRule(httpsHost, ProxyConfig.MATCH_HTTPS)
                         } else {
+                            Logger.d(TAG, "Adding proxy rule $host")
                             addProxyRule(host)
                         }
                     }.build()

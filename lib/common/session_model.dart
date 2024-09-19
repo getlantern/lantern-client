@@ -431,6 +431,10 @@ class SessionModel extends Model {
     throw Exception("Not supported on mobile");
   }
 
+  Future<String> proxyAddr() async {
+    return await methodChannel.invokeMethod('proxyAddr', <String, dynamic>{});
+  }
+
   /// Auth API end
   Future<String> getCountryCode() async {
     return await methodChannel

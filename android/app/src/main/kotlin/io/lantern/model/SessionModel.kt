@@ -134,6 +134,8 @@ class SessionModel internal constructor(
 
             }
 
+            "proxyAddr" -> result.success(LanternApp.session.hTTPAddr)
+
             "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
             }

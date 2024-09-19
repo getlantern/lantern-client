@@ -47,13 +47,24 @@ class _AppWebViewState extends State<AppWebView> {
 
 class AppBrowser extends InAppBrowser {
   final VoidCallback? onClose;
-  final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
-      browserSettings: InAppBrowserSettings(hideUrlBar: true),
-      webViewSettings: InAppWebViewSettings(
-          javaScriptEnabled: true, isInspectable: kDebugMode));
+
+  static final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
+    browserSettings: InAppBrowserSettings(
+      hideTitleBar: true,
+      hideToolbarBottom: true,
+      presentationStyle: ModalPresentationStyle.POPOVER,
+    ),
+    webViewSettings: InAppWebViewSettings(
+      sharedCookiesEnabled: true,
+      javaScriptEnabled: true,
+      useOnDownloadStart: true,
+      useShouldOverrideUrlLoading: true,
+      isInspectable: kDebugMode,
+    ),
+  );
 
   AppBrowser({
-    required this.onClose,
+    this.onClose,
   });
 
   static Future setProxyAddr() async {
@@ -61,13 +72,13 @@ class AppBrowser extends InAppBrowser {
         await WebViewFeature.isFeatureSupported(WebViewFeature.PROXY_OVERRIDE);
     if (proxyAvailable) {
       ProxyController proxyController = ProxyController.instance();
-      final httpProxyAddr = sessionModel.configNotifier.value?.httpProxyAddr;
-      print("httpProxyAddr is $httpProxyAddr");
-      // await proxyController.clearProxyOverride();
+      final proxyAddr = await sessionModel.proxyAddr();
+      await proxyController.clearProxyOverride();
       await proxyController.setProxyOverride(
-          settings: ProxySettings(proxyRules: [
-        ProxyRule(url: "${InternetAddress.loopbackIPv4.address}:$httpProxyAddr")
-      ], bypassRules: []));
+          settings: ProxySettings(
+        proxyRules: [ProxyRule(url: "http://$proxyAddr")],
+        bypassRules: [],
+      ));
     }
   }
 
@@ -92,12 +103,23 @@ class AppBrowser extends InAppBrowser {
   }
 
   @override
+  Future<NavigationActionPolicy> shouldOverrideUrlLoading(
+      navigationAction) async {
+    final url = navigationAction.request.url!;
+    if (url.scheme.startsWith("alipay")) {
+      await launchUrl(url, mode: LaunchMode.platformDefault);
+      return NavigationActionPolicy.CANCEL;
+    }
+    return NavigationActionPolicy.ALLOW;
+  }
+
+  @override
   void onProgressChanged(progress) {
     print("Progress: $progress");
   }
 
   @override
-  void onExit() {
+  Future<void> onExit() async {
     print("Browser closed");
     onClose?.call();
   }
@@ -130,7 +152,12 @@ class AppBrowser extends InAppBrowser {
         InAppBrowser.openWithSystemBrowser(url: WebUri(url));
         break;
       default:
-        await launchUrl(Uri.parse(url), mode: LaunchMode.platformDefault);
+        await setProxyAddr();
+        final instance = AppBrowser();
+        await instance.openUrlRequest(
+          urlRequest: URLRequest(url: WebUri(url)),
+          settings: settings,
+        );
         break;
     }
   }

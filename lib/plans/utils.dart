@@ -7,13 +7,13 @@ import 'package:lantern/common/ui/app_webview.dart';
 const defaultTimeoutDuration = Duration(seconds: 10);
 
 bool isProdPlay() {
-  if (sessionModel.isStoreVersion.value ??false) {
+  if (sessionModel.isStoreVersion.value ?? false) {
     return true;
   }
-  if (sessionModel.isTestPlayVersion.value ??false) {
+  if (sessionModel.isTestPlayVersion.value ?? false) {
     return true;
   }
- return  false;
+  return false;
 }
 
 const lanternStarLogo = CAssetImage(
@@ -159,9 +159,6 @@ Future<void> openDesktopPaymentWebview(
           AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
   }
 }
-
-
-
 
 Plan planFromJson(Map<String, dynamic> item) {
   print("called plans $item");
