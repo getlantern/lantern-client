@@ -94,7 +94,7 @@ dependencies:
 
   # URL & Sharing utilities
   url_launcher: ^6.2.5
-  share_plus: ^9.0.0
+  share_plus: ^10.0.0
   flutter_inappwebview: ^6.0.0
   flutter_windows_webview:
     git:
