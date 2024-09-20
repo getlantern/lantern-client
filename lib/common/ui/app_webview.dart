@@ -107,7 +107,7 @@ class AppBrowser extends InAppBrowser {
       navigationAction) async {
     final url = navigationAction.request.url!;
     if (url.scheme.startsWith("alipay")) {
-      await launchUrl(url, mode: LaunchMode.platformDefault);
+       launchUrl(url, mode: LaunchMode.platformDefault);
       return NavigationActionPolicy.CANCEL;
     }
     return NavigationActionPolicy.ALLOW;
