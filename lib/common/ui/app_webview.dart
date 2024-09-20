@@ -106,8 +106,8 @@ class AppBrowser extends InAppBrowser {
   Future<NavigationActionPolicy> shouldOverrideUrlLoading(
       navigationAction) async {
     final url = navigationAction.request.url!;
-    if (url.scheme.startsWith("alipay")) {
-       launchUrl(url, mode: LaunchMode.platformDefault);
+    if (url.scheme.startsWith("alipay") && await canLaunchUrl(url)) {
+      launchUrl(url, mode: LaunchMode.platformDefault);
       return NavigationActionPolicy.CANCEL;
     }
     return NavigationActionPolicy.ALLOW;
