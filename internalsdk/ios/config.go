@@ -44,6 +44,18 @@ type ConfigResult struct {
 	IPSToExcludeFromVPN string
 }
 
+type configurer struct {
+	configFolderPath string
+	hardcodedProxies string
+	uc               *UserConfig
+	rt               http.RoundTripper
+}
+
+type Configurer interface {
+	Configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error)
+	OpenGlobal() (*config.Global, string, bool, error)
+}
+
 // Configure fetches updated configuration from the cloud and stores it in
 // configFolderPath. There are 5 files that must be initialized in
 // configFolderPath - global.yaml, global.yaml.etag, proxies.yaml,
@@ -59,20 +71,22 @@ func Configure(configFolderPath string, userID int, proToken, deviceID string, r
 		hardcodedProxies: hardcodedProxies,
 		uc:               uc,
 	}
-	return cf.configure(userID, proToken, refreshProxies)
+	return cf.Configure(userID, proToken, refreshProxies)
+}
+
+// NewConfigurer returns a new instance of Configurer
+func NewConfigurer(configFolderPath string, userID int, proToken, deviceID, hardcodedProxies string) Configurer {
+	return &configurer{
+		configFolderPath: configFolderPath,
+		hardcodedProxies: hardcodedProxies,
+		uc:               userConfigFor(userID, proToken, deviceID),
+	}
 }
 
 type UserConfig struct {
 	common.UserConfigData
 	Country     string
 	AllowProbes bool
-}
-
-type configurer struct {
-	configFolderPath string
-	hardcodedProxies string
-	uc               *UserConfig
-	rt               http.RoundTripper
 }
 
 // Important:
@@ -84,14 +98,14 @@ type configurer struct {
 // config.go:176 Configured completed in 3.700574125s
 
 // TODO: Implement a timeout mechanism to handle prolonged execution times and potentially execute this method in the background to maintain smooth UI startup performance.
-func (cf *configurer) configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
+func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
 	result := &ConfigResult{}
 	start := time.Now()
 	if err := cf.writeUserConfig(); err != nil {
 		return nil, err
 	}
 
-	global, globalEtag, globalInitialized, err := cf.openGlobal()
+	global, globalEtag, globalInitialized, err := cf.OpenGlobal()
 	if err != nil {
 		return nil, err
 	}
@@ -207,7 +221,7 @@ func (cf *configurer) readUserConfig() (*UserConfig, error) {
 	return uc, nil
 }
 
-func (cf *configurer) openGlobal() (*config.Global, string, bool, error) {
+func (cf *configurer) OpenGlobal() (*config.Global, string, bool, error) {
 	cfg := &config.Global{}
 	etag, updated, err := cf.openConfig(globalYaml, cfg, embeddedconfig.Global)
 	return cfg, etag, updated, err

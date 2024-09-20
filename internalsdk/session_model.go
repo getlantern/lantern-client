@@ -13,8 +13,10 @@ import (
 	"github.com/1Password/srp"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/ios"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
@@ -26,9 +28,10 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
-	authClient  auth.AuthClient
-	proClient   pro.ProClient
-	surveyModel *SurveyModel
+	authClient    auth.AuthClient
+	proClient     pro.ProClient
+	surveyModel   *SurveyModel
+	iosConfigurer *config.Global
 }
 
 // Expose payment providers
@@ -120,6 +123,7 @@ type SessionModelOpts struct {
 	Lang            string
 	TimeZone        string
 	Platform        string
+	ConfigPath      string
 }
 
 var (
@@ -155,13 +159,13 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 
 	m := &SessionModel{baseModel: base}
+	deviceID, _ := m.GetDeviceID()
+	userID, _ := m.GetUserID()
+	token, _ := m.GetToken()
+	lang, _ := m.Locale()
 	webclientOpts := &webclient.Opts{
 		Timeout: dialTimeout,
 		UserConfig: func() common.UserConfig {
-			deviceID, _ := m.GetDeviceID()
-			userID, _ := m.GetUserID()
-			token, _ := m.GetToken()
-			lang, _ := m.Locale()
 			internalHeaders := map[string]string{
 				common.PlatformHeader:   opts.Platform,
 				common.AppVersionHeader: common.ApplicationVersion,
@@ -188,6 +192,14 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if opts.Platform == "ios" {
 		m.SetAuthEnabled(true)
 	}
+	cf := ios.NewConfigurer(opts.ConfigPath, int(userID), token, deviceID, "")
+	global, _, _, err := cf.OpenGlobal()
+	if err != nil {
+		log.Errorf("Error while opening global %v", err)
+		return nil, err
+	}
+	m.iosConfigurer = global
+	m.checkAvailableFeatures()
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
 }
@@ -628,6 +640,10 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "checkIfSurveyLinkOpened":
 		return m.checkIfSurveyLinkOpened(arguments.Scalar().String())
+	case "checkAvailableFeatures":
+		m.checkAvailableFeatures()
+		return true, nil
+
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -724,12 +740,48 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		}
 	}()
 	go checkSplitTunneling(m)
+
 	m.surveyModel, _ = NewSurveyModel(*m)
 	// By defautl on ios  auth flow enabled
 	if opts.Platform == "ios" {
 		m.SetAuthEnabled(true)
 	}
 	return nil
+}
+
+func (m *SessionModel) checkAvailableFeatures() {
+	// Check for auth feature
+	authEnabled := m.featureEnabled(config.FeatureAuth)
+	log.Debugf("Auth feature enabled: %v", authEnabled)
+
+	// Check for ads feature
+	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
+	m.SetShowGoogleAds(googleAdsEnabled)
+
+	tapSellAdsEnabled := m.featureEnabled("tapsellads")
+	m.SetShowTapSellAds(tapSellAdsEnabled)
+}
+
+// check if feature is enabled or not
+func (m *SessionModel) featureEnabled(feature string) bool {
+	userId, err := m.GetUserID()
+	if err != nil {
+		log.Errorf("Error while getting user id %v", err)
+		return false
+	}
+	isPro, err := m.IsProUser()
+	if err != nil {
+		log.Errorf("Error while getting user id %v", err)
+		return false
+	}
+	countryCode, err := m.GetCountryCode()
+	if err != nil {
+		log.Errorf("Error while getting user id %v", err)
+		return false
+	}
+	featureEnabled := m.iosConfigurer.FeatureEnabled(feature, common.Platform, common.DefaultAppName, common.ApplicationVersion, userId, isPro, countryCode)
+	log.Debugf("Feature %s enabled %v", feature, featureEnabled)
+	return featureEnabled
 }
 
 func (m *SessionModel) platform() (string, error) {
