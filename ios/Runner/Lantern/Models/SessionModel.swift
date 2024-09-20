@@ -139,7 +139,14 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
         updateBandwidth(bandwidth: bandwidthData)
       }
    case Constants.configupdate:
-        checkForAvaliabelFeature()
+        if let config = change![.newKey] as? Bool {
+            if config {
+                logger.debug("upcomming message from vpn config")
+                checkForAvaliabelFeature()
+            }
+          
+        }
+        
     default:
       logger.debug("Unknown message \(keyPath)")
     }

@@ -98,6 +98,7 @@ class VpnHelper: NSObject {
       self.configuring = false
     }
     performAppSetUp()
+   Constants.appGroupDefaults.set(false, forKey: Constants.configupdate)
   }
 
   // MARK: Set Up

@@ -199,7 +199,6 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 		return nil, err
 	}
 	m.iosConfigurer = global
-	m.checkAvailableFeatures()
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
 }
@@ -752,7 +751,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 func (m *SessionModel) checkAvailableFeatures() {
 	// Check for auth feature
 	authEnabled := m.featureEnabled(config.FeatureAuth)
-	log.Debugf("Auth feature enabled: %v", authEnabled)
+	m.SetAuthEnabled(authEnabled)
 
 	// Check for ads feature
 	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
