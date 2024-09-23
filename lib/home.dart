@@ -209,7 +209,8 @@ class _HomePageState extends State<HomePage> with WindowListener {
               Logger.level = Level.error;
             }
 
-            bool isPlayVersion = (sessionModel.isTestPlayVersion.value ?? false);
+            bool isPlayVersion =
+                (sessionModel.isTestPlayVersion.value ?? false);
             bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
 
             if ((isStoreVersion || isPlayVersion) && version == 0) {
@@ -218,9 +219,11 @@ class _HomePageState extends State<HomePage> with WindowListener {
               return const PrivacyDisclosure();
             }
 
-            userNew(() {
-              _checkForFirstTimeVisit();
-            });
+            if (sessionModel.isAuthEnabled.value!) {
+              userNew(() {
+                _checkForFirstTimeVisit();
+              });
+            }
 
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
