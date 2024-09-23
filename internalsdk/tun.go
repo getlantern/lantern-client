@@ -42,7 +42,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 		return errors.New("Unable to get SOCKS5 dialer: %v", err)
 	}
 
-	ipp, err := ipproxy.New(&ipproxy.Opts{
+	ipp := ipproxy.New(&ipproxy.Opts{
 		DeviceName:          fmt.Sprintf("fd://%d", fd),
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
@@ -72,9 +72,6 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 			return conn, err
 		},
 	})
-	if err != nil {
-		return errors.New("Unable to create ipproxy: %v", err)
-	}
 
 	currentDeviceMx.Lock()
 	currentIPP = ipp
@@ -82,7 +79,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 
 	ctx := context.Background()
 
-	err = ipp.Serve(ctx)
+	err = ipp.Start(ctx)
 	if err != io.EOF {
 		return log.Errorf("unexpected error serving TUN traffic: %v", err)
 	}
@@ -106,7 +103,7 @@ func StopTun2Socks() {
 	if ipp != nil {
 		go func() {
 			log.Debug("Closing ipproxy")
-			if err := ipp.Close(); err != nil {
+			if err := ipp.Stop(); err != nil {
 				log.Errorf("Error closing ipproxy: %v", err)
 			}
 			log.Debug("Closed ipproxy")
