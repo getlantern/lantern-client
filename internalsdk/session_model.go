@@ -191,16 +191,32 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
 		m.SetAuthEnabled(true)
+		go m.setupIosConfigure(opts.ConfigPath, int(userID), token, deviceID)
 	}
-	cf := ios.NewConfigurer(opts.ConfigPath, int(userID), token, deviceID, "")
-	global, _, _, err := cf.OpenGlobal()
-	if err != nil {
-		log.Errorf("Error while opening global %v", err)
-		return nil, err
-	}
-	m.iosConfigurer = global
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
+}
+
+// setupIosConfigure sets up the iOS configuration for the session model.
+// It continuously checks if the global configuration is available and retries every second if not.
+func (m *SessionModel) setupIosConfigure(configPath string, userId int, token string, deviceId string) {
+	go func() {
+		cf := ios.NewConfigurer(configPath, userId, token, deviceId, "")
+		for {
+			if cf.HasGlobalConfig() {
+				global, _, _, err := cf.OpenGlobal()
+				if err != nil {
+					log.Errorf("Error while opening global %v", err)
+					return
+				}
+				m.iosConfigurer = global
+				log.Debugf("Found global config IOS configure done %v", global)
+				break
+			}
+			time.Sleep(1 * time.Second)
+			log.Debugf("global config not available trying ")
+		}
+	}()
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -739,12 +755,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		}
 	}()
 	go checkSplitTunneling(m)
-
 	m.surveyModel, _ = NewSurveyModel(*m)
-	// By defautl on ios  auth flow enabled
-	if opts.Platform == "ios" {
-		m.SetAuthEnabled(true)
-	}
 	return nil
 }
 
@@ -752,6 +763,10 @@ func (m *SessionModel) checkAvailableFeatures() {
 	// Check for auth feature
 	authEnabled := m.featureEnabled(config.FeatureAuth)
 	m.SetAuthEnabled(authEnabled)
+	platfrom, _ := m.platform()
+	if platfrom == "ios" {
+		m.SetAuthEnabled(true)
+	}
 
 	// Check for ads feature
 	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)

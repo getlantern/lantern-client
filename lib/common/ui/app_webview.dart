@@ -50,7 +50,9 @@ class AppBrowser extends InAppBrowser {
   final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
       browserSettings: InAppBrowserSettings(hideUrlBar: true),
       webViewSettings: InAppWebViewSettings(
-          javaScriptEnabled: true, isInspectable: kDebugMode));
+        javaScriptEnabled: true,
+        isInspectable: kDebugMode,
+      ));
 
   AppBrowser({
     required this.onClose,

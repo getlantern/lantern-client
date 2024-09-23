@@ -36,6 +36,11 @@ class GoogleAdsProvider implements AdsProvider {
   Future<void> loadInterstitialAd(VoidCallback adLoadedCallback) async {
     assert(interstitialAdUnitId.isNotEmpty,
         "interstitialAdUnitId should not be null or empty");
+
+    if(isAdsShown) {
+      logger.i("[Ads Manager] Google ad is already shown");
+      return;
+    }
     if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
       logger.i('[Ads Manager] Request: Making Google Ad request.');
       await InterstitialAd.load(

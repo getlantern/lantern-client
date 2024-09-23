@@ -54,6 +54,7 @@ type configurer struct {
 type Configurer interface {
 	Configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error)
 	OpenGlobal() (*config.Global, string, bool, error)
+	HasGlobalConfig() bool
 }
 
 // Configure fetches updated configuration from the cloud and stores it in
@@ -200,7 +201,7 @@ func (cf *configurer) writeUserConfig() error {
 	if err != nil {
 		return errors.New("Unable to marshal user config: %v", err)
 	}
-	if writeErr := ioutil.WriteFile(cf.fullPathTo(userConfigYaml), bytes, 0644); writeErr != nil {
+	if writeErr := os.WriteFile(cf.fullPathTo(userConfigYaml), bytes, 0644); writeErr != nil {
 		return errors.New("Unable to save userconfig.yaml: %v", err)
 	}
 	return nil
@@ -227,6 +228,11 @@ func (cf *configurer) OpenGlobal() (*config.Global, string, bool, error) {
 	return cfg, etag, updated, err
 }
 
+func (cf *configurer) HasGlobalConfig() bool {
+	_, err := os.Stat(cf.fullPathTo(globalYaml))
+	return err == nil
+}
+
 func (cf *configurer) openProxies() (map[string]*commonconfig.ProxyConfig, string, bool, error) {
 	cfg := make(map[string]*commonconfig.ProxyConfig)
 	etag, updated, err := cf.openConfig(proxiesYaml, cfg, embeddedconfig.Proxies)
@@ -241,21 +247,21 @@ func (cf *configurer) openConfig(name string, cfg interface{}, embedded []byte) 
 	var initialized bool
 	configFile := cf.fullPathTo(name)
 	log.Debugf("Opening config file at %s", configFile)
-	bytes, err := ioutil.ReadFile(configFile)
+	bytes, err := os.ReadFile(configFile)
 	if err == nil && len(bytes) > 0 {
 		log.Debugf("Loaded %v from file", name)
 	} else {
 		log.Debugf("Initializing %v from embedded", name)
 		bytes = embedded
 		initialized = true
-		if writeErr := ioutil.WriteFile(configFile, bytes, 0644); writeErr != nil {
+		if writeErr := os.WriteFile(configFile, bytes, 0644); writeErr != nil {
 			return "", false, errors.New("Unable to write embedded %v to disk: %v", name, writeErr)
 		}
 	}
 	if parseErr := yaml.Unmarshal(bytes, cfg); parseErr != nil {
 		return "", false, errors.New("Unable to parse %v: %v", name, parseErr)
 	}
-	etagBytes, err := ioutil.ReadFile(cf.fullPathTo(name + ".etag"))
+	etagBytes, err := os.ReadFile(cf.fullPathTo(name + ".etag"))
 	if err != nil {
 		log.Debugf("No known etag for %v", name)
 		etagBytes = []byte{}
@@ -425,14 +431,14 @@ func (cf *configurer) openFile(filename string) (*os.File, error) {
 }
 
 func (cf *configurer) saveConfig(name string, bytes []byte) {
-	err := ioutil.WriteFile(cf.fullPathTo(name), bytes, 0644)
+	err := os.WriteFile(cf.fullPathTo(name), bytes, 0644)
 	if err != nil {
 		log.Errorf("Unable to save config for %v: %v", name, err)
 	}
 }
 
 func (cf *configurer) saveEtag(name string, etag string) {
-	err := ioutil.WriteFile(cf.fullPathTo(name+".etag"), []byte(etag), 0644)
+	err := os.WriteFile(cf.fullPathTo(name+".etag"), []byte(etag), 0644)
 	if err != nil {
 		log.Errorf("Unable to save etag for %v: %v", name, err)
 	}
