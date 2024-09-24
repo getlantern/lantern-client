@@ -26,7 +26,7 @@ class SessionModel extends Model {
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> referralNotifier;
   late ValueNotifier<String?> deviceIdNotifier;
-   ValueNotifier<String?> langNotifier=ValueNotifier('en_us');
+  ValueNotifier<String?> langNotifier = ValueNotifier('en_us');
   late ValueNotifier<bool> proxyAllNotifier;
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
@@ -429,6 +429,10 @@ class SessionModel extends Model {
       return await compute(LanternFFI.setProxyAll, isOn ? 'true' : 'false');
     }
     throw Exception("Not supported on mobile");
+  }
+
+  Future<String> proxyAddr() async {
+    return await methodChannel.invokeMethod('proxyAddr', <String, dynamic>{});
   }
 
   /// Auth API end
@@ -876,12 +880,6 @@ class SessionModel extends Model {
       }).then((value) => value as String);
     }
     await compute(LanternFFI.emailExists, email);
-  }
-
-  Future<void> openWebview(String url) {
-    return methodChannel.invokeMethod('openWebview', <String, dynamic>{
-      'url': url,
-    });
   }
 
   Future<void> refreshAppsList() async {
