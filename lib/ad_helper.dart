@@ -37,7 +37,7 @@ class GoogleAdsProvider implements AdsProvider {
     assert(interstitialAdUnitId.isNotEmpty,
         "interstitialAdUnitId should not be null or empty");
 
-    if(isAdsShown) {
+    if (isAdsShown) {
       logger.i("[Ads Manager] Google ad is already shown");
       return;
     }
@@ -74,7 +74,12 @@ class GoogleAdsProvider implements AdsProvider {
           onAdFailedToLoad: (err) {
             _failedLoadAttempts++;
             logger.i('[Ads Manager] failed to load $err');
-            loadInterstitialAd(adLoadedCallback);
+            Future.delayed(
+              const Duration(milliseconds: 500),
+              () {
+                loadInterstitialAd(adLoadedCallback);
+              },
+            );
           },
         ),
       );
@@ -133,13 +138,23 @@ class TapSellAdsProvider implements AdsProvider {
           adLoadedCallback();
         } else {
           _failedLoadAttempts++;
-          loadInterstitialAd(adLoadedCallback);
+          Future.delayed(
+            const Duration(milliseconds: 500),
+            () {
+              loadInterstitialAd(adLoadedCallback);
+            },
+          );
         }
       } catch (e) {
         logger.e("[Ads Manager] requesting tapsell ad failed $e", error: e);
         _failedLoadAttempts++;
         isAdLoading = false;
-        loadInterstitialAd(adLoadedCallback);
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () {
+            loadInterstitialAd(adLoadedCallback);
+          },
+        );
       }
     }
   }
