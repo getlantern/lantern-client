@@ -34,6 +34,5 @@ func configureFronted() {
 	fronted.Configure(certs, cfg.Client.FrontedProviders(), config.DefaultFrontedProviderID, filepath.Join(tempConfigDir, "masquerade_cache"))
 
 	// Perform initial geolookup with a high timeout so that we don't later timeout when trying to
-	geolookup.Refresh()
 	geolookup.GetCountry(5 * time.Second)
 }

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
@@ -94,6 +93,10 @@ func TestProxying(t *testing.T) {
 		newResult, err := Start("testapp", "en_US", testSettings{}, testSession{})
 		require.NoError(t, err, "Should have been able to start lantern twice")
 		require.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address")
+
+		// give the client time to initialize. This helps with consistency in tests
+		time.Sleep(1 * time.Second)
+
 		err = testProxiedRequest(helper, result.HTTPAddr, result.DNSGrabAddr, false)
 		require.NoError(t, err, "Proxying request via HTTP should have worked")
 		err = testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
@@ -160,7 +163,7 @@ func testProxiedRequest(helper *integrationtest.Helper, proxyAddr string, dnsGra
 
 	var buf []byte
 
-	buf, err = ioutil.ReadAll(res.Body)
+	buf, err = io.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}

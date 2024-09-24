@@ -24,6 +24,7 @@ import (
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/embeddedconfig"
 	"github.com/getlantern/flashlight/v7/geolookup"
+
 	"github.com/getlantern/lantern-client/internalsdk/common"
 )
 
@@ -120,7 +121,6 @@ func (cf *configurer) configure(userID int, proToken string, refreshProxies bool
 		log.Errorf("Unable to configure fronting, sticking with embedded configuration: %v", err)
 	} else {
 		log.Debug("Refreshing geolookup")
-		geolookup.Refresh()
 
 		go func() {
 			cf.uc.Country = geolookup.GetCountry(1 * time.Minute)
