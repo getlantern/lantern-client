@@ -47,7 +47,12 @@ android {
         def start = new Date(2015, 1, 1).getTime()
         code = (int) ((now.getTime() - start) / 1000)
     }
-
+    // Use legacy packaging to helps reduce apk size
+    packagingOptions{
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
     defaultConfig {
 
         multiDexEnabled = true
