@@ -39,7 +39,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     //if ads is not ready then wait for at least 5 seconds and then show ads
     //if ads is ready then show ads immediately
 
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       if (vpnStatus != 'connected' && userHasPermission) {
         if (!await adHelper.isAdsReadyToShow()) {
           await vpnModel.connectingDelay(newValue);
@@ -82,8 +82,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
             disabledOpacity: 1,
             enabled: (internetStatusProvider.isConnected &&
                 !vpnNotifier.isFlashlightInitializedFailed),
-            initialValue:
-                vpnStatus == 'connected' || vpnStatus == 'disconnecting' ||vpnStatus == 'connecting',
+            initialValue: vpnStatus == 'connected' ||
+                vpnStatus == 'disconnecting' ||
+                vpnStatus == 'connecting',
             activeColor: onSwitchColor,
             inactiveColor: (internetStatusProvider.isConnected &&
                     !vpnNotifier.isFlashlightInitializedFailed)
@@ -115,8 +116,10 @@ class _VPNSwitchState extends State<VPNSwitch> {
                 : grey3,
             onChanged: (newValue) {
               vpnProcessForDesktop();
-              setState(() {
-                this.vpnStatus = newValue ? 'connected' : 'disconnected';
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() {
+                  this.vpnStatus = newValue ? 'connected' : 'disconnected';
+                });
               });
             },
           );
