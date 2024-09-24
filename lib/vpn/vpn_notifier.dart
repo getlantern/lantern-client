@@ -1,8 +1,14 @@
-import '../common/common.dart';
-import '../ffi.dart';
+import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
+import 'package:tray_manager/tray_manager.dart';
+import 'package:lantern/ffi.dart';
 
-class VPNChangeNotifier extends ChangeNotifier {
+class VPNChangeNotifier with ChangeNotifier {
   Timer? timer;
+  final ValueNotifier<String> _vpnStatus =
+      ValueNotifier<String>('disconnected');
+  ValueNotifier<String> get vpnStatus => _vpnStatus;
+
   bool isFlashlightInitialized = false;
   bool isFlashlightInitializedFailed = false;
   String flashlightState = 'fetching_configuration'.i18n;
@@ -20,6 +26,21 @@ class VPNChangeNotifier extends ChangeNotifier {
 
   (bool, bool, bool) startUpInitCallBacks() {
     return LanternFFI.startUpInitCallBacks();
+  }
+
+  bool _isConnected() => vpnStatus.value == 'connected';
+
+  void toggleConnection() {
+    bool isConnected = _isConnected();
+    if (isConnected) {
+      LanternFFI.sysProxyOff();
+      _vpnStatus.value = 'disconnected';
+    } else {
+      LanternFFI.sysProxyOn();
+      _vpnStatus.value = 'connected';
+    }
+    setupTray(!isConnected);
+    notifyListeners();
   }
 
   void initCallbacks() {

@@ -6,16 +6,19 @@ final vpnModel = VpnModel();
 class VpnModel extends Model {
   late ValueNotifier<String> vpnStatusNotifier;
 
-  VpnModel() : super('vpn') {
-    if (isDesktop()) {
-      vpnStatusNotifier = ValueNotifier("disconnected");
-    }
-  }
+  VpnModel() : super('vpn') {}
 
   Future<void> switchVPN<T>(bool on) async {
     return methodChannel.invokeMethod('switchVPN', <String, dynamic>{
       'on': on,
     });
+  }
+
+  bool isConnected() => vpnStatusNotifier.value == 'connected';
+
+  void toggleVpn() {
+    final newStatus = isConnected() ? 'disconnected' : 'connected';
+    vpnStatusNotifier.value = newStatus;
   }
 
   //This method will create artificial delay in connecting VPN
@@ -27,13 +30,10 @@ class VpnModel extends Model {
   }
 
   Widget vpnStatus(ValueWidgetBuilder<String> builder) {
-    if (isMobile()) {
-      return subscribedSingleValueBuilder<String>(
-        '/vpn_status',
-        builder: builder,
-      );
-    }
-    return FfiValueBuilder<String>('vpnStatus', vpnStatusNotifier, builder);
+    return subscribedSingleValueBuilder<String>(
+      '/vpn_status',
+      builder: builder,
+    );
   }
 
   Future<bool> isVpnConnected() async {

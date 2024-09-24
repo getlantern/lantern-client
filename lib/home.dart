@@ -2,7 +2,6 @@ import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/account/privacy_disclosure.dart';
 import 'package:lantern/common/common.dart';
-import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
@@ -12,8 +11,6 @@ import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
-import 'package:tray_manager/tray_manager.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'messaging/messaging_model.dart';
 
@@ -25,28 +22,19 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WindowListener {
+class _HomePageState extends State<HomePage> {
   Function()? _cancelEventSubscription;
   Function userNew = once<void>();
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _startupSequence();
+      if (isMobile()) {
+        // This is a mobile device
+        channelListener();
+      }
     });
-
     super.initState();
-  }
-
-  void _startupSequence() {
-    if (isMobile()) {
-      // This is a mobile device
-      channelListener();
-    } else {
-      // This is a desktop device
-      setupTrayManager();
-      _initWindowManager();
-    }
   }
 
   void channelListener() {
@@ -96,16 +84,6 @@ class _HomePageState extends State<HomePage> with WindowListener {
     });
   }
 
-  void _initWindowManager() async {
-    windowManager.addListener(this);
-    await windowManager.setPreventClose(true);
-    setState(() {});
-  }
-
-  void setupTrayManager() async {
-    trayManager.addListener(TrayHandler.instance);
-  }
-
   Future<void> _checkForFirstTimeVisit() async {
     checkForFirstTimeVisit() async {
       if (sessionModel.proUserNotifier.value == null) {
@@ -137,42 +115,6 @@ class _HomePageState extends State<HomePage> with WindowListener {
     }
   }
 
-  @override
-  void onWindowClose() async {
-    bool _isPreventClose = await windowManager.isPreventClose();
-    if (_isPreventClose) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text('confirm_close_window'.i18n),
-            actions: [
-              TextButton(
-                child: Text('No'.i18n),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('Yes'.i18n),
-                onPressed: () async {
-                  LanternFFI.exit();
-                  await trayManager.destroy();
-                  await windowManager.destroy();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
-  @override
-  void onWindowEvent(String eventName) {
-    print('[WindowManager] onWindowEvent: $eventName');
-  }
-
   Future<dynamic> _handleNativeNavigationRequest(MethodCall methodCall) async {
     switch (methodCall.method) {
       case 'openConversation':
@@ -186,10 +128,6 @@ class _HomePageState extends State<HomePage> with WindowListener {
 
   @override
   void dispose() {
-    if (isDesktop()) {
-      trayManager.removeListener(TrayHandler.instance);
-      windowManager.removeListener(this);
-    }
     if (_cancelEventSubscription != null) {
       _cancelEventSubscription!();
     }

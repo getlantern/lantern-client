@@ -1,11 +1,13 @@
 import 'package:animated_loading_border/animated_loading_border.dart';
 import 'package:app_links/app_links.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/custom_bottom_bar.dart';
 import 'package:lantern/messaging/messaging.dart';
 import 'package:lantern/vpn/vpn_notifier.dart';
-import 'package:lantern/ffi.dart';
+import 'package:tray_manager/tray_manager.dart';
+import 'package:window_manager/window_manager.dart';
 import 'common/ui/custom/internet_checker.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -32,7 +34,7 @@ class LanternApp extends StatefulWidget {
 }
 
 class _LanternAppState extends State<LanternApp>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, TrayListener, WindowListener {
   late final AnimationController networkWarningAnimationController;
   late final Animation networkWarningAnimation;
 
@@ -41,6 +43,10 @@ class _LanternAppState extends State<LanternApp>
     _animateNetworkWarning();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initDeepLinks();
+      if (isDesktop()) {
+        _setupTrayManager();
+        _initWindowManager();
+      }
     });
     super.initState();
   }
@@ -111,6 +117,73 @@ class _LanternAppState extends State<LanternApp>
       }
       // Update the state after running the animations.
     }
+  }
+
+  void _setupTrayManager() async {
+    trayManager.addListener(this);
+    setupTray(false);
+  }
+
+  void _initWindowManager() async {
+    windowManager.addListener(this);
+    await windowManager.setPreventClose(true);
+    setState(() {});
+  }
+
+  @override
+  Future<void> onTrayIconMouseDown() async {
+    windowManager.show();
+    trayManager.popUpContextMenu();
+  }
+
+  @override
+  void onTrayIconRightMouseDown() {
+    trayManager.popUpContextMenu();
+  }
+
+  @override
+  void onWindowEvent(String eventName) {
+    print('[WindowManager] onWindowEvent: $eventName');
+  }
+
+  @override
+  void onWindowClose() async {
+    bool _isPreventClose = await windowManager.isPreventClose();
+    if (_isPreventClose) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text('confirm_close_window'.i18n),
+            actions: [
+              TextButton(
+                child: Text('No'.i18n),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('Yes'.i18n),
+                onPressed: () async {
+                  LanternFFI.exit();
+                  await trayManager.destroy();
+                  await windowManager.destroy();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    if (isDesktop()) {
+      trayManager.removeListener(this);
+      windowManager.removeListener(this);
+    }
+    super.dispose();
   }
 
   @override
