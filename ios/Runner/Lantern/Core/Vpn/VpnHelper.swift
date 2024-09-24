@@ -98,7 +98,7 @@ class VpnHelper: NSObject {
       self.configuring = false
     }
     performAppSetUp()
-   Constants.appGroupDefaults.set(false, forKey: Constants.configupdate)
+    Constants.appGroupDefaults.set(false, forKey: Constants.configupdate)
   }
 
   // MARK: Set Up
@@ -267,7 +267,7 @@ class VpnHelper: NSObject {
         switch result {
         case .success:
           logger.debug("Config fetch succeeded.")
-            if !strongSelf.hasConfiguredThisSession {
+          if !strongSelf.hasConfiguredThisSession {
             logger.debug("Sending configupdate.")
             Constants.appGroupDefaults.set(true, forKey: Constants.configupdate)
           }

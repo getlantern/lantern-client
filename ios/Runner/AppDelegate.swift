@@ -62,8 +62,8 @@ import UIKit
     lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
     sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
     vpnModel = try VpnModel(
-  flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault,
-  sessionModel: sessionModel)
+      flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault,
+      sessionModel: sessionModel)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
   }
 

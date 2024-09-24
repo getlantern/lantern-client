@@ -118,7 +118,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   func observeConfigUpdates() {
     logger.debug("observing config udpates")
     Constants.appGroupDefaults.addObserver(
-        self, forKeyPath: Constants.configupdate, options: [.new], context: nil)
+      self, forKeyPath: Constants.configupdate, options: [.new], context: nil)
   }
 
   // System method that observe value user default path
@@ -138,15 +138,15 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
         logger.debug("Bandwidth message coming from tunnel")
         updateBandwidth(bandwidth: bandwidthData)
       }
-   case Constants.configupdate:
-        if let config = change![.newKey] as? Bool {
-            if config {
-                logger.debug("upcomming message from vpn config")
-                checkForAvaliabelFeature()
-            }
-          
+    case Constants.configupdate:
+      if let config = change![.newKey] as? Bool {
+        if config {
+          logger.debug("upcomming message from vpn config")
+          checkForAvaliabelFeature()
         }
-        
+
+      }
+
     default:
       logger.debug("Unknown message \(keyPath)")
     }

@@ -101,7 +101,7 @@ class Settings extends StatelessWidget {
                   : const SizedBox(),
             ),
           //* Split tunneling
-          if (!isDesktop() && !Platform.isIOS)
+          if (Platform.isAndroid)
             sessionModel.splitTunneling(
               (BuildContext context, bool value, Widget? child) =>
                   ListItemFactory.settingsItem(

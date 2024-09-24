@@ -65,8 +65,6 @@ class _VPNSwitchState extends State<VPNSwitch> {
     final vpnNotifier = context.watch<VPNChangeNotifier>();
     if (isMobile()) {
       return sessionModel.shouldShowAds((context, provider, child) {
-        //Since we don't have feature flag on ios at the moment
-        // disable ads'
         adHelper.loadAds(provider: provider);
         return vpnModel
             .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
