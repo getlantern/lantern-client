@@ -167,11 +167,11 @@ dependency_overrides:
       url: https://github.com/andychucs/flutter_inappwebview.git
       ref: master
       path: flutter_inappwebview_macos
-  flutter_inappwebview_ios:
-    git:
-      url: https://github.com/andychucs/flutter_inappwebview.git
-      ref: master
-      path: flutter_inappwebview_ios
+#  flutter_inappwebview_ios:
+#    git:
+#      url: https://github.com/andychucs/flutter_inappwebview.git
+#      ref: master
+#      path: flutter_inappwebview_ios
 
 # The following section is specific to Flutter.
 flutter:

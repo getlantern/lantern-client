@@ -107,7 +107,7 @@ class AppBrowser extends InAppBrowser {
       navigationAction) async {
     final url = navigationAction.request.url!;
     if (url.scheme.startsWith("alipay")) {
-       launchUrl(url, mode: LaunchMode.platformDefault);
+      launchUrl(url, mode: LaunchMode.platformDefault);
       return NavigationActionPolicy.CANCEL;
     }
     return NavigationActionPolicy.ALLOW;
@@ -144,11 +144,8 @@ class AppBrowser extends InAppBrowser {
         await openWindowsWebview(url);
         break;
       case 'macos':
-
-        ///**Officially Supported Platforms/Implementations**:
-        ///- Android native WebView
-        ///- iOS
-        ///- MacOS
+        InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+      case 'ios':
         InAppBrowser.openWithSystemBrowser(url: WebUri(url));
         break;
       default:
