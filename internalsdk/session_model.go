@@ -202,7 +202,9 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 func (m *SessionModel) setupIosConfigure(configPath string, userId int, token string, deviceId string) {
 	go func() {
 		cf := ios.NewConfigurer(configPath, userId, token, deviceId, "")
-		for {
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
+		for range ticker.C {
 			if cf.HasGlobalConfig() {
 				global, _, _, err := cf.OpenGlobal()
 				if err != nil {
@@ -211,10 +213,9 @@ func (m *SessionModel) setupIosConfigure(configPath string, userId int, token st
 				}
 				m.iosConfigurer = global
 				log.Debugf("Found global config IOS configure done %v", global)
-				break
+				return // Exit the loop after success
 			}
-			time.Sleep(1 * time.Second)
-			log.Debugf("global config not available trying ")
+			log.Debugf("global config not available, retrying...")
 		}
 	}()
 }
@@ -1552,8 +1553,14 @@ func checkAdsEnabled(session *SessionModel) error {
 		})
 	}
 	// If the user has all permissions but is not a pro user, enable ads:
-	googleAdsEnable, _ := pathdb.Get[bool](session.db, pathShouldShowGoogleAds)
-	tapSellAdsEnable, _ := pathdb.Get[bool](session.db, pathTapSellAdsEnabled)
+	googleAdsEnable, err := pathdb.Get[bool](session.db, pathShouldShowGoogleAds)
+	if err != nil {
+		return err
+	}
+	tapSellAdsEnable, err := pathdb.Get[bool](session.db, pathTapSellAdsEnabled)
+	if err != nil {
+		return err
+	}
 	if googleAdsEnable {
 		log.Debug("Google Ads is enabled")
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
