@@ -34,7 +34,7 @@ class LanternApp extends StatefulWidget {
 }
 
 class _LanternAppState extends State<LanternApp>
-    with SingleTickerProviderStateMixin, TrayListener, WindowListener {
+    with SingleTickerProviderStateMixin {
   late final AnimationController networkWarningAnimationController;
   late final Animation networkWarningAnimation;
 
@@ -43,10 +43,6 @@ class _LanternAppState extends State<LanternApp>
     _animateNetworkWarning();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initDeepLinks();
-      if (isDesktop()) {
-        _setupTrayManager();
-        _initWindowManager();
-      }
     });
     super.initState();
   }
@@ -117,73 +113,6 @@ class _LanternAppState extends State<LanternApp>
       }
       // Update the state after running the animations.
     }
-  }
-
-  void _setupTrayManager() async {
-    trayManager.addListener(this);
-    setupTray(false);
-  }
-
-  void _initWindowManager() async {
-    windowManager.addListener(this);
-    await windowManager.setPreventClose(true);
-    setState(() {});
-  }
-
-  @override
-  Future<void> onTrayIconMouseDown() async {
-    windowManager.show();
-    trayManager.popUpContextMenu();
-  }
-
-  @override
-  void onTrayIconRightMouseDown() {
-    trayManager.popUpContextMenu();
-  }
-
-  @override
-  void onWindowEvent(String eventName) {
-    print('[WindowManager] onWindowEvent: $eventName');
-  }
-
-  @override
-  void onWindowClose() async {
-    bool _isPreventClose = await windowManager.isPreventClose();
-    if (_isPreventClose) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text('confirm_close_window'.i18n),
-            actions: [
-              TextButton(
-                child: Text('No'.i18n),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('Yes'.i18n),
-                onPressed: () async {
-                  LanternFFI.exit();
-                  await trayManager.destroy();
-                  await windowManager.destroy();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    if (isDesktop()) {
-      trayManager.removeListener(this);
-      windowManager.removeListener(this);
-    }
-    super.dispose();
   }
 
   @override

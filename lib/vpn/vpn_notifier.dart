@@ -28,19 +28,12 @@ class VPNChangeNotifier with ChangeNotifier {
     return LanternFFI.startUpInitCallBacks();
   }
 
-  bool _isConnected() => vpnStatus.value == 'connected';
+  bool isConnected() => vpnStatus.value == 'connected';
 
   void toggleConnection() {
-    bool isConnected = _isConnected();
-    if (isConnected) {
-      LanternFFI.sysProxyOff();
-      _vpnStatus.value = 'disconnected';
-    } else {
-      LanternFFI.sysProxyOn();
-      _vpnStatus.value = 'connected';
-    }
-    setupTray(!isConnected);
-    notifyListeners();
+    bool connected = isConnected();
+    String newStatus = connected ? 'disconnected' : 'connected';
+    _vpnStatus.value = newStatus;
   }
 
   void initCallbacks() {

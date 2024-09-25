@@ -2,15 +2,20 @@ import 'package:lantern/account/account_tab.dart';
 import 'package:lantern/account/developer_settings.dart';
 import 'package:lantern/account/privacy_disclosure.dart';
 import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/custom_bottom_bar.dart';
+import 'package:lantern/ffi.dart';
 import 'package:lantern/messaging/chats.dart';
 import 'package:lantern/messaging/onboarding/welcome.dart';
 import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/replica/replica_tab.dart';
 import 'package:lantern/vpn/try_lantern_chat.dart';
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/vpn/vpn_notifier.dart';
 import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
+import 'package:tray_manager/tray_manager.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'messaging/messaging_model.dart';
 
@@ -22,19 +27,134 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   Function()? _cancelEventSubscription;
   Function userNew = once<void>();
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (isMobile()) {
-        // This is a mobile device
-        channelListener();
-      }
+      _startupSequence();
     });
     super.initState();
+  }
+
+  void _startupSequence() {
+    if (isMobile()) {
+      // This is a mobile device
+      channelListener();
+    } else {
+      // This is a desktop device
+      _setupTrayManager();
+      _initWindowManager();
+    }
+  }
+
+  void _setupTrayManager() async {
+    trayManager.addListener(this);
+    _setupTray();
+  }
+
+  void _initWindowManager() async {
+    windowManager.addListener(this);
+    await windowManager.setPreventClose(true);
+    setState(() {});
+  }
+
+  Future<void> _updateTrayMenu() async {
+    final isConnected =
+        context.read<VPNChangeNotifier>().vpnStatus.value == 'connected';
+    await trayManager.setIcon(systemTrayIcon(isConnected));
+    Menu menu = Menu(
+      items: [
+        MenuItem(
+          key: 'status',
+          disabled: true,
+          label: isConnected ? 'status_on'.i18n : 'status_off'.i18n,
+        ),
+        MenuItem(
+            key: 'status',
+            label: isConnected ? 'disconnect'.i18n : 'connect'.i18n,
+            onClick: (item) {
+              trayManager.setIcon(systemTrayIcon(!isConnected));
+              if (isConnected) {
+                LanternFFI.sysProxyOff();
+              } else {
+                LanternFFI.sysProxyOn();
+              }
+              context.read<VPNChangeNotifier>().toggleConnection();
+            }),
+        MenuItem.separator(),
+        MenuItem(
+            key: 'show_window',
+            label: 'show'.i18n,
+            onClick: (item) {
+              windowManager.focus();
+              windowManager.setSkipTaskbar(false);
+            }),
+        MenuItem.separator(),
+        MenuItem(
+            key: 'exit',
+            label: 'exit'.i18n,
+            onClick: (item) {
+              windowManager.destroy();
+              LanternFFI.exit();
+            }),
+      ],
+    );
+    await trayManager.setContextMenu(menu);
+  }
+
+  void _setupTray() async {
+    final vpnNotifier = context.read<VPNChangeNotifier>();
+    await _updateTrayMenu();
+    vpnNotifier.vpnStatus.addListener(_updateTrayMenu);
+  }
+
+  @override
+  Future<void> onTrayIconMouseDown() async {
+    windowManager.show();
+    trayManager.popUpContextMenu();
+  }
+
+  @override
+  void onTrayIconRightMouseDown() {
+    trayManager.popUpContextMenu();
+  }
+
+  @override
+  void onWindowEvent(String eventName) {
+    print('[WindowManager] onWindowEvent: $eventName');
+  }
+
+  @override
+  void onWindowClose() async {
+    bool isPreventClose = await windowManager.isPreventClose();
+    if (!isPreventClose) return;
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('confirm_close_window'.i18n),
+          actions: [
+            TextButton(
+              child: Text('No'.i18n),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Yes'.i18n),
+              onPressed: () async {
+                LanternFFI.exit();
+                await trayManager.destroy();
+                await windowManager.destroy();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void channelListener() {
@@ -128,6 +248,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    if (isDesktop()) {
+      trayManager.removeListener(this);
+      windowManager.removeListener(this);
+    }
     if (_cancelEventSubscription != null) {
       _cancelEventSubscription!();
     }

@@ -53,6 +53,7 @@ class CustomBottomBar extends StatelessWidget {
           showSelectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: buildItems(
+            context,
             indexToTab,
             tabToIndex,
             currentIndex,
@@ -68,6 +69,7 @@ class CustomBottomBar extends StatelessWidget {
   }
 
   List<BottomNavigationBarItem> buildItems(
+    BuildContext context,
     Map<int, String> indexToTab,
     Map<String, int> tabToIndex,
     int currentIndex,
@@ -167,6 +169,7 @@ class CustomBottomBar extends StatelessWidget {
           label: 'VPN'.i18n,
           icon: ImagePaths.key,
           labelWidget: vpnModel.vpnStatus(
+            context,
             (context, value, child) => Padding(
               padding: const EdgeInsetsDirectional.only(start: 4.0),
               child: CircleAvatar(

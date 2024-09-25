@@ -61,8 +61,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
         if (Platform.isAndroid) {
           adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
         }
-        return vpnModel
-            .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+        return vpnModel.vpnStatus(context,
+            (BuildContext context, String vpnStatus, Widget? child) {
           // Changes scale on mobile due to hit target
           return AdvancedSwitch(
             width: 150,

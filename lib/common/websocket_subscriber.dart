@@ -126,7 +126,7 @@ class WebsocketSubscriber {
               final vpnStatus =
                   res.toString() == "true" ? "connected" : "disconnected";
               _webSocketLogger.i("Websocket message[VPNStatus]: $vpnStatus");
-              vpnModel.vpnStatusNotifier.value = vpnStatus;
+              //vpnModel.vpnStatusNotifier.value = vpnStatus;
             }
             break;
         }
@@ -144,9 +144,7 @@ void _updatePlans(Map<String, Plan>? plans) {
   if (plans != null) {
     sessionModel.plansNotifier.value.clearPaths();
     plans.forEach((key, plan) {
-      if (plan != null) {
-        sessionModel.plansNotifier.value.map[key] = plan;
-      }
+      sessionModel.plansNotifier.value.map[key] = plan;
     });
   }
 }

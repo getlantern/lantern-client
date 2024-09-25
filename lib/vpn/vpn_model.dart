@@ -1,24 +1,16 @@
 import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/vpn/vpn.dart';
+import 'package:lantern/vpn/vpn_notifier.dart';
 
 final vpnModel = VpnModel();
 
 class VpnModel extends Model {
-  late ValueNotifier<String> vpnStatusNotifier;
-
   VpnModel() : super('vpn') {}
 
   Future<void> switchVPN<T>(bool on) async {
     return methodChannel.invokeMethod('switchVPN', <String, dynamic>{
       'on': on,
     });
-  }
-
-  bool isConnected() => vpnStatusNotifier.value == 'connected';
-
-  void toggleVpn() {
-    final newStatus = isConnected() ? 'disconnected' : 'connected';
-    vpnStatusNotifier.value = newStatus;
   }
 
   //This method will create artificial delay in connecting VPN
@@ -29,7 +21,12 @@ class VpnModel extends Model {
     });
   }
 
-  Widget vpnStatus(ValueWidgetBuilder<String> builder) {
+  Widget vpnStatus(BuildContext context, ValueWidgetBuilder<String> builder) {
+    if (isDesktop()) {
+      final vpnNotifier = context.watch<VPNChangeNotifier>();
+      return FfiValueBuilder<String>(
+          'vpnStatus', vpnNotifier.vpnStatus, builder);
+    }
     return subscribedSingleValueBuilder<String>(
       '/vpn_status',
       builder: builder,
