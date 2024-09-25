@@ -17,15 +17,14 @@ class VPNSwitch extends StatefulWidget {
 //https://pub.dev/packages/animated_toggle_switch
 class _VPNSwitchState extends State<VPNSwitch> {
   final adHelper = AdHelper();
-  String vpnStatus = 'disconnected';
+
+
+
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
   Future<void> vpnProcessForDesktop(String vpnStatus) async {
     bool isConnected = vpnStatus == 'connected';
-    setState(() {
-      this.vpnStatus = vpnStatus;
-    });
     if (isConnected) {
       LanternFFI.sysProxyOn();
     } else {

@@ -136,9 +136,8 @@ class WebsocketSubscriber {
   }
 }
 
-/// Socket internal methods
 
-// Method to update plans
+/// Method to update plans
 void _updatePlans(Map<String, Plan>? plans) {
   if (plans != null) {
     sessionModel.plansNotifier.value.clearPaths();
