@@ -23,6 +23,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   Future<void> vpnProcessForDesktop(String vpnStatus) async {
     bool isConnected = vpnStatus == 'connected';
+    setState(() {
+      this.vpnStatus = vpnStatus;
+    });
     if (isConnected) {
       LanternFFI.sysProxyOn();
     } else {
@@ -111,11 +114,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
               : grey3,
           onChanged: (newValue) {
             final newStatus = newValue ? 'connected' : 'disconnected';
-            vpnProcessForDesktop(newStatus);
-            setState(() {
-              vpnStatus = newStatus;
-            });
             context.read<VPNChangeNotifier>().vpnStatus.value = newStatus;
+            vpnProcessForDesktop(newStatus);
           },
         ),
       );
