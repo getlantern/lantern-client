@@ -101,7 +101,12 @@ class _VPNSwitchState extends State<VPNSwitch> {
                   !vpnNotifier.isFlashlightInitializedFailed)
               ? offSwitchColor
               : grey3,
-          onChanged: (newValue) => vpnNotifier.toggleConnection(),
+          onChanged: (newValue) {
+            vpnNotifier.toggleConnection();
+            setState(() {
+              this.vpnStatus = newValue ? 'connected' : 'disconnected';
+            });
+          },
         ),
       );
     }

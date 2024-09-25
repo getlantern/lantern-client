@@ -39,6 +39,7 @@ class VPNChangeNotifier with ChangeNotifier {
       LanternFFI.sysProxyOn();
     }
     _vpnStatus.value = newStatus;
+    notifyListeners();
   }
 
   void initCallbacks() {

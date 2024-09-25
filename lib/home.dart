@@ -73,11 +73,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
           label: isConnected ? 'status_on'.i18n : 'status_off'.i18n,
         ),
         MenuItem(
-            key: 'status',
-            label: isConnected ? 'disconnect'.i18n : 'connect'.i18n,
-            onClick: (item) {
-              context.read<VPNChangeNotifier>().toggleConnection();
-            }),
+          key: 'status',
+          label: isConnected ? 'disconnect'.i18n : 'connect'.i18n,
+          onClick: (item) =>
+              context.read<VPNChangeNotifier>().toggleConnection(),
+        ),
         MenuItem.separator(),
         MenuItem(
             key: 'show_window',
