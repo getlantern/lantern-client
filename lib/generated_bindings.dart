@@ -182,36 +182,6 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('start');
   late final _start = _startPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> onSuccess() {
-    return _onSuccess();
-  }
-
-  late final _onSuccessPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'onSuccess');
-  late final _onSuccess =
-      _onSuccessPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> hasProxyFected() {
-    return _hasProxyFected();
-  }
-
-  late final _hasProxyFectedPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'hasProxyFected');
-  late final _hasProxyFected =
-      _hasProxyFectedPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> hasConfigFected() {
-    return _hasConfigFected();
-  }
-
-  late final _hasConfigFectedPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'hasConfigFected');
-  late final _hasConfigFected =
-      _hasConfigFectedPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   void sysProxyOn() {
     return _sysProxyOn();
   }
