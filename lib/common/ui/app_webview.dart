@@ -50,9 +50,12 @@ class AppBrowser extends InAppBrowser {
 
   static final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
     browserSettings: InAppBrowserSettings(
-      hideTitleBar: true,
-      hideToolbarBottom: true,
-      presentationStyle: ModalPresentationStyle.POPOVER,
+      hideTitleBar: false,
+      hideToolbarBottom: false,
+      hideCloseButton: false,
+      hideUrlBar: true,
+      hidden: false,
+      presentationStyle: ModalPresentationStyle.FULL_SCREEN,
     ),
     webViewSettings: InAppWebViewSettings(
       sharedCookiesEnabled: true,
@@ -107,7 +110,7 @@ class AppBrowser extends InAppBrowser {
       navigationAction) async {
     final url = navigationAction.request.url!;
     if (url.scheme.startsWith("alipay")) {
-      launchUrl(url, mode: LaunchMode.platformDefault);
+      launchUrl(url, mode: LaunchMode.platformDefault,);
       return NavigationActionPolicy.CANCEL;
     }
     return NavigationActionPolicy.ALLOW;
@@ -152,7 +155,11 @@ class AppBrowser extends InAppBrowser {
         await setProxyAddr();
         final instance = AppBrowser();
         await instance.openUrlRequest(
-          urlRequest: URLRequest(url: WebUri(url)),
+          urlRequest: URLRequest(
+            url: WebUri(url),
+            allowsCellularAccess: true
+
+          ),
           settings: settings,
         );
         break;

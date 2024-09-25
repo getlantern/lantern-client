@@ -1,8 +1,13 @@
-import '../common/common.dart';
-import '../ffi.dart';
+import 'package:lantern/common/common.dart';
+import 'package:lantern/common/common_desktop.dart';
+import 'package:lantern/ffi.dart';
 
-class VPNChangeNotifier extends ChangeNotifier {
+class VPNChangeNotifier with ChangeNotifier {
   Timer? timer;
+  final ValueNotifier<String> _vpnStatus =
+      ValueNotifier<String>('disconnected');
+
+  ValueNotifier<String> get vpnStatus => _vpnStatus;
   bool isFlashlightInitialized = false;
   bool isFlashlightInitializedFailed = false;
   String flashlightState = 'fetching_configuration'.i18n;
@@ -11,43 +16,36 @@ class VPNChangeNotifier extends ChangeNotifier {
     if (isMobile()) {
       initCallbackForMobile();
     } else {
-      // TODO: change to call initCallbacks again
-      isFlashlightInitialized = true;
-      isFlashlightInitializedFailed = false;
-      //initCallbacks();
+      initCallbacksDesktop();
     }
   }
 
-  (bool, bool, bool) startUpInitCallBacks() {
-    return LanternFFI.startUpInitCallBacks();
+  bool isConnected() => vpnStatus.value == 'connected';
+
+  void toggleConnection() {
+    if (isConnected()) {
+      LanternFFI.sysProxyOff();
+      _vpnStatus.value = 'disconnected';
+    } else {
+      LanternFFI.sysProxyOn();
+      _vpnStatus.value = 'connected';
+    }
+    notifyListeners();
   }
 
-  void initCallbacks() {
+  void initCallbacksDesktop() {
     if (timer != null) {
       return;
     }
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      final result = startUpInitCallBacks();
-      if (!result.$1 || !result.$2) {
-        flashlightState = 'fetching_configuration'.i18n;
+      final configNotifier = sessionModel.configNotifier.value;
+      if (configNotifier == null) {
+        return;
       }
-      if (result.$1 && result.$2 && !result.$3) {
-        flashlightState = 'establish_connection_to_server'.i18n;
-      }
-      if (result.$1 && result.$2 && result.$3) {
-        // everything is initialized
-        isFlashlightInitialized = true;
-        isFlashlightInitializedFailed = false;
-        print("flashlight initialized");
-        timer?.cancel();
-      } else if (timer != null && timer!.tick >= 6) {
-        // Timer has reached 6 seconds
-        // Stop the timer and set isFlashlightInitialized to true
-        print("flashlight fail initialized");
-        isFlashlightInitialized = true;
-        isFlashlightInitializedFailed = true;
-      }
-      notifyListeners();
+      updateStatus(
+          configNotifier.fetchedProxiesConfig,
+          configNotifier.fetchedGlobalConfig,
+          configNotifier.hasSucceedingProxy);
     });
   }
 
@@ -81,25 +79,6 @@ class VPNChangeNotifier extends ChangeNotifier {
     final successNotifier =
         sessionModel.pathValueNotifier('hasOnSuccess', false);
 
-    updateStatus(bool proxy, bool config, bool success) {
-      if (proxy || config) {
-        flashlightState = 'fetching_configuration'.i18n;
-      }
-      if (proxy && config && !success) {
-        flashlightState = 'establish_connection_to_server'.i18n;
-      }
-      notifyListeners();
-
-      if (proxy && proxy && success) {
-        // everything is initialized
-        isFlashlightInitialized = true;
-        isFlashlightInitializedFailed = false;
-        timer?.cancel();
-        print("flashlight initialized");
-        notifyListeners();
-      }
-    }
-
     configNotifier.addListener(() {
       updateStatus(
           proxyNotifier.value!, configNotifier.value!, successNotifier.value!);
@@ -113,6 +92,25 @@ class VPNChangeNotifier extends ChangeNotifier {
       updateStatus(
           proxyNotifier.value!, configNotifier.value!, successNotifier.value!);
     });
+  }
+
+  void updateStatus(bool proxy, bool config, bool success) {
+    if (proxy || config) {
+      flashlightState = 'fetching_configuration'.i18n;
+    }
+    if (proxy && config && !success) {
+      flashlightState = 'establish_connection_to_server'.i18n;
+    }
+    notifyListeners();
+
+    if (proxy && proxy && success) {
+      // everything is initialized
+      isFlashlightInitialized = true;
+      isFlashlightInitializedFailed = false;
+      timer?.cancel();
+      print("flashlight initialized");
+      notifyListeners();
+    }
   }
 
   @override

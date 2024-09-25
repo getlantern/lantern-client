@@ -3,8 +3,8 @@ import 'package:lantern/vpn/vpn.dart';
 class VPNStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return vpnModel
-        .vpnStatus((BuildContext context, String vpnStatus, Widget? child) {
+    return vpnModel.vpnStatus(context,
+        (BuildContext context, String vpnStatus, Widget? child) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
