@@ -5,7 +5,7 @@ import 'package:lantern/vpn/vpn_notifier.dart';
 final vpnModel = VpnModel();
 
 class VpnModel extends Model {
-  VpnModel() : super('vpn') {}
+  VpnModel() : super('vpn');
 
   Future<void> switchVPN<T>(bool on) async {
     return methodChannel.invokeMethod('switchVPN', <String, dynamic>{
