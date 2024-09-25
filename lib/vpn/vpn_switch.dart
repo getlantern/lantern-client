@@ -21,6 +21,15 @@ class _VPNSwitchState extends State<VPNSwitch> {
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
+  Future<void> vpnProcessForDesktop(String vpnStatus) async {
+    bool isConnected = vpnStatus == 'connected';
+    if (isConnected) {
+      LanternFFI.sysProxyOn();
+    } else {
+      LanternFFI.sysProxyOff();
+    }
+  }
+
   Future<void> vpnProcessForMobile(
       bool newValue, String vpnStatus, bool userHasPermission) async {
     //Make sure user has permission all the permission
@@ -93,18 +102,20 @@ class _VPNSwitchState extends State<VPNSwitch> {
           disabledOpacity: 1,
           enabled: (internetStatusProvider.isConnected &&
               !vpnNotifier.isFlashlightInitializedFailed),
-          initialValue:
-              vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+          initialValue: vpnNotifier.vpnStatus.value == 'connected' ||
+              vpnNotifier.vpnStatus.value == 'disconnecting',
           activeColor: onSwitchColor,
           inactiveColor: (internetStatusProvider.isConnected &&
                   !vpnNotifier.isFlashlightInitializedFailed)
               ? offSwitchColor
               : grey3,
           onChanged: (newValue) {
-            vpnNotifier.toggleConnection();
+            final newStatus = newValue ? 'connected' : 'disconnected';
+            vpnProcessForDesktop(newStatus);
             setState(() {
-              this.vpnStatus = newValue ? 'connected' : 'disconnected';
+              vpnStatus = newStatus;
             });
+            context.read<VPNChangeNotifier>().vpnStatus.value = newStatus;
           },
         ),
       );
