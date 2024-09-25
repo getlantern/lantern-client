@@ -16,8 +16,9 @@ class VPNSwitch extends StatefulWidget {
 //implement this switch with loading implementation
 //https://pub.dev/packages/animated_toggle_switch
 class _VPNSwitchState extends State<VPNSwitch> {
+  final switchController = ValueNotifier<bool>(false);
   final adHelper = AdHelper();
-
+  String vpnStatus = 'disconnected';
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
@@ -87,25 +88,22 @@ class _VPNSwitchState extends State<VPNSwitch> {
     } else {
       // This ui for desktop
       return Transform.scale(
-          scale: 2.5,
-          child: AdvancedSwitch(
-            width: 60,
-            disabledOpacity: 1,
-            enabled: (internetStatusProvider.isConnected &&
-                !vpnNotifier.isFlashlightInitializedFailed),
-            initialValue: vpnNotifier.vpnStatus.value == 'connected' ||
-                vpnNotifier.vpnStatus.value == 'disconnecting',
-            activeColor: onSwitchColor,
-            inactiveColor: (internetStatusProvider.isConnected &&
-                    !vpnNotifier.isFlashlightInitializedFailed)
-                ? offSwitchColor
-                : grey3,
-            onChanged: (newValue) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                vpnNotifier.toggleConnection();
-              });
-            },
-          ));
+        scale: 2.5,
+        child: AdvancedSwitch(
+          width: 60,
+          disabledOpacity: 1,
+          enabled: (internetStatusProvider.isConnected &&
+              !vpnNotifier.isFlashlightInitializedFailed),
+          initialValue:
+              vpnStatus == 'connected' || vpnStatus == 'disconnecting',
+          activeColor: onSwitchColor,
+          inactiveColor: (internetStatusProvider.isConnected &&
+                  !vpnNotifier.isFlashlightInitializedFailed)
+              ? offSwitchColor
+              : grey3,
+          onChanged: (newValue) => vpnNotifier.toggleConnection(),
+        ),
+      );
     }
   }
 }

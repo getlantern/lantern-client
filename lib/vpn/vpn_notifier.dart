@@ -33,6 +33,11 @@ class VPNChangeNotifier with ChangeNotifier {
   void toggleConnection() {
     bool connected = isConnected();
     String newStatus = connected ? 'disconnected' : 'connected';
+    if (connected) {
+      LanternFFI.sysProxyOff();
+    } else {
+      LanternFFI.sysProxyOn();
+    }
     _vpnStatus.value = newStatus;
   }
 

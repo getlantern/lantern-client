@@ -126,7 +126,6 @@ class WebsocketSubscriber {
               final vpnStatus =
                   res.toString() == "true" ? "connected" : "disconnected";
               _webSocketLogger.i("Websocket message[VPNStatus]: $vpnStatus");
-              //vpnModel.vpnStatusNotifier.value = vpnStatus;
             }
             break;
         }

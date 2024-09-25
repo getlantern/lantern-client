@@ -76,12 +76,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             key: 'status',
             label: isConnected ? 'disconnect'.i18n : 'connect'.i18n,
             onClick: (item) {
-              trayManager.setIcon(systemTrayIcon(!isConnected));
-              if (isConnected) {
-                LanternFFI.sysProxyOff();
-              } else {
-                LanternFFI.sysProxyOn();
-              }
               context.read<VPNChangeNotifier>().toggleConnection();
             }),
         MenuItem.separator(),

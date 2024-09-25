@@ -23,9 +23,8 @@ class VpnModel extends Model {
 
   Widget vpnStatus(BuildContext context, ValueWidgetBuilder<String> builder) {
     if (isDesktop()) {
-      final vpnNotifier = context.watch<VPNChangeNotifier>();
       return FfiValueBuilder<String>(
-          'vpnStatus', vpnNotifier.vpnStatus, builder);
+          'vpnStatus', context.read<VPNChangeNotifier>().vpnStatus, builder);
     }
     return subscribedSingleValueBuilder<String>(
       '/vpn_status',
