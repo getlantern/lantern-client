@@ -121,6 +121,9 @@ class TapSellAdsProvider implements AdsProvider {
 
   @override
   Future<void> loadInterstitialAd(VoidCallback adLoadedCallback) async {
+    // Since we are showing ads to non-EU user
+    Tapsell.setUserConsent(true);
+
     if (isAdLoading || isAdsShown || appId.isNotEmpty) {
       logger.i(
           "[Ads Manager] Tapsell ad is already loading $isAdLoading or shown $isAdsShown");
@@ -213,6 +216,10 @@ class AdHelper {
   }
 
   Future<void> loadAds({required String provider}) async {
+    if(provider.isEmpty){
+      logger.i("[Ads Manager] Provider is empty do not show ads");
+      return;
+    }
     if (provider == _AdsProvider.google.name) {
       logger.i("[Ads Manager] Loading Google Ads");
       await googleAdsService.loadInterstitialAd(showAds);
