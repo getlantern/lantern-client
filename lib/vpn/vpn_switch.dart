@@ -16,7 +16,6 @@ class VPNSwitch extends StatefulWidget {
 //implement this switch with loading implementation
 //https://pub.dev/packages/animated_toggle_switch
 class _VPNSwitchState extends State<VPNSwitch> {
-  final switchController = ValueNotifier<bool>(false);
   final adHelper = AdHelper();
   String vpnStatus = 'disconnected';
   bool isIdle(String vpnStatus) =>
