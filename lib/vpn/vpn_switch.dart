@@ -18,47 +18,6 @@ class VPNSwitch extends StatefulWidget {
 class _VPNSwitchState extends State<VPNSwitch> {
   final adHelper = AdHelper();
 
-
-
-  bool isIdle(String vpnStatus) =>
-      vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
-
-  Future<void> vpnProcessForDesktop(String vpnStatus) async {
-    bool isConnected = vpnStatus == 'connected';
-    if (isConnected) {
-      LanternFFI.sysProxyOn();
-    } else {
-      LanternFFI.sysProxyOff();
-    }
-  }
-
-  Future<void> vpnProcessForMobile(
-      bool newValue, String vpnStatus, bool userHasPermission) async {
-    //Make sure user has permission all the permission
-    //if ads is not ready then wait for at least 5 seconds and then show ads
-    //if ads is ready then show ads immediately
-
-    if (Platform.isAndroid) {
-      if (vpnStatus != 'connected' && userHasPermission) {
-        if (!await adHelper.isAdsReadyToShow()) {
-          await vpnModel.connectingDelay(newValue);
-          await Future.delayed(const Duration(seconds: 5));
-        }
-      }
-    }
-    await vpnModel.switchVPN(newValue);
-
-    //add delayed to avoid flickering
-    if (vpnStatus != 'connected') {
-      Future.delayed(
-        const Duration(seconds: 1),
-        () async {
-          await adHelper.showAds();
-        },
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final internetStatusProvider = context.watch<InternetStatusProvider>();
@@ -97,26 +56,64 @@ class _VPNSwitchState extends State<VPNSwitch> {
       });
     } else {
       // This ui for desktop
-      return Transform.scale(
-        scale: 2.5,
-        child: AdvancedSwitch(
-          width: 60,
-          disabledOpacity: 1,
-          enabled: (internetStatusProvider.isConnected &&
-              !vpnNotifier.isFlashlightInitializedFailed),
-          initialValue: vpnNotifier.vpnStatus.value == 'connected' ||
-              vpnNotifier.vpnStatus.value == 'disconnecting',
-          activeColor: onSwitchColor,
-          inactiveColor: (internetStatusProvider.isConnected &&
-                  !vpnNotifier.isFlashlightInitializedFailed)
-              ? offSwitchColor
-              : grey3,
-          onChanged: (newValue) {
-            final newStatus = newValue ? 'connected' : 'disconnected';
-            context.read<VPNChangeNotifier>().vpnStatus.value = newStatus;
-            vpnProcessForDesktop(newStatus);
-          },
-        ),
+      return AdvancedSwitch(
+        width: 160,
+        height: 70,
+        borderRadius: BorderRadius.circular(40),
+        disabledOpacity: 1,
+        enabled: (internetStatusProvider.isConnected &&
+            !vpnNotifier.isFlashlightInitializedFailed),
+        initialValue: vpnNotifier.vpnStatus.value == 'connected' ||
+            vpnNotifier.vpnStatus.value == 'disconnecting',
+        activeColor: onSwitchColor,
+        inactiveColor: (internetStatusProvider.isConnected &&
+                !vpnNotifier.isFlashlightInitializedFailed)
+            ? offSwitchColor
+            : grey3,
+        onChanged: (newValue) {
+          final newStatus = newValue ? 'connected' : 'disconnected';
+          context.read<VPNChangeNotifier>().vpnStatus.value = newStatus;
+          vpnProcessForDesktop(newStatus);
+        },
+      );
+    }
+  }
+
+  bool isIdle(String vpnStatus) =>
+      vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
+
+  Future<void> vpnProcessForDesktop(String vpnStatus) async {
+    bool isConnected = vpnStatus == 'connected';
+    if (isConnected) {
+      LanternFFI.sysProxyOn();
+    } else {
+      LanternFFI.sysProxyOff();
+    }
+  }
+
+  Future<void> vpnProcessForMobile(
+      bool newValue, String vpnStatus, bool userHasPermission) async {
+    //Make sure user has permission all the permission
+    //if ads is not ready then wait for at least 5 seconds and then show ads
+    //if ads is ready then show ads immediately
+
+    if (Platform.isAndroid) {
+      if (vpnStatus != 'connected' && userHasPermission) {
+        if (!await adHelper.isAdsReadyToShow()) {
+          await vpnModel.connectingDelay(newValue);
+          await Future.delayed(const Duration(seconds: 5));
+        }
+      }
+    }
+    await vpnModel.switchVPN(newValue);
+
+    //add delayed to avoid flickering
+    if (vpnStatus != 'connected') {
+      Future.delayed(
+        const Duration(seconds: 1),
+        () async {
+          await adHelper.showAds();
+        },
       );
     }
   }
