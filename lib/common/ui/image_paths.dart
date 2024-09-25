@@ -158,6 +158,13 @@ class ImagePaths {
   static const addAccountIllustration = 'assets/images/add_account_illustration.svg';
   static const cloudOff = 'assets/images/cloud_off.svg';
   static const restore = 'assets/images/restore.svg';
+  static const lanternConnected = 'assets/images/lantern_connected.png';
+  static const lanternDisconnected = 'assets/images/lantern_disconnected.png';
+  static const lanternDiss = 'assets/images/lantern_dis.png';
+  static const lanternConnectedIco = 'assets/images/lantern_connected.ico';
+  static const lanternDisconnectedIco = 'assets/images/lantern_disconnected.ico';
+
+
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';
