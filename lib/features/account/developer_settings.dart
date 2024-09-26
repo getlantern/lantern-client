@@ -1,8 +1,7 @@
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:lantern/features/messaging/messaging.dart';
 import 'package:lantern/features/replica/common.dart';
-import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/replica/common.dart';
+
 
 class DeveloperSettingsTab extends StatelessWidget {
   DeveloperSettingsTab({Key? key}) : super(key: key);

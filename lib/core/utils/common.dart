@@ -8,7 +8,7 @@ export 'dart:convert';
 export 'dart:io';
 export 'dart:math';
 export 'dart:typed_data';
-
+export  'package:lantern/core/app/app_webview.dart';
 export 'package:auto_route/auto_route.dart';
 export 'package:back_button_interceptor/back_button_interceptor.dart';
 export 'package:dotted_border/dotted_border.dart';

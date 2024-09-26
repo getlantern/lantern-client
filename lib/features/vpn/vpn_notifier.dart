@@ -1,10 +1,6 @@
 import 'package:lantern/core/service/lantern_ffi_service.dart';
 import 'package:lantern/core/utils/common.dart';
 
-import 'package:lantern/common/common.dart';
-import 'package:lantern/common/common_desktop.dart';
-import 'package:lantern/ffi.dart';
-
 class VPNChangeNotifier with ChangeNotifier {
   Timer? timer;
   final ValueNotifier<String> _vpnStatus =

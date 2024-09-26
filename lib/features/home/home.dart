@@ -1,36 +1,22 @@
-import 'package:lantern/features/account/account_tab.dart';
-import 'package:lantern/features/account/developer_settings.dart';
-import 'package:lantern/features/account/privacy_disclosure.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
+import 'package:lantern/features/account/account_tab.dart';
+import 'package:lantern/features/account/developer_settings.dart';
+import 'package:lantern/features/account/privacy_disclosure.dart';
 import 'package:lantern/features/messaging/chats.dart';
 import 'package:lantern/features/messaging/onboarding/welcome.dart';
 import 'package:lantern/features/messaging/protos_flutteronly/messaging.pb.dart';
 import 'package:lantern/features/replica/replica_tab.dart';
 import 'package:lantern/features/vpn/try_lantern_chat.dart';
 import 'package:lantern/features/vpn/vpn.dart';
+import 'package:lantern/features/vpn/vpn_notifier.dart';
 import 'package:lantern/features/vpn/vpn_tab.dart';
-import 'package:lantern/account/account_tab.dart';
-import 'package:lantern/account/developer_settings.dart';
-import 'package:lantern/account/privacy_disclosure.dart';
-import 'package:lantern/common/common.dart';
-import 'package:lantern/common/common_desktop.dart';
-import 'package:lantern/custom_bottom_bar.dart';
-import 'package:lantern/messaging/chats.dart';
-import 'package:lantern/messaging/onboarding/welcome.dart';
-import 'package:lantern/messaging/protos_flutteronly/messaging.pb.dart';
-import 'package:lantern/replica/replica_tab.dart';
-import 'package:lantern/vpn/try_lantern_chat.dart';
-import 'package:lantern/vpn/vpn.dart';
-import 'package:lantern/vpn/vpn_notifier.dart';
-import 'package:lantern/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../messaging/messaging_model.dart';
-
 
 @RoutePage(name: 'Home')
 class HomePage extends StatefulWidget {

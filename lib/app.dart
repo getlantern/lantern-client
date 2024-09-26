@@ -1,17 +1,10 @@
 import 'package:animated_loading_border/animated_loading_border.dart';
 import 'package:app_links/app_links.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:lantern/common/common_desktop.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/messaging/messaging.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
-import 'package:lantern/core/service/lantern_ffi_service.dart';
-import 'package:lantern/custom_bottom_bar.dart';
-import 'package:lantern/messaging/messaging.dart';
-import 'package:lantern/vpn/vpn_notifier.dart';
-import 'package:tray_manager/tray_manager.dart';
-import 'package:window_manager/window_manager.dart';
 import 'common/ui/custom/internet_checker.dart';
 
 

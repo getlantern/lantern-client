@@ -1,5 +1,6 @@
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/vpn/vpn.dart';
+import 'package:lantern/features/vpn/vpn_notifier.dart';
 
 final vpnModel = VpnModel();
 

@@ -32,17 +32,17 @@ class MessagingEmojiPicker extends StatelessWidget {
               onBackspacePressed: onBackspacePressed,
               onEmojiSelected: onEmojiSelected,
               config: ep.Config(
-                initCategory: ep.Category.SMILEYS,
-                columns: constraints.maxWidth ~/ 50.0,
-                iconColor: grey5,
-                iconColorSelected: black,
-                noRecents: Text(
-                  emptySuggestions,
-                  style: const TextStyle(fontSize: 15, color: Colors.black26),
-                  textAlign: TextAlign.center,
+                checkPlatformCompatibility: true,
+                categoryViewConfig: ep.CategoryViewConfig(
+                  initCategory: ep.Category.SMILEYS,
+                  iconColor: grey5,
+                  iconColorSelected: black,
+                  indicatorColor: grey5,
                 ),
-                bgColor: white,
-                indicatorColor: grey5,
+                emojiViewConfig: ep.EmojiViewConfig(
+                  columns: constraints.maxWidth ~/ 50.0,
+                  backgroundColor: white,
+                ),
               ),
             ),
           );
