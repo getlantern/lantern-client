@@ -163,6 +163,8 @@ class ImagePaths {
   static const lanternDiss = 'assets/images/lantern_dis.png';
   static const lanternConnectedIco = 'assets/images/lantern_connected.ico';
   static const lanternDisconnectedIco = 'assets/images/lantern_disconnected.ico';
+  static const proxySetting = 'assets/images/proxy_setting.svg';
+  static const copy = 'assets/images/copy.svg';
 
 
 

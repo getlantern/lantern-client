@@ -8,7 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
-  Settings({Key? key}) : super(key: key);
+  Settings({super.key});
 
   final packageInfo = PackageInfo.fromPlatform();
 
@@ -32,6 +32,9 @@ class Settings extends StatelessWidget {
 
   void openWebView(String url, BuildContext context, String title) async =>
       await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+
+  void openProxySetting(BuildContext context) =>
+      context.pushRoute(ProxiesSetting());
 
   Future<void> checkForUpdateTap(BuildContext context) async {
     AppLoadingDialog.showLoadingDialog(context);
@@ -186,6 +189,15 @@ class Settings extends StatelessWidget {
                 ],
               ),
             ),
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.proxySetting,
+            content: 'proxy_settings'.i18n,
+            trailingArray: [
+              mirrorLTR(context: context, child: const ContinueArrow())
+            ],
+            onTap: () => {openProxySetting(context)},
+          ),
+
           ListItemFactory.settingsItem(
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,

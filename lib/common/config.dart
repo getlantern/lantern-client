@@ -40,6 +40,7 @@ class ConfigOptions {
   final String deviceId;
   final String expirationDate;
   final String httpProxyAddr;
+  final String socksProxyAddr;
 
   final Map<String, Plan>? plans;
   Devices devices = Devices();
@@ -59,6 +60,7 @@ class ConfigOptions {
     this.expirationDate = '',
     this.sdkVersion = '',
     this.httpProxyAddr = '',
+    this.socksProxyAddr = '',
     this.deviceId = '',
     this.plans = null,
     this.paymentMethods = null,
@@ -85,6 +87,7 @@ class ConfigOptions {
       authEnabled: parsedJson['authEnabled'],
       chatEnabled: parsedJson['chatEnabled'],
       httpProxyAddr: parsedJson['httpProxyAddr'],
+      socksProxyAddr: parsedJson['socksProxyAddr'],
       splitTunneling: parsedJson['splitTunneling'],
       hasSucceedingProxy: parsedJson['hasSucceedingProxy'],
       fetchedGlobalConfig: parsedJson['fetchedGlobalConfig'],
