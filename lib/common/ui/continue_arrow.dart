@@ -1,4 +1,4 @@
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 //// An arrow that indicates that clicking on the containing control will continue to a new
 //// screen. It is sensitive to the current language's directionality.

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
-import 'package:lantern/common/add_nonbreaking_spaces.dart';
+import 'package:lantern/core/utils/add_nonbreaking_spaces.dart';
 import 'package:lantern/flutter_driver_extensions/add_dummy_contacts_command.dart';
 import 'package:lantern/flutter_driver_extensions/navigate_command.dart';
 import 'package:lantern/flutter_driver_extensions/reset_flags_command.dart';

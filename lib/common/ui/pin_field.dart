@@ -1,4 +1,4 @@
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 
 //// A field for entering PIN codes

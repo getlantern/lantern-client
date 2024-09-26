@@ -12,69 +12,75 @@ import 'dart:io' as _i60;
 
 import 'package:auto_route/auto_route.dart' as _i56;
 import 'package:flutter/cupertino.dart' as _i61;
-import 'package:lantern/account/account.dart' as _i2;
-import 'package:lantern/account/account_management.dart' as _i1;
-import 'package:lantern/account/auth/auth_landing.dart' as _i6;
-import 'package:lantern/account/auth/change_email.dart' as _i11;
-import 'package:lantern/account/auth/confirm_email.dart' as _i17;
-import 'package:lantern/account/auth/create_account_email.dart' as _i20;
-import 'package:lantern/account/auth/create_account_password.dart' as _i21;
-import 'package:lantern/account/auth/reset_password.dart' as _i46;
-import 'package:lantern/account/auth/restore_purchase.dart' as _i47;
-import 'package:lantern/account/auth/sign_in.dart' as _i49;
-import 'package:lantern/account/auth/sign_in_password.dart' as _i50;
-import 'package:lantern/account/auth/verification.dart' as _i55;
-import 'package:lantern/account/blocked_users.dart' as _i10;
-import 'package:lantern/account/chat_number_account.dart' as _i12;
-import 'package:lantern/account/device_linking/add_device.dart' as _i3;
-import 'package:lantern/account/device_linking/authorize_device_for_pro.dart'
-    as _i7;
-import 'package:lantern/account/device_linking/authorize_device_via_email.dart'
-    as _i8;
-import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart'
-    as _i9;
-import 'package:lantern/account/device_linking/device_limit.dart' as _i22;
-import 'package:lantern/account/device_linking/link_device.dart' as _i30;
-import 'package:lantern/account/invite_friends.dart' as _i27;
-import 'package:lantern/account/language.dart' as _i28;
-import 'package:lantern/account/lantern_desktop.dart' as _i29;
-import 'package:lantern/account/recovery_key.dart' as _i34;
-import 'package:lantern/account/report_issue.dart' as _i43;
-import 'package:lantern/account/settings.dart' as _i48;
-import 'package:lantern/account/split_tunneling.dart' as _i51;
-import 'package:lantern/account/support.dart' as _i54;
-import 'package:lantern/common/common.dart' as _i58;
-import 'package:lantern/common/ui/app_webview.dart' as _i5;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i23;
-import 'package:lantern/home.dart' as _i24;
-import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i4;
-import 'package:lantern/messaging/contacts/contact_info.dart' as _i18;
-import 'package:lantern/messaging/contacts/new_chat.dart' as _i31;
-import 'package:lantern/messaging/conversation/conversation.dart' as _i19;
-import 'package:lantern/messaging/introductions/introduce.dart' as _i25;
-import 'package:lantern/messaging/introductions/introductions.dart' as _i26;
-import 'package:lantern/messaging/messaging.dart' as _i57;
-import 'package:lantern/messaging/onboarding/chat_number_messaging.dart'
+import 'package:lantern/core/app/app_webview.dart' as _i5;
+import 'package:lantern/core/utils/common.dart' as _i58;
+import 'package:lantern/features/account/account.dart' as _i2;
+import 'package:lantern/features/account/account_management.dart' as _i1;
+import 'package:lantern/features/account/blocked_users.dart' as _i10;
+import 'package:lantern/features/account/chat_number_account.dart' as _i12;
+import 'package:lantern/features/account/invite_friends.dart' as _i27;
+import 'package:lantern/features/account/language.dart' as _i28;
+import 'package:lantern/features/account/lantern_desktop.dart' as _i29;
+import 'package:lantern/features/account/recovery_key.dart' as _i34;
+import 'package:lantern/features/account/report_issue.dart' as _i43;
+import 'package:lantern/features/account/settings.dart' as _i48;
+import 'package:lantern/features/account/split_tunneling.dart' as _i51;
+import 'package:lantern/features/account/support.dart' as _i54;
+import 'package:lantern/features/auth/auth_landing.dart' as _i6;
+import 'package:lantern/features/auth/change_email.dart' as _i11;
+import 'package:lantern/features/auth/confirm_email.dart' as _i17;
+import 'package:lantern/features/auth/create_account_email.dart' as _i20;
+import 'package:lantern/features/auth/create_account_password.dart' as _i21;
+import 'package:lantern/features/auth/reset_password.dart' as _i46;
+import 'package:lantern/features/auth/restore_purchase.dart' as _i47;
+import 'package:lantern/features/auth/sign_in.dart' as _i49;
+import 'package:lantern/features/auth/sign_in_password.dart' as _i50;
+import 'package:lantern/features/auth/verification.dart' as _i55;
+import 'package:lantern/features/checkout/checkout.dart' as _i15;
+import 'package:lantern/features/checkout/checkout_legacy.dart' as _i16;
+import 'package:lantern/features/checkout/plans.dart' as _i32;
+import 'package:lantern/features/checkout/play_checkout.dart' as _i33;
+import 'package:lantern/features/checkout/reseller_checkout.dart' as _i44;
+import 'package:lantern/features/checkout/reseller_checkout_legacy.dart'
+    as _i45;
+import 'package:lantern/features/checkout/store_checkout.dart' as _i52;
+import 'package:lantern/features/checkout/stripe_checkout.dart' as _i53;
+import 'package:lantern/features/device_linking/add_device.dart' as _i3;
+import 'package:lantern/features/device_linking/authorize_device_for_pro.dart'
+    as _i7;
+import 'package:lantern/features/device_linking/authorize_device_via_email.dart'
+    as _i8;
+import 'package:lantern/features/device_linking/authorize_device_via_email_pin.dart'
+    as _i9;
+import 'package:lantern/features/device_linking/device_limit.dart' as _i22;
+import 'package:lantern/features/device_linking/link_device.dart' as _i30;
+import 'package:lantern/features/home/home.dart' as _i24;
+import 'package:lantern/features/messaging/contacts/add_contact_number.dart'
+    as _i4;
+import 'package:lantern/features/messaging/contacts/contact_info.dart' as _i18;
+import 'package:lantern/features/messaging/contacts/new_chat.dart' as _i31;
+import 'package:lantern/features/messaging/conversation/conversation.dart'
+    as _i19;
+import 'package:lantern/features/messaging/introductions/introduce.dart'
+    as _i25;
+import 'package:lantern/features/messaging/introductions/introductions.dart'
+    as _i26;
+import 'package:lantern/features/messaging/messaging.dart' as _i57;
+import 'package:lantern/features/messaging/onboarding/chat_number_messaging.dart'
     as _i13;
-import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i14;
-import 'package:lantern/plans/checkout.dart' as _i15;
-import 'package:lantern/plans/checkout_legacy.dart' as _i16;
-import 'package:lantern/plans/plans.dart' as _i32;
-import 'package:lantern/plans/play_checkout.dart' as _i33;
-import 'package:lantern/plans/reseller_checkout.dart' as _i45;
-import 'package:lantern/plans/reseller_checkout_legacy.dart' as _i44;
-import 'package:lantern/plans/store_checkout.dart' as _i52;
-import 'package:lantern/plans/stripe_checkout.dart' as _i53;
-import 'package:lantern/replica/common.dart' as _i59;
-import 'package:lantern/replica/link_handler.dart' as _i37;
-import 'package:lantern/replica/ui/viewers/audio.dart' as _i35;
-import 'package:lantern/replica/ui/viewers/image.dart' as _i36;
-import 'package:lantern/replica/ui/viewers/misc.dart' as _i38;
-import 'package:lantern/replica/ui/viewers/video.dart' as _i42;
-import 'package:lantern/replica/upload/description.dart' as _i39;
-import 'package:lantern/replica/upload/review.dart' as _i40;
-import 'package:lantern/replica/upload/title.dart' as _i41;
-import 'package:lantern/vpn/vpn.dart' as _i62;
+import 'package:lantern/features/messaging/onboarding/chat_number_recovery.dart'
+    as _i14;
+import 'package:lantern/features/replica/common.dart' as _i59;
+import 'package:lantern/features/replica/link_handler.dart' as _i37;
+import 'package:lantern/features/replica/ui/viewers/audio.dart' as _i35;
+import 'package:lantern/features/replica/ui/viewers/image.dart' as _i36;
+import 'package:lantern/features/replica/ui/viewers/misc.dart' as _i38;
+import 'package:lantern/features/replica/ui/viewers/video.dart' as _i42;
+import 'package:lantern/features/replica/upload/description.dart' as _i39;
+import 'package:lantern/features/replica/upload/review.dart' as _i40;
+import 'package:lantern/features/replica/upload/title.dart' as _i41;
+import 'package:lantern/features/vpn/vpn.dart' as _i62;
 
 /// generated route for
 /// [_i1.AccountManagement]
@@ -1686,53 +1692,6 @@ class ReportIssueArgs {
 
 /// generated route for
 /// [_i44.ResellerCodeCheckout]
-class ResellerCodeCheckoutLegacy
-    extends _i56.PageRouteInfo<ResellerCodeCheckoutLegacyArgs> {
-  ResellerCodeCheckoutLegacy({
-    required bool isPro,
-    _i58.Key? key,
-    List<_i56.PageRouteInfo>? children,
-  }) : super(
-          ResellerCodeCheckoutLegacy.name,
-          args: ResellerCodeCheckoutLegacyArgs(
-            isPro: isPro,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ResellerCodeCheckoutLegacy';
-
-  static _i56.PageInfo page = _i56.PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<ResellerCodeCheckoutLegacyArgs>();
-      return _i44.ResellerCodeCheckout(
-        isPro: args.isPro,
-        key: args.key,
-      );
-    },
-  );
-}
-
-class ResellerCodeCheckoutLegacyArgs {
-  const ResellerCodeCheckoutLegacyArgs({
-    required this.isPro,
-    this.key,
-  });
-
-  final bool isPro;
-
-  final _i58.Key? key;
-
-  @override
-  String toString() {
-    return 'ResellerCodeCheckoutLegacyArgs{isPro: $isPro, key: $key}';
-  }
-}
-
-/// generated route for
-/// [_i45.ResellerCodeCheckout]
 class ResellerCodeCheckout
     extends _i56.PageRouteInfo<ResellerCodeCheckoutArgs> {
   ResellerCodeCheckout({
@@ -1758,7 +1717,7 @@ class ResellerCodeCheckout
     name,
     builder: (data) {
       final args = data.argsAs<ResellerCodeCheckoutArgs>();
-      return _i45.ResellerCodeCheckout(
+      return _i44.ResellerCodeCheckout(
         isPro: args.isPro,
         email: args.email,
         otp: args.otp,
@@ -1787,6 +1746,53 @@ class ResellerCodeCheckoutArgs {
   @override
   String toString() {
     return 'ResellerCodeCheckoutArgs{isPro: $isPro, email: $email, otp: $otp, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i45.ResellerCodeCheckout]
+class ResellerCodeCheckoutLegacy
+    extends _i56.PageRouteInfo<ResellerCodeCheckoutLegacyArgs> {
+  ResellerCodeCheckoutLegacy({
+    required bool isPro,
+    _i58.Key? key,
+    List<_i56.PageRouteInfo>? children,
+  }) : super(
+          ResellerCodeCheckoutLegacy.name,
+          args: ResellerCodeCheckoutLegacyArgs(
+            isPro: isPro,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ResellerCodeCheckoutLegacy';
+
+  static _i56.PageInfo page = _i56.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ResellerCodeCheckoutLegacyArgs>();
+      return _i45.ResellerCodeCheckout(
+        isPro: args.isPro,
+        key: args.key,
+      );
+    },
+  );
+}
+
+class ResellerCodeCheckoutLegacyArgs {
+  const ResellerCodeCheckoutLegacyArgs({
+    required this.isPro,
+    this.key,
+  });
+
+  final bool isPro;
+
+  final _i58.Key? key;
+
+  @override
+  String toString() {
+    return 'ResellerCodeCheckoutLegacyArgs{isPro: $isPro, key: $key}';
   }
 }
 

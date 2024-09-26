@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/features/messaging/messaging.dart';
 import 'package:test/test.dart';
 
 void main() {

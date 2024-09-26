@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/replica/models/replica_link.dart';
+import 'package:lantern/features/replica/models/replica_link.dart';
 
 class TestCase {
   TestCase({

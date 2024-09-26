@@ -1,4 +1,4 @@
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 extension PathBuilding on BorderRadius {
   /// Creates a path that fills the given size and rounds corners to match this

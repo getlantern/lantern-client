@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 
 import 'package:flutter/gestures.dart';
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 /// CDialog incorporates the standard dialog styling and behavior as defined
 /// in the [component library](https://www.figma.com/file/Jz424KUVkFFc2NsxuYaZKL/Lantern-Component-Library?node-id=27%3A28).

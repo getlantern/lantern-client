@@ -1,4 +1,4 @@
-//import 'package:lantern/messaging/calls/signaling.dart';
+//import 'package:lantern/features/messaging/calls/signaling.dart';
 import 'package:test/test.dart';
 
 void main() {
