@@ -6,12 +6,12 @@
 # Anh Phan <vietnamesel10n@gmail.com>, 2024
 # e2f <projects@e2f.com>, 2024
 # Derek F <derek@getlantern.org>, 2024
-# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024
 # Nathan Tran, 2024
+# e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Nathan Tran, 2024\n"
+"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2024\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1846,16 +1846,16 @@ msgid "follow_us"
 msgstr "Theo dõi chúng tôi "
 
 msgid "follow_us_telegram"
-msgstr "Theo dõi chúng tôi "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "Theo dõi chúng tôi trên Instagram "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "Theo dõi chúng tôi trên Facebook "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "Theo dõi chúng tôi trên X "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "Chúng tôi đang gặp sự cố kỹ thuật. Vui lòng thử lại sau. "
@@ -1903,52 +1903,52 @@ msgid "file_size_limit_description"
 msgstr "Kích thước tệp đính kèm phải dưới 100 MB"
 
 msgid "lantern_pro_one_year"
-msgstr "Lantern Pro: Gói Một Năm"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "Lantern Pro: Gói Hai Năm"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "Lantern Pro: Gói Một Tháng"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "Gói đăng ký không tự động gia hạn"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "Khôi phục mua hàng"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "Bỏ qua tạm thời"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "Không tìm thấy mua hàng với email cung cấp"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "Không tìm thấy mua hàng trước đó"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "Nhập email bạn đã sử dụng khi thanh toán để khôi phục mua hàng của bạn."
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "Mua hàng đã được khôi phục"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "Mua hàng của bạn đã được khôi phục thành công"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "Có vẻ như có sự cố khi khôi phục mua hàng. Vui lòng kiểm tra xem bạn đã nhập đúng email hoặc mã."
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "Đã xảy ra lỗi khi gửi mã, vui lòng thử lại"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*Email là tùy chọn nhưng được khuyến khích"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "Thêm email để truy cập vào các giao dịch mua của bạn trên bất kỳ thiết bị nào. Không có email, các giao dịch mua sẽ gắn liền với thiết bị này và có thể bị mất."
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "Tiếp tục mà không cần email"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "Bạn có phiên bản mới nhất!"

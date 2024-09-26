@@ -70,13 +70,6 @@ class LanternFFI {
     return User.create()..mergeFromProto3Json(jsonDecode(res));
   }
 
-  static (bool, bool, bool) startUpInitCallBacks() {
-    final proxy = _lanternFFI.hasProxyFected().cast<Utf8>().toDartString();
-    final config = _lanternFFI.hasConfigFected().cast<Utf8>().toDartString();
-    final success = _lanternFFI.onSuccess().cast<Utf8>().toDartString();
-    print("startup status proxy $proxy config $config success $success");
-    return (proxy.toBool(), config.toBool(), success.toBool());
-  }
 
   static Future<String> approveDevice(String code) async {
     final json = await _lanternFFI

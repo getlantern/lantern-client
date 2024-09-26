@@ -17,10 +17,10 @@ object DeviceInfo : internalsdk.DeviceInfo {
     }
 
     override fun deviceID(): String {
-        return LanternApp.getSession().deviceID() ?: ""
+        return LanternApp.session.deviceID() ?: ""
     }
 
     override fun userID(): String {
-        return LanternApp.getSession().userId().toString()
+        return LanternApp.session.userId().toString()
     }
 }

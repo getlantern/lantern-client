@@ -91,8 +91,7 @@ class VPNTab extends StatelessWidget {
                               const CDivider(height: 32.0),
                               SplitTunnelingWidget(),
                             },
-                            if (!proUser)
-                              const VPNBandwidth(),
+                            if (!proUser) const VPNBandwidth(),
                           ],
                         ),
                       ),

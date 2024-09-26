@@ -98,9 +98,6 @@ extern char* validateRecoveryByEmail(char* email, char* code);
 //
 extern char* deleteAccount(char* password);
 extern char* start();
-extern char* onSuccess();
-extern char* hasProxyFected();
-extern char* hasConfigFected();
 extern void sysProxyOn();
 extern void sysProxyOff();
 extern char* websocketAddr();

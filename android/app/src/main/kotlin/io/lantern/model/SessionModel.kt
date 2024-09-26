@@ -71,7 +71,7 @@ class SessionModel internal constructor(
     private val autoUpdater = AutoUpdater(activity, activity)
 
     init {
-        LanternApp.setSession(this)
+        LanternApp.session = this
         LanternApp.setGoSession(model)
         LanternApp.setInAppBilling(inAppBilling)
         updateAppsData()
@@ -107,19 +107,6 @@ class SessionModel internal constructor(
                 paymentUtils.submitGooglePlayPayment(email, planId, result)
             }
 
-//            "submitFreekassa" -> {
-//                val userEmail = call.argument("email") ?: ""
-//                val planID = call.argument("planID") ?: ""
-//                val currencyPrice = call.argument("currencyPrice") ?: ""
-//                activity.startActivity(
-//                    Intent(activity, FreeKassaActivity_::class.java).apply {
-//                        putExtra("userEmail", userEmail)
-//                        putExtra("planID", planID)
-//                        putExtra("currencyPrice", currencyPrice)
-//                    },
-//                )
-//            }
-
             "openWebview" -> {
                 val url = call.argument("url") ?: ""
                 if (url.isNotEmpty()) {
@@ -146,6 +133,8 @@ class SessionModel internal constructor(
                 autoUpdater.checkForUpdates(result)
 
             }
+
+            "proxyAddr" -> result.success(LanternApp.session.hTTPAddr)
 
             "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
@@ -262,6 +251,7 @@ class SessionModel internal constructor(
         } else {
             startResult!!.httpAddr
         }
+
     val sOCKS5Addr: String
         get() = if (startResult == null) {
             ""

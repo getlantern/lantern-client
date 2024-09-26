@@ -1856,16 +1856,16 @@ msgid "follow_us"
 msgstr "আমাদের অনুসরণ করুন "
 
 msgid "follow_us_telegram"
-msgstr "আমাদের অনুসরণ করুন Telegram-এ "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "আমাদের অনুসরণ করুন Instagram-এ "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "আমাদের অনুসরণ করুন Facebook-এ "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "আমাদের অনুসরণ করুন X-এ "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "আমরা প্রযুক্তিগত সমস্যার সম্মুখীন হচ্ছি। পরে আবার চেষ্টা করুন। "
@@ -1961,6 +1961,7 @@ msgstr ""
 
 msgid "continue_without_email"
 msgstr ""
+
 msgid "no_new_update"
 msgstr "আপনি আপ টু ডেট!"
 

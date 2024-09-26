@@ -1886,16 +1886,16 @@ msgid "follow_us"
 msgstr "ကျွန်ုပ်တို့ကိုလိုက်နာပါ "
 
 msgid "follow_us_telegram"
-msgstr "ကျွန်ုပ်တို့ကို Telegram ပေါ်တွင်လိုက်နာပါ "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "ကျွန်ုပ်တို့ကို Instagram ပေါ်တွင်လိုက်နာပါ "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "ကျွန်ုပ်တို့ကို Facebook ပေါ်တွင်လိုက်နာပါ "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "ကျွန်ုပ်တို့ကို X ပေါ်တွင်လိုက်နာပါ "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr ""
@@ -1995,6 +1995,7 @@ msgstr ""
 
 msgid "continue_without_email"
 msgstr ""
+
 msgid "no_new_update"
 msgstr "သင်နောက်ဆုံးပေါ်အဆင့်ရောက်နေပါပြီ"
 

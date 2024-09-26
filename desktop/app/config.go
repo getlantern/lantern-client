@@ -29,6 +29,7 @@ type ChatOptions struct {
 type ConfigOptions struct {
 	DevelopmentMode      bool                   `json:"developmentMode"`
 	ReplicaAddr          string                 `json:"replicaAddr"`
+	HttpProxyAddr        string                 `json:"httpProxyAddr"`
 	AuthEnabled          bool                   `json:"authEnabled"`
 	ChatEnabled          bool                   `json:"chatEnabled"`
 	SplitTunneling       bool                   `json:"splitTunneling"`
@@ -83,6 +84,7 @@ func (app *App) sendConfigOptions() {
 		DevelopmentMode:      common.IsDevEnvironment(),
 		AppVersion:           common.ApplicationVersion,
 		ReplicaAddr:          "",
+		HttpProxyAddr:        app.settings.GetAddr(),
 		AuthEnabled:          authEnabled(app),
 		ChatEnabled:          false,
 		SplitTunneling:       false,

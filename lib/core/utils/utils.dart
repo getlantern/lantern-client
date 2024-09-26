@@ -7,13 +7,13 @@ import 'package:lantern/core/app/app_webview.dart';
 const defaultTimeoutDuration = Duration(seconds: 10);
 
 bool isProdPlay() {
-  if (sessionModel.isStoreVersion.value ??false) {
+  if (sessionModel.isStoreVersion.value ?? false) {
     return true;
   }
-  if (sessionModel.isTestPlayVersion.value ??false) {
+  if (sessionModel.isTestPlayVersion.value ?? false) {
     return true;
   }
- return  false;
+  return false;
 }
 
 const lanternStarLogo = CAssetImage(
@@ -160,8 +160,11 @@ Future<void> openDesktopPaymentWebview(
   }
 }
 
-
-
+List<PathAndValue<PaymentMethod>> sortProviders(
+  Iterable<PathAndValue<PaymentMethod>> paymentMethods,
+) =>
+    paymentMethods.toList()
+      ..sort((a, b) => a.value.method.compareTo(b.value.method));
 
 Plan planFromJson(Map<String, dynamic> item) {
   print("called plans $item");

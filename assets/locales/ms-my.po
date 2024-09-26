@@ -8,10 +8,11 @@
 # Derek F <derek@getlantern.org>, 2024
 # tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2024
 # Alyssa Chung <lisiachung7@gmail.com>, 2024
+# e2f <projects@e2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Alyssa Chung <lisiachung7@gmail.com>, 2024\n"
+"Last-Translator: e2f <projects@e2f.com>, 2024\n"
 "Language-Team: Malay (https://app.transifex.com/lantern-1/teams/94371/ms/)\n"
 "Language: ms\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1861,16 +1862,16 @@ msgid "follow_us"
 msgstr "Ikuti Kami "
 
 msgid "follow_us_telegram"
-msgstr "Ikuti kami di Telegram "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "Ikuti kami di Instagram "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "Ikuti kami di Facebook "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "Ikuti kami di X "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "Kami mengalami kesukaran teknikal. Cuba lagi nanti. "
@@ -1966,6 +1967,7 @@ msgstr ""
 
 msgid "continue_without_email"
 msgstr ""
+
 msgid "no_new_update"
 msgstr "Anda mengikut masa terkini!"
 

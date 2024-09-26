@@ -21,10 +21,11 @@
 # AHMAD MASOUD BARAKZAI, 2024
 # Mersen M, 2024
 # Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024
+# zar24 <zarghamjan@yahoo.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024\n"
+"Last-Translator: zar24 <zarghamjan@yahoo.com>, 2024\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -1843,16 +1844,16 @@ msgid "follow_us"
 msgstr "ما را دنبال کنید "
 
 msgid "follow_us_telegram"
-msgstr "ما را در Telegram دنبال کنید "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "ما را در Instagram دنبال کنید "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "ما را در Facebook دنبال کنید "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "ما را در X دنبال کنید "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "ما با مشکلات فنی مواجه هستیم. لطفاً بعداً دوباره تلاش کنید. "
@@ -1900,53 +1901,52 @@ msgid "file_size_limit_description"
 msgstr "اندازه پیوست‌ها باید کمتر از 100 مگابایت باشد"
 
 msgid "lantern_pro_one_year"
-msgstr "لنترن پرو: طرح یک ساله"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "لنترن پرو: طرح دو ساله"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "لنترن پرو: طرح یک ماهه"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "اشتراک غیرقابل تمدید"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "بازیابی خرید"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "فعلاً رد کردن"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "هیچ خریدی با ایمیل ارائه شده یافت نشد"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "هیچ خرید قبلی یافت نشد"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "ایمیلی را که هنگام خرید وارد کرده‌اید وارد کنید تا خرید خود را بازیابی کنید."
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "خرید بازیابی شد"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "خرید شما با موفقیت بازیابی شد"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "به نظر می‌رسد مشکلی در بازیابی خرید رخ داده است. لطفاً بررسی کنید که ایمیل یا کد صحیح را وارد کرده‌اید."
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "هنگام ارسال کد مشکلی پیش آمد، لطفاً دوباره تلاش کنید"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*ایمیل اختیاری است اما توصیه می‌شود"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "ایمیل را اضافه کنید تا بتوانید به خریدهای خود در هر دستگاهی دسترسی داشته باشید. بدون ایمیل، خریدها به این دستگاه متصل می‌شوند و ممکن است از بین بروند."
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "ادامه بدون ایمیل"
-
+msgstr ""
 
 msgid "no_new_update"
 msgstr "شما به روز هستید!"

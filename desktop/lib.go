@@ -134,21 +134,6 @@ func saveUserSalt(salt []byte) {
 	a.Settings().SaveSalt(salt)
 }
 
-//export onSuccess
-func onSuccess() *C.char {
-	return booltoCString(a.GetOnSuccess())
-}
-
-//export hasProxyFected
-func hasProxyFected() *C.char {
-	return booltoCString(a.GetHasProxyFetched())
-}
-
-//export hasConfigFected
-func hasConfigFected() *C.char {
-	return booltoCString(a.GetHasConfigFetched())
-}
-
 //export sysProxyOn
 func sysProxyOn() {
 	go a.SysproxyOn()

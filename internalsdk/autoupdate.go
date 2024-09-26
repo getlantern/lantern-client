@@ -77,7 +77,7 @@ func InstallFinished(deviceInfo DeviceInfo, success bool) {
 func buildUpdateCfg() *autoupdate.Config {
 	return &autoupdate.Config{
 		CurrentVersion: common.ApplicationVersion,
-		URL:            fmt.Sprintf("https://update.getlantern.org/update/%s", strings.ToLower(common.DefaultAppName)),
+		URL:            fmt.Sprintf("%s/update/%s", common.UpdateServerURL, strings.ToLower(common.DefaultAppName)),
 		HTTPClient:     updateClient,
 		PublicKey:      []byte(autoupdate.PackagePublicKey),
 	}

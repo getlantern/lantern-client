@@ -187,12 +187,13 @@ class _CheckoutState extends State<Checkout>
     Iterable<PathAndValue<PaymentMethod>> paymentMethods,
   ) {
     var widgets = <Widget>[];
-    for (final paymentMethod in paymentMethods) {
+    for (final pathAndValue in sortProviders(paymentMethods)) {
+      final paymentMethod = pathAndValue.value;
       if (widgets.length == 2) {
-        widgets.add(options());
+        if (paymentMethods.length != 2) widgets.add(options());
         if (!showMoreOptions) break;
       }
-      widgets.addAll(paymentProviders(paymentMethod.value));
+      widgets.addAll(paymentProviders(paymentMethod));
     }
     return widgets;
   }
@@ -286,7 +287,7 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
-      await sessionModel.openWebview(btcPayURL);
+      await AppBrowser.openWebview(btcPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -304,7 +305,7 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       final froPayURL = value;
-      await sessionModel.openWebview(froPayURL);
+      await AppBrowser.openWebview(froPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -339,13 +340,12 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       final shepherdURL = value;
-      await sessionModel.openWebview(shepherdURL);
+      await AppBrowser.openWebview(shepherdURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
     }
   }
-
 
   // This methods is responsible for polling for user data
   // so if user has done payment or renew plans and show
@@ -403,7 +403,7 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
-      await sessionModel.openWebview(btcPayURL);
+      await AppBrowser.openWebview(btcPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -464,9 +464,10 @@ class _CheckoutState extends State<Checkout>
     assert(widget.authFlow != null, 'authFlow is null');
     switch (widget.authFlow!) {
       case AuthFlow.createAccount:
-      /// There is edge case where user is signup with email and password but not pro
-      /// this happens when does restore purchase on other device so older device
-      /// does not have pro status but have email and password
+
+        /// There is edge case where user is signup with email and password but not pro
+        /// this happens when does restore purchase on other device so older device
+        /// does not have pro status but have email and password
         if (sessionModel.hasUserSignedInNotifier.value ?? false) {
           showSuccessDialog(context, widget.isPro);
           return;
@@ -493,7 +494,7 @@ class _CheckoutState extends State<Checkout>
       case AuthFlow.updateAccount:
       // TODO: Handle this case.
       case AuthFlow.restoreAccount:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
     }
   }
 }

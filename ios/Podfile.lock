@@ -78,7 +78,7 @@ PODS:
     - Flutter
     - Google-Mobile-Ads-SDK (~> 11.2.0)
     - webview_flutter_wkwebview
-  - GoogleUserMessagingPlatform (2.5.0)
+  - GoogleUserMessagingPlatform (2.6.0)
   - in_app_purchase_storekit (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -111,17 +111,17 @@ PODS:
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
-  - SDWebImage (5.19.4):
-    - SDWebImage/Core (= 5.19.4)
-  - SDWebImage/Core (5.19.4)
+  - SDWebImage (5.19.7):
+    - SDWebImage/Core (= 5.19.7)
+  - SDWebImage/Core (5.19.7)
   - SDWebImageWebPCoder (0.14.6):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
-  - Sentry/HybridSDK (8.32.0)
-  - sentry_flutter (8.6.0):
+  - Sentry/HybridSDK (8.36.0)
+  - sentry_flutter (8.9.0):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 8.32.0)
+    - Sentry/HybridSDK (= 8.36.0)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -278,9 +278,9 @@ SPEC CHECKSUMS:
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   Google-Mobile-Ads-SDK: 5a6d005a6cb5b5e8f4c7b69ca05cdea79c181139
   google_mobile_ads: 9379c80fdfa9988fb0e105a407890ff8deb3cf86
-  GoogleUserMessagingPlatform: 6b4f48a370e77ce121d034c908cc6ee4fdafaf13
+  GoogleUserMessagingPlatform: 0c3a08353e53ce8c2feab7addd0b652cde522450
   in_app_purchase_storekit: 8c3b0b3eb1b0f04efbff401c3de6266d4258d433
-  integration_test: ce0a3ffa1de96d1a89ca0ac26fca7ea18a749ef4
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
@@ -289,10 +289,10 @@ SPEC CHECKSUMS:
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
-  SDWebImage: 066c47b573f408f18caa467d71deace7c0f8280d
+  SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
-  Sentry: 96ae1dcdf01a644bc3a3b1dc279cecaf48a833fb
-  sentry_flutter: 090351ce1ff5f96a4b33ef9455b7e3b28185387d
+  Sentry: f8374b5415bc38dfb5645941b3ae31230fbeae57
+  sentry_flutter: 0eb93e5279eb41e2392212afe1ccd2fecb4f8cbe
   share_plus: 8875f4f2500512ea181eef553c3e27dba5135aad
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
@@ -306,4 +306,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: edbeaea3b499feb7b2b276309b09c237de1a6cff
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

@@ -6,10 +6,11 @@
 # Lantern, 2024
 # tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2024
 # Acclaro Thailand <bkk-project@acclaro.com>, 2024
+# e2f <projects@e2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Acclaro Thailand <bkk-project@acclaro.com>, 2024\n"
+"Last-Translator: e2f <projects@e2f.com>, 2024\n"
 "Language-Team: Thai (https://app.transifex.com/lantern-1/teams/94371/th/)\n"
 "Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1824,16 +1825,16 @@ msgid "follow_us"
 msgstr "ติดตามเรา "
 
 msgid "follow_us_telegram"
-msgstr "ติดตามเราบน Telegram "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "ติดตามเราบน Instagram "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "ติดตามเราบน Facebook "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "ติดตามเราบน X "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "เรากำลังพบปัญหาทางเทคนิค กรุณาลองใหม่ภายหลัง "
@@ -1883,52 +1884,52 @@ msgid "file_size_limit_description"
 msgstr "ขนาดไฟล์แนบต้องต่ำกว่า 100 MB"
 
 msgid "lantern_pro_one_year"
-msgstr "Lantern Pro: แผนหนึ่งปี"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "Lantern Pro: แผนสองปี"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "Lantern Pro: แผนหนึ่งเดือน"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "การสมัครสมาชิกที่ไม่ต่ออายุ"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "กู้คืนการซื้อ"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "ข้ามตอนนี้"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "ไม่พบการซื้อด้วยอีเมลที่ให้ไว้"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "ไม่พบการซื้อก่อนหน้านี้"
+msgstr ""
 
 msgid "warning_restore_purchase"
-msgstr "ป้อนอีเมลที่คุณใช้ในระหว่างการชำระเงินเพื่อกู้คืนการซื้อของคุณ"
+msgstr ""
 
 msgid "purchase_restored"
-msgstr "กู้คืนการซื้อเรียบร้อยแล้ว"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "การซื้อของคุณได้รับการกู้คืนเรียบร้อยแล้ว"
+msgstr ""
 
 msgid "purchase_restored_error"
-msgstr "ดูเหมือนว่ามีบางอย่างผิดพลาดในการกู้คืนการซื้อ โปรดตรวจสอบว่าคุณป้อนอีเมลหรือรหัสที่ถูกต้อง"
+msgstr ""
 
 msgid "err_while_sending_code"
-msgstr "เกิดข้อผิดพลาดขณะส่งรหัส โปรดลองอีกครั้ง"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*อีเมลเป็นตัวเลือกแต่แนะนำให้กรอก"
+msgstr ""
 
 msgid "email_hint_pro"
-msgstr "เพิ่มอีเมลเพื่อเข้าถึงการซื้อของคุณบนอุปกรณ์ใดก็ได้ หากไม่มีอีเมล การซื้อจะผูกกับอุปกรณ์นี้และอาจสูญหายได้"
+msgstr ""
 
 msgid "continue_without_email"
-msgstr "ดำเนินการต่อโดยไม่ใช้อีเมล"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "คุณมีการอัปเดตล่าสุดแล้ว"
