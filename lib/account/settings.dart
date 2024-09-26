@@ -148,7 +148,7 @@ class Settings extends StatelessWidget {
               (BuildContext context, bool proxyAll, Widget? child) =>
                   ListItemFactory.settingsItem(
                 header: 'VPN'.i18n,
-                icon: ImagePaths.key,
+                    icon: ImagePaths.split_tunneling,
                 content: CInkWell(
                   onTap: () => openInfoProxyAll(context),
                   child: Row(
@@ -157,9 +157,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Flexible(
                         child: CText(
-                          'proxy_everything_is'
-                              .i18n
-                              .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                          'proxy_everything'.i18n,
                           softWrap: false,
                           style: tsSubtitle1.short,
                         ),
@@ -189,6 +187,7 @@ class Settings extends StatelessWidget {
                 ],
               ),
             ),
+          if(isDesktop())
           ListItemFactory.settingsItem(
             icon: ImagePaths.proxySetting,
             content: 'proxy_settings'.i18n,

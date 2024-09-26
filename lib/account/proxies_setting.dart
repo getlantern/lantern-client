@@ -12,7 +12,7 @@ class _ProxiesSettingState extends State<ProxiesSetting> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      title: 'proxy_setting'.i18n,
+      title: 'proxy_settings'.i18n,
       body: _buildBody(),
       padHorizontal: true,
       padVertical: true,
@@ -27,12 +27,12 @@ class _ProxiesSettingState extends State<ProxiesSetting> {
           header: 'http_proxy'.i18n,
           content: CText(config?.httpProxyAddr ?? '', style: tsBody1),
           trailingArray: [SvgPicture.asset(ImagePaths.copy)],
-          onTap: () => copyHttpProxy(config?.httpProxyAddr??''),
+          onTap: () => copyHttpProxy(config?.httpProxyAddr ?? ''),
         ),
         ListItemFactory.settingsItem(
           header: 'socks_proxy'.i18n,
           content: CText(config?.socksProxyAddr ?? '', style: tsBody1),
-          onTap: () => copySocksProxy(config?.httpProxyAddr??''),
+          onTap: () => copySocksProxy(config?.httpProxyAddr ?? ''),
           trailingArray: [SvgPicture.asset(ImagePaths.copy)],
         )
       ],
@@ -41,11 +41,9 @@ class _ProxiesSettingState extends State<ProxiesSetting> {
 
   void copyHttpProxy(String address) {
     copyText(context, address);
-    showSnackbar(context: context, content: 'http_proxy_copied'.i18n);
   }
 
   void copySocksProxy(String address) {
     copyText(context, address);
-    showSnackbar(context: context, content: 'socks_proxy_copied'.i18n);
   }
 }

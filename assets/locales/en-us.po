@@ -1827,6 +1827,12 @@ msgstr "HTTP Proxy copied"
 msgid "socks_proxy_copied"
 msgstr "Socks Proxy copied"
 
+msgid "proxy_everything"
+msgstr "Proxy Everything"
+
+
+
+
 
 
 

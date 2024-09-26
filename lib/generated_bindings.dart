@@ -208,35 +208,6 @@ class NativeLibrary {
   late final _websocketAddr =
       _websocketAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> paymentMethodsV3() {
-    return _paymentMethodsV3();
-  }
-
-  late final _paymentMethodsV3Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'paymentMethodsV3');
-  late final _paymentMethodsV3 =
-      _paymentMethodsV3Ptr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> paymentMethodsV4() {
-    return _paymentMethodsV4();
-  }
-
-  late final _paymentMethodsV4Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'paymentMethodsV4');
-  late final _paymentMethodsV4 =
-      _paymentMethodsV4Ptr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> proxyAll() {
-    return _proxyAll();
-  }
-
-  late final _proxyAllPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('proxyAll');
-  late final _proxyAll =
-      _proxyAllPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   void setProxyAll(
     ffi.Pointer<ffi.Char> value,
   ) {
