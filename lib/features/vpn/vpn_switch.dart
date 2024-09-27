@@ -6,7 +6,6 @@ import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
 
 
-
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
 
