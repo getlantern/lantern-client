@@ -617,26 +617,27 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
 	checkFeatures := func() {
 		replicaServer.CheckEnabled()
-		chatEnabled := runner.FeatureEnabled("chat", common.ApplicationVersion)
+		chatEnabled := runner.FeatureEnabled(config.FeatureChat, common.ApplicationVersion)
 		log.Debugf("Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 
-		authEnabled := runner.FeatureEnabled("auth", common.ApplicationVersion)
+		authEnabled := runner.FeatureEnabled(config.FeatureAuth, common.ApplicationVersion)
 		log.Debugf("Auth enabled? %v", authEnabled)
 		session.SetAuthEnabled(authEnabled)
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
-			showAdsEnabled := runner.FeatureEnabled("interstitialads", common.ApplicationVersion)
+			showAdsEnabled := runner.FeatureEnabled(config.FeatureInterstitialAds, common.ApplicationVersion)
 			log.Debugf("Show ads enabled? %v", showAdsEnabled)
 			session.SetShowGoogleAds(showAdsEnabled)
 
-			showTapSellAdsEnabled := runner.FeatureEnabled("tapsellads", common.ApplicationVersion)
-			log.Debugf("Show ads enabled? %v", showAdsEnabled)
+			showTapSellAdsEnabled := runner.FeatureEnabled(config.FeatureTapsellAds, common.ApplicationVersion)
+			log.Debugf("Show tapsell ads enabled? %v", showTapSellAdsEnabled)
 			session.SetShowTapSellAds(showTapSellAdsEnabled)
 
 		} else {
 			// Explicitly disable ads for Pro users.
 			session.SetShowGoogleAds(false)
+			session.SetShowTapSellAds(false)
 		}
 	}
 

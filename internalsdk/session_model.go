@@ -190,7 +190,6 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
-		m.SetAuthEnabled(true)
 		go m.setupIosConfigure(opts.ConfigPath, int(userID), token, deviceID)
 	}
 	go m.initSessionModel(context.Background(), opts)
@@ -773,7 +772,7 @@ func (m *SessionModel) checkAvailableFeatures() {
 	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
 	m.SetShowGoogleAds(googleAdsEnabled)
 
-	tapSellAdsEnabled := m.featureEnabled("tapsellads")
+	tapSellAdsEnabled := m.featureEnabled(config.FeatureTapsellAds)
 	m.SetShowTapSellAds(tapSellAdsEnabled)
 }
 
