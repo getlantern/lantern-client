@@ -2103,6 +2103,7 @@ func clearLocalUserData(session SessionModel) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:     nil,
 			pathEmailAddress: "",
+			pathBandwidth:    nil,
 		})
 	})
 	if err1 != nil {
