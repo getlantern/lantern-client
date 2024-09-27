@@ -40,7 +40,6 @@ dependencies:
   flag: ^7.0.0
 
   #Loogs and crash reporting
-#  catcher_2: ^1.2.6
   sentry_flutter: ^8.9.0
 
   badges: ^3.1.2
@@ -96,7 +95,7 @@ dependencies:
   # URL & Sharing utilities
   url_launcher: ^6.3.0
   share_plus: ^10.0.2
-  flutter_inappwebview: ^6.1.0+1
+  flutter_inappwebview: ^6.1.1
   flutter_windows_webview:
     git:
       url: https://github.com/wgh136/flutter_windows_webview
@@ -122,7 +121,7 @@ dependencies:
   # Path, permission & Markdown handling
   path_provider: ^2.1.4
   permission_handler: ^11.3.1
-  flutter_markdown: ^0.7.3+1
+  flutter_markdown: ^0.7.3+2
 
   # Purchase
   in_app_purchase: ^3.2.0
@@ -131,8 +130,6 @@ dependencies:
   google_mobile_ads: ^5.1.0
   tapsell_mediation: ^1.0.1-beta06
   tapsell_mediation_legacy: ^1.0.1-beta06
-#  tapsell_mediation_admob: ^1.0.1-beta06
-#  tapsell_plus: ^2.2.7
 
   retry: ^3.1.2
   # Generate bindings to native libraries
@@ -140,7 +137,7 @@ dependencies:
   # Deeplink handling
   app_links: ^6.3.2
   # Service Locator
-  get_it: ^7.7.0
+  get_it: ^8.0.0
   #Loading
   animated_loading_border: ^0.0.2
   shimmer: ^3.0.0
@@ -152,12 +149,11 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  ffigen: ^13.0.0
-  flutter_lints: ^4.0.0
-  test: ^1.15.7
-  mockito: ^5.0.12
+  ffigen: ^14.0.1
+  flutter_lints: ^5.0.0
+  mockito: ^5.4.4
   auto_route_generator: ^9.0.0
-  build_runner: ^2.0.5
+  build_runner: ^2.4.12
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

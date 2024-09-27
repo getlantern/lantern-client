@@ -1,5 +1,6 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/features/messaging/messaging.dart';
-import 'package:test/test.dart';
+
 
 void main() {
   group('ChatNumber', () {

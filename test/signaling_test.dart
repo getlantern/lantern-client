@@ -1,5 +1,5 @@
 //import 'package:lantern/features/messaging/calls/signaling.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   /*
