@@ -30,6 +30,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.lang = Locale.current.identifier
     opts.developmentMode = false
     opts.playVersion = true
+    opts.configPath = Constants(process: .app).configDirectoryURL.path
     opts.timeZone = TimeZone.current.identifier
     opts.device = modelName
     opts.model = modelName
@@ -45,6 +46,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     try super.init(flutterBinary, model)
     observeStatsUpdates()
     observeBandwidthUpdates()
+    observeConfigUpdates()
     getUserId()
     getProToken()
   }
@@ -113,6 +115,12 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
       self, forKeyPath: Constants.bandwidthData, options: [.new], context: nil)
   }
 
+  func observeConfigUpdates() {
+    logger.debug("observing config udpates")
+    Constants.appGroupDefaults.addObserver(
+      self, forKeyPath: Constants.configupdate, options: [.new], context: nil)
+  }
+
   // System method that observe value user default path
   override func observeValue(
     forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?,
@@ -120,19 +128,38 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   ) {
     logger.debug("observeValue call with key \(keyPath)")
     switch keyPath {
-      case Constants.statsData:
-        if let statsData = change![.newKey] as? Data {
-          logger.debug("Stats message coming from tunnel")
-          updateStats(stats: statsData)
+    case Constants.statsData:
+      if let statsData = change![.newKey] as? Data {
+        logger.debug("Stats message coming from tunnel")
+        updateStats(stats: statsData)
+      }
+    case Constants.bandwidthData:
+      if let bandwidthData = change![.newKey] as? Data {
+        logger.debug("Bandwidth message coming from tunnel")
+        updateBandwidth(bandwidth: bandwidthData)
+      }
+    case Constants.configupdate:
+      if let config = change![.newKey] as? Bool {
+        if config {
+          logger.debug("upcomming message from vpn config")
+          checkForAvaliabelFeature()
         }
-      case Constants.bandwidthData:
-        if let bandwidthData = change![.newKey] as? Data {
-          logger.debug("Bandwidth message coming from tunnel")
-          updateBandwidth(bandwidth: bandwidthData)
-        }
-      default:
-        logger.debug("Unknown message \(keyPath)")
+
+      }
+
+    default:
+      logger.debug("Unknown message \(keyPath)")
     }
+  }
+
+  func checkForAvaliabelFeature() {
+    do {
+      try invoke("checkAvailableFeatures", completion: emptyCompletion)
+      logger.debug("checking for features:")
+    } catch {
+      logger.debug("error while checking features: \(error)")
+    }
+
   }
 
   func updateBandwidth(bandwidth: Data) {
