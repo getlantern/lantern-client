@@ -54,27 +54,22 @@ android {
         }
     }
     defaultConfig {
-
         multiDexEnabled = true
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        applicationId "org.getlantern.lantern"
+        versionCode code
 
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ['resourcePackageName': 'org.getlantern.lantern', "androidManifestFile": "$projectDir/src/main/AndroidManifest.xml".toString()]
             }
         }
-
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
-
-        applicationId "org.getlantern.lantern"
-
         ndk {
             // Specifies the ABI configurations of native libraries Gradle should build and package with the app.
             abiFilters = ["x86_64", "arm64-v8a"]
             debugSymbolLevel 'FULL'
         }
-
-        versionCode code
 
         if (project.hasProperty('lanternVersion')) {
             versionName "$project.lanternVersion ($project.lanternRevisionDate)"
@@ -82,10 +77,15 @@ android {
             versionName "9999.99.99"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
         vectorDrawables.useSupportLibrary = true
-    }
+        manifestPlaceholders = [
+                TapsellMediationAppKey                  : "ad680da7-f319-42cb-bdde-3b6c43486eaa",
+                TapsellMediationAdmobAdapterSignature   : "ca-app-pub-2685698271254859~9283700921",
+                TapsellMediationApplovinAdapterSignature: "YOUR_APPLOVIN_SIGNATURE",
+                TapsellMediationAppMarket               : "GooglePlay",
+        ]
 
+    }
     kotlin {
         jvmToolchain(17)
     }
@@ -100,6 +100,7 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
+
 
     signingConfigs {
         release {

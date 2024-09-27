@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (5.2.2)
-  - app_links (0.0.1):
+  - app_links (0.0.2):
     - Flutter
   - audioplayers_darwin (0.0.1):
     - Flutter
@@ -259,7 +259,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
-  app_links: e70ca16b4b0f88253b3b3660200d4a10b4ea9795
+  app_links: e7a6750a915a9e161c58d91bc610e8cd1d4d0ad0
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
