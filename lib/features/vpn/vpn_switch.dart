@@ -23,15 +23,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
   Widget build(BuildContext context) {
     final internetStatusProvider = context.watch<InternetStatusProvider>();
     final vpnNotifier = context.watch<VPNChangeNotifier>();
-
     if (isMobile()) {
-      return sessionModel
-          .shouldShowGoogleAds((context, isGoogleAdsEnable, child) {
-        //Since we don't have feature flag on ios at the moment
-        // disable ads'
-        if (Platform.isAndroid) {
-          adHelper.loadAds(shouldShowGoogleAds: isGoogleAdsEnable);
-        }
+      return sessionModel.shouldShowAds((context, provider, child) {
+        adHelper.loadAds(provider: provider);
         return vpnModel.vpnStatus(context,
             (BuildContext context, String vpnStatus, Widget? child) {
           // Changes scale on mobile due to hit target
@@ -51,7 +45,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
                 ? offSwitchColor
                 : grey3,
             onChanged: (newValue) =>
-                vpnProcessForMobile(newValue, vpnStatus, isGoogleAdsEnable),
+                vpnProcessForMobile(newValue, vpnStatus, provider.isNotEmpty),
           );
         });
       });
@@ -98,14 +92,13 @@ class _VPNSwitchState extends State<VPNSwitch> {
     //if ads is not ready then wait for at least 5 seconds and then show ads
     //if ads is ready then show ads immediately
 
-    if (Platform.isAndroid) {
-      if (vpnStatus != 'connected' && userHasPermission) {
-        if (!await adHelper.isAdsReadyToShow()) {
-          await vpnModel.connectingDelay(newValue);
-          await Future.delayed(const Duration(seconds: 5));
-        }
+    if (vpnStatus != 'connected' && userHasPermission) {
+      if (!await adHelper.isAdsReadyToShow()) {
+        await vpnModel.connectingDelay(newValue);
+        await Future.delayed(const Duration(seconds: 5));
       }
     }
+
     await vpnModel.switchVPN(newValue);
 
     //add delayed to avoid flickering

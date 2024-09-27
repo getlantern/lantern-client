@@ -13,8 +13,10 @@ import (
 	"github.com/1Password/srp"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/ios"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
@@ -26,9 +28,10 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
-	authClient  auth.AuthClient
-	proClient   pro.ProClient
-	surveyModel *SurveyModel
+	authClient    auth.AuthClient
+	proClient     pro.ProClient
+	surveyModel   *SurveyModel
+	iosConfigurer *config.Global
 }
 
 // Expose payment providers
@@ -77,6 +80,8 @@ const (
 	pathLang                   = "lang"
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
+	pathShowAds                = "showAds"
+	pathTapSellAdsEnabled      = "tapsellAdsEnabled"
 	pathStoreVersion           = "storeVersion"
 	pathTestPlayVersion        = "testPlayVersion"
 	pathServerInfo             = "/server_info"
@@ -118,6 +123,7 @@ type SessionModelOpts struct {
 	Lang            string
 	TimeZone        string
 	Platform        string
+	ConfigPath      string
 }
 
 var (
@@ -153,13 +159,13 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 
 	m := &SessionModel{baseModel: base}
+	deviceID, _ := m.GetDeviceID()
+	userID, _ := m.GetUserID()
+	token, _ := m.GetToken()
+	lang, _ := m.Locale()
 	webclientOpts := &webclient.Opts{
 		Timeout: dialTimeout,
 		UserConfig: func() common.UserConfig {
-			deviceID, _ := m.GetDeviceID()
-			userID, _ := m.GetUserID()
-			token, _ := m.GetToken()
-			lang, _ := m.Locale()
 			internalHeaders := map[string]string{
 				common.PlatformHeader:   opts.Platform,
 				common.AppVersionHeader: common.ApplicationVersion,
@@ -184,10 +190,33 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
-		m.SetAuthEnabled(true)
+		go m.setupIosConfigure(opts.ConfigPath, int(userID), token, deviceID)
 	}
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
+}
+
+// setupIosConfigure sets up the iOS configuration for the session model.
+// It continuously checks if the global configuration is available and retries every second if not.
+func (m *SessionModel) setupIosConfigure(configPath string, userId int, token string, deviceId string) {
+	go func() {
+		cf := ios.NewConfigurer(configPath, userId, token, deviceId, "")
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
+		for range ticker.C {
+			if cf.HasGlobalConfig() {
+				global, _, _, err := cf.OpenGlobal()
+				if err != nil {
+					log.Errorf("Error while opening global %v", err)
+					return
+				}
+				m.iosConfigurer = global
+				log.Debugf("Found global config IOS configure done %v", global)
+				return // Exit the loop after success
+			}
+			log.Debugf("global config not available, retrying...")
+		}
+	}()
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -626,6 +655,10 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "checkIfSurveyLinkOpened":
 		return m.checkIfSurveyLinkOpened(arguments.Scalar().String())
+	case "checkAvailableFeatures":
+		m.checkAvailableFeatures()
+		return true, nil
+
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -723,11 +756,46 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	}()
 	go checkSplitTunneling(m)
 	m.surveyModel, _ = NewSurveyModel(*m)
-	// By defautl on ios  auth flow enabled
-	if opts.Platform == "ios" {
+	return nil
+}
+
+func (m *SessionModel) checkAvailableFeatures() {
+	// Check for auth feature
+	authEnabled := m.featureEnabled(config.FeatureAuth)
+	m.SetAuthEnabled(authEnabled)
+	platfrom, _ := m.platform()
+	if platfrom == "ios" {
 		m.SetAuthEnabled(true)
 	}
-	return checkAdsEnabled(m)
+
+	// Check for ads feature
+	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
+	m.SetShowGoogleAds(googleAdsEnabled)
+
+	tapSellAdsEnabled := m.featureEnabled(config.FeatureTapsellAds)
+	m.SetShowTapSellAds(tapSellAdsEnabled)
+}
+
+// check if feature is enabled or not
+func (m *SessionModel) featureEnabled(feature string) bool {
+	userId, err := m.GetUserID()
+	if err != nil {
+		log.Errorf("Error while getting user id %v", err)
+		return false
+	}
+	isPro, err := m.IsProUser()
+	if err != nil {
+		log.Errorf("Error while getting user id %v", err)
+		return false
+	}
+	countryCode, err := m.GetCountryCode()
+	if err != nil {
+		log.Errorf("Error while getting user id %v", err)
+		return false
+	}
+	featureEnabled := m.iosConfigurer.FeatureEnabled(feature, common.Platform, common.DefaultAppName, common.ApplicationVersion, userId, isPro, countryCode)
+	log.Debugf("Feature %s enabled %v", feature, featureEnabled)
+	return featureEnabled
 }
 
 func (m *SessionModel) platform() (string, error) {
@@ -1191,11 +1259,20 @@ func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 	return pathdb.Get[bool](m.db, pathSplitTunneling)
 }
 
-func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
-	log.Debugf("SetShowInterstitialAdsEnabled %v", adsEnable)
+func (m *SessionModel) SetShowGoogleAds(adsEnable bool) {
+	log.Debugf("SetShowGoogleAds %v", adsEnable)
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathAdsEnabled, adsEnable, "")
+		return pathdb.Put(tx, pathShouldShowGoogleAds, adsEnable, "")
 	}))
+	checkAdsEnabled(m)
+}
+
+func (m *SessionModel) SetShowTapSellAds(adsEnable bool) {
+	log.Debugf("SetShowTapSellAds %v", adsEnable)
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathTapSellAdsEnabled, adsEnable, "")
+	}))
+	checkAdsEnabled(m)
 }
 
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
@@ -1453,17 +1530,16 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 func checkAdsEnabled(session *SessionModel) error {
 	log.Debugf("Check ads enabled")
 	// Check if ads is enable or not
-	adsEnable, err := pathdb.Get[bool](session.db, pathAdsEnabled)
+	isPro, err := session.IsProUser()
 	if err != nil {
-		return log.Errorf("Error while getting ads enabled %v", err)
+		return err
 	}
-	if !adsEnable {
+	if isPro {
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
+			return pathdb.Put[string](tx, pathShowAds, "", "")
 		})
 	}
-
-	// if enable
+	// if user is not pro check if user provdied all permission
 	hasAllPermisson, err := pathdb.Get[bool](session.db, pathHasAllNetworkPermssion)
 	if err != nil {
 		return err
@@ -1471,26 +1547,32 @@ func checkAdsEnabled(session *SessionModel) error {
 	// If the user doesn't have all permissions, disable Google ads:
 	if !hasAllPermisson {
 		log.Debugf("User has not given all permission")
-
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
-		})
-	}
-	log.Debugf("User has given all permission")
-	isPro, err := session.IsProUser()
-	if err != nil {
-		return err
-	}
-	if isPro {
-		log.Debugf("Is user pro %v", isPro)
-		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
+			return pathdb.Put[string](tx, pathShowAds, "", "")
 		})
 	}
 	// If the user has all permissions but is not a pro user, enable ads:
-	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathShouldShowGoogleAds, true, "")
-	})
+	googleAdsEnable, err := pathdb.Get[bool](session.db, pathShouldShowGoogleAds)
+	if err != nil {
+		return err
+	}
+	tapSellAdsEnable, err := pathdb.Get[bool](session.db, pathTapSellAdsEnabled)
+	if err != nil {
+		return err
+	}
+	if googleAdsEnable {
+		log.Debug("Google Ads is enabled")
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put[string](tx, pathShowAds, "google", "")
+		})
+	}
+	if tapSellAdsEnable {
+		log.Debug("TapSell Ads is enabled")
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put[string](tx, pathShowAds, "tapsell", "")
+		})
+	}
+	return nil
 
 }
 func redeemResellerCode(m *SessionModel, email string, resellerCode string) error {
@@ -2021,6 +2103,7 @@ func clearLocalUserData(session SessionModel) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:     nil,
 			pathEmailAddress: "",
+			pathBandwidth:    nil,
 		})
 	})
 	if err1 != nil {

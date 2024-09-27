@@ -2,70 +2,45 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/features/replica/common.dart';
 import 'package:logger/logger.dart';
+import 'package:tapsell_mediation/tapsell.dart';
 
-enum AdType { Google }
+enum _AdsProvider { tapsell, google }
 
-const privacyPolicy = 'https://lantern.io/privacy';
+var logger = Logger(
+  printer: PrettyPrinter(
+    printEmojis: true,
+    methodCount: 0,
+    colors: true,
+  ),
+  level: Level.debug,
+);
 
-const googleAttributes = {
-  'provider': "Google",
-};
+abstract class AdsProvider {
+  Future<void> loadInterstitialAd(VoidCallback adLoadedCallback);
 
+  Future<void> showInterstitialAd();
 
-var logger = Logger(printer: PrettyPrinter(), level: Level.debug);
+  Future<void> dispose();
 
-class AdHelper {
-  static final AdHelper _instance = AdHelper._internal();
+  bool isAdReady();
+}
 
-  AdHelper._internal();
-
-  factory AdHelper() {
-    return _instance;
-  }
-
-
+class GoogleAdsProvider implements AdsProvider {
   InterstitialAd? _interstitialAd;
   int _failedLoadAttempts = 0;
+  bool isAdsShown = false;
 
-  //If ads are getting failed to load we want to make lot of calls
-  // Just try 5 times
   final int _maxFailAttempts = 5;
-  bool isAdsLoading = false;
-  //Google Test ID if needed to test
-  // return 'ca-app-pub-3940256099942544/1033173712';
-  String get interstitialAdUnitId {
-    if (Platform.isAndroid) {
-      return AppSecret.androidAdsAppId;
-    } else {
-      return AppSecret.iOSAdsAppId;
-    }
-  }
 
-  // Private methods to decide whether to load or show Google Ads or CAS ads based on conditions
-  Future<void> _decideAndLoadAds({required bool shouldShowGoogleAds}) async {
-    checkForConsent();
-    logger.d('[Ads Manager] Google Ads enable $shouldShowGoogleAds:');
-    if (shouldShowGoogleAds) {
-      logger.i('[Ads Manager] Decision: Loading Google Ads.');
-      await _loadInterstitialAd();
-    }
-  }
-
-  Future<bool> isAdsReadyToShow() async {
-    return _interstitialAd != null;
-  }
-
-  Future<void> _decideAndShowAds() async {
-    if (_interstitialAd != null) {
-      await _showInterstitialAd();
-    }
-  }
-
-  Future<void> _loadInterstitialAd() async {
-    //To avoid calling multiple ads request repeatedly
-    isAdsLoading= true;
-    assert(interstitialAdUnitId != "",
+  @override
+  Future<void> loadInterstitialAd(VoidCallback adLoadedCallback) async {
+    assert(interstitialAdUnitId.isNotEmpty,
         "interstitialAdUnitId should not be null or empty");
+
+    if (isAdsShown) {
+      logger.i("[Ads Manager] Google ad is already shown");
+      return;
+    }
     if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {
       logger.i('[Ads Manager] Request: Making Google Ad request.');
       await InterstitialAd.load(
@@ -74,102 +49,191 @@ class AdHelper {
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (ad) {
             _failedLoadAttempts = 0;
-            isAdsLoading= false;
             ad.fullScreenContentCallback = FullScreenContentCallback(
               onAdClicked: (ad) {
+                isAdsShown = true;
                 logger.i('[Ads Manager] onAdClicked callback');
               },
               onAdShowedFullScreenContent: (ad) {
+                isAdsShown = true;
                 logger.i('[Ads Manager] Showing Ads');
               },
               onAdFailedToShowFullScreenContent: (ad, error) {
                 logger.i(
                     '[Ads Manager] onAdFailedToShowFullScreenContent callback');
-                //if ads fail to load let user turn on VPN
-                _postShowingAds();
               },
               onAdDismissedFullScreenContent: (ad) {
+                isAdsShown = true;
                 logger.i('[Ads Manager] fullScreenContentCallback callback');
-                _postShowingAds();
               },
             );
             _interstitialAd = ad;
-            logger.i('[Ads Manager] to loaded $ad');
+            logger.i('[Ads Manager] Ad loaded $ad');
+            adLoadedCallback();
           },
           onAdFailedToLoad: (err) {
-            _failedLoadAttempts++; // increment the count on failure
+            _failedLoadAttempts++;
             logger.i('[Ads Manager] failed to load $err');
-            _postShowingAds();
+            Future.delayed(
+              const Duration(milliseconds: 500),
+              () {
+                loadInterstitialAd(adLoadedCallback);
+              },
+            );
           },
         ),
       );
     }
   }
 
-  void _postShowingAds() {
-    _interstitialAd?.dispose();
-    _interstitialAd = null;
-    logger.i(
-        '[Ads Manager] Post-show: Google Ad displayed. Resetting failed load attempts and requesting a new ad.');
-    _loadInterstitialAd();
-  }
-
-  Future<void> _showInterstitialAd() async {
-    if (_interstitialAd != null) {
-      await _interstitialAd?.show();
-    }
-  }
-
-  // Public methods
-  Future<void> loadAds({
-    required bool shouldShowGoogleAds,
-  }) async {
-    if(isAdsLoading) {
-      logger.i('[Ads Manager] Request: Ads already loading. Ignoring request.');
+  @override
+  Future<void> showInterstitialAd() async {
+    if (isAdsShown) {
+      logger.i("[Ads Manager] Google ad is already shown");
       return;
     }
+    _interstitialAd?.show();
+  }
 
-    await _decideAndLoadAds(
-      shouldShowGoogleAds: shouldShowGoogleAds,
+  @override
+  Future<void> dispose() async {
+    await _interstitialAd?.dispose();
+  }
+
+  String get interstitialAdUnitId {
+    return Platform.isAndroid
+        ? AppSecret.androidAdsAppId
+        : AppSecret.iOSAdsAppId;
+  }
+
+  @override
+  bool isAdReady() {
+    return _interstitialAd != null;
+  }
+}
+
+class TapSellAdsProvider implements AdsProvider {
+  String appId = '';
+  int _failedLoadAttempts = 0;
+  bool isAdLoading = false;
+  bool isAdsShown = false;
+  final int _maxFailAttempts = 5;
+
+  @override
+  Future<void> loadInterstitialAd(VoidCallback adLoadedCallback) async {
+    // Since we are showing ads to non-EU user
+    Tapsell.setUserConsent(true);
+
+    if (isAdLoading || isAdsShown || appId.isNotEmpty) {
+      logger.i(
+          "[Ads Manager] Tapsell ad is already loading $isAdLoading or shown $isAdsShown");
+      return;
+    }
+    if (_failedLoadAttempts < _maxFailAttempts) {
+      try {
+        isAdLoading = true;
+        appId = (await Tapsell.requestInterstitialAd(
+                AppSecret.videoInterstitialZoneId)) ??
+            '';
+        logger.i("[Ads Manager] Tapsell ad loaded $appId");
+        isAdLoading = false;
+        if (appId.isNotEmpty) {
+          adLoadedCallback();
+        } else {
+          _failedLoadAttempts++;
+          Future.delayed(
+            const Duration(milliseconds: 500),
+            () {
+              loadInterstitialAd(adLoadedCallback);
+            },
+          );
+        }
+      } catch (e) {
+        logger.e("[Ads Manager] requesting tapsell ad failed $e", error: e);
+        _failedLoadAttempts++;
+        isAdLoading = false;
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () {
+            loadInterstitialAd(adLoadedCallback);
+          },
+        );
+      }
+    }
+  }
+
+  @override
+  Future<void> showInterstitialAd() async {
+    if (appId.isEmpty || isAdsShown) {
+      logger.i(
+          "[Ads Manager] Tapsell ad is not ready or already shown $isAdsShown");
+      return;
+    }
+    await Tapsell.showInterstitialAd(
+      appId,
+      onAdClicked: () {
+        logger.i("[Ads Manager] Tapsell ad clicked");
+        isAdsShown = true;
+      },
+      onAdFailed: (message) {
+        logger.e("[Ads Manager] Tapsell ad failed to show $message");
+      },
+      onAdClosed: (completionState) {
+        logger.i("[Ads Manager] Tapsell ad closed $completionState");
+        isAdsShown = true;
+      },
+      onAdImpression: () {
+        logger.i("[Ads Manager] Tapsell ad impression");
+        isAdsShown = true;
+      },
     );
   }
 
-  Future<void> checkForConsent() async {
-    logger.d('[Ads Manager] Checking for consent');
-    final consentStatus = await ConsentInformation.instance.getConsentStatus();
-    if (consentStatus == ConsentStatus.required) {
-      logger.d('[Ads Manager] Consent Required');
-      _loadConsentForm();
-      return;
-    }
-    logger.d('[Ads Manager] consent not needed');
+  @override
+  Future<void> dispose() {
+    appId = '';
+    isAdsShown = true;
+    return Future.value();
   }
 
-  void _loadConsentForm() {
-    final params = ConsentRequestParameters();
-    ConsentInformation.instance.requestConsentInfoUpdate(params, () async {
-      // success
-      if (await ConsentInformation.instance.isConsentFormAvailable()) {
-        logger.d('[Ads Manager] Consent Form is available ');
-        ConsentForm.loadConsentForm((consentForm) {
-          logger.d('[Ads Manager] Consent Form Loaded ');
-          //Form is loaded successfully
-          // Ready to display the consent
-          consentForm.show((formError) {
-            logger.d('[Ads Manager] Consent form dismissed');
-          });
-        }, (formError) {
-          logger.d('[Ads Manager] Failed to load consent form');
-          //Error while loading form
-        });
-      }
-    }, (error) {
-      // failure
-      logger.d('[Ads Manager] Failed to request consent form');
-    });
+  @override
+  bool isAdReady() {
+    return appId.isNotEmpty;
+  }
+}
+
+class AdHelper {
+  final googleAdsService = GoogleAdsProvider();
+  final tapSellAdsService = TapSellAdsProvider();
+  static final AdHelper _instance = AdHelper._internal();
+
+  AdHelper._internal();
+
+  factory AdHelper() => _instance;
+
+  Future<bool> isAdsReadyToShow() async {
+    return googleAdsService.isAdReady() || tapSellAdsService.isAdReady();
+  }
+
+  Future<void> loadAds({required String provider}) async {
+    if(provider.isEmpty){
+      logger.i("[Ads Manager] Provider is empty do not show ads");
+      return;
+    }
+    if (provider == _AdsProvider.google.name) {
+      logger.i("[Ads Manager] Loading Google Ads");
+      await googleAdsService.loadInterstitialAd(showAds);
+    } else if (provider == _AdsProvider.tapsell.name) {
+      logger.i("[Ads Manager] Loading Tapsell Ads");
+      await tapSellAdsService.loadInterstitialAd(showAds);
+    }
   }
 
   Future<void> showAds() async {
-    await _decideAndShowAds();
+    if (googleAdsService.isAdReady()) {
+      await googleAdsService.showInterstitialAd();
+    } else if (tapSellAdsService.isAdReady()) {
+      await tapSellAdsService.showInterstitialAd();
+    }
   }
 }

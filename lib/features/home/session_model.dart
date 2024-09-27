@@ -509,12 +509,21 @@ class SessionModel extends Model {
         .setCurrentIndex(tab);
   }
 
-  Widget shouldShowGoogleAds(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>(
-      'shouldShowGoogleAds',
+
+
+  /// this is only used for android and ios
+  /// if string value is "" then it will not show ads
+  /// if string value is "tapsell" then it will show tapsell ads
+  /// if string value is "admob" then it will show admob ads
+  Widget shouldShowAds(ValueWidgetBuilder<String> builder) {
+    return subscribedSingleValueBuilder<String>(
+      'showAds',
       builder: builder,
+      defaultValue: ''
     );
   }
+
+
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {

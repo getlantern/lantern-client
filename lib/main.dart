@@ -77,5 +77,5 @@ Future<void> main() async {
 
 Future<void> _initGoogleMobileAds() async {
   await MobileAds.instance.initialize();
-  await MobileAds.instance.setAppMuted(true);
+  // await MobileAds.instance.setAppMuted(true);
 }

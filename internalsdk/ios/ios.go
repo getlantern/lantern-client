@@ -275,21 +275,32 @@ func (c *iosClient) start() (ClientWriter, error) {
 func bandwidthUpdates(bt BandwidthTracker) {
 	go func() {
 		for quota := range bandwidth.Updates {
-			if quota == nil || quota.MiBAllowed > 50000000 {
-				continue
-			}
-			var percent, remaining int
-			if quota.MiBUsed >= quota.MiBAllowed {
-				percent = 100
-				remaining = 0
-			} else {
-				percent = int(100 * (float64(quota.MiBUsed) / float64(quota.MiBAllowed)))
-				remaining = int(quota.MiBAllowed - quota.MiBUsed)
-			}
-
-			bt.BandwidthUpdate("", percent, remaining, int(quota.MiBAllowed), int(quota.TTLSeconds))
+			percent, remaining, allowed := getBandwidth(quota)
+			bt.BandwidthUpdate("", percent, remaining, allowed, int(quota.TTLSeconds))
 		}
 	}()
+}
+
+func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
+	remaining := 0
+	percent := 100
+	if quota == nil {
+		return 0, 0, 0
+	}
+
+	allowed := quota.MiBAllowed
+	if allowed > 50000000 {
+		return 0, 0, 0
+	}
+
+	if quota.MiBUsed >= quota.MiBAllowed {
+		percent = 100
+		remaining = 0
+	} else {
+		percent = int(100 * (float64(quota.MiBUsed) / float64(quota.MiBAllowed)))
+		remaining = int(quota.MiBAllowed - quota.MiBUsed)
+	}
+	return percent, remaining, int(quota.MiBAllowed)
 }
 
 func (c *iosClient) loadUserConfig() error {

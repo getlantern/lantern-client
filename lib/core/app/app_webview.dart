@@ -147,11 +147,8 @@ class AppBrowser extends InAppBrowser {
         await openWindowsWebview(url);
         break;
       case 'macos':
-
-        ///**Officially Supported Platforms/Implementations**:
-        ///- Android native WebView
-        ///- iOS
-        ///- MacOS
+        InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+      case 'ios':
         InAppBrowser.openWithSystemBrowser(url: WebUri(url));
         break;
       default:

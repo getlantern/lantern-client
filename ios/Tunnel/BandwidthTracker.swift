@@ -8,7 +8,7 @@
 import Foundation
 import Internalsdk
 
-// BandwidthTracker serves as an abstraction for updating bandwidth/data usage statistics 
+// BandwidthTracker serves as an abstraction for updating bandwidth/data usage statistics
 // relevant to the VPN connection.
 class BandwidthTracker: NSObject, IosBandwidthTrackerProtocol {
   func bandwidthUpdate(_ p0: String?, p1: Int, p2: Int, p3: Int, p4: Int) {

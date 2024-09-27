@@ -23,9 +23,6 @@ class _SignInPasswordState extends State<SignInPassword> {
       if (value!.isEmpty) {
         return 'password_cannot_be_empty'.i18n;
       }
-      if (value.length < 8) {
-        return 'password_must_be_at_least_8_characters'.i18n;
-      }
       return null;
     },
   );
@@ -61,7 +58,7 @@ class _SignInPasswordState extends State<SignInPassword> {
             SizedBox(
               width: double.infinity,
               child: Button(
-                disabled: _passwordController.text.length < 8,
+                disabled: _passwordController.text.isEmpty,
                 text: 'continue'.i18n,
                 onPressed: onContinueTap,
               ),
