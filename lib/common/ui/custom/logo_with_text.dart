@@ -1,4 +1,4 @@
-import '../../common.dart';
+import '../../../core/utils/common.dart';
 
 class LogoWithText extends StatelessWidget {
   const LogoWithText({super.key});

@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/features/messaging/messaging.dart';
 
 /// Based on https://www.flutterclutter.dev/flutter/tutorials/date-format-dynamic-string-depending-on-how-long-ago/2020/229/
 extension Humanize on int {

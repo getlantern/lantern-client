@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   connectivity_plus
   emoji_picker_flutter
+  flutter_inappwebview_windows
   flutter_windows_webview
   permission_handler_windows
   screen_retriever
