@@ -13,6 +13,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/joho/godotenv"
+
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
@@ -31,7 +33,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/osversion"
-	"github.com/joho/godotenv"
 )
 
 import "C"
@@ -70,7 +71,7 @@ func init() {
 	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
 		UserConfig: userConfig,
 	})
-	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
+	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.APIBaseURL), userConfig)
 
 	a = app.NewApp(flags, cdir, proClient, ss)
 }

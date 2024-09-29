@@ -182,11 +182,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
 
-	authUrl := common.DFBaseUrl
-	if opts.Platform == "ios" {
-		authUrl = common.APIBaseUrl
-	}
-	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), webclientOpts.UserConfig)
+	m.authClient = auth.NewClient(common.APIBaseURL, webclientOpts.UserConfig)
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {

@@ -42,8 +42,9 @@ var (
 
 	ProAPIHost = "api.getiantem.org"
 
-	DFBaseUrl  = "df.iantem.io/api/v1"
-	APIBaseUrl = "iantem.io/api/v1"
+	// APIBaseURL is the URL for all requests to the back-end "API service". Paths at this URL can
+	// be hit directly, through proxies, or through domain fronting.
+	APIBaseURL = "df.iantem.io/api/v1"
 
 	log = golog.LoggerFor("flashlight.common")
 
