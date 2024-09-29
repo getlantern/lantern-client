@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
+
+	"github.com/go-resty/resty/v2"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/proxied"
@@ -13,7 +16,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
-	"github.com/go-resty/resty/v2"
 
 	"github.com/leekchan/accounting"
 	"github.com/shopspring/decimal"
@@ -57,17 +59,26 @@ type ProClient interface {
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	if opts.HttpClient == nil {
-		// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
-		// attempts to send requests through both chained and direct fronted routes in parallel
-		// for HEAD and GET requests and ChainedThenFronted for all others.
-		opts.HttpClient = NewHTTPClient(proxied.ParallelForIdempotent(), opts.Timeout)
+		opts.HttpClient = &http.Client{
+			// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
+			// attempts to send requests through both chained and direct fronted routes in parallel
+			// for HEAD and GET requests and ChainedThenFronted for all others.
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		}
 	}
+
 	if opts.OnBeforeRequest == nil {
 		opts.OnBeforeRequest = func(client *resty.Client, req *http.Request) error {
-			prepareProRequest(req, common.ProAPIHost, opts.UserConfig())
+			prepareProRequest(req, opts.UserConfig())
 			return nil
 		}
 	}
+
+	if opts.BaseURL == "" {
+		opts.BaseURL = baseURL
+	}
+
 	return &proClient{
 		userConfig: opts.UserConfig,
 		RESTClient: webclient.NewRESTClient(opts),
@@ -75,11 +86,10 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 }
 
 // prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
-func prepareProRequest(r *http.Request, proAPIHost string, userConfig common.UserConfig) {
+func prepareProRequest(r *http.Request, userConfig common.UserConfig) {
 	if r.URL.Scheme == "" {
 		r.URL.Scheme = "http"
 	}
-	r.URL.Host = proAPIHost
 	r.RequestURI = "" // http: Request.RequestURI can't be set in client requests.
 	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 		common.DeviceIdHeader,

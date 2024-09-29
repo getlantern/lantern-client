@@ -26,7 +26,7 @@ package pro
 // 		},
 // 	}
 
-// 	proClient := NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+// 	proClient := NewClient(common.ProAPIBaseURL, webclientOpts)
 
 // 	puchaseData := map[string]interface{}{
 // 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
