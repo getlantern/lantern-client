@@ -1,4 +1,4 @@
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 /// A stopwatch countdown timer.
 class CountdownStopwatch extends StatelessWidget {

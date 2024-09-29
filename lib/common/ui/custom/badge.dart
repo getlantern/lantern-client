@@ -1,5 +1,5 @@
 import 'package:badges/badges.dart';
-import 'package:lantern/common/common.dart' hide Badge;
+import 'package:lantern/core/utils/common.dart' hide Badge;
 
 class CBadge extends StatelessWidget {
   final int count;

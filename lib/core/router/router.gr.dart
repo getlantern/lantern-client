@@ -8,584 +8,80 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:io' as _i62;
-import 'dart:ui' as _i60;
+import 'dart:io' as _i61;
 
 import 'package:auto_route/auto_route.dart' as _i57;
-import 'package:flutter/cupertino.dart' as _i63;
-import 'package:lantern/account/account.dart' as _i2;
-import 'package:lantern/account/account_management.dart' as _i1;
-import 'package:lantern/account/auth/auth_landing.dart' as _i6;
-import 'package:lantern/account/auth/change_email.dart' as _i11;
-import 'package:lantern/account/auth/confirm_email.dart' as _i17;
-import 'package:lantern/account/auth/create_account_email.dart' as _i20;
-import 'package:lantern/account/auth/create_account_password.dart' as _i21;
-import 'package:lantern/account/auth/reset_password.dart' as _i47;
-import 'package:lantern/account/auth/restore_purchase.dart' as _i48;
-import 'package:lantern/account/auth/sign_in.dart' as _i50;
-import 'package:lantern/account/auth/sign_in_password.dart' as _i51;
-import 'package:lantern/account/auth/verification.dart' as _i56;
-import 'package:lantern/account/blocked_users.dart' as _i10;
-import 'package:lantern/account/chat_number_account.dart' as _i12;
-import 'package:lantern/account/device_linking/add_device.dart' as _i3;
-import 'package:lantern/account/device_linking/authorize_device_for_pro.dart'
-    as _i7;
-import 'package:lantern/account/device_linking/authorize_device_via_email.dart'
-    as _i8;
-import 'package:lantern/account/device_linking/authorize_device_via_email_pin.dart'
-    as _i9;
-import 'package:lantern/account/device_linking/device_limit.dart' as _i22;
-import 'package:lantern/account/device_linking/link_device.dart' as _i30;
-import 'package:lantern/account/invite_friends.dart' as _i27;
-import 'package:lantern/account/language.dart' as _i28;
-import 'package:lantern/account/lantern_desktop.dart' as _i29;
-import 'package:lantern/account/proxies_setting.dart' as _i34;
-import 'package:lantern/account/recovery_key.dart' as _i35;
-import 'package:lantern/account/report_issue.dart' as _i44;
-import 'package:lantern/account/settings.dart' as _i49;
-import 'package:lantern/account/split_tunneling.dart' as _i52;
-import 'package:lantern/account/support.dart' as _i55;
-import 'package:lantern/common/common.dart' as _i59;
-import 'package:lantern/common/ui/app_webview.dart' as _i5;
+import 'package:flutter/cupertino.dart' as _i62;
 import 'package:lantern/common/ui/full_screen_dialog.dart' as _i23;
-import 'package:lantern/home.dart' as _i24;
-import 'package:lantern/messaging/contacts/add_contact_number.dart' as _i4;
-import 'package:lantern/messaging/contacts/contact_info.dart' as _i18;
-import 'package:lantern/messaging/contacts/new_chat.dart' as _i31;
-import 'package:lantern/messaging/conversation/conversation.dart' as _i19;
-import 'package:lantern/messaging/introductions/introduce.dart' as _i25;
-import 'package:lantern/messaging/introductions/introductions.dart' as _i26;
-import 'package:lantern/messaging/messaging.dart' as _i58;
-import 'package:lantern/messaging/onboarding/chat_number_messaging.dart'
+import 'package:lantern/core/app/app_webview.dart' as _i5;
+import 'package:lantern/core/utils/common.dart' as _i59;
+import 'package:lantern/features/account/account.dart' as _i2;
+import 'package:lantern/features/account/account_management.dart' as _i1;
+import 'package:lantern/features/account/blocked_users.dart' as _i10;
+import 'package:lantern/features/account/chat_number_account.dart' as _i12;
+import 'package:lantern/features/account/invite_friends.dart' as _i27;
+import 'package:lantern/features/account/language.dart' as _i28;
+import 'package:lantern/features/account/lantern_desktop.dart' as _i29;
+import 'package:lantern/features/account/proxies_settings.dart' as _i34;
+import 'package:lantern/features/account/recovery_key.dart' as _i35;
+import 'package:lantern/features/account/report_issue.dart' as _i44;
+import 'package:lantern/features/account/settings.dart' as _i49;
+import 'package:lantern/features/account/split_tunneling.dart' as _i52;
+import 'package:lantern/features/account/support.dart' as _i55;
+import 'package:lantern/features/auth/auth_landing.dart' as _i6;
+import 'package:lantern/features/auth/change_email.dart' as _i11;
+import 'package:lantern/features/auth/confirm_email.dart' as _i17;
+import 'package:lantern/features/auth/create_account_email.dart' as _i20;
+import 'package:lantern/features/auth/create_account_password.dart' as _i21;
+import 'package:lantern/features/auth/reset_password.dart' as _i47;
+import 'package:lantern/features/auth/restore_purchase.dart' as _i48;
+import 'package:lantern/features/auth/sign_in.dart' as _i50;
+import 'package:lantern/features/auth/sign_in_password.dart' as _i51;
+import 'package:lantern/features/auth/verification.dart' as _i56;
+import 'package:lantern/features/checkout/checkout.dart' as _i15;
+import 'package:lantern/features/checkout/checkout_legacy.dart' as _i16;
+import 'package:lantern/features/checkout/plans.dart' as _i32;
+import 'package:lantern/features/checkout/play_checkout.dart' as _i33;
+import 'package:lantern/features/checkout/reseller_checkout.dart' as _i46;
+import 'package:lantern/features/checkout/reseller_checkout_legacy.dart'
+    as _i45;
+import 'package:lantern/features/checkout/store_checkout.dart' as _i53;
+import 'package:lantern/features/checkout/stripe_checkout.dart' as _i54;
+import 'package:lantern/features/device_linking/add_device.dart' as _i3;
+import 'package:lantern/features/device_linking/authorize_device_for_pro.dart'
+    as _i7;
+import 'package:lantern/features/device_linking/authorize_device_via_email.dart'
+    as _i8;
+import 'package:lantern/features/device_linking/authorize_device_via_email_pin.dart'
+    as _i9;
+import 'package:lantern/features/device_linking/device_limit.dart' as _i22;
+import 'package:lantern/features/device_linking/link_device.dart' as _i30;
+import 'package:lantern/features/home/home.dart' as _i24;
+import 'package:lantern/features/messaging/contacts/add_contact_number.dart'
+    as _i4;
+import 'package:lantern/features/messaging/contacts/contact_info.dart' as _i18;
+import 'package:lantern/features/messaging/contacts/new_chat.dart' as _i31;
+import 'package:lantern/features/messaging/conversation/conversation.dart'
+    as _i19;
+import 'package:lantern/features/messaging/introductions/introduce.dart'
+    as _i25;
+import 'package:lantern/features/messaging/introductions/introductions.dart'
+    as _i26;
+import 'package:lantern/features/messaging/messaging.dart' as _i58;
+import 'package:lantern/features/messaging/onboarding/chat_number_messaging.dart'
     as _i13;
-import 'package:lantern/messaging/onboarding/chat_number_recovery.dart' as _i14;
-import 'package:lantern/plans/checkout.dart' as _i15;
-import 'package:lantern/plans/checkout_legacy.dart' as _i16;
-import 'package:lantern/plans/plans.dart' as _i32;
-import 'package:lantern/plans/play_checkout.dart' as _i33;
-import 'package:lantern/plans/reseller_checkout.dart' as _i46;
-import 'package:lantern/plans/reseller_checkout_legacy.dart' as _i45;
-import 'package:lantern/plans/store_checkout.dart' as _i53;
-import 'package:lantern/plans/stripe_checkout.dart' as _i54;
-import 'package:lantern/replica/common.dart' as _i61;
-import 'package:lantern/replica/link_handler.dart' as _i38;
-import 'package:lantern/replica/ui/viewers/audio.dart' as _i36;
-import 'package:lantern/replica/ui/viewers/image.dart' as _i37;
-import 'package:lantern/replica/ui/viewers/misc.dart' as _i39;
-import 'package:lantern/replica/ui/viewers/video.dart' as _i43;
-import 'package:lantern/replica/upload/description.dart' as _i40;
-import 'package:lantern/replica/upload/review.dart' as _i41;
-import 'package:lantern/replica/upload/title.dart' as _i42;
-import 'package:lantern/vpn/vpn.dart' as _i64;
-
-abstract class $AppRouter extends _i57.RootStackRouter {
-  $AppRouter({super.navigatorKey});
-
-  @override
-  final Map<String, _i57.PageFactory> pagesMap = {
-    AccountManagement.name: (routeData) {
-      final args = routeData.argsAs<AccountManagementArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i1.AccountManagement(
-          key: args.key,
-          isPro: args.isPro,
-        ),
-      );
-    },
-    Account.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i2.AccountMenu(),
-      );
-    },
-    ApproveDevice.name: (routeData) {
-      final args = routeData.argsAs<ApproveDeviceArgs>(
-          orElse: () => const ApproveDeviceArgs());
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i3.AddDevice(key: args.key),
-      );
-    },
-    AddViaChatNumber.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i4.AddViaChatNumber(),
-      );
-    },
-    AppWebview.name: (routeData) {
-      final args = routeData.argsAs<AppWebviewArgs>();
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i5.AppWebView(
-          key: args.key,
-          url: args.url,
-          title: args.title,
-        ),
-      );
-    },
-    AuthLanding.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i6.AuthLanding(),
-      );
-    },
-    AuthorizePro.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i7.AuthorizeDeviceForPro(),
-      );
-    },
-    AuthorizeDeviceEmail.name: (routeData) {
-      final args = routeData.argsAs<AuthorizeDeviceEmailArgs>(
-          orElse: () => const AuthorizeDeviceEmailArgs());
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i8.AuthorizeDeviceViaEmail(key: args.key),
-      );
-    },
-    AuthorizeDeviceEmailPin.name: (routeData) {
-      final args = routeData.argsAs<AuthorizeDeviceEmailPinArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i9.AuthorizeDeviceViaEmailPin(
-          key: args.key,
-          email: args.email,
-        ),
-      );
-    },
-    BlockedUsers.name: (routeData) {
-      final args = routeData.argsAs<BlockedUsersArgs>(
-          orElse: () => const BlockedUsersArgs());
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i10.BlockedUsers(key: args.key),
-      );
-    },
-    ChangeEmail.name: (routeData) {
-      final args = routeData.argsAs<ChangeEmailArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i11.ChangeEmail(
-          key: args.key,
-          email: args.email,
-        ),
-      );
-    },
-    ChatNumberAccount.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i12.ChatNumberAccount(),
-      );
-    },
-    ChatNumberMessaging.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i13.ChatNumberMessaging(),
-      );
-    },
-    ChatNumberRecovery.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i14.ChatNumberRecovery(),
-      );
-    },
-    Checkout.name: (routeData) {
-      final args = routeData.argsAs<CheckoutArgs>();
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i15.Checkout(
-          plan: args.plan,
-          isPro: args.isPro,
-          authFlow: args.authFlow,
-          email: args.email,
-          verificationPin: args.verificationPin,
-          key: args.key,
-        ),
-      );
-    },
-    CheckoutLegacy.name: (routeData) {
-      final args = routeData.argsAs<CheckoutLegacyArgs>();
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i16.CheckoutLegacy(
-          plan: args.plan,
-          isPro: args.isPro,
-          key: args.key,
-        ),
-      );
-    },
-    ConfirmEmail.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i17.ConfirmEmail(),
-      );
-    },
-    ContactInfo.name: (routeData) {
-      final args = routeData.argsAs<ContactInfoArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i18.ContactInfo(contact: args.contact),
-      );
-    },
-    Conversation.name: (routeData) {
-      final args = routeData.argsAs<ConversationArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i19.Conversation(
-          contactId: args.contactId,
-          initialScrollIndex: args.initialScrollIndex,
-          showContactEditingDialog: args.showContactEditingDialog,
-        ),
-      );
-    },
-    CreateAccountEmail.name: (routeData) {
-      final args = routeData.argsAs<CreateAccountEmailArgs>(
-          orElse: () => const CreateAccountEmailArgs());
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i20.CreateAccountEmail(
-          key: args.key,
-          plan: args.plan,
-          authFlow: args.authFlow,
-          email: args.email,
-        ),
-      );
-    },
-    CreateAccountPassword.name: (routeData) {
-      final args = routeData.argsAs<CreateAccountPasswordArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i21.CreateAccountPassword(
-          key: args.key,
-          email: args.email,
-          code: args.code,
-        ),
-      );
-    },
-    DeviceLimit.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i22.DeviceLimit(),
-      );
-    },
-    FullScreenDialogPage.name: (routeData) {
-      final args = routeData.argsAs<FullScreenDialogPageArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i23.FullScreenDialog(
-          widget: args.widget,
-          bgColor: args.bgColor,
-          key: args.key,
-        ),
-      );
-    },
-    Home.name: (routeData) {
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i24.HomePage(),
-      );
-    },
-    Introduce.name: (routeData) {
-      final args = routeData.argsAs<IntroduceArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i25.Introduce(
-          singleIntro: args.singleIntro,
-          contactToIntro: args.contactToIntro,
-        ),
-      );
-    },
-    Introductions.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i26.Introductions(),
-      );
-    },
-    InviteFriends.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i27.InviteFriends(),
-      );
-    },
-    Language.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i28.Language(),
-      );
-    },
-    LanternDesktop.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i29.LanternDesktop(),
-      );
-    },
-    LinkDevice.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i30.LinkDevice(),
-      );
-    },
-    NewChat.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i31.NewChat(),
-      );
-    },
-    PlansPage.name: (routeData) {
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i32.PlansPage(),
-      );
-    },
-    PlayCheckout.name: (routeData) {
-      final args = routeData.argsAs<PlayCheckoutArgs>();
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i33.PlayCheckout(
-          plan: args.plan,
-          isPro: args.isPro,
-          key: args.key,
-        ),
-      );
-    },
-    ProxiesSetting.name: (routeData) {
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i34.ProxiesSetting(),
-      );
-    },
-    RecoveryKey.name: (routeData) {
-      final args = routeData.argsAs<RecoveryKeyArgs>(
-          orElse: () => const RecoveryKeyArgs());
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i35.RecoveryKey(key: args.key),
-      );
-    },
-    ReplicaAudioViewer.name: (routeData) {
-      final args = routeData.argsAs<ReplicaAudioViewerArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i36.ReplicaAudioViewer(
-          replicaApi: args.replicaApi,
-          item: args.item,
-          category: args.category,
-        ),
-      );
-    },
-    ReplicaImageViewer.name: (routeData) {
-      final args = routeData.argsAs<ReplicaImageViewerArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i37.ReplicaImageViewer(
-          replicaApi: args.replicaApi,
-          item: args.item,
-          category: args.category,
-        ),
-      );
-    },
-    ReplicaLinkHandler.name: (routeData) {
-      final args = routeData.argsAs<ReplicaLinkHandlerArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i38.ReplicaLinkHandler(
-          key: args.key,
-          replicaApi: args.replicaApi,
-          replicaLink: args.replicaLink,
-        ),
-      );
-    },
-    ReplicaMiscViewer.name: (routeData) {
-      final args = routeData.argsAs<ReplicaMiscViewerArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i39.ReplicaMiscViewer(
-          replicaApi: args.replicaApi,
-          item: args.item,
-          category: args.category,
-        ),
-      );
-    },
-    ReplicaUploadDescription.name: (routeData) {
-      final args = routeData.argsAs<ReplicaUploadDescriptionArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i40.ReplicaUploadDescription(
-          key: args.key,
-          fileToUpload: args.fileToUpload,
-          fileTitle: args.fileTitle,
-          fileDescription: args.fileDescription,
-        ),
-      );
-    },
-    ReplicaUploadReview.name: (routeData) {
-      final args = routeData.argsAs<ReplicaUploadReviewArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i41.ReplicaUploadReview(
-          key: args.key,
-          fileToUpload: args.fileToUpload,
-          fileTitle: args.fileTitle,
-          fileDescription: args.fileDescription,
-        ),
-      );
-    },
-    ReplicaUploadTitle.name: (routeData) {
-      final args = routeData.argsAs<ReplicaUploadTitleArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i42.ReplicaUploadTitle(
-          key: args.key,
-          fileToUpload: args.fileToUpload,
-          fileTitle: args.fileTitle,
-          fileDescription: args.fileDescription,
-        ),
-      );
-    },
-    ReplicaVideoViewer.name: (routeData) {
-      final args = routeData.argsAs<ReplicaVideoViewerArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i43.ReplicaVideoViewer(
-          replicaApi: args.replicaApi,
-          item: args.item,
-          category: args.category,
-        ),
-      );
-    },
-    ReportIssue.name: (routeData) {
-      final args = routeData.argsAs<ReportIssueArgs>(
-          orElse: () => const ReportIssueArgs());
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i44.ReportIssue(
-          key: args.key,
-          description: args.description,
-        ),
-      );
-    },
-    ResellerCodeCheckoutLegacy.name: (routeData) {
-      final args = routeData.argsAs<ResellerCodeCheckoutLegacyArgs>();
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i45.ResellerCodeCheckout(
-          isPro: args.isPro,
-          key: args.key,
-        ),
-      );
-    },
-    ResellerCodeCheckout.name: (routeData) {
-      final args = routeData.argsAs<ResellerCodeCheckoutArgs>();
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i46.ResellerCodeCheckout(
-          isPro: args.isPro,
-          email: args.email,
-          otp: args.otp,
-          key: args.key,
-        ),
-      );
-    },
-    ResetPassword.name: (routeData) {
-      final args = routeData.argsAs<ResetPasswordArgs>(
-          orElse: () => const ResetPasswordArgs());
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i47.ResetPassword(
-          key: args.key,
-          email: args.email,
-          code: args.code,
-          authFlow: args.authFlow,
-        ),
-      );
-    },
-    RestorePurchase.name: (routeData) {
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const _i48.RestorePurchase(),
-      );
-    },
-    Settings.name: (routeData) {
-      final args =
-          routeData.argsAs<SettingsArgs>(orElse: () => const SettingsArgs());
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i49.Settings(key: args.key),
-      );
-    },
-    SignIn.name: (routeData) {
-      final args =
-          routeData.argsAs<SignInArgs>(orElse: () => const SignInArgs());
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i50.SignIn(
-          key: args.key,
-          authFlow: args.authFlow,
-        ),
-      );
-    },
-    SignInPassword.name: (routeData) {
-      final args = routeData.argsAs<SignInPasswordArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i51.SignInPassword(
-          key: args.key,
-          email: args.email,
-        ),
-      );
-    },
-    SplitTunneling.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i52.SplitTunneling(),
-      );
-    },
-    StoreCheckout.name: (routeData) {
-      final args = routeData.argsAs<StoreCheckoutArgs>();
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i53.StoreCheckout(
-          plan: args.plan,
-          key: args.key,
-        ),
-      );
-    },
-    StripeCheckout.name: (routeData) {
-      final args = routeData.argsAs<StripeCheckoutArgs>();
-      return _i57.AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: _i54.StripeCheckout(
-          plan: args.plan,
-          email: args.email,
-          refCode: args.refCode,
-          isPro: args.isPro,
-          key: args.key,
-        ),
-      );
-    },
-    Support.name: (routeData) {
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: const _i55.Support(),
-      );
-    },
-    Verification.name: (routeData) {
-      final args = routeData.argsAs<VerificationArgs>();
-      return _i57.AutoRoutePage<void>(
-        routeData: routeData,
-        child: _i56.Verification(
-          key: args.key,
-          email: args.email,
-          authFlow: args.authFlow,
-          changeEmailArgs: args.changeEmailArgs,
-          plan: args.plan,
-          tempPassword: args.tempPassword,
-        ),
-      );
-    },
-  };
-}
+import 'package:lantern/features/messaging/onboarding/chat_number_recovery.dart'
+    as _i14;
+import 'package:lantern/features/replica/common.dart' as _i60;
+import 'package:lantern/features/replica/link_handler.dart' as _i38;
+import 'package:lantern/features/replica/ui/viewers/audio.dart' as _i36;
+import 'package:lantern/features/replica/ui/viewers/image.dart' as _i37;
+import 'package:lantern/features/replica/ui/viewers/misc.dart' as _i39;
+import 'package:lantern/features/replica/ui/viewers/video.dart' as _i43;
+import 'package:lantern/features/replica/upload/description.dart' as _i40;
+import 'package:lantern/features/replica/upload/review.dart' as _i41;
+import 'package:lantern/features/replica/upload/title.dart' as _i42;
+import 'package:lantern/features/vpn/vpn.dart' as _i63;
 
 /// generated route for
 /// [_i1.AccountManagement]
@@ -605,8 +101,16 @@ class AccountManagement extends _i57.PageRouteInfo<AccountManagementArgs> {
 
   static const String name = 'AccountManagement';
 
-  static const _i57.PageInfo<AccountManagementArgs> page =
-      _i57.PageInfo<AccountManagementArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AccountManagementArgs>();
+      return _i1.AccountManagement(
+        key: args.key,
+        isPro: args.isPro,
+      );
+    },
+  );
 }
 
 class AccountManagementArgs {
@@ -636,7 +140,12 @@ class Account extends _i57.PageRouteInfo<void> {
 
   static const String name = 'Account';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i2.AccountMenu();
+    },
+  );
 }
 
 /// generated route for
@@ -653,8 +162,14 @@ class ApproveDevice extends _i57.PageRouteInfo<ApproveDeviceArgs> {
 
   static const String name = 'ApproveDevice';
 
-  static const _i57.PageInfo<ApproveDeviceArgs> page =
-      _i57.PageInfo<ApproveDeviceArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ApproveDeviceArgs>(
+          orElse: () => const ApproveDeviceArgs());
+      return _i3.AddDevice(key: args.key);
+    },
+  );
 }
 
 class ApproveDeviceArgs {
@@ -679,7 +194,12 @@ class AddViaChatNumber extends _i57.PageRouteInfo<void> {
 
   static const String name = 'AddViaChatNumber';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return _i4.AddViaChatNumber();
+    },
+  );
 }
 
 /// generated route for
@@ -702,8 +222,17 @@ class AppWebview extends _i57.PageRouteInfo<AppWebviewArgs> {
 
   static const String name = 'AppWebview';
 
-  static const _i57.PageInfo<AppWebviewArgs> page =
-      _i57.PageInfo<AppWebviewArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AppWebviewArgs>();
+      return _i5.AppWebView(
+        key: args.key,
+        url: args.url,
+        title: args.title,
+      );
+    },
+  );
 }
 
 class AppWebviewArgs {
@@ -736,7 +265,12 @@ class AuthLanding extends _i57.PageRouteInfo<void> {
 
   static const String name = 'AuthLanding';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i6.AuthLanding();
+    },
+  );
 }
 
 /// generated route for
@@ -750,7 +284,12 @@ class AuthorizePro extends _i57.PageRouteInfo<void> {
 
   static const String name = 'AuthorizePro';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i7.AuthorizeDeviceForPro();
+    },
+  );
 }
 
 /// generated route for
@@ -768,8 +307,14 @@ class AuthorizeDeviceEmail
 
   static const String name = 'AuthorizeDeviceEmail';
 
-  static const _i57.PageInfo<AuthorizeDeviceEmailArgs> page =
-      _i57.PageInfo<AuthorizeDeviceEmailArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AuthorizeDeviceEmailArgs>(
+          orElse: () => const AuthorizeDeviceEmailArgs());
+      return _i8.AuthorizeDeviceViaEmail(key: args.key);
+    },
+  );
 }
 
 class AuthorizeDeviceEmailArgs {
@@ -802,8 +347,16 @@ class AuthorizeDeviceEmailPin
 
   static const String name = 'AuthorizeDeviceEmailPin';
 
-  static const _i57.PageInfo<AuthorizeDeviceEmailPinArgs> page =
-      _i57.PageInfo<AuthorizeDeviceEmailPinArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AuthorizeDeviceEmailPinArgs>();
+      return _i9.AuthorizeDeviceViaEmailPin(
+        key: args.key,
+        email: args.email,
+      );
+    },
+  );
 }
 
 class AuthorizeDeviceEmailPinArgs {
@@ -836,8 +389,14 @@ class BlockedUsers extends _i57.PageRouteInfo<BlockedUsersArgs> {
 
   static const String name = 'BlockedUsers';
 
-  static const _i57.PageInfo<BlockedUsersArgs> page =
-      _i57.PageInfo<BlockedUsersArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args =
+          data.argsAs<BlockedUsersArgs>(orElse: () => const BlockedUsersArgs());
+      return _i10.BlockedUsers(key: args.key);
+    },
+  );
 }
 
 class BlockedUsersArgs {
@@ -869,8 +428,16 @@ class ChangeEmail extends _i57.PageRouteInfo<ChangeEmailArgs> {
 
   static const String name = 'ChangeEmail';
 
-  static const _i57.PageInfo<ChangeEmailArgs> page =
-      _i57.PageInfo<ChangeEmailArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ChangeEmailArgs>();
+      return _i11.ChangeEmail(
+        key: args.key,
+        email: args.email,
+      );
+    },
+  );
 }
 
 class ChangeEmailArgs {
@@ -900,7 +467,12 @@ class ChatNumberAccount extends _i57.PageRouteInfo<void> {
 
   static const String name = 'ChatNumberAccount';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return _i12.ChatNumberAccount();
+    },
+  );
 }
 
 /// generated route for
@@ -914,7 +486,12 @@ class ChatNumberMessaging extends _i57.PageRouteInfo<void> {
 
   static const String name = 'ChatNumberMessaging';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return _i13.ChatNumberMessaging();
+    },
+  );
 }
 
 /// generated route for
@@ -928,7 +505,12 @@ class ChatNumberRecovery extends _i57.PageRouteInfo<void> {
 
   static const String name = 'ChatNumberRecovery';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return _i14.ChatNumberRecovery();
+    },
+  );
 }
 
 /// generated route for
@@ -957,8 +539,20 @@ class Checkout extends _i57.PageRouteInfo<CheckoutArgs> {
 
   static const String name = 'Checkout';
 
-  static const _i57.PageInfo<CheckoutArgs> page =
-      _i57.PageInfo<CheckoutArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CheckoutArgs>();
+      return _i15.Checkout(
+        plan: args.plan,
+        isPro: args.isPro,
+        authFlow: args.authFlow,
+        email: args.email,
+        verificationPin: args.verificationPin,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class CheckoutArgs {
@@ -1009,8 +603,17 @@ class CheckoutLegacy extends _i57.PageRouteInfo<CheckoutLegacyArgs> {
 
   static const String name = 'CheckoutLegacy';
 
-  static const _i57.PageInfo<CheckoutLegacyArgs> page =
-      _i57.PageInfo<CheckoutLegacyArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CheckoutLegacyArgs>();
+      return _i16.CheckoutLegacy(
+        plan: args.plan,
+        isPro: args.isPro,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class CheckoutLegacyArgs {
@@ -1043,7 +646,12 @@ class ConfirmEmail extends _i57.PageRouteInfo<void> {
 
   static const String name = 'ConfirmEmail';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i17.ConfirmEmail();
+    },
+  );
 }
 
 /// generated route for
@@ -1060,8 +668,13 @@ class ContactInfo extends _i57.PageRouteInfo<ContactInfoArgs> {
 
   static const String name = 'ContactInfo';
 
-  static const _i57.PageInfo<ContactInfoArgs> page =
-      _i57.PageInfo<ContactInfoArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ContactInfoArgs>();
+      return _i18.ContactInfo(contact: args.contact);
+    },
+  );
 }
 
 class ContactInfoArgs {
@@ -1095,8 +708,17 @@ class Conversation extends _i57.PageRouteInfo<ConversationArgs> {
 
   static const String name = 'Conversation';
 
-  static const _i57.PageInfo<ConversationArgs> page =
-      _i57.PageInfo<ConversationArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ConversationArgs>();
+      return _i19.Conversation(
+        contactId: args.contactId,
+        initialScrollIndex: args.initialScrollIndex,
+        showContactEditingDialog: args.showContactEditingDialog,
+      );
+    },
+  );
 }
 
 class ConversationArgs {
@@ -1140,8 +762,19 @@ class CreateAccountEmail extends _i57.PageRouteInfo<CreateAccountEmailArgs> {
 
   static const String name = 'CreateAccountEmail';
 
-  static const _i57.PageInfo<CreateAccountEmailArgs> page =
-      _i57.PageInfo<CreateAccountEmailArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CreateAccountEmailArgs>(
+          orElse: () => const CreateAccountEmailArgs());
+      return _i20.CreateAccountEmail(
+        key: args.key,
+        plan: args.plan,
+        authFlow: args.authFlow,
+        email: args.email,
+      );
+    },
+  );
 }
 
 class CreateAccountEmailArgs {
@@ -1187,8 +820,17 @@ class CreateAccountPassword
 
   static const String name = 'CreateAccountPassword';
 
-  static const _i57.PageInfo<CreateAccountPasswordArgs> page =
-      _i57.PageInfo<CreateAccountPasswordArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<CreateAccountPasswordArgs>();
+      return _i21.CreateAccountPassword(
+        key: args.key,
+        email: args.email,
+        code: args.code,
+      );
+    },
+  );
 }
 
 class CreateAccountPasswordArgs {
@@ -1221,7 +863,12 @@ class DeviceLimit extends _i57.PageRouteInfo<void> {
 
   static const String name = 'DeviceLimit';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i22.DeviceLimit();
+    },
+  );
 }
 
 /// generated route for
@@ -1230,7 +877,7 @@ class FullScreenDialogPage
     extends _i57.PageRouteInfo<FullScreenDialogPageArgs> {
   FullScreenDialogPage({
     required _i59.Widget widget,
-    _i60.Color? bgColor,
+    _i59.Color? bgColor,
     _i59.Key? key,
     List<_i57.PageRouteInfo>? children,
   }) : super(
@@ -1245,8 +892,17 @@ class FullScreenDialogPage
 
   static const String name = 'FullScreenDialogPage';
 
-  static const _i57.PageInfo<FullScreenDialogPageArgs> page =
-      _i57.PageInfo<FullScreenDialogPageArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<FullScreenDialogPageArgs>();
+      return _i23.FullScreenDialog(
+        widget: args.widget,
+        bgColor: args.bgColor,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class FullScreenDialogPageArgs {
@@ -1258,7 +914,7 @@ class FullScreenDialogPageArgs {
 
   final _i59.Widget widget;
 
-  final _i60.Color? bgColor;
+  final _i59.Color? bgColor;
 
   final _i59.Key? key;
 
@@ -1279,7 +935,12 @@ class Home extends _i57.PageRouteInfo<void> {
 
   static const String name = 'Home';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i24.HomePage();
+    },
+  );
 }
 
 /// generated route for
@@ -1300,8 +961,16 @@ class Introduce extends _i57.PageRouteInfo<IntroduceArgs> {
 
   static const String name = 'Introduce';
 
-  static const _i57.PageInfo<IntroduceArgs> page =
-      _i57.PageInfo<IntroduceArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<IntroduceArgs>();
+      return _i25.Introduce(
+        singleIntro: args.singleIntro,
+        contactToIntro: args.contactToIntro,
+      );
+    },
+  );
 }
 
 class IntroduceArgs {
@@ -1331,7 +1000,12 @@ class Introductions extends _i57.PageRouteInfo<void> {
 
   static const String name = 'Introductions';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return _i26.Introductions();
+    },
+  );
 }
 
 /// generated route for
@@ -1345,7 +1019,12 @@ class InviteFriends extends _i57.PageRouteInfo<void> {
 
   static const String name = 'InviteFriends';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return _i27.InviteFriends();
+    },
+  );
 }
 
 /// generated route for
@@ -1359,7 +1038,12 @@ class Language extends _i57.PageRouteInfo<void> {
 
   static const String name = 'Language';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i28.Language();
+    },
+  );
 }
 
 /// generated route for
@@ -1373,7 +1057,12 @@ class LanternDesktop extends _i57.PageRouteInfo<void> {
 
   static const String name = 'LanternDesktop';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i29.LanternDesktop();
+    },
+  );
 }
 
 /// generated route for
@@ -1387,7 +1076,12 @@ class LinkDevice extends _i57.PageRouteInfo<void> {
 
   static const String name = 'LinkDevice';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i30.LinkDevice();
+    },
+  );
 }
 
 /// generated route for
@@ -1401,7 +1095,12 @@ class NewChat extends _i57.PageRouteInfo<void> {
 
   static const String name = 'NewChat';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return _i31.NewChat();
+    },
+  );
 }
 
 /// generated route for
@@ -1415,7 +1114,12 @@ class PlansPage extends _i57.PageRouteInfo<void> {
 
   static const String name = 'PlansPage';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i32.PlansPage();
+    },
+  );
 }
 
 /// generated route for
@@ -1438,8 +1142,17 @@ class PlayCheckout extends _i57.PageRouteInfo<PlayCheckoutArgs> {
 
   static const String name = 'PlayCheckout';
 
-  static const _i57.PageInfo<PlayCheckoutArgs> page =
-      _i57.PageInfo<PlayCheckoutArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PlayCheckoutArgs>();
+      return _i33.PlayCheckout(
+        plan: args.plan,
+        isPro: args.isPro,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class PlayCheckoutArgs {
@@ -1472,7 +1185,12 @@ class ProxiesSetting extends _i57.PageRouteInfo<void> {
 
   static const String name = 'ProxiesSetting';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i34.ProxiesSetting();
+    },
+  );
 }
 
 /// generated route for
@@ -1489,8 +1207,14 @@ class RecoveryKey extends _i57.PageRouteInfo<RecoveryKeyArgs> {
 
   static const String name = 'RecoveryKey';
 
-  static const _i57.PageInfo<RecoveryKeyArgs> page =
-      _i57.PageInfo<RecoveryKeyArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args =
+          data.argsAs<RecoveryKeyArgs>(orElse: () => const RecoveryKeyArgs());
+      return _i35.RecoveryKey(key: args.key);
+    },
+  );
 }
 
 class RecoveryKeyArgs {
@@ -1508,9 +1232,9 @@ class RecoveryKeyArgs {
 /// [_i36.ReplicaAudioViewer]
 class ReplicaAudioViewer extends _i57.PageRouteInfo<ReplicaAudioViewerArgs> {
   ReplicaAudioViewer({
-    required _i61.ReplicaApi replicaApi,
-    required _i61.ReplicaSearchItem item,
-    required _i61.SearchCategory category,
+    required _i60.ReplicaApi replicaApi,
+    required _i60.ReplicaSearchItem item,
+    required _i60.SearchCategory category,
     List<_i57.PageRouteInfo>? children,
   }) : super(
           ReplicaAudioViewer.name,
@@ -1524,8 +1248,17 @@ class ReplicaAudioViewer extends _i57.PageRouteInfo<ReplicaAudioViewerArgs> {
 
   static const String name = 'ReplicaAudioViewer';
 
-  static const _i57.PageInfo<ReplicaAudioViewerArgs> page =
-      _i57.PageInfo<ReplicaAudioViewerArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReplicaAudioViewerArgs>();
+      return _i36.ReplicaAudioViewer(
+        replicaApi: args.replicaApi,
+        item: args.item,
+        category: args.category,
+      );
+    },
+  );
 }
 
 class ReplicaAudioViewerArgs {
@@ -1535,11 +1268,11 @@ class ReplicaAudioViewerArgs {
     required this.category,
   });
 
-  final _i61.ReplicaApi replicaApi;
+  final _i60.ReplicaApi replicaApi;
 
-  final _i61.ReplicaSearchItem item;
+  final _i60.ReplicaSearchItem item;
 
-  final _i61.SearchCategory category;
+  final _i60.SearchCategory category;
 
   @override
   String toString() {
@@ -1551,9 +1284,9 @@ class ReplicaAudioViewerArgs {
 /// [_i37.ReplicaImageViewer]
 class ReplicaImageViewer extends _i57.PageRouteInfo<ReplicaImageViewerArgs> {
   ReplicaImageViewer({
-    required _i61.ReplicaApi replicaApi,
-    required _i61.ReplicaSearchItem item,
-    required _i61.SearchCategory category,
+    required _i60.ReplicaApi replicaApi,
+    required _i60.ReplicaSearchItem item,
+    required _i60.SearchCategory category,
     List<_i57.PageRouteInfo>? children,
   }) : super(
           ReplicaImageViewer.name,
@@ -1567,8 +1300,17 @@ class ReplicaImageViewer extends _i57.PageRouteInfo<ReplicaImageViewerArgs> {
 
   static const String name = 'ReplicaImageViewer';
 
-  static const _i57.PageInfo<ReplicaImageViewerArgs> page =
-      _i57.PageInfo<ReplicaImageViewerArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReplicaImageViewerArgs>();
+      return _i37.ReplicaImageViewer(
+        replicaApi: args.replicaApi,
+        item: args.item,
+        category: args.category,
+      );
+    },
+  );
 }
 
 class ReplicaImageViewerArgs {
@@ -1578,11 +1320,11 @@ class ReplicaImageViewerArgs {
     required this.category,
   });
 
-  final _i61.ReplicaApi replicaApi;
+  final _i60.ReplicaApi replicaApi;
 
-  final _i61.ReplicaSearchItem item;
+  final _i60.ReplicaSearchItem item;
 
-  final _i61.SearchCategory category;
+  final _i60.SearchCategory category;
 
   @override
   String toString() {
@@ -1595,8 +1337,8 @@ class ReplicaImageViewerArgs {
 class ReplicaLinkHandler extends _i57.PageRouteInfo<ReplicaLinkHandlerArgs> {
   ReplicaLinkHandler({
     _i59.Key? key,
-    required _i61.ReplicaApi replicaApi,
-    required _i61.ReplicaLink replicaLink,
+    required _i60.ReplicaApi replicaApi,
+    required _i60.ReplicaLink replicaLink,
     List<_i57.PageRouteInfo>? children,
   }) : super(
           ReplicaLinkHandler.name,
@@ -1610,8 +1352,17 @@ class ReplicaLinkHandler extends _i57.PageRouteInfo<ReplicaLinkHandlerArgs> {
 
   static const String name = 'ReplicaLinkHandler';
 
-  static const _i57.PageInfo<ReplicaLinkHandlerArgs> page =
-      _i57.PageInfo<ReplicaLinkHandlerArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReplicaLinkHandlerArgs>();
+      return _i38.ReplicaLinkHandler(
+        key: args.key,
+        replicaApi: args.replicaApi,
+        replicaLink: args.replicaLink,
+      );
+    },
+  );
 }
 
 class ReplicaLinkHandlerArgs {
@@ -1623,9 +1374,9 @@ class ReplicaLinkHandlerArgs {
 
   final _i59.Key? key;
 
-  final _i61.ReplicaApi replicaApi;
+  final _i60.ReplicaApi replicaApi;
 
-  final _i61.ReplicaLink replicaLink;
+  final _i60.ReplicaLink replicaLink;
 
   @override
   String toString() {
@@ -1637,9 +1388,9 @@ class ReplicaLinkHandlerArgs {
 /// [_i39.ReplicaMiscViewer]
 class ReplicaMiscViewer extends _i57.PageRouteInfo<ReplicaMiscViewerArgs> {
   ReplicaMiscViewer({
-    required _i61.ReplicaApi replicaApi,
-    required _i61.ReplicaSearchItem item,
-    required _i61.SearchCategory category,
+    required _i60.ReplicaApi replicaApi,
+    required _i60.ReplicaSearchItem item,
+    required _i60.SearchCategory category,
     List<_i57.PageRouteInfo>? children,
   }) : super(
           ReplicaMiscViewer.name,
@@ -1653,8 +1404,17 @@ class ReplicaMiscViewer extends _i57.PageRouteInfo<ReplicaMiscViewerArgs> {
 
   static const String name = 'ReplicaMiscViewer';
 
-  static const _i57.PageInfo<ReplicaMiscViewerArgs> page =
-      _i57.PageInfo<ReplicaMiscViewerArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReplicaMiscViewerArgs>();
+      return _i39.ReplicaMiscViewer(
+        replicaApi: args.replicaApi,
+        item: args.item,
+        category: args.category,
+      );
+    },
+  );
 }
 
 class ReplicaMiscViewerArgs {
@@ -1664,11 +1424,11 @@ class ReplicaMiscViewerArgs {
     required this.category,
   });
 
-  final _i61.ReplicaApi replicaApi;
+  final _i60.ReplicaApi replicaApi;
 
-  final _i61.ReplicaSearchItem item;
+  final _i60.ReplicaSearchItem item;
 
-  final _i61.SearchCategory category;
+  final _i60.SearchCategory category;
 
   @override
   String toString() {
@@ -1682,7 +1442,7 @@ class ReplicaUploadDescription
     extends _i57.PageRouteInfo<ReplicaUploadDescriptionArgs> {
   ReplicaUploadDescription({
     _i59.Key? key,
-    required _i62.File fileToUpload,
+    required _i61.File fileToUpload,
     required String fileTitle,
     String? fileDescription,
     List<_i57.PageRouteInfo>? children,
@@ -1699,8 +1459,18 @@ class ReplicaUploadDescription
 
   static const String name = 'ReplicaUploadDescription';
 
-  static const _i57.PageInfo<ReplicaUploadDescriptionArgs> page =
-      _i57.PageInfo<ReplicaUploadDescriptionArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReplicaUploadDescriptionArgs>();
+      return _i40.ReplicaUploadDescription(
+        key: args.key,
+        fileToUpload: args.fileToUpload,
+        fileTitle: args.fileTitle,
+        fileDescription: args.fileDescription,
+      );
+    },
+  );
 }
 
 class ReplicaUploadDescriptionArgs {
@@ -1713,7 +1483,7 @@ class ReplicaUploadDescriptionArgs {
 
   final _i59.Key? key;
 
-  final _i62.File fileToUpload;
+  final _i61.File fileToUpload;
 
   final String fileTitle;
 
@@ -1730,7 +1500,7 @@ class ReplicaUploadDescriptionArgs {
 class ReplicaUploadReview extends _i57.PageRouteInfo<ReplicaUploadReviewArgs> {
   ReplicaUploadReview({
     _i59.Key? key,
-    required _i62.File fileToUpload,
+    required _i61.File fileToUpload,
     required String fileTitle,
     String? fileDescription,
     List<_i57.PageRouteInfo>? children,
@@ -1747,8 +1517,18 @@ class ReplicaUploadReview extends _i57.PageRouteInfo<ReplicaUploadReviewArgs> {
 
   static const String name = 'ReplicaUploadReview';
 
-  static const _i57.PageInfo<ReplicaUploadReviewArgs> page =
-      _i57.PageInfo<ReplicaUploadReviewArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReplicaUploadReviewArgs>();
+      return _i41.ReplicaUploadReview(
+        key: args.key,
+        fileToUpload: args.fileToUpload,
+        fileTitle: args.fileTitle,
+        fileDescription: args.fileDescription,
+      );
+    },
+  );
 }
 
 class ReplicaUploadReviewArgs {
@@ -1761,7 +1541,7 @@ class ReplicaUploadReviewArgs {
 
   final _i59.Key? key;
 
-  final _i62.File fileToUpload;
+  final _i61.File fileToUpload;
 
   final String fileTitle;
 
@@ -1778,7 +1558,7 @@ class ReplicaUploadReviewArgs {
 class ReplicaUploadTitle extends _i57.PageRouteInfo<ReplicaUploadTitleArgs> {
   ReplicaUploadTitle({
     _i59.Key? key,
-    required _i62.File fileToUpload,
+    required _i61.File fileToUpload,
     String? fileTitle,
     String? fileDescription,
     List<_i57.PageRouteInfo>? children,
@@ -1795,8 +1575,18 @@ class ReplicaUploadTitle extends _i57.PageRouteInfo<ReplicaUploadTitleArgs> {
 
   static const String name = 'ReplicaUploadTitle';
 
-  static const _i57.PageInfo<ReplicaUploadTitleArgs> page =
-      _i57.PageInfo<ReplicaUploadTitleArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReplicaUploadTitleArgs>();
+      return _i42.ReplicaUploadTitle(
+        key: args.key,
+        fileToUpload: args.fileToUpload,
+        fileTitle: args.fileTitle,
+        fileDescription: args.fileDescription,
+      );
+    },
+  );
 }
 
 class ReplicaUploadTitleArgs {
@@ -1809,7 +1599,7 @@ class ReplicaUploadTitleArgs {
 
   final _i59.Key? key;
 
-  final _i62.File fileToUpload;
+  final _i61.File fileToUpload;
 
   final String? fileTitle;
 
@@ -1825,9 +1615,9 @@ class ReplicaUploadTitleArgs {
 /// [_i43.ReplicaVideoViewer]
 class ReplicaVideoViewer extends _i57.PageRouteInfo<ReplicaVideoViewerArgs> {
   ReplicaVideoViewer({
-    required _i61.ReplicaApi replicaApi,
-    required _i61.ReplicaSearchItem item,
-    required _i61.SearchCategory category,
+    required _i60.ReplicaApi replicaApi,
+    required _i60.ReplicaSearchItem item,
+    required _i60.SearchCategory category,
     List<_i57.PageRouteInfo>? children,
   }) : super(
           ReplicaVideoViewer.name,
@@ -1841,8 +1631,17 @@ class ReplicaVideoViewer extends _i57.PageRouteInfo<ReplicaVideoViewerArgs> {
 
   static const String name = 'ReplicaVideoViewer';
 
-  static const _i57.PageInfo<ReplicaVideoViewerArgs> page =
-      _i57.PageInfo<ReplicaVideoViewerArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ReplicaVideoViewerArgs>();
+      return _i43.ReplicaVideoViewer(
+        replicaApi: args.replicaApi,
+        item: args.item,
+        category: args.category,
+      );
+    },
+  );
 }
 
 class ReplicaVideoViewerArgs {
@@ -1852,11 +1651,11 @@ class ReplicaVideoViewerArgs {
     required this.category,
   });
 
-  final _i61.ReplicaApi replicaApi;
+  final _i60.ReplicaApi replicaApi;
 
-  final _i61.ReplicaSearchItem item;
+  final _i60.ReplicaSearchItem item;
 
-  final _i61.SearchCategory category;
+  final _i60.SearchCategory category;
 
   @override
   String toString() {
@@ -1882,8 +1681,17 @@ class ReportIssue extends _i57.PageRouteInfo<ReportIssueArgs> {
 
   static const String name = 'ReportIssue';
 
-  static const _i57.PageInfo<ReportIssueArgs> page =
-      _i57.PageInfo<ReportIssueArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args =
+          data.argsAs<ReportIssueArgs>(orElse: () => const ReportIssueArgs());
+      return _i44.ReportIssue(
+        key: args.key,
+        description: args.description,
+      );
+    },
+  );
 }
 
 class ReportIssueArgs {
@@ -1921,8 +1729,16 @@ class ResellerCodeCheckoutLegacy
 
   static const String name = 'ResellerCodeCheckoutLegacy';
 
-  static const _i57.PageInfo<ResellerCodeCheckoutLegacyArgs> page =
-      _i57.PageInfo<ResellerCodeCheckoutLegacyArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ResellerCodeCheckoutLegacyArgs>();
+      return _i45.ResellerCodeCheckout(
+        isPro: args.isPro,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class ResellerCodeCheckoutLegacyArgs {
@@ -1964,8 +1780,18 @@ class ResellerCodeCheckout
 
   static const String name = 'ResellerCodeCheckout';
 
-  static const _i57.PageInfo<ResellerCodeCheckoutArgs> page =
-      _i57.PageInfo<ResellerCodeCheckoutArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ResellerCodeCheckoutArgs>();
+      return _i46.ResellerCodeCheckout(
+        isPro: args.isPro,
+        email: args.email,
+        otp: args.otp,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class ResellerCodeCheckoutArgs {
@@ -1994,7 +1820,7 @@ class ResellerCodeCheckoutArgs {
 /// [_i47.ResetPassword]
 class ResetPassword extends _i57.PageRouteInfo<ResetPasswordArgs> {
   ResetPassword({
-    _i63.Key? key,
+    _i62.Key? key,
     String? email,
     String? code,
     _i59.AuthFlow authFlow = _i59.AuthFlow.reset,
@@ -2012,8 +1838,19 @@ class ResetPassword extends _i57.PageRouteInfo<ResetPasswordArgs> {
 
   static const String name = 'ResetPassword';
 
-  static const _i57.PageInfo<ResetPasswordArgs> page =
-      _i57.PageInfo<ResetPasswordArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ResetPasswordArgs>(
+          orElse: () => const ResetPasswordArgs());
+      return _i47.ResetPassword(
+        key: args.key,
+        email: args.email,
+        code: args.code,
+        authFlow: args.authFlow,
+      );
+    },
+  );
 }
 
 class ResetPasswordArgs {
@@ -2024,7 +1861,7 @@ class ResetPasswordArgs {
     this.authFlow = _i59.AuthFlow.reset,
   });
 
-  final _i63.Key? key;
+  final _i62.Key? key;
 
   final String? email;
 
@@ -2049,7 +1886,12 @@ class RestorePurchase extends _i57.PageRouteInfo<void> {
 
   static const String name = 'RestorePurchase';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i48.RestorePurchase();
+    },
+  );
 }
 
 /// generated route for
@@ -2066,8 +1908,14 @@ class Settings extends _i57.PageRouteInfo<SettingsArgs> {
 
   static const String name = 'Settings';
 
-  static const _i57.PageInfo<SettingsArgs> page =
-      _i57.PageInfo<SettingsArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args =
+          data.argsAs<SettingsArgs>(orElse: () => const SettingsArgs());
+      return _i49.Settings(key: args.key);
+    },
+  );
 }
 
 class SettingsArgs {
@@ -2099,7 +1947,16 @@ class SignIn extends _i57.PageRouteInfo<SignInArgs> {
 
   static const String name = 'SignIn';
 
-  static const _i57.PageInfo<SignInArgs> page = _i57.PageInfo<SignInArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SignInArgs>(orElse: () => const SignInArgs());
+      return _i50.SignIn(
+        key: args.key,
+        authFlow: args.authFlow,
+      );
+    },
+  );
 }
 
 class SignInArgs {
@@ -2136,8 +1993,16 @@ class SignInPassword extends _i57.PageRouteInfo<SignInPasswordArgs> {
 
   static const String name = 'SignInPassword';
 
-  static const _i57.PageInfo<SignInPasswordArgs> page =
-      _i57.PageInfo<SignInPasswordArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SignInPasswordArgs>();
+      return _i51.SignInPassword(
+        key: args.key,
+        email: args.email,
+      );
+    },
+  );
 }
 
 class SignInPasswordArgs {
@@ -2167,7 +2032,12 @@ class SplitTunneling extends _i57.PageRouteInfo<void> {
 
   static const String name = 'SplitTunneling';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i52.SplitTunneling();
+    },
+  );
 }
 
 /// generated route for
@@ -2188,8 +2058,16 @@ class StoreCheckout extends _i57.PageRouteInfo<StoreCheckoutArgs> {
 
   static const String name = 'StoreCheckout';
 
-  static const _i57.PageInfo<StoreCheckoutArgs> page =
-      _i57.PageInfo<StoreCheckoutArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<StoreCheckoutArgs>();
+      return _i53.StoreCheckout(
+        plan: args.plan,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class StoreCheckoutArgs {
@@ -2232,8 +2110,19 @@ class StripeCheckout extends _i57.PageRouteInfo<StripeCheckoutArgs> {
 
   static const String name = 'StripeCheckout';
 
-  static const _i57.PageInfo<StripeCheckoutArgs> page =
-      _i57.PageInfo<StripeCheckoutArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<StripeCheckoutArgs>();
+      return _i54.StripeCheckout(
+        plan: args.plan,
+        email: args.email,
+        refCode: args.refCode,
+        isPro: args.isPro,
+        key: args.key,
+      );
+    },
+  );
 }
 
 class StripeCheckoutArgs {
@@ -2272,18 +2161,23 @@ class Support extends _i57.PageRouteInfo<void> {
 
   static const String name = 'Support';
 
-  static const _i57.PageInfo<void> page = _i57.PageInfo<void>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      return const _i55.Support();
+    },
+  );
 }
 
 /// generated route for
 /// [_i56.Verification]
 class Verification extends _i57.PageRouteInfo<VerificationArgs> {
   Verification({
-    _i64.Key? key,
+    _i63.Key? key,
     required String email,
-    _i64.AuthFlow authFlow = _i64.AuthFlow.reset,
+    _i63.AuthFlow authFlow = _i63.AuthFlow.reset,
     _i11.ChangeEmailPageArgs? changeEmailArgs,
-    _i64.Plan? plan,
+    _i63.Plan? plan,
     String? tempPassword,
     List<_i57.PageRouteInfo>? children,
   }) : super(
@@ -2301,29 +2195,41 @@ class Verification extends _i57.PageRouteInfo<VerificationArgs> {
 
   static const String name = 'Verification';
 
-  static const _i57.PageInfo<VerificationArgs> page =
-      _i57.PageInfo<VerificationArgs>(name);
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<VerificationArgs>();
+      return _i56.Verification(
+        key: args.key,
+        email: args.email,
+        authFlow: args.authFlow,
+        changeEmailArgs: args.changeEmailArgs,
+        plan: args.plan,
+        tempPassword: args.tempPassword,
+      );
+    },
+  );
 }
 
 class VerificationArgs {
   const VerificationArgs({
     this.key,
     required this.email,
-    this.authFlow = _i64.AuthFlow.reset,
+    this.authFlow = _i63.AuthFlow.reset,
     this.changeEmailArgs,
     this.plan,
     this.tempPassword,
   });
 
-  final _i64.Key? key;
+  final _i63.Key? key;
 
   final String email;
 
-  final _i64.AuthFlow authFlow;
+  final _i63.AuthFlow authFlow;
 
   final _i11.ChangeEmailPageArgs? changeEmailArgs;
 
-  final _i64.Plan? plan;
+  final _i63.Plan? plan;
 
   final String? tempPassword;
 

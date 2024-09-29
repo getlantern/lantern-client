@@ -1,7 +1,7 @@
 // From https://raw.githubusercontent.com/lekanbar/custom_rounded_rectangle_border/master/lib/custom_rounded_rectangle_border.dart,
 // modified for null safety.
 
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 /// A rectangular border with rounded corners.
 ///

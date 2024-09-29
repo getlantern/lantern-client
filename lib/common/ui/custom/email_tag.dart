@@ -1,4 +1,4 @@
-import '../../common.dart';
+import '../../../core/utils/common.dart';
 
 class EmailTag extends StatelessWidget {
   final String email;

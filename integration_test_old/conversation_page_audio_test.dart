@@ -10,7 +10,7 @@ import 'helpers/clipboard_test.dart';
 
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:i18n_extension/i18n_widget.dart';
-export 'package:lantern/i18n/i18n.dart';
+export 'package:lantern/core/localization/i18n.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

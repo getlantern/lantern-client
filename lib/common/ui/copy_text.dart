@@ -1,4 +1,4 @@
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 void copyText(BuildContext context, String text) {
   showSnackbar(

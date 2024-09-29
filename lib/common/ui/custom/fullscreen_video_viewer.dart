@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/features/messaging/messaging.dart';
 import 'package:video_player/video_player.dart';
 
 /// FullScreenVideoViewer extends Viewer and also receives decryption and loading functions from Chat and Replica components. It has no awareness of the video file (Chat or Replica) it displays.

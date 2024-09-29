@@ -1,4 +1,4 @@
-import '../../common.dart';
+import '../../../core/utils/common.dart';
 
 class RetryWidget extends StatelessWidget {
   final VoidCallback onRetryTap;

@@ -12,7 +12,7 @@ INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 codegen: protos routes
 
 # You can install the dart protoc support by running 'dart pub global activate protoc_plugin'
-protos: lib/vpn/protos_shared/vpn.pb.dart internalsdk/protos/vpn.pb.go
+protos: lib/features/vpn internalsdk/protos/vpn.pb.go
 
 lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging.proto
 	@protoc --dart_out=./lib/messaging --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_flutteronly/messaging.proto
