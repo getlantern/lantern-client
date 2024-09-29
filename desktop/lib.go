@@ -68,7 +68,7 @@ func init() {
 	userConfig := func() common.UserConfig {
 		return settings.UserConfig(ss)
 	}
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
+	proClient = proclient.NewClient(common.ProAPIHost, common.ProAPIPath, &webclient.Opts{
 		UserConfig: userConfig,
 	})
 	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.APIBaseURL), userConfig)

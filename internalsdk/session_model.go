@@ -180,7 +180,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 			)
 		},
 	}
-	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	m.proClient = pro.NewClient(common.ProAPIHost, common.ProAPIPath, webclientOpts)
 
 	m.authClient = auth.NewClient(common.APIBaseURL, webclientOpts.UserConfig)
 

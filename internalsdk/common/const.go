@@ -40,7 +40,8 @@ var (
 	// GlobalStagingURL is the URL for fetching the global config in a staging environment.
 	GlobalStagingURL = "https://globalconfig.flashlightproxy.com/global.yaml.gz"
 
-	ProAPIHost = "api.getiantem.org"
+	ProAPIHost = "df.iantem.io"
+	ProAPIPath = "/api/pro-server"
 
 	// APIBaseURL is the URL for all requests to the back-end "API service". Paths at this URL can
 	// be hit directly, through proxies, or through domain fronting.

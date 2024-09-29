@@ -100,7 +100,7 @@ func (pt *proxyTransport) RoundTrip(req *http.Request) (resp *http.Response, err
 }
 
 // APIHandler returns an HTTP handler that specifically looks for and properly handles pro server requests.
-func APIHandler(proAPIHost string, userConfig common.UserConfig) http.Handler {
+func APIHandler(proAPIHost, proAPIPath string, userConfig common.UserConfig) http.Handler {
 	log.Debugf("Returning pro API handler hitting host: %v", proAPIHost)
 	return &httputil.ReverseProxy{
 		Transport: &proxyTransport{},
@@ -109,7 +109,7 @@ func APIHandler(proAPIHost string, userConfig common.UserConfig) http.Handler {
 			if strings.HasPrefix(r.URL.Path, "/pro/") {
 				r.URL.Path = r.URL.Path[4:]
 			}
-			prepareProRequest(r, proAPIHost, userConfig)
+			prepareProRequest(r, proAPIHost, proAPIPath, userConfig)
 		},
 	}
 }

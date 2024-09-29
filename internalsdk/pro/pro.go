@@ -7,13 +7,14 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/go-resty/resty/v2"
+
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
-	"github.com/go-resty/resty/v2"
 
 	"github.com/leekchan/accounting"
 	"github.com/shopspring/decimal"
@@ -55,7 +56,7 @@ type ProClient interface {
 }
 
 // NewClient creates a new instance of ProClient
-func NewClient(baseURL string, opts *webclient.Opts) ProClient {
+func NewClient(baseHost, basePath string, opts *webclient.Opts) ProClient {
 	if opts.HttpClient == nil {
 		// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
 		// attempts to send requests through both chained and direct fronted routes in parallel
@@ -64,7 +65,7 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	}
 	if opts.OnBeforeRequest == nil {
 		opts.OnBeforeRequest = func(client *resty.Client, req *http.Request) error {
-			prepareProRequest(req, common.ProAPIHost, opts.UserConfig())
+			prepareProRequest(req, baseHost, basePath, opts.UserConfig())
 			return nil
 		}
 	}
@@ -74,12 +75,14 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	}
 }
 
-// prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
-func prepareProRequest(r *http.Request, proAPIHost string, userConfig common.UserConfig) {
+// prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set. The
+// host is always set to baseHost and basePath is prepended to the request path.
+func prepareProRequest(r *http.Request, baseHost, basePath string, userConfig common.UserConfig) {
 	if r.URL.Scheme == "" {
 		r.URL.Scheme = "http"
 	}
-	r.URL.Host = proAPIHost
+	r.URL.Host = baseHost
+	r.URL.Path = basePath + r.URL.Path
 	r.RequestURI = "" // http: Request.RequestURI can't be set in client requests.
 	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 		common.DeviceIdHeader,
