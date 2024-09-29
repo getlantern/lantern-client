@@ -62,3 +62,18 @@ package pro
 // 		assert.Equal(t, 200, resp.StatusCode, "should respond 200 ok")
 // 	}
 // }
+
+// // APIHandler returns an HTTP handler that specifically looks for and properly handles pro server requests.
+// func APIHandler(proAPIHost, proAPIPath string, userConfig common.UserConfig) http.Handler {
+// 	log.Debugf("Returning pro API handler hitting host: %v", proAPIHost)
+// 	return &httputil.ReverseProxy{
+// 		Transport: &proxyTransport{},
+// 		Director: func(r *http.Request) {
+// 			// Strip /pro from path.
+// 			if strings.HasPrefix(r.URL.Path, "/pro/") {
+// 				r.URL.Path = r.URL.Path[4:]
+// 			}
+// 			prepareProRequest(r, proAPIHost, proAPIPath, userConfig)
+// 		},
+// 	}
+// }

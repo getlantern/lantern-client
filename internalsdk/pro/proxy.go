@@ -7,7 +7,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"net/http/httputil"
 	"strconv"
 	"strings"
 	"time"
@@ -45,7 +44,7 @@ func (pt *proxyTransport) RoundTrip(req *http.Request) (resp *http.Response, err
 	origin := req.Header.Get("Origin")
 	// Workaround for https://github.com/getlantern/pro-server/issues/192
 	req.Header.Del("Origin")
-	resp, err = NewHTTPClient(http.DefaultTransport, time.Duration(time.Second*30)).Do(req)
+	resp, err = (&http.Client{Timeout: 30 * time.Second}).Do(req)
 	if err != nil {
 		log.Errorf("Could not issue HTTP request? %v", err)
 		return
@@ -97,19 +96,4 @@ func (pt *proxyTransport) RoundTrip(req *http.Request) (resp *http.Response, err
 	}
 	log.Debugf("Updating user data implicitly for user %v", userID)
 	return
-}
-
-// APIHandler returns an HTTP handler that specifically looks for and properly handles pro server requests.
-func APIHandler(proAPIHost, proAPIPath string, userConfig common.UserConfig) http.Handler {
-	log.Debugf("Returning pro API handler hitting host: %v", proAPIHost)
-	return &httputil.ReverseProxy{
-		Transport: &proxyTransport{},
-		Director: func(r *http.Request) {
-			// Strip /pro from path.
-			if strings.HasPrefix(r.URL.Path, "/pro/") {
-				r.URL.Path = r.URL.Path[4:]
-			}
-			prepareProRequest(r, proAPIHost, proAPIPath, userConfig)
-		},
-	}
 }

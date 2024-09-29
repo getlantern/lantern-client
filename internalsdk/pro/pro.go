@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/go-resty/resty/v2"
 
@@ -58,11 +59,15 @@ type ProClient interface {
 // NewClient creates a new instance of ProClient
 func NewClient(baseHost, basePath string, opts *webclient.Opts) ProClient {
 	if opts.HttpClient == nil {
-		// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
-		// attempts to send requests through both chained and direct fronted routes in parallel
-		// for HEAD and GET requests and ChainedThenFronted for all others.
-		opts.HttpClient = NewHTTPClient(proxied.ParallelForIdempotent(), opts.Timeout)
+		opts.HttpClient = &http.Client{
+			// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
+			// attempts to send requests through both chained and direct fronted routes in parallel
+			// for HEAD and GET requests and ChainedThenFronted for all others.
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		}
 	}
+
 	if opts.OnBeforeRequest == nil {
 		opts.OnBeforeRequest = func(client *resty.Client, req *http.Request) error {
 			prepareProRequest(req, baseHost, basePath, opts.UserConfig())
