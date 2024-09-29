@@ -6,7 +6,6 @@ package app
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -200,7 +199,7 @@ func startApp(t *testing.T, helper *integrationtest.Helper) (*App, error) {
 			return settings.UserConfig(ss)
 		},
 	}
-	proClient := pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	proClient := pro.NewClient(ProAPIBaseURL, webclientOpts)
 
 	a := NewApp(flags, helper.ConfigDir, proClient, ss)
 	id := ss.GetUserID()

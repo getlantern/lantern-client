@@ -57,7 +57,7 @@ type ProClient interface {
 }
 
 // NewClient creates a new instance of ProClient
-func NewClient(baseHost, basePath string, opts *webclient.Opts) ProClient {
+func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 	if opts.HttpClient == nil {
 		opts.HttpClient = &http.Client{
 			// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
@@ -70,24 +70,26 @@ func NewClient(baseHost, basePath string, opts *webclient.Opts) ProClient {
 
 	if opts.OnBeforeRequest == nil {
 		opts.OnBeforeRequest = func(client *resty.Client, req *http.Request) error {
-			prepareProRequest(req, baseHost, basePath, opts.UserConfig())
+			prepareProRequest(req, opts.UserConfig())
 			return nil
 		}
 	}
+
+	if opts.BaseURL == "" {
+		opts.BaseURL = baseURL
+	}
+
 	return &proClient{
 		userConfig: opts.UserConfig,
 		RESTClient: webclient.NewRESTClient(opts),
 	}
 }
 
-// prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set. The
-// host is always set to baseHost and basePath is prepended to the request path.
-func prepareProRequest(r *http.Request, baseHost, basePath string, userConfig common.UserConfig) {
+// prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
+func prepareProRequest(r *http.Request, userConfig common.UserConfig) {
 	if r.URL.Scheme == "" {
 		r.URL.Scheme = "http"
 	}
-	r.URL.Host = baseHost
-	r.URL.Path = basePath + r.URL.Path
 	r.RequestURI = "" // http: Request.RequestURI can't be set in client requests.
 	r.Header.Set("Access-Control-Allow-Headers", strings.Join([]string{
 		common.DeviceIdHeader,

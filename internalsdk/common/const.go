@@ -40,11 +40,14 @@ var (
 	// GlobalStagingURL is the URL for fetching the global config in a staging environment.
 	GlobalStagingURL = "https://globalconfig.flashlightproxy.com/global.yaml.gz"
 
-	ProAPIHost = "df.iantem.io"
-	ProAPIPath = "/api/pro-server"
+	// ProAPIBaseURL is the URL for all requests to the back-end pro server. Paths at this URL can
+	// be hit directly (not recommended due to censorship), through proxies, or through domain
+	// fronting.
+	ProAPIBaseURL = "df.iantem.io/api/pro-server"
 
 	// APIBaseURL is the URL for all requests to the back-end "API service". Paths at this URL can
-	// be hit directly, through proxies, or through domain fronting.
+	// be hit directly (not recommended due to censorship), through proxies, or through domain
+	// fronting.
 	APIBaseURL = "df.iantem.io/api/v1"
 
 	log = golog.LoggerFor("flashlight.common")
@@ -65,9 +68,6 @@ func ForceStaging() {
 func initInternal() {
 	isStaging := IsStagingEnvironment()
 	log.Debugf("****************************** stagingMode: %v", isStaging)
-	if isStaging {
-		ProAPIHost = "api-staging.getiantem.org"
-	}
 	forceAds, _ = strconv.ParseBool(os.Getenv("FORCEADS"))
 }
 
