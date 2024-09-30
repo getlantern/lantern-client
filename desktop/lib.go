@@ -65,7 +65,8 @@ var issueMap = map[string]string{
 
 func init() {
 	// If a signal like SIGUSR1 or SIGUSR2 is received without the SA_ONSTACK flag (for example, from a system process during proxy toggling),
-	// the Go runtime may get confused and crash. We ignore these signals to prevent crashes, as they are not relevant to the app's functionality.
+	// the Go runtime may get confused and crash. We ignore these signals to prevent crashes, as they are user-defined and not relevant to the
+	// app's functionality anyway.
 	signal.Ignore(syscall.SIGUSR1, syscall.SIGUSR2)
 	cdir := configDir(&flags)
 	ss := settings.LoadSettings(cdir)
