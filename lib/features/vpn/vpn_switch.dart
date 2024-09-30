@@ -87,7 +87,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     } catch (e, stackTrace) {
       await Sentry.captureException(
         e,
-        stackTrace: stackTrace, // Include stack trace for debugging
+        stackTrace: stackTrace,
       );
       print("error toggling the system proxy: $e");
     }
