@@ -5,7 +5,6 @@ import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
 
-
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
 
@@ -78,10 +77,14 @@ class _VPNSwitchState extends State<VPNSwitch> {
 
   Future<void> vpnProcessForDesktop(String vpnStatus) async {
     bool isConnected = vpnStatus == 'connected';
-    if (isConnected) {
-      LanternFFI.sysProxyOn();
-    } else {
-      LanternFFI.sysProxyOff();
+    try {
+      if (isConnected) {
+        LanternFFI.sysProxyOn();
+      } else {
+        LanternFFI.sysProxyOff();
+      }
+    } catch (e) {
+      print("error toggling the system proxy: $e");
     }
   }
 
