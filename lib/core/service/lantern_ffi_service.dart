@@ -1,6 +1,3 @@
-import 'dart:ffi'; // For FFI
-
-import 'package:ffi/src/utf8.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 
@@ -48,7 +45,8 @@ class LanternFFI {
 
   static void sysProxyOff() => _lanternFFI.sysProxyOff();
 
-  static void setLang(String lang) => _lanternFFI.setSelectLang(lang.toPointerChar());
+  static void setLang(String lang) =>
+      _lanternFFI.setSelectLang(lang.toPointerChar());
 
   static void setProxyAll(String isOn) =>
       _lanternFFI.setProxyAll(isOn.toPointerChar());
@@ -69,7 +67,6 @@ class LanternFFI {
     // Protobuf JSON decoding failed at: root["telephone"]. Unknown field name 'telephone'
     return User.create()..mergeFromProto3Json(jsonDecode(res));
   }
-
 
   static Future<String> approveDevice(String code) async {
     final json = await _lanternFFI
@@ -136,8 +133,10 @@ class LanternFFI {
     return Future.value();
   }
 
-  static Pointer<Utf8> checkUpdates() =>
-      _lanternFFI.checkUpdates().cast<Utf8>();
+  static FutureOr<String> checkUpdates(dynamic args) async {
+    final updateUrl = await _lanternFFI.checkUpdates().cast<Utf8>().toDartString();
+    return updateUrl;
+  }
 
   static Pointer<Utf8> paymentMethods() =>
       _lanternFFI.paymentMethodsV3().cast<Utf8>();
@@ -179,8 +178,8 @@ class LanternFFI {
     }
   }
 
-  static Pointer<Utf8> ffIsPlayVersion() => "false".toPointerChar().cast<Utf8>();
-
+  static Pointer<Utf8> ffIsPlayVersion() =>
+      "false".toPointerChar().cast<Utf8>();
 
   static Future<void> ffiApplyRefCode(String refCode) {
     final code = refCode.toPointerChar();
@@ -188,7 +187,6 @@ class LanternFFI {
     checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
     return Future.value();
   }
-
 
   static Future<void> testPaymentRequest(List<String> params) {
     final email = params[0].toPointerChar();
