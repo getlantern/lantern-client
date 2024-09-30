@@ -35,12 +35,18 @@ class Settings extends StatelessWidget {
   }
 
   Future<void> checkForUpdateTap(BuildContext context) async {
-    AppLoadingDialog.showLoadingDialog(context);
-    final result = await sessionModel.checkForUpdates();
-    AppLoadingDialog.dismissLoadingDialog(context);
-    if (result != null && result != "" && result == "no_new_update") {
-      CDialog.showInfo(context,
-          title: "app_name".i18n, description: "no_new_update".i18n);
+    try {
+      AppLoadingDialog.showLoadingDialog(context);
+      final result = await sessionModel.checkForUpdates();
+      AppLoadingDialog.dismissLoadingDialog(context);
+      if (result != null && result != "" && result == "no_new_update") {
+        CDialog.showInfo(context,
+            title: "app_name".i18n, description: "no_new_update".i18n);
+      }
+    } catch (e) {
+      AppLoadingDialog.dismissLoadingDialog(context);
+      CDialog.showError(context,
+          description: 'we_are_experiencing_technical_difficulties'.i18n);
     }
   }
 

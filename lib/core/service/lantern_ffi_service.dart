@@ -135,6 +135,7 @@ class LanternFFI {
 
   static FutureOr<String> checkUpdates(dynamic args) async {
     final updateUrl = await _lanternFFI.checkUpdates().cast<Utf8>().toDartString();
+    checkAPIError(updateUrl, 'we_are_experiencing_technical_difficulties'.i18n);
     return updateUrl;
   }
 
