@@ -1,5 +1,5 @@
+import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -110,7 +110,10 @@ class AppBrowser extends InAppBrowser {
       navigationAction) async {
     final url = navigationAction.request.url!;
     if (url.scheme.startsWith("alipay")) {
-      launchUrl(url, mode: LaunchMode.platformDefault,);
+      launchUrl(
+        url,
+        mode: LaunchMode.platformDefault,
+      );
       return NavigationActionPolicy.CANCEL;
     }
     return NavigationActionPolicy.ALLOW;
@@ -137,14 +140,24 @@ class AppBrowser extends InAppBrowser {
     );
   }
 
-  static Future<void> openWindowsWebview(String url) async {
-    FlutterWindowsWebview().launchWebview(url);
-  }
-
   static Future<void> openWebview(String url) async {
     switch (Platform.operatingSystem) {
       case 'windows':
-        await openWindowsWebview(url);
+        try {
+          await _openUrlRequest(url);
+        } catch (e) {
+          mainLogger.e("Error opening windows webview: $e");
+          final webview = await WebviewWindow.create();
+          webview.launch(url);
+        }
+        break;
+      case 'linux':
+        try {
+          final webview = await WebviewWindow.create();
+          webview.launch(url);
+        } catch (e) {
+          mainLogger.e("Error opening linux webview: $e");
+        }
         break;
       case 'macos':
         InAppBrowser.openWithSystemBrowser(url: WebUri(url));
@@ -153,16 +166,16 @@ class AppBrowser extends InAppBrowser {
         break;
       default:
         await setProxyAddr();
-        final instance = AppBrowser();
-        await instance.openUrlRequest(
-          urlRequest: URLRequest(
-            url: WebUri(url),
-            allowsCellularAccess: true
-
-          ),
-          settings: settings,
-        );
+        await _openUrlRequest(url);
         break;
     }
+  }
+
+  static Future<void> _openUrlRequest(String url) async {
+    final instance = AppBrowser();
+    await instance.openUrlRequest(
+      urlRequest: URLRequest(url: WebUri(url), allowsCellularAccess: true),
+      settings: settings,
+    );
   }
 }

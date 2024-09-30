@@ -1,14 +1,13 @@
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
-import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/app/app_loading_dialog.dart';
 import 'package:lantern/core/localization/localization_constants.dart';
+import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/features/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
-  Settings({Key? key}) : super(key: key);
+  Settings({super.key});
 
   final packageInfo = PackageInfo.fromPlatform();
 
@@ -30,8 +29,10 @@ class Settings extends StatelessWidget {
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
-  void openWebView(String url, BuildContext context, String title) async =>
-      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+  Future<void> openWebView(
+      String url, BuildContext context, String title) async {
+    await AppBrowser.openWebview(url);
+  }
 
   Future<void> checkForUpdateTap(BuildContext context) async {
     AppLoadingDialog.showLoadingDialog(context);
