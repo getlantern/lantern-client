@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'package:ffi/src/utf8.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../generated_bindings.dart';
 
@@ -65,14 +66,14 @@ class LanternFFI {
     //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
-  // Run FFI code for toggling the system proxy in a separate isolate,
-  // to isolate problematic interactions between signaling and Go's runtime.
-  // This helps catch signals before they propagate and cause the Go
-  // runtime to crash.
+  // To isolate problematic interactions between signal handling and the Go
+  // runtime, the FFI code for toggling the system proxy is run on a separate
+  // isolate. This provides a way to catch and manage signals before they
+  // propagate and cause the Go runtime to crash.
   static void proxyIsolateEntry(SendPort sendPort) {
     final commandPort = ReceivePort();
     sendPort.send(commandPort.sendPort);
-    commandPort.listen((message) {
+    commandPort.listen((message) async {
       String vpnStatus = message;
       try {
         if (vpnStatus == 'connected') {
@@ -81,7 +82,11 @@ class LanternFFI {
           sysProxyOff();
         }
         sendPort.send("done");
-      } catch (e) {
+      } catch (e, stackTrace) {
+        await Sentry.captureException(
+          e,
+          stackTrace: stackTrace,
+        );
         sendPort.send("error");
       }
     });
