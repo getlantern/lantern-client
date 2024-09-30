@@ -4,6 +4,7 @@ import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -83,7 +84,11 @@ class _VPNSwitchState extends State<VPNSwitch> {
       } else {
         LanternFFI.sysProxyOff();
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace, // Include stack trace for debugging
+      );
       print("error toggling the system proxy: $e");
     }
   }
