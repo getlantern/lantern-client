@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/core/helpers/ad_helper.dart';
 import 'package:lantern/core/utils/common.dart';
@@ -5,6 +7,8 @@ import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+
+SendPort? proxySendPort;
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -77,20 +81,12 @@ class _VPNSwitchState extends State<VPNSwitch> {
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
 
   Future<void> vpnProcessForDesktop(String vpnStatus) async {
-    bool isConnected = vpnStatus == 'connected';
-    try {
-      if (isConnected) {
-        LanternFFI.sysProxyOn();
-      } else {
-        LanternFFI.sysProxyOff();
-      }
-    } catch (e, stackTrace) {
-      await Sentry.captureException(
-        e,
-        stackTrace: stackTrace,
-      );
-      print("error toggling the system proxy: $e");
+    if (LanternFFI.proxySendPort == null) {
+      // when the button is toggled, check whether the isolate has
+      // already been started
+      await LanternFFI.systemProxyIsolate();
     }
+    LanternFFI.proxySendPort?.send(vpnStatus);
   }
 
   Future<void> vpnProcessForMobile(

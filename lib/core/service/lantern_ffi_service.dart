@@ -1,4 +1,5 @@
 import 'dart:ffi'; // For FFI
+import 'dart:isolate';
 
 import 'package:ffi/src/utf8.dart';
 import 'package:lantern/core/utils/common.dart';
@@ -42,13 +43,16 @@ class LanternFFI {
     throw Exception("Platform is not supported");
   }
 
+  static SendPort? proxySendPort;
+
   static startDesktopService() => _lanternFFI.start();
 
   static void sysProxyOn() => _lanternFFI.sysProxyOn();
 
   static void sysProxyOff() => _lanternFFI.sysProxyOff();
 
-  static void setLang(String lang) => _lanternFFI.setSelectLang(lang.toPointerChar());
+  static void setLang(String lang) =>
+      _lanternFFI.setSelectLang(lang.toPointerChar());
 
   static void setProxyAll(String isOn) =>
       _lanternFFI.setProxyAll(isOn.toPointerChar());
@@ -61,6 +65,35 @@ class LanternFFI {
     //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
+  // Run FFI code for toggling the system proxy in a separate isolate,
+  // to isolate problematic interactions between signaling and Go's runtime.
+  // This helps catch signals before they propagate and cause the Go
+  // runtime to crash.
+  static void proxyIsolateEntry(SendPort sendPort) {
+    final commandPort = ReceivePort();
+    sendPort.send(commandPort.sendPort);
+    commandPort.listen((message) {
+      String vpnStatus = message;
+      try {
+        if (vpnStatus == 'connected') {
+          sysProxyOn();
+        } else {
+          sysProxyOff();
+        }
+        sendPort.send("done");
+      } catch (e) {
+        sendPort.send("error");
+      }
+    });
+  }
+
+  // create isolate that listens for system proxy commands
+  static Future<void> systemProxyIsolate() async {
+    final receivePort = ReceivePort();
+    await Isolate.spawn(proxyIsolateEntry, receivePort.sendPort);
+    proxySendPort = await receivePort.first;
+  }
+
   static Future<User> ffiUserData() async {
     final res = await _lanternFFI.userData().cast<Utf8>().toDartString();
     // it's necessary to use mergeFromProto3Json here instead of fromJson; otherwise, a FormatException with
@@ -69,7 +102,6 @@ class LanternFFI {
     // Protobuf JSON decoding failed at: root["telephone"]. Unknown field name 'telephone'
     return User.create()..mergeFromProto3Json(jsonDecode(res));
   }
-
 
   static Future<String> approveDevice(String code) async {
     final json = await _lanternFFI
@@ -179,8 +211,8 @@ class LanternFFI {
     }
   }
 
-  static Pointer<Utf8> ffIsPlayVersion() => "false".toPointerChar().cast<Utf8>();
-
+  static Pointer<Utf8> ffIsPlayVersion() =>
+      "false".toPointerChar().cast<Utf8>();
 
   static Future<void> ffiApplyRefCode(String refCode) {
     final code = refCode.toPointerChar();
@@ -188,7 +220,6 @@ class LanternFFI {
     checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
     return Future.value();
   }
-
 
   static Future<void> testPaymentRequest(List<String> params) {
     final email = params[0].toPointerChar();

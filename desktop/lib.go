@@ -7,12 +7,10 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"os/signal"
 	"runtime"
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/getlantern/appdir"
@@ -64,11 +62,6 @@ var issueMap = map[string]string{
 }
 
 func init() {
-	// If a signal like SIGUSR1 or SIGUSR2 is received without the SA_ONSTACK flag (for example,
-	// from a system process during proxy toggling), the Go runtime may get confused and crash.
-	// We ignore these signals to prevent crashes, as they are user-defined and not relevant to the
-	// app's functionality anyway.
-	signal.Ignore(syscall.SIGUSR1, syscall.SIGUSR2)
 	cdir := configDir(&flags)
 	ss := settings.LoadSettings(cdir)
 	userConfig := func() common.UserConfig {
