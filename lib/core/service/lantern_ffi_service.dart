@@ -45,7 +45,7 @@ class LanternFFI {
   }
 
   static SendPort? _proxySendPort;
-  static Completer<void> _isolateInitialized = Completer<void>();
+  static final Completer<void> _isolateInitialized = Completer<void>();
 
   static startDesktopService() => _lanternFFI.start();
 
@@ -89,12 +89,12 @@ class LanternFFI {
   // To isolate problematic interactions between signal handling and the Go
   // runtime, the FFI code for toggling the system proxy is run on a separate
   // isolate. This provides a way to catch and manage signals before they
-  // propagate and cause the Go runtime to crash.
+  // propagate and cause the runtime to crash.
   static void _proxyIsolateEntry(SendPort sendPort) {
     final commandPort = ReceivePort();
     sendPort.send(commandPort.sendPort);
     commandPort.listen((message) async {
-      String vpnStatus = message;
+      final vpnStatus = message;
       try {
         if (vpnStatus == 'connected') {
           sysProxyOn();
