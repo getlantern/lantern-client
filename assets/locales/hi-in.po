@@ -1952,3 +1952,21 @@ msgstr "आप अद्यतित हैं!"
 
 msgid "error_referral"
 msgstr "आपका रेफरल कोड लागू करते समय कुछ गड़बड़ हुई।"
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""

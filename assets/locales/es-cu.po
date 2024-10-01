@@ -1991,3 +1991,21 @@ msgstr "¡Está actualizado!"
 
 msgid "error_referral"
 msgstr "Algo ha fallado al aplicar tu código de recomendación."
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""

@@ -153,35 +153,9 @@ func sysProxyOff() {
 func websocketAddr() *C.char {
 	return C.CString(a.WebsocketAddr())
 }
-
-//export paymentMethodsV3
-func paymentMethodsV3() *C.char {
-	return C.CString("")
-}
-
-//export paymentMethodsV4
-func paymentMethodsV4() *C.char {
-	/*resp, err := a.PaymentMethods(context.Background())
-	if err != nil {
-		return sendError(err)
-	}
-	b, _ := json.Marshal(resp)
-	return C.CString(string(b))*/
-	return C.CString("")
-}
-
 func cachedUserData() (*protos.User, bool) {
 	uc := settings.UserConfig(a.Settings())
 	return a.GetUserData(uc.GetUserID())
-}
-
-//export proxyAll
-func proxyAll() *C.char {
-	proxyAll := a.Settings().GetProxyAll()
-	if proxyAll {
-		return C.CString("true")
-	}
-	return C.CString("false")
 }
 
 //export setProxyAll

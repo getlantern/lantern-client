@@ -196,12 +196,6 @@ class LanternFFI {
   static Pointer<Utf8> checkUpdates() =>
       _lanternFFI.checkUpdates().cast<Utf8>();
 
-  static Pointer<Utf8> paymentMethods() =>
-      _lanternFFI.paymentMethodsV3().cast<Utf8>();
-
-  static Pointer<Utf8> paymentMethodsV4() =>
-      _lanternFFI.paymentMethodsV4().cast<Utf8>();
-
   static Future<void> reportIssue(List<String> list) {
     final email = list[0].toPointerChar();
     final issueType = list[1].toPointerChar();

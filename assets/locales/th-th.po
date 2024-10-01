@@ -1936,3 +1936,21 @@ msgstr "คุณมีการอัปเดตล่าสุดแล้ว
 
 msgid "error_referral"
 msgstr "เกิดข้อผิดพลาดบางอย่างระหว่างการใส่รหัสอ้างอิงของคุณ"
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""

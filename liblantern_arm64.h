@@ -101,9 +101,6 @@ extern char* start();
 extern char* sysProxyOn();
 extern void sysProxyOff();
 extern char* websocketAddr();
-extern char* paymentMethodsV3();
-extern char* paymentMethodsV4();
-extern char* proxyAll();
 extern void setProxyAll(char* value);
 
 // this method is reposible for checking if the user has updated plan or bought plans

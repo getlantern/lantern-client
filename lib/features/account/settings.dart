@@ -8,7 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
-  Settings({Key? key}) : super(key: key);
+  Settings({super.key});
 
   final packageInfo = PackageInfo.fromPlatform();
 
@@ -32,6 +32,9 @@ class Settings extends StatelessWidget {
 
   void openWebView(String url, BuildContext context, String title) async =>
       await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+
+  void openProxySetting(BuildContext context) =>
+      context.pushRoute(ProxiesSetting());
 
   Future<void> checkForUpdateTap(BuildContext context) async {
     AppLoadingDialog.showLoadingDialog(context);
@@ -145,7 +148,7 @@ class Settings extends StatelessWidget {
               (BuildContext context, bool proxyAll, Widget? child) =>
                   ListItemFactory.settingsItem(
                 header: 'VPN'.i18n,
-                icon: ImagePaths.key,
+                icon: ImagePaths.split_tunneling,
                 content: CInkWell(
                   onTap: () => openInfoProxyAll(context),
                   child: Row(
@@ -154,9 +157,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Flexible(
                         child: CText(
-                          'proxy_everything_is'
-                              .i18n
-                              .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                          'proxy_everything'.i18n,
                           softWrap: false,
                           style: tsSubtitle1.short,
                         ),
@@ -186,6 +187,16 @@ class Settings extends StatelessWidget {
                 ],
               ),
             ),
+          if (isDesktop())
+            ListItemFactory.settingsItem(
+              icon: ImagePaths.proxySetting,
+              content: 'proxy_settings'.i18n,
+              trailingArray: [
+                mirrorLTR(context: context, child: const ContinueArrow())
+              ],
+              onTap: () => {openProxySetting(context)},
+            ),
+
           ListItemFactory.settingsItem(
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,

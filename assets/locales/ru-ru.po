@@ -1969,3 +1969,21 @@ msgstr "Нет новых обновлений!"
 
 msgid "error_referral"
 msgstr "Что-то пошло не так, попробуйте ещё раз. "
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""
