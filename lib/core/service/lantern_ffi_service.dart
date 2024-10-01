@@ -69,13 +69,11 @@ class LanternFFI {
 
   // Initialize the system proxy isolate
   static Future<void> _initializeSystemProxyIsolate() async {
-    if (!_isolateInitialized.isCompleted) {
-      final receivePort = ReceivePort();
-      // create isolate that listens for system proxy commands
-      await Isolate.spawn(_proxyIsolateEntry, receivePort.sendPort);
-      _proxySendPort = await receivePort.first;
-      _isolateInitialized.complete();
-    }
+    final receivePort = ReceivePort();
+    // create isolate that listens for system proxy commands
+    await Isolate.spawn(_proxyIsolateEntry, receivePort.sendPort);
+    _proxySendPort = await receivePort.first;
+    _isolateInitialized.complete();
   }
 
   // initialize the isolate if need be and send the vpnStatus to it
