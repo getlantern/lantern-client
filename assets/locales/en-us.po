@@ -1812,6 +1812,9 @@ msgstr "You're up to date!"
 msgid "error_referral"
 msgstr "Something went wrong while applying your referral code."
 
+msgid "proxy_error"
+msgstr "We are having problem starting lantern Please try again later."
+
 msgid "proxy_settings"
 msgstr "Proxy Settings"
 
@@ -1829,11 +1832,6 @@ msgstr "Socks Proxy copied"
 
 msgid "proxy_everything"
 msgstr "Proxy Everything"
-
-
-
-
-
 
 
 

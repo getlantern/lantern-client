@@ -9,6 +9,7 @@ class VPNBandwidth extends StatelessWidget {
         .bandwidth((BuildContext context, Bandwidth bandwidth, Widget? child) {
       // User does not have bandwidth cap off
       if (bandwidth.remaining > 0) {
+        if (bandwidth.percent.isZero) bandwidth.percent = bandwidth.remaining;
         return Column(
           children: [
             Container(
@@ -29,7 +30,7 @@ class VPNBandwidth extends StatelessWidget {
                 ),
                 Expanded(
                   child: CText(
-                    '${(bandwidth.allowed - bandwidth.remaining)}/${bandwidth.allowed} MB',
+                    '${bandwidth.remaining}/${bandwidth.allowed} MB',
                     textAlign: TextAlign.end,
                     style: tsSubtitle4,
                   ),
