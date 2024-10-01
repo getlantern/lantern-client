@@ -1,14 +1,9 @@
-import 'dart:isolate';
-
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/core/helpers/ad_helper.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-
-SendPort? proxySendPort;
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
