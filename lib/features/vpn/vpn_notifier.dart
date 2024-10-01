@@ -7,7 +7,6 @@ class VPNChangeNotifier with ChangeNotifier {
       ValueNotifier<String>('disconnected');
 
   ValueNotifier<String> get vpnStatus => _vpnStatus;
-  ValueNotifier<bool> vpnStatusController = ValueNotifier<bool>(false);
   bool isFlashlightInitialized = false;
   bool isFlashlightInitializedFailed = false;
   String flashlightState = 'fetching_configuration'.i18n;
