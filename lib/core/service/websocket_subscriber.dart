@@ -69,6 +69,11 @@ class WebsocketSubscriber {
               sessionModel.deviceIdNotifier.value = deviceID;
             }
 
+            final proxyAll = message['proxyAll'];
+            if (proxyAll != null) {
+              sessionModel.proxyAllNotifier.value = proxyAll as bool;
+            }
+
           case _WebsocketMessageType.stats:
             if (message['countryCode'] != null) {
               sessionModel.serverInfoNotifier.value = ServerInfo.create()

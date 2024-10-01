@@ -30,6 +30,7 @@ type ConfigOptions struct {
 	DevelopmentMode      bool                   `json:"developmentMode"`
 	ReplicaAddr          string                 `json:"replicaAddr"`
 	HttpProxyAddr        string                 `json:"httpProxyAddr"`
+	SocksProxyAddr       string                 `json:"socksProxyAddr"`
 	AuthEnabled          bool                   `json:"authEnabled"`
 	ChatEnabled          bool                   `json:"chatEnabled"`
 	SplitTunneling       bool                   `json:"splitTunneling"`
@@ -44,6 +45,7 @@ type ConfigOptions struct {
 	DeviceId             string                 `json:"deviceId"`
 	ExpirationDate       string                 `json:"expirationDate"`
 	Chat                 ChatOptions            `json:"chat"`
+	ProxyAll             bool                   `json:"proxyAll"`
 }
 
 func (s *configService) StartService(channel ws.UIChannel) (err error) {
@@ -85,6 +87,7 @@ func (app *App) sendConfigOptions() {
 		AppVersion:           common.ApplicationVersion,
 		ReplicaAddr:          "",
 		HttpProxyAddr:        app.settings.GetAddr(),
+		SocksProxyAddr:       app.settings.GetSOCKSAddr(),
 		AuthEnabled:          authEnabled(app),
 		ChatEnabled:          false,
 		SplitTunneling:       false,
@@ -97,6 +100,7 @@ func (app *App) sendConfigOptions() {
 		DeviceId:             app.settings.GetDeviceID(),
 		ExpirationDate:       app.settings.GetExpirationDate(),
 		Devices:              app.devices(),
+		ProxyAll:             app.settings.GetProxyAll(),
 		Chat: ChatOptions{
 			AcceptedTermsVersion: 0,
 			OnBoardingStatus:     false,

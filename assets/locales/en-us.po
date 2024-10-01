@@ -1806,14 +1806,34 @@ msgstr "Add an email to access your purchases on any device. Without an email pu
 msgid "continue_without_email"
 msgstr "Continue without Email"
 
-
-
-
 msgid "no_new_update"
 msgstr "You're up to date!"
 
 msgid "error_referral"
 msgstr "Something went wrong while applying your referral code."
+
+msgid "proxy_settings"
+msgstr "Proxy Settings"
+
+msgid "http_proxy"
+msgstr "HTTPS proxy"
+
+msgid "socks_proxy"
+msgstr "Socks proxy"
+
+msgid "http_proxy_copied"
+msgstr "HTTP Proxy copied"
+
+msgid "socks_proxy_copied"
+msgstr "Socks Proxy copied"
+
+msgid "proxy_everything"
+msgstr "Proxy Everything"
+
+
+
+
+
 
 
 
