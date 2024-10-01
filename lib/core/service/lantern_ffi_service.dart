@@ -86,9 +86,9 @@ class LanternFFI {
     _proxySendPort?.send(vpnStatus);
   }
 
-  // To isolate problematic interactions between signal handling and the Go
-  // runtime, the FFI code for toggling the system proxy is run on a separate
-  // isolate. This provides a way to catch and manage signals before they
+  // The FFI code for toggling the system proxy is run on a separate isolate
+  // to avoid conflicting signal handling between Dart and the Go runtime.
+  // This provides an effective way to catch and manage signals before they
   // propagate and cause the runtime to crash.
   static void _proxyIsolateEntry(SendPort sendPort) {
     final commandPort = ReceivePort();
