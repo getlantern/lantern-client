@@ -44,7 +44,8 @@ class LanternFFI {
     throw Exception("Platform is not supported");
   }
 
-  static SendPort? proxySendPort;
+  static SendPort? _proxySendPort;
+  static Completer<void> _isolateInitialized = Completer<void>();
 
   static startDesktopService() => _lanternFFI.start();
 
@@ -66,11 +67,30 @@ class LanternFFI {
     //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
 
+  // Initialize the system proxy isolate
+  static Future<void> _initializeSystemProxyIsolate() async {
+    if (!_isolateInitialized.isCompleted) {
+      final receivePort = ReceivePort();
+      // create isolate that listens for system proxy commands
+      await Isolate.spawn(_proxyIsolateEntry, receivePort.sendPort);
+      _proxySendPort = await receivePort.first;
+      _isolateInitialized.complete();
+    }
+  }
+
+  // initialize the isolate if need be and send the vpnStatus to it
+  static Future<void> sendVpnStatus(String vpnStatus) async {
+    if (!_isolateInitialized.isCompleted) {
+      await _initializeSystemProxyIsolate();
+    }
+    _proxySendPort?.send(vpnStatus);
+  }
+
   // To isolate problematic interactions between signal handling and the Go
   // runtime, the FFI code for toggling the system proxy is run on a separate
   // isolate. This provides a way to catch and manage signals before they
   // propagate and cause the Go runtime to crash.
-  static void proxyIsolateEntry(SendPort sendPort) {
+  static void _proxyIsolateEntry(SendPort sendPort) {
     final commandPort = ReceivePort();
     sendPort.send(commandPort.sendPort);
     commandPort.listen((message) async {
@@ -90,13 +110,6 @@ class LanternFFI {
         sendPort.send("error");
       }
     });
-  }
-
-  // create isolate that listens for system proxy commands
-  static Future<void> systemProxyIsolate() async {
-    final receivePort = ReceivePort();
-    await Isolate.spawn(proxyIsolateEntry, receivePort.sendPort);
-    proxySendPort = await receivePort.first;
   }
 
   static Future<User> ffiUserData() async {

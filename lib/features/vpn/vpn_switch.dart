@@ -54,40 +54,34 @@ class _VPNSwitchState extends State<VPNSwitch> {
       });
     } else {
       // This ui for desktop
-      return AdvancedSwitch(
-        width: 160,
-        height: 70,
-        borderRadius: BorderRadius.circular(40),
-        disabledOpacity: 1,
-        enabled: (internetStatusProvider.isConnected &&
-            !vpnNotifier.isFlashlightInitializedFailed),
-        initialValue: vpnNotifier.vpnStatus.value == 'connected' ||
-            vpnNotifier.vpnStatus.value == 'disconnecting',
-        activeColor: onSwitchColor,
-        inactiveColor: (internetStatusProvider.isConnected &&
-                !vpnNotifier.isFlashlightInitializedFailed)
-            ? offSwitchColor
-            : grey3,
-        onChanged: (newValue) {
-          final newStatus = newValue ? 'connected' : 'disconnected';
-          context.read<VPNChangeNotifier>().vpnStatus.value = newStatus;
-          vpnProcessForDesktop(newStatus);
-        },
-      );
+      return ValueListenableBuilder<String>(
+          valueListenable: vpnNotifier.vpnStatus,
+          builder: (context, value, child) {
+            return AdvancedSwitch(
+              width: 160,
+              height: 70,
+              borderRadius: BorderRadius.circular(40),
+              disabledOpacity: 1,
+              enabled: (internetStatusProvider.isConnected &&
+                  !vpnNotifier.isFlashlightInitializedFailed),
+              initialValue: value == 'connected' || value == 'disconnecting',
+              activeColor: onSwitchColor,
+              inactiveColor: (internetStatusProvider.isConnected &&
+                      !vpnNotifier.isFlashlightInitializedFailed)
+                  ? offSwitchColor
+                  : grey3,
+              onChanged: (newValue) {
+                final newStatus = newValue ? 'connected' : 'disconnected';
+                vpnNotifier.vpnStatus.value = newStatus;
+                LanternFFI.sendVpnStatus(newStatus);
+              },
+            );
+          });
     }
   }
 
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
-
-  Future<void> vpnProcessForDesktop(String vpnStatus) async {
-    if (LanternFFI.proxySendPort == null) {
-      // when the button is toggled, check whether the isolate has
-      // already been started
-      await LanternFFI.systemProxyIsolate();
-    }
-    LanternFFI.proxySendPort?.send(vpnStatus);
-  }
 
   Future<void> vpnProcessForMobile(
       bool newValue, String vpnStatus, bool userHasPermission) async {
