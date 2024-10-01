@@ -8,7 +8,7 @@ class VPNBandwidth extends StatelessWidget {
     return sessionModel
         .bandwidth((BuildContext context, Bandwidth bandwidth, Widget? child) {
       // User does not have bandwidth cap off
-      if (bandwidth.remaining > 0) {
+      if (bandwidth.remaining > 0 || isDesktop()) {
         if (bandwidth.percent.isZero) bandwidth.percent = bandwidth.remaining;
         return Column(
           children: [
