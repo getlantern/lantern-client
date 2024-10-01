@@ -1,3 +1,4 @@
+import 'package:fixnum/src/int64.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 
 class VPNBandwidth extends StatelessWidget {
@@ -10,6 +11,10 @@ class VPNBandwidth extends StatelessWidget {
       // User does not have bandwidth cap off
       if (bandwidth.remaining > 0 || isDesktop()) {
         if (bandwidth.percent.isZero) bandwidth.percent = bandwidth.remaining;
+        if (bandwidth.allowed.isZero) {
+          final defaultmibAllowed = 250;
+          bandwidth.allowed = Int64(defaultmibAllowed);
+        }
         return Column(
           children: [
             Container(
