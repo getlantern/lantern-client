@@ -1,7 +1,5 @@
-import 'dart:ffi'; // For FFI
 import 'dart:isolate';
 
-import 'package:ffi/src/utf8.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -49,7 +47,10 @@ class LanternFFI {
 
   static startDesktopService() => _lanternFFI.start();
 
-  static void sysProxyOn() => _lanternFFI.sysProxyOn();
+  static void sysProxyOn() {
+    final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();
+    checkAPIError(response, 'cannot_connect_to_vpn'.i18n);
+  }
 
   static void sysProxyOff() => _lanternFFI.sysProxyOff();
 
@@ -77,11 +78,24 @@ class LanternFFI {
   }
 
   // initialize the isolate if need be and send the vpnStatus to it
-  static Future<void> sendVpnStatus(String vpnStatus) async {
+  static Future<String> sendVpnStatus(String vpnStatus) async {
     if (!_isolateInitialized.isCompleted) {
       await _initializeSystemProxyIsolate();
     }
-    _proxySendPort?.send(vpnStatus);
+
+    final responsePort = ReceivePort(); // Port to receive isolate's response
+    _proxySendPort?.send([vpnStatus, responsePort.sendPort]);
+
+    // Listen for the result (success or error)
+    final message = await responsePort.first;
+    if (message == "done") {
+      mainLogger.i("System proxy updated successfully.");
+      responsePort.close();
+      return "done";
+    } else {
+      responsePort.close();
+      throw PlatformException(code: 'proxy_error', message: message);
+    }
   }
 
   // The FFI code for toggling the system proxy is run on a separate isolate
@@ -92,20 +106,15 @@ class LanternFFI {
     final commandPort = ReceivePort();
     sendPort.send(commandPort.sendPort);
     commandPort.listen((message) async {
-      final vpnStatus = message;
+      final vpnStatus = message[0] as String;
+      final replyPort = message[1] as SendPort;
+
       try {
-        if (vpnStatus == 'connected') {
-          sysProxyOn();
-        } else {
-          sysProxyOff();
-        }
-        sendPort.send("done");
+        vpnStatus == 'connected' ? sysProxyOn() : sysProxyOff();
+        replyPort.send("done");
       } catch (e, stackTrace) {
-        await Sentry.captureException(
-          e,
-          stackTrace: stackTrace,
-        );
-        sendPort.send("error");
+        await Sentry.captureException(e, stackTrace: stackTrace);
+        replyPort.send("error");
       }
     });
   }

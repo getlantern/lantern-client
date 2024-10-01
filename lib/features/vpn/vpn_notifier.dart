@@ -7,6 +7,7 @@ class VPNChangeNotifier with ChangeNotifier {
       ValueNotifier<String>('disconnected');
 
   ValueNotifier<String> get vpnStatus => _vpnStatus;
+  ValueNotifier<bool> vpnStatusController = ValueNotifier<bool>(false);
   bool isFlashlightInitialized = false;
   bool isFlashlightInitializedFailed = false;
   String flashlightState = 'fetching_configuration'.i18n;
@@ -23,8 +24,13 @@ class VPNChangeNotifier with ChangeNotifier {
 
   void toggleConnection() {
     final newStatus = isConnected() ? 'disconnected' : 'connected';
-    _vpnStatus.value = newStatus;
     LanternFFI.sendVpnStatus(newStatus);
+    _vpnStatus.value = newStatus;
+    notifyListeners();
+  }
+
+  Future<void> updateVpnStatus(String status) async {
+    _vpnStatus.value = status;
     notifyListeners();
   }
 

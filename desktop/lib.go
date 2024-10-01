@@ -135,8 +135,13 @@ func saveUserSalt(salt []byte) {
 }
 
 //export sysProxyOn
-func sysProxyOn() {
-	go a.SysproxyOn()
+func sysProxyOn() *C.char {
+	err := a.SysproxyOn()
+	if err != nil {
+		log.Error(err)
+		return sendError(err)
+	}
+	return C.CString("true")
 }
 
 //export sysProxyOff
