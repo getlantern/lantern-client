@@ -230,8 +230,8 @@ github.com/getlantern/algeneva v0.0.0-20240605225338-caba0b3edf03 h1:VaBQdRGkP47
 github.com/getlantern/algeneva v0.0.0-20240605225338-caba0b3edf03/go.mod h1:PrNR8tMXO26YNs8K9653XCUH7u2Kv4OdfFC3Ke1GsX0=
 github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da h1:T/pxF37Z9SIQCHhMMUITZ3rhKRL0Noi9XxNwxKdBNw0=
 github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da/go.mod h1:3vR6+jQdWfWojZ77w+htCqEF5MO/Y2twJOpAvFuM9po=
-github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7 h1:/efTOJpxXC/DglC3qTt3P7kQZA7jPO3+1PLsfH+mc7k=
-github.com/getlantern/autoupdate v0.0.0-20211217175350-d0b211f39ba7/go.mod h1:+X8pAviVhThDBjPEqLUB0iO7EPxhpWk7Q9VYxvz6rCY=
+github.com/getlantern/autoupdate v0.0.0-20240926204302-11d9aa2df948 h1:QPpGiY3ljAaNe3qdx22cTVzDPQLS/4yUeuvyGgfADCA=
+github.com/getlantern/autoupdate v0.0.0-20240926204302-11d9aa2df948/go.mod h1:ohIVs2H6Wb58ZaCw/OAP+z6RPFVaRokAnldy+ATGwdQ=
 github.com/getlantern/broflake v0.0.0-20240726141511-b0693659265d h1:1CP0+0UYTn/sl0VfQhcvaisAZxoCqVoTfsl59dmajb0=
 github.com/getlantern/broflake v0.0.0-20240726141511-b0693659265d/go.mod h1:tiDZ3G1JdjwLZDG0O4LYpeFMAxGjFb9L15s7NO4ibVk=
 github.com/getlantern/bufconn v0.0.0-20190625204133-a08544339f8d/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
