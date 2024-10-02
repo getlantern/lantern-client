@@ -1937,6 +1937,9 @@ msgstr "คุณมีการอัปเดตล่าสุดแล้ว
 msgid "error_referral"
 msgstr "เกิดข้อผิดพลาดบางอย่างระหว่างการใส่รหัสอ้างอิงของคุณ"
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 

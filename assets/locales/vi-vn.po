@@ -1956,6 +1956,9 @@ msgstr "Bạn có phiên bản mới nhất!"
 msgid "error_referral"
 msgstr "Đã xảy ra lỗi khi áp dụng mã giới thiệu của bạn."
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 

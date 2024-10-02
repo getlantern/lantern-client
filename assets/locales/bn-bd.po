@@ -1968,6 +1968,9 @@ msgstr "আপনি আপ টু ডেট!"
 msgid "error_referral"
 msgstr "আপনার রেফারেল কোড প্রয়োগ করার সময় কিছু সমস্যা হয়েছে।"
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 

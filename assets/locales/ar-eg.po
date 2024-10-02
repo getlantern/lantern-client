@@ -1955,6 +1955,9 @@ msgstr "لديك آخر التحديثات! "
 msgid "error_referral"
 msgstr "حدث خطأ ما أثناء تطبيق رمز الإحالة المخصص لك."
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 

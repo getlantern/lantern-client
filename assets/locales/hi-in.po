@@ -1953,6 +1953,9 @@ msgstr "आप अद्यतित हैं!"
 msgid "error_referral"
 msgstr "आपका रेफरल कोड लागू करते समय कुछ गड़बड़ हुई।"
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 
