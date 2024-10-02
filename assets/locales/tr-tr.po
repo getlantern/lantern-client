@@ -1968,3 +1968,24 @@ msgstr "En güncel sürümü kullanıyorsunuz!"
 
 msgid "error_referral"
 msgstr "Referans kodu uygulanırken bir sorun oluştu."
+
+msgid "proxy_error"
+msgstr ""
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""

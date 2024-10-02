@@ -86,7 +86,7 @@ class VPNTab extends StatelessWidget {
                           children: [
                             VPNStatus(),
                             const CDivider(height: 32.0),
-                            ServerLocationWidget(),
+                            const ServerLocationWidget(),
                             if (Platform.isAndroid) ...{
                               const CDivider(height: 32.0),
                               SplitTunnelingWidget(),

@@ -37,6 +37,7 @@ dependencies:
 
   # UI Enhancements & User Input
   flutter_advanced_switch: ^3.1.0
+  animated_toggle_switch: ^0.8.3
   flag: ^7.0.0
 
   #Loogs and crash reporting

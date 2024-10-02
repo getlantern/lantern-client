@@ -11,7 +11,6 @@ import 'package:lantern/features/replica/ui/utils.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
-
 // IOS issue
 // https://github.com/flutter/flutter/issues/133465
 Future<void> main() async {
@@ -37,17 +36,17 @@ Future<void> main() async {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
       size: ui.Size(360, 712),
-      minimumSize: ui.Size(315, 584),
-      maximumSize: ui.Size(1000, 1000),
+      minimumSize: ui.Size(360, 712),
+      maximumSize: ui.Size(360, 712),
       center: true,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
       windowButtonVisibility: true,
-
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
+      await windowManager.setResizable(false);
     });
   } else {
     await _initGoogleMobileAds();

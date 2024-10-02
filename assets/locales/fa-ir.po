@@ -1953,3 +1953,24 @@ msgstr "شما به روز هستید!"
 
 msgid "error_referral"
 msgstr "هنگام اعمال کد معرف خطا دریافت شد"
+
+msgid "proxy_error"
+msgstr ""
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""
