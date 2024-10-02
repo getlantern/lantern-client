@@ -333,9 +333,8 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     );
   }
 
-  Future<void> _openWebview(String url) async {
-    await AppBrowser.openWebview(context, url);
-  }
+  Future<void> _openWebview(String url) async =>
+      await AppBrowser.openWebview(context, url);
 
   void _proceedWithBTCPay() async {
     try {
