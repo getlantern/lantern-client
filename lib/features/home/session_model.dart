@@ -187,9 +187,7 @@ class SessionModel extends Model {
   }
 
   Future<void> setForceCountry(String? countryCode) {
-    return methodChannel.invokeMethod('setForceCountry', <String, dynamic>{
-      'countryCode': countryCode,
-    });
+    return methodChannel.invokeMethod('setForceCountry', countryCode);
   }
 
   Widget geoCountryCode(ValueWidgetBuilder<String> builder) {
