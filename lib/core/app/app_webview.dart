@@ -1,5 +1,4 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_windows/webview_windows.dart';
