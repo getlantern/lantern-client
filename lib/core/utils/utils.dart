@@ -1,8 +1,6 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/core/utils/common.dart';
-import 'package:lantern/core/app/app_webview.dart';
 
 const defaultTimeoutDuration = Duration(seconds: 10);
 
@@ -147,8 +145,7 @@ Future<void> openDesktopPaymentWebview(
       await AppBrowser.navigateWebview(context, redirectUrl);
       break;
     default:
-      await context.pushRoute(
-          AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
+      await AppBrowser.openWebview(context, redirectUrl);
   }
 }
 

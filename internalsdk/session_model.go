@@ -793,8 +793,9 @@ func (m *SessionModel) featureEnabled(feature string) bool {
 		log.Errorf("Error while getting user id %v", err)
 		return false
 	}
+	log.Debugf("Feature country code %s", countryCode)
 	featureEnabled := m.iosConfigurer.FeatureEnabled(feature, common.Platform, common.DefaultAppName, common.ApplicationVersion, userId, isPro, countryCode)
-	log.Debugf("Feature %s enabled %v", feature, featureEnabled)
+	log.Debugf("Feature enabled  %s %v", feature, featureEnabled)
 	return featureEnabled
 }
 

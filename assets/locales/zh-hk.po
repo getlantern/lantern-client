@@ -1852,6 +1852,9 @@ msgstr "已更新為最新狀態！"
 msgid "error_referral"
 msgstr "使用您的推荐码时报错"
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 

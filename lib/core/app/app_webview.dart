@@ -1,3 +1,4 @@
+import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -167,6 +168,14 @@ class AppBrowser extends InAppBrowser {
       case 'windows':
         await navigateWebview(context, url);
         break;
+      case 'linux':
+        try {
+          final webview = await WebviewWindow.create();
+          webview.launch(url);
+        } catch (e) {
+          mainLogger.e("Error opening linux webview: $e");
+        }
+        break;
       case 'macos':
         await openWithSystemBrowser(url);
       case 'ios':
@@ -174,12 +183,16 @@ class AppBrowser extends InAppBrowser {
         break;
       default:
         await setProxyAddr();
-        final instance = AppBrowser();
-        await instance.openUrlRequest(
-          urlRequest: URLRequest(url: WebUri(url), allowsCellularAccess: true),
-          settings: settings,
-        );
+        await _openUrlRequest(url);
         break;
     }
+  }
+
+  static Future<void> _openUrlRequest(String url) async {
+    final instance = AppBrowser();
+    await instance.openUrlRequest(
+      urlRequest: URLRequest(url: WebUri(url), allowsCellularAccess: true),
+      settings: settings,
+    );
   }
 }

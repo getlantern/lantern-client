@@ -1857,6 +1857,9 @@ msgstr "您已在使用最新版！"
 msgid "error_referral"
 msgstr "使用您的推荐码时报错"
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 

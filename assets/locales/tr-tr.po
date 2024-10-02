@@ -1969,6 +1969,9 @@ msgstr "En güncel sürümü kullanıyorsunuz!"
 msgid "error_referral"
 msgstr "Referans kodu uygulanırken bir sorun oluştu."
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 

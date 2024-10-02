@@ -618,20 +618,20 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 	checkFeatures := func() {
 		replicaServer.CheckEnabled()
 		chatEnabled := runner.FeatureEnabled(config.FeatureChat, common.ApplicationVersion)
-		log.Debugf("Chat enabled? %v", chatEnabled)
+		log.Debugf("Feature: Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 
 		authEnabled := runner.FeatureEnabled(config.FeatureAuth, common.ApplicationVersion)
-		log.Debugf("Auth enabled? %v", authEnabled)
+		log.Debugf("Feature: Auth enabled? %v", authEnabled)
 		session.SetAuthEnabled(authEnabled)
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
 			showAdsEnabled := runner.FeatureEnabled(config.FeatureInterstitialAds, common.ApplicationVersion)
-			log.Debugf("Show ads enabled? %v", showAdsEnabled)
+			log.Debugf("Feature: Show ads enabled? %v", showAdsEnabled)
 			session.SetShowGoogleAds(showAdsEnabled)
 
 			showTapSellAdsEnabled := runner.FeatureEnabled(config.FeatureTapsellAds, common.ApplicationVersion)
-			log.Debugf("Show tapsell ads enabled? %v", showTapSellAdsEnabled)
+			log.Debugf("Feature: Show tapsell ads enabled? %v", showTapSellAdsEnabled)
 			session.SetShowTapSellAds(showTapSellAdsEnabled)
 
 		} else {

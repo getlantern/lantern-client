@@ -1970,6 +1970,9 @@ msgstr "Нет новых обновлений!"
 msgid "error_referral"
 msgstr "Что-то пошло не так, попробуйте ещё раз. "
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 

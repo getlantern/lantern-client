@@ -193,8 +193,11 @@ class LanternFFI {
     return Future.value();
   }
 
-  static Pointer<Utf8> checkUpdates() =>
-      _lanternFFI.checkUpdates().cast<Utf8>();
+  static FutureOr<String> checkUpdates(dynamic args) async {
+    final updateUrl = await _lanternFFI.checkUpdates().cast<Utf8>().toDartString();
+    checkAPIError(updateUrl, 'we_are_experiencing_technical_difficulties'.i18n);
+    return updateUrl;
+  }
 
   static Future<void> reportIssue(List<String> list) {
     final email = list[0].toPointerChar();

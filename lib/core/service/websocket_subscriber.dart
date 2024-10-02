@@ -112,8 +112,9 @@ class WebsocketSubscriber {
             final Map res = jsonDecode(jsonEncode(message));
             sessionModel.bandwidthNotifier.value = Bandwidth.create()
               ..mergeFromProto3Json({
-                'allowed': res['mibAllowed'],
-                'remaining': res['mibUsed'],
+                'allowed': res['allowed'],
+                'remaining': res['remaining'],
+                'percent': res['percent'],
               });
           case _WebsocketMessageType.config:
             _webSocketLogger.i("Websocket message[config]: $json");

@@ -2009,6 +2009,9 @@ msgid "error_referral"
 msgstr ""
 "Une erreur est survenue lors de l’application de votre code de parrainage."
 
+msgid "proxy_error"
+msgstr ""
+
 msgid "proxy_settings"
 msgstr ""
 
