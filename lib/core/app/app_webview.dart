@@ -38,7 +38,7 @@ class _AppWebViewState extends State<AppWebView> {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.title,
-      showAppBar: false,
+      showAppBar: true,
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
         initialSettings: InAppWebViewSettings(
