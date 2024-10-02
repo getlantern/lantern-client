@@ -34,20 +34,6 @@ Future<void> main() async {
     LanternFFI.startDesktopService();
     await WebsocketSubscriber().connect();
     await windowManager.ensureInitialized();
-    WindowOptions windowOptions = const WindowOptions(
-      size: ui.Size(360, 712),
-      minimumSize: ui.Size(315, 584),
-      //maximumSize: ui.Size(360, 712),
-      center: true,
-      backgroundColor: Colors.transparent,
-      skipTaskbar: false,
-      windowButtonVisibility: true,
-    );
-    windowManager.waitUntilReadyToShow(windowOptions, () async {
-      await windowManager.show();
-      await windowManager.focus();
-      //await windowManager.setResizable(false);
-    });
   } else {
     await _initGoogleMobileAds();
     // Inject all the services
