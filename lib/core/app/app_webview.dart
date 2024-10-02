@@ -1,7 +1,6 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_windows/webview_windows.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -35,43 +34,32 @@ class _AppWebViewState extends State<AppWebView> {
     preferredContentMode: UserPreferredContentMode.MOBILE,
   );
 
-  Future<void> _initializeWindowsWebView(
-      WebviewController controller, String url) async {
-    await controller.initialize();
-    await controller.loadUrl(url);
-  }
-
-  Widget _buildWindowsWebView(String url) {
-    final webviewController = WebviewController();
-
-    return FutureBuilder(
-      future: _initializeWindowsWebView(webviewController, url),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return SizedBox.expand(
-            child: Webview(webviewController),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.title,
       showAppBar: false,
-      body: Platform.isWindows
-          ? _buildWindowsWebView(widget.url)
-          : InAppWebView(
-              initialUrlRequest: URLRequest(url: WebUri(widget.url)),
-              initialSettings: settings,
-              onProgressChanged: (controller, progress) {
-                appLogger.i("Progress: $progress");
-              },
-            ),
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+        initialSettings: InAppWebViewSettings(
+          isInspectable: kDebugMode,
+          javaScriptEnabled: true,
+          supportZoom: true,
+          useWideViewPort: true,
+          loadWithOverviewMode: true,
+          builtInZoomControls: true,
+          displayZoomControls: false,
+          mediaPlaybackRequiresUserGesture: false,
+          allowsInlineMediaPlayback: false,
+          underPageBackgroundColor: Colors.white,
+          allowBackgroundAudioPlaying: false,
+          allowFileAccessFromFileURLs: true,
+          preferredContentMode: UserPreferredContentMode.MOBILE,
+        ),
+        onProgressChanged: (controller, progress) {
+          appLogger.i("Loading progress: $progress%");
+        },
+      ),
     );
   }
 }
