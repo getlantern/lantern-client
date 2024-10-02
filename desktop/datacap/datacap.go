@@ -59,10 +59,17 @@ func ServeDataCap(channel ws.UIChannel, iconURL func() string, clickURL func() s
 		log.Errorf("Error registering with UI? %v", err)
 		return err
 	}
-	dc := &dataCap{iconURL: iconURL, clickURL: clickURL, isPro: isPro}
+	// dc := &dataCap{iconURL: iconURL, clickURL: clickURL, isPro: isPro}
 	go func() {
 		for quota := range bandwidth.Updates {
-			dc.processQuota(bservice.Out, quota)
+			percent, remaining, allowed := getBandwidth(quota)
+			bandwidthMap := map[string]interface{}{
+				"percent":   percent,
+				"remaining": remaining,
+				"allowed":   allowed,
+			}
+			bservice.Out <- bandwidthMap
+			// dc.processQuota(bservice.Out, quota)
 		}
 	}()
 	return nil
@@ -91,6 +98,27 @@ func (dc *dataCap) processQuota(out chan<- interface{}, quota *bandwidth.Quota) 
 			go dc.notifyFifty()
 		})
 	}
+}
+func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
+	remaining := 0
+	percent := 100
+	if quota == nil {
+		return 0, 0, 0
+	}
+
+	allowed := quota.MiBAllowed
+	if allowed > 50000000 {
+		return 0, 0, 0
+	}
+
+	if quota.MiBUsed >= quota.MiBAllowed {
+		percent = 100
+		remaining = 0
+	} else {
+		percent = int(100 * (float64(quota.MiBUsed) / float64(quota.MiBAllowed)))
+		remaining = int(quota.MiBAllowed - quota.MiBUsed)
+	}
+	return percent, remaining, int(quota.MiBAllowed)
 }
 
 // AddDataCapListener adds a listener for any updates to the data cap.
