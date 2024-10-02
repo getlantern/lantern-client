@@ -1,8 +1,7 @@
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
-import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/app/app_loading_dialog.dart';
 import 'package:lantern/core/localization/localization_constants.dart';
+import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/features/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -30,19 +29,27 @@ class Settings extends StatelessWidget {
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
-  void openWebView(String url, BuildContext context, String title) async =>
-      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+  Future<void> openWebView(
+      String url, BuildContext context, String title) async {
+    await AppBrowser.openWebview(url);
+  }
 
   void openProxySetting(BuildContext context) =>
       context.pushRoute(ProxiesSetting());
 
   Future<void> checkForUpdateTap(BuildContext context) async {
-    AppLoadingDialog.showLoadingDialog(context);
-    final result = await sessionModel.checkForUpdates();
-    AppLoadingDialog.dismissLoadingDialog(context);
-    if (result != null && result != "" && result == "no_new_update") {
-      CDialog.showInfo(context,
-          title: "app_name".i18n, description: "no_new_update".i18n);
+    try {
+      AppLoadingDialog.showLoadingDialog(context);
+      final result = await sessionModel.checkForUpdates();
+      AppLoadingDialog.dismissLoadingDialog(context);
+      if (result != null && result != "" && result == "no_new_update") {
+        CDialog.showInfo(context,
+            title: "app_name".i18n, description: "no_new_update".i18n);
+      }
+    } catch (e) {
+      AppLoadingDialog.dismissLoadingDialog(context);
+      CDialog.showError(context,
+          description: 'we_are_experiencing_technical_difficulties'.i18n);
     }
   }
 

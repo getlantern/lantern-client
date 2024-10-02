@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
-import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/core/utils/utils.dart';
+import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/replica/common.dart';
 
 import '../../core/utils/common.dart';
@@ -509,21 +509,14 @@ class SessionModel extends Model {
         .setCurrentIndex(tab);
   }
 
-
-
   /// this is only used for android and ios
   /// if string value is "" then it will not show ads
   /// if string value is "tapsell" then it will show tapsell ads
   /// if string value is "admob" then it will show admob ads
   Widget shouldShowAds(ValueWidgetBuilder<String> builder) {
-    return subscribedSingleValueBuilder<String>(
-      'showAds',
-      builder: builder,
-      defaultValue: ''
-    );
+    return subscribedSingleValueBuilder<String>('showAds',
+        builder: builder, defaultValue: '');
   }
-
-
 
   Widget replicaAddr(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
@@ -601,8 +594,8 @@ class SessionModel extends Model {
         return "";
       }
     } else {
-      LanternFFI.checkUpdates();
-      return "";
+      final updateUrl = await compute(LanternFFI.checkUpdates, '');
+      return updateUrl;
     }
   }
 

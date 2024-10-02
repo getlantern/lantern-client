@@ -1,8 +1,6 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/core/utils/common.dart';
-import 'package:lantern/core/app/app_webview.dart';
 
 const defaultTimeoutDuration = Duration(seconds: 10);
 
@@ -142,21 +140,17 @@ Future<void> openDesktopPaymentWebview(
     required Providers provider,
     VoidCallback? onClose}) async {
   switch (Platform.operatingSystem) {
-    case 'windows':
-      await AppBrowser.openWindowsWebview(redirectUrl);
-      break;
     case 'macos':
       if (provider == Providers.shepherd || provider == Providers.fropay) {
         // Open with system browser browser on mac due to not able to by pass human verification.
-        await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
+        await AppBrowser.openWebview(redirectUrl);
       } else {
         final browser = AppBrowser(onClose: onClose);
         await browser.openMacWebview(redirectUrl);
       }
       break;
     default:
-      await context.pushRoute(
-          AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
+      await AppBrowser.openWebview(redirectUrl);
   }
 }
 
