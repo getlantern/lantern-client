@@ -1,7 +1,8 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_windows_webview/flutter_windows_webview.dart';
+import 'package:lantern/core/router/router.gr.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_windows/webview_windows.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -30,17 +31,43 @@ class _AppWebViewState extends State<AppWebView> {
     preferredContentMode: UserPreferredContentMode.MOBILE,
   );
 
+  Future<void> _initializeWindowsWebView(
+      WebviewController controller, String url) async {
+    await controller.initialize();
+    await controller.loadUrl(url);
+  }
+
+  Widget _buildWindowsWebView(String url) {
+    final webviewController = WebviewController();
+
+    return FutureBuilder(
+      future: _initializeWindowsWebView(webviewController, url),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return SizedBox.expand(
+            child: Webview(webviewController),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.title,
-      body: InAppWebView(
-        initialUrlRequest: URLRequest(url: WebUri(widget.url)),
-        initialSettings: settings,
-        onProgressChanged: (controller, progress) {
-          appLogger.i("Progress: $progress");
-        },
-      ),
+      showAppBar: false,
+      body: Platform.isWindows
+          ? _buildWindowsWebView(widget.url)
+          : InAppWebView(
+              initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+              initialSettings: settings,
+              onProgressChanged: (controller, progress) {
+                appLogger.i("Progress: $progress");
+              },
+            ),
     );
   }
 }
@@ -110,7 +137,10 @@ class AppBrowser extends InAppBrowser {
       navigationAction) async {
     final url = navigationAction.request.url!;
     if (url.scheme.startsWith("alipay")) {
-      launchUrl(url, mode: LaunchMode.platformDefault,);
+      launchUrl(
+        url,
+        mode: LaunchMode.platformDefault,
+      );
       return NavigationActionPolicy.CANCEL;
     }
     return NavigationActionPolicy.ALLOW;
@@ -127,39 +157,33 @@ class AppBrowser extends InAppBrowser {
     onClose?.call();
   }
 
-  Future<void> openMacWebview(String url) async {
-    await openUrlRequest(
-            urlRequest: URLRequest(url: WebUri(url)), settings: settings)
-        .then(
-      (value) {
-        print("open mac webview");
-      },
-    );
+  // navigateWebview navigates to the webview route and displays the given url
+  static Future<void> navigateWebview(BuildContext context, String url) async {
+    context.pushRoute(AppWebview(
+      url: url,
+      title: 'lantern_pro_checkout'.i18n,
+    ));
   }
 
-  static Future<void> openWindowsWebview(String url) async {
-    FlutterWindowsWebview().launchWebview(url);
-  }
+  // openWithSystemBrowser opens a URL in the browser
+  static Future<void> openWithSystemBrowser(String url) async =>
+      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
 
-  static Future<void> openWebview(String url) async {
+  static Future<void> openWebview(BuildContext context, String url) async {
     switch (Platform.operatingSystem) {
       case 'windows':
-        await openWindowsWebview(url);
+        await navigateWebview(context, url);
         break;
       case 'macos':
-        InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+        await openWithSystemBrowser(url);
       case 'ios':
-        InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+        await openWithSystemBrowser(url);
         break;
       default:
         await setProxyAddr();
         final instance = AppBrowser();
         await instance.openUrlRequest(
-          urlRequest: URLRequest(
-            url: WebUri(url),
-            allowsCellularAccess: true
-
-          ),
+          urlRequest: URLRequest(url: WebUri(url), allowsCellularAccess: true),
           settings: settings,
         );
         break;

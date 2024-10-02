@@ -1,5 +1,3 @@
-
-
 import 'package:lantern/core/app/app_webview.dart';
 
 import '../../core/utils/common.dart';
@@ -136,6 +134,6 @@ class _FollowUsState extends State<FollowUs> {
           duration: const Duration(seconds: 2));
       return;
     }
-    await AppBrowser.openWebview(url);
+    await AppBrowser.openWebview(context, url);
   }
 }

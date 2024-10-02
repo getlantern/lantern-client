@@ -143,15 +143,14 @@ Future<void> openDesktopPaymentWebview(
     VoidCallback? onClose}) async {
   switch (Platform.operatingSystem) {
     case 'windows':
-      await AppBrowser.openWindowsWebview(redirectUrl);
+      await AppBrowser.navigateWebview(context, redirectUrl);
       break;
     case 'macos':
       if (provider == Providers.shepherd || provider == Providers.fropay) {
         // Open with system browser browser on mac due to not able to by pass human verification.
         await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
       } else {
-        final browser = AppBrowser(onClose: onClose);
-        await browser.openMacWebview(redirectUrl);
+        await AppBrowser.navigateWebview(context, redirectUrl);
       }
       break;
     default:

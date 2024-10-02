@@ -938,15 +938,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_windows_webview:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: master
-      resolved-ref: "9e7a954ffd54f38baa77520f47fc63ae80c22f14"
-      url: "https://github.com/wgh136/flutter_windows_webview"
-    source: git
-    version: "0.0.1"
   fluttertoast:
     dependency: "direct main"
     description:
@@ -2114,6 +2105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.14.0"
+  webview_windows:
+    dependency: "direct main"
+    description:
+      name: webview_windows
+      sha256: "47fcad5875a45db29dbb5c9e6709bf5c88dcc429049872701343f91ed7255730"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.0"
   win32:
     dependency: transitive
     description:
