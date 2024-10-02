@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
@@ -148,10 +150,23 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   ///window manager methods
-
   void _initWindowManager() async {
     windowManager.addListener(this);
     await windowManager.setPreventClose(true);
+    WindowOptions windowOptions = const WindowOptions(
+      size: ui.Size(360, 712),
+      minimumSize: ui.Size(360, 712),
+      maximumSize: ui.Size(360, 712),
+      center: true,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      windowButtonVisibility: true,
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+      await windowManager.setResizable(false);
+    });
     setState(() {});
   }
 

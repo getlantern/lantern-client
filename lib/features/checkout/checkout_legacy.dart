@@ -333,6 +333,9 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     );
   }
 
+  Future<void> _openWebview(String url) async =>
+      await AppBrowser.openWebview(context, url);
+
   void _proceedWithBTCPay() async {
     try {
       context.loaderOverlay.show();
@@ -343,7 +346,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
-      await AppBrowser.openWebview(btcPayURL);
+      await _openWebview(btcPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -361,7 +364,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
 
       context.loaderOverlay.hide();
       final froPayURL = value;
-      await AppBrowser.openWebview(froPayURL);
+      await _openWebview(froPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -379,7 +382,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
 
       context.loaderOverlay.hide();
       final shepherdURL = value;
-      await AppBrowser.openWebview(shepherdURL);
+      await _openWebview(shepherdURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -442,7 +445,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
-      await AppBrowser.openWebview(btcPayURL);
+      await _openWebview(btcPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);

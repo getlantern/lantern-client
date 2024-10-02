@@ -19,26 +19,30 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
-  final InAppWebViewSettings settings = InAppWebViewSettings(
-    isInspectable: kDebugMode,
-    javaScriptEnabled: true,
-    mediaPlaybackRequiresUserGesture: false,
-    allowsInlineMediaPlayback: false,
-    underPageBackgroundColor: Colors.white,
-    allowBackgroundAudioPlaying: false,
-    allowFileAccessFromFileURLs: true,
-    preferredContentMode: UserPreferredContentMode.MOBILE,
-  );
-
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.title,
+      showAppBar: true,
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
-        initialSettings: settings,
+        initialSettings: InAppWebViewSettings(
+          isInspectable: kDebugMode,
+          javaScriptEnabled: true,
+          supportZoom: true,
+          useWideViewPort: true,
+          loadWithOverviewMode: true,
+          builtInZoomControls: true,
+          displayZoomControls: false,
+          mediaPlaybackRequiresUserGesture: false,
+          allowsInlineMediaPlayback: false,
+          underPageBackgroundColor: Colors.white,
+          allowBackgroundAudioPlaying: false,
+          allowFileAccessFromFileURLs: true,
+          preferredContentMode: UserPreferredContentMode.MOBILE,
+        ),
         onProgressChanged: (controller, progress) {
-          appLogger.i("Progress: $progress");
+          appLogger.i("Loading progress: $progress%");
         },
       ),
     );
@@ -87,23 +91,23 @@ class AppBrowser extends InAppBrowser {
 
   @override
   Future onBrowserCreated() async {
-    print("Browser created");
+    appLogger.i("Browser created");
   }
 
   @override
   Future onLoadStart(url) async {
-    print("Started displaying $url");
+    appLogger.i("Started displaying $url");
   }
 
   @override
   Future onLoadStop(url) async {
-    print("Stopped displaying $url");
+    appLogger.i("Stopped displaying $url");
   }
 
   @override
-  void onReceivedError(WebResourceRequest request, WebResourceError error) {
-    print("Can't load ${request.url}.. Error: ${error.description}");
-  }
+  void onReceivedError(WebResourceRequest request, WebResourceError error) =>
+      appLogger.e("Can't load ${request.url}.. Error: ${error.description}",
+          error: error);
 
   @override
   Future<NavigationActionPolicy> shouldOverrideUrlLoading(
@@ -121,35 +125,32 @@ class AppBrowser extends InAppBrowser {
 
   @override
   void onProgressChanged(progress) {
-    print("Progress: $progress");
+    appLogger.i("Progress: $progress");
   }
 
   @override
   Future<void> onExit() async {
-    print("Browser closed");
+    appLogger.i("Browser closed");
     onClose?.call();
   }
 
-  Future<void> openMacWebview(String url) async {
-    await openUrlRequest(
-            urlRequest: URLRequest(url: WebUri(url)), settings: settings)
-        .then(
-      (value) {
-        print("open mac webview");
-      },
-    );
-  }
+  // navigateWebview navigates to the webview route and displays the given url
+  static Future<void> navigateWebview(BuildContext context, String url) async =>
+      await context.pushRoute(
+        AppWebview(
+          url: url,
+          title: 'lantern_pro_checkout'.i18n,
+        ),
+      );
 
-  static Future<void> openWebview(String url) async {
+  // openWithSystemBrowser opens a URL in the browser
+  static Future<void> openWithSystemBrowser(String url) async =>
+      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+
+  static Future<void> openWebview(BuildContext context, String url) async {
     switch (Platform.operatingSystem) {
       case 'windows':
-        try {
-          await _openUrlRequest(url);
-        } catch (e) {
-          mainLogger.e("Error opening windows webview: $e");
-          final webview = await WebviewWindow.create();
-          webview.launch(url);
-        }
+        await navigateWebview(context, url);
         break;
       case 'linux':
         try {
@@ -160,9 +161,9 @@ class AppBrowser extends InAppBrowser {
         }
         break;
       case 'macos':
-        InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+        await openWithSystemBrowser(url);
       case 'ios':
-        InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+        await openWithSystemBrowser(url);
         break;
       default:
         await setProxyAddr();
