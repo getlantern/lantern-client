@@ -19,22 +19,6 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
-  final InAppWebViewSettings settings = InAppWebViewSettings(
-    isInspectable: kDebugMode,
-    javaScriptEnabled: true,
-    supportZoom: true,
-    useWideViewPort: true,
-    loadWithOverviewMode: true,
-    builtInZoomControls: true,
-    displayZoomControls: false,
-    mediaPlaybackRequiresUserGesture: false,
-    allowsInlineMediaPlayback: false,
-    underPageBackgroundColor: Colors.white,
-    allowBackgroundAudioPlaying: false,
-    allowFileAccessFromFileURLs: true,
-    preferredContentMode: UserPreferredContentMode.MOBILE,
-  );
-
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
