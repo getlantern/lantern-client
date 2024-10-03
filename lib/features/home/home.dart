@@ -34,10 +34,10 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
-    super.initState();
   }
 
   void _startupSequence() {
@@ -151,14 +151,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   ///window manager methods
   void _initWindowManager() async {
-    final double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
-
     windowManager.addListener(this);
+    const double width = 360;
+    const double height = 712;
 
-    final double width = 360 * devicePixelRatio;
-    final double height = 712 * devicePixelRatio;
-
-    WindowOptions windowOptions = WindowOptions(
+    WindowOptions windowOptions = const WindowOptions(
       size: ui.Size(width, height),
       minimumSize: ui.Size(width, height),
       maximumSize: ui.Size(width, height),
@@ -173,6 +170,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
+      await windowManager.center();
       await windowManager.focus();
     });
     setState(() {});
@@ -306,9 +304,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
               return Scaffold(
-                body: SafeArea(
-                  child: buildBody(tab, isOnboarded),
-                ),
+                body: buildBody(tab, isOnboarded),
                 bottomNavigationBar: CustomBottomBar(
                   selectedTab: tab,
                   isDevelop: developmentMode,
