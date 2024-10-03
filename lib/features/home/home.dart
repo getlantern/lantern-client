@@ -154,11 +154,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     final double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
 
     windowManager.addListener(this);
-    await windowManager.setPreventClose(true);
 
     final double width = 360 * devicePixelRatio;
     final double height = 712 * devicePixelRatio;
-
     WindowOptions windowOptions = WindowOptions(
       size: ui.Size(width, height),
       minimumSize: ui.Size(width, height),
@@ -168,7 +166,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       skipTaskbar: false,
       windowButtonVisibility: true,
     );
-
+    await windowManager.setPreventClose(true);
     await windowManager.setResizable(false);
 
     windowManager.waitUntilReadyToShow(windowOptions, () async {
@@ -306,7 +304,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
               return Scaffold(
-                body: buildBody(tab, isOnboarded),
+                body: SafeArea(
+                  child: buildBody(tab, isOnboarded),
+                ),
                 bottomNavigationBar: CustomBottomBar(
                   selectedTab: tab,
                   isDevelop: developmentMode,
