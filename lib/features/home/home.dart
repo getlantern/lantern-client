@@ -170,7 +170,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
-      await windowManager.center();
       await windowManager.focus();
     });
     setState(() {});
