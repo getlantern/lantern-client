@@ -46,20 +46,7 @@ class LanternFFI {
   static SendPort? _proxySendPort;
   static final Completer<void> _isolateInitialized = Completer<void>();
 
-  static final Pointer<Utf8> Function() _start = _getLanternLib()
-      .lookup<NativeFunction<Pointer<Utf8> Function()>>('start')
-      .asFunction();
-
-  static Future<void> startDesktopService() async {
-    final startResult = _start();
-    final result = startResult.toDartString();
-    calloc.free(startResult);
-    if (result.isNotEmpty) {
-      mainLogger.e("Error starting Lantern: $result");
-    } else {
-      mainLogger.i("Lantern started successfully");
-    }
-  }
+  static startDesktopService() => _lanternFFI.start();
 
   static void sysProxyOn() {
     final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();

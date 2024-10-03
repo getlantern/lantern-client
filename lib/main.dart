@@ -31,7 +31,7 @@ Future<void> main() async {
   }
 
   if (isDesktop()) {
-    await LanternFFI.startDesktopService();
+    LanternFFI.startDesktopService();
     await WebsocketSubscriber().connect();
     await windowManager.ensureInitialized();
   } else {
