@@ -26,6 +26,7 @@ import io.lantern.model.MessagingModel
 import io.lantern.model.ReplicaModel
 import io.lantern.model.SessionModel
 import io.lantern.model.VpnModel
+import io.sentry.Sentry
 import kotlinx.coroutines.*
 import org.getlantern.lantern.activity.WebViewActivity
 import org.getlantern.lantern.event.AppEvent
@@ -72,59 +73,63 @@ class MainActivity :
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
 
+        try {
+            val opts = SessionModelOpts()
+            opts.lang = DeviceUtil.getLanguageCode(this)
+            opts.deviceID = DeviceUtil.deviceId(this)
+            opts.model = DeviceUtil.model()
+            opts.osVersion = DeviceUtil.deviceOs()
+            opts.playVersion = DeviceUtil.isStoreVersion(this)
+            opts.device = DeviceUtil.model()
+            opts.platform = DeviceUtil.devicePlatform()
+            opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
+            opts.timeZone = TimeZone.getDefault().displayName
+            vpnModel = VpnModel(flutterEngine, ::switchLantern)
+            sessionModel = SessionModel(this, flutterEngine, opts)
 
-        val opts = SessionModelOpts()
-        opts.lang = DeviceUtil.getLanguageCode(this)
-        opts.deviceID = DeviceUtil.deviceId(this)
-        opts.model = DeviceUtil.model()
-        opts.osVersion = DeviceUtil.deviceOs()
-        opts.playVersion = DeviceUtil.isStoreVersion(this)
-        opts.device = DeviceUtil.model()
-        opts.platform = DeviceUtil.devicePlatform()
-        opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
-        opts.timeZone = TimeZone.getDefault().displayName
-        vpnModel = VpnModel(flutterEngine, ::switchLantern)
-        sessionModel = SessionModel(this, flutterEngine, opts)
+            messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
+            replicaModel = ReplicaModel(this, flutterEngine)
 
-        messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
-        replicaModel = ReplicaModel(this, flutterEngine)
-
-        MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "lantern_method_channel",
-        ).setMethodCallHandler(this)
-
-        flutterNavigation =
             MethodChannel(
                 flutterEngine.dartExecutor.binaryMessenger,
-                "navigation",
+                "lantern_method_channel",
+            ).setMethodCallHandler(this)
+
+            flutterNavigation =
+                MethodChannel(
+                    flutterEngine.dartExecutor.binaryMessenger,
+                    "navigation",
+                )
+
+            flutterNavigation.setMethodCallHandler { call, _ ->
+                if (call.method == "ready") {
+                    intent.let { intent ->
+                        // If the user clicks on a message notification and MainActivity opens in
+                        // response, this ensures that we navigate to the corresponding conversation.
+                        navigateForIntent(intent)
+                    }
+                }
+            }
+            eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
+                override fun onListen(event: Event) {
+                    if (LanternApp.session.lanternDidStart()) {
+                        Plausible.init(applicationContext)
+                        Plausible.enable(true)
+                        Logger.debug(TAG, "Plausible initialized")
+                        checkIfSurveyAvailable()
+                    }
+                    LanternApp.session.dnsDetector.publishNetworkAvailability()
+                }
+            }
+
+            Logger.debug(
+                TAG,
+                "configureFlutterEngine finished at ${System.currentTimeMillis() - start}",
             )
-
-        flutterNavigation.setMethodCallHandler { call, _ ->
-            if (call.method == "ready") {
-                intent.let { intent ->
-                    // If the user clicks on a message notification and MainActivity opens in
-                    // response, this ensures that we navigate to the corresponding conversation.
-                    navigateForIntent(intent)
-                }
-            }
+        } catch (e: Exception) {
+            Logger.error(TAG, "Error configuring Flutter engine", e)
+            Sentry.captureException(e)
         }
-        eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
-            override fun onListen(event: Event) {
-                if (LanternApp.session.lanternDidStart()) {
-                    Plausible.init(applicationContext)
-                    Plausible.enable(true)
-                    Logger.debug(TAG, "Plausible initialized")
-                    checkIfSurveyAvailable()
-                }
-                LanternApp.session.dnsDetector.publishNetworkAvailability()
-            }
-        }
-
-        Logger.debug(
-            TAG,
-            "configureFlutterEngine finished at ${System.currentTimeMillis() - start}",
-        )
     }
 
 

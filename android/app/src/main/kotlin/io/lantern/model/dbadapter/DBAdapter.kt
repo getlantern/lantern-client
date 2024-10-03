@@ -9,6 +9,8 @@ import minisql.Values
 import net.sqlcipher.database.SQLiteDatabase
 import java.util.UUID
 
+val activeSavePoints = mutableListOf<String>()
+
 open class DBAdapter(val db: SQLiteDatabase) : DB {
     init {
         setPragmaSettings()
@@ -21,11 +23,14 @@ open class DBAdapter(val db: SQLiteDatabase) : DB {
 
     override fun exec(sql: String, args: Values?) = db.execSQL(sql, args!!.toBindArgs())
 
-    override fun query(sql: String?, args: Values?) =
-        RowsAdapter(db.rawQuery(sql, args?.toBindArgs()))
+    override fun query(sql: String?, args: Values?): Rows {
+        Log.d("Database", "QUERY: $sql")
+        return RowsAdapter(db.rawQuery(sql, args?.toBindArgs()))
+    }
+
 
     override fun begin(): Tx {
-//        Log.d("Database", "BEGIN")
+        Log.d("Database", "BEGIN")
         return TxAdapter(db);
     }
 }
@@ -33,19 +38,13 @@ open class DBAdapter(val db: SQLiteDatabase) : DB {
 class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx {
     val id = UUID.randomUUID().toString()
 
-    @Volatile
-    private var isSavepointActive = false
-
-    init {
-        createSavepoint()
-    }
-
     @Synchronized
     private fun createSavepoint() {
-        if (!isSavepointActive) {
+        if (!activeSavePoints.contains(id)) {
             sqliteDB.execSQL("SAVEPOINT ${id.quote()}")
-//            Log.d("Database", "SAVEPOINT ${id.quote()} created")
-            isSavepointActive = true
+            Log.d("Database", "SAVEPOINT ${id.quote()} created")
+
+            activeSavePoints.add(id)
         } else {
             Log.w("Database", "Attempted to create nested savepoint: ${id.quote()}")
         }
@@ -54,10 +53,10 @@ class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx 
     @Synchronized
     override fun commit() {
         try {
-            if (isSavepointActive) {
+            createSavepoint()
+            if (activeSavePoints.contains(id)) {
                 sqliteDB.execSQL("RELEASE ${id.quote()}")
-//                Log.d("Database", "RELEASE ${id.quote()}")
-                isSavepointActive = false
+                activeSavePoints.remove(id)
             } else {
                 Log.w("Database", "No active savepoint to release")
             }
@@ -69,10 +68,10 @@ class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx 
 
     @Synchronized
     override fun rollback() {
-        if (isSavepointActive) {
+        if (activeSavePoints.contains(id)) {
             sqliteDB.execSQL("ROLLBACK TO ${id.quote()}")
-//            Log.d("Database", "ROLLBACK TO ${id.quote()}")
-            isSavepointActive = false
+            Log.d("Database", "ROLLBACK TO ${id.quote()}")
+            activeSavePoints.remove(id)
         } else {
             Log.w("Database", "No active savepoint to rollback to")
         }
