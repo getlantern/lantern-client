@@ -38,9 +38,12 @@ import (
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 )
 
 var (
@@ -78,6 +81,7 @@ type App struct {
 	flashlight *flashlight.Flashlight
 
 	issueReporter *issueReporter
+	authClient    auth.AuthClient
 	proClient     proclient.ProClient
 
 	selectedTab Tab
@@ -98,13 +102,22 @@ type App struct {
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, ss *settings.Settings) *App {
+func NewApp(flags flashlight.Flags, configDir string) *App {
+	ss := settings.LoadSettings(configDir)
+	userConfig := func() common.UserConfig {
+		return settings.UserConfig(ss)
+	}
+	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
+		UserConfig: userConfig,
+	})
+	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
 	analyticsSession := newAnalyticsSession(ss)
 	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
+		authClient:                authClient,
 		proClient:                 proClient,
 		settings:                  ss,
 		analyticsSession:          analyticsSession,
@@ -153,7 +166,6 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 // Run starts the app.
 func (app *App) Run(ctx context.Context) {
 	golog.OnFatal(app.exitOnFatal)
-
 	go func() {
 		for <-geolookup.OnRefresh() {
 			app.settings.SetCountry(geolookup.GetCountry(0))
@@ -787,4 +799,12 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 
 func (app *App) Settings() *settings.Settings {
 	return app.settings
+}
+
+func (app *App) AuthClient() auth.AuthClient {
+	return app.authClient
+}
+
+func (app *App) ProClient() pro.ProClient {
+	return app.proClient
 }
