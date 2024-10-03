@@ -151,21 +151,27 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   ///window manager methods
   void _initWindowManager() async {
+    final double devicePixelRatio = View.of(context).devicePixelRatio;
     windowManager.addListener(this);
     await windowManager.setPreventClose(true);
-    WindowOptions windowOptions = const WindowOptions(
-      size: ui.Size(360, 712),
-      minimumSize: ui.Size(360, 712),
-      maximumSize: ui.Size(360, 712),
+    final double width = 360 * devicePixelRatio;
+    final double height = 712 * devicePixelRatio;
+
+    WindowOptions windowOptions = WindowOptions(
+      size: ui.Size(width, height),
+      minimumSize: ui.Size(width, height),
+      maximumSize: ui.Size(width, height),
       center: true,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
       windowButtonVisibility: true,
     );
+
+    await windowManager.setResizable(false);
+
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
-      await windowManager.setResizable(false);
     });
     setState(() {});
   }
@@ -194,9 +200,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             TextButton(
               child: Text('Yes'.i18n),
               onPressed: () async {
+                Navigator.of(context).pop();
+                // clean up FFI and system tray
                 LanternFFI.exit();
                 await trayManager.destroy();
-                await windowManager.destroy();
+                exit(0);
               },
             ),
           ],
@@ -242,9 +250,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
         MenuItem(
             key: 'exit',
             label: 'exit'.i18n,
-            onClick: (item) {
-              windowManager.destroy();
+            onClick: (item) async {
+              await trayManager.destroy();
               LanternFFI.exit();
+              // Exit app immediately after cleanup
+              exit(0);
             }),
       ],
     );
