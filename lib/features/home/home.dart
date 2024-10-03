@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               onPressed: () async {
                 Navigator.of(context).pop();
                 // clean up FFI and system tray
-                LanternFFI.exit();
+                await LanternFFI.exit();
                 await trayManager.destroy();
                 exit(0);
               },
@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             label: 'exit'.i18n,
             onClick: (item) async {
               await trayManager.destroy();
-              LanternFFI.exit();
+              await LanternFFI.exit();
               // Exit app immediately after cleanup
               exit(0);
             }),

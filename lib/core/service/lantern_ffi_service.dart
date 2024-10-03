@@ -63,10 +63,7 @@ class LanternFFI {
   static String websocketAddr() =>
       _lanternFFI.websocketAddr().cast<Utf8>().toDartString();
 
-  static void exit() {
-    _lanternFFI.exitApp();
-    //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-  }
+  static Future<void> exit() async => _lanternFFI.exitApp();
 
   // Initialize the system proxy isolate
   static Future<void> _initializeSystemProxyIsolate() async {
@@ -194,7 +191,8 @@ class LanternFFI {
   }
 
   static FutureOr<String> checkUpdates(dynamic args) async {
-    final updateUrl = await _lanternFFI.checkUpdates().cast<Utf8>().toDartString();
+    final updateUrl =
+        await _lanternFFI.checkUpdates().cast<Utf8>().toDartString();
     checkAPIError(updateUrl, 'we_are_experiencing_technical_difficulties'.i18n);
     return updateUrl;
   }
