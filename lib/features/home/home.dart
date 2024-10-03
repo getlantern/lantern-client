@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   ///window manager methods
   void _initWindowManager() async {
     windowManager.addListener(this);
-    // temporary workaround for issue on Windows where the UI loads with a
+    // temporary workaround for an issue on Windows where the UI loads with a
     // distorted view on start on. The problem goes away when the window is
     // resized. See https://github.com/leanflutter/window_manager/issues/464
     if (Theme.of(context).platform != TargetPlatform.windows) return;
