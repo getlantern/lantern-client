@@ -63,7 +63,7 @@ class LanternFFI {
   static String websocketAddr() =>
       _lanternFFI.websocketAddr().cast<Utf8>().toDartString();
 
-  static Future<void> exit() async => _lanternFFI.exitApp();
+  static void exit() => _lanternFFI.exitApp();
 
   // Initialize the system proxy isolate
   static Future<void> _initializeSystemProxyIsolate() async {
