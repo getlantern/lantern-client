@@ -151,9 +151,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   ///window manager methods
   void _initWindowManager() async {
-    final double devicePixelRatio = View.of(context).devicePixelRatio;
+    final double devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+
     windowManager.addListener(this);
     await windowManager.setPreventClose(true);
+
     final double width = 360 * devicePixelRatio;
     final double height = 712 * devicePixelRatio;
 
