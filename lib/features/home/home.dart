@@ -34,10 +34,10 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   void initState() {
-    super.initState();
     if (isDesktop()) {
       _initWindowManager();
     }
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
