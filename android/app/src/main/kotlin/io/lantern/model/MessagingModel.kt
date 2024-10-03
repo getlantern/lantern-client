@@ -8,6 +8,7 @@ import android.media.audiofx.NoiseSuppressor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
@@ -55,11 +56,14 @@ class MessagingModel(
 //        }
 
         // default onboarding status to false if it hasn't been set yet
+
         db.mutate { tx ->
             if (!db.contains("onBoardingStatus")) {
                 tx.put("onBoardingStatus", false)
             }
         }
+
+
     }
 
     fun sendSignal(signal: WebRTCSignal, acceptedCall: Boolean) {
