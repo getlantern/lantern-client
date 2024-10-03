@@ -198,9 +198,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             TextButton(
               child: Text('Yes'.i18n),
               onPressed: () async {
-                LanternFFI.exit();
                 await trayManager.destroy();
                 await windowManager.destroy();
+                LanternFFI.exit();
               },
             ),
           ],
@@ -247,9 +247,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
           key: 'exit',
           label: 'exit'.i18n,
           onClick: (item) async {
-            LanternFFI.exit();
             await trayManager.destroy();
             await windowManager.destroy();
+            LanternFFI.exit();
           },
         ),
       ],
