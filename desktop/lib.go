@@ -4,7 +4,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"runtime"
@@ -104,10 +103,7 @@ func start() *C.char {
 	configDir := configDir(&flags)
 
 	a = app.NewApp(flags, configDir)
-	err = a.Run(context.Background())
-	if err != nil {
-		return C.CString(fmt.Sprintf("Error running app: %v", err))
-	}
+	a.Run(context.Background())
 
 	return C.CString("")
 }
