@@ -163,6 +163,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
         );
       });
     });
+    setState(() {});
   }
 
   @override
