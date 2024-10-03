@@ -201,10 +201,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
               child: Text('Yes'.i18n),
               onPressed: () async {
                 Navigator.of(context).pop();
-                // clean up FFI and system tray
-                await LanternFFI.exit();
                 await trayManager.destroy();
-                exit(0);
+                await windowManager.destroy();
+                await LanternFFI.exit();
               },
             ),
           ],
@@ -248,14 +247,14 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             }),
         MenuItem.separator(),
         MenuItem(
-            key: 'exit',
-            label: 'exit'.i18n,
-            onClick: (item) async {
-              await trayManager.destroy();
-              await LanternFFI.exit();
-              // Exit app immediately after cleanup
-              exit(0);
-            }),
+          key: 'exit',
+          label: 'exit'.i18n,
+          onClick: (item) async {
+            await trayManager.destroy();
+            await windowManager.destroy();
+            await LanternFFI.exit();
+          },
+        ),
       ],
     );
     await trayManager.setContextMenu(menu);
