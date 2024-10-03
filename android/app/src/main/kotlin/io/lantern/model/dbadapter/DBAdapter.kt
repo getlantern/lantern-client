@@ -43,7 +43,6 @@ class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx 
         if (!activeSavePoints.contains(id)) {
             sqliteDB.execSQL("SAVEPOINT ${id.quote()}")
             Log.d("Database", "SAVEPOINT ${id.quote()} created")
-
             activeSavePoints.add(id)
         } else {
             Log.w("Database", "Attempted to create nested savepoint: ${id.quote()}")
