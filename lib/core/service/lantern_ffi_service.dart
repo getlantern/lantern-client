@@ -1,5 +1,6 @@
 import 'dart:isolate';
 
+import 'package:ffi/ffi.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
