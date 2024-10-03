@@ -128,7 +128,7 @@ func sysProxyOn() *C.char {
 
 //export sysProxyOff
 func sysProxyOff() {
-	a.SysProxyOff()
+	go a.SysProxyOff()
 }
 
 //export websocketAddr
