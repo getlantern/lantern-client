@@ -34,13 +34,10 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   void initState() {
-    if (isDesktop()) {
-      _initWindowManager();
-    }
-    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
+    super.initState();
   }
 
   void _startupSequence() {
@@ -50,6 +47,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
     // This is a desktop device
     _setupTrayManager();
+    _initWindowManager();
   }
 
   void channelListener() {
@@ -200,10 +198,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             TextButton(
               child: Text('Yes'.i18n),
               onPressed: () async {
-                Navigator.of(context).pop();
+                LanternFFI.exit();
                 await trayManager.destroy();
                 await windowManager.destroy();
-                await LanternFFI.exit();
               },
             ),
           ],
@@ -250,9 +247,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
           key: 'exit',
           label: 'exit'.i18n,
           onClick: (item) async {
+            LanternFFI.exit();
             await trayManager.destroy();
             await windowManager.destroy();
-            await LanternFFI.exit();
           },
         ),
       ],
