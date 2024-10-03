@@ -31,6 +31,10 @@ Future<void> main() async {
   }
 
   if (isDesktop()) {
+    // start backend services before setting up window
+    LanternFFI.startDesktopService();
+    await WebsocketSubscriber().connect();
+
     await windowManager.ensureInitialized();
     const double width = 360;
     const double height = 712;
@@ -46,13 +50,11 @@ Future<void> main() async {
     );
     await windowManager.setPreventClose(true);
     await windowManager.setResizable(false);
-
+    // make sure the window is initialized before rendering the UI
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
     });
-    LanternFFI.startDesktopService();
-    await WebsocketSubscriber().connect();
   } else {
     await _initGoogleMobileAds();
     // Inject all the services
