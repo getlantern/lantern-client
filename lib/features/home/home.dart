@@ -35,6 +35,9 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void initState() {
     super.initState();
+    if (isDesktop()) {
+      _initWindowManager();
+    }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
@@ -47,7 +50,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
     // This is a desktop device
     _setupTrayManager();
-    _initWindowManager();
   }
 
   void channelListener() {
@@ -172,7 +174,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       await windowManager.show();
       await windowManager.focus();
     });
-    setState(() {});
   }
 
   @override
