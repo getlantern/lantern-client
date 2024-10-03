@@ -24,13 +24,13 @@ open class DBAdapter(val db: SQLiteDatabase) : DB {
     override fun exec(sql: String, args: Values?) = db.execSQL(sql, args!!.toBindArgs())
 
     override fun query(sql: String?, args: Values?): Rows {
-        Log.d("Database", "QUERY: $sql")
+//        Log.d("Database", "QUERY: $sql")
         return RowsAdapter(db.rawQuery(sql, args?.toBindArgs()))
     }
 
 
     override fun begin(): Tx {
-        Log.d("Database", "BEGIN")
+//        Log.d("Database", "BEGIN")
         return TxAdapter(db);
     }
 }
@@ -42,7 +42,7 @@ class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx 
     private fun createSavepoint() {
         if (!activeSavePoints.contains(id)) {
             sqliteDB.execSQL("SAVEPOINT ${id.quote()}")
-            Log.d("Database", "SAVEPOINT ${id.quote()} created")
+//            Log.d("Database", "SAVEPOINT ${id.quote()} created")
             activeSavePoints.add(id)
         } else {
             Log.w("Database", "Attempted to create nested savepoint: ${id.quote()}")
@@ -69,7 +69,7 @@ class TxAdapter(private val sqliteDB: SQLiteDatabase) : DBAdapter(sqliteDB), Tx 
     override fun rollback() {
         if (activeSavePoints.contains(id)) {
             sqliteDB.execSQL("ROLLBACK TO ${id.quote()}")
-            Log.d("Database", "ROLLBACK TO ${id.quote()}")
+//            Log.d("Database", "ROLLBACK TO ${id.quote()}")
             activeSavePoints.remove(id)
         } else {
             Log.w("Database", "No active savepoint to rollback to")
