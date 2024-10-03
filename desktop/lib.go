@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
-	"runtime"
 	"runtime/debug"
 	"strconv"
 	"strings"
@@ -56,7 +55,6 @@ var issueMap = map[string]string{
 
 //export start
 func start() *C.char {
-	runtime.LockOSThread()
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
