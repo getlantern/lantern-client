@@ -41,15 +41,13 @@ Future<void> main() async {
 
     WindowOptions windowOptions = const WindowOptions(
       size: ui.Size(width, height),
-      minimumSize: ui.Size(width, height),
-      maximumSize: ui.Size(width, height),
       center: true,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
       windowButtonVisibility: true,
     );
     await windowManager.setPreventClose(true);
-    // await windowManager.setResizable(false);
+    //await windowManager.setResizable(false);
     // make sure the window is initialized before rendering the UI
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();

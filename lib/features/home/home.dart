@@ -153,17 +153,18 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   void _initWindowManager() async {
     windowManager.addListener(this);
     if (!Platform.isWindows) return;
-    // temporary workaround for distorted layout on Windows. The problem goes
-    // away after the window is resized.
+    // temporary workaround for distorted layout on Windows. The problem goes away
+    // after the window is resized.
     // See https://github.com/leanflutter/window_manager/issues/464
-    await Future<void>.delayed(const Duration(milliseconds: 100), () {
-      windowManager.getSize().then((ui.Size value) {
+    // and https://github.com/KRTirtho/spotube/issues/1553
+    await Future<void>.delayed(const Duration(milliseconds: 100), () async {
+      await windowManager.getSize().then((ui.Size value) {
         windowManager.setSize(
           ui.Size(value.width + 1, value.height + 1),
         );
       });
+      await windowManager.setResizable(false);
     });
-    setState(() {});
   }
 
   @override
