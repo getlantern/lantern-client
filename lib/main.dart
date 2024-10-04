@@ -46,12 +46,14 @@ Future<void> main() async {
       skipTaskbar: false,
       windowButtonVisibility: true,
     );
-    await windowManager.setPreventClose(true);
-    await windowManager.setResizable(false);
+    //await windowManager.setPreventClose(true);
+    //await windowManager.setResizable(false);
     // make sure the window is initialized before rendering the UI
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
+      await windowManager.setMinimumSize(const ui.Size(width, height));
+      await windowManager.setMaximumSize(const ui.Size(width, height));
     });
   } else {
     await _initGoogleMobileAds();
