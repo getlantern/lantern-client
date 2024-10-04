@@ -17,7 +17,6 @@ import 'package:lantern/features/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../messaging/messaging_model.dart';
 
@@ -39,7 +38,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       _startupSequence();
     });
     super.initState();
-    _initWindowManager();
+    if (isDesktop()) _initWindowManager();
   }
 
   void _startupSequence() {
@@ -312,7 +311,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   Widget buildBody(String selectedTab, bool? isOnboarded) {
-    useFixWindowStretching();
     switch (selectedTab) {
       case TAB_CHATS:
         return isOnboarded == null
