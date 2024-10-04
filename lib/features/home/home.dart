@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       _startupSequence();
     });
     super.initState();
+    _initWindowManager();
   }
 
   void _startupSequence() {
@@ -48,7 +49,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
     // This is a desktop device
     _setupTrayManager();
-    windowManager.addListener(this);
   }
 
   void channelListener() {
@@ -154,21 +154,20 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   // after the window is resized.
   // See https://github.com/leanflutter/window_manager/issues/464
   // and https://github.com/KRTirtho/spotube/issues/1553
-  void useFixWindowStretching() {
-    useEffect(() {
-      if (!Platform.isWindows) return;
-      WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) async {
-        await Future<void>.delayed(const Duration(milliseconds: 100), () {
-          windowManager.getSize().then((ui.Size value) {
-            windowManager.setSize(
-              ui.Size(value.width + 1, value.height + 1),
-            );
-          });
+  void _initWindowManager() {
+    windowManager.addListener(this);
+    if (!Platform.isWindows) return;
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) async {
+      await Future<void>.delayed(const Duration(milliseconds: 100), () {
+        windowManager.getSize().then((ui.Size value) {
+          windowManager
+              .setSize(
+                ui.Size(value.width + 1, value.height + 1),
+              )
+              .then((_) => setState(() {}));
         });
       });
-
-      return null;
-    }, []);
+    });
   }
 
   @override
