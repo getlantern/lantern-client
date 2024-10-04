@@ -17,6 +17,7 @@ import 'package:lantern/features/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../messaging/messaging_model.dart';
 
@@ -34,10 +35,10 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   void initState() {
-    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
+    super.initState();
   }
 
   void _startupSequence() {
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
     // This is a desktop device
     _setupTrayManager();
-    _initWindowManager();
+    windowManager.addListener(this);
   }
 
   void channelListener() {
@@ -149,21 +150,25 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     super.dispose();
   }
 
-  ///window manager methods
-  void _initWindowManager() async {
-    windowManager.addListener(this);
-    if (!Platform.isWindows) return;
-    // temporary workaround for distorted layout on Windows. The problem goes
-    // away after the window is resized.
-    // See https://github.com/leanflutter/window_manager/issues/464
-    await Future<void>.delayed(const Duration(milliseconds: 100), () {
-      windowManager.getSize().then((ui.Size value) {
-        windowManager.setSize(
-          ui.Size(value.width + 1, value.height + 1),
-        );
+  // temporary workaround for distorted layout on Windows. The problem goes away
+  // after the window is resized.
+  // See https://github.com/leanflutter/window_manager/issues/464
+  // and https://github.com/KRTirtho/spotube/issues/1553
+  void useFixWindowStretching() {
+    useEffect(() {
+      if (!Platform.isWindows) return;
+      WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) async {
+        await Future<void>.delayed(const Duration(milliseconds: 100), () {
+          windowManager.getSize().then((ui.Size value) {
+            windowManager.setSize(
+              ui.Size(value.width + 1, value.height + 1),
+            );
+          });
+        });
       });
-    });
-    setState(() {});
+
+      return null;
+    }, []);
   }
 
   @override
@@ -308,6 +313,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   Widget buildBody(String selectedTab, bool? isOnboarded) {
+    useFixWindowStretching();
     switch (selectedTab) {
       case TAB_CHATS:
         return isOnboarded == null
