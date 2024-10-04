@@ -159,13 +159,12 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) async {
       await Future<void>.delayed(const Duration(milliseconds: 100), () {
         windowManager.getSize().then((ui.Size value) {
-          windowManager
-              .setSize(
-                ui.Size(value.width + 1, value.height + 1),
-              )
-              .then((_) => setState(() {}));
+          windowManager.setSize(
+            ui.Size(value.width + 1, value.height + 1),
+          );
         });
       });
+      setState(() => {});
     });
   }
 
