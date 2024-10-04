@@ -149,13 +149,17 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     super.dispose();
   }
 
-  // temporary workaround for distorted layout on Windows. The problem goes away
-  // after the window is resized.
-  // See https://github.com/leanflutter/window_manager/issues/464
-  // and https://github.com/KRTirtho/spotube/issues/1553
-  Future<void> _initWindowManager() async {
+  ///window manager methods
+  void _initWindowManager() async {
     windowManager.addListener(this);
-    //if (!Platform.isWindows) return;
+    if (!Platform.isWindows) {
+      await windowManager.setResizable(false);
+      return;
+    }
+    // temporary workaround for distorted layout on Windows. The problem goes away
+    // after the window is resized.
+    // See https://github.com/leanflutter/window_manager/issues/464
+    // and https://github.com/KRTirtho/spotube/issues/1553
     await Future<void>.delayed(const Duration(milliseconds: 100), () async {
       await windowManager.getSize().then((ui.Size value) {
         windowManager.setSize(
@@ -203,7 +207,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   /// system tray methods
-  Future<void> _setupTrayManager() async {
+  void _setupTrayManager() async {
     trayManager.addListener(this);
     final vpnNotifier = context.read<VPNChangeNotifier>();
     await _updateTrayMenu();
