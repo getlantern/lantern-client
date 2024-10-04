@@ -39,12 +39,8 @@ Future<void> main() async {
     const double width = 360;
     const double height = 712;
 
-    final windowSize = Platform.isWindows
-        ? const ui.Size(width - 1, height - 1)
-        : const ui.Size(width, height);
-
-    WindowOptions windowOptions = WindowOptions(
-      size: windowSize,
+    WindowOptions windowOptions = const WindowOptions(
+      size: ui.Size(width, height),
       center: true,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
@@ -56,8 +52,7 @@ Future<void> main() async {
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
-      await windowManager.setMinimumSize(const ui.Size(width, height));
-      await windowManager.setMaximumSize(const ui.Size(width, height));
+      await windowManager.setResizable(false);
     });
   } else {
     await _initGoogleMobileAds();

@@ -162,6 +162,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
           ui.Size(value.width + 1, value.height + 1),
         );
       });
+      setState(() {});
     });
   }
 
