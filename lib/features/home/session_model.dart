@@ -6,7 +6,7 @@ import 'package:lantern/features/replica/common.dart';
 import '../../core/utils/common.dart';
 import '../../core/utils/common_desktop.dart';
 
-final sessionModel = SessionModel();
+final sessionModel = sl<SessionModel>();
 
 const TAB_CHATS = 'chats';
 const TAB_VPN = 'vpn';

@@ -152,11 +152,17 @@ dev_dependencies:
   mockito: ^5.4.4
   auto_route_generator: ^9.0.0
   build_runner: ^2.4.12
+  analyzer: ^6.7.0
+  golden_toolkit: ^0.15.0
+#  Testing
+  alchemist: ^0.10.0
+  patrol: ^3.11.0
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-dependency_overrides:
 
 # The following section is specific to Flutter.
 flutter:

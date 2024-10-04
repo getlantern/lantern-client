@@ -1,9 +1,16 @@
 import 'package:get_it/get_it.dart';
 import 'package:lantern/core/service/app_purchase.dart';
+import 'package:lantern/core/utils/common.dart';
 
 final GetIt sl = GetIt.instance;
 
 void init() {
   //Inject
-  sl.registerLazySingleton(() => AppPurchase());
+
+  if (isMobile()) {
+    sl.registerLazySingleton(() => AppPurchase());
+    sl<AppPurchase>().init();
+  }
+  sl.registerLazySingleton(() => SessionModel());
+  sl.registerLazySingleton(() => VpnModel());
 }

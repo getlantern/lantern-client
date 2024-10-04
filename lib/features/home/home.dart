@@ -267,6 +267,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     final tabModel = context.watch<BottomBarChangeNotifier>();
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
+        print("accepted terms version $version");
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
             if (developmentMode) {

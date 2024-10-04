@@ -25,7 +25,7 @@ enum AppFontFamily {
 }
 
 class LanternApp extends StatefulWidget {
-  const LanternApp({Key? key}) : super(key: key);
+  const LanternApp({super.key});
 
   @override
   State<LanternApp> createState() => _LanternAppState();
