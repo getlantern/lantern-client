@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       _startupSequence();
     });
     super.initState();
+    if (isDesktop()) _setWindowResizable();
   }
 
   void _startupSequence() {
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
     // This is a desktop device
     _setupTrayManager();
-    _initWindowManager();
+    windowManager.addListener(this);
   }
 
   void channelListener() {
@@ -150,24 +151,25 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   ///window manager methods
-  void _initWindowManager() async {
-    windowManager.addListener(this);
-    await windowManager.setPreventClose(true);
-    WindowOptions windowOptions = const WindowOptions(
-      size: ui.Size(360, 712),
-      minimumSize: ui.Size(360, 712),
-      maximumSize: ui.Size(360, 712),
-      center: true,
-      backgroundColor: Colors.transparent,
-      skipTaskbar: false,
-      windowButtonVisibility: true,
-    );
-    windowManager.waitUntilReadyToShow(windowOptions, () async {
-      await windowManager.show();
-      await windowManager.focus();
+  void _setWindowResizable() async {
+    if (!Platform.isWindows) {
       await windowManager.setResizable(false);
+      return;
+    }
+    // temporary workaround for distorted layout on Windows. The problem goes away
+    // after the window is resized.
+    // See https://github.com/leanflutter/window_manager/issues/464
+    // and https://github.com/KRTirtho/spotube/issues/1553
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) async {
+      await Future<void>.delayed(const Duration(milliseconds: 100), () async {
+        windowManager.getSize().then((ui.Size value) {
+          windowManager.setSize(
+            ui.Size(value.width + 1, value.height + 1),
+          );
+        });
+        await windowManager.setResizable(false);
+      });
     });
-    setState(() {});
   }
 
   @override
@@ -197,6 +199,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
                 LanternFFI.exit();
                 await trayManager.destroy();
                 await windowManager.destroy();
+                exit(0);
               },
             ),
           ],
@@ -240,12 +243,15 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             }),
         MenuItem.separator(),
         MenuItem(
-            key: 'exit',
-            label: 'exit'.i18n,
-            onClick: (item) {
-              windowManager.destroy();
-              LanternFFI.exit();
-            }),
+          key: 'exit',
+          label: 'exit'.i18n,
+          onClick: (item) async {
+            LanternFFI.exit();
+            await trayManager.destroy();
+            await windowManager.destroy();
+            exit(0);
+          },
+        ),
       ],
     );
     await trayManager.setContextMenu(menu);

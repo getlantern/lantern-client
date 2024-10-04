@@ -38,9 +38,12 @@ import (
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 )
 
 var (
@@ -78,6 +81,7 @@ type App struct {
 	flashlight *flashlight.Flashlight
 
 	issueReporter *issueReporter
+	authClient    auth.AuthClient
 	proClient     proclient.ProClient
 
 	selectedTab Tab
@@ -94,18 +98,18 @@ type App struct {
 
 	onUserData []func(current *protos.User, new *protos.User)
 
-	mu sync.Mutex
+	mu sync.RWMutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, ss *settings.Settings) *App {
+func NewApp(flags flashlight.Flags, configDir string) *App {
+	ss := settings.LoadSettings(configDir)
 	analyticsSession := newAnalyticsSession(ss)
 	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
-		proClient:                 proClient,
 		settings:                  ss,
 		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
@@ -153,10 +157,9 @@ func newAnalyticsSession(settings *settings.Settings) analytics.Session {
 // Run starts the app.
 func (app *App) Run(ctx context.Context) {
 	golog.OnFatal(app.exitOnFatal)
-
 	go func() {
 		for <-geolookup.OnRefresh() {
-			app.settings.SetCountry(geolookup.GetCountry(0))
+			app.Settings().SetCountry(geolookup.GetCountry(0))
 		}
 	}()
 
@@ -164,14 +167,29 @@ func (app *App) Run(ctx context.Context) {
 	// for the first time. User can still quit Lantern through systray menu when it happens.
 	go func() {
 		log.Debug(app.Flags)
+		userConfig := func() common.UserConfig {
+			return settings.UserConfig(app.Settings())
+		}
+		proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
+			UserConfig: userConfig,
+		})
+		authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
+
+		app.mu.Lock()
+		app.proClient = proClient
+		app.authClient = authClient
+		app.mu.Unlock()
+
+		settings := app.Settings()
+
 		if app.Flags.ProxyAll {
 			// If proxyall flag was supplied, force proxying of all
-			app.settings.SetProxyAll(true)
+			settings.SetProxyAll(true)
 		}
 
 		listenAddr := app.Flags.Addr
 		if listenAddr == "" {
-			listenAddr = app.settings.GetAddr()
+			listenAddr = settings.GetAddr()
 		}
 		if listenAddr == "" {
 			listenAddr = defaultHTTPProxyAddress
@@ -179,7 +197,7 @@ func (app *App) Run(ctx context.Context) {
 
 		socksAddr := app.Flags.SocksAddr
 		if socksAddr == "" {
-			socksAddr = app.settings.GetSOCKSAddr()
+			socksAddr = settings.GetSOCKSAddr()
 		}
 		if socksAddr == "" {
 			socksAddr = defaultSOCKSProxyAddress
@@ -200,15 +218,15 @@ func (app *App) Run(ctx context.Context) {
 			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
-			app.settings.GetProxyAll,
+			func() bool { return settings.GetDisconnected() }, // check whether we're disconnected
+			settings.GetProxyAll,
 			func() bool { return false }, // on desktop, we do not allow private hosts
-			app.settings.IsAutoReport,
+			settings.IsAutoReport,
 			app.Flags.AsMap(),
-			app.settings,
+			settings,
 			app.statsTracker,
 			app.IsPro,
-			app.settings.GetLanguage,
+			settings.GetLanguage,
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
 			app.analyticsSession.EventWithLabel,
 			flashlight.WithOnConfig(app.onConfigUpdate),
@@ -786,5 +804,19 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 }
 
 func (app *App) Settings() *settings.Settings {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
 	return app.settings
+}
+
+func (app *App) AuthClient() auth.AuthClient {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.authClient
+}
+
+func (app *App) ProClient() pro.ProClient {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.proClient
 }
