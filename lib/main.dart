@@ -49,7 +49,7 @@ Future<void> main() async {
       windowButtonVisibility: true,
     );
     await windowManager.setPreventClose(true);
-    await windowManager.setResizable(false);
+    // await windowManager.setResizable(false);
     // make sure the window is initialized before rendering the UI
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();

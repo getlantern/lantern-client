@@ -149,23 +149,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     super.dispose();
   }
 
-  ///window manager methods
-  void _initWindowManager() async {
-    windowManager.addListener(this);
-    if (Theme.of(context).platform != TargetPlatform.windows) return;
-    // temporary workaround for distorted layout on Windows. The problem goes
-    // away after the window is resized.
-    // See https://github.com/leanflutter/window_manager/issues/464
-    await Future<void>.delayed(const Duration(milliseconds: 100), () {
-      windowManager.getSize().then((ui.Size value) {
-        windowManager.setSize(
-          ui.Size(value.width + 1, value.height + 1),
-        );
-      });
-    });
-    setState(() {});
-  }
-
   @override
   void onWindowEvent(String eventName) {
     print('[WindowManager] onWindowEvent: $eventName');
