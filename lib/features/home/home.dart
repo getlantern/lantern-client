@@ -34,10 +34,10 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
-    super.initState();
   }
 
   void _startupSequence() {
@@ -152,10 +152,10 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   ///window manager methods
   void _initWindowManager() async {
     windowManager.addListener(this);
-    // temporary workaround for an issue on Windows where the UI loads with a
-    // distorted view on start on. The problem goes away when the window is
-    // resized. See https://github.com/leanflutter/window_manager/issues/464
     if (Theme.of(context).platform != TargetPlatform.windows) return;
+    // temporary workaround for distorted layout on Windows. The problem goes
+    // away after the window is resized.
+    // See https://github.com/leanflutter/window_manager/issues/464
     await Future<void>.delayed(const Duration(milliseconds: 100), () {
       windowManager.getSize().then((ui.Size value) {
         windowManager.setSize(
