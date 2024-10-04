@@ -54,6 +54,17 @@ Future<void> main() async {
     await windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
       await windowManager.focus();
+      if (!Platform.isWindows) return;
+      // temporary workaround for distorted layout on Windows. The problem goes
+      // away after the window is resized.
+      // See https://github.com/leanflutter/window_manager/issues/464
+      await Future<void>.delayed(const Duration(milliseconds: 100), () {
+        windowManager.getSize().then((ui.Size value) {
+          windowManager.setSize(
+            ui.Size(value.width + 1, value.height + 1),
+          );
+        });
+      });
     });
   } else {
     await _initGoogleMobileAds();

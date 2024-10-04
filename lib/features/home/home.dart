@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
     // This is a desktop device
     _setupTrayManager();
-    _initWindowManager();
+    windowManager.addListener(this);
   }
 
   void channelListener() {
@@ -149,22 +149,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     super.dispose();
   }
 
-  ///window manager methods
-  void _initWindowManager() async {
-    windowManager.addListener(this);
-    if (Theme.of(context).platform != TargetPlatform.windows) return;
-    // temporary workaround for distorted layout on Windows. The problem goes
-    // away after the window is resized.
-    // See https://github.com/leanflutter/window_manager/issues/464
-    await Future<void>.delayed(const Duration(milliseconds: 100), () {
-      windowManager.getSize().then((ui.Size value) {
-        windowManager.setSize(
-          ui.Size(value.width + 1, value.height + 1),
-        );
-      });
-    });
-  }
-
   @override
   void onWindowEvent(String eventName) {
     print('[WindowManager] onWindowEvent: $eventName');
@@ -189,9 +173,10 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
             TextButton(
               child: Text('Yes'.i18n),
               onPressed: () async {
+                LanternFFI.exit();
                 await trayManager.destroy();
                 await windowManager.destroy();
-                LanternFFI.exit();
+                exit(0);
               },
             ),
           ],
@@ -238,9 +223,10 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
           key: 'exit',
           label: 'exit'.i18n,
           onClick: (item) async {
+            LanternFFI.exit();
             await trayManager.destroy();
             await windowManager.destroy();
-            LanternFFI.exit();
+            exit(0);
           },
         ),
       ],
