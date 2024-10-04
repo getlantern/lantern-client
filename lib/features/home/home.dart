@@ -34,10 +34,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   void initState() {
-    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
+    super.initState();
+    if (isDesktop()) _setWindowResizable();
   }
 
   void _startupSequence() {
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
     // This is a desktop device
     _setupTrayManager();
-    _initWindowManager();
+    windowManager.addListener(this);
   }
 
   void channelListener() {
@@ -150,8 +151,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   ///window manager methods
-  void _initWindowManager() async {
-    windowManager.addListener(this);
+  void _setWindowResizable() async {
     if (!Platform.isWindows) {
       await windowManager.setResizable(false);
       return;
@@ -160,13 +160,15 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     // after the window is resized.
     // See https://github.com/leanflutter/window_manager/issues/464
     // and https://github.com/KRTirtho/spotube/issues/1553
-    await Future<void>.delayed(const Duration(milliseconds: 100), () async {
-      await windowManager.getSize().then((ui.Size value) {
-        windowManager.setSize(
-          ui.Size(value.width + 1, value.height + 1),
-        );
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) async {
+      await Future<void>.delayed(const Duration(milliseconds: 100), () async {
+        windowManager.getSize().then((ui.Size value) {
+          windowManager.setSize(
+            ui.Size(value.width + 1, value.height + 1),
+          );
+        });
+        await windowManager.setResizable(false);
       });
-      await windowManager.setResizable(false);
     });
   }
 
