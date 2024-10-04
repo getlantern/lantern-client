@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
     // This is a desktop device
     _setupTrayManager();
-    windowManager.addListener(this);
+    _initWindowManager();
   }
 
   void channelListener() {
@@ -147,6 +147,25 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       _cancelEventSubscription!();
     }
     super.dispose();
+  }
+
+  ///window manager methods
+  void _initWindowManager() async {
+    windowManager.addListener(this);
+    if (!Platform.isWindows) return;
+    // temporary workaround for distorted layout on Windows. The problem goes
+    // away after the window is resized.
+    // See https://github.com/leanflutter/window_manager/issues/464
+    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) async {
+      await Future<void>.delayed(const Duration(milliseconds: 100), () {
+        windowManager.getSize().then((ui.Size value) {
+          windowManager.setSize(
+            ui.Size(value.width + 1, value.height + 1),
+          );
+        });
+      });
+    });
+    setState(() {});
   }
 
   @override
