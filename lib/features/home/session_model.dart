@@ -122,7 +122,7 @@ class SessionModel extends Model {
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
-      return subscribedSingleValueBuilder<bool>('prouser', builder: builder);
+      return subscribedSingleValueBuilder<bool>('prouser', builder: builder,defaultValue: false);
     }
     return FfiValueBuilder<bool>('prouser', proUserNotifier, builder);
   }
