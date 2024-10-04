@@ -35,19 +35,19 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await _startupSequence();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _startupSequence();
     });
   }
 
-  Future<void> _startupSequence() async {
+  void _startupSequence() {
     if (isMobile()) {
       channelListener();
       return;
     }
     // This is a desktop device
-    await _setupTrayManager();
-    await _initWindowManager();
+    _setupTrayManager();
+    _initWindowManager();
   }
 
   void channelListener() {
@@ -155,14 +155,14 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   // and https://github.com/KRTirtho/spotube/issues/1553
   Future<void> _initWindowManager() async {
     windowManager.addListener(this);
-    if (!Platform.isWindows) return;
-    await Future<void>.delayed(const Duration(milliseconds: 100), () {
-      windowManager.getSize().then((ui.Size value) {
+    //if (!Platform.isWindows) return;
+    await Future<void>.delayed(const Duration(milliseconds: 100), () async {
+      await windowManager.getSize().then((ui.Size value) {
         windowManager.setSize(
           ui.Size(value.width + 1, value.height + 1),
         );
       });
-      setState(() {});
+      await windowManager.setResizable(false);
     });
   }
 
