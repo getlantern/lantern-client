@@ -34,20 +34,20 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _startupSequence();
-    });
     super.initState();
-    if (isDesktop()) _initWindowManager();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await _startupSequence();
+    });
   }
 
-  void _startupSequence() {
+  Future<void> _startupSequence() async {
     if (isMobile()) {
       channelListener();
       return;
     }
     // This is a desktop device
-    _setupTrayManager();
+    await _setupTrayManager();
+    await _initWindowManager();
   }
 
   void channelListener() {
@@ -153,18 +153,15 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   // after the window is resized.
   // See https://github.com/leanflutter/window_manager/issues/464
   // and https://github.com/KRTirtho/spotube/issues/1553
-  void _initWindowManager() {
+  Future<void> _initWindowManager() async {
     windowManager.addListener(this);
     if (!Platform.isWindows) return;
-    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) async {
-      await Future<void>.delayed(const Duration(milliseconds: 100), () {
-        windowManager.getSize().then((ui.Size value) {
-          windowManager.setSize(
-            ui.Size(value.width + 1, value.height + 1),
-          );
-        });
+    await Future<void>.delayed(const Duration(milliseconds: 100), () {
+      windowManager.getSize().then((ui.Size value) {
+        windowManager.setSize(
+          ui.Size(value.width + 1, value.height + 1),
+        );
       });
-      setState(() => {});
     });
   }
 
@@ -205,7 +202,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   }
 
   /// system tray methods
-  void _setupTrayManager() async {
+  Future<void> _setupTrayManager() async {
     trayManager.addListener(this);
     final vpnNotifier = context.read<VPNChangeNotifier>();
     await _updateTrayMenu();

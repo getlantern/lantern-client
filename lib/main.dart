@@ -39,8 +39,12 @@ Future<void> main() async {
     const double width = 360;
     const double height = 712;
 
-    WindowOptions windowOptions = const WindowOptions(
-      size: ui.Size(width, height),
+    final windowSize = Platform.isWindows
+        ? const ui.Size(width - 1, height - 1)
+        : const ui.Size(width, height);
+
+    WindowOptions windowOptions = WindowOptions(
+      size: windowSize,
       center: true,
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
