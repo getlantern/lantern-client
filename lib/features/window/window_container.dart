@@ -55,9 +55,11 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
     // and https://github.com/KRTirtho/spotube/issues/1553
     await Future<void>.delayed(const Duration(milliseconds: 100), () async {
       windowManager.getSize().then((Size value) {
-        windowManager.setSize(
-          Size(value.width + 1, value.height + 1),
-        );
+        windowManager
+            .setSize(
+              Size(value.width + 1, value.height + 1),
+            )
+            .then((_) => setState(() => {}));
       });
       await windowManager.setResizable(false);
     });
