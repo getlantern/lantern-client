@@ -27,16 +27,38 @@
 -renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
 
--keep class ir.tapsell.mediation.flutter.utils.UtilsKt { *; }
--keep class com.google.android.libraries.places.api.model.AddressComponents { *; }
--keep class com.stripe.android.financialconnections.model.FinancialConnectionsSession { *; }
--keep class androidx.appcompat.view.ContextThemeWrapper { *; }
--keep class androidx.browser.customtabs.CustomTabsSession { *; }
--keep class com.google.common.util.concurrent.ListenableFuture { *; }
--keep class androidx.window.extensions.embedding.ActivityEmbeddingComponent { *; }
--keep class androidx.window.extensions.layout.WindowLayoutComponent { *; }
--keep class androidx.window.sidecar.SidecarDeviceState { *; }
--keep class androidx.window.sidecar.SidecarInterface { *; }
+##---------------Begin: proguard configuration for Tapsell Sdk  ----------
+
+# Application classes that will be serialized/deserialized over Gson
+-keepclassmembers enum * { *; }
+-keep interface ir.tapsell.sdk.NoProguard
+
+-keep interface ir.tapsell.sdk.NoNameProguard
+-keep class * implements ir.tapsell.sdk.NoProguard { *; }
+
+-keep enum * implements ir.tapsell.sdk.NoProguard { *; }
+
+-keepnames class * implements ir.tapsell.sdk.NoNameProguard { *; }
+-keep class ir.tapsell.sdk.nativeads.TapsellNativeVideoAdLoader$Builder {*;}
+-keep class ir.tapsell.sdk.nativeads.TapsellNativeBannerAdLoader$Builder {*;}
+-keep interface com.android.vending.billing.IInAppBillingService
+-keep class * implements com.android.vending.billing.IInAppBillingService {*;}
+
+-keep class ir.tapsell.sdk.models.** { *; }
+
+-keep class ir.tapsell.sdk.sentry.model.** {*;}
+
+# To Remove Logger Class (Todo: Replace Logger Class with LogUtils)
+-assumenosideeffects class ir.tapsell.sdk.logger.Logger {
+    public * ;
+    public static *** LogDebug(...);
+    public static *** LogError(...);
+    public static *** LogInfo(...);
+    public static *** LogVerbose(...);
+    public static *** LogWarn(...);
+}
+
+-keep public class com.bumptech.glide.**
 
 # This is generated automatically by the Android Gradle plugin.
 -dontwarn com.google.android.libraries.places.api.Places
