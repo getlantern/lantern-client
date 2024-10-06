@@ -1833,14 +1833,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1-beta08"
-  tapsell_mediation_legacy:
-    dependency: "direct main"
-    description:
-      name: tapsell_mediation_legacy
-      sha256: "19d218719b137d87ea6e9257561561d55db675621b9f561c15583e2700097923"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1-beta08"
   term_glyph:
     dependency: transitive
     description:
