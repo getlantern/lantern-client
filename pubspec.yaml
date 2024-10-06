@@ -126,8 +126,8 @@ dependencies:
 
   # Ads
   google_mobile_ads: ^5.1.0
-  tapsell_mediation: ^1.0.1-beta06
-  tapsell_mediation_legacy: ^1.0.1-beta06
+  tapsell_mediation: ^1.0.1-beta08
+  tapsell_mediation_legacy: ^1.0.1-beta08
 
   retry: ^3.1.2
   # Generate bindings to native libraries

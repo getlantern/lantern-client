@@ -1829,18 +1829,18 @@ packages:
     dependency: "direct main"
     description:
       name: tapsell_mediation
-      sha256: cd393853faff889b881d0b077dfea3c03a70e93b7fbb7ee8b2e61eab5135cec3
+      sha256: "3cd7ef31daef76a8d4ec089f3809edc7cda8a6044f2c378f11ded4ce62cda4b3"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1-beta06"
+    version: "1.0.1-beta08"
   tapsell_mediation_legacy:
     dependency: "direct main"
     description:
       name: tapsell_mediation_legacy
-      sha256: "0e9a37eeb28875e3b4667742e1993647245e9c3c95ca17f09010afbdb0ed1b89"
+      sha256: "19d218719b137d87ea6e9257561561d55db675621b9f561c15583e2700097923"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1-beta06"
+    version: "1.0.1-beta08"
   term_glyph:
     dependency: transitive
     description:
