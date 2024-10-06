@@ -138,6 +138,7 @@ dependencies:
   #Loading
   animated_loading_border: ^0.0.2
   shimmer: ^3.0.0
+  tapsell_mediation_legacy: ^1.0.1-beta08
 
 dev_dependencies:
   integration_test:
