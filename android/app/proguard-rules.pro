@@ -27,6 +27,17 @@
 -renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
 
+-keep class ir.tapsell.mediation.flutter.utils.UtilsKt { *; }
+-keep class com.google.android.libraries.places.api.model.AddressComponents { *; }
+-keep class com.stripe.android.financialconnections.model.FinancialConnectionsSession { *; }
+-keep class androidx.appcompat.view.ContextThemeWrapper { *; }
+-keep class androidx.browser.customtabs.CustomTabsSession { *; }
+-keep class com.google.common.util.concurrent.ListenableFuture { *; }
+-keep class androidx.window.extensions.embedding.ActivityEmbeddingComponent { *; }
+-keep class androidx.window.extensions.layout.WindowLayoutComponent { *; }
+-keep class androidx.window.sidecar.SidecarDeviceState { *; }
+-keep class androidx.window.sidecar.SidecarInterface { *; }
+
 # This is generated automatically by the Android Gradle plugin.
 -dontwarn com.google.android.libraries.places.api.Places
 -dontwarn com.google.android.libraries.places.api.model.AddressComponent
