@@ -96,11 +96,6 @@ android {
         coreLibraryDesugaringEnabled = true
     }
 
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
-    }
-
 
     signingConfigs {
         release {
@@ -200,6 +195,10 @@ android {
         unitTests.returnDefaultValues = true
     }
     namespace 'org.getlantern.lantern'
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
 }
 
 def androidArch() {
