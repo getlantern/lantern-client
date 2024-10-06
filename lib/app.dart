@@ -123,7 +123,6 @@ class _LanternAppState extends State<LanternApp>
         ChangeNotifierProvider(create: (context) => BottomBarChangeNotifier()),
         ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
         ChangeNotifierProvider(create: (context) => InternetStatusProvider()),
-        ChangeNotifierProvider(create: (context) => WindowNotifier()),
       ],
       child: sessionModel.language(
         (context, lang, child) {
