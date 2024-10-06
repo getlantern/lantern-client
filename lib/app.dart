@@ -5,8 +5,9 @@ import 'package:lantern/core/router/router.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/messaging/messaging.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
-import 'common/ui/custom/internet_checker.dart';
+import 'package:lantern/features/window/window_container.dart';
 
+import 'common/ui/custom/internet_checker.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 final globalRouter = AppRouter();
@@ -121,28 +122,30 @@ class _LanternAppState extends State<LanternApp>
       providers: [
         ChangeNotifierProvider(create: (context) => BottomBarChangeNotifier()),
         ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
-        ChangeNotifierProvider(create: (context) => InternetStatusProvider())
+        ChangeNotifierProvider(create: (context) => InternetStatusProvider()),
+        ChangeNotifierProvider(create: (context) => WindowNotifier()),
       ],
       child: sessionModel.language(
         (context, lang, child) {
           Localization.locale = lang.startsWith('en') ? "en_us" : lang;
           return GlobalLoaderOverlay(
-              useDefaultLoading: false,
-              overlayColor: Colors.black.withOpacity(0.5),
-              overlayWidget: Center(
-                child: AnimatedLoadingBorder(
-                  borderWidth: 5,
-                  borderColor: yellow3,
-                  cornerRadius: 100,
-                  child: SvgPicture.asset(
-                    ImagePaths.lantern_logo,
-                  ),
+            useDefaultLoading: false,
+            overlayColor: Colors.black.withOpacity(0.5),
+            overlayWidget: Center(
+              child: AnimatedLoadingBorder(
+                borderWidth: 5,
+                borderColor: yellow3,
+                cornerRadius: 100,
+                child: SvgPicture.asset(
+                  ImagePaths.lantern_logo,
                 ),
               ),
-              child: I18n(
-                initialLocale: currentLocale(lang),
-                child: ScaffoldMessenger(
-                  child: MaterialApp.router(
+            ),
+            child: I18n(
+              initialLocale: currentLocale(lang),
+              child: ScaffoldMessenger(
+                child: WindowContainer(
+                  MaterialApp.router(
                     locale: currentLocale(lang),
                     debugShowCheckedModeBanner: false,
                     theme: ThemeData(
@@ -184,7 +187,9 @@ class _LanternAppState extends State<LanternApp>
                     ],
                   ),
                 ),
-              ));
+              ),
+            ),
+          );
         },
       ),
     );

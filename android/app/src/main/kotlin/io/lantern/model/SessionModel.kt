@@ -139,6 +139,7 @@ class SessionModel internal constructor(
             "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
             }
+
             else -> super.doOnMethodCall(call, result)
         }
     }
