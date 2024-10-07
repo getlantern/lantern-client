@@ -4,14 +4,16 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i4;
-import 'dart:ffi' as _i5;
-import 'dart:typed_data' as _i8;
+import 'dart:ffi' as _i6;
+import 'dart:typed_data' as _i9;
 
 import 'package:lantern/core/utils/common.dart' as _i2;
 import 'package:lantern/core/utils/common_desktop.dart' as _i3;
-import 'package:lantern/core/utils/utils.dart' as _i7;
+import 'package:lantern/core/utils/utils.dart' as _i8;
+import 'package:lantern/features/messaging/messaging.dart' as _i5;
+import 'package:lantern/features/replica/common.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:mockito/src/dummies.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -105,6 +107,37 @@ class _FakeValueListenableBuilder_6<T1> extends _i1.SmartFake
   @override
   String toString({_i2.DiagnosticLevel? minLevel = _i2.DiagnosticLevel.info}) =>
       super.toString();
+}
+
+class _FakeChatNumber_7 extends _i1.SmartFake implements _i5.ChatNumber {
+  _FakeChatNumber_7(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeContact_8 extends _i1.SmartFake implements _i5.Contact {
+  _FakeContact_8(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeValueListenable_9<T> extends _i1.SmartFake
+    implements _i2.ValueListenable<T> {
+  _FakeValueListenable_9(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [SessionModel].
@@ -1119,26 +1152,26 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
       ) as _i4.Future<void>);
 
   @override
-  _i5.Pointer<_i3.Utf8> ffiIsUserLoggedIn() => (super.noSuchMethod(
+  _i6.Pointer<_i3.Utf8> ffiIsUserLoggedIn() => (super.noSuchMethod(
         Invocation.method(
           #ffiIsUserLoggedIn,
           [],
         ),
-        returnValue: _i6.dummyValue<_i5.Pointer<_i3.Utf8>>(
+        returnValue: _i7.dummyValue<_i6.Pointer<_i3.Utf8>>(
           this,
           Invocation.method(
             #ffiIsUserLoggedIn,
             [],
           ),
         ),
-        returnValueForMissingStub: _i6.dummyValue<_i5.Pointer<_i3.Utf8>>(
+        returnValueForMissingStub: _i7.dummyValue<_i6.Pointer<_i3.Utf8>>(
           this,
           Invocation.method(
             #ffiIsUserLoggedIn,
             [],
           ),
         ),
-      ) as _i5.Pointer<_i3.Utf8>);
+      ) as _i6.Pointer<_i3.Utf8>);
 
   @override
   _i2.Widget isUserSignedIn(_i2.ValueWidgetBuilder<bool>? builder) =>
@@ -1366,7 +1399,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           #proxyAddr,
           [],
         ),
-        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #proxyAddr,
@@ -1374,7 +1407,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<String>.value(_i6.dummyValue<String>(
+            _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #proxyAddr,
@@ -1389,7 +1422,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           #getCountryCode,
           [],
         ),
-        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #getCountryCode,
@@ -1397,7 +1430,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<String>.value(_i6.dummyValue<String>(
+            _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #getCountryCode,
@@ -1575,7 +1608,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           #getReplicaAddr,
           [],
         ),
-        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #getReplicaAddr,
@@ -1583,7 +1616,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<String>.value(_i6.dummyValue<String>(
+            _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #getReplicaAddr,
@@ -1876,7 +1909,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           #requestLinkCode,
           [],
         ),
-        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #requestLinkCode,
@@ -1884,7 +1917,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<String>.value(_i6.dummyValue<String>(
+            _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #requestLinkCode,
@@ -1960,7 +1993,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
             email,
           ],
         ),
-        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #submitBitcoinPayment,
@@ -1971,7 +2004,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<String>.value(_i6.dummyValue<String>(
+            _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #submitBitcoinPayment,
@@ -1987,7 +2020,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
   _i4.Future<String> generatePaymentRedirectUrl({
     required String? planID,
     required String? email,
-    required _i7.Providers? paymentProvider,
+    required _i8.Providers? paymentProvider,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -1999,7 +2032,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
             #paymentProvider: paymentProvider,
           },
         ),
-        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #generatePaymentRedirectUrl,
@@ -2012,7 +2045,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<String>.value(_i6.dummyValue<String>(
+            _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #generatePaymentRedirectUrl,
@@ -2058,7 +2091,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
     _i2.BuildContext? context,
     String? planID,
     String? email,
-    _i7.Providers? provider,
+    _i8.Providers? provider,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2070,7 +2103,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
             provider,
           ],
         ),
-        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #paymentRedirectForDesktop,
@@ -2083,7 +2116,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           ),
         )),
         returnValueForMissingStub:
-            _i4.Future<String>.value(_i6.dummyValue<String>(
+            _i4.Future<String>.value(_i7.dummyValue<String>(
           this,
           Invocation.method(
             #paymentRedirectForDesktop,
@@ -2309,8 +2342,8 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
           #get,
           [path],
         ),
-        returnValue: _i6.ifNotNull(
-              _i6.dummyValueOrNull<T>(
+        returnValue: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #get,
@@ -2326,8 +2359,8 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
                 [path],
               ),
             ),
-        returnValueForMissingStub: _i6.ifNotNull(
-              _i6.dummyValueOrNull<T>(
+        returnValueForMissingStub: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
                 this,
                 Invocation.method(
                   #get,
@@ -2352,7 +2385,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
     int? count = 34,
     String? fullTextSearch,
     bool? reverseSort = false,
-    T Function(_i8.Uint8List)? deserialize,
+    T Function(_i9.Uint8List)? deserialize,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2376,7 +2409,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
     T? defaultValue,
     required _i2.ValueWidgetBuilder<T>? builder,
     bool? details = false,
-    T Function(_i8.Uint8List)? deserialize,
+    T Function(_i9.Uint8List)? deserialize,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2422,7 +2455,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
     String? path,
     T? defaultValue, {
     bool? details = false,
-    T Function(_i8.Uint8List)? deserialize,
+    T Function(_i9.Uint8List)? deserialize,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2476,7 +2509,7 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
       String,
       String,
     )? compare,
-    T Function(_i8.Uint8List)? deserialize,
+    T Function(_i9.Uint8List)? deserialize,
   }) =>
           (super.noSuchMethod(
             Invocation.method(
@@ -2527,7 +2560,2638 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
       String,
       String,
     )? compare,
-    T Function(_i8.Uint8List)? deserialize,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #listNotifier,
+          [path],
+          {
+            #details: details,
+            #compare: compare,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _FakeValueNotifier_1<_i2.ChangeTrackingList<T>>(
+          this,
+          Invocation.method(
+            #listNotifier,
+            [path],
+            {
+              #details: details,
+              #compare: compare,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+        returnValueForMissingStub:
+            _FakeValueNotifier_1<_i2.ChangeTrackingList<T>>(
+          this,
+          Invocation.method(
+            #listNotifier,
+            [path],
+            {
+              #details: details,
+              #compare: compare,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+      ) as _i2.ValueNotifier<_i2.ChangeTrackingList<T>>);
+
+  @override
+  _i2.ValueListenableBuilder<T> listChildBuilder<T>(
+    _i2.BuildContext? context,
+    String? path, {
+    required T? defaultValue,
+    required _i2.ValueWidgetBuilder<T>? builder,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #listChildBuilder,
+          [
+            context,
+            path,
+          ],
+          {
+            #defaultValue: defaultValue,
+            #builder: builder,
+          },
+        ),
+        returnValue: _FakeValueListenableBuilder_6<T>(
+          this,
+          Invocation.method(
+            #listChildBuilder,
+            [
+              context,
+              path,
+            ],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueListenableBuilder_6<T>(
+          this,
+          Invocation.method(
+            #listChildBuilder,
+            [
+              context,
+              path,
+            ],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+            },
+          ),
+        ),
+      ) as _i2.ValueListenableBuilder<T>);
+}
+
+/// A class which mocks [VpnModel].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockVpnModel extends _i1.Mock implements _i2.VpnModel {
+  @override
+  _i2.MethodChannel get methodChannel => (super.noSuchMethod(
+        Invocation.getter(#methodChannel),
+        returnValue: _FakeMethodChannel_3(
+          this,
+          Invocation.getter(#methodChannel),
+        ),
+        returnValueForMissingStub: _FakeMethodChannel_3(
+          this,
+          Invocation.getter(#methodChannel),
+        ),
+      ) as _i2.MethodChannel);
+
+  @override
+  set methodChannel(_i2.MethodChannel? _methodChannel) => super.noSuchMethod(
+        Invocation.setter(
+          #methodChannel,
+          _methodChannel,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  set event(_i2.Event? _event) => super.noSuchMethod(
+        Invocation.setter(
+          #event,
+          _event,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i2.ValueNotifier<_i3.ConfigOptions?> get configNotifier =>
+      (super.noSuchMethod(
+        Invocation.getter(#configNotifier),
+        returnValue: _FakeValueNotifier_1<_i3.ConfigOptions?>(
+          this,
+          Invocation.getter(#configNotifier),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_1<_i3.ConfigOptions?>(
+          this,
+          Invocation.getter(#configNotifier),
+        ),
+      ) as _i2.ValueNotifier<_i3.ConfigOptions?>);
+
+  @override
+  set configNotifier(_i2.ValueNotifier<_i3.ConfigOptions?>? _configNotifier) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #configNotifier,
+          _configNotifier,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i4.Future<void> switchVPN<T>(bool? on) => (super.noSuchMethod(
+        Invocation.method(
+          #switchVPN,
+          [on],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> connectingDelay<T>(bool? on) => (super.noSuchMethod(
+        Invocation.method(
+          #connectingDelay,
+          [on],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i2.Widget vpnStatus(
+    _i2.BuildContext? context,
+    _i2.ValueWidgetBuilder<String>? builder,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #vpnStatus,
+          [
+            context,
+            builder,
+          ],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #vpnStatus,
+            [
+              context,
+              builder,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #vpnStatus,
+            [
+              context,
+              builder,
+            ],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i4.Future<bool> isVpnConnected() => (super.noSuchMethod(
+        Invocation.method(
+          #isVpnConnected,
+          [],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+
+  @override
+  _i4.Future<T> get<T>(String? path) => (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [path],
+        ),
+        returnValue: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #get,
+                  [path],
+                ),
+              ),
+              (T v) => _i4.Future<T>.value(v),
+            ) ??
+            _FakeFuture_5<T>(
+              this,
+              Invocation.method(
+                #get,
+                [path],
+              ),
+            ),
+        returnValueForMissingStub: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #get,
+                  [path],
+                ),
+              ),
+              (T v) => _i4.Future<T>.value(v),
+            ) ??
+            _FakeFuture_5<T>(
+              this,
+              Invocation.method(
+                #get,
+                [path],
+              ),
+            ),
+      ) as _i4.Future<T>);
+
+  @override
+  _i4.Future<List<T>> list<T>(
+    String? path, {
+    int? start = 0,
+    int? count = 34,
+    String? fullTextSearch,
+    bool? reverseSort = false,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #list,
+          [path],
+          {
+            #start: start,
+            #count: count,
+            #fullTextSearch: fullTextSearch,
+            #reverseSort: reverseSort,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _i4.Future<List<T>>.value(<T>[]),
+        returnValueForMissingStub: _i4.Future<List<T>>.value(<T>[]),
+      ) as _i4.Future<List<T>>);
+
+  @override
+  _i2.ValueListenableBuilder<T?> subscribedSingleValueBuilder<T>(
+    String? path, {
+    T? defaultValue,
+    required _i2.ValueWidgetBuilder<T>? builder,
+    bool? details = false,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #subscribedSingleValueBuilder,
+          [path],
+          {
+            #defaultValue: defaultValue,
+            #builder: builder,
+            #details: details,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _FakeValueListenableBuilder_6<T?>(
+          this,
+          Invocation.method(
+            #subscribedSingleValueBuilder,
+            [path],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueListenableBuilder_6<T?>(
+          this,
+          Invocation.method(
+            #subscribedSingleValueBuilder,
+            [path],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+      ) as _i2.ValueListenableBuilder<T?>);
+
+  @override
+  _i2.ValueNotifier<T?> singleValueNotifier<T>(
+    String? path,
+    T? defaultValue, {
+    bool? details = false,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #singleValueNotifier,
+          [
+            path,
+            defaultValue,
+          ],
+          {
+            #details: details,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _FakeValueNotifier_1<T?>(
+          this,
+          Invocation.method(
+            #singleValueNotifier,
+            [
+              path,
+              defaultValue,
+            ],
+            {
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_1<T?>(
+          this,
+          Invocation.method(
+            #singleValueNotifier,
+            [
+              path,
+              defaultValue,
+            ],
+            {
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+      ) as _i2.ValueNotifier<T?>);
+
+  @override
+  _i2.ValueListenableBuilder<_i2.ChangeTrackingList<T>>
+      subscribedListBuilder<T>(
+    String? path, {
+    required _i2.ValueWidgetBuilder<Iterable<_i2.PathAndValue<T>>>? builder,
+    bool? details = false,
+    int Function(
+      String,
+      String,
+    )? compare,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #subscribedListBuilder,
+              [path],
+              {
+                #builder: builder,
+                #details: details,
+                #compare: compare,
+                #deserialize: deserialize,
+              },
+            ),
+            returnValue:
+                _FakeValueListenableBuilder_6<_i2.ChangeTrackingList<T>>(
+              this,
+              Invocation.method(
+                #subscribedListBuilder,
+                [path],
+                {
+                  #builder: builder,
+                  #details: details,
+                  #compare: compare,
+                  #deserialize: deserialize,
+                },
+              ),
+            ),
+            returnValueForMissingStub:
+                _FakeValueListenableBuilder_6<_i2.ChangeTrackingList<T>>(
+              this,
+              Invocation.method(
+                #subscribedListBuilder,
+                [path],
+                {
+                  #builder: builder,
+                  #details: details,
+                  #compare: compare,
+                  #deserialize: deserialize,
+                },
+              ),
+            ),
+          ) as _i2.ValueListenableBuilder<_i2.ChangeTrackingList<T>>);
+
+  @override
+  _i2.ValueNotifier<_i2.ChangeTrackingList<T>> listNotifier<T>(
+    String? path, {
+    bool? details = false,
+    int Function(
+      String,
+      String,
+    )? compare,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #listNotifier,
+          [path],
+          {
+            #details: details,
+            #compare: compare,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _FakeValueNotifier_1<_i2.ChangeTrackingList<T>>(
+          this,
+          Invocation.method(
+            #listNotifier,
+            [path],
+            {
+              #details: details,
+              #compare: compare,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+        returnValueForMissingStub:
+            _FakeValueNotifier_1<_i2.ChangeTrackingList<T>>(
+          this,
+          Invocation.method(
+            #listNotifier,
+            [path],
+            {
+              #details: details,
+              #compare: compare,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+      ) as _i2.ValueNotifier<_i2.ChangeTrackingList<T>>);
+
+  @override
+  _i2.ValueListenableBuilder<T> listChildBuilder<T>(
+    _i2.BuildContext? context,
+    String? path, {
+    required T? defaultValue,
+    required _i2.ValueWidgetBuilder<T>? builder,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #listChildBuilder,
+          [
+            context,
+            path,
+          ],
+          {
+            #defaultValue: defaultValue,
+            #builder: builder,
+          },
+        ),
+        returnValue: _FakeValueListenableBuilder_6<T>(
+          this,
+          Invocation.method(
+            #listChildBuilder,
+            [
+              context,
+              path,
+            ],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueListenableBuilder_6<T>(
+          this,
+          Invocation.method(
+            #listChildBuilder,
+            [
+              context,
+              path,
+            ],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+            },
+          ),
+        ),
+      ) as _i2.ValueListenableBuilder<T>);
+}
+
+/// A class which mocks [MessagingModel].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMessagingModel extends _i1.Mock implements _i5.MessagingModel {
+  @override
+  _i2.ValueNotifier<bool?> get copiedRecoveryStatusNotifier =>
+      (super.noSuchMethod(
+        Invocation.getter(#copiedRecoveryStatusNotifier),
+        returnValue: _FakeValueNotifier_1<bool?>(
+          this,
+          Invocation.getter(#copiedRecoveryStatusNotifier),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_1<bool?>(
+          this,
+          Invocation.getter(#copiedRecoveryStatusNotifier),
+        ),
+      ) as _i2.ValueNotifier<bool?>);
+
+  @override
+  set copiedRecoveryStatusNotifier(
+          _i2.ValueNotifier<bool?>? _copiedRecoveryStatusNotifier) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #copiedRecoveryStatusNotifier,
+          _copiedRecoveryStatusNotifier,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i2.MethodChannel get methodChannel => (super.noSuchMethod(
+        Invocation.getter(#methodChannel),
+        returnValue: _FakeMethodChannel_3(
+          this,
+          Invocation.getter(#methodChannel),
+        ),
+        returnValueForMissingStub: _FakeMethodChannel_3(
+          this,
+          Invocation.getter(#methodChannel),
+        ),
+      ) as _i2.MethodChannel);
+
+  @override
+  set methodChannel(_i2.MethodChannel? _methodChannel) => super.noSuchMethod(
+        Invocation.setter(
+          #methodChannel,
+          _methodChannel,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  set event(_i2.Event? _event) => super.noSuchMethod(
+        Invocation.setter(
+          #event,
+          _event,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i2.ValueNotifier<_i3.ConfigOptions?> get configNotifier =>
+      (super.noSuchMethod(
+        Invocation.getter(#configNotifier),
+        returnValue: _FakeValueNotifier_1<_i3.ConfigOptions?>(
+          this,
+          Invocation.getter(#configNotifier),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_1<_i3.ConfigOptions?>(
+          this,
+          Invocation.getter(#configNotifier),
+        ),
+      ) as _i2.ValueNotifier<_i3.ConfigOptions?>);
+
+  @override
+  set configNotifier(_i2.ValueNotifier<_i3.ConfigOptions?>? _configNotifier) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #configNotifier,
+          _configNotifier,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i4.Future<void> start() => (super.noSuchMethod(
+        Invocation.method(
+          #start,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> kill() => (super.noSuchMethod(
+        Invocation.method(
+          #kill,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> wipeData() => (super.noSuchMethod(
+        Invocation.method(
+          #wipeData,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<_i5.ChatNumber> findChatNumberByShortNumber(String? shortNumber) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #findChatNumberByShortNumber,
+          [shortNumber],
+        ),
+        returnValue: _i4.Future<_i5.ChatNumber>.value(_FakeChatNumber_7(
+          this,
+          Invocation.method(
+            #findChatNumberByShortNumber,
+            [shortNumber],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<_i5.ChatNumber>.value(_FakeChatNumber_7(
+          this,
+          Invocation.method(
+            #findChatNumberByShortNumber,
+            [shortNumber],
+          ),
+        )),
+      ) as _i4.Future<_i5.ChatNumber>);
+
+  @override
+  _i4.Future<Map<dynamic, dynamic>> addProvisionalContact(
+    String? contactId,
+    String? source,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addProvisionalContact,
+          [
+            contactId,
+            source,
+          ],
+        ),
+        returnValue:
+            _i4.Future<Map<dynamic, dynamic>>.value(<dynamic, dynamic>{}),
+        returnValueForMissingStub:
+            _i4.Future<Map<dynamic, dynamic>>.value(<dynamic, dynamic>{}),
+      ) as _i4.Future<Map<dynamic, dynamic>>);
+
+  @override
+  _i4.Future<void> deleteProvisionalContact(String? contactId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteProvisionalContact,
+          [contactId],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<_i5.Contact> addOrUpdateDirectContact({
+    String? unsafeId,
+    _i5.ChatNumber? chatNumber,
+    String? displayName,
+    String? source,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #addOrUpdateDirectContact,
+          [],
+          {
+            #unsafeId: unsafeId,
+            #chatNumber: chatNumber,
+            #displayName: displayName,
+            #source: source,
+          },
+        ),
+        returnValue: _i4.Future<_i5.Contact>.value(_FakeContact_8(
+          this,
+          Invocation.method(
+            #addOrUpdateDirectContact,
+            [],
+            {
+              #unsafeId: unsafeId,
+              #chatNumber: chatNumber,
+              #displayName: displayName,
+              #source: source,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i4.Future<_i5.Contact>.value(_FakeContact_8(
+          this,
+          Invocation.method(
+            #addOrUpdateDirectContact,
+            [],
+            {
+              #unsafeId: unsafeId,
+              #chatNumber: chatNumber,
+              #displayName: displayName,
+              #source: source,
+            },
+          ),
+        )),
+      ) as _i4.Future<_i5.Contact>);
+
+  @override
+  _i4.Future<void> acceptDirectContact(String? unsafeId) => (super.noSuchMethod(
+        Invocation.method(
+          #acceptDirectContact,
+          [unsafeId],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> markDirectContactVerified(String? unsafeId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #markDirectContactVerified,
+          [unsafeId],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> blockDirectContact(String? unsafeId) => (super.noSuchMethod(
+        Invocation.method(
+          #blockDirectContact,
+          [unsafeId],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> unblockDirectContact(String? unsafeId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #unblockDirectContact,
+          [unsafeId],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> setCurrentConversationContact(
+          String? currentConversationContact) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setCurrentConversationContact,
+          [currentConversationContact],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> clearCurrentConversationContact() => (super.noSuchMethod(
+        Invocation.method(
+          #clearCurrentConversationContact,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<_i5.Contact?> getContact(String? contactPath) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getContact,
+          [contactPath],
+        ),
+        returnValue: _i4.Future<_i5.Contact?>.value(),
+        returnValueForMissingStub: _i4.Future<_i5.Contact?>.value(),
+      ) as _i4.Future<_i5.Contact?>);
+
+  @override
+  _i4.Future<void> deleteDirectContact(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteDirectContact,
+          [id],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> introduce(List<String>? recipientIds) => (super.noSuchMethod(
+        Invocation.method(
+          #introduce,
+          [recipientIds],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> acceptIntroduction(
+    String? fromId,
+    String? toId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #acceptIntroduction,
+          [
+            fromId,
+            toId,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> rejectIntroduction(
+    String? fromId,
+    String? toId,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #rejectIntroduction,
+          [
+            fromId,
+            toId,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i2.Widget bestIntroductions(
+          {required _i2.ValueWidgetBuilder<
+                  Iterable<_i2.PathAndValue<_i5.StoredMessage>>>?
+              builder}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #bestIntroductions,
+          [],
+          {#builder: builder},
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #bestIntroductions,
+            [],
+            {#builder: builder},
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #bestIntroductions,
+            [],
+            {#builder: builder},
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.Widget contactsByActivity(
+          {required _i2
+              .ValueWidgetBuilder<Iterable<_i2.PathAndValue<_i5.Contact>>>?
+              builder}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #contactsByActivity,
+          [],
+          {#builder: builder},
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #contactsByActivity,
+            [],
+            {#builder: builder},
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #contactsByActivity,
+            [],
+            {#builder: builder},
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.Widget contacts(
+          {required _i2
+              .ValueWidgetBuilder<Iterable<_i2.PathAndValue<_i5.Contact>>>?
+              builder}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #contacts,
+          [],
+          {#builder: builder},
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #contacts,
+            [],
+            {#builder: builder},
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #contacts,
+            [],
+            {#builder: builder},
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.Widget contact(
+    _i2.BuildContext? context,
+    _i2.PathAndValue<_i5.Contact>? contact,
+    _i2.ValueWidgetBuilder<_i5.Contact>? builder,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #contact,
+          [
+            context,
+            contact,
+            builder,
+          ],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #contact,
+            [
+              context,
+              contact,
+              builder,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #contact,
+            [
+              context,
+              contact,
+              builder,
+            ],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.Widget singleContact(
+    _i5.Contact? contact,
+    _i2.ValueWidgetBuilder<_i5.Contact>? builder,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #singleContact,
+          [
+            contact,
+            builder,
+          ],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #singleContact,
+            [
+              contact,
+              builder,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #singleContact,
+            [
+              contact,
+              builder,
+            ],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.Widget singleContactById(
+    _i5.ContactId? contactId,
+    _i2.ValueWidgetBuilder<_i5.Contact>? builder,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #singleContactById,
+          [
+            contactId,
+            builder,
+          ],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #singleContactById,
+            [
+              contactId,
+              builder,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #singleContactById,
+            [
+              contactId,
+              builder,
+            ],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.ValueNotifier<_i5.Contact?> contactNotifier(String? contactId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #contactNotifier,
+          [contactId],
+        ),
+        returnValue: _FakeValueNotifier_1<_i5.Contact?>(
+          this,
+          Invocation.method(
+            #contactNotifier,
+            [contactId],
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_1<_i5.Contact?>(
+          this,
+          Invocation.method(
+            #contactNotifier,
+            [contactId],
+          ),
+        ),
+      ) as _i2.ValueNotifier<_i5.Contact?>);
+
+  @override
+  _i2.Widget contactMessages(
+    _i5.Contact? contact, {
+    required _i2
+        .ValueWidgetBuilder<Iterable<_i2.PathAndValue<_i5.StoredMessage>>>?
+        builder,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #contactMessages,
+          [contact],
+          {#builder: builder},
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #contactMessages,
+            [contact],
+            {#builder: builder},
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #contactMessages,
+            [contact],
+            {#builder: builder},
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i4.Future<_i5.Contact> getDirectContact(String? contactId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getDirectContact,
+          [contactId],
+        ),
+        returnValue: _i4.Future<_i5.Contact>.value(_FakeContact_8(
+          this,
+          Invocation.method(
+            #getDirectContact,
+            [contactId],
+          ),
+        )),
+        returnValueForMissingStub: _i4.Future<_i5.Contact>.value(_FakeContact_8(
+          this,
+          Invocation.method(
+            #getDirectContact,
+            [contactId],
+          ),
+        )),
+      ) as _i4.Future<_i5.Contact>);
+
+  @override
+  _i2.Widget message(
+    _i2.BuildContext? context,
+    _i2.PathAndValue<_i5.StoredMessage>? message,
+    _i2.ValueWidgetBuilder<_i5.StoredMessage>? builder,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #message,
+          [
+            context,
+            message,
+            builder,
+          ],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #message,
+            [
+              context,
+              message,
+              builder,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #message,
+            [
+              context,
+              message,
+              builder,
+            ],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.Widget singleMessage(
+    String? senderId,
+    String? messageId,
+    _i2.ValueWidgetBuilder<_i5.StoredMessage>? builder,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #singleMessage,
+          [
+            senderId,
+            messageId,
+            builder,
+          ],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #singleMessage,
+            [
+              senderId,
+              messageId,
+              builder,
+            ],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #singleMessage,
+            [
+              senderId,
+              messageId,
+              builder,
+            ],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.Widget me(_i2.ValueWidgetBuilder<_i5.Contact>? builder) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #me,
+          [builder],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #me,
+            [builder],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #me,
+            [builder],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i4.Future<void> recover(String? recoveryCode) => (super.noSuchMethod(
+        Invocation.method(
+          #recover,
+          [recoveryCode],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<String> getRecoveryCode() => (super.noSuchMethod(
+        Invocation.method(
+          #getRecoveryCode,
+          [],
+        ),
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getRecoveryCode,
+            [],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getRecoveryCode,
+            [],
+          ),
+        )),
+      ) as _i4.Future<String>);
+
+  @override
+  _i4.Future<void> sendToDirectContact(
+    String? identityKey, {
+    String? text,
+    List<_i9.Uint8List>? attachments,
+    String? replyToId,
+    String? replyToSenderId,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #sendToDirectContact,
+          [identityKey],
+          {
+            #text: text,
+            #attachments: attachments,
+            #replyToId: replyToId,
+            #replyToSenderId: replyToSenderId,
+          },
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> react(
+    _i5.StoredMessage? message,
+    String? reaction,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #react,
+          [
+            message,
+            reaction,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> markViewed(_i5.StoredMessage? message) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #markViewed,
+          [message],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> deleteLocally(_i5.StoredMessage? message) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteLocally,
+          [message],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> deleteGlobally(_i5.StoredMessage? message) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteGlobally,
+          [message],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> setDisappearSettings(
+    _i5.Contact? contact,
+    int? seconds,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setDisappearSettings,
+          [
+            contact,
+            seconds,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<bool> startRecordingVoiceMemo() => (super.noSuchMethod(
+        Invocation.method(
+          #startRecordingVoiceMemo,
+          [],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+
+  @override
+  _i4.Future<_i9.Uint8List> stopRecordingVoiceMemo() => (super.noSuchMethod(
+        Invocation.method(
+          #stopRecordingVoiceMemo,
+          [],
+        ),
+        returnValue: _i4.Future<_i9.Uint8List>.value(_i9.Uint8List(0)),
+        returnValueForMissingStub:
+            _i4.Future<_i9.Uint8List>.value(_i9.Uint8List(0)),
+      ) as _i4.Future<_i9.Uint8List>);
+
+  @override
+  _i4.Future<_i9.Uint8List> filePickerLoadAttachment(
+    String? filePath,
+    Map<String, String>? metadata,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #filePickerLoadAttachment,
+          [
+            filePath,
+            metadata,
+          ],
+        ),
+        returnValue: _i4.Future<_i9.Uint8List>.value(_i9.Uint8List(0)),
+        returnValueForMissingStub:
+            _i4.Future<_i9.Uint8List>.value(_i9.Uint8List(0)),
+      ) as _i4.Future<_i9.Uint8List>);
+
+  @override
+  _i2.ValueListenable<_i2.CachedValue<_i9.Uint8List>> thumbnail(
+          _i5.StoredAttachment? attachment) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #thumbnail,
+          [attachment],
+        ),
+        returnValue: _FakeValueListenable_9<_i2.CachedValue<_i9.Uint8List>>(
+          this,
+          Invocation.method(
+            #thumbnail,
+            [attachment],
+          ),
+        ),
+        returnValueForMissingStub:
+            _FakeValueListenable_9<_i2.CachedValue<_i9.Uint8List>>(
+          this,
+          Invocation.method(
+            #thumbnail,
+            [attachment],
+          ),
+        ),
+      ) as _i2.ValueListenable<_i2.CachedValue<_i9.Uint8List>>);
+
+  @override
+  _i4.Future<_i9.Uint8List> decryptAttachment(
+          _i5.StoredAttachment? attachment) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #decryptAttachment,
+          [attachment],
+        ),
+        returnValue: _i4.Future<_i9.Uint8List>.value(_i9.Uint8List(0)),
+        returnValueForMissingStub:
+            _i4.Future<_i9.Uint8List>.value(_i9.Uint8List(0)),
+      ) as _i4.Future<_i9.Uint8List>);
+
+  @override
+  _i4.Future<String> decryptVideoForPlayback(
+          _i5.StoredAttachment? attachment) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #decryptVideoForPlayback,
+          [attachment],
+        ),
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #decryptVideoForPlayback,
+            [attachment],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #decryptVideoForPlayback,
+            [attachment],
+          ),
+        )),
+      ) as _i4.Future<String>);
+
+  @override
+  _i4.Future<String> allocateRelayAddress(String? localAddr) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #allocateRelayAddress,
+          [localAddr],
+        ),
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #allocateRelayAddress,
+            [localAddr],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #allocateRelayAddress,
+            [localAddr],
+          ),
+        )),
+      ) as _i4.Future<String>);
+
+  @override
+  _i4.Future<String> relayTo(String? relayAddr) => (super.noSuchMethod(
+        Invocation.method(
+          #relayTo,
+          [relayAddr],
+        ),
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #relayTo,
+            [relayAddr],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #relayTo,
+            [relayAddr],
+          ),
+        )),
+      ) as _i4.Future<String>);
+
+  @override
+  _i4.Future<List<_i2.SearchResult<_i5.Contact>>> searchContacts(
+    String? query,
+    int? numTokens,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #searchContacts,
+          [
+            query,
+            numTokens,
+          ],
+        ),
+        returnValue: _i4.Future<List<_i2.SearchResult<_i5.Contact>>>.value(
+            <_i2.SearchResult<_i5.Contact>>[]),
+        returnValueForMissingStub:
+            _i4.Future<List<_i2.SearchResult<_i5.Contact>>>.value(
+                <_i2.SearchResult<_i5.Contact>>[]),
+      ) as _i4.Future<List<_i2.SearchResult<_i5.Contact>>>);
+
+  @override
+  _i4.Future<List<_i2.SearchResult<_i5.StoredMessage>>> searchMessages(
+    String? query,
+    int? numTokens,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #searchMessages,
+          [
+            query,
+            numTokens,
+          ],
+        ),
+        returnValue:
+            _i4.Future<List<_i2.SearchResult<_i5.StoredMessage>>>.value(
+                <_i2.SearchResult<_i5.StoredMessage>>[]),
+        returnValueForMissingStub:
+            _i4.Future<List<_i2.SearchResult<_i5.StoredMessage>>>.value(
+                <_i2.SearchResult<_i5.StoredMessage>>[]),
+      ) as _i4.Future<List<_i2.SearchResult<_i5.StoredMessage>>>);
+
+  @override
+  String sanitizeQuery(String? query) => (super.noSuchMethod(
+        Invocation.method(
+          #sanitizeQuery,
+          [query],
+        ),
+        returnValue: _i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #sanitizeQuery,
+            [query],
+          ),
+        ),
+        returnValueForMissingStub: _i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #sanitizeQuery,
+            [query],
+          ),
+        ),
+      ) as String);
+
+  @override
+  _i4.Future<void> dismissVerificationReminder(String? unsafeId) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #dismissVerificationReminder,
+          [unsafeId],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> markIsOnboarded<T>() => (super.noSuchMethod(
+        Invocation.method(
+          #markIsOnboarded,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i2.Widget getOnBoardingStatus(_i2.ValueWidgetBuilder<bool?>? builder) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getOnBoardingStatus,
+          [builder],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getOnBoardingStatus,
+            [builder],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getOnBoardingStatus,
+            [builder],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i4.Future<void> markCopiedRecoveryKey<T>() => (super.noSuchMethod(
+        Invocation.method(
+          #markCopiedRecoveryKey,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i2.Widget getCopiedRecoveryStatus(_i2.ValueWidgetBuilder<bool>? builder) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getCopiedRecoveryStatus,
+          [builder],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getCopiedRecoveryStatus,
+            [builder],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getCopiedRecoveryStatus,
+            [builder],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i4.Future<void> saveNotificationsTS<T>() => (super.noSuchMethod(
+        Invocation.method(
+          #saveNotificationsTS,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i2.Widget getLastDismissedNotificationTS(
+          _i2.ValueWidgetBuilder<int>? builder) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getLastDismissedNotificationTS,
+          [builder],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getLastDismissedNotificationTS,
+            [builder],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getLastDismissedNotificationTS,
+            [builder],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i4.Future<String> getDefaultRingtoneUri() => (super.noSuchMethod(
+        Invocation.method(
+          #getDefaultRingtoneUri,
+          [],
+        ),
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getDefaultRingtoneUri,
+            [],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getDefaultRingtoneUri,
+            [],
+          ),
+        )),
+      ) as _i4.Future<String>);
+
+  @override
+  _i4.Future<bool> shouldShowTryLanternChatModal<T>() => (super.noSuchMethod(
+        Invocation.method(
+          #shouldShowTryLanternChatModal,
+          [],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+
+  @override
+  _i4.Future<void> dismissTryLanternChatBadge<T>() => (super.noSuchMethod(
+        Invocation.method(
+          #dismissTryLanternChatBadge,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i2.Widget getFirstShownTryLanternChatModalTS(
+          _i2.ValueWidgetBuilder<int>? builder) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getFirstShownTryLanternChatModalTS,
+          [builder],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getFirstShownTryLanternChatModalTS,
+            [builder],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getFirstShownTryLanternChatModalTS,
+            [builder],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i4.Future<void> resetTimestamps() => (super.noSuchMethod(
+        Invocation.method(
+          #resetTimestamps,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> resetFlags() => (super.noSuchMethod(
+        Invocation.method(
+          #resetFlags,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  void addDummyContacts() => super.noSuchMethod(
+        Invocation.method(
+          #addDummyContacts,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i4.Future<void> saveDummyAttachment(
+    String? url,
+    String? displayName,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveDummyAttachment,
+          [
+            url,
+            displayName,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> sendDummyAttachment(
+    String? fileName,
+    Map<String, String>? metadata,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #sendDummyAttachment,
+          [
+            fileName,
+            metadata,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<T> get<T>(String? path) => (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [path],
+        ),
+        returnValue: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #get,
+                  [path],
+                ),
+              ),
+              (T v) => _i4.Future<T>.value(v),
+            ) ??
+            _FakeFuture_5<T>(
+              this,
+              Invocation.method(
+                #get,
+                [path],
+              ),
+            ),
+        returnValueForMissingStub: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #get,
+                  [path],
+                ),
+              ),
+              (T v) => _i4.Future<T>.value(v),
+            ) ??
+            _FakeFuture_5<T>(
+              this,
+              Invocation.method(
+                #get,
+                [path],
+              ),
+            ),
+      ) as _i4.Future<T>);
+
+  @override
+  _i4.Future<List<T>> list<T>(
+    String? path, {
+    int? start = 0,
+    int? count = 34,
+    String? fullTextSearch,
+    bool? reverseSort = false,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #list,
+          [path],
+          {
+            #start: start,
+            #count: count,
+            #fullTextSearch: fullTextSearch,
+            #reverseSort: reverseSort,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _i4.Future<List<T>>.value(<T>[]),
+        returnValueForMissingStub: _i4.Future<List<T>>.value(<T>[]),
+      ) as _i4.Future<List<T>>);
+
+  @override
+  _i2.ValueListenableBuilder<T?> subscribedSingleValueBuilder<T>(
+    String? path, {
+    T? defaultValue,
+    required _i2.ValueWidgetBuilder<T>? builder,
+    bool? details = false,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #subscribedSingleValueBuilder,
+          [path],
+          {
+            #defaultValue: defaultValue,
+            #builder: builder,
+            #details: details,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _FakeValueListenableBuilder_6<T?>(
+          this,
+          Invocation.method(
+            #subscribedSingleValueBuilder,
+            [path],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueListenableBuilder_6<T?>(
+          this,
+          Invocation.method(
+            #subscribedSingleValueBuilder,
+            [path],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+      ) as _i2.ValueListenableBuilder<T?>);
+
+  @override
+  _i2.ValueNotifier<T?> singleValueNotifier<T>(
+    String? path,
+    T? defaultValue, {
+    bool? details = false,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #singleValueNotifier,
+          [
+            path,
+            defaultValue,
+          ],
+          {
+            #details: details,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _FakeValueNotifier_1<T?>(
+          this,
+          Invocation.method(
+            #singleValueNotifier,
+            [
+              path,
+              defaultValue,
+            ],
+            {
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_1<T?>(
+          this,
+          Invocation.method(
+            #singleValueNotifier,
+            [
+              path,
+              defaultValue,
+            ],
+            {
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+      ) as _i2.ValueNotifier<T?>);
+
+  @override
+  _i2.ValueListenableBuilder<_i2.ChangeTrackingList<T>>
+      subscribedListBuilder<T>(
+    String? path, {
+    required _i2.ValueWidgetBuilder<Iterable<_i2.PathAndValue<T>>>? builder,
+    bool? details = false,
+    int Function(
+      String,
+      String,
+    )? compare,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #subscribedListBuilder,
+              [path],
+              {
+                #builder: builder,
+                #details: details,
+                #compare: compare,
+                #deserialize: deserialize,
+              },
+            ),
+            returnValue:
+                _FakeValueListenableBuilder_6<_i2.ChangeTrackingList<T>>(
+              this,
+              Invocation.method(
+                #subscribedListBuilder,
+                [path],
+                {
+                  #builder: builder,
+                  #details: details,
+                  #compare: compare,
+                  #deserialize: deserialize,
+                },
+              ),
+            ),
+            returnValueForMissingStub:
+                _FakeValueListenableBuilder_6<_i2.ChangeTrackingList<T>>(
+              this,
+              Invocation.method(
+                #subscribedListBuilder,
+                [path],
+                {
+                  #builder: builder,
+                  #details: details,
+                  #compare: compare,
+                  #deserialize: deserialize,
+                },
+              ),
+            ),
+          ) as _i2.ValueListenableBuilder<_i2.ChangeTrackingList<T>>);
+
+  @override
+  _i2.ValueNotifier<_i2.ChangeTrackingList<T>> listNotifier<T>(
+    String? path, {
+    bool? details = false,
+    int Function(
+      String,
+      String,
+    )? compare,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #listNotifier,
+          [path],
+          {
+            #details: details,
+            #compare: compare,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _FakeValueNotifier_1<_i2.ChangeTrackingList<T>>(
+          this,
+          Invocation.method(
+            #listNotifier,
+            [path],
+            {
+              #details: details,
+              #compare: compare,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+        returnValueForMissingStub:
+            _FakeValueNotifier_1<_i2.ChangeTrackingList<T>>(
+          this,
+          Invocation.method(
+            #listNotifier,
+            [path],
+            {
+              #details: details,
+              #compare: compare,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+      ) as _i2.ValueNotifier<_i2.ChangeTrackingList<T>>);
+
+  @override
+  _i2.ValueListenableBuilder<T> listChildBuilder<T>(
+    _i2.BuildContext? context,
+    String? path, {
+    required T? defaultValue,
+    required _i2.ValueWidgetBuilder<T>? builder,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #listChildBuilder,
+          [
+            context,
+            path,
+          ],
+          {
+            #defaultValue: defaultValue,
+            #builder: builder,
+          },
+        ),
+        returnValue: _FakeValueListenableBuilder_6<T>(
+          this,
+          Invocation.method(
+            #listChildBuilder,
+            [
+              context,
+              path,
+            ],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueListenableBuilder_6<T>(
+          this,
+          Invocation.method(
+            #listChildBuilder,
+            [
+              context,
+              path,
+            ],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+            },
+          ),
+        ),
+      ) as _i2.ValueListenableBuilder<T>);
+}
+
+/// A class which mocks [ReplicaModel].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockReplicaModel extends _i1.Mock implements _i10.ReplicaModel {
+  @override
+  _i2.MethodChannel get methodChannel => (super.noSuchMethod(
+        Invocation.getter(#methodChannel),
+        returnValue: _FakeMethodChannel_3(
+          this,
+          Invocation.getter(#methodChannel),
+        ),
+        returnValueForMissingStub: _FakeMethodChannel_3(
+          this,
+          Invocation.getter(#methodChannel),
+        ),
+      ) as _i2.MethodChannel);
+
+  @override
+  set methodChannel(_i2.MethodChannel? _methodChannel) => super.noSuchMethod(
+        Invocation.setter(
+          #methodChannel,
+          _methodChannel,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  set event(_i2.Event? _event) => super.noSuchMethod(
+        Invocation.setter(
+          #event,
+          _event,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i2.ValueNotifier<_i3.ConfigOptions?> get configNotifier =>
+      (super.noSuchMethod(
+        Invocation.getter(#configNotifier),
+        returnValue: _FakeValueNotifier_1<_i3.ConfigOptions?>(
+          this,
+          Invocation.getter(#configNotifier),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_1<_i3.ConfigOptions?>(
+          this,
+          Invocation.getter(#configNotifier),
+        ),
+      ) as _i2.ValueNotifier<_i3.ConfigOptions?>);
+
+  @override
+  set configNotifier(_i2.ValueNotifier<_i3.ConfigOptions?>? _configNotifier) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #configNotifier,
+          _configNotifier,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i4.Future<void> downloadFile(
+    String? url,
+    String? displayName,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #downloadFile,
+          [
+            url,
+            displayName,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i2.Widget withReplicaApi(_i2.ValueWidgetBuilder<_i10.ReplicaApi>? builder) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #withReplicaApi,
+          [builder],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #withReplicaApi,
+            [builder],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #withReplicaApi,
+            [builder],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i4.Future<bool?> getSuppressUploadWarning() => (super.noSuchMethod(
+        Invocation.method(
+          #getSuppressUploadWarning,
+          [],
+        ),
+        returnValue: _i4.Future<bool?>.value(),
+        returnValueForMissingStub: _i4.Future<bool?>.value(),
+      ) as _i4.Future<bool?>);
+
+  @override
+  _i4.Future<void> setSuppressUploadWarning(bool? suppress) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setSuppressUploadWarning,
+          [suppress],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> setSearchTerm<T>(String? searchTerm) => (super.noSuchMethod(
+        Invocation.method(
+          #setSearchTerm,
+          [searchTerm],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> setSearchTab<T>(int? searchTab) => (super.noSuchMethod(
+        Invocation.method(
+          #setSearchTab,
+          [searchTab],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> setShowNewBadge(bool? showNewBadge) => (super.noSuchMethod(
+        Invocation.method(
+          #setShowNewBadge,
+          [showNewBadge],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  _i2.Widget getShowNewBadgeWidget(_i2.ValueWidgetBuilder<bool>? builder) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getShowNewBadgeWidget,
+          [builder],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getShowNewBadgeWidget,
+            [builder],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getShowNewBadgeWidget,
+            [builder],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.Widget getSearchTermWidget(_i2.ValueWidgetBuilder<String>? builder) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getSearchTermWidget,
+          [builder],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getSearchTermWidget,
+            [builder],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getSearchTermWidget,
+            [builder],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i2.Widget getSearchTabWidget(_i2.ValueWidgetBuilder<String>? builder) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getSearchTabWidget,
+          [builder],
+        ),
+        returnValue: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getSearchTabWidget,
+            [builder],
+          ),
+        ),
+        returnValueForMissingStub: _FakeWidget_4(
+          this,
+          Invocation.method(
+            #getSearchTabWidget,
+            [builder],
+          ),
+        ),
+      ) as _i2.Widget);
+
+  @override
+  _i4.Future<bool> getShowNewBadge() => (super.noSuchMethod(
+        Invocation.method(
+          #getShowNewBadge,
+          [],
+        ),
+        returnValue: _i4.Future<bool>.value(false),
+        returnValueForMissingStub: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
+
+  @override
+  _i4.Future<String> getSearchTerm() => (super.noSuchMethod(
+        Invocation.method(
+          #getSearchTerm,
+          [],
+        ),
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getSearchTerm,
+            [],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getSearchTerm,
+            [],
+          ),
+        )),
+      ) as _i4.Future<String>);
+
+  @override
+  _i4.Future<String> getSearchTab() => (super.noSuchMethod(
+        Invocation.method(
+          #getSearchTab,
+          [],
+        ),
+        returnValue: _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getSearchTab,
+            [],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i4.Future<String>.value(_i7.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getSearchTab,
+            [],
+          ),
+        )),
+      ) as _i4.Future<String>);
+
+  @override
+  _i4.Future<T> get<T>(String? path) => (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [path],
+        ),
+        returnValue: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #get,
+                  [path],
+                ),
+              ),
+              (T v) => _i4.Future<T>.value(v),
+            ) ??
+            _FakeFuture_5<T>(
+              this,
+              Invocation.method(
+                #get,
+                [path],
+              ),
+            ),
+        returnValueForMissingStub: _i7.ifNotNull(
+              _i7.dummyValueOrNull<T>(
+                this,
+                Invocation.method(
+                  #get,
+                  [path],
+                ),
+              ),
+              (T v) => _i4.Future<T>.value(v),
+            ) ??
+            _FakeFuture_5<T>(
+              this,
+              Invocation.method(
+                #get,
+                [path],
+              ),
+            ),
+      ) as _i4.Future<T>);
+
+  @override
+  _i4.Future<List<T>> list<T>(
+    String? path, {
+    int? start = 0,
+    int? count = 34,
+    String? fullTextSearch,
+    bool? reverseSort = false,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #list,
+          [path],
+          {
+            #start: start,
+            #count: count,
+            #fullTextSearch: fullTextSearch,
+            #reverseSort: reverseSort,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _i4.Future<List<T>>.value(<T>[]),
+        returnValueForMissingStub: _i4.Future<List<T>>.value(<T>[]),
+      ) as _i4.Future<List<T>>);
+
+  @override
+  _i2.ValueListenableBuilder<T?> subscribedSingleValueBuilder<T>(
+    String? path, {
+    T? defaultValue,
+    required _i2.ValueWidgetBuilder<T>? builder,
+    bool? details = false,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #subscribedSingleValueBuilder,
+          [path],
+          {
+            #defaultValue: defaultValue,
+            #builder: builder,
+            #details: details,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _FakeValueListenableBuilder_6<T?>(
+          this,
+          Invocation.method(
+            #subscribedSingleValueBuilder,
+            [path],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueListenableBuilder_6<T?>(
+          this,
+          Invocation.method(
+            #subscribedSingleValueBuilder,
+            [path],
+            {
+              #defaultValue: defaultValue,
+              #builder: builder,
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+      ) as _i2.ValueListenableBuilder<T?>);
+
+  @override
+  _i2.ValueNotifier<T?> singleValueNotifier<T>(
+    String? path,
+    T? defaultValue, {
+    bool? details = false,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #singleValueNotifier,
+          [
+            path,
+            defaultValue,
+          ],
+          {
+            #details: details,
+            #deserialize: deserialize,
+          },
+        ),
+        returnValue: _FakeValueNotifier_1<T?>(
+          this,
+          Invocation.method(
+            #singleValueNotifier,
+            [
+              path,
+              defaultValue,
+            ],
+            {
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_1<T?>(
+          this,
+          Invocation.method(
+            #singleValueNotifier,
+            [
+              path,
+              defaultValue,
+            ],
+            {
+              #details: details,
+              #deserialize: deserialize,
+            },
+          ),
+        ),
+      ) as _i2.ValueNotifier<T?>);
+
+  @override
+  _i2.ValueListenableBuilder<_i2.ChangeTrackingList<T>>
+      subscribedListBuilder<T>(
+    String? path, {
+    required _i2.ValueWidgetBuilder<Iterable<_i2.PathAndValue<T>>>? builder,
+    bool? details = false,
+    int Function(
+      String,
+      String,
+    )? compare,
+    T Function(_i9.Uint8List)? deserialize,
+  }) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #subscribedListBuilder,
+              [path],
+              {
+                #builder: builder,
+                #details: details,
+                #compare: compare,
+                #deserialize: deserialize,
+              },
+            ),
+            returnValue:
+                _FakeValueListenableBuilder_6<_i2.ChangeTrackingList<T>>(
+              this,
+              Invocation.method(
+                #subscribedListBuilder,
+                [path],
+                {
+                  #builder: builder,
+                  #details: details,
+                  #compare: compare,
+                  #deserialize: deserialize,
+                },
+              ),
+            ),
+            returnValueForMissingStub:
+                _FakeValueListenableBuilder_6<_i2.ChangeTrackingList<T>>(
+              this,
+              Invocation.method(
+                #subscribedListBuilder,
+                [path],
+                {
+                  #builder: builder,
+                  #details: details,
+                  #compare: compare,
+                  #deserialize: deserialize,
+                },
+              ),
+            ),
+          ) as _i2.ValueListenableBuilder<_i2.ChangeTrackingList<T>>);
+
+  @override
+  _i2.ValueNotifier<_i2.ChangeTrackingList<T>> listNotifier<T>(
+    String? path, {
+    bool? details = false,
+    int Function(
+      String,
+      String,
+    )? compare,
+    T Function(_i9.Uint8List)? deserialize,
   }) =>
       (super.noSuchMethod(
         Invocation.method(

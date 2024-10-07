@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _startupSequence();
+      // _startupSequence();
     });
     super.initState();
   }
@@ -270,14 +270,14 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
         print("accepted terms version $version");
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
+            print("Development mode $developmentMode");
             if (developmentMode) {
               Logger.level = Level.trace;
             } else {
               Logger.level = Level.error;
             }
 
-            bool isPlayVersion =
-                (sessionModel.isTestPlayVersion.value ?? false);
+            bool isPlayVersion = (sessionModel.isTestPlayVersion.value ?? false);
             bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
 
             if ((isStoreVersion || isPlayVersion) && version == 0) {

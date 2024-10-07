@@ -173,7 +173,7 @@ class SessionModel extends Model {
   Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
-          builder: builder, defaultValue: 0);
+          builder: builder);
     }
     return configValueBuilder('accepted_terms_version', builder,
         (value) => value?.chat.acceptedTermsVersion ?? 0);

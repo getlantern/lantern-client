@@ -18,6 +18,8 @@ class MockBuildContext extends Mock implements BuildContext {}
 ValueWidgetBuilder<int> intEmptyBuilder = (context, value, child) => const SizedBox();
 ValueWidgetBuilder<double> doubleEmptyBuilder = (context, value, child) => const SizedBox();
 ValueWidgetBuilder<bool> boolEmptyBuilder = (context, value, child) => const SizedBox();
+ValueWidgetBuilder<bool?> boolNullableEmptyBuilder = (context, value, child) => const SizedBox();
+ValueWidgetBuilder<String> stringEmptyBuilder = (context, value, child) => const SizedBox();
 
 
 

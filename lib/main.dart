@@ -28,7 +28,7 @@ Future<void> main() async {
   }
 
   // Inject all the services
-  init();
+  initServices();
 
   if (isDesktop()) {
     LanternFFI.startDesktopService();
