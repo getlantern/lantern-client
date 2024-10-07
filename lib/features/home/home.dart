@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
+class _HomePageState extends State<HomePage> with TrayListener {
   Function()? _cancelEventSubscription;
   Function userNew = once<void>();
 
@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       _startupSequence();
     });
     super.initState();
-    if (isDesktop()) _setWindowResizable();
   }
 
   void _startupSequence() {
@@ -48,7 +47,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
     }
     // This is a desktop device
     _setupTrayManager();
-    windowManager.addListener(this);
   }
 
   void channelListener() {
@@ -142,70 +140,11 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
   void dispose() {
     if (isDesktop()) {
       trayManager.removeListener(this);
-      windowManager.removeListener(this);
     }
     if (_cancelEventSubscription != null) {
       _cancelEventSubscription!();
     }
     super.dispose();
-  }
-
-  ///window manager methods
-  void _setWindowResizable() async {
-    if (!Platform.isWindows) {
-      await windowManager.setResizable(false);
-      return;
-    }
-    // temporary workaround for distorted layout on Windows. The problem goes away
-    // after the window is resized.
-    // See https://github.com/leanflutter/window_manager/issues/464
-    // and https://github.com/KRTirtho/spotube/issues/1553
-    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) async {
-      await Future<void>.delayed(const Duration(milliseconds: 100), () async {
-        windowManager.getSize().then((ui.Size value) {
-          windowManager.setSize(
-            ui.Size(value.width + 1, value.height + 1),
-          );
-        });
-        await windowManager.setResizable(false);
-      });
-    });
-  }
-
-  @override
-  void onWindowEvent(String eventName) {
-    print('[WindowManager] onWindowEvent: $eventName');
-  }
-
-  @override
-  void onWindowClose() async {
-    bool isPreventClose = await windowManager.isPreventClose();
-    if (!isPreventClose) return;
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text('confirm_close_window'.i18n),
-          actions: [
-            TextButton(
-              child: Text('No'.i18n),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Yes'.i18n),
-              onPressed: () async {
-                LanternFFI.exit();
-                await trayManager.destroy();
-                await windowManager.destroy();
-                exit(0);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   /// system tray methods
