@@ -104,6 +104,14 @@ jobs:
           echo "Android_interstitialAd=$ANDROID_INTERSTITIAL_AD_ID" > app.env
           echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
 
+
+      - name: Clean packages to save disk space
+        run: |
+          sudo apt-get autoremove -y
+          sudo apt-get clean
+          sudo apt-get autoclean
+          sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
+
       - name: Build Android installers
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
