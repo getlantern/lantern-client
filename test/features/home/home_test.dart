@@ -1,7 +1,9 @@
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
+import 'package:lantern/core/widgtes/custom_bottom_item.dart';
 import 'package:lantern/features/home/home.dart';
 import 'package:lantern/features/messaging/messaging_model.dart';
+import 'package:lantern/features/replica/common.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
 
 import '../../utils/test_common.dart';
@@ -12,17 +14,33 @@ void main() {
   late MockSessionModel mockSessionModel;
   late MockBuildContext mockBuildContext;
   late MockMessagingModel mockMessagingModel;
+  late MockBottomBarChangeNotifier mockBottomBarChangeNotifier;
+  late MockVPNChangeNotifier mockVPNChangeNotifier;
+  late MockInternetStatusProvider mockInternetStatusProvider;
+  late MockReplicaModel mockReplicaModel;
+  late MockVpnModel mockVpnModel;
 
   setUpAll(
     () {
       mockSessionModel = MockSessionModel();
       mockBuildContext = MockBuildContext();
       mockMessagingModel = MockMessagingModel();
+      mockBottomBarChangeNotifier = MockBottomBarChangeNotifier();
+      mockVPNChangeNotifier = MockVPNChangeNotifier();
+      mockInternetStatusProvider = MockInternetStatusProvider();
+      mockReplicaModel = MockReplicaModel();
+      mockVpnModel = MockVpnModel();
 
+      // Injection models
       sl.registerLazySingleton<SessionModel>(() => mockSessionModel);
       sl.registerLazySingleton<MessagingModel>(() => mockMessagingModel);
+      sl.registerLazySingleton<ReplicaModel>(() => mockReplicaModel);
+      sl.registerLazySingleton<VpnModel>(() => mockVpnModel);
 
-      sl.registerLazySingleton(() => VpnModel());
+      // mock the providers
+      mockBottomBarChangeNotifier = MockBottomBarChangeNotifier();
+      mockVPNChangeNotifier = MockVPNChangeNotifier();
+      mockInternetStatusProvider = MockInternetStatusProvider();
     },
   );
 
@@ -36,61 +54,158 @@ void main() {
     "Home widget render properly for mobile",
     () {
       testWidgets(
-        "Home widget started ",
+        "Home widget started with all taps showing",
         (widgetTester) async {
           final homeWidget = MultiProvider(providers: [
-            ChangeNotifierProvider(
-                create: (context) => BottomBarChangeNotifier()),
-            ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
-            ChangeNotifierProvider(
-                create: (context) => InternetStatusProvider())
+            ChangeNotifierProvider<BottomBarChangeNotifier>.value(
+                value: mockBottomBarChangeNotifier),
+            ChangeNotifierProvider<VPNChangeNotifier>.value(
+                value: mockVPNChangeNotifier),
+            ChangeNotifierProvider<InternetStatusProvider>.value(
+                value: mockInternetStatusProvider),
           ], child: wrapWithMaterialApp(const HomePage()));
 
-          /// Now stub all daa widgets
+          /// stub providers
+          when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
 
-          // / Use Mockito's `any` matcher to match the argument passed to `acceptedTermsVersion`
+
+          /// Stub session model
           when(mockSessionModel.acceptedTermsVersion(any))
               .thenAnswer((invocation) {
             final builder =
                 invocation.positionalArguments[0] as ValueWidgetBuilder<int>;
-            return builder(
-                mockBuildContext, 0, null);
+            return builder(mockBuildContext, 0, null);
           });
 
           when(mockSessionModel.developmentMode(any)).thenAnswer(
             (invocation) {
               final builder =
-              invocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
-              return builder(
-                  mockBuildContext, true, null);
+                  invocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
+              return builder(mockBuildContext, true, null);
             },
           );
 
+          when(mockSessionModel.isTestPlayVersion)
+              .thenAnswer((realInvocation) => ValueNotifier(false));
+          when(mockSessionModel.isStoreVersion)
+              .thenAnswer((realInvocation) => ValueNotifier(false));
+          when(mockSessionModel.isAuthEnabled)
+              .thenAnswer((realInvocation) => ValueNotifier(false));
 
-
-          when(mockSessionModel.isTestPlayVersion).thenAnswer((realInvocation) => ValueNotifier(false));
-          when(mockSessionModel.isStoreVersion).thenAnswer((realInvocation) => ValueNotifier(false));
-          when(mockSessionModel.isAuthEnabled).thenAnswer((realInvocation) => ValueNotifier(false));
-
-
-          when(mockMessagingModel.getOnBoardingStatus(any))
-              .thenAnswer(
-            (realInvocation) {
-              final builder = realInvocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
-              return builder(mockBuildContext, false, null);
-            },
-          );
-
+          
           when(mockSessionModel.chatEnabled(any)).thenAnswer(
             (realInvocation) {
-              final builder = realInvocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<bool>;
               return builder(mockBuildContext, false, null);
             },
           );
           //
           when(mockSessionModel.replicaAddr(any)).thenAnswer(
             (realInvocation) {
-              final builder = realInvocation.positionalArguments[0] as ValueWidgetBuilder<String>;
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<String>;
+              return builder(mockBuildContext, "test", null);
+            },
+          );
+
+          when(mockSessionModel.proUser(any)).thenAnswer(
+            (realInvocation) {
+              return boolEmptyBuilder(mockBuildContext, false, null);
+            },
+          );
+
+
+          ///Stub messaging model
+          when(mockMessagingModel.getOnBoardingStatus(any)).thenAnswer(
+                (realInvocation) {
+              final builder = realInvocation.positionalArguments[0]
+              as ValueWidgetBuilder<bool>;
+              return builder(mockBuildContext, false, null);
+            },
+          );
+
+
+          ///stub vpn model
+          when(mockVpnModel.vpnStatus(any,any)).thenAnswer((realInvocation) {
+            final builder = realInvocation.positionalArguments[1] as ValueWidgetBuilder<String>;
+            return builder(mockBuildContext, 'disconnected', null);
+          },);
+
+          ///stub replica model
+          when(mockReplicaModel.getShowNewBadgeWidget(any)).thenAnswer((realInvocation) {
+            final builder = realInvocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
+            return builder(mockBuildContext, true, null);
+          },);
+
+          await widgetTester.pumpWidget(homeWidget);
+
+          final bottombar = find.byType(BottomNavigationBar);
+          expect(bottombar, findsOneWidget);
+          // three item since replica is disable
+          expect(find.byType(CustomBottomBarItem), findsAtLeast(4));
+        },
+        variant: TargetPlatformVariant.only(TargetPlatform.android),
+      );
+
+      testWidgets(
+        "Home widget started with replica disabled",
+        (widgetTester) async {
+          final homeWidget = MultiProvider(providers: [
+            ChangeNotifierProvider<BottomBarChangeNotifier>.value(
+                value: mockBottomBarChangeNotifier),
+            ChangeNotifierProvider<VPNChangeNotifier>.value(
+                value: mockVPNChangeNotifier),
+            ChangeNotifierProvider<InternetStatusProvider>.value(
+                value: mockInternetStatusProvider),
+          ], child: wrapWithMaterialApp(const HomePage()));
+
+          /// stub providers
+          when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
+
+          /// Now stub all daa widgets
+          when(mockSessionModel.acceptedTermsVersion(any))
+              .thenAnswer((invocation) {
+            final builder =
+                invocation.positionalArguments[0] as ValueWidgetBuilder<int>;
+            return builder(mockBuildContext, 0, null);
+          });
+
+          when(mockSessionModel.developmentMode(any)).thenAnswer(
+            (invocation) {
+              final builder =
+                  invocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
+              return builder(mockBuildContext, true, null);
+            },
+          );
+
+          when(mockSessionModel.isTestPlayVersion)
+              .thenAnswer((realInvocation) => ValueNotifier(false));
+          when(mockSessionModel.isStoreVersion)
+              .thenAnswer((realInvocation) => ValueNotifier(false));
+          when(mockSessionModel.isAuthEnabled)
+              .thenAnswer((realInvocation) => ValueNotifier(false));
+
+          when(mockMessagingModel.getOnBoardingStatus(any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<bool>;
+              return builder(mockBuildContext, false, null);
+            },
+          );
+
+          when(mockSessionModel.chatEnabled(any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<bool>;
+              return builder(mockBuildContext, false, null);
+            },
+          );
+          //
+          when(mockSessionModel.replicaAddr(any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<String>;
               return builder(mockBuildContext, "", null);
             },
           );
@@ -103,7 +218,10 @@ void main() {
 
           await widgetTester.pumpWidget(homeWidget);
 
-          expect(find.byType(BottomNavigationBar), findsOneWidget);
+          final bottombar = find.byType(BottomNavigationBar);
+          expect(bottombar, findsOneWidget);
+          // three item since replica is disable
+          expect(find.byType(CustomBottomBarItem), findsAtLeast(3));
         },
         variant: TargetPlatformVariant.only(TargetPlatform.android),
       );

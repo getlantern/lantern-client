@@ -6,12 +6,16 @@
 import 'dart:async' as _i4;
 import 'dart:ffi' as _i6;
 import 'dart:typed_data' as _i9;
+import 'dart:ui' as _i12;
 
+import 'package:lantern/common/ui/custom/internet_checker.dart' as _i14;
 import 'package:lantern/core/utils/common.dart' as _i2;
 import 'package:lantern/core/utils/common_desktop.dart' as _i3;
 import 'package:lantern/core/utils/utils.dart' as _i8;
+import 'package:lantern/core/widgtes/custom_bottom_bar.dart' as _i11;
 import 'package:lantern/features/messaging/messaging.dart' as _i5;
 import 'package:lantern/features/replica/common.dart' as _i10;
+import 'package:lantern/features/vpn/vpn_notifier.dart' as _i13;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i7;
 
@@ -5278,4 +5282,332 @@ class MockReplicaModel extends _i1.Mock implements _i10.ReplicaModel {
           ),
         ),
       ) as _i2.ValueListenableBuilder<T>);
+}
+
+/// A class which mocks [BottomBarChangeNotifier].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBottomBarChangeNotifier extends _i1.Mock
+    implements _i11.BottomBarChangeNotifier {
+  @override
+  String get currentIndex => (super.noSuchMethod(
+        Invocation.getter(#currentIndex),
+        returnValue: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#currentIndex),
+        ),
+        returnValueForMissingStub: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#currentIndex),
+        ),
+      ) as String);
+
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  void setCurrentIndex(String? tabName) => super.noSuchMethod(
+        Invocation.method(
+          #setCurrentIndex,
+          [tabName],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void addListener(_i12.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void removeListener(_i12.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [VPNChangeNotifier].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockVPNChangeNotifier extends _i1.Mock implements _i13.VPNChangeNotifier {
+  @override
+  set timer(_i4.Timer? _timer) => super.noSuchMethod(
+        Invocation.setter(
+          #timer,
+          _timer,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool get isFlashlightInitialized => (super.noSuchMethod(
+        Invocation.getter(#isFlashlightInitialized),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  set isFlashlightInitialized(bool? _isFlashlightInitialized) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #isFlashlightInitialized,
+          _isFlashlightInitialized,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool get isFlashlightInitializedFailed => (super.noSuchMethod(
+        Invocation.getter(#isFlashlightInitializedFailed),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  set isFlashlightInitializedFailed(bool? _isFlashlightInitializedFailed) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #isFlashlightInitializedFailed,
+          _isFlashlightInitializedFailed,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  String get flashlightState => (super.noSuchMethod(
+        Invocation.getter(#flashlightState),
+        returnValue: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#flashlightState),
+        ),
+        returnValueForMissingStub: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#flashlightState),
+        ),
+      ) as String);
+
+  @override
+  set flashlightState(String? _flashlightState) => super.noSuchMethod(
+        Invocation.setter(
+          #flashlightState,
+          _flashlightState,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i2.ValueNotifier<String> get vpnStatus => (super.noSuchMethod(
+        Invocation.getter(#vpnStatus),
+        returnValue: _FakeValueNotifier_1<String>(
+          this,
+          Invocation.getter(#vpnStatus),
+        ),
+        returnValueForMissingStub: _FakeValueNotifier_1<String>(
+          this,
+          Invocation.getter(#vpnStatus),
+        ),
+      ) as _i2.ValueNotifier<String>);
+
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool isConnected() => (super.noSuchMethod(
+        Invocation.method(
+          #isConnected,
+          [],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  void toggleConnection() => super.noSuchMethod(
+        Invocation.method(
+          #toggleConnection,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i4.Future<void> updateVpnStatus(String? status) => (super.noSuchMethod(
+        Invocation.method(
+          #updateVpnStatus,
+          [status],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  void initCallbacksDesktop() => super.noSuchMethod(
+        Invocation.method(
+          #initCallbacksDesktop,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void initCallbackForMobile() => super.noSuchMethod(
+        Invocation.method(
+          #initCallbackForMobile,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void updateStatus(
+    bool? proxy,
+    bool? config,
+    bool? success,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #updateStatus,
+          [
+            proxy,
+            config,
+            success,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void addListener(_i12.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void removeListener(_i12.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [InternetStatusProvider].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockInternetStatusProvider extends _i1.Mock
+    implements _i14.InternetStatusProvider {
+  @override
+  bool get isConnected => (super.noSuchMethod(
+        Invocation.getter(#isConnected),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+
+  @override
+  _i4.Future<void> checkInternetConnection() => (super.noSuchMethod(
+        Invocation.method(
+          #checkInternetConnection,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void addListener(_i12.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void removeListener(_i12.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
