@@ -127,6 +127,11 @@ jobs:
           sudo rm -rf /var/cache/*
           df -h
 
+      - name: Delete Gradle cache
+        run: |
+          rm -rf $HOME/.gradle
+          echo "Gradle cache deleted successfully"
+
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk-build
