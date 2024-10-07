@@ -111,6 +111,11 @@ jobs:
           VERSION: "${{ env.version }}"
         run: make package-android
 
+      - name: Clean Go module and build cache
+        run: |
+          go clean -modcache
+          go clean -cache -testcache
+
       - uses: actions/upload-artifact@v4
         with:
           name: android-apk-build
