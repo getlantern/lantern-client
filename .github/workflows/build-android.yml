@@ -129,7 +129,7 @@ jobs:
 
       - name: Delete Gradle cache
         run: |
-          rm -rf $HOME/.gradle
+          sudo rm -rf $HOME/.gradle/caches
           echo "Gradle cache deleted successfully"
 
       - uses: actions/upload-artifact@v4
