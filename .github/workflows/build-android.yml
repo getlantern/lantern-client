@@ -63,12 +63,6 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
-      - name: Clean up disk space
-        run: |
-          df -h  # Check disk space
-          sudo apt-get clean
-          sudo apt-get autoremove
-
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
@@ -123,6 +117,15 @@ jobs:
         run: |
           go clean -modcache
           go clean -cache -testcache
+
+      - name: Clean up disk space
+        run: |
+          df -h  # Check disk space
+          sudo apt-get clean
+          sudo apt-get autoremove
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/cache/*
+          df -h
 
       - uses: actions/upload-artifact@v4
         with:
