@@ -28,16 +28,15 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
   }
 
   Future<void> _initializeWindow() async {
-    await windowManager.ensureInitialized();
-
+    //await windowManager.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
       await windowManager.setSize(const Size(360, 712));
-      await windowManager.setPreventClose(true);
-      await windowManager.setFullScreen(false);
-      await windowManager.setMaximizable(false);
-      await _setWindowResizable();
+      //await windowManager.setPreventClose(true);
+      //await windowManager.setFullScreen(false);
+      //await windowManager.setMaximizable(false);
+      //await _setWindowResizable();
       await windowManager.show();
-      await windowManager.focus();
+      //await windowManager.focus();
     });
   }
 
