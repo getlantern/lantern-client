@@ -31,7 +31,8 @@ Future<void> main() async {
   }
 
   if (isDesktop()) {
-    // start backend services before setting up window
+    await windowManager.ensureInitialized();
+    await windowManager.setSize(const ui.Size(360, 712));
     LanternFFI.startDesktopService();
     await WebsocketSubscriber().connect();
   } else {
@@ -58,20 +59,6 @@ Future<void> main() async {
     options.enableNativeCrashHandling = true;
     options.attachStacktrace = true;
   }, appRunner: () => runApp(const LanternApp()));
-
-  if (Platform.isWindows) {
-    // temporary workaround for distorted layout on Windows. The problem goes away
-    // after the window is resized.
-    // See https://github.com/leanflutter/window_manager/issues/464
-    // and https://github.com/KRTirtho/spotube/issues/1553
-    Future<void>.delayed(const Duration(seconds: 1), () async {
-      final size = await windowManager.getSize();
-      await windowManager.setSize(
-        ui.Size(size.width + 1, size.height + 1),
-      );
-      await windowManager.setResizable(false);
-    });
-  }
 }
 
 Future<void> _initGoogleMobileAds() async {
