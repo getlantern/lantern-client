@@ -16,7 +16,8 @@ const TAB_ACCOUNT = 'account';
 const TAB_DEVELOPER = 'developer';
 
 class SessionModel extends Model {
-  late final EventManager eventManager;
+  final EventManager eventManager = EventManager('lantern_event_channel');
+
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> isTestPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
@@ -40,7 +41,6 @@ class SessionModel extends Model {
 
   SessionModel() : super('session') {
     if (isMobile()) {
-      eventManager = EventManager('lantern_event_channel');
       isStoreVersion = singleValueNotifier(
         'storeVersion',
         false,

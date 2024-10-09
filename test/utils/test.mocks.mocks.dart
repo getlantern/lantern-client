@@ -144,6 +144,38 @@ class _FakeValueListenable_9<T> extends _i1.SmartFake
         );
 }
 
+class _FakeMethodCodec_10 extends _i1.SmartFake implements _i2.MethodCodec {
+  _FakeMethodCodec_10(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeBinaryMessenger_11 extends _i1.SmartFake
+    implements _i2.BinaryMessenger {
+  _FakeBinaryMessenger_11(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeStreamSubscription_12<T> extends _i1.SmartFake
+    implements _i4.StreamSubscription<T> {
+  _FakeStreamSubscription_12(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [SessionModel].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -5610,4 +5642,151 @@ class MockInternetStatusProvider extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [EventManager].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockEventManager extends _i1.Mock implements _i2.EventManager {
+  @override
+  int get nextSubscriberID => (super.noSuchMethod(
+        Invocation.getter(#nextSubscriberID),
+        returnValue: 0,
+        returnValueForMissingStub: 0,
+      ) as int);
+
+  @override
+  set nextSubscriberID(int? _nextSubscriberID) => super.noSuchMethod(
+        Invocation.setter(
+          #nextSubscriberID,
+          _nextSubscriberID,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  Map<
+      int,
+      void Function(
+        _i2.Event,
+        Map<dynamic, dynamic>,
+      )> get subscribers => (super.noSuchMethod(
+        Invocation.getter(#subscribers),
+        returnValue: <int,
+            void Function(
+          _i2.Event,
+          Map<dynamic, dynamic>,
+        )>{},
+        returnValueForMissingStub: <int,
+            void Function(
+          _i2.Event,
+          Map<dynamic, dynamic>,
+        )>{},
+      ) as Map<
+          int,
+          void Function(
+            _i2.Event,
+            Map<dynamic, dynamic>,
+          )>);
+
+  @override
+  Map<int, _i4.StreamSubscription<dynamic>> get subscriptions =>
+      (super.noSuchMethod(
+        Invocation.getter(#subscriptions),
+        returnValue: <int, _i4.StreamSubscription<dynamic>>{},
+        returnValueForMissingStub: <int, _i4.StreamSubscription<dynamic>>{},
+      ) as Map<int, _i4.StreamSubscription<dynamic>>);
+
+  @override
+  String get name => (super.noSuchMethod(
+        Invocation.getter(#name),
+        returnValue: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#name),
+        ),
+        returnValueForMissingStub: _i7.dummyValue<String>(
+          this,
+          Invocation.getter(#name),
+        ),
+      ) as String);
+
+  @override
+  _i2.MethodCodec get codec => (super.noSuchMethod(
+        Invocation.getter(#codec),
+        returnValue: _FakeMethodCodec_10(
+          this,
+          Invocation.getter(#codec),
+        ),
+        returnValueForMissingStub: _FakeMethodCodec_10(
+          this,
+          Invocation.getter(#codec),
+        ),
+      ) as _i2.MethodCodec);
+
+  @override
+  _i2.BinaryMessenger get binaryMessenger => (super.noSuchMethod(
+        Invocation.getter(#binaryMessenger),
+        returnValue: _FakeBinaryMessenger_11(
+          this,
+          Invocation.getter(#binaryMessenger),
+        ),
+        returnValueForMissingStub: _FakeBinaryMessenger_11(
+          this,
+          Invocation.getter(#binaryMessenger),
+        ),
+      ) as _i2.BinaryMessenger);
+
+  @override
+  void Function() subscribe(
+    _i2.Event? event,
+    void Function(
+      _i2.Event,
+      Map<dynamic, dynamic>,
+    )? onNewEvent,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #subscribe,
+          [
+            event,
+            onNewEvent,
+          ],
+        ),
+        returnValue: () {},
+        returnValueForMissingStub: () {},
+      ) as void Function());
+
+  @override
+  _i4.StreamSubscription<dynamic> listen(_i4.Stream<dynamic>? stream) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #listen,
+          [stream],
+        ),
+        returnValue: _FakeStreamSubscription_12<dynamic>(
+          this,
+          Invocation.method(
+            #listen,
+            [stream],
+          ),
+        ),
+        returnValueForMissingStub: _FakeStreamSubscription_12<dynamic>(
+          this,
+          Invocation.method(
+            #listen,
+            [stream],
+          ),
+        ),
+      ) as _i4.StreamSubscription<dynamic>);
+
+  @override
+  _i4.Stream<dynamic> receiveBroadcastStream([dynamic arguments]) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #receiveBroadcastStream,
+          [arguments],
+        ),
+        returnValue: _i4.Stream<dynamic>.empty(),
+        returnValueForMissingStub: _i4.Stream<dynamic>.empty(),
+      ) as _i4.Stream<dynamic>);
 }

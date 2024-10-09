@@ -7,7 +7,7 @@ import 'package:lantern/features/vpn/vpn_notifier.dart';
 import 'package:mockito/annotations.dart';
 
 /// All generate mock should happened or add here
-/// For generate mock run flutter pub run build_runner build --delete-conflicting-outputs
+/// For generate mock run dart run run build_runner build --delete-conflicting-outputs
 /// So for most other test cases we need import only one class
 @GenerateNiceMocks([
   MockSpec<SessionModel>(),
@@ -17,5 +17,6 @@ import 'package:mockito/annotations.dart';
   MockSpec<BottomBarChangeNotifier>(),
   MockSpec<VPNChangeNotifier>(),
   MockSpec<InternetStatusProvider>(),
+  MockSpec<EventManager>(),
 ])
 void main() {}
