@@ -147,6 +147,13 @@ bool isMobile() {
   return Platform.isAndroid || Platform.isIOS;
 }
 
+bool isAndroid() {
+  if (kDebugMode) {
+    return (defaultTargetPlatform == TargetPlatform.android);
+  }
+  return Platform.isAndroid ;
+}
+
 bool isDesktop() {
   if (kDebugMode) {
     return (defaultTargetPlatform == TargetPlatform.macOS ||

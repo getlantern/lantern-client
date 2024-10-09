@@ -87,7 +87,7 @@ class VPNTab extends StatelessWidget {
                             VPNStatus(),
                             const CDivider(height: 32.0),
                             const ServerLocationWidget(),
-                            if (Platform.isAndroid) ...{
+                           if (isAndroid()) ...{
                               const CDivider(height: 32.0),
                               SplitTunnelingWidget(),
                             },
@@ -114,6 +114,7 @@ class VPNTapSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("VPNTapSkeleton");
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade100,
       highlightColor: Colors.grey.shade200,
