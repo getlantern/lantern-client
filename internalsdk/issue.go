@@ -35,7 +35,7 @@ func SendIssueReport(
 		return err
 	}
 	return issue.SendReport(
-		NewUserConfig(&panickingSessionImpl{session}),
+		newUserConfig(&panickingSessionImpl{session}),
 		issueTypeInt,
 		description,
 		subscriptionLevel,
