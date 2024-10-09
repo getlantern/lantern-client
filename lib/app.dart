@@ -4,6 +4,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/messaging/messaging.dart';
+import 'package:lantern/features/tray/tray_container.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
 import 'package:lantern/features/window/window_container.dart';
 
@@ -114,6 +115,56 @@ class _LanternAppState extends State<LanternApp>
     }
   }
 
+  Widget _buildMaterialApp(BuildContext context, String lang) {
+    final currentLocal = View.of(context).platformDispatcher.locale;
+    final app = MaterialApp.router(
+      locale: currentLocale(lang),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: false,
+        fontFamily: _getLocaleBasedFont(currentLocal),
+        brightness: Brightness.light,
+        primarySwatch: Colors.grey,
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+        ),
+        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
+      ),
+      title: 'app_name'.i18n,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      routerConfig: globalRouter.config(
+        deepLinkBuilder: navigateToDeepLink,
+      ),
+      supportedLocales: const [
+        Locale('ar', 'EG'),
+        Locale('fr', 'FR'),
+        Locale('en', 'US'),
+        Locale('fa', 'IR'),
+        Locale('th', 'TH'),
+        Locale('ms', 'MY'),
+        Locale('ru', 'RU'),
+        Locale('ur', 'IN'),
+        Locale('zh', 'CN'),
+        Locale('zh', 'HK'),
+        Locale('es', 'ES'),
+        Locale('es', 'CU'),
+        Locale('tr', 'TR'),
+        Locale('vi', 'VN'),
+        Locale('my', 'MM'),
+      ],
+    );
+    if (isDesktop()) {
+      return WindowContainer(
+        TrayContainer(app),
+      );
+    }
+    return app;
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentLocal = View.of(context).platformDispatcher.locale;
@@ -143,49 +194,7 @@ class _LanternAppState extends State<LanternApp>
             child: I18n(
               initialLocale: currentLocale(lang),
               child: ScaffoldMessenger(
-                child: WindowContainer(
-                  MaterialApp.router(
-                    locale: currentLocale(lang),
-                    debugShowCheckedModeBanner: false,
-                    theme: ThemeData(
-                      useMaterial3: false,
-                      fontFamily: _getLocaleBasedFont(currentLocal),
-                      brightness: Brightness.light,
-                      primarySwatch: Colors.grey,
-                      appBarTheme: const AppBarTheme(
-                        systemOverlayStyle: SystemUiOverlayStyle.dark,
-                      ),
-                      colorScheme: ColorScheme.fromSwatch()
-                          .copyWith(secondary: Colors.black),
-                    ),
-                    title: 'app_name'.i18n,
-                    localizationsDelegates: const [
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                    ],
-                    routerConfig: globalRouter.config(
-                      deepLinkBuilder: navigateToDeepLink,
-                    ),
-                    supportedLocales: const [
-                      Locale('ar', 'EG'),
-                      Locale('fr', 'FR'),
-                      Locale('en', 'US'),
-                      Locale('fa', 'IR'),
-                      Locale('th', 'TH'),
-                      Locale('ms', 'MY'),
-                      Locale('ru', 'RU'),
-                      Locale('ur', 'IN'),
-                      Locale('zh', 'CN'),
-                      Locale('zh', 'HK'),
-                      Locale('es', 'ES'),
-                      Locale('es', 'CU'),
-                      Locale('tr', 'TR'),
-                      Locale('vi', 'VN'),
-                      Locale('my', 'MM'),
-                    ],
-                  ),
-                ),
+                child: _buildMaterialApp(context, lang),
               ),
             ),
           );
