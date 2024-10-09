@@ -54,13 +54,11 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
     // See https://github.com/leanflutter/window_manager/issues/464
     // and https://github.com/KRTirtho/spotube/issues/1553
     await Future<void>.delayed(const Duration(milliseconds: 100), () async {
-      windowManager.getSize().then((Size value) {
-        windowManager
-            .setSize(
-              Size(value.width + 1, value.height + 1),
-            )
-            .then((_) => setState(() => {}));
-      });
+      final size = await windowManager.getSize();
+      await windowManager.setSize(
+        Size(size.width + 1, size.height + 1),
+      );
+      setState(() => {});
       await windowManager.setResizable(false);
     });
   }
