@@ -171,7 +171,7 @@ class MainActivity :
         }
     }
 
-    @SuppressLint("WrongConstant")
+
     override fun onStart() {
         super.onStart()
         val packageName = activity.packageName
@@ -235,9 +235,22 @@ class MainActivity :
 
 
     private fun startLanternService() {
-        val intent = Intent(this, LanternService::class.java)
-        context.startService(intent)
-        Logger.debug(TAG, "Lantern service started at ${System.currentTimeMillis()}")
+        try{
+            val isServiceRunning = Utils.isServiceRunning(activity, LanternService::class.java)
+            if(isServiceRunning) {
+                Logger.debug(TAG, "Lantern service already running")
+                return
+            }
+            val intent = Intent(this, LanternService::class.java)
+            context.startService(intent)
+            Logger.debug(TAG, "Lantern service started at ${System.currentTimeMillis()}")
+        }catch (e: IllegalStateException){
+            Logger.error(TAG, "Error starting Lantern service", e)
+        }catch (e: Exception){
+            Logger.error(TAG, "Error starting Lantern service", e)
+        }
+
+
     }
 
     /**
