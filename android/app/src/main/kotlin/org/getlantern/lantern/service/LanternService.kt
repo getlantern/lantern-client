@@ -88,10 +88,7 @@ open class LanternService : Service(), Runnable {
     }
 
     private fun afterStart() {
-        if (LanternApp.session.userId().toInt() == 0) {
-            // create a user if no user id is stored
-            EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING)
-        }
+        EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
         if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
             // check if an update is available
             autoUpdater.checkForUpdates(null)
