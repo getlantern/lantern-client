@@ -24,20 +24,18 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
     if (isDesktop()) {
       windowManager.addListener(this);
       _initializeWindow();
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await windowManager.setPreventClose(true);
+        await _setWindowResizable();
+      });
     }
   }
 
   Future<void> _initializeWindow() async {
-    //await windowManager.ensureInitialized();
-    windowManager.waitUntilReadyToShow().then((_) async {
-      await windowManager.setSize(const Size(360, 712));
-      //await windowManager.setPreventClose(true);
-      //await windowManager.setFullScreen(false);
-      //await windowManager.setMaximizable(false);
-      //await _setWindowResizable();
-      await windowManager.show();
-      //await windowManager.focus();
-    });
+    await windowManager.ensureInitialized();
+    await windowManager.setSize(const Size(360, 712));
+    await windowManager.show();
+    await windowManager.focus();
   }
 
   @override
