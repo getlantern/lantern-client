@@ -274,25 +274,33 @@ class MainActivity :
                     accountInitDialog?.dismiss()
                     finish()
                 }
-                accountInitDialog?.show()
+                if (!isFinishing) {
+                    accountInitDialog?.show()
+                }
             }
 
             AccountInitializationStatus.Status.SUCCESS -> {
-                accountInitDialog?.let { it.dismiss() }
+                if (!isFinishing) {
+                    accountInitDialog?.dismiss()
+                }
+
             }
 
             AccountInitializationStatus.Status.FAILURE -> {
-                accountInitDialog?.let { it.dismiss() }
+                if (!isFinishing) {
+                    accountInitDialog?.dismiss()
 
-                Utils.showAlertDialog(
-                    this,
-                    getString(R.string.connection_error),
-                    getString(R.string.reopen_to_try, appName),
-                    getString(R.string.ok),
-                    true,
-                    null,
-                    false,
-                )
+                    Utils.showAlertDialog(
+                        this,
+                        getString(R.string.connection_error),
+                        getString(R.string.reopen_to_try, appName),
+                        getString(R.string.ok),
+                        true,
+                        null,
+                        false,
+                    )
+                }
+
             }
         }
     }
