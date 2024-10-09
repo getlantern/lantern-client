@@ -337,7 +337,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 		-androidapi=23 \
 		-ldflags="-s -w $(LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
-		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/lantern-client/internalsdk/common github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
+		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)

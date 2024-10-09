@@ -32,6 +32,7 @@ open class LanternService : Service(), Runnable {
         val AUTO_BOOTED = "autoBooted"
     }
 
+    private var thread: Thread? = null
     private val random: Random = Random()
     private val serviceIcon: Int = if (LanternApp.session.chatEnabled()) {
         R.drawable.status_chat
