@@ -64,15 +64,10 @@ jobs:
           dart pub global activate protoc_plugin
 
       - name: Build liblantern.dll
-        if: ${{inputs.update-suffix == '386'}}
-        run: make windows
-
-      - name: Build liblantern.dll
-        if: ${{inputs.update-suffix == 'x64'}}
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
-        run: make windows64
+        run: make windows
 
       - run: make ffigen
 

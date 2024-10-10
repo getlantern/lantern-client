@@ -496,16 +496,12 @@ package-linux:
 	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
 
 .PHONY: windows
-windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
-$(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
-$(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
-$(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
+windows: $(WINDOWS_LIB_NAME) ## Build lantern for windows
 $(WINDOWS_LIB_NAME): export GOOS = windows
-$(WINDOWS_LIB_NAME): export GOARCH = 386
 $(WINDOWS_LIB_NAME): export LIB_NAME = $(WINDOWS_LIB_NAME)
 $(WINDOWS_LIB_NAME): export BUILD_TAGS += walk_use_cgo
 $(WINDOWS_LIB_NAME): export EXTRA_LDFLAGS +=
-$(WINDOWS_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
+$(WINDOWS_LIB_NAME): export GO_BUILD_FLAGS += -buildmode=c-shared
 $(WINDOWS_LIB_NAME): export BUILD_RACE =
 $(WINDOWS_LIB_NAME): export Environment = production
 $(WINDOWS_LIB_NAME): desktop-lib
