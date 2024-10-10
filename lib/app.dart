@@ -158,9 +158,7 @@ class _LanternAppState extends State<LanternApp>
       ],
     );
     if (isDesktop()) {
-      return WindowContainer(
-        TrayContainer(app),
-      );
+      return WindowContainer(TrayContainer(app));
     }
     return app;
   }
