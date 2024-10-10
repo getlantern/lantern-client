@@ -187,6 +187,39 @@ void main() {
         },
         variant: TargetPlatformVariant.all(excluding: {TargetPlatform.fuchsia}),
       );
+
+      testWidgets(
+        'render VPN tap internet warning',
+        (widgetTester) async {
+          final vpnTapWidget = MultiProvider(providers: [
+            ChangeNotifierProvider<BottomBarChangeNotifier>.value(
+                value: mockBottomBarChangeNotifier),
+            ChangeNotifierProvider<VPNChangeNotifier>.value(
+                value: mockVPNChangeNotifier),
+            ChangeNotifierProvider<InternetStatusProvider>.value(
+                value: mockInternetStatusProvider),
+          ], child: wrapWithMaterialApp(const VPNTab()));
+
+          when(mockVPNChangeNotifier.isFlashlightInitialized).thenReturn(true);
+          when(mockInternetStatusProvider.isConnected).thenReturn(false);
+
+          if (isDesktop()) {
+            when(mockVPNChangeNotifier.vpnStatus)
+                .thenReturn(ValueNotifier('disconnected'));
+          }
+          stubSessionModel(
+              mockSessionModel: mockSessionModel,
+              mockBuildContext: mockBuildContext);
+
+          stubVpnModel(
+              mockVpnModel: mockVpnModel, mockBuildContext: mockBuildContext);
+
+          await widgetTester.pumpWidget(vpnTapWidget);
+
+          expect(find.byType(InternetChecker), findsOneWidget);
+        },
+        variant: TargetPlatformVariant.all(excluding: {TargetPlatform.fuchsia}),
+      );
     },
   );
 }

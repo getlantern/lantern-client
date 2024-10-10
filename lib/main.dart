@@ -6,7 +6,6 @@ import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/replica/ui/utils.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:window_manager/window_manager.dart';
 
 // IOS issue
 // https://github.com/flutter/flutter/issues/133465

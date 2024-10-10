@@ -216,3 +216,16 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+
+# petrol configuration
+patrol:
+  app_name: Lantern
+  flavor: prod
+  android:
+    package_name: org.getlantern.lantern
+  ios:
+    bundle_id: org.getlantern.lantern
+  macos:
+    bundle_id: org.getlantern.lantern
