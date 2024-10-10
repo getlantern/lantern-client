@@ -16,24 +16,39 @@ import androidx.core.app.NotificationManagerCompat
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
+import org.getlantern.mobilesdk.Logger
 import java.util.concurrent.LinkedBlockingDeque
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ServiceHelper(
     private val service: Service,
-    private val defaultIcon: Int,
+    private val defaultIcon: Int?,
     private val defaultText: Int
 ) {
     private val foregrounded = AtomicBoolean(false)
 
     fun makeForeground() {
-        if (foregrounded.compareAndSet(false, true)) {
-            val doIt = {
-                service.startForeground(notificationId, buildNotification(defaultIcon, defaultText))
+        try {
+            val serviceIcon = defaultIcon
+                ?: if (LanternApp.session.chatEnabled()) {
+                    R.drawable.status_chat
+                } else {
+                    R.drawable.status_plain
+                }
+            if (foregrounded.compareAndSet(false, true)) {
+                val doIt = {
+                    service.startForeground(
+                        notificationId,
+                        buildNotification(serviceIcon, defaultText)
+                    )
+                }
+                serviceDeque.push(doIt)
+                doIt()
             }
-            serviceDeque.push(doIt)
-            doIt()
+        } catch (e: Exception) {
+            Logger.debug("ServiceHelper", "Failed to make service foreground", e)
         }
+
     }
 
     fun onDestroy() {
