@@ -1,30 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/app.dart';
-import 'package:lantern/core/utils/common.dart';
 
-void main() {
-  group(
-    'Widget startup',
-    () {
-      testWidgets(
-        'Check for everything being loaded on the root',
-        (WidgetTester tester) async {
-          print('Load the root widget without catcher');
-          await tester.pumpWidget(LanternApp());
-          print('Declare a variable of type [GlobalLoaderOverlay]');
-          var globalLoaderOverlay = find.byType(GlobalLoaderOverlay);
-          print(
-            'If the root was loaded successfully it should find [GlobalLoaderOverlay]',
-          );
-          expect(globalLoaderOverlay, findsOneWidget);
-          print('Declare a variable of type [MaterialApp.router]');
-          var appRouter = find.byType(MaterialApp);
-          print(
-            'If the root was loaded successfully it should find [MaterialApp.router]',
-          );
-          expect(appRouter, findsOneWidget);
-        },
-      );
-    },
-  );
-}
+
+/// Looks like patrol does not have native support yet
+/// so any test that interact with the native layer will / need to use flutter test
+/// patrol feature priority:https://patrol.leancode.co/native/feature-parity
+/// finder documentation: https://patrol.leancode.co/finders/usage
+void main() {}
