@@ -3,7 +3,7 @@ import 'package:lantern/core/utils/common.dart';
 //// An arrow that indicates that clicking on the containing control will continue to a new
 //// screen. It is sensitive to the current language's directionality.
 class ContinueArrow extends StatelessWidget {
-  const ContinueArrow();
+  const ContinueArrow({super.key});
 
   @override
   Widget build(BuildContext context) {

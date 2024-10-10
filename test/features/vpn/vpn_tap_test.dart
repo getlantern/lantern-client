@@ -53,11 +53,12 @@ void main() {
       sl.reset();
     },
   );
+
   group(
-    "render VPN tap for mobile",
+    "render VPN tap",
     () {
       testWidgets(
-        'render VPN tap skeleton for mobile',
+        'render VPN tap for mobile',
         (widgetTester) async {
           final vpnTapWidget = MultiProvider(providers: [
             ChangeNotifierProvider<BottomBarChangeNotifier>.value(
@@ -68,27 +69,15 @@ void main() {
                 value: mockInternetStatusProvider),
           ], child: wrapWithMaterialApp(const VPNTab()));
 
-          when(mockSessionModel.proUser(any)).thenAnswer(
-            (realInvocation) {
-              final builder = realInvocation.positionalArguments[0]
-                  as ValueWidgetBuilder<bool>;
-              return builder(mockBuildContext, false, null);
-            },
-          );
+          when(mockVPNChangeNotifier.isFlashlightInitialized).thenReturn(true);
 
-          when(mockSessionModel.shouldShowAds(any)).thenAnswer(
-            (realInvocation) {
-              final builder = realInvocation.positionalArguments[0]
-                  as ValueWidgetBuilder<String>;
-              return builder(mockBuildContext, "", null);
-            },
-          );
+          // Session model stubs
+          stubSessionModel(mockSessionModel: mockSessionModel, mockBuildContext: mockBuildContext,);
 
-          when(mockSessionModel.proxyAvailable)
-              .thenAnswer((realInvocation) => ValueNotifier(true));
+
+       
 
           ///stub vpn models
-
           when(mockVpnModel.vpnStatus(any, any)).thenAnswer(
             (realInvocation) {
               final builder = realInvocation.positionalArguments[1]
@@ -98,13 +87,19 @@ void main() {
           );
 
           await widgetTester.pumpWidget(vpnTapWidget);
-
-          expect(find.byType(VPNTapSkeleton), findsOneWidget);
+          expect(find.byType(VPNTapSkeleton), findsNothing);
+          expect(find.byType(ProBanner), findsOneWidget);
+          expect(find.byType(VPNSwitch), findsOneWidget);
+          expect(find.byType(ServerLocationWidget), findsOneWidget);
+          expect(find.byType(SplitTunnelingWidget), findsOneWidget);
+          expect(find.byType(VPNBandwidth), findsOneWidget);
+          expect(find.byType(LinearProgressIndicator), findsOneWidget);
         },
+        variant: TargetPlatformVariant.only(TargetPlatform.android),
       );
 
       testWidgets(
-        'render VPN tap for mobile',
+        'render VPN tap for ios',
         (widgetTester) async {
           final vpnTapWidget = MultiProvider(providers: [
             ChangeNotifierProvider<BottomBarChangeNotifier>.value(
@@ -128,7 +123,6 @@ void main() {
             },
           );
 
-
           when(mockSessionModel.shouldShowAds(any)).thenAnswer(
             (realInvocation) {
               final builder = realInvocation.positionalArguments[0]
@@ -151,15 +145,15 @@ void main() {
             var bandwidth = Bandwidth()
               ..allowed = Int64(250)
               ..remaining = Int64(200)
-              ..percent = Int64(20);
-
+              ..percent = Int64(28);
             return builder(mockBuildContext, bandwidth, null);
           });
 
+          /// even with spilt tunneling widget should nto show
           when(mockSessionModel.splitTunneling(any)).thenAnswer(
-                (realInvocation) {
+            (realInvocation) {
               final builder = realInvocation.positionalArguments[0]
-              as ValueWidgetBuilder<bool>;
+                  as ValueWidgetBuilder<bool>;
               return builder(mockBuildContext, false, null);
             },
           );
@@ -174,15 +168,145 @@ void main() {
           );
 
           await widgetTester.pumpWidget(vpnTapWidget);
-
           expect(find.byType(VPNTapSkeleton), findsNothing);
           expect(find.byType(ProBanner), findsOneWidget);
           expect(find.byType(VPNSwitch), findsOneWidget);
           expect(find.byType(ServerLocationWidget), findsOneWidget);
-          expect(find.byType(SplitTunnelingWidget), findsOneWidget);
-          expect(find.byType(VPNBandwidth), findsNothing);
+          expect(find.byType(SplitTunnelingWidget), findsNothing);
+          expect(find.byType(VPNBandwidth), findsOneWidget);
+          expect(find.byType(LinearProgressIndicator), findsOneWidget);
         },
-        variant: TargetPlatformVariant.only(TargetPlatform.android),
+        variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+      );
+
+      testWidgets(
+        'render VPN tap for desktop',
+        (widgetTester) async {
+          final vpnTapWidget = MultiProvider(providers: [
+            ChangeNotifierProvider<BottomBarChangeNotifier>.value(
+                value: mockBottomBarChangeNotifier),
+            ChangeNotifierProvider<VPNChangeNotifier>.value(
+                value: mockVPNChangeNotifier),
+            ChangeNotifierProvider<InternetStatusProvider>.value(
+                value: mockInternetStatusProvider),
+          ], child: wrapWithMaterialApp(const VPNTab()));
+
+          when(mockVPNChangeNotifier.isFlashlightInitialized).thenReturn(true);
+          when(mockVPNChangeNotifier.vpnStatus)
+              .thenAnswer((realInvocation) => ValueNotifier('disconnected'));
+
+          /// Session model stubs
+          when(mockSessionModel.proxyAvailable)
+              .thenAnswer((realInvocation) => ValueNotifier(true));
+          when(mockSessionModel.proUser(any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<bool>;
+              return builder(mockBuildContext, false, null);
+            },
+          );
+
+          when(mockSessionModel.serverInfo(any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<ServerInfo?>;
+              return builder(mockBuildContext, null, null);
+            },
+          );
+
+          when(mockSessionModel.bandwidth(any)).thenAnswer((realInvocation) {
+            final builder = realInvocation.positionalArguments[0]
+                as ValueWidgetBuilder<Bandwidth>;
+            var bandwidth = Bandwidth()
+              ..allowed = Int64(250)
+              ..remaining = Int64(200)
+              ..percent = Int64(28);
+            return builder(mockBuildContext, bandwidth, null);
+          });
+
+          /// even with spilt tunneling widget should nto show
+          when(mockSessionModel.splitTunneling(any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<bool>;
+              return builder(mockBuildContext, false, null);
+            },
+          );
+
+          ///stub vpn models
+
+          when(mockVpnModel.vpnStatus(any, any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[1]
+                  as ValueWidgetBuilder<String>;
+              return builder(mockBuildContext, 'disconnected', null);
+            },
+          );
+
+          await widgetTester.pumpWidget(vpnTapWidget);
+          expect(find.byType(VPNTapSkeleton), findsNothing);
+          expect(find.byType(ProBanner), findsOneWidget);
+          expect(find.byType(VPNSwitch), findsOneWidget);
+          expect(find.byType(ServerLocationWidget), findsOneWidget);
+          expect(find.byType(SplitTunnelingWidget), findsNothing);
+          expect(find.byType(VPNBandwidth), findsOneWidget);
+          expect(find.byType(LinearProgressIndicator), findsOneWidget);
+        },
+        variant: TargetPlatformVariant.desktop(),
+      );
+    },
+  );
+
+  group(
+    "render common widgets properly for al platforms",
+    () {
+      testWidgets(
+        'render VPN tap skeleton ',
+        (widgetTester) async {
+          final vpnTapWidget = MultiProvider(providers: [
+            ChangeNotifierProvider<BottomBarChangeNotifier>.value(
+                value: mockBottomBarChangeNotifier),
+            ChangeNotifierProvider<VPNChangeNotifier>.value(
+                value: mockVPNChangeNotifier),
+            ChangeNotifierProvider<InternetStatusProvider>.value(
+                value: mockInternetStatusProvider),
+          ], child: wrapWithMaterialApp(const VPNTab()));
+
+          if (isDesktop()) {
+            when(mockVPNChangeNotifier.vpnStatus)
+                .thenReturn(ValueNotifier('disconnected'));
+          }
+          when(mockSessionModel.proUser(any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<bool>;
+              return builder(mockBuildContext, false, null);
+            },
+          );
+
+          when(mockSessionModel.shouldShowAds(any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[0]
+                  as ValueWidgetBuilder<String>;
+              return builder(mockBuildContext, "", null);
+            },
+          );
+
+          when(mockSessionModel.proxyAvailable)
+              .thenAnswer((realInvocation) => ValueNotifier(true));
+
+          ///stub vpn models
+          when(mockVpnModel.vpnStatus(any, any)).thenAnswer(
+            (realInvocation) {
+              final builder = realInvocation.positionalArguments[1]
+                  as ValueWidgetBuilder<String>;
+              return builder(mockBuildContext, 'disconnected', null);
+            },
+          );
+          await widgetTester.pumpWidget(vpnTapWidget);
+          expect(find.byType(VPNTapSkeleton), findsOneWidget);
+        },
+        variant: TargetPlatformVariant.all(excluding: {TargetPlatform.fuchsia}),
       );
     },
   );

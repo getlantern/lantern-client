@@ -11,7 +11,7 @@ import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
 class VPNTab extends StatelessWidget {
-  const VPNTab({Key? key}) : super(key: key);
+  const VPNTab({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -332,7 +332,7 @@ class SplitTunnelingWidget extends StatelessWidget {
                 style: tsSubtitle4,
               ),
             ),
-            mirrorLTR(context: context, child: const ContinueArrow())
+            const ContinueArrow(),
           ],
         ),
       ),
