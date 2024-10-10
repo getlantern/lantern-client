@@ -4,10 +4,8 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
-	"runtime"
 	"runtime/debug"
 	"strconv"
 	"strings"
@@ -25,11 +23,8 @@ import (
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/sentry"
 	"github.com/getlantern/lantern-client/desktop/settings"
-	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
-	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/osversion"
 	"github.com/joho/godotenv"
 )
@@ -41,11 +36,8 @@ const (
 )
 
 var (
-	log        = golog.LoggerFor("lantern-client.main")
-	flags      = flashlight.ParseFlags()
-	proClient  proclient.ProClient
-	authClient auth.AuthClient
-	a          *app.App
+	log = golog.LoggerFor("lantern-client.main")
+	a   *app.App
 )
 
 var issueMap = map[string]string{
@@ -61,23 +53,8 @@ var issueMap = map[string]string{
 	"Other":                       "9",
 }
 
-func init() {
-	cdir := configDir(&flags)
-	ss := settings.LoadSettings(cdir)
-	userConfig := func() common.UserConfig {
-		return settings.UserConfig(ss)
-	}
-	proClient = proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
-		UserConfig: userConfig,
-	})
-	authClient = auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
-
-	a = app.NewApp(flags, cdir, proClient, ss)
-}
-
 //export start
 func start() *C.char {
-	runtime.LockOSThread()
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
@@ -106,7 +83,7 @@ func start() *C.char {
 		})
 	}
 	golog.SetPrepender(logging.Timestamped)
-
+	flags := flashlight.ParseFlags()
 	if flags.Pprof {
 		addr := "localhost:6060"
 		go func() {
@@ -121,6 +98,9 @@ func start() *C.char {
 	}
 
 	// i18nInit(a)
+	configDir := configDir(&flags)
+
+	a = app.NewApp(flags, configDir)
 	a.Run(context.Background())
 
 	return C.CString("")
@@ -172,7 +152,7 @@ func hasPlanUpdatedOrBuy() *C.char {
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	cacheUserData, isOldFound := cachedUserData()
 	//Get latest user data
-	resp, err := proClient.UserData(context.Background())
+	resp, err := a.ProClient().UserData(context.Background())
 	if err != nil {
 		return sendError(err)
 	}
@@ -189,7 +169,7 @@ func hasPlanUpdatedOrBuy() *C.char {
 
 //export applyRef
 func applyRef(referralCode *C.char) *C.char {
-	_, err := proClient.ReferralAttach(context.Background(), C.GoString(referralCode))
+	_, err := a.ProClient().ReferralAttach(context.Background(), C.GoString(referralCode))
 	if err != nil {
 		return sendError(err)
 	}
@@ -211,7 +191,7 @@ func devices() *C.char {
 
 //export approveDevice
 func approveDevice(code *C.char) *C.char {
-	resp, err := proClient.LinkCodeApprove(context.Background(), C.GoString(code))
+	resp, err := a.ProClient().LinkCodeApprove(context.Background(), C.GoString(code))
 	if err != nil {
 		return sendError(err)
 	}
@@ -220,7 +200,7 @@ func approveDevice(code *C.char) *C.char {
 
 //export removeDevice
 func removeDevice(deviceId *C.char) *C.char {
-	resp, err := proClient.DeviceRemove(context.Background(), C.GoString(deviceId))
+	resp, err := a.ProClient().DeviceRemove(context.Background(), C.GoString(deviceId))
 	if err != nil {
 		log.Error(err)
 		return sendError(err)
@@ -230,7 +210,7 @@ func removeDevice(deviceId *C.char) *C.char {
 
 //export userLinkValidate
 func userLinkValidate(code *C.char) *C.char {
-	_, err := proClient.UserLinkValidate(context.Background(), C.GoString(code))
+	_, err := a.ProClient().UserLinkValidate(context.Background(), C.GoString(code))
 	if err != nil {
 		log.Error(err)
 		return sendError(err)
@@ -268,7 +248,7 @@ func emailAddress() *C.char {
 
 //export emailExists
 func emailExists(email *C.char) *C.char {
-	_, err := proClient.EmailExists(context.Background(), C.GoString(email))
+	_, err := a.ProClient().EmailExists(context.Background(), C.GoString(email))
 	if err != nil {
 		return sendError(err)
 	}
@@ -284,7 +264,7 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 		"email":          C.GoString(email),
 		"plan":           C.GoString(plan),
 	}
-	_, err := proClient.PurchaseRequest(ctx, puchaseData)
+	_, err := a.ProClient().PurchaseRequest(ctx, puchaseData)
 	if err != nil {
 		return sendError(err)
 	}
@@ -299,7 +279,7 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 //
 //export redeemResellerCode
 func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.char {
-	response, err := proClient.RedeemResellerCode(context.Background(), &protos.RedeemResellerCodeRequest{
+	response, err := a.ProClient().RedeemResellerCode(context.Background(), &protos.RedeemResellerCodeRequest{
 		Currency:       C.GoString(currency),
 		DeviceName:     C.GoString(deviceName),
 		Email:          C.GoString(email),
@@ -393,7 +373,7 @@ func deviceName() string {
 
 //export deviceLinkingCode
 func deviceLinkingCode() *C.char {
-	resp, err := proClient.LinkCodeRequest(context.Background(), deviceName())
+	resp, err := a.ProClient().LinkCodeRequest(context.Background(), deviceName())
 	if err != nil {
 		return sendError(err)
 	}
@@ -403,7 +383,7 @@ func deviceLinkingCode() *C.char {
 //export paymentRedirect
 func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
-	resp, err := proClient.PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
+	resp, err := a.ProClient().PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
 		Provider:    C.GoString(provider),
 		Currency:    strings.ToUpper(C.GoString(currency)),

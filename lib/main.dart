@@ -31,9 +31,9 @@ Future<void> main() async {
   initServices();
 
   if (isDesktop()) {
+    // start backend services before setting up window
     LanternFFI.startDesktopService();
     await WebsocketSubscriber().connect();
-    await windowManager.ensureInitialized();
   } else {
     await _initGoogleMobileAds();
     // Due to replica we are using lot of cache
