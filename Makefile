@@ -495,8 +495,8 @@ linux-arm64: desktop-lib ## Build lantern for linux-arm64
 package-linux:
 	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
 
-.PHONY: windows
-windows: $(WINDOWS_LIB_NAME) ## Build lantern for windows
+.PHONY: windows-lib
+windows-lib: $(WINDOWS_LIB_NAME) ## Build lantern for windows
 $(WINDOWS_LIB_NAME): export GOOS = windows
 $(WINDOWS_LIB_NAME): export LIB_NAME = $(WINDOWS_LIB_NAME)
 $(WINDOWS_LIB_NAME): export BUILD_TAGS += walk_use_cgo
@@ -507,7 +507,7 @@ $(WINDOWS_LIB_NAME): export Environment = production
 $(WINDOWS_LIB_NAME): desktop-lib
 
 .PHONY: windows64
-windows64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
+windows-lib64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
 $(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
 $(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
 $(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static
@@ -519,6 +519,11 @@ $(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS +=
 $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
+
+## Windows
+.PHONY: windows
+windows: windows-lib ffigen
+	flutter_distributor package --flutter-build-args=verbose --platform windows --targets exe,msix --skip-clean --build-target lib/main.dart
 
 ## Darwin
 .PHONY: darwin-amd64

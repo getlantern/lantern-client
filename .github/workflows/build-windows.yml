@@ -61,20 +61,15 @@ jobs:
 
       - name: Activate protoc-gen-dart plugin
         run: |
-          dart pub global activate protoc_plugin
-
-      - name: Build liblantern.dll
-        env:
-          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
-          VERSION: "${{ env.version }}"
-        run: make windows
-
-      - run: make ffigen
+          dart pub global activate protoc_plugin flutter_distributor
 
       - run: touch app.env
 
       - name: Build Flutter app
-        run: flutter build windows --release
+        run: make windows
+        env:
+          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+          VERSION: "${{ env.version }}"
 
       - name: Sign liblantern.dll with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -118,7 +113,7 @@ jobs:
     env:
       version: ${{ inputs.version }}
       prefix: ${{ inputs.prefix }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Install dependencies
