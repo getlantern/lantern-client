@@ -529,10 +529,15 @@ func reverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 	}
 }
 
-func run(configDir, locale string, settings Settings, session PanickingSession) {
-	// Recover from panics that occur running the Lantern client proxy and log them to Sentry
-	defer sentry.Recover()
+// logPanicAndRecover attempts to recoveer from panics that occur running the client proxy and logs them to Sentry
+func logPanicAndRecover() {
+	if err := recover(); err != nil {
+		sentry.CurrentHub().Recover(err)
+		sentry.Flush(time.Second * 5)
+	}
+}
 
+func run(configDir, locale string, settings Settings, session PanickingSession) {
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(false)
 
@@ -668,15 +673,18 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 
 	replicaServer.CheckEnabled()
 
-	go runner.Run(
-		httpProxyAddr, // listen for HTTP on provided address
-		"127.0.0.1:0", // listen for SOCKS on random address
-		func(c *client.Client) {
-			clEventual.Set(c)
-			afterStart(session)
-		},
-		nil, // onError
-	)
+	go func() {
+		defer logPanicAndRecover()
+		runner.Run(
+			httpProxyAddr, // listen for HTTP on provided address
+			"127.0.0.1:0", // listen for SOCKS on random address
+			func(c *client.Client) {
+				clEventual.Set(c)
+				afterStart(session)
+			},
+			nil, // onError
+		)
+	}()
 }
 
 func bandwidthUpdates(session PanickingSession) {
