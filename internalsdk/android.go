@@ -531,12 +531,8 @@ func reverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 
 func run(configDir, locale string, settings Settings, session PanickingSession) {
 	// Recover from panics that occur running the Lantern client proxy and log them to Sentry
-	defer func() {
-		if r := recover(); r != nil {
-			sentry.CurrentHub().Recover(r)
-			sentry.Flush(time.Second * 2)
-		}
-	}()
+	defer sentry.Recover()
+
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(false)
 
