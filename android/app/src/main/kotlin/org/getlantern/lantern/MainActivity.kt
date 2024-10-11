@@ -1,7 +1,6 @@
 package org.getlantern.lantern
 
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -64,6 +63,7 @@ class MainActivity :
     private lateinit var receiver: NotificationReceiver
     private var accountInitDialog: AlertDialog? = null
     private var lastSurvey: Survey? = null
+    var maxServiceRetryFailedCount: Int = 0
 
     override fun configureFlutterEngine(
         flutterEngine: FlutterEngine,
@@ -235,23 +235,35 @@ class MainActivity :
 
 
     private fun startLanternService() {
-        try{
+        try {
             val isServiceRunning = Utils.isServiceRunning(activity, LanternService::class.java)
-            if(isServiceRunning) {
+            if (isServiceRunning) {
                 Logger.debug(TAG, "Lantern service already running")
                 return
             }
             val intent = Intent(this, LanternService::class.java)
             context.startService(intent)
             Logger.debug(TAG, "Lantern service started at ${System.currentTimeMillis()}")
-        }catch (e: IllegalStateException){
-            Logger.error(TAG, "Error starting Lantern service", e)
-        }catch (e: Exception){
+        } catch (e: IllegalStateException) {
+            handleServiceStartException(e);
+        } catch (e: Exception) {
             Logger.error(TAG, "Error starting Lantern service", e)
         }
-
-
     }
+
+
+    private fun handleServiceStartException(e: IllegalStateException) {
+        if (e.javaClass.name == "android.app.BackgroundServiceStartNotAllowedException") {
+            maxServiceRetryFailedCount++
+            Logger.error(TAG, "Error starting Lantern service", e)
+            if (maxServiceRetryFailedCount < 3) {
+                Handler(Looper.getMainLooper()).postDelayed({ startLanternService() }, 1000)
+            }
+        } else {
+            Logger.error(TAG, "Error starting Lantern service", e)
+        }
+    }
+
 
     /**
      * Fetch the latest loconf config and update the UI based on those
