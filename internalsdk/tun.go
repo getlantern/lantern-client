@@ -32,7 +32,7 @@ var (
 // 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
 func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Session) error {
 	runtime.LockOSThread()
-
+	defer logPanicAndRecover()
 	// perform geo lookup after establishing the VPN connection, prior to running tun2socks
 	go geoLookup(&panickingSessionImpl{wrappedSession})
 
@@ -88,12 +88,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 
 // StopTun2Socks stops the current tun device.
 func StopTun2Socks() {
-	defer func() {
-		p := recover()
-		if p != nil {
-			log.Errorf("Panic while stopping: %v", p)
-		}
-	}()
+	defer logPanicAndRecover()
 
 	currentDeviceMx.Lock()
 	ipp := currentIPP
