@@ -29,6 +29,7 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/analytics"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/mtime"
+	"github.com/getsentry/sentry-go"
 
 	// import gomobile just to make sure it stays in go.mod
 	_ "golang.org/x/mobile/bind/java"
@@ -425,6 +426,13 @@ func Start(configDir string,
 	settings Settings,
 	wrappedSession Session) (*StartResult, error) {
 
+	err := sentry.Init(sentry.ClientOptions{
+		Dsn: "https://4753d78f885f4b79a497435907ce4210@o75725.ingest.us.sentry.io/5850353",
+	})
+	if err != nil {
+		log.Fatalf("sentry.Init failed: %v", err)
+	}
+
 	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
 
 	session := &panickingSessionImpl{wrappedSession}
@@ -468,7 +476,8 @@ func newAnalyticsSession(session PanickingSession) analytics.Session {
 	return analyticsSession
 }
 
-func InitDnsGrab(configDir string, session PanickingSession) (dnsgrab.Server, error) {
+// initDnsGrab initializes and starts running the dns grab server
+func initDnsGrab(configDir string, session PanickingSession) (dnsgrab.Server, error) {
 	cache, err := persistentcache.New(filepath.Join(configDir, "dnsgrab.cache"), maxDNSGrabAge)
 	if err != nil {
 		log.Errorf("unable to open dnsgrab cache: %v", err)
@@ -494,7 +503,8 @@ func InitDnsGrab(configDir string, session PanickingSession) (dnsgrab.Server, er
 	return grabber, nil
 }
 
-func ReverseDns(grabber dnsgrab.Server) func(string) (string, error) {
+// reverseDns returns a function that can be used to perform a reverse DNS lookup using the dns grab server
+func reverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 	return func(addr string) (string, error) {
 		op := ops.Begin("reverse_dns")
 		defer op.End()
@@ -520,6 +530,13 @@ func ReverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 }
 
 func run(configDir, locale string, settings Settings, session PanickingSession) {
+	// Recover from panics that occur running the Lantern client proxy and log them to Sentry
+	defer func() {
+		if r := recover(); r != nil {
+			sentry.CurrentHub().Recover(r)
+			sentry.Flush(time.Second * 2)
+		}
+	}()
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(false)
 
@@ -545,7 +562,7 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 
 	log.Debugf("Writing log messages to %s/lantern.log", configDir)
 
-	grabber, err := InitDnsGrab(configDir, session)
+	grabber, err := initDnsGrab(configDir, session)
 	if err != nil {
 		return
 	}
@@ -579,7 +596,7 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		NewStatsTracker(session),
 		session.IsProUser,
 		func() string { return "" }, // only used for desktop
-		ReverseDns(grabber),
+		reverseDns(grabber),
 		func(category, action, label string) {},
 		flashlight.WithOnConfig(func(g *config.Global, s config.Source) {
 			session.SetHasConfigFetched(true)
