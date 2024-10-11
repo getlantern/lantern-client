@@ -425,14 +425,13 @@ func Start(configDir string,
 	locale string,
 	settings Settings,
 	wrappedSession Session) (*StartResult, error) {
-
 	err := sentry.Init(sentry.ClientOptions{
-		Dsn: "https://4753d78f885f4b79a497435907ce4210@o75725.ingest.us.sentry.io/5850353",
+		Dsn:              common.SentrtAndroidDSN,
+		AttachStacktrace: true,
 	})
 	if err != nil {
 		log.Fatalf("sentry.Init failed: %v", err)
 	}
-
 	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
 
 	session := &panickingSessionImpl{wrappedSession}
