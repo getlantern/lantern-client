@@ -1,6 +1,6 @@
 // import 'package:audioplayers/audioplayers.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:lantern/app_test.dart';
+// import 'package:lantern/app_startup_flow_test.dart';
 // import 'package:lantern/core/utils/common.dart';
 // import 'package:lantern/features/home/home.dart';
 // import 'package:lantern/features/messaging/messaging_model.dart';

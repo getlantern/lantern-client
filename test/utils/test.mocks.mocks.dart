@@ -194,15 +194,6 @@ class MockSessionModel extends _i1.Mock implements _i2.SessionModel {
       ) as _i2.EventManager);
 
   @override
-  set eventManager(_i2.EventManager? _eventManager) => super.noSuchMethod(
-        Invocation.setter(
-          #eventManager,
-          _eventManager,
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
   _i2.ValueNotifier<bool> get networkAvailable => (super.noSuchMethod(
         Invocation.getter(#networkAvailable),
         returnValue: _FakeValueNotifier_1<bool>(

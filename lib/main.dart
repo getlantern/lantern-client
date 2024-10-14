@@ -42,6 +42,7 @@ Future<void> main() async {
   await Localization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
+
   SentryFlutter.init((options) {
     // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
     // We recommend adjusting this value in production.

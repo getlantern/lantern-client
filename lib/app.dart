@@ -40,6 +40,7 @@ class _LanternAppState extends State<LanternApp>
 
   @override
   void initState() {
+    print("initState");
     _animateNetworkWarning();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initDeepLinks();
@@ -115,8 +116,7 @@ class _LanternAppState extends State<LanternApp>
     }
   }
 
-  Widget _buildMaterialApp(BuildContext context, String lang) {
-    final currentLocal = View.of(context).platformDispatcher.locale;
+  Widget _buildMaterialApp(BuildContext context, String lang,Locale currentLocal) {
     final app = MaterialApp.router(
       locale: currentLocale(lang),
       debugShowCheckedModeBanner: false,
@@ -175,6 +175,7 @@ class _LanternAppState extends State<LanternApp>
       ],
       child: sessionModel.language(
         (context, lang, child) {
+          print("selected language: $lang");
           Localization.locale = lang.startsWith('en') ? "en_us" : lang;
           return GlobalLoaderOverlay(
             useDefaultLoading: false,
@@ -192,7 +193,7 @@ class _LanternAppState extends State<LanternApp>
             child: I18n(
               initialLocale: currentLocale(lang),
               child: ScaffoldMessenger(
-                child: _buildMaterialApp(context, lang),
+                child: _buildMaterialApp(context, lang,currentLocal),
               ),
             ),
           );
