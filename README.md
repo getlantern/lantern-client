@@ -371,7 +371,9 @@ NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation i
 To generate mocks for the interfaces using Mockery, follow these steps:
 
 1. Install mockery: `go install github.com/vektra/mockery/v2@latest`
-2. To generate mocks, simply run: `make mocks`
+2. Generate mocks: `make mocks`
+
+The generated mocks will be output to the `./mocks` directory.
 
 #### Testing Replica
 A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.
