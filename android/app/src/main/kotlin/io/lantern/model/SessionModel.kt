@@ -79,11 +79,6 @@ class SessionModel internal constructor(
         LanternProxySelector(this)
     }
 
-    fun createUser(): Boolean {
-        val result = model.invokeMethod("createUser", Arguments(""))
-        return result.toJava().toString() == "true";
-    }
-
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "enableScreenshot" -> {
@@ -203,6 +198,9 @@ class SessionModel internal constructor(
         model.invokeMethod("setDevice", Arguments(mapOf("deviceID" to deviceId)))
     }
 
+    fun setUserIdAndToken(userId: Long, token: String) {
+        model.invokeMethod("setUserIdAndToken", Arguments(mapOf("userId" to userId, "token" to token)))
+    }
 
     fun setUserPro(isPro: Boolean) {
         model.invokeMethod("setProUser", Arguments(isPro))
