@@ -120,11 +120,12 @@ jobs:
 
       - name: Clean up disk space
         run: |
-          df -h  # Check disk space
-          sudo apt-get clean
-          sudo apt-get autoremove
           sudo rm -rf /tmp/*
           sudo rm -rf /var/cache/*
+          sudo apt-get clean
+          sudo apt-get autoremove
+          go clean -modcache
+          go clean -cache -testcache
           df -h
 
       - name: Delete Gradle cache
