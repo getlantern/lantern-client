@@ -365,7 +365,7 @@ type adSettings struct {
 	wrapped *config.AdSettings
 }
 
-func (s *adSettings) GetAdProvider(isPro bool, countryCode string, daysSinceInstalled int) (common.AdProvider, error) {
+func (s *adSettings) GetAdProvider(isPro bool, countryCode string, daysSinceInstalled int) (AdProvider, error) {
 	adProvider := s.wrapped.GetAdProvider(isPro, countryCode, daysSinceInstalled)
 	if adProvider == nil {
 		return nil, errNoAdProviderAvailable
