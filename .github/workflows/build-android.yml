@@ -107,7 +107,7 @@ jobs:
           sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
 
       - name: Build Lantern library
-        run: make android-lib
+        run: make android-lib ANDROID_ARCH=all
 
       - name: Clean Go module and build cache
         run: |
