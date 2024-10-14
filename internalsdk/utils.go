@@ -27,10 +27,6 @@ import (
 
 // createProClient creates a new instance of ProClient with the given client session information
 func createProClient(session ClientSession, platform string) pro.ProClient {
-	deviceID, _ := session.GetDeviceID()
-	userID, _ := session.GetUserID()
-	token, _ := session.GetToken()
-	lang, _ := session.Locale()
 	dialTimeout := 30 * time.Second
 	if platform == "ios" {
 		dialTimeout = 20 * time.Second
@@ -42,6 +38,10 @@ func createProClient(session ClientSession, platform string) pro.ProClient {
 				common.PlatformHeader:   platform,
 				common.AppVersionHeader: common.ApplicationVersion,
 			}
+			deviceID, _ := session.GetDeviceID()
+			userID, _ := session.GetUserID()
+			token, _ := session.GetToken()
+			lang, _ := session.Locale()
 			return common.NewUserConfig(
 				common.DefaultAppName,
 				deviceID,
