@@ -106,17 +106,20 @@ jobs:
           sudo apt-get autoclean
           sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
 
+      - name: Build Lantern library
+        run: make android-lib
+
+      - name: Clean Go module and build cache
+        run: |
+          go clean -modcache
+          go clean -cache -testcache
+
       - name: Build Android installers
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
         run: make package-android
-
-      - name: Clean Go module and build cache
-        run: |
-          go clean -modcache
-          go clean -cache -testcache
 
       - name: Clean up disk space
         run: |
