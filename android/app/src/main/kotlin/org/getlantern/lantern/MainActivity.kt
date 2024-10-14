@@ -1,7 +1,6 @@
 package org.getlantern.lantern
 
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -64,6 +63,7 @@ class MainActivity :
     private lateinit var receiver: NotificationReceiver
     private var accountInitDialog: AlertDialog? = null
     private var lastSurvey: Survey? = null
+    var maxServiceRetryFailedCount: Int = 0
 
     override fun configureFlutterEngine(
         flutterEngine: FlutterEngine,
@@ -171,7 +171,7 @@ class MainActivity :
         }
     }
 
-    @SuppressLint("WrongConstant")
+
     override fun onStart() {
         super.onStart()
         val packageName = activity.packageName
@@ -235,10 +235,35 @@ class MainActivity :
 
 
     private fun startLanternService() {
-        val intent = Intent(this, LanternService::class.java)
-        context.startService(intent)
-        Logger.debug(TAG, "Lantern service started at ${System.currentTimeMillis()}")
+        try {
+            val isServiceRunning = Utils.isServiceRunning(activity, LanternService::class.java)
+            if (isServiceRunning) {
+                Logger.debug(TAG, "Lantern service already running")
+                return
+            }
+            val intent = Intent(this, LanternService::class.java)
+            context.startService(intent)
+            Logger.debug(TAG, "Lantern service started at ${System.currentTimeMillis()}")
+        } catch (e: IllegalStateException) {
+            handleServiceStartException(e);
+        } catch (e: Exception) {
+            Logger.error(TAG, "Error starting Lantern service", e)
+        }
     }
+
+
+    private fun handleServiceStartException(e: IllegalStateException) {
+        if (e.javaClass.name == "android.app.BackgroundServiceStartNotAllowedException") {
+            maxServiceRetryFailedCount++
+            Logger.error(TAG, "Error starting Lantern service", e)
+            if (maxServiceRetryFailedCount < 3) {
+                Handler(Looper.getMainLooper()).postDelayed({ startLanternService() }, 1000)
+            }
+        } else {
+            Logger.error(TAG, "Error starting Lantern service", e)
+        }
+    }
+
 
     /**
      * Fetch the latest loconf config and update the UI based on those
@@ -274,25 +299,33 @@ class MainActivity :
                     accountInitDialog?.dismiss()
                     finish()
                 }
-                accountInitDialog?.show()
+                if (!isFinishing) {
+                    accountInitDialog?.show()
+                }
             }
 
             AccountInitializationStatus.Status.SUCCESS -> {
-                accountInitDialog?.let { it.dismiss() }
+                if (!isFinishing) {
+                    accountInitDialog?.dismiss()
+                }
+
             }
 
             AccountInitializationStatus.Status.FAILURE -> {
-                accountInitDialog?.let { it.dismiss() }
+                if (!isFinishing) {
+                    accountInitDialog?.dismiss()
 
-                Utils.showAlertDialog(
-                    this,
-                    getString(R.string.connection_error),
-                    getString(R.string.reopen_to_try, appName),
-                    getString(R.string.ok),
-                    true,
-                    null,
-                    false,
-                )
+                    Utils.showAlertDialog(
+                        this,
+                        getString(R.string.connection_error),
+                        getString(R.string.reopen_to_try, appName),
+                        getString(R.string.ok),
+                        true,
+                        null,
+                        false,
+                    )
+                }
+
             }
         }
     }

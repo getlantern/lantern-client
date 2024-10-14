@@ -41,6 +41,7 @@
         android:persistent="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
+        android:largeHeap="true"
         tools:replace="allowBackup, label"
         tools:targetApi="n">
 
