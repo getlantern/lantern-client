@@ -366,6 +366,15 @@ TODO: we need to automate the running of integration tests in a CI environment u
 
 NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation is to move to using `integration_test`. [Here](https://github.com/flutter/flutter/issues/12810) is a good depiction of related conversations.
 
+#### Generating Mocks
+
+To generate mocks for the interfaces using Mockery, follow these steps:
+
+1. Install mockery: `go install github.com/vektra/mockery/v2@latest`
+2. Generate mocks: `make mocks`
+
+The generated mocks will be output to the `./mocks` directory.
+
 #### Testing Replica
 A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.
 The tests should transparently setup and teardown the dummy server but you need to have `json-server` in your PATH.
