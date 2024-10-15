@@ -35,15 +35,20 @@ open class LanternService : Service(), Runnable {
     private var thread: Thread? = null
 
     private val random: Random = Random()
-    private val serviceIcon: Int = if (LanternApp.session.chatEnabled()) {
-        R.drawable.status_chat
-    } else {
-        R.drawable.status_plain
-    }
-    private val helper: ServiceHelper = ServiceHelper(this, serviceIcon, R.string.ready_to_connect)
+    private lateinit var helper: ServiceHelper
 
     private val started: AtomicBoolean = AtomicBoolean()
     private lateinit var autoUpdater: AutoUpdater
+
+    override fun onCreate() {
+        super.onCreate()
+        val serviceIcon: Int = if (LanternApp.session.chatEnabled()) {
+                    R.drawable.status_chat
+                } else {
+                    R.drawable.status_plain
+                }
+        helper = ServiceHelper(this, serviceIcon, R.string.ready_to_connect)
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent == null) return START_NOT_STICKY
