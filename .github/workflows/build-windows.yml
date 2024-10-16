@@ -53,7 +53,7 @@ jobs:
           channel: "stable"
 
       - name: Add pub-cache to PATH
-        run: echo "${LOCALAPPDATA}\\Pub\\Cache\\bin" >> $GITHUB_PATH
+        run: echo "C:\\Users\\runneradmin\\AppData\\Local\\Pub\\Cache\\bin" >> $GITHUB_PATH
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
