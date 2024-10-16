@@ -92,9 +92,7 @@ jobs:
           mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
   
       - name: Build Flutter app
-        run: |
-          ls "${LOCALAPPDATA}\\Pub\\Cache\\bin"
-          make windows-release
+        run: make windows-release
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
