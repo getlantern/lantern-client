@@ -52,9 +52,6 @@ jobs:
         with:
           channel: "stable"
 
-      - name: Add pub-cache to PATH
-        run: echo "C:\\Users\\runneradmin\\AppData\\Local\\Pub\\Cache\\bin" >> $GITHUB_PATH
-
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
@@ -92,7 +89,7 @@ jobs:
           mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
   
       - name: Build Flutter app
-        run: make windows-release
+        run: flutter_distributor package --flutter-build-args=verbose --platform windows --targets "exe,msix"
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
