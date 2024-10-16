@@ -52,7 +52,11 @@ jobs:
         with:
           channel: "stable"
 
-      - run: flutter --version
+      - name: Add Flutter pub-cache bin to PATH
+        run: |
+          flutter --version
+          $env:PATH += ";C:\Users\runneradmin\AppData\Roaming\Pub\Cache\bin"
+          refreshenv
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
