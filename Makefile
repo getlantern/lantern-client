@@ -539,7 +539,7 @@ $(WINDOWS64_LIB_NAME): desktop-lib
 APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
 
 windows-release: ffigen
-	$(HOME)/AppData/Local/Pub/Cache/bin/flutter_distributor package --skip-clean --platform windows --targets "exe,msix" --flutter-build-args=verbose
+	/Users/runneradmin/AppData/Local/Pub/Cache/bin/flutter_distributor package --skip-clean --platform windows --targets "exe,msix" --flutter-build-args=verbose
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).msix lantern-installer-x64.msix
 
