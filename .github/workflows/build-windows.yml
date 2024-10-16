@@ -53,10 +53,12 @@ jobs:
           channel: "stable"
 
       - name: Add Flutter pub-cache bin to PATH
+        shell: pwsh
         run: |
           flutter --version
           $env:PATH += ";C:\Users\runneradmin\AppData\Roaming\Pub\Cache\bin"
-          refreshenv
+          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+          RefreshEnv
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
