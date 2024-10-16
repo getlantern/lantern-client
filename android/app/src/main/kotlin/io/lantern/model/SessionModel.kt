@@ -216,12 +216,14 @@ class SessionModel internal constructor(
     }
 
     fun isProUser(): Boolean {
-        return model.isProUser
+        return model.isProUser()
 
     }
 
     fun userId(): Long {
-        return model.userID
+        Logger.debug(TAG, "1. User id is", model.userID.toString())
+        Logger.debug(TAG, "2. User id is", model.getUserID().toString())
+        return model.getUserID()
     }
 
     fun email(): String {
@@ -229,7 +231,7 @@ class SessionModel internal constructor(
     }
 
     fun countryCode(): String {
-        return model.countryCode
+        return model.getCountryCode()
     }
 
     // TO update to use sessionModel go
