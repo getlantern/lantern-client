@@ -16,8 +16,6 @@ class PriceSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final description = plan.description;
-
     final bonus = plan.formattedBonus;
     return Padding(
       padding: const EdgeInsetsDirectional.only(top: 8.0),
