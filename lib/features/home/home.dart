@@ -141,17 +141,16 @@ class _HomePageState extends State<HomePage> {
     final tabModel = context.watch<BottomBarChangeNotifier>();
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
-        print("accepted terms version $version");
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
-            print("Development mode $developmentMode");
             if (developmentMode) {
               Logger.level = Level.trace;
             } else {
               Logger.level = Level.error;
             }
 
-            bool isPlayVersion = (sessionModel.isTestPlayVersion.value ?? false);
+            bool isPlayVersion =
+                (sessionModel.isTestPlayVersion.value ?? false);
             bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
 
             if ((isStoreVersion || isPlayVersion) && version == 0) {

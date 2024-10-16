@@ -43,18 +43,19 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
 
-  SentryFlutter.init((options) {
-    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-    // We recommend adjusting this value in production.
-    options.tracesSampleRate = 1.0;
-    // The sampling rate for profiling is relative to tracesSampleRate
-    // Setting to 1.0 will profile 100% of sampled transactions:
-    options.profilesSampleRate = 1.0;
-    options.environment = kReleaseMode ? "production" : "development";
-    options.dsn = kReleaseMode ? AppSecret.dnsConfig() : "";
-    options.enableNativeCrashHandling = true;
-    options.attachStacktrace = true;
-  }, appRunner: () => runApp(const LanternApp()));
+  runApp(LanternApp());
+  // SentryFlutter.init((options) {
+  //   // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+  //   // We recommend adjusting this value in production.
+  //   options.tracesSampleRate = 1.0;
+  //   // The sampling rate for profiling is relative to tracesSampleRate
+  //   // Setting to 1.0 will profile 100% of sampled transactions:
+  //   options.profilesSampleRate = 1.0;
+  //   options.environment = kReleaseMode ? "production" : "development";
+  //   options.dsn = kReleaseMode ? AppSecret.dnsConfig() : "";
+  //   options.enableNativeCrashHandling = true;
+  //   options.attachStacktrace = true;
+  // }, appRunner: () => runApp(const LanternApp()));
 }
 
 Future<void> _initGoogleMobileAds() async {

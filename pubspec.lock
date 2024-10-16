@@ -14,14 +14,6 @@ packages:
     description: dart
     source: sdk
     version: "0.3.2"
-  alchemist:
-    dependency: "direct dev"
-    description:
-      name: alchemist
-      sha256: "2fcd35d7422070cdf7f276bc04dd2d38c9164adb7d58bd00b7bebd8b6927d112"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.0"
   analyzer:
     dependency: "direct dev"
     description:
@@ -2002,10 +1994,10 @@ packages:
     dependency: "direct main"
     description:
       name: uuid
-      sha256: "83d37c7ad7aaf9aa8e275490669535c8080377cfa7a7004c24dfac53afffaa90"
+      sha256: a5be9ef6618a7ac1e964353ef476418026db906c4facdedaa299b7a2e71690ff
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.2"
+    version: "4.5.1"
   vector_graphics:
     dependency: transitive
     description:

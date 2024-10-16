@@ -29,9 +29,9 @@ dependencies:
     sdk: flutter
 
   # State management and Data handling
-  provider: ^6.0.5
+  provider: ^6.1.2
   protobuf: any
-  uuid: ^4.4.0
+  uuid: ^4.5.1
 
   sliver_tools: ^0.2.12
 
@@ -155,7 +155,6 @@ dev_dependencies:
   analyzer: ^6.7.0
   golden_toolkit: ^0.15.0
 #  Testing
-  alchemist: ^0.10.0
   patrol: ^3.11.0
 
 
