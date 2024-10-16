@@ -541,6 +541,7 @@ APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
 windows-release: ffigen
 	flutter_distributor package --skip-clean --platform windows --targets "exe,msix" --flutter-build-args=verbose
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
+	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).msix lantern-installer-x64.msix
 
 ## Darwin
 .PHONY: darwin-amd64
