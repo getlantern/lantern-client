@@ -52,9 +52,6 @@ jobs:
         with:
           args: -h
 
-      - name: Set up MinGW
-        run: choco install mingw -y
-
       # Install Flutter
       - uses: subosito/flutter-action@v2
         with:
@@ -71,7 +68,7 @@ jobs:
         run: |
           touch app.env
           mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
-          make windows
+          make windows64
           mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
 
       - name: Activate plugins
