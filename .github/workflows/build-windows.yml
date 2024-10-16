@@ -52,22 +52,18 @@ jobs:
         with:
           channel: "stable"
 
-      - name: Add Flutter pub-cache bin to PATH
-        shell: pwsh
-        run: |
-          flutter --version
-          $env:PATH += ";C:\Users\runneradmin\AppData\Local\Pub\Cache\bin"
-          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-          RefreshEnv
+      - name: Add pub-cache to PATH
+        run: echo "${LOCALAPPDATA}\\Pub\\Cache\\bin" >> $GITHUB_PATH
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Activate protoc_plugin
+      - name: Activate plugins
         run: |
           dart pub global activate protoc_plugin
+          dart pub global activate flutter_distributor
 
       - name: Build Lantern Library
         shell: bash
@@ -96,8 +92,8 @@ jobs:
           mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
   
       - name: Build Flutter app
-        shell: bash
         run: |
+          ls "${LOCALAPPDATA}\\Pub\\Cache\\bin"
           make windows-release
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
