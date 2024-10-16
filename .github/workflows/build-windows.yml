@@ -87,9 +87,18 @@ jobs:
       - name: Move Lantern library to release directory
         run: |
           mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
-  
+         
+      - name: Extract app version from pubspec.yaml
+        id: extract_version
+        run: |
+            APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+            echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+
       - name: Build Flutter app
-        run: flutter_distributor package --flutter-build-args=verbose --platform windows --targets "exe,msix"
+        run: |
+          flutter_distributor package --flutter-build-args=verbose --platform windows --targets "exe,msix"
+          mv "dist/$APP_VERSION/lantern-$APP_VERSION.exe" lantern-installer-x64.exe
+          mv "dist/$APP_VERSION/lantern-$APP_VERSION.msix" lantern-installer-x64.msix
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
