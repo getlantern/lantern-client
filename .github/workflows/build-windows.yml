@@ -47,6 +47,14 @@ jobs:
         with:
           go-version-file: "go.mod"
 
+      - name: Chocolatey Action
+        uses: crazy-max/ghaction-chocolatey@v3.0.0
+
+      - name: Set up MinGW
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+
       # Install Flutter
       - uses: subosito/flutter-action@v2
         with:
