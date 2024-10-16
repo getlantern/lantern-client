@@ -98,7 +98,7 @@ jobs:
           mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
   
       - name: Build Flutter app
-        shell: pwsh
+        shell: bash
         run: |
           make windows-release
         env:
