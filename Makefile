@@ -207,7 +207,6 @@ GENERATED_PROTO_SOURCES = $(shell echo "$(PROTO_SOURCES)" | sed 's/\.proto/\.pb\
 GO_SOURCES := $(GENERATED_PROTO_SOURCES) go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
 
-
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
 # dumpvars prints out all variables defined in the Makefile, useful for debugging environment
@@ -495,6 +494,7 @@ linux-arm64: desktop-lib ## Build lantern for linux-arm64
 package-linux:
 	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
 
+## Windows
 .PHONY: windows-lib
 windows-lib: $(WINDOWS_LIB_NAME) ## Build lantern for windows
 $(WINDOWS_LIB_NAME): export GOOS = windows
@@ -520,10 +520,12 @@ $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
-## Windows
-.PHONY: windows
-windows: windows-lib ffigen
-	flutter_distributor package --flutter-build-args=verbose --platform windows --targets exe,msix --skip-clean --build-target lib/main.dart
+.PHONY: build-windows windows-release
+build-windows: windows-lib ffigen
+
+# Build the Windows app using Flutter Distributor
+windows-release: ffigen
+	@flutter_distributor package --flutter-build-args=verbose --platform windows --targets exe,msix --build-target lib/main.dart
 
 ## Darwin
 .PHONY: darwin-amd64

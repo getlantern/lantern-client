@@ -59,17 +59,16 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Activate protoc-gen-dart plugin
+      - name: Build Lantern Library
+        run: |
+          touch app.env
+          mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
+          make build-windows
+          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
+
+      - name: Activate plugins
         run: |
           dart pub global activate protoc_plugin flutter_distributor
-
-      - run: touch app.env
-
-      - name: Build Flutter app
-        run: make windows
-        env:
-          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
-          VERSION: "${{ env.version }}"
 
       - name: Sign liblantern.dll with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -86,62 +85,31 @@ jobs:
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
 
-      - uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-build-signed
-          path: |
-            liblantern.dll
+      - name: Build Flutter app
+        run: make windows-release
+        env:
+          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+          VERSION: "${{ env.version }}"
 
-      - name: Create archive
+      - name: Extract version from pubspec.yaml
         run: |
-          ls build/windows
-          cp liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
-          Compress-Archive "build/windows/${{inputs.arch}}/runner/Release" lantern.zip
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "VERSION_PUBSPEC=$VERSION" >> $GITHUB_ENV
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
         with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-build
-          path: lantern.zip
+          name: windows${{inputs.build-suffix}}-exe-build
+          path: dist/${{ env.VERSION_PUBSPEC }}/windows/app-${{ env.VERSION_PUBSPEC }}.exe
 
-  build-installer:
-    needs: build-windows
-    permissions:
-      contents: "read"
-      id-token: "write"
-    env:
-      version: ${{ inputs.version }}
-      prefix: ${{ inputs.prefix }}
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Install dependencies
-        run: |
-          sudo apt-get install -y file build-essential pkg-config
-          sudo apt-get install -y mingw-w64 nsis
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - name: Upload MSIX artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: windows${{inputs.build-suffix}}-build
-      - name: Make installer
-        run: |
-          pwd
-          unzip lantern.zip
-          cp installer-resources-lantern/.packaged-lantern.yaml installer-resources-lantern/windows/.packaged-lantern.yaml
-          cp installer-resources-lantern/lantern.yaml installer-resources-lantern/windows/lantern.yaml
-          cp -r Release/* installer-resources-lantern/windows
-          makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
-          mv installer-resources-lantern/windows/lantern-installer${{inputs.installer-suffix}}.exe lantern-installer${{inputs.installer-suffix}}.exe
-
-      - uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-installer-unsigned
-          path: lantern-installer${{inputs.installer-suffix}}.exe
+          name: windows${{inputs.build-suffix}}-msix-build
+          path: dist/${{ env.VERSION_PUBSPEC }}/windows/app-${{ env.VERSION_PUBSPEC }}.msix
 
   sign-installer:
-    needs: build-installer
+    needs: build-windows
     permissions:
       contents: "read"
       id-token: "write"
@@ -153,7 +121,8 @@ jobs:
       - name: Download the win build output
         uses: actions/download-artifact@v4
         with:
-          name: windows${{inputs.build-suffix}}-installer-unsigned
+          name: windows${{inputs.build-suffix}}-exe-build
+          destination: lantern-installer${{inputs.installer-suffix}}.exe
 
       - name: Sign EXE with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -184,7 +153,7 @@ jobs:
     env:
       version: ${{ inputs.version }}
       prefix: ${{ inputs.prefix }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Download the artifact
