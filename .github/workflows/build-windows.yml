@@ -65,11 +65,9 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Activate plugins
+      - name: Activate protoc_plugin
         run: |
           dart pub global activate protoc_plugin
-          dart pub global activate flutter_distributor
-          ls ${HOME}/AppData/Local/Pub/Cache/bin
 
       - name: Build Lantern Library
         shell: bash
