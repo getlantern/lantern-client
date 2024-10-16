@@ -160,6 +160,7 @@ class _HomePageState extends State<HomePage> {
             }
 
             if (sessionModel.isAuthEnabled.value!) {
+              print('userNew');
               userNew(() {
                 _checkForFirstTimeVisit();
               });
