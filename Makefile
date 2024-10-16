@@ -538,7 +538,7 @@ build-windows: windows-lib ffigen
 
 # Build the Windows app using Flutter Distributor
 windows-release: ffigen
-	@flutter_distributor package --flutter-build-args=verbose --platform windows --targets exe,msix --build-target lib/main.dart
+	flutter_distributor package --skip-clean --platform windows --targets "exe,msix" --flutter-build-args=verbose
 
 ## Darwin
 .PHONY: darwin-amd64
