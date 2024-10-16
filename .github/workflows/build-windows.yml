@@ -47,11 +47,6 @@ jobs:
         with:
           go-version-file: "go.mod"
 
-      - name: Chocolatey Action
-        uses: crazy-max/ghaction-chocolatey@v3.0.0
-        with:
-          args: -h
-
       # Install Flutter
       - uses: subosito/flutter-action@v2
         with:
