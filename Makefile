@@ -521,6 +521,9 @@ $(WINDOWS_LIB_NAME): desktop-lib
 
 .PHONY: windows64
 windows64: $(WINDOWS64_LIB_NAME) ## Build lantern for windows
+$(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
+$(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
+$(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static
 $(WINDOWS64_LIB_NAME): export GOOS = windows
 $(WINDOWS64_LIB_NAME): export GOARCH = amd64
 $(WINDOWS64_LIB_NAME): export LIB_NAME = $(WINDOWS64_LIB_NAME)
