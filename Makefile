@@ -207,6 +207,7 @@ GENERATED_PROTO_SOURCES = $(shell echo "$(PROTO_SOURCES)" | sed 's/\.proto/\.pb\
 GO_SOURCES := $(GENERATED_PROTO_SOURCES) go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
 
+
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
 # dumpvars prints out all variables defined in the Makefile, useful for debugging environment
@@ -443,6 +444,15 @@ ios-release:set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PR
 	echo "iOS IPA generated under: $$IPA_PATH"; \
 	open "$$IPA_PATH"
 
+## Mocks
+MOCKERY=mockery
+MOCKERY_FLAGS=--case=underscore --output=internalsdk/mocks --outpkg=mocks
+
+.PHONY: mocks
+mocks:
+	@$(MOCKERY) --name=AdProvider --name=AdSettings --name=Session --dir=./internalsdk $(MOCKERY_FLAGS)
+	@$(MOCKERY) --name=ProClient --dir=./internalsdk/pro $(MOCKERY_FLAGS)
+
 .PHONY: echo-build-tags
 echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=1 make echo-build-tags` for example to see how it changes
 	@if [[ -z "$$VERSION" ]]; then \
@@ -494,20 +504,23 @@ linux-arm64: desktop-lib ## Build lantern for linux-arm64
 package-linux:
 	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
 
-## Windows
-.PHONY: windows-lib
-windows-lib: $(WINDOWS_LIB_NAME) ## Build lantern for windows
+.PHONY: windows
+windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
+$(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
+$(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
+$(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
 $(WINDOWS_LIB_NAME): export GOOS = windows
+$(WINDOWS_LIB_NAME): export GOARCH = 386
 $(WINDOWS_LIB_NAME): export LIB_NAME = $(WINDOWS_LIB_NAME)
 $(WINDOWS_LIB_NAME): export BUILD_TAGS += walk_use_cgo
 $(WINDOWS_LIB_NAME): export EXTRA_LDFLAGS +=
-$(WINDOWS_LIB_NAME): export GO_BUILD_FLAGS += -buildmode=c-shared
+$(WINDOWS_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS_LIB_NAME): export BUILD_RACE =
 $(WINDOWS_LIB_NAME): export Environment = production
 $(WINDOWS_LIB_NAME): desktop-lib
 
 .PHONY: windows64
-windows-lib64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
+windows64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
 $(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
 $(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
 $(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static

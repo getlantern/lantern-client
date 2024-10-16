@@ -68,7 +68,8 @@ jobs:
 
       - name: Activate plugins
         run: |
-          dart pub global activate protoc_plugin flutter_distributor
+          dart pub global activate protoc_plugin
+          dart pub global activate flutter_distributor
 
       - name: Sign liblantern.dll with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
