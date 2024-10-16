@@ -268,7 +268,8 @@ class _PlanCardState extends State<PlanCard> {
   Future<void> _processLegacyCheckOut(BuildContext context) async {
     if (await AppMethods.isPlayStoreEnable()) {
       await context.pushRoute(
-        StoreCheckout(
+        PlayCheckout(
+          isPro: widget.isPro,
           plan: widget.plan,
         ),
       );
