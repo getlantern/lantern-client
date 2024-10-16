@@ -166,25 +166,7 @@ class _PlanCardState extends State<PlanCard> {
     }
   }
 
-  String getPlanDisplayName(String plan) {
-    if (Platform.isIOS) {
-      if (plan == '1y') {
-        return 'lantern_pro_one_year'.i18n;
-      } else if (plan == '1m') {
-        return 'lantern_pro_one_month'.i18n;
-      } else {
-        return 'lantern_pro_two_year'.i18n;
-      }
-    } else {
-      if (plan == '1y') {
-        return 'one_year_plan'.i18n;
-      } else if (plan == '1m') {
-        return 'one_month_plan'.i18n;
-      } else {
-        return 'two_year_plan'.i18n;
-      }
-    }
-  }
+
 
   String getPrice(String totalCost, {bool perMonthCost = false}) {
     final appPurchase = sl<AppPurchase>();
