@@ -64,12 +64,16 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract app version from pubspec.yaml
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Build Lantern Library
         run: |
           touch app.env
           mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
           make windows64
-          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
 
       - name: Activate plugins
         run: |
@@ -91,46 +95,16 @@ jobs:
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
 
+      - name: Move Lantern library to release directory
+        run: |
+          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
+  
       - name: Build Flutter app
-        run: make windows-release
+        run: |
+          make windows-release
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
-
-      - name: Extract app version from pubspec.yaml
-        run: |
-          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
-          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: Upload EXE artifact
-        uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-exe-build
-          path: dist/${{ env.APP_VERSION }}/windows/lantern-${{ env.APP_VERSION }}.exe
-
-      - name: Upload MSIX artifact
-        uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-msix-build
-          path: dist/${{ env.APP_VERSION }}/windows/lantern-${{ env.APP_VERSION }}.msix
-
-  sign-installer:
-    needs: build-windows
-    permissions:
-      contents: "read"
-      id-token: "write"
-    env:
-      version: ${{ inputs.version }}
-      prefix: ${{ inputs.prefix }}
-    runs-on: windows-latest
-    steps:
-      - name: Download the win build output
-        uses: actions/download-artifact@v4
-        with:
-          name: windows${{inputs.build-suffix}}-exe-build
-          destination: lantern-installer${{inputs.installer-suffix}}.exe
 
       - name: Sign EXE with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -147,14 +121,22 @@ jobs:
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
         with:
+          if-no-files-found: error
           name: windows${{inputs.build-suffix}}-installer-signed
-          path: |
-            lantern-installer${{inputs.installer-suffix}}.exe
+          path: lantern-installer${{inputs.installer-suffix}}.exe
+
+      # - name: Upload MSIX artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     if-no-files-found: error
+      #     name: windows${{inputs.build-suffix}}-msix-build
+      #     path: dist/${{ env.APP_VERSION }}/windows/lantern-${{ env.APP_VERSION }}.msix
 
   upload-windows:
-    needs: sign-installer
+    needs: build-windows
     permissions:
       contents: "read"
       id-token: "write"
