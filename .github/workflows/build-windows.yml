@@ -56,7 +56,7 @@ jobs:
         shell: pwsh
         run: |
           flutter --version
-          $env:PATH += ";C:\Users\runneradmin\AppData\Roaming\Pub\Cache\bin"
+          $env:PATH += ";C:\Users\runneradmin\AppData\Local\Pub\Cache\bin"
           Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
           RefreshEnv
 
