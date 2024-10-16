@@ -63,7 +63,6 @@ jobs:
         shell: bash
         run: |
           touch app.env
-          choco install git -y
           mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
           make windows64
 
