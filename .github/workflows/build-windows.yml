@@ -49,6 +49,8 @@ jobs:
 
       - name: Chocolatey Action
         uses: crazy-max/ghaction-chocolatey@v3.0.0
+        with:
+          args: -h
 
       - name: Set up MinGW
         uses: egor-tensin/setup-mingw@v2
