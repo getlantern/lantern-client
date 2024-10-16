@@ -64,14 +64,11 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract app version from pubspec.yaml
-        run: |
-          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
-          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
-
       - name: Build Lantern Library
+        shell: bash
         run: |
           touch app.env
+          choco install git -y
           mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
           make windows64
 
