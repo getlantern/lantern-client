@@ -69,7 +69,7 @@ jobs:
         run: |
           dart pub global activate protoc_plugin
           dart pub global activate flutter_distributor
-          ls ${HOME}/.pub-cache/bin
+          ls ${HOME}/AppData/Local/Pub/Cache/bin
 
       - name: Build Lantern Library
         shell: bash
