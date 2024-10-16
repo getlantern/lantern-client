@@ -8,11 +8,11 @@ class PriceSummary extends StatelessWidget {
   final bool isPro;
 
   const PriceSummary({
-    Key? key,
+    super.key,
     required this.plan,
     required this.isPro,
     this.refCode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
