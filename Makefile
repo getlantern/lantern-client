@@ -533,10 +533,8 @@ $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
-.PHONY: build-windows windows-release
-build-windows: windows-lib ffigen
+.PHONY: windows-release
 
-# Build the Windows app using Flutter Distributor
 windows-release: ffigen
 	flutter_distributor package --skip-clean --platform windows --targets "exe,msix" --flutter-build-args=verbose
 

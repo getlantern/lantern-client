@@ -63,7 +63,7 @@ jobs:
         run: |
           touch app.env
           mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
-          make build-windows
+          make windows
           mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
 
       - name: Activate plugins
