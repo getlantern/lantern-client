@@ -47,6 +47,14 @@ jobs:
         with:
           go-version-file: "go.mod"
 
+      - name: Chocolatey Action
+        uses: crazy-max/ghaction-chocolatey@v3.0.0
+
+      - name: Set up MinGW
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
+
       # Install Flutter
       - uses: subosito/flutter-action@v2
         with:
@@ -92,22 +100,24 @@ jobs:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
 
-      - name: Extract version from pubspec.yaml
+      - name: Extract app version from pubspec.yaml
         run: |
           VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
-          echo "VERSION_PUBSPEC=$VERSION" >> $GITHUB_ENV
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
         with:
+          if-no-files-found: error
           name: windows${{inputs.build-suffix}}-exe-build
-          path: dist/${{ env.VERSION_PUBSPEC }}/windows/app-${{ env.VERSION_PUBSPEC }}.exe
+          path: dist/${{ env.APP_VERSION }}/windows/lantern-${{ env.APP_VERSION }}.exe
 
       - name: Upload MSIX artifact
         uses: actions/upload-artifact@v4
         with:
+          if-no-files-found: error
           name: windows${{inputs.build-suffix}}-msix-build
-          path: dist/${{ env.VERSION_PUBSPEC }}/windows/app-${{ env.VERSION_PUBSPEC }}.msix
+          path: dist/${{ env.APP_VERSION }}/windows/lantern-${{ env.APP_VERSION }}.msix
 
   sign-installer:
     needs: build-windows

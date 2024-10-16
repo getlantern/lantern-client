@@ -87,6 +87,11 @@ jobs:
 
       - run: touch app.env
 
+      - name: Extract app version from pubspec.yaml
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Build Flutter app
         run: flutter build linux
 
@@ -94,8 +99,8 @@ jobs:
         run: |
           cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
           make package-linux
-          mv dist/1.0.0+1/lantern-1.0.0+1-linux.deb lantern_${{inputs.version}}_x64.deb
-          mv dist/1.0.0+1/lantern-1.0.0+1-linux.rpm lantern_${{inputs.version}}_x64.rpm
+          mv dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-linux.deb lantern_${{inputs.version}}_x64.deb
+          mv dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-linux.rpm lantern_${{inputs.version}}_x64.rpm
 
       - uses: actions/upload-artifact@v4
         with:

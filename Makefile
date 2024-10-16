@@ -505,7 +505,7 @@ package-linux:
 	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
 
 .PHONY: windows
-windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
+windows: $(WINDOWS_LIB_NAME) ## Build lantern for windows
 $(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
 $(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
 $(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
