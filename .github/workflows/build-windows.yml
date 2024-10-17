@@ -98,7 +98,7 @@ jobs:
       - name: Build Flutter app
         run: |
           New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
-          flutter_distributor package --skip-clean --platform --targets exe 
+          flutter_distributor package --platform windows --targets exe --skip-clean
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
