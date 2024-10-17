@@ -90,9 +90,10 @@ jobs:
          
       - name: Extract app version from pubspec.yaml
         id: extract_version
+        shell: bash
         run: |
-            APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
-            echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
       - name: Build Flutter app
         run: |
