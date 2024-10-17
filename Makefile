@@ -505,7 +505,7 @@ package-linux:
 	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
 
 .PHONY: windows
-windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
+windows: $(WINDOWS_LIB_NAME) ## Build lantern for windows
 $(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
 $(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
 $(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
@@ -532,6 +532,11 @@ $(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS +=
 $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
+
+.PHONY: windows-release
+
+windows-release: ffigen
+	flutter_distributor package --skip-clean --platform windows --targets "exe,msix" --flutter-build-args=verbose
 
 ## Darwin
 .PHONY: darwin-amd64
