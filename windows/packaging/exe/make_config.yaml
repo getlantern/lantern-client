@@ -1,6 +1,8 @@
-publisher: Lantern
+publisher_name: Lantern
 display_name: Lantern
 publisher_url: https://github.com/getlantern/lantern-client
-executable_name: lantern.exe
-output_base_file_name: lantern.exe
 create_desktop_icon: true
+launch_at_startup: true
+locales:
+  - en
+  - zh
