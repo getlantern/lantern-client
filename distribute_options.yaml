@@ -7,5 +7,3 @@ releases:
         package:
           platform: windows
           target: exe
-          build_args:
-            profile: true
