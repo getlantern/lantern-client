@@ -2,6 +2,3 @@ publisher: Lantern
 display_name: Lantern
 publisher_url: https://github.com/getlantern/lantern-client
 create_desktop_icon: true
-locales:
-  - en
-  - zh
