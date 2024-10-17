@@ -6,7 +6,7 @@ display_name: Lantern
 create_desktop_icon: true
 # See: https://jrsoftware.org/ishelp/index.php?topic=setup_defaultdirname
 # install_dir_name: "D:\\HELLO-WORLD"
-publisher_url: https://github.com/getlantern/lantern-client
+# publisher_url: https://github.com/getlantern/lantern-client
 locales:
   - en
   - zh
