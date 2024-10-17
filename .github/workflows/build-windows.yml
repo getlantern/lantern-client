@@ -98,11 +98,15 @@ jobs:
       - name: Build Flutter app
         run: |
           flutter_distributor package --flutter-build-args=verbose --platform windows --targets "exe,msix"
-          mv "dist/$APP_VERSION/lantern-$APP_VERSION.exe" lantern-installer-x64.exe
-          mv "dist/$APP_VERSION/lantern-$APP_VERSION.msix" lantern-installer-x64.msix
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
+
+      - name: Rename installer
+        run: |
+          ls dist
+          mv "dist/$APP_VERSION/lantern-$APP_VERSION.exe" lantern-installer-x64.exe
+          mv "dist/$APP_VERSION/lantern-$APP_VERSION.msix" lantern-installer-x64.msix
 
       - name: Sign EXE with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
