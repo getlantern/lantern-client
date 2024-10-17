@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:email_validator/email_validator.dart';
-import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/app/app_loading_dialog.dart';
+import 'package:lantern/core/utils/common.dart';
 
 @RoutePage(name: 'ReportIssue')
 class ReportIssue extends StatefulWidget {
@@ -108,7 +108,7 @@ class _ReportIssueState extends State<ReportIssue> {
                           prefixIcon: Transform.scale(
                               scale: 0.4,
                               child:
-                              const CAssetImage(path: ImagePaths.alert))),
+                                  const CAssetImage(path: ImagePaths.alert))),
                       hint: CText('select_an_issue'.i18n, style: tsBody1),
                       value: issueController.text != ''
                           ? issueController.text
@@ -123,9 +123,9 @@ class _ReportIssueState extends State<ReportIssue> {
                       },
                       padding: isDesktop()
                           ? const EdgeInsetsDirectional.only(
-                        top: 8,
-                        bottom: 8,
-                      )
+                              top: 8,
+                              bottom: 8,
+                            )
                           : const EdgeInsetsDirectional.all(0),
                       items: <String>[
                         'cannot_access_blocked_sites'.i18n,
@@ -217,9 +217,7 @@ class _ReportIssueState extends State<ReportIssue> {
         context,
         error: error,
         stackTrace: stackTrace,
-        description: (error as PlatformException)
-            .message
-            .toString(), // This is coming localized
+        description: error.localizedDescription, // This is coming localized
       );
     }
   }
