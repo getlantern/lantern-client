@@ -1,8 +1,2 @@
+app_name: 'Lantern'
 output: 'dist/'
-releases:
-  - name: prod
-    jobs:
-      - name: release-production-windows
-        package:
-          platform: windows
-          target: exe

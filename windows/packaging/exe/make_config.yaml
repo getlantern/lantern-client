@@ -3,4 +3,10 @@
 # TODO: Update this to add Lantern to Windows app store
 #app_id: 5B599538-42B1-4826-A479-AF079F21A65D
 display_name: Lantern
-create_desktop_icon: true
+app_name: Lantern
+publisher: getlantern
+publisher_url: https://github.com/getlantern/lantern-client
+display_name: Lantern
+executable_name: lantern.exe
+output_base_file_name: lantern.exe
+setup_icon_file: ..\windows\runner\resources\app_icon.ico
