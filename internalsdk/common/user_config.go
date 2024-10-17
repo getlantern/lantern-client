@@ -12,6 +12,7 @@ type AuthConfig interface {
 	GetDeviceID() string
 	GetUserID() int64
 	GetToken() string
+	Locale() string
 }
 
 type UserConfig interface {
@@ -36,6 +37,7 @@ func (uc *UserConfigData) GetAppName() string  { return uc.AppName }
 func (uc *UserConfigData) GetDeviceID() string { return uc.DeviceID }
 func (uc *UserConfigData) GetUserID() int64    { return uc.UserID }
 func (uc *UserConfigData) GetToken() string    { return uc.Token }
+func (uc *UserConfigData) Locale() string      { return uc.Language }
 func (uc *UserConfigData) GetLanguage() string {
 	if uc.Language != "" {
 		return uc.Language

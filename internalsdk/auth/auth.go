@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+
 	"fmt"
 	"net/http"
 	"strings"
@@ -45,6 +46,8 @@ type AuthClient interface {
 	DeleteAccount(ctc context.Context, loginData *protos.DeleteUserRequest) (bool, error)
 	//Logout
 	SignOut(ctx context.Context, logoutData *protos.LogoutRequest) (bool, error)
+
+	Healthz(ctx context.Context) (bool, error)
 }
 
 // NewClient creates a new instance of AuthClient
@@ -92,6 +95,15 @@ func prepareUserRequest(r *http.Request, uc common.UserConfig) {
 	} else {
 		common.AddCommonNonUserHeaders(uc, r)
 	}
+}
+
+// healthz is used to check the health of the auth service
+func (c *authClient) Healthz(ctx context.Context) (bool, error) {
+	err := c.GetJSON(ctx, "/healthz", nil, nil)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 // Auth APIS
@@ -153,6 +165,7 @@ func (c *authClient) LoginPrepare(ctx context.Context, loginData *protos.Prepare
 
 // Login is used to login a user with the LoginRequest
 func (c *authClient) login(ctx context.Context, loginData *protos.LoginRequest) (*protos.LoginResponse, error) {
+	log.Debugf("login request is %v", loginData)
 	var resp protos.LoginResponse
 	err := c.PostPROTOC(ctx, "/users/login", nil, loginData, &resp)
 	if err != nil {

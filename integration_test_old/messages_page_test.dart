@@ -1,16 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:lantern/custom_bottom_bar.dart';
-import 'package:lantern/home.dart';
-import 'package:lantern/messaging/chats.dart';
-import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
+import 'package:lantern/features/home/home.dart';
+import 'package:lantern/features/messaging/chats.dart';
+import 'package:lantern/features/messaging/messaging.dart';
 
 import 'action/navigation_action_test.dart';
 import 'enums/screens_test.dart';
 
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:i18n_extension/i18n_widget.dart';
-export 'package:lantern/i18n/i18n.dart';
+export 'package:lantern/core/localization/i18n.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

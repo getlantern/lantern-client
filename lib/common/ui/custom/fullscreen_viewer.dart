@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/features/messaging/messaging.dart';
 
 /// Base class for widgets that allow viewing files like images and videos, for both Chat and Replica.
 abstract class FullScreenViewer extends StatefulWidget {

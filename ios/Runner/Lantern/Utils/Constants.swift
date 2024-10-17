@@ -15,6 +15,7 @@ struct Constants {
   static let netExBundleId = "org.getlantern.lantern.Tunnel"
   static let appGroupName = "group.getlantern.lantern"
   static let bandwidthData = "bandwidthData"
+  static let configupdate = "configUpdate"
   static let statsData = "statsData"
   // MARK: App Group
   static let appGroupDefaults = UserDefaults(suiteName: appGroupName)!

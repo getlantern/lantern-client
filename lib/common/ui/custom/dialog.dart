@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 
 import 'package:flutter/gestures.dart';
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 /// CDialog incorporates the standard dialog styling and behavior as defined
 /// in the [component library](https://www.figma.com/file/Jz424KUVkFFc2NsxuYaZKL/Lantern-Component-Library?node-id=27%3A28).
@@ -12,6 +12,7 @@ class CDialog extends StatefulWidget {
     required String description,
     Object? error,
     StackTrace? stackTrace,
+    VoidCallback? okAction,
   }) {
     if (error != null || stackTrace != null) {
       developer.log(description, error: error, stackTrace: stackTrace);
@@ -22,6 +23,31 @@ class CDialog extends StatefulWidget {
       iconPath: ImagePaths.alert,
       barrierDismissible: false,
       agreeText: 'OK'.i18n,
+      agreeAction: () async {
+        okAction?.call();
+        return true;
+      },
+      includeCancel: false,
+    ).show(context);
+  }
+
+  static void noPurchaseFound(BuildContext context) {
+    CDialog(
+      title: 'purchase_not_found'.i18n,
+      description: 'no_previous_purchase'.i18n,
+      iconPath: ImagePaths.alert,
+      barrierDismissible: false,
+      agreeText: 'OK',
+    ).show(context);
+  }
+
+  static void purchaseRestoredDialog(BuildContext context) {
+    CDialog(
+      title: ''.i18n,
+      description: ''.i18n,
+      iconPath: ImagePaths.check_green_large,
+      barrierDismissible: false,
+      agreeText: 'OK',
     ).show(context);
   }
 
@@ -85,7 +111,8 @@ class CDialog extends StatefulWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 16),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +124,9 @@ class CDialog extends StatefulWidget {
                       path: ImagePaths.cloudOff, color: Colors.black),
                 ),
               ),
-              Center(child: CText('check_your_internet_connection'.i18n, style: tsSubtitle1)),
+              Center(
+                  child: CText('check_your_internet_connection'.i18n,
+                      style: tsSubtitle1)),
               const SizedBox(height: 10),
               CText('please_try'.i18n, style: tsSubtitle2),
               RichText(
@@ -148,7 +177,8 @@ class CDialog extends StatefulWidget {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: CText('got_it'.i18n.toUpperCase(), style: tsButtonPink),
+                    child:
+                        CText('got_it'.i18n.toUpperCase(), style: tsButtonPink),
                   ),
                 ],
               ),

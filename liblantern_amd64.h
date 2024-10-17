@@ -98,15 +98,9 @@ extern char* validateRecoveryByEmail(char* email, char* code);
 //
 extern char* deleteAccount(char* password);
 extern char* start();
-extern char* onSuccess();
-extern char* hasProxyFected();
-extern char* hasConfigFected();
-extern void sysProxyOn();
+extern char* sysProxyOn();
 extern void sysProxyOff();
 extern char* websocketAddr();
-extern char* paymentMethodsV3();
-extern char* paymentMethodsV4();
-extern char* proxyAll();
 extern void setProxyAll(char* value);
 
 // this method is reposible for checking if the user has updated plan or bought plans

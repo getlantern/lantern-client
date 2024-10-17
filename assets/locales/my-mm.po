@@ -525,6 +525,9 @@ msgstr "သင့်အကောင့်ဒေတာကိုရယူရာတ
 msgid "reseller_timeout"
 msgstr "သင်၏ စဖွင့်သုံးကုဒ်ကို အတည်ပြုနေစဉ် တစ်ခုခုမှားယွင်းသွားသည်။"
 
+msgid "wrong_reseller_code"
+msgstr "မမှန်ကန်သော activation ကုဒ်"
+
 msgid "reseller_success"
 msgstr "အောင်မြင်စွာအတည်ပြုကုဒ်ကိုရရှိပါပြီ။ "
 
@@ -1883,16 +1886,16 @@ msgid "follow_us"
 msgstr "ကျွန်ုပ်တို့ကိုလိုက်နာပါ "
 
 msgid "follow_us_telegram"
-msgstr "ကျွန်ုပ်တို့ကို Telegram ပေါ်တွင်လိုက်နာပါ "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "ကျွန်ုပ်တို့ကို Instagram ပေါ်တွင်လိုက်နာပါ "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "ကျွန်ုပ်တို့ကို Facebook ပေါ်တွင်လိုက်နာပါ "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "ကျွန်ုပ်တို့ကို X ပေါ်တွင်လိုက်နာပါ "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr ""
@@ -1945,8 +1948,77 @@ msgstr "ကန့်သတ်ချက်ရောက်ရှိပြီးပ
 msgid "file_size_limit_description"
 msgstr "ပူးတွဲထားသောဖိုင်အရွယ်အစားသည် 100 MB ထက်ငယ်သင့်သည်"
 
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""
+
 msgid "no_new_update"
 msgstr "သင်နောက်ဆုံးပေါ်အဆင့်ရောက်နေပါပြီ"
 
 msgid "error_referral"
 msgstr "သင့်ရဲ့ရည်ညွှန်းကုဒ်ကိုအသုံးပြုရာတွင် အမှားတစ်ခုဖြစ်ပွားခဲ့သည်။ "
+
+msgid "proxy_error"
+msgstr ""
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""

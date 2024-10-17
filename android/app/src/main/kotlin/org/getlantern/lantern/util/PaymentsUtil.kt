@@ -16,7 +16,7 @@ import org.getlantern.mobilesdk.Logger
 
 class PaymentsUtil(private val activity: Activity) {
 
-    val session = LanternApp.getSession()
+    val session = LanternApp.session
 
     fun submitStripePayment(
         planID: String,
@@ -110,7 +110,6 @@ class PaymentsUtil(private val activity: Activity) {
         planID: String,
         methodCallResult: MethodChannel.Result,
     ) {
-        assert(email.isNotEmpty(), { "Email cannot be empty" })
         assert(planID.isNotEmpty(), { "PlanId cannot be empty" })
         val inAppBilling = LanternApp.getInAppBilling()
         val plan = getPlanYear(planID)
@@ -155,7 +154,7 @@ class PaymentsUtil(private val activity: Activity) {
                         * if the purchase state is not purchased then do not call api
                         * make user pro temporary next user open app it will check the purchase state and call api accordingly
                         * */
-                        LanternApp.getSession().setUserPro(true)
+                        LanternApp.session.setUserPro(true)
                         return
                     }
 

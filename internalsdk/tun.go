@@ -32,7 +32,7 @@ var (
 // 3. All TCP traffic is routed through the Lantern proxy at the given socksAddr.
 func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Session) error {
 	runtime.LockOSThread()
-
+	defer logPanicAndRecover()
 	// perform geo lookup after establishing the VPN connection, prior to running tun2socks
 	go geoLookup(&panickingSessionImpl{wrappedSession})
 
@@ -42,7 +42,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 		return errors.New("Unable to get SOCKS5 dialer: %v", err)
 	}
 
-	ipp, err := ipproxy.New(&ipproxy.Opts{
+	ipp := ipproxy.New(&ipproxy.Opts{
 		DeviceName:          fmt.Sprintf("fd://%d", fd),
 		IdleTimeout:         70 * time.Second,
 		StatsInterval:       15 * time.Second,
@@ -72,9 +72,6 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 			return conn, err
 		},
 	})
-	if err != nil {
-		return errors.New("Unable to create ipproxy: %v", err)
-	}
 
 	currentDeviceMx.Lock()
 	currentIPP = ipp
@@ -82,7 +79,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 
 	ctx := context.Background()
 
-	err = ipp.Serve(ctx)
+	err = ipp.Start(ctx)
 	if err != io.EOF {
 		return log.Errorf("unexpected error serving TUN traffic: %v", err)
 	}
@@ -91,12 +88,7 @@ func Tun2Socks(fd int, socksAddr, dnsGrabAddr string, mtu int, wrappedSession Se
 
 // StopTun2Socks stops the current tun device.
 func StopTun2Socks() {
-	defer func() {
-		p := recover()
-		if p != nil {
-			log.Errorf("Panic while stopping: %v", p)
-		}
-	}()
+	defer logPanicAndRecover()
 
 	currentDeviceMx.Lock()
 	ipp := currentIPP
@@ -106,7 +98,7 @@ func StopTun2Socks() {
 	if ipp != nil {
 		go func() {
 			log.Debug("Closing ipproxy")
-			if err := ipp.Close(); err != nil {
+			if err := ipp.Stop(); err != nil {
 				log.Errorf("Error closing ipproxy: %v", err)
 			}
 			log.Debug("Closed ipproxy")

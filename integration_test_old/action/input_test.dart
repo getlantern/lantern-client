@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/messaging/conversation/audio/audio_widget.dart';
-import 'package:lantern/messaging/conversation/audio/waveform.dart';
-import 'package:lantern/messaging/conversation/message_bubble.dart';
-import 'package:lantern/messaging/conversation/status_row.dart';
+import 'package:lantern/features/messaging/conversation/audio/audio_widget.dart';
+import 'package:lantern/features/messaging/conversation/audio/waveform.dart';
+import 'package:lantern/features/messaging/conversation/message_bubble.dart';
+import 'package:lantern/features/messaging/conversation/status_row.dart';
 
 import '../enums/disappearing_test.dart';
 import '../helpers/clipboard_test.dart';

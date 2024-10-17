@@ -13,11 +13,12 @@ import (
 	"github.com/1Password/srp"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/ios"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
@@ -26,9 +27,10 @@ import (
 // SessionModel is a custom model derived from the baseModel.
 type SessionModel struct {
 	*baseModel
-	authClient  auth.AuthClient
-	proClient   pro.ProClient
-	surveyModel *SurveyModel
+	authClient    auth.AuthClient
+	proClient     pro.ProClient
+	surveyModel   *SurveyModel
+	iosConfigurer *config.Global
 }
 
 // Expose payment providers
@@ -77,6 +79,8 @@ const (
 	pathLang                   = "lang"
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
+	pathShowAds                = "showAds"
+	pathTapSellAdsEnabled      = "tapsellAdsEnabled"
 	pathStoreVersion           = "storeVersion"
 	pathTestPlayVersion        = "testPlayVersion"
 	pathServerInfo             = "/server_info"
@@ -118,6 +122,7 @@ type SessionModelOpts struct {
 	Lang            string
 	TimeZone        string
 	Platform        string
+	ConfigPath      string
 }
 
 var (
@@ -130,9 +135,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
-	dialTimeout := 30 * time.Second
 	if opts.Platform == "ios" {
-		dialTimeout = 20 * time.Second
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 		base.db.RegisterType(5000, &protos.Device{})
@@ -153,38 +156,62 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 
 	m := &SessionModel{baseModel: base}
-	webclientOpts := &webclient.Opts{
-		Timeout: dialTimeout,
-		UserConfig: func() common.UserConfig {
-			deviceID, _ := m.GetDeviceID()
-			userID, _ := m.GetUserID()
-			token, _ := m.GetToken()
-			lang, _ := m.Locale()
-			internalHeaders := map[string]string{
-				common.PlatformHeader:   opts.Platform,
-				common.AppVersionHeader: common.ApplicationVersion,
-			}
-			return common.NewUserConfig(
-				common.DefaultAppName,
-				deviceID,
-				userID,
-				token,
-				internalHeaders,
-				lang,
-			)
-		},
-	}
-	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+
+	deviceID, _ := m.GetDeviceID()
+	userID, _ := m.GetUserID()
+	token, _ := m.GetToken()
+	lang, _ := m.Locale()
+
+	m.proClient = createProClient(m, opts.Platform)
 
 	authUrl := common.DFBaseUrl
 	if opts.Platform == "ios" {
 		authUrl = common.APIBaseUrl
 	}
-	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), webclientOpts.UserConfig)
+	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), func() common.UserConfig {
+		internalHeaders := map[string]string{
+			common.PlatformHeader:   opts.Platform,
+			common.AppVersionHeader: common.ApplicationVersion,
+		}
+		return common.NewUserConfig(
+			common.DefaultAppName,
+			deviceID,
+			userID,
+			token,
+			internalHeaders,
+			lang,
+		)
+	})
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
+	if opts.Platform == "ios" {
+		go m.setupIosConfigure(opts.ConfigPath, int(userID), token, deviceID)
+	}
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
+}
+
+// setupIosConfigure sets up the iOS configuration for the session model.
+// It continuously checks if the global configuration is available and retries every second if not.
+func (m *SessionModel) setupIosConfigure(configPath string, userId int, token string, deviceId string) {
+	go func() {
+		cf := ios.NewConfigurer(configPath, userId, token, deviceId, "")
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
+		for range ticker.C {
+			if cf.HasGlobalConfig() {
+				global, _, _, err := cf.OpenGlobal()
+				if err != nil {
+					log.Errorf("Error while opening global %v", err)
+					return
+				}
+				m.iosConfigurer = global
+				log.Debugf("Found global config IOS configure done %v", global)
+				return // Exit the loop after success
+			}
+			log.Debugf("global config not available, retrying...")
+		}
+	}()
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -298,6 +325,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "setUserIdAndToken":
+		userId := arguments.Get("userId").Int()
+		token := arguments.Get("token").String()
+		err := m.SetUserIdAndToken(int64(userId), token)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 	case "signupEmailResendCode":
 		email := arguments.Get("email").String()
 		err := signupEmailResend(m, email)
@@ -328,6 +363,16 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		purchaseId := arguments.Get("purchaseId").String()
 		email := arguments.Get("email").String()
 		err := submitApplePayPayment(m, email, plandId, purchaseId)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "restoreAccount":
+		email := arguments.Get("email").String()
+		code := arguments.Get("code").String()
+		provider := arguments.Get("provider").String()
+		err := restorePurchase(m, email, code, provider)
 		if err != nil {
 			return nil, err
 		}
@@ -407,6 +452,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "authorizeViaEmail":
 		email := arguments.Get("emailAddress").String()
 		err := requestRecoveryEmail(m, email)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+
+	case "userEmailRequest":
+		email := arguments.Get("email").String()
+		err := userEmailRequest(m, email)
 		if err != nil {
 			return nil, err
 		}
@@ -605,6 +658,10 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "checkIfSurveyLinkOpened":
 		return m.checkIfSurveyLinkOpened(arguments.Scalar().String())
+	case "checkAvailableFeatures":
+		m.checkAvailableFeatures()
+		return true, nil
+
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -627,6 +684,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		return err
 	}
 	log.Debugf("my device id %v", opts.DeviceID)
+	log.Debugf("Store version %v", opts.PlayVersion)
 	err = pathdb.PutAll(tx, map[string]interface{}{
 		pathDevelopmentMode: opts.DevelopmentMode,
 		pathDeviceID:        opts.DeviceID,
@@ -701,11 +759,47 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	}()
 	go checkSplitTunneling(m)
 	m.surveyModel, _ = NewSurveyModel(*m)
-	// By defautl on ios  auth flow enabled
-	if opts.Platform == "ios" {
+	return nil
+}
+
+func (m *SessionModel) checkAvailableFeatures() {
+	// Check for auth feature
+	authEnabled := m.featureEnabled(config.FeatureAuth)
+	m.SetAuthEnabled(authEnabled)
+	platfrom, _ := m.platform()
+	if platfrom == "ios" {
 		m.SetAuthEnabled(true)
 	}
-	return checkAdsEnabled(m)
+
+	// Check for ads feature
+	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
+	m.SetShowGoogleAds(googleAdsEnabled)
+
+	tapSellAdsEnabled := m.featureEnabled(config.FeatureTapsellAds)
+	m.SetShowTapSellAds(tapSellAdsEnabled)
+}
+
+// check if feature is enabled or not
+func (m *SessionModel) featureEnabled(feature string) bool {
+	userId, err := m.GetUserID()
+	if err != nil {
+		log.Errorf("Error while getting user id %v", err)
+		return false
+	}
+	isPro, err := m.IsProUser()
+	if err != nil {
+		log.Errorf("Error while getting user id %v", err)
+		return false
+	}
+	countryCode, err := m.GetCountryCode()
+	if err != nil {
+		log.Errorf("Error while getting user id %v", err)
+		return false
+	}
+	log.Debugf("Feature country code %s", countryCode)
+	featureEnabled := m.iosConfigurer.FeatureEnabled(feature, common.Platform, common.DefaultAppName, common.ApplicationVersion, userId, isPro, countryCode)
+	log.Debugf("Feature enabled  %s %v", feature, featureEnabled)
+	return featureEnabled
 }
 
 func (m *SessionModel) platform() (string, error) {
@@ -738,7 +832,7 @@ func (session *SessionModel) setSplitTunneling(tunneling bool) error {
 func (session *SessionModel) paymentMethods() error {
 	plans, err := session.proClient.PaymentMethodsV4(context.Background())
 	if err != nil {
-		log.Debugf("Plans V3 error: %v", err)
+		log.Debugf("Plans V4 error: %v", err)
 		return err
 	}
 	log.Debugf("Plans V4 response: %+v", plans)
@@ -1169,11 +1263,20 @@ func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 	return pathdb.Get[bool](m.db, pathSplitTunneling)
 }
 
-func (m *SessionModel) SetShowInterstitialAdsEnabled(adsEnable bool) {
-	log.Debugf("SetShowInterstitialAdsEnabled %v", adsEnable)
+func (m *SessionModel) SetShowGoogleAds(adsEnable bool) {
+	log.Debugf("SetShowGoogleAds %v", adsEnable)
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathAdsEnabled, adsEnable, "")
+		return pathdb.Put(tx, pathShouldShowGoogleAds, adsEnable, "")
 	}))
+	checkAdsEnabled(m)
+}
+
+func (m *SessionModel) SetShowTapSellAds(adsEnable bool) {
+	log.Debugf("SetShowTapSellAds %v", adsEnable)
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathTapSellAdsEnabled, adsEnable, "")
+	}))
+	checkAdsEnabled(m)
 }
 
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
@@ -1244,10 +1347,12 @@ func isShowFirstTimeUserVisit(m *baseModel) error {
 	})
 }
 
-func setUserIdAndToken(m *baseModel, userId int64, token string) error {
-	log.Debugf("Setting user id %v token %v", userId, token)
+// Keep name as p1,p2 somehow is conflicting with objective c
+// p1 is userid and p2 is token
+func (m *SessionModel) SetUserIdAndToken(p1 int64, p2 string) error {
+	log.Debugf("Setting user id %v token %v", p1, p2)
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		if err := pathdb.Put[int64](tx, pathUserID, userId, ""); err != nil {
+		if err := pathdb.Put[int64](tx, pathUserID, p1, ""); err != nil {
 			log.Errorf("Error while setting user id %v", err)
 			return err
 		}
@@ -1256,7 +1361,7 @@ func setUserIdAndToken(m *baseModel, userId int64, token string) error {
 			return err
 		}
 		log.Debugf("User id %v", userid)
-		return pathdb.Put(tx, pathToken, token, "")
+		return pathdb.Put(tx, pathToken, p2, "")
 	})
 }
 func setResellerCode(m *baseModel, resellerCode string) error {
@@ -1298,7 +1403,7 @@ func (session *SessionModel) userCreate(ctx context.Context) error {
 	}
 
 	//Save user id and token
-	err = setUserIdAndToken(session.baseModel, int64(user.UserId), user.Token)
+	err = session.SetUserIdAndToken(int64(user.UserId), user.Token)
 	if err != nil {
 		return err
 	}
@@ -1378,8 +1483,10 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
 		log.Debugf("User is pro and not first time")
 		setProUser(session.baseModel, true)
+	} else if userDetail.UserLevel == "pro" {
+		log.Debugf("user is pro and device not found")
+		setProUser(session.baseModel, true)
 	} else {
-		log.Debugf("User is not pro")
 		setProUser(session.baseModel, false)
 	}
 
@@ -1389,7 +1496,7 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 		return err
 	}
 	log.Debugf("User caching successful: %+v", userDetail)
-	return setUserIdAndToken(session.baseModel, int64(userDetail.UserId), userDetail.Token)
+	return session.SetUserIdAndToken(int64(userDetail.UserId), userDetail.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
@@ -1429,17 +1536,16 @@ func reportIssue(session *SessionModel, email string, issue string, description 
 func checkAdsEnabled(session *SessionModel) error {
 	log.Debugf("Check ads enabled")
 	// Check if ads is enable or not
-	adsEnable, err := pathdb.Get[bool](session.db, pathAdsEnabled)
+	isPro, err := session.IsProUser()
 	if err != nil {
-		return log.Errorf("Error while getting ads enabled %v", err)
+		return err
 	}
-	if !adsEnable {
+	if isPro {
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
+			return pathdb.Put[string](tx, pathShowAds, "", "")
 		})
 	}
-
-	// if enable
+	// if user is not pro check if user provdied all permission
 	hasAllPermisson, err := pathdb.Get[bool](session.db, pathHasAllNetworkPermssion)
 	if err != nil {
 		return err
@@ -1447,26 +1553,32 @@ func checkAdsEnabled(session *SessionModel) error {
 	// If the user doesn't have all permissions, disable Google ads:
 	if !hasAllPermisson {
 		log.Debugf("User has not given all permission")
-
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
-		})
-	}
-	log.Debugf("User has given all permission")
-	isPro, err := session.IsProUser()
-	if err != nil {
-		return err
-	}
-	if isPro {
-		log.Debugf("Is user pro %v", isPro)
-		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathShouldShowGoogleAds, false, "")
+			return pathdb.Put[string](tx, pathShowAds, "", "")
 		})
 	}
 	// If the user has all permissions but is not a pro user, enable ads:
-	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathShouldShowGoogleAds, true, "")
-	})
+	googleAdsEnable, err := pathdb.Get[bool](session.db, pathShouldShowGoogleAds)
+	if err != nil {
+		return err
+	}
+	tapSellAdsEnable, err := pathdb.Get[bool](session.db, pathTapSellAdsEnabled)
+	if err != nil {
+		return err
+	}
+	if googleAdsEnable {
+		log.Debug("Google Ads is enabled")
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put[string](tx, pathShowAds, "google", "")
+		})
+	}
+	if tapSellAdsEnable {
+		log.Debug("TapSell Ads is enabled")
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put[string](tx, pathShowAds, "tapsell", "")
+		})
+	}
+	return nil
 
 }
 func redeemResellerCode(m *SessionModel, email string, resellerCode string) error {
@@ -1519,6 +1631,29 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 	}
 	// Set user to pro
 	return setProUser(m.baseModel, true)
+}
+
+func restorePurchase(session *SessionModel, email string, code string, provider string) error {
+	deviceName, err := pathdb.Get[string](session.db, pathDevice)
+	if err != nil {
+		return err
+	}
+
+	requData := map[string]interface{}{
+		"verified_email":          email,
+		"provider":                provider,
+		"deviceName":              deviceName,
+		"email_verification_code": code,
+	}
+	okResponse, err := session.proClient.RestorePurchase(context.Background(), requData)
+	if err != nil {
+		return err
+	}
+	if okResponse.Status != "ok" {
+		return errors.New("error restoring purchase")
+	}
+	setProUser(session.baseModel, true)
+	return nil
 }
 
 func submitGooglePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
@@ -1614,18 +1749,20 @@ func signup(session *SessionModel, email string, password string) error {
 	lowerCaseEmail := strings.ToLower(email)
 	salt, err := session.authClient.SignUp(email, password)
 	if err != nil {
+		// log.Errorf("Error while signing up %v", err)
 		return err
 	}
 	//Request successfull then save salt
-	err = pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+	dbErr := pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:     salt,
 			pathEmailAddress: lowerCaseEmail,
 		})
 	})
-	if err != nil {
-		return err
+	if dbErr != nil {
+		return dbErr
 	}
+	go session.paymentMethods()
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put[bool](tx, pathIsUserLoggedIn, true, "")
 	})
@@ -1750,7 +1887,7 @@ func deviceLimitFlow(session *SessionModel, login *protos.LoginResponse) error {
 	if err != nil {
 		return err
 	}
-	return setUserIdAndToken(session.baseModel, login.LegacyID, login.LegacyToken)
+	return session.SetUserIdAndToken(login.LegacyID, login.LegacyToken)
 }
 
 func startRecoveryByEmail(session *SessionModel, email string) error {
@@ -1809,9 +1946,9 @@ func completeRecoveryByEmail(session *SessionModel, email string, code string, p
 
 // This will validate code send by server
 func validateRecoveryByEmail(session *SessionModel, email string, code string) error {
-	lowerCaseEmail := strings.ToLower(email)
+	// lowerCaseEmail := strings.ToLower(email)
 	prepareRequestBody := &protos.ValidateRecoveryCodeRequest{
-		Email: lowerCaseEmail,
+		Email: email,
 		Code:  code,
 	}
 	recovery, err := session.authClient.ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
@@ -1819,7 +1956,7 @@ func validateRecoveryByEmail(session *SessionModel, email string, code string) e
 		return err
 	}
 	if !recovery.Valid {
-		return log.Errorf("invalid_code Error: %v", err)
+		return log.Errorf("invalid_code Error")
 	}
 	log.Debugf("Validate code response %v", recovery.Valid)
 	return nil
@@ -1972,6 +2109,7 @@ func clearLocalUserData(session SessionModel) error {
 		return pathdb.PutAll(tx, map[string]interface{}{
 			pathUserSalt:     nil,
 			pathEmailAddress: "",
+			pathBandwidth:    nil,
 		})
 	})
 	if err1 != nil {
@@ -2125,7 +2263,7 @@ func linkCodeRedeem(session *SessionModel) error {
 		return err
 	}
 	log.Debugf("linkCodeRedeem response %+v", linkRedeemResponse)
-	err = setUserIdAndToken(session.baseModel, linkRedeemResponse.UserID, linkRedeemResponse.Token)
+	err = session.SetUserIdAndToken(linkRedeemResponse.UserID, linkRedeemResponse.Token)
 	if err != nil {
 		return log.Errorf("Error while setting user id and token %v", err)
 	}
@@ -2154,6 +2292,17 @@ func userLinkRemove(session *SessionModel, deviceId string) error {
 	}
 	log.Debugf("UserLink Remove response %v", linkResponse)
 	return session.userDetail(context.Background())
+}
+
+func userEmailRequest(session *SessionModel, email string) error {
+	okResponse, err := session.proClient.EmailRequest(context.Background(), email)
+	if err != nil {
+		return err
+	}
+	if okResponse.Status != "ok" {
+		return errors.New("Email request failed")
+	}
+	return nil
 }
 
 // Add device for LINK WITH EMAIL method
@@ -2185,7 +2334,7 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 		return err
 	}
 	log.Debugf("ValidateRecovery code response %v", linkResponse)
-	err = setUserIdAndToken(session.baseModel, linkResponse.UserID, linkResponse.Token)
+	err = session.SetUserIdAndToken(linkResponse.UserID, linkResponse.Token)
 	if err != nil {
 		return err
 	}

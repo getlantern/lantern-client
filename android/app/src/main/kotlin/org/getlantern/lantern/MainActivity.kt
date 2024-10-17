@@ -1,7 +1,6 @@
 package org.getlantern.lantern
 
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -26,6 +25,7 @@ import io.lantern.model.MessagingModel
 import io.lantern.model.ReplicaModel
 import io.lantern.model.SessionModel
 import io.lantern.model.VpnModel
+import io.sentry.Sentry
 import kotlinx.coroutines.*
 import org.getlantern.lantern.activity.WebViewActivity
 import org.getlantern.lantern.event.AppEvent
@@ -63,65 +63,73 @@ class MainActivity :
     private lateinit var receiver: NotificationReceiver
     private var accountInitDialog: AlertDialog? = null
     private var lastSurvey: Survey? = null
+    var maxServiceRetryFailedCount: Int = 0
 
     override fun configureFlutterEngine(
         flutterEngine: FlutterEngine,
     ) {
+        /// Add only flutter related code here
+        //  only code that needs flutter engin
         val start = System.currentTimeMillis()
         super.configureFlutterEngine(flutterEngine)
-        messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
-        vpnModel = VpnModel(flutterEngine, ::switchLantern)
-        val opts = SessionModelOpts()
-        opts.lang = DeviceUtil.getLanguageCode(this)
-        opts.deviceID = DeviceUtil.deviceId(this)
-        opts.model = DeviceUtil.model()
-        opts.osVersion = DeviceUtil.deviceOs()
-        opts.playVersion = DeviceUtil.isStoreVersion(this)
-        opts.device = DeviceUtil.model()
-        opts.platform = DeviceUtil.devicePlatform()
-        opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
-        opts.timeZone = TimeZone.getDefault().displayName
-        sessionModel = SessionModel(this, flutterEngine, opts)
-        replicaModel = ReplicaModel(this, flutterEngine)
-        receiver = NotificationReceiver()
-        notifications = NotificationHelper(this, receiver)
-        eventManager =
-            object : EventManager("lantern_event_channel", flutterEngine) {
+
+        try {
+            val opts = SessionModelOpts()
+            opts.lang = DeviceUtil.getLanguageCode(this)
+            opts.deviceID = DeviceUtil.deviceId(this)
+            opts.model = DeviceUtil.model()
+            opts.osVersion = DeviceUtil.deviceOs()
+            opts.playVersion = DeviceUtil.isStoreVersion(this)
+            opts.device = DeviceUtil.model()
+            opts.platform = DeviceUtil.devicePlatform()
+            opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
+            opts.timeZone = TimeZone.getDefault().displayName
+            vpnModel = VpnModel(flutterEngine, ::switchLantern)
+            sessionModel = SessionModel(this, flutterEngine, opts)
+
+            messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
+            replicaModel = ReplicaModel(this, flutterEngine)
+
+            MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                "lantern_method_channel",
+            ).setMethodCallHandler(this)
+
+            flutterNavigation =
+                MethodChannel(
+                    flutterEngine.dartExecutor.binaryMessenger,
+                    "navigation",
+                )
+
+            flutterNavigation.setMethodCallHandler { call, _ ->
+                if (call.method == "ready") {
+                    intent.let { intent ->
+                        // If the user clicks on a message notification and MainActivity opens in
+                        // response, this ensures that we navigate to the corresponding conversation.
+                        navigateForIntent(intent)
+                    }
+                }
+            }
+            eventManager = object : EventManager("lantern_event_channel", flutterEngine) {
                 override fun onListen(event: Event) {
-                    if (LanternApp.getSession().lanternDidStart()) {
+                    if (LanternApp.session.lanternDidStart()) {
                         Plausible.init(applicationContext)
                         Plausible.enable(true)
                         Logger.debug(TAG, "Plausible initialized")
                         checkIfSurveyAvailable()
                     }
-                    LanternApp.getSession().dnsDetector.publishNetworkAvailability()
+                    LanternApp.session.dnsDetector.publishNetworkAvailability()
                 }
             }
-        MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            "lantern_method_channel",
-        ).setMethodCallHandler(this)
 
-        flutterNavigation =
-            MethodChannel(
-                flutterEngine.dartExecutor.binaryMessenger,
-                "navigation",
+            Logger.debug(
+                TAG,
+                "configureFlutterEngine finished at ${System.currentTimeMillis() - start}",
             )
-
-        flutterNavigation.setMethodCallHandler { call, _ ->
-            if (call.method == "ready") {
-                intent.let { intent ->
-                    // If the user clicks on a message notification and MainActivity opens in
-                    // response, this ensures that we navigate to the corresponding conversation.
-                    navigateForIntent(intent)
-                }
-            }
+        } catch (e: Exception) {
+            Logger.error(TAG, "Error configuring Flutter engine", e)
+            Sentry.captureException(e)
         }
-
-        Logger.debug(
-            TAG,
-            "configureFlutterEngine finished at ${System.currentTimeMillis() - start}",
-        )
     }
 
 
@@ -130,6 +138,10 @@ class MainActivity :
         super.onCreate(savedInstanceState)
         Logger.debug(TAG, "Default Locale is %1\$s", Locale.getDefault())
         subscribeAppEvents()
+
+        receiver = NotificationReceiver()
+        notifications = NotificationHelper(this, receiver)
+
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -159,7 +171,7 @@ class MainActivity :
         }
     }
 
-    @SuppressLint("WrongConstant")
+
     override fun onStart() {
         super.onStart()
         val packageName = activity.packageName
@@ -171,6 +183,7 @@ class MainActivity :
                 ContextCompat.RECEIVER_NOT_EXPORTED,
             )
         }
+        /// Lantern service should only when session model is initialized
         startLanternService()
     }
 
@@ -200,7 +213,10 @@ class MainActivity :
         vpnModel.destroy()
         sessionModel.destroy()
         replicaModel.destroy()
-        messagingModel.destroy()
+        if (sessionModel.chatEnabled()) {
+            messagingModel.destroy()
+        }
+
     }
 
     override fun onMethodCall(
@@ -219,10 +235,35 @@ class MainActivity :
 
 
     private fun startLanternService() {
-        val intent = Intent(this, LanternService::class.java)
-        context.startService(intent)
-        Logger.debug(TAG, "Lantern service started at ${System.currentTimeMillis()}")
+        try {
+            val isServiceRunning = Utils.isServiceRunning(activity, LanternService::class.java)
+            if (isServiceRunning) {
+                Logger.debug(TAG, "Lantern service already running")
+                return
+            }
+            val intent = Intent(this, LanternService::class.java)
+            context.startService(intent)
+            Logger.debug(TAG, "Lantern service started at ${System.currentTimeMillis()}")
+        } catch (e: IllegalStateException) {
+            handleServiceStartException(e);
+        } catch (e: Exception) {
+            Logger.error(TAG, "Error starting Lantern service", e)
+        }
     }
+
+
+    private fun handleServiceStartException(e: IllegalStateException) {
+        if (e.javaClass.name == "android.app.BackgroundServiceStartNotAllowedException") {
+            maxServiceRetryFailedCount++
+            Logger.error(TAG, "Error starting Lantern service", e)
+            if (maxServiceRetryFailedCount < 3) {
+                Handler(Looper.getMainLooper()).postDelayed({ startLanternService() }, 1000)
+            }
+        } else {
+            Logger.error(TAG, "Error starting Lantern service", e)
+        }
+    }
+
 
     /**
      * Fetch the latest loconf config and update the UI based on those
@@ -258,25 +299,33 @@ class MainActivity :
                     accountInitDialog?.dismiss()
                     finish()
                 }
-                accountInitDialog?.show()
+                if (!isFinishing) {
+                    accountInitDialog?.show()
+                }
             }
 
             AccountInitializationStatus.Status.SUCCESS -> {
-                accountInitDialog?.let { it.dismiss() }
+                if (!isFinishing) {
+                    accountInitDialog?.dismiss()
+                }
+
             }
 
             AccountInitializationStatus.Status.FAILURE -> {
-                accountInitDialog?.let { it.dismiss() }
+                if (!isFinishing) {
+                    accountInitDialog?.dismiss()
 
-                Utils.showAlertDialog(
-                    this,
-                    getString(R.string.connection_error),
-                    getString(R.string.reopen_to_try, appName),
-                    getString(R.string.ok),
-                    true,
-                    null,
-                    false,
-                )
+                    Utils.showAlertDialog(
+                        this,
+                        getString(R.string.connection_error),
+                        getString(R.string.reopen_to_try, appName),
+                        getString(R.string.ok),
+                        true,
+                        null,
+                        false,
+                    )
+                }
+
             }
         }
     }
@@ -284,7 +333,7 @@ class MainActivity :
     private fun sendSurveyEvent(survey: Survey) {
         val url = survey.url
         if (url != "") {
-            if (LanternApp.getSession().checkIfSurveyLinkOpened(url)) {
+            if (LanternApp.session.checkIfSurveyLinkOpened(url)) {
                 Logger.debug(
                     TAG,
                     "User already opened link to survey; not displaying snackbar",
@@ -304,7 +353,7 @@ class MainActivity :
         val intent = Intent(this, WebViewActivity::class.java)
         intent.putExtra("url", survey.url)
         startActivity(intent)
-        LanternApp.getSession().setSurveyLinkOpened(survey.url)
+        LanternApp.session.setSurveyLinkOpened(survey.url)
     }
 
     @Throws(Exception::class)
@@ -400,7 +449,7 @@ class MainActivity :
                 )
                 // If user come here it mean user has all permissions needed
                 // Also user given permission for VPN service dialog as well
-                LanternApp.getSession().setHasAllNetworkPermissions(true)
+                LanternApp.session.setHasAllNetworkPermissions(true)
                 updateStatus(true)
                 startVpnService()
             }
@@ -468,7 +517,7 @@ class MainActivity :
                 // This check is for new user that will start app first time
                 // this mean user has already given
                 // system permissions
-                LanternApp.getSession().setHasAllNetworkPermissions(true)
+                LanternApp.session.setHasAllNetworkPermissions(true)
             } else {
                 Logger.debug(PERMISSIONS_TAG, "User denied vpn permission")
                 vpnModel.updateStatus(false)
@@ -491,8 +540,6 @@ class MainActivity :
 
     private fun updateStatus(useVpn: Boolean) {
         Logger.d(TAG, "Updating VPN status to %1\$s", useVpn)
-//        LanternApp.getSession().updateVpnPreference(useVpn)
-//        LanternApp.getSession().updateBootUpVpnPreference(useVpn)
         vpnModel.updateStatus(useVpn)
     }
 

@@ -8,10 +8,11 @@
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
 # Katherine Mojena, 2024
 # strel, 2024
+# Emerson Castaneda, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: strel, 2024\n"
+"Last-Translator: Emerson Castaneda, 2024\n"
 "Language-Team: Spanish (Cuba) (https://app.transifex.com/lantern-1/teams/94371/es_CU/)\n"
 "Language: es_CU\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -521,6 +522,9 @@ msgstr "Algo ha fallado al obtener los datos de tu cuenta."
 
 msgid "reseller_timeout"
 msgstr "Algo ha fallado al validar tu código de activación."
+
+msgid "wrong_reseller_code"
+msgstr "Código de activación  invalido"
 
 msgid "reseller_success"
 msgstr "Se ha cambiado el código de activación."
@@ -1874,16 +1878,16 @@ msgid "follow_us"
 msgstr "Síguenos"
 
 msgid "follow_us_telegram"
-msgstr "Síguenos en Telegram"
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "Síguenos en Telegram"
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "Síguenos en Facebook"
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "Síguenos en X"
+msgstr ""
 
 msgid "report_issue_error"
 msgstr ""
@@ -1934,8 +1938,77 @@ msgstr "Límite alcanzado"
 msgid "file_size_limit_description"
 msgstr "Los tamaños de los archivos adjuntos deben ser menores de 100 MB"
 
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""
+
 msgid "no_new_update"
 msgstr "¡Está actualizado!"
 
 msgid "error_referral"
 msgstr "Algo ha fallado al aplicar tu código de recomendación."
+
+msgid "proxy_error"
+msgstr ""
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""

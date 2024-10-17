@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 /// Forked version of https://github.com/retroportalstudio/focused_menu that
 /// always displays the focused child at the top of the page

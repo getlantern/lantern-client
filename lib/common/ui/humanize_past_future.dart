@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 final _hourMinuteFormat = DateFormat('jm');
 final _weekdayFormat = DateFormat('EEEE');

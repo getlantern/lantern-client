@@ -220,3 +220,10 @@
 -keep class org.whispersystems.** { *; }
 ##---------------End: proguard configuration for Signal  ----------
 #
+
+##---------------Begin: proguard configuration for Tapsell  ----------
+-dontwarn ir.tapsell.mediation.flutter.utils.UtilsKt
+-keep class ir.tapsell.mediation.flutter.utils.UtilsKt
+-keep class ir.tapsell.mediation.flutter.TapsellFlutterPlugin
+##---------------End: proguard configuration for Tapsell  ----------
+#
