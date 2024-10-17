@@ -225,7 +225,6 @@ class _AccountMenuState extends State<AccountMenu> {
 
   @override
   Widget build(BuildContext context) {
-    print("Auth vaule ${sessionModel.isAuthEnabled.value}");
     return BaseScreen(
       title: 'Account'.i18n,
       automaticallyImplyLeading: false,

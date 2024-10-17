@@ -1,4 +1,0 @@
-enum DISAPPEARING { SECONDS_5, MINUTES_1, DAYS_1 }
-
-Map<DISAPPEARING, String> disappearMap = {DISAPPEARING.SECONDS_5: '5 seconds'};
-Map<DISAPPEARING, String> disappearMapReduced = {DISAPPEARING.SECONDS_5: '5S'};
