@@ -103,9 +103,11 @@ jobs:
           VERSION: "${{ env.version }}"
 
       - name: List dist contents
+        shell: bash
         run: ls dist
 
       - name: Rename installer
+        shell: bash
         run: |
           mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}.exe" lantern-installer-x64.exe
           mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}.msix" lantern-installer-x64.msix
