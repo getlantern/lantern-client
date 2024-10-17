@@ -97,14 +97,10 @@ jobs:
 
       - name: Build Flutter app
         run: |
-          flutter_distributor package --flutter-build-args=verbose --platform windows --targets "exe,msix"
+          flutter_distributor package --platform windows --targets "exe,msix" --skip-clean
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
-
-      - name: List dist contents
-        shell: bash
-        run: ls dist
 
       - name: Rename installer
         shell: bash
