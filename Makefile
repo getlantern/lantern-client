@@ -444,6 +444,15 @@ ios-release:set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PR
 	echo "iOS IPA generated under: $$IPA_PATH"; \
 	open "$$IPA_PATH"
 
+## Mocks
+MOCKERY=mockery
+MOCKERY_FLAGS=--case=underscore --output=internalsdk/mocks --outpkg=mocks
+
+.PHONY: mocks
+mocks:
+	@$(MOCKERY) --name=AdProvider --name=AdSettings --name=Session --dir=./internalsdk $(MOCKERY_FLAGS)
+	@$(MOCKERY) --name=ProClient --dir=./internalsdk/pro $(MOCKERY_FLAGS)
+
 .PHONY: echo-build-tags
 echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=1 make echo-build-tags` for example to see how it changes
 	@if [[ -z "$$VERSION" ]]; then \

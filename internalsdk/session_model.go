@@ -19,7 +19,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/ios"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
@@ -136,9 +135,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
-	dialTimeout := 30 * time.Second
 	if opts.Platform == "ios" {
-		dialTimeout = 20 * time.Second
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 		base.db.RegisterType(5000, &protos.Device{})
@@ -159,34 +156,32 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 
 	m := &SessionModel{baseModel: base}
+
 	deviceID, _ := m.GetDeviceID()
 	userID, _ := m.GetUserID()
 	token, _ := m.GetToken()
 	lang, _ := m.Locale()
-	webclientOpts := &webclient.Opts{
-		Timeout: dialTimeout,
-		UserConfig: func() common.UserConfig {
-			internalHeaders := map[string]string{
-				common.PlatformHeader:   opts.Platform,
-				common.AppVersionHeader: common.ApplicationVersion,
-			}
-			return common.NewUserConfig(
-				common.DefaultAppName,
-				deviceID,
-				userID,
-				token,
-				internalHeaders,
-				lang,
-			)
-		},
-	}
-	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+
+	m.proClient = createProClient(m, opts.Platform)
 
 	authUrl := common.DFBaseUrl
 	if opts.Platform == "ios" {
 		authUrl = common.APIBaseUrl
 	}
-	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), webclientOpts.UserConfig)
+	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), func() common.UserConfig {
+		internalHeaders := map[string]string{
+			common.PlatformHeader:   opts.Platform,
+			common.AppVersionHeader: common.ApplicationVersion,
+		}
+		return common.NewUserConfig(
+			common.DefaultAppName,
+			deviceID,
+			userID,
+			token,
+			internalHeaders,
+			lang,
+		)
+	})
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
@@ -326,6 +321,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "setDeviceId":
 		deviceId := arguments.Get("deviceID").String()
 		err := m.setDeviceId(deviceId)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "setUserIdAndToken":
+		userId := arguments.Get("userId").Int()
+		token := arguments.Get("token").String()
+		err := m.SetUserIdAndToken(int64(userId), token)
 		if err != nil {
 			return nil, err
 		}
@@ -1344,10 +1347,12 @@ func isShowFirstTimeUserVisit(m *baseModel) error {
 	})
 }
 
-func setUserIdAndToken(m *baseModel, userId int64, token string) error {
-	log.Debugf("Setting user id %v token %v", userId, token)
+// Keep name as p1,p2 somehow is conflicting with objective c
+// p1 is userid and p2 is token
+func (m *SessionModel) SetUserIdAndToken(p1 int64, p2 string) error {
+	log.Debugf("Setting user id %v token %v", p1, p2)
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		if err := pathdb.Put[int64](tx, pathUserID, userId, ""); err != nil {
+		if err := pathdb.Put[int64](tx, pathUserID, p1, ""); err != nil {
 			log.Errorf("Error while setting user id %v", err)
 			return err
 		}
@@ -1356,7 +1361,7 @@ func setUserIdAndToken(m *baseModel, userId int64, token string) error {
 			return err
 		}
 		log.Debugf("User id %v", userid)
-		return pathdb.Put(tx, pathToken, token, "")
+		return pathdb.Put(tx, pathToken, p2, "")
 	})
 }
 func setResellerCode(m *baseModel, resellerCode string) error {
@@ -1398,7 +1403,7 @@ func (session *SessionModel) userCreate(ctx context.Context) error {
 	}
 
 	//Save user id and token
-	err = setUserIdAndToken(session.baseModel, int64(user.UserId), user.Token)
+	err = session.SetUserIdAndToken(int64(user.UserId), user.Token)
 	if err != nil {
 		return err
 	}
@@ -1491,7 +1496,7 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 		return err
 	}
 	log.Debugf("User caching successful: %+v", userDetail)
-	return setUserIdAndToken(session.baseModel, int64(userDetail.UserId), userDetail.Token)
+	return session.SetUserIdAndToken(int64(userDetail.UserId), userDetail.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
@@ -1882,7 +1887,7 @@ func deviceLimitFlow(session *SessionModel, login *protos.LoginResponse) error {
 	if err != nil {
 		return err
 	}
-	return setUserIdAndToken(session.baseModel, login.LegacyID, login.LegacyToken)
+	return session.SetUserIdAndToken(login.LegacyID, login.LegacyToken)
 }
 
 func startRecoveryByEmail(session *SessionModel, email string) error {
@@ -2258,7 +2263,7 @@ func linkCodeRedeem(session *SessionModel) error {
 		return err
 	}
 	log.Debugf("linkCodeRedeem response %+v", linkRedeemResponse)
-	err = setUserIdAndToken(session.baseModel, linkRedeemResponse.UserID, linkRedeemResponse.Token)
+	err = session.SetUserIdAndToken(linkRedeemResponse.UserID, linkRedeemResponse.Token)
 	if err != nil {
 		return log.Errorf("Error while setting user id and token %v", err)
 	}
@@ -2329,7 +2334,7 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 		return err
 	}
 	log.Debugf("ValidateRecovery code response %v", linkResponse)
-	err = setUserIdAndToken(session.baseModel, linkResponse.UserID, linkResponse.Token)
+	err = session.SetUserIdAndToken(linkResponse.UserID, linkResponse.Token)
 	if err != nil {
 		return err
 	}

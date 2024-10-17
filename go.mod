@@ -38,7 +38,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.112
+	github.com/getlantern/flashlight/v7 v7.6.116
 	github.com/getlantern/fronted v0.0.0-20240822220559-6e97652d23cc
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
@@ -60,7 +60,7 @@ require (
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
 	github.com/getlantern/waitforserver v1.0.1
 	github.com/getlantern/yaml v0.0.0-20190801163808-0c9bb1ebf426
-	github.com/getsentry/sentry-go v0.28.1
+	github.com/getsentry/sentry-go v0.29.0
 	github.com/go-ping/ping v1.1.0
 	github.com/go-resty/resty/v2 v2.13.1
 	github.com/google/uuid v1.6.0
@@ -79,6 +79,8 @@ require (
 	google.golang.org/protobuf v1.34.2
 	nhooyr.io/websocket v1.8.17
 )
+
+require github.com/coder/websocket v1.8.12 // indirect
 
 require (
 	filippo.io/edwards25519 v1.0.0 // indirect
@@ -124,7 +126,7 @@ require (
 	github.com/bits-and-blooms/bitset v1.13.0 // indirect
 	github.com/blang/vfs v1.0.0 // indirect
 	github.com/bradfitz/iter v0.0.0-20191230175014-e8f45d346db8 // indirect
-	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
+	github.com/cenkalti/backoff/v4 v4.3.0
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cockroachdb/apd v1.1.0 // indirect
@@ -178,7 +180,7 @@ require (
 	github.com/getlantern/keepcurrent v0.0.0-20221014183517-fcee77376b89 // indirect
 	github.com/getlantern/keyman v0.0.0-20230503155501-4e864ca2175b // indirect
 	github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a // indirect
-	github.com/getlantern/lantern-algeneva v0.0.0-20240418193310-610690afddbc // indirect
+	github.com/getlantern/lantern-algeneva v0.0.0-20240930181006-6d3c00db1d5d // indirect
 	github.com/getlantern/measured v0.0.0-20230919230611-3d9e3776a6cd // indirect
 	github.com/getlantern/meta-scrubber v0.0.1 // indirect
 	github.com/getlantern/multipath v0.0.0-20230510135141-717ed305ef50 // indirect

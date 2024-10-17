@@ -79,11 +79,6 @@ class SessionModel internal constructor(
         LanternProxySelector(this)
     }
 
-    fun createUser(): Boolean {
-        val result = model.invokeMethod("createUser", Arguments(""))
-        return result.toJava().toString() == "true";
-    }
-
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             "enableScreenshot" -> {
@@ -203,6 +198,9 @@ class SessionModel internal constructor(
         model.invokeMethod("setDevice", Arguments(mapOf("deviceID" to deviceId)))
     }
 
+    fun setUserIdAndToken(userId: Long, token: String) {
+        model.invokeMethod("setUserIdAndToken", Arguments(mapOf("userId" to userId, "token" to token)))
+    }
 
     fun setUserPro(isPro: Boolean) {
         model.invokeMethod("setProUser", Arguments(isPro))
@@ -379,25 +377,31 @@ class SessionModel internal constructor(
     // user in the database
     private fun updateAppsData() {
         // This can be quite slow, run it on its own coroutine
+        ///Figure out how to get the list of apps from quickly
+        // this ends up in memory out of exception
         CoroutineScope(Dispatchers.IO).launch {
-            val appsList = appsDataProvider.listOfApps()
-            // First add just the app names to get a list quickly
-            val apps = buildJsonArray {
-                appsList.forEach { app ->
-                    add(
-                        buildJsonObject {
-                            val byte = ByteString.copyFrom(app.icon)
-                            put("packageName", app.packageName)
-                            put("name", app.name)
-                            put("icon", byte.toByteArray().toUByteArray().joinToString(", "))
-                        }
-                    )
+            try {
+                val appsList = appsDataProvider.listOfApps()
+                // First add just the app names to get a list quickly
+                val apps = buildJsonArray {
+                    appsList.forEach { app ->
+                        add(
+                            buildJsonObject {
+                                val byte = ByteString.copyFrom(app.icon)
+                                put("packageName", app.packageName)
+                                put("name", app.name)
+                                put("icon", byte.toByteArray().toUByteArray().joinToString(", "))
+                            }
+                        )
+                    }
                 }
+                model.invokeMethod(
+                    "updateAppsData",
+                    Arguments(mapOf("appsList" to apps.toString()))
+                )
+            } catch (e: Exception) {
+                Logger.error(TAG, "Error updating apps data", e)
             }
-            model.invokeMethod(
-                "updateAppsData",
-                Arguments(mapOf("appsList" to apps.toString()))
-            )
         }
     }
 
