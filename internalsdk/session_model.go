@@ -156,6 +156,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 
 	m := &SessionModel{baseModel: base}
+
 	deviceID, _ := m.GetDeviceID()
 	userID, _ := m.GetUserID()
 	token, _ := m.GetToken()
@@ -1346,10 +1347,12 @@ func isShowFirstTimeUserVisit(m *baseModel) error {
 	})
 }
 
-func (m *SessionModel) SetUserIdAndToken(userId int64, token string) error {
-	log.Debugf("Setting user id %v token %v", userId, token)
+// Keep name as p1,p2 somehow is conflicting with objective c
+// p1 is userid and p2 is token
+func (m *SessionModel) SetUserIdAndToken(p1 int64, p2 string) error {
+	log.Debugf("Setting user id %v token %v", p1, p2)
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		if err := pathdb.Put[int64](tx, pathUserID, userId, ""); err != nil {
+		if err := pathdb.Put[int64](tx, pathUserID, p1, ""); err != nil {
 			log.Errorf("Error while setting user id %v", err)
 			return err
 		}
@@ -1358,7 +1361,7 @@ func (m *SessionModel) SetUserIdAndToken(userId int64, token string) error {
 			return err
 		}
 		log.Debugf("User id %v", userid)
-		return pathdb.Put(tx, pathToken, token, "")
+		return pathdb.Put(tx, pathToken, p2, "")
 	})
 }
 func setResellerCode(m *baseModel, resellerCode string) error {
