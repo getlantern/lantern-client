@@ -96,7 +96,9 @@ jobs:
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
       - name: Build Flutter app
+        shell: bash
         run: |
+          mkdir -p "dist/${{ env.APP_VERSION }}"
           flutter_distributor package --platform windows --targets "exe" --skip-clean
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
