@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:lantern/features/replica/common.dart';
 import 'package:logger/logger.dart';
 
+import '../router/router.dart';
 import 'common.dart';
 
 export 'dart:async';
@@ -170,3 +171,7 @@ final mainLogger = Logger(
       printEmojis: true,
       printTime: true,
     ), filter: DevelopmentFilter(), level: Level.debug);
+
+
+
+AppRouter get appRouter => sl<AppRouter>();

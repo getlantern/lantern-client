@@ -43,7 +43,7 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
 
-  runApp(LanternApp());
+  runApp(const LanternApp());
   // SentryFlutter.init((options) {
   //   // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
   //   // We recommend adjusting this value in production.

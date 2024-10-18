@@ -72,17 +72,17 @@ class AuthLanding extends StatelessWidget {
 
   void openSignIn(BuildContext context, bool proUser) {
     if (proUser) {
-      context.router.popAndPush(SignIn(authFlow: AuthFlow.updateAccount));
+      appRouter.popAndPush(SignIn(authFlow: AuthFlow.updateAccount));
     } else {
-      context.router.popAndPush(SignIn(authFlow: AuthFlow.signIn));
+      appRouter.popAndPush(SignIn(authFlow: AuthFlow.signIn));
     }
   }
 
   void openPlans(BuildContext context, bool proUser) {
     if (proUser) {
-      context.router.popAndPush(SignIn(authFlow: AuthFlow.signIn));
+      appRouter.popAndPush(SignIn(authFlow: AuthFlow.signIn));
     } else {
-      context.router.popAndPush(const PlansPage());
+      appRouter.popAndPush(const PlansPage());
     }
   }
 }

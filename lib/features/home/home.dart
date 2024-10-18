@@ -100,6 +100,7 @@ class _HomePageState extends State<HomePage> {
       }
       final isFirstTime = await sessionModel.isUserFirstTimeVisit();
       if (isFirstTime) {
+        print('User is not a  pro user');
         context.router.push(const AuthLanding());
         sessionModel.setFirstTimeVisit();
         if (sessionModel.proUserNotifier.hasListeners) {
@@ -160,7 +161,6 @@ class _HomePageState extends State<HomePage> {
             }
 
             if (sessionModel.isAuthEnabled.value!) {
-              print('userNew');
               userNew(() {
                 _checkForFirstTimeVisit();
               });
