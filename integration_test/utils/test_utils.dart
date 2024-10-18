@@ -10,7 +10,7 @@ export 'package:patrol/patrol.dart';
 
 export '../../test/utils/test.mocks.mocks.dart';
 
-TestVariant isMobile() {
+TestVariant mobileVariant() {
   return const TargetPlatformVariant(
       {TargetPlatform.android, TargetPlatform.iOS});
 }

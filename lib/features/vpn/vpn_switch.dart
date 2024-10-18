@@ -51,6 +51,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
         });
       });
     } else {
+      print("Using desktop switch;");
       return CustomAnimatedToggleSwitch<String>(
         current: vpnNotifier.vpnStatus.value,
         values: const ['disconnected', 'connected'],
@@ -89,6 +90,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
         },
         onChanged: (newValue) {},
         onTap: (props) {
+          print("Tapped on switch $props");
           if (vpnNotifier.vpnStatus.value == 'connected') {
             vpnProcessForDesktop('disconnected');
           } else {
