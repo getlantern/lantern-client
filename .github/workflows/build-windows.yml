@@ -140,13 +140,6 @@ jobs:
           name: windows${{inputs.build-suffix}}-installer-signed
           path: lantern-installer${{inputs.installer-suffix}}.exe
 
-      - name: Upload MSIX artifact
-        uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-msix-build
-          path: lantern-installer${{inputs.installer-suffix}}.msix
-
   upload-windows:
     needs: build-windows
     permissions:
