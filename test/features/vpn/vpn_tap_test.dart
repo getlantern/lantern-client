@@ -1,6 +1,7 @@
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
-import 'package:lantern/features/account/split_tunneling.dart';
+import 'package:lantern/core/widgtes/split_tunnel_widget.dart';
+
 import 'package:lantern/features/vpn/vpn_bandwidth.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
 import 'package:lantern/features/vpn/vpn_pro_banner.dart';

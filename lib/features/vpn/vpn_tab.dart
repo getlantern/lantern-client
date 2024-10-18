@@ -1,3 +1,4 @@
+import 'package:lantern/core/widgtes/split_tunnel_widget.dart';
 import 'package:lantern/features/account/split_tunneling.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/features/messaging/messaging.dart';
