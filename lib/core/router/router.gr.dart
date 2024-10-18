@@ -42,9 +42,9 @@ import 'package:lantern/features/checkout/checkout.dart' as _i15;
 import 'package:lantern/features/checkout/checkout_legacy.dart' as _i16;
 import 'package:lantern/features/checkout/plans.dart' as _i32;
 import 'package:lantern/features/checkout/play_checkout.dart' as _i33;
-import 'package:lantern/features/checkout/reseller_checkout.dart' as _i46;
+import 'package:lantern/features/checkout/reseller_checkout.dart' as _i45;
 import 'package:lantern/features/checkout/reseller_checkout_legacy.dart'
-    as _i45;
+    as _i46;
 import 'package:lantern/features/checkout/store_checkout.dart' as _i53;
 import 'package:lantern/features/checkout/stripe_checkout.dart' as _i54;
 import 'package:lantern/features/device_linking/add_device.dart' as _i3;
@@ -1712,53 +1712,6 @@ class ReportIssueArgs {
 
 /// generated route for
 /// [_i45.ResellerCodeCheckout]
-class ResellerCodeCheckoutLegacy
-    extends _i57.PageRouteInfo<ResellerCodeCheckoutLegacyArgs> {
-  ResellerCodeCheckoutLegacy({
-    required bool isPro,
-    _i59.Key? key,
-    List<_i57.PageRouteInfo>? children,
-  }) : super(
-          ResellerCodeCheckoutLegacy.name,
-          args: ResellerCodeCheckoutLegacyArgs(
-            isPro: isPro,
-            key: key,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ResellerCodeCheckoutLegacy';
-
-  static _i57.PageInfo page = _i57.PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<ResellerCodeCheckoutLegacyArgs>();
-      return _i45.ResellerCodeCheckout(
-        isPro: args.isPro,
-        key: args.key,
-      );
-    },
-  );
-}
-
-class ResellerCodeCheckoutLegacyArgs {
-  const ResellerCodeCheckoutLegacyArgs({
-    required this.isPro,
-    this.key,
-  });
-
-  final bool isPro;
-
-  final _i59.Key? key;
-
-  @override
-  String toString() {
-    return 'ResellerCodeCheckoutLegacyArgs{isPro: $isPro, key: $key}';
-  }
-}
-
-/// generated route for
-/// [_i46.ResellerCodeCheckout]
 class ResellerCodeCheckout
     extends _i57.PageRouteInfo<ResellerCodeCheckoutArgs> {
   ResellerCodeCheckout({
@@ -1784,7 +1737,7 @@ class ResellerCodeCheckout
     name,
     builder: (data) {
       final args = data.argsAs<ResellerCodeCheckoutArgs>();
-      return _i46.ResellerCodeCheckout(
+      return _i45.ResellerCodeCheckout(
         isPro: args.isPro,
         email: args.email,
         otp: args.otp,
@@ -1813,6 +1766,53 @@ class ResellerCodeCheckoutArgs {
   @override
   String toString() {
     return 'ResellerCodeCheckoutArgs{isPro: $isPro, email: $email, otp: $otp, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i46.ResellerCodeCheckout]
+class ResellerCodeCheckoutLegacy
+    extends _i57.PageRouteInfo<ResellerCodeCheckoutLegacyArgs> {
+  ResellerCodeCheckoutLegacy({
+    required bool isPro,
+    _i59.Key? key,
+    List<_i57.PageRouteInfo>? children,
+  }) : super(
+          ResellerCodeCheckoutLegacy.name,
+          args: ResellerCodeCheckoutLegacyArgs(
+            isPro: isPro,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ResellerCodeCheckoutLegacy';
+
+  static _i57.PageInfo page = _i57.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ResellerCodeCheckoutLegacyArgs>();
+      return _i46.ResellerCodeCheckout(
+        isPro: args.isPro,
+        key: args.key,
+      );
+    },
+  );
+}
+
+class ResellerCodeCheckoutLegacyArgs {
+  const ResellerCodeCheckoutLegacyArgs({
+    required this.isPro,
+    this.key,
+  });
+
+  final bool isPro;
+
+  final _i59.Key? key;
+
+  @override
+  String toString() {
+    return 'ResellerCodeCheckoutLegacyArgs{isPro: $isPro, key: $key}';
   }
 }
 

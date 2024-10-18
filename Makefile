@@ -44,7 +44,7 @@ test:
 TEST ?= *_test
 
 # integration-test:
-# 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
+# 	@flutter drive --driver test_driver/integration_test.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
 APP ?= lantern
 CAPITALIZED_APP := Lantern
