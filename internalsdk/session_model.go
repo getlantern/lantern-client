@@ -2367,7 +2367,7 @@ func (session *SessionModel) appsAllowedAccess() (string, error) {
 type AppInfo struct {
 	PackageName string `json:"packageName"`
 	Name        string `json:"name"`
-	Icon        string `json:"icon"`
+	Icon        []int  `json:"icon"`
 }
 
 func (session *SessionModel) updateAppsData(appsList string) error {
@@ -2376,11 +2376,11 @@ func (session *SessionModel) updateAppsData(appsList string) error {
 	if err != nil {
 		log.Fatalf("Error decoding JSON: %v", err)
 	}
+
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		for _, app := range apps {
 			path := pathAppsData + app.PackageName
-			list, _ := convertStringArrayToIntArray(strings.Split(app.Icon, ", "))
-			imagebyte, _ := convertIntArrayToByteArray(list)
+			imagebyte, _ := convertIntArrayToByteArray(app.Icon)
 			vpn := &protos.AppData{
 				PackageName: app.PackageName,
 				Name:        app.Name,

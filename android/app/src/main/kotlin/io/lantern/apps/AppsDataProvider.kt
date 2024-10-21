@@ -3,6 +3,11 @@ package io.lantern.apps
 import android.Manifest
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import java.io.ByteArrayOutputStream
 
 class AppsDataProvider(
     private val packageManager: PackageManager,
@@ -11,7 +16,8 @@ class AppsDataProvider(
     private val applicationFilterPredicate: (ApplicationInfo) -> Boolean = { appInfo ->
         hasInternetPermission(appInfo.packageName) &&
                 isLaunchable(appInfo.packageName) &&
-                !isSelfApplication(appInfo.packageName)
+                !isSelfApplication(appInfo.packageName) &&
+                !isSystemApp(appInfo.packageName)
     }
 
     // Return a list of all application packages that are installed for the current user,
@@ -24,6 +30,7 @@ class AppsDataProvider(
             .map { info -> AppData(packageManager, info) }
             .toList().sortedBy { it.name }
     }
+
 
     // check whether a particular package has been granted permission to open network sockets
     private fun hasInternetPermission(packageName: String): Boolean {
@@ -39,6 +46,15 @@ class AppsDataProvider(
 
     private fun isSelfApplication(packageName: String): Boolean {
         return packageName == thisPackageName
+    }
+
+    private fun isSystemApp(packageName: String): Boolean {
+        return try {
+            val appInfo = packageManager.getApplicationInfo(packageName, 0)
+            (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
     }
 
     companion object {

@@ -107,8 +107,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         Iterable<PathAndValue<AppData>> _appsData,
         Widget? child,
       ) {
-        return Expanded(
-            child: SplitTunnelingAppsList(appsList: _appsData.toList()));
+        return SplitTunnelingAppsList(appsList: _appsData.toList());
       },
     );
   }
