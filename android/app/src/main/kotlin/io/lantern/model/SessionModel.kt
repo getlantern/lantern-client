@@ -31,6 +31,7 @@ import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.activity.WebViewActivity
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.LanternProxySelector
 import org.getlantern.lantern.util.PaymentsUtil
@@ -135,6 +136,13 @@ class SessionModel internal constructor(
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
             }
 
+            "trackUserAction" -> {
+                val props: Map<String, String> = mapOf("title" to call.argument("title")!!)
+                Plausible.event(
+                    call.argument("name")!!, url = call.argument("url")!!, props = props
+                )
+            }
+
             else -> super.doOnMethodCall(call, result)
         }
     }
@@ -199,7 +207,10 @@ class SessionModel internal constructor(
     }
 
     fun setUserIdAndToken(userId: Long, token: String) {
-        model.invokeMethod("setUserIdAndToken", Arguments(mapOf("userId" to userId, "token" to token)))
+        model.invokeMethod(
+            "setUserIdAndToken",
+            Arguments(mapOf("userId" to userId, "token" to token))
+        )
     }
 
     fun setUserPro(isPro: Boolean) {

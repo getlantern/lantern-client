@@ -47,8 +47,18 @@ class ServiceHelper(
             }
         } catch (e: Exception) {
             Logger.debug("ServiceHelper", "Failed to make service foreground", e)
-        }
+            if (foregrounded.compareAndSet(false, true)) {
+                val doIt = {
+                    service.startForeground(
+                        notificationId,
+                        buildNotification(R.drawable.status_plain, defaultText)
+                    )
+                }
+                serviceDeque.push(doIt)
+                doIt()
+            }
 
+        }
     }
 
     fun onDestroy() {
