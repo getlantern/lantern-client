@@ -75,23 +75,26 @@ class AppBrowser extends InAppBrowser {
   });
 
   static Future setProxyAddr() async {
-    try{
-      var proxyAvailable =
-      await WebViewFeature.isFeatureSupported(WebViewFeature.PROXY_OVERRIDE);
+    try {
+      var proxyAvailable = await WebViewFeature.isFeatureSupported(
+          WebViewFeature.PROXY_OVERRIDE);
       if (proxyAvailable) {
         ProxyController proxyController = ProxyController.instance();
         final proxyAddr = await sessionModel.proxyAddr();
+        if (proxyAddr.isEmpty) {
+          return;
+        }
         await proxyController.clearProxyOverride();
         await proxyController.setProxyOverride(
             settings: ProxySettings(
-              proxyRules: [ProxyRule(url: "http://$proxyAddr")],
-              bypassRules: [],
-            ));
+          proxyRules: [ProxyRule(url: "http://$proxyAddr")],
+          bypassRules: [],
+        ));
+        appLogger.e("Proxy set as :http://$proxyAddr");
       }
     } catch (e) {
       appLogger.e("Error setting proxy address: $e");
     }
-
   }
 
   @override
