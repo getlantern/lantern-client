@@ -42,12 +42,7 @@ open class LanternService : Service(), Runnable {
 
     override fun onCreate() {
         super.onCreate()
-        val serviceIcon: Int = if (LanternApp.session.chatEnabled()) {
-                    R.drawable.status_chat
-                } else {
-                    R.drawable.status_plain
-                }
-        helper = ServiceHelper(this, serviceIcon, R.string.ready_to_connect)
+        helper = ServiceHelper(this, null, R.string.ready_to_connect)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
