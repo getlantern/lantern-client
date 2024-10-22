@@ -193,18 +193,8 @@ class MainActivity :
     }
 
     override fun onResume() {
-        val start = System.currentTimeMillis()
         super.onResume()
-
-        val isServiceRunning = Utils.isServiceRunning(activity, LanternVpnService::class.java)
-        if (vpnModel.isConnectedToVpn() && !isServiceRunning) {
-            Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
-            vpnModel.setVpnOn(false)
-        } else if (!vpnModel.isConnectedToVpn() && isServiceRunning) {
-            Logger.d(TAG, "LanternVpnService is running, updating VPN preference")
-            vpnModel.setVpnOn(true)
-        }
-        Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
+        checkVPNStatus();
     }
 
     override fun onDestroy() {
@@ -233,6 +223,24 @@ class MainActivity :
         }
     }
 
+    private fun checkVPNStatus() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val start = System.currentTimeMillis()
+            val isServiceRunning = withContext(Dispatchers.Main) {
+                Utils.isServiceRunning(activity, LanternVpnService::class.java)
+            }
+
+            if (vpnModel.isConnectedToVpn() && !isServiceRunning) {
+                Logger.d(TAG, "LanternVpnService isn't running, clearing VPN preference")
+                vpnModel.setVpnOn(false)
+            } else if (!vpnModel.isConnectedToVpn() && isServiceRunning) {
+                Logger.d(TAG, "LanternVpnService is running, updating VPN preference")
+                vpnModel.setVpnOn(true)
+            }
+            Logger.debug(TAG, "onResume() finished at ${System.currentTimeMillis() - start}")
+        }
+
+    }
 
     private fun startLanternService() {
         try {
@@ -279,7 +287,7 @@ class MainActivity :
                     sendSurveyEvent(it)
                 }
             } catch (e: Exception) {
-                Logger.error("Survey", "Error fetching loconf", e)
+                Logger.warn("Survey", "Error fetching loconf", e)
             }
         }, 2000L)
     }
