@@ -1,4 +1,3 @@
-
 import '../utils/common.dart';
 
 extension ErrorX on Object {
@@ -33,7 +32,9 @@ extension ErrorX on Object {
         if (description.contains("wrong-reseller-code")) {
           return "wrong_seller_code".i18n;
         }
-        if (description.contains("user already exists") || description.contains("user with this legacy user ID already exists")) {
+        if (description.contains("user already exists") ||
+            description
+                .contains("user with this legacy user ID already exists")) {
           return "signup_error_user_exists".i18n;
         }
 
@@ -67,9 +68,13 @@ extension ErrorX on Object {
 
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;
-        } else {
-          return 'we_are_experiencing_technical_difficulties'.i18n;
         }
+
+        if (description.contains("errorSubmittingToGooglePlay")) {
+          return "errorSubmittingToGooglePlay".i18n;
+        }
+
+        return 'we_are_experiencing_technical_difficulties'.i18n;
       } else {
         return toString().i18n;
       }

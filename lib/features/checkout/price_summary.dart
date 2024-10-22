@@ -1,4 +1,6 @@
+import 'package:lantern/core/service/app_purchase.dart';
 import 'package:lantern/core/utils/common.dart';
+import 'package:lantern/core/utils/utils.dart';
 
 class PriceSummary extends StatelessWidget {
   final Plan plan;
@@ -6,16 +8,14 @@ class PriceSummary extends StatelessWidget {
   final bool isPro;
 
   const PriceSummary({
-    Key? key,
+    super.key,
     required this.plan,
     required this.isPro,
     this.refCode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    final description = plan.description;
-    final formattedPricePerYear = plan.totalCost.split(' ').first;
     final bonus = plan.formattedBonus;
     return Padding(
       padding: const EdgeInsetsDirectional.only(top: 8.0),
@@ -25,12 +25,12 @@ class PriceSummary extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CText(description.toUpperCase(), style: tsOverline),
-              CText(formattedPricePerYear, style: tsOverline),
+              CText(getPlanDisplayName(plan.id), style: tsOverline),
+              CText(showPrice(), style: tsOverline),
             ],
           ),
           // * Renewal Bonus
-          if (bonus != '0 days')
+          if (bonus.isNotEmpty && bonus != '0 days')
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -58,7 +58,7 @@ class PriceSummary extends StatelessWidget {
             children: [
               CText('total'.i18n, style: tsBody1),
               CText(
-                formattedPricePerYear,
+                showPrice(),
                 style: tsBody1.copiedWith(
                   color: pink4,
                   fontWeight: FontWeight.w500,
@@ -70,5 +70,23 @@ class PriceSummary extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String showPrice() {
+    if (Platform.isIOS) {
+      return getPrice(plan.totalCost);
+    } else {
+      if (isProdPlay()) {
+        return getPrice(plan.totalCost);
+      }
+      return plan.totalCost.split(' ').first;
+    }
+  }
+
+  String getPrice(String totalCost, {bool perMonthCost = false}) {
+    final appPurchase = sl<AppPurchase>();
+    final appStorePrice =
+        appPurchase.getPriceFromPlanId(plan.id, perMonthCost: perMonthCost);
+    return appStorePrice == '' ? totalCost : appStorePrice;
   }
 }

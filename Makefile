@@ -230,7 +230,7 @@ tag: require-version
 	git push
 
 define osxcodesign
-	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Innovate Labs LLC (4FYC28AXA2)" -v $(1)
+	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Brave New Software Project, Inc (ACZRKC3LQ9)" -v $(1)
 endef
 
 guard-%:
