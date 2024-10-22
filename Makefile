@@ -523,7 +523,7 @@ $(WINDOWS_LIB_NAME): export Environment = production
 $(WINDOWS_LIB_NAME): desktop-lib
 
 .PHONY: windows64
-windows64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
+windows64: $(WINDOWS64_LIB_NAME) ## Build lantern for windows
 $(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
 $(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
 $(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static

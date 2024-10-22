@@ -47,11 +47,6 @@ jobs:
         with:
           go-version-file: "go.mod"
 
-      - name: Chocolatey Action
-        uses: crazy-max/ghaction-chocolatey@v3.0.0
-        with:
-          args: -h
-
       - name: Set up MinGW
         run: choco install mingw -y
 
@@ -68,6 +63,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Lantern Library
+        shell: bash
         run: |
           touch app.env
           mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
