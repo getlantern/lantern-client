@@ -42,7 +42,7 @@ open class LanternService : Service(), Runnable {
 
     override fun onCreate() {
         super.onCreate()
-        helper = ServiceHelper(this, null, R.string.ready_to_connect)
+        helper = ServiceHelper(this,  R.string.ready_to_connect)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

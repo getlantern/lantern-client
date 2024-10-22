@@ -16,8 +16,7 @@ class AppsDataProvider(
     private val applicationFilterPredicate: (ApplicationInfo) -> Boolean = { appInfo ->
         hasInternetPermission(appInfo.packageName) &&
                 isLaunchable(appInfo.packageName) &&
-                !isSelfApplication(appInfo.packageName) &&
-                !isSystemApp(appInfo.packageName)
+                !isSelfApplication(appInfo.packageName)
     }
 
     // Return a list of all application packages that are installed for the current user,
@@ -48,14 +47,7 @@ class AppsDataProvider(
         return packageName == thisPackageName
     }
 
-    private fun isSystemApp(packageName: String): Boolean {
-        return try {
-            val appInfo = packageManager.getApplicationInfo(packageName, 0)
-            (appInfo.flags and ApplicationInfo.FLAG_SYSTEM) != 0
-        } catch (e: PackageManager.NameNotFoundException) {
-            false
-        }
-    }
+
 
     companion object {
         private val TAG = AppsDataProvider::class.java.name

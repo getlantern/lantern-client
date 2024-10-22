@@ -22,19 +22,21 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class ServiceHelper(
     private val service: Service,
-    private val defaultIcon: Int?,
     private val defaultText: Int
 ) {
     private val foregrounded = AtomicBoolean(false)
 
     fun makeForeground() {
         try {
-            val serviceIcon = defaultIcon
-                ?: if (LanternApp.session.chatEnabled()) {
+            val serviceIcon = if (LanternApp.sessionInitialized) {
+                if (LanternApp.session.chatEnabled()) {
                     R.drawable.status_chat
                 } else {
                     R.drawable.status_plain
                 }
+            } else {
+                R.drawable.status_plain
+            }
             if (foregrounded.compareAndSet(false, true)) {
                 val doIt = {
                     service.startForeground(
