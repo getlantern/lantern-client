@@ -68,7 +68,6 @@ jobs:
           touch app.env
           mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
           make windows64
-          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
 
       - name: Activate plugins
         run: |
@@ -90,17 +89,12 @@ jobs:
           timestamp-digest: SHA256
 
       - name: Build Flutter app
-        run: make windows-release
+        run: |
+          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"  
+          make windows-release
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
-
-      - name: Upload EXE artifact
-        uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-exe-build
-          path: lantern-installer-x64.exe
 
       - name: Sign EXE with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -117,7 +111,8 @@ jobs:
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
         with:
           name: windows${{inputs.build-suffix}}-installer-signed
           path: |
