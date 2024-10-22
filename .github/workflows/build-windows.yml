@@ -89,9 +89,7 @@ jobs:
           timestamp-digest: SHA256
 
       - name: Build Flutter app
-        run: |
-          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"  
-          make windows-release
+        run: make windows-release
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"

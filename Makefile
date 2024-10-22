@@ -538,7 +538,9 @@ $(WINDOWS64_LIB_NAME): desktop-lib
 
 .PHONY: windows-release
 
-windows-release: ffigen
+windows-release: pubget
+	mv liblantern.dll build/windows/x64/runner/Release
+	make ffigen
 	flutter build windows
 	mv build/windows/x64/runner/Release/lantern.exe lantern-installer-x64.exe
 
