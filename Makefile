@@ -536,13 +536,13 @@ $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
-.PHONY: windows-release
+## APP_VERSION is the version defined in pubspec.yaml
+APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
 
-windows-release: pubget
-	mv liblantern.dll build/windows/x64/runner/Release
-	make ffigen
-	flutter build windows
-	mv build/windows/x64/runner/Release/lantern.exe lantern-installer-x64.exe
+.PHONY: windows-release
+windows-release: ffigen
+	flutter_distributor package --flutter-build-args=verbose --platform windows --targets exe
+	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
 
 ## Darwin
 .PHONY: darwin-amd64
