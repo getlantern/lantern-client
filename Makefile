@@ -482,6 +482,9 @@ lantern: ## Build lantern without REPLICA enabled
 ffigen:
 	dart run ffigen --config ffigen.yaml
 
+## APP_VERSION is the version defined in pubspec.yaml
+APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
+
 .PHONY: linux-amd64
 linux-amd64: export GOOS = linux
 linux-amd64: export GOARCH = amd64
@@ -536,7 +539,8 @@ $(WINDOWS64_LIB_NAME): desktop-lib
 .PHONY: windows-release
 
 windows-release: ffigen
-	flutter_distributor package --skip-clean --platform windows --targets "exe,msix" --flutter-build-args=verbose
+	flutter build windows
+	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
 
 ## Darwin
 .PHONY: darwin-amd64
