@@ -68,7 +68,6 @@ jobs:
           touch app.env
           mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
           make windows64
-          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
 
       - name: Activate plugins
         run: |
@@ -89,6 +88,11 @@ jobs:
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
+
+      - name: Move liblantern.dll to release directory
+        shell: bash
+        run: |
+          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
 
       - name: Extract app version from pubspec.yaml
         id: extract_version
