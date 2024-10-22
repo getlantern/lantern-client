@@ -540,7 +540,7 @@ $(WINDOWS64_LIB_NAME): desktop-lib
 
 windows-release: ffigen
 	flutter build windows
-	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
+	mv build/windows/x64/runner/Release/lantern.exe lantern-installer-x64.exe
 
 ## Darwin
 .PHONY: darwin-amd64
