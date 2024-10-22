@@ -153,9 +153,9 @@ class _PlayCheckoutState extends State<PlayCheckout>
         showSuccessDialog(context, widget.isPro);
       }
     } catch (error, stackTrace) {
-      // In case of an error, hide the loader and show the error message.
       context.loaderOverlay.hide();
-      showError(context, error: error, stackTrace: stackTrace);
+      CDialog.showError(context, description: error.localizedDescription);
+
     }
   }
 }

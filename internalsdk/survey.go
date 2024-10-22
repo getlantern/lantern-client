@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	dialTimeout = 30 * time.Second
+	dialTimeout = 15 * time.Second
 	httpClient  = &http.Client{
 		Transport: proxied.ParallelPreferChained(),
 		Timeout:   dialTimeout,
