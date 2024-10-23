@@ -27,7 +27,7 @@ class _AppWebViewState extends State<AppWebView> {
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
         initialSettings: InAppWebViewSettings(
-          isInspectable: kDebugMode,
+          isInspectable: true,
           javaScriptEnabled: true,
           supportZoom: true,
           useWideViewPort: true,
@@ -39,7 +39,6 @@ class _AppWebViewState extends State<AppWebView> {
           underPageBackgroundColor: Colors.white,
           allowBackgroundAudioPlaying: false,
           allowFileAccessFromFileURLs: true,
-          preferredContentMode: UserPreferredContentMode.MOBILE,
         ),
         onProgressChanged: (controller, progress) {
           appLogger.i("Loading progress: $progress%");
