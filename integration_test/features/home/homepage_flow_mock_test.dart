@@ -2,7 +2,6 @@ import 'package:lantern/app.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
-import 'package:lantern/features/account/privacy_disclosure.dart';
 import 'package:lantern/features/messaging/messaging_model.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
 
@@ -30,8 +29,6 @@ void main() {
 
   setUpAll(
     () async {
-      print("setting up mock and sl");
-
       await Localization.ensureInitialized();
 
       mockSessionModel = MockSessionModel();
@@ -67,7 +64,7 @@ void main() {
   );
 
   tearDown(
-    () {
+    () async {
       clearInteractions(mockSessionModel);
     },
   );
@@ -78,10 +75,9 @@ void main() {
     },
   );
 
-
   patrolWidgetTest(
     'home widget show privacy policy',
-        ($) async {
+    ($) async {
       print("privacy policy test");
       when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
 
@@ -91,24 +87,24 @@ void main() {
           .thenReturn(ValueNotifier(true));
 
       when(mockSessionModel.language(any)).thenAnswer(
-            (invocation) {
+        (invocation) {
           print("language called");
           final builder =
-          invocation.positionalArguments[0] as ValueWidgetBuilder<String>;
+              invocation.positionalArguments[0] as ValueWidgetBuilder<String>;
           return builder(mockBuildContext, 'en_us', null);
         },
       );
 
       when(mockSessionModel.acceptedTermsVersion(any)).thenAnswer((invocation) {
         final builder =
-        invocation.positionalArguments[0] as ValueWidgetBuilder<int>;
+            invocation.positionalArguments[0] as ValueWidgetBuilder<int>;
         return builder(mockBuildContext, 0, null);
       });
 
       when(mockSessionModel.developmentMode(any)).thenAnswer(
-            (invocation) {
+        (invocation) {
           final builder =
-          invocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
+              invocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
           return builder(mockBuildContext, true, null);
         },
       );
@@ -123,23 +119,23 @@ void main() {
           .thenAnswer((realInvocation) => ValueNotifier(false));
 
       when(mockSessionModel.chatEnabled(any)).thenAnswer(
-            (realInvocation) {
+        (realInvocation) {
           final builder =
-          realInvocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
+              realInvocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
           return builder(mockBuildContext, false, null);
         },
       );
 
       when(mockSessionModel.replicaAddr(any)).thenAnswer(
-            (realInvocation) {
+        (realInvocation) {
           final builder = realInvocation.positionalArguments[0]
-          as ValueWidgetBuilder<String>;
+              as ValueWidgetBuilder<String>;
           return builder(mockBuildContext, "test", null);
         },
       );
 
       when(mockSessionModel.proUser(any)).thenAnswer(
-            (realInvocation) {
+        (realInvocation) {
           return boolEmptyBuilder(mockBuildContext, false, null);
         },
       );
@@ -148,16 +144,16 @@ void main() {
       when(mockEventManager.subscribe(any, any)).thenAnswer((realInvocation) {
         final event = realInvocation.positionalArguments[0] as Event;
         final onNewEvent =
-        realInvocation.positionalArguments[1] as void Function(Event, Map);
+            realInvocation.positionalArguments[1] as void Function(Event, Map);
         return () {
           onNewEvent(event, {});
         };
       });
 
       when(mockSessionModel.acceptedTermsVersion(any)).thenAnswer(
-            (realInvocation) {
+        (realInvocation) {
           final builder =
-          realInvocation.positionalArguments[0] as ValueWidgetBuilder<int>;
+              realInvocation.positionalArguments[0] as ValueWidgetBuilder<int>;
           return builder(mockBuildContext, 0, null);
         },
       );
@@ -167,8 +163,8 @@ void main() {
       await $.pumpAndSettle();
 
       await $.pump(const Duration(seconds: 5));
-      await $(FullScreenDialog).waitUntilVisible(timeout: Duration(seconds: 20));
-
+      await $(FullScreenDialog)
+          .waitUntilVisible(timeout: Duration(seconds: 20));
 
       expect($('privacy_disclosure_accept'.i18n.toUpperCase()), findsOneWidget);
       expect($(BottomNavigationBar), findsNothing);
@@ -222,7 +218,6 @@ void main() {
       when(mockSessionModel.proUserNotifier)
           .thenAnswer((realInvocation) => ValueNotifier(false));
       when(mockSessionModel.isStoreVersion).thenAnswer((realInvocation) {
-        print("auth enable show");
         return ValueNotifier(false);
       });
       when(mockSessionModel.isAuthEnabled)
@@ -305,5 +300,4 @@ void main() {
       expect($('sign_in'.i18n), findsOneWidget);
     },
   );
-
 }

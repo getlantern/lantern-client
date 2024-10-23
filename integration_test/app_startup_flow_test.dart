@@ -18,6 +18,10 @@ import 'package:lantern/main.dart' as app;
 /// if you do not want not to interact with the native layer, then use patrolWidgetTest
 /// For running patrolWidgetTest, you need to run the patrol test or flutter test both will work
 void main() {
+  tearDownAll(() async {
+    await sl.reset();
+  },);
+
   patrolWidgetTest(
     "app start up sequence",
     ($) async {

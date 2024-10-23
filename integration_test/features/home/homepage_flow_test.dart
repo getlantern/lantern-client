@@ -14,8 +14,8 @@ void main() {
     () {},
   );
 
-  tearDown(
-    () {
+  tearDownAll(
+    () async {
       sl.reset();
     },
   );
