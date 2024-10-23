@@ -31,9 +31,9 @@ class _AppWebViewState extends State<AppWebView> {
         onWebViewCreated: (controller) {
           webViewController = controller;
         },
-        onLoadStop: (controller, url) async {
+        /*onLoadStop: (controller, url) async {
           _showWebViewUrl();
-        },
+        },*/
         onReceivedError: (controller, request, error) {
           showDialog(
             context: context,
@@ -65,10 +65,6 @@ class _AppWebViewState extends State<AppWebView> {
           mediaPlaybackRequiresUserGesture: false,
           allowsInlineMediaPlayback: true,
           underPageBackgroundColor: Colors.white,
-          allowFileAccessFromFileURLs: true,
-          sharedCookiesEnabled: true,
-          useOnDownloadStart: true,
-          useShouldOverrideUrlLoading: true,
         ),
         onProgressChanged: (controller, progress) {
           appLogger.i("Loading progress: $progress%");
