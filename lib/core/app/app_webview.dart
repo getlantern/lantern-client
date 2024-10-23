@@ -47,6 +47,10 @@ class _AppWebViewState extends State<AppWebView> {
           underPageBackgroundColor: Colors.white,
           allowBackgroundAudioPlaying: false,
           allowFileAccessFromFileURLs: true,
+          sharedCookiesEnabled: true,
+          useOnDownloadStart: true,
+          transparentBackground: true,
+          useShouldOverrideUrlLoading: true,
         ),
         onProgressChanged: (controller, progress) {
           appLogger.i("Loading progress: $progress%");
