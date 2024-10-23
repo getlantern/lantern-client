@@ -19,7 +19,7 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
-  late InAppWebViewController? webViewController;
+  late InAppWebViewController webViewController;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +34,26 @@ class _AppWebViewState extends State<AppWebView> {
         onLoadStop: (controller, url) async {
           _showWebViewUrl();
         },
+        onReceivedError: (controller, request, error) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Error"),
+                content: Text(
+                    "Failed to load URL: ${request.url}\nError: ${error.description}"),
+                actions: [
+                  TextButton(
+                    child: const Text("OK"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
         initialSettings: InAppWebViewSettings(
           isInspectable: true,
           javaScriptEnabled: true,
@@ -43,13 +63,11 @@ class _AppWebViewState extends State<AppWebView> {
           builtInZoomControls: true,
           displayZoomControls: false,
           mediaPlaybackRequiresUserGesture: false,
-          allowsInlineMediaPlayback: false,
+          allowsInlineMediaPlayback: true,
           underPageBackgroundColor: Colors.white,
-          allowBackgroundAudioPlaying: false,
           allowFileAccessFromFileURLs: true,
           sharedCookiesEnabled: true,
           useOnDownloadStart: true,
-          transparentBackground: true,
           useShouldOverrideUrlLoading: true,
         ),
         onProgressChanged: (controller, progress) {
@@ -62,7 +80,7 @@ class _AppWebViewState extends State<AppWebView> {
   Future<void> _showWebViewUrl() async {
     try {
       // Get the current URL from the WebView
-      var currentUrl = await webViewController?.getUrl();
+      var currentUrl = await webViewController.getUrl();
       String urlToShow =
           currentUrl != null ? currentUrl.toString() : "No URL loaded";
 
@@ -226,6 +244,7 @@ class AppBrowser extends InAppBrowser {
         break;
       case 'macos':
         await openWithSystemBrowser(url);
+        break;
       case 'ios':
         await openWithSystemBrowser(url);
         break;
