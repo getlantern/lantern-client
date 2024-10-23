@@ -63,12 +63,6 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
-      - name: Clean up disk space
-        run: |
-          df -h  # Check disk space
-          sudo apt-get clean
-          sudo apt-get autoremove
-
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
@@ -108,12 +102,34 @@ jobs:
           echo "VideoInterstitialZoneId=$TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID" >> app.env
           echo "InterstitialZoneId=$TAPSELL_INTERSTITIAL_ZONE_ID" >> app.env
 
+      - name: Clean packages
+        run: |
+          sudo apt-get clean
+          sudo apt-get autoremove -y
+          sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
+
       - name: Build Android installers
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
         run: make package-android
+
+      - name: Clean Go module and build cache
+        run: |
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/cache/*
+          sudo apt-get clean
+          sudo apt-get autoremove -y
+          sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
+          go clean -modcache
+          go clean -cache -testcache
+          df -h
+
+      - name: Delete Gradle cache
+        run: |
+          sudo rm -rf $HOME/.gradle/caches
+          echo "Gradle cache deleted successfully"
 
       - uses: actions/upload-artifact@v4
         with:
