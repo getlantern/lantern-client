@@ -47,6 +47,11 @@ jobs:
         with:
           go-version-file: "go.mod"
 
+      - name: Remove Go module cache manually
+        run: |
+          rmdir /s /q "%GOPATH%\pkg\mod"
+        shell: cmd
+
       - name: Set up MinGW
         run: choco install mingw -y
 
@@ -61,6 +66,7 @@ jobs:
         uses: arduino/setup-protoc@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Build Lantern Library
         shell: bash
