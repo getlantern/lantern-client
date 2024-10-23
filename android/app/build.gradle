@@ -77,6 +77,9 @@ android {
             versionName "9999.99.99"
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments clearPackageData: "true"
+
         vectorDrawables.useSupportLibrary = true
         manifestPlaceholders = [
                 TapsellMediationAppKey                  : "ad680da7-f319-42cb-bdde-3b6c43486eaa",
@@ -198,6 +201,7 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
+        execution "ANDROIDX_TEST_ORCHESTRATOR"
     }
     namespace 'org.getlantern.lantern'
 }
@@ -314,14 +318,16 @@ flutter {
     source '../..'
 }
 
-configurations {
-    debugImplementation.exclude group: "junit", module: "junit"
-}
+//configurations {
+//    debugImplementation.exclude group: "junit", module: "junit"
+//}
 
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.8"
     implementation "com.google.protobuf:protobuf-javalite:$protoc_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.2'
+    androidTestImplementation 'junit:junit:4.12'
+
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugarJdk"
     implementation fileTree(dir: "libs", include: "liblantern-${androidArch()}.aar")
@@ -352,18 +358,20 @@ dependencies {
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
     //Test implementation
-    androidTestImplementation 'androidx.test:rules:1.6.1'
-    androidTestImplementation 'androidx.annotation:annotation:1.8.2'
-    androidTestImplementation 'androidx.test:runner:1.6.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.6.1'
-    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-
-    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
     androidTestImplementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
+//    androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     testImplementation 'junit:junit:4.13.2'
-    testImplementation "io.mockk:mockk:1.13.5"
+    testImplementation "io.mockk:mockk:1.13.12"
+    androidTestUtil "androidx.test:orchestrator:1.4.2"
+    //    androidTestImplementation 'androidx.test:rules:1.6.1'
+//    androidTestImplementation 'androidx.annotation:annotation:1.8.2'
+//    androidTestImplementation 'androidx.test:runner:1.6.2'
+//    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+//    androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.6.1'
+//    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+
 }
 
 
@@ -414,3 +422,5 @@ sentry {
     // Default is disabled.
     includeNativeSources = false
 }
+
+

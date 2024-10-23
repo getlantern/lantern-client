@@ -1,7 +1,7 @@
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/features/replica/common.dart';
 
-final replicaModel = ReplicaModel();
+final replicaModel = sl<ReplicaModel>();
 
 class ReplicaModel extends Model {
   ReplicaModel() : super('replica');

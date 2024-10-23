@@ -85,3 +85,5 @@ lib/generated_bindings.dart
 
 *.env
 ExportOptions.plist
+integration_test/test_bundle.dart
+integration_test/test_bundle.dart

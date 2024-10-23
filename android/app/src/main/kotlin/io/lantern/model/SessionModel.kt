@@ -125,10 +125,15 @@ class SessionModel internal constructor(
                     result
                 )
             }
-
             "checkForUpdates" -> {
                 autoUpdater.checkForUpdates(result)
 
+            }
+            "trackUserAction" -> {
+                val props: Map<String, String> = mapOf("title" to call.argument("title")!!)
+                Plausible.event(
+                    call.argument("name")!!, url = call.argument("url")!!, props = props
+                )
             }
 
             "proxyAddr" -> result.success(LanternApp.session.hTTPAddr)

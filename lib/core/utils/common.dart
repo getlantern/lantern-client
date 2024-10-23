@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:lantern/features/replica/common.dart';
 import 'package:logger/logger.dart';
 
+import '../router/router.dart';
+import 'common.dart';
+
 export 'dart:async';
 export 'dart:convert';
 export 'dart:io';
@@ -134,11 +137,29 @@ final appLogger = Logger(
   output: ConsoleOutput(),
 );
 
+// We need to check platform using flutter foundation defaultTargetPlatform
+// so while testing we can easily override the platform
+// Als this recommended way to check platform from Flutter Team
 bool isMobile() {
+  if (kDebugMode) {
+  return (defaultTargetPlatform == TargetPlatform.android ||
+      defaultTargetPlatform == TargetPlatform.iOS);
+  }
   return Platform.isAndroid || Platform.isIOS;
 }
 
+bool isAndroid() {
+  if (kDebugMode) {
+    return (defaultTargetPlatform == TargetPlatform.android);
+  }
+  return Platform.isAndroid ;
+}
+
 bool isDesktop() {
+  if (kDebugMode) {
+    return (defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.linux || defaultTargetPlatform == TargetPlatform.windows);
+  }
   return Platform.isMacOS || Platform.isLinux || Platform.isWindows;
 }
 
@@ -150,3 +171,7 @@ final mainLogger = Logger(
       printEmojis: true,
       printTime: true,
     ), filter: DevelopmentFilter(), level: Level.debug);
+
+
+
+AppRouter get appRouter => sl<AppRouter>();

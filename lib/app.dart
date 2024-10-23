@@ -11,7 +11,7 @@ import 'package:lantern/features/window/window_container.dart';
 import 'common/ui/custom/internet_checker.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
-final globalRouter = AppRouter();
+final globalRouter = sl<AppRouter>();
 final networkWarningBarHeightRatio = ValueNotifier(0.0);
 var showConnectivityWarning = false;
 
@@ -27,7 +27,7 @@ enum AppFontFamily {
 }
 
 class LanternApp extends StatefulWidget {
-  const LanternApp({Key? key}) : super(key: key);
+  const LanternApp({super.key});
 
   @override
   State<LanternApp> createState() => _LanternAppState();
@@ -40,6 +40,7 @@ class _LanternAppState extends State<LanternApp>
 
   @override
   void initState() {
+    print("initState");
     _animateNetworkWarning();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initDeepLinks();
@@ -49,8 +50,7 @@ class _LanternAppState extends State<LanternApp>
 
   void _animateNetworkWarning() {
     if (isMobile()) {
-      sessionModel.proxyAvailable
-          .addListener(toggleConnectivityWarningIfNecessary);
+      // sessionModel.proxyAvailable.addListener(toggleConnectivityWarningIfNecessary);
       networkWarningAnimationController = AnimationController(
         duration: shortAnimationDuration,
         vsync: this,
@@ -115,8 +115,8 @@ class _LanternAppState extends State<LanternApp>
     }
   }
 
-  Widget _buildMaterialApp(BuildContext context, String lang) {
-    final currentLocal = View.of(context).platformDispatcher.locale;
+  Widget _buildMaterialApp(
+      BuildContext context, String lang, Locale currentLocal) {
     final app = MaterialApp.router(
       locale: currentLocale(lang),
       debugShowCheckedModeBanner: false,
@@ -166,15 +166,16 @@ class _LanternAppState extends State<LanternApp>
   @override
   Widget build(BuildContext context) {
     final currentLocal = View.of(context).platformDispatcher.locale;
-    print('selected local: ${currentLocal.languageCode}');
+
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => BottomBarChangeNotifier()),
-        ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
-        ChangeNotifierProvider(create: (context) => InternetStatusProvider()),
+        ChangeNotifierProvider(create: (context) => sl<BottomBarChangeNotifier>()),
+        ChangeNotifierProvider(create: (context) => sl<VPNChangeNotifier>()),
+        ChangeNotifierProvider(create: (context) => sl<InternetStatusProvider>()),
       ],
       child: sessionModel.language(
         (context, lang, child) {
+          print("selected language: $lang");
           Localization.locale = lang.startsWith('en') ? "en_us" : lang;
           return GlobalLoaderOverlay(
             useDefaultLoading: false,
@@ -192,7 +193,7 @@ class _LanternAppState extends State<LanternApp>
             child: I18n(
               initialLocale: currentLocale(lang),
               child: ScaffoldMessenger(
-                child: _buildMaterialApp(context, lang),
+                child: _buildMaterialApp(context, lang, currentLocal),
               ),
             ),
           );
