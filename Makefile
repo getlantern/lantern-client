@@ -712,3 +712,18 @@ clean:
 	rm -f `which gomobile` && \
 	rm -f `which gobind`
 	rm -Rf "$(FLASHLIGHT_FRAMEWORK_PATH)" "$(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
+
+
+# Test environment scripts and other utilities
+
+guard-patrol-cli:
+	@command -v patrol > /dev/null || (echo "Patrol CLI is not installed. Please install it before running this target." && exit 1)
+
+nativeTest: guard-patrol-cli
+	@echo "Running native tests..."
+	patrol test --target integration_test/features/vpn/vpn_flow_test.dart --dart-define native=true --flavor=prod --verbose
+
+appWorkflowTest:
+	@echo "Running all integration tests..."
+	flutter test integration_test/ --flavor=prod
+

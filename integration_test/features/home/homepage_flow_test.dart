@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:i18n_extension/default.i18n.dart';
 import 'package:lantern/features/account/account_tab.dart';
 import 'package:lantern/features/home/home.dart';
 import 'package:lantern/main.dart' as app;
@@ -26,7 +25,6 @@ void main() {
     () {
       patrolWidgetTest(
         'app initializes and navigates to homepage',
-        tags: ['android,ios,desktop'],
         ($) async {
           await app.main();
 

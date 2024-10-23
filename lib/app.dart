@@ -50,8 +50,7 @@ class _LanternAppState extends State<LanternApp>
 
   void _animateNetworkWarning() {
     if (isMobile()) {
-      sessionModel.proxyAvailable
-          .addListener(toggleConnectivityWarningIfNecessary);
+      // sessionModel.proxyAvailable.addListener(toggleConnectivityWarningIfNecessary);
       networkWarningAnimationController = AnimationController(
         duration: shortAnimationDuration,
         vsync: this,

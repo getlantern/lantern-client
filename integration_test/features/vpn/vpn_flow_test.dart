@@ -1,5 +1,4 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/widgtes/split_tunnel_widget.dart';
 import 'package:lantern/features/vpn/vpn_bandwidth.dart';
 import 'package:lantern/features/vpn/vpn_pro_banner.dart';
@@ -64,9 +63,9 @@ void main() {
           if (isAndroid()) {
             //go back
             await $(IconButton).tap();
-            await $.pumpAndSettle();
+            await $.pump(const Duration(seconds: 1));
             await $('split_tunneling'.i18n).tap();
-            await $.pumpAndSettle();
+            await $.pump(const Duration(seconds: 1));
             expect($('split_tunneling'.i18n), findsOneWidget);
           }
         },
@@ -86,9 +85,33 @@ void main() {
           expect($('connected'.i18n), findsOneWidget);
           await $.pump(const Duration(seconds: 2));
 
-          await $(CustomAnimatedToggleSwitch<String>).tap(settlePolicy: SettlePolicy.settle);
+          await $(CustomAnimatedToggleSwitch<String>)
+              .tap(settlePolicy: SettlePolicy.settle);
           await $.pumpAndSettle();
           await $.pump(const Duration(seconds: 1));
+          expect($('connected'.i18n), findsNothing);
+          expect($('Disconnected'.i18n), findsOneWidget);
+        },
+      );
+
+      patrolNative(
+        'VPN turn off/on on mobile platforms',
+        skip: isDesktop(),
+        ($) async {
+          await createApp($);
+          await $(VPNTab).waitUntilVisible();
+          await $.pump(const Duration(seconds: 3));
+          expect($('Disconnected'.i18n), findsOneWidget);
+          await $(const AdvancedSwitch()).tap();
+          await $.pump(const Duration(seconds: 1));
+          //Turn on
+          $.native.tap(Selector(text: 'OK'));
+          await $.pumpAndSettle();
+          expect($('connected'.i18n), findsOneWidget);
+          expect($('Disconnected'.i18n), findsNothing);
+          //Turn off
+          await $.pump(const Duration(seconds: 1));
+          await $(const AdvancedSwitch()).tap();
           expect($('connected'.i18n), findsNothing);
           expect($('Disconnected'.i18n), findsOneWidget);
         },

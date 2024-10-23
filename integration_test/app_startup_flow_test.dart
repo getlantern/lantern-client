@@ -1,9 +1,8 @@
 import 'package:lantern/features/home/home.dart';
-import 'package:lantern/main.dart' as app;
-import 'package:patrol/patrol.dart';
 
 import '../test/utils/test_common.dart';
-
+import 'utils/test_utils.dart';
+import 'package:lantern/main.dart' as app;
 /// Looks like patrol does not have native support yet for Linux and Windows
 /// so any test that interact with the native layer will / need to use flutter test
 /// patrol feature priority:https://patrol.leancode.co/native/feature-parity
@@ -23,14 +22,10 @@ void main() {
     "app start up sequence",
     ($) async {
       await app.main();
-
       await $.pumpAndSettle();
-
       await $(HomePage).waitUntilVisible();
-
       final bottombar = find.byType(BottomNavigationBar);
       expect(bottombar, findsOneWidget);
     },
   );
 }
-
