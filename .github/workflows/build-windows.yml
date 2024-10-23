@@ -62,6 +62,10 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Remove Go module cache manually
+        run: Remove-Item -Recurse -Force C:\Users\runneradmin\go\pkg\mod\
+        shell: pwsh
+
       - name: Build Lantern Library
         shell: bash
         run: |

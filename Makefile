@@ -470,7 +470,7 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 
 desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: echo-build-tags
-	go clean -cache -modcache -i -r
+	go clean -modcache
 	CGO_ENABLED=1 go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
 # This runs a development build for lantern. For production builds, see
