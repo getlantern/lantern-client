@@ -93,7 +93,7 @@ jobs:
       - name: Move liblantern.dll to release directory
         shell: bash
         run: |
-          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
+          mv liblantern_x64.dll "build/windows/${{inputs.arch}}/runner/Release"
 
       - name: Extract app version from pubspec.yaml
         id: extract_version
@@ -104,7 +104,7 @@ jobs:
 
       - name: Build Flutter app
         run: |
-          Get-FileHash "build/windows/${{inputs.arch}}/runner/Release/liblantern.dll" -Algorithm SHA256
+          Get-FileHash "build/windows/${{inputs.arch}}/runner/Release/liblantern_x64.dll" -Algorithm SHA256
           New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
           flutter_distributor package --platform windows --targets exe --skip-clean
         env:

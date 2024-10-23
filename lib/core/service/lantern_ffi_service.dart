@@ -38,7 +38,7 @@ class LanternFFI {
       return DynamicLibrary.open('$dir/$_libName.so');
     }
     if (Platform.isWindows) {
-      return DynamicLibrary.open('$_libName.dll');
+      return DynamicLibrary.open('${_libName}_x64.dll');
     }
     throw Exception("Platform is not supported");
   }
