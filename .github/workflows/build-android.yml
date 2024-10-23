@@ -102,7 +102,7 @@ jobs:
           echo "VideoInterstitialZoneId=$TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID" >> app.env
           echo "InterstitialZoneId=$TAPSELL_INTERSTITIAL_ZONE_ID" >> app.env
 
-      - name: Clean Go module and build cache
+      - name: Clean packages
         run: |
           sudo apt-get clean
           sudo apt-get autoremove -y
