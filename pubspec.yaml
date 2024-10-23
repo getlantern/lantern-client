@@ -96,7 +96,7 @@ dependencies:
   # URL & Sharing utilities
   url_launcher: ^6.3.0
   share_plus: ^10.0.2
-  flutter_inappwebview: ^6.1.3
+  flutter_inappwebview: ^6.1.5
   desktop_webview_window: ^0.2.3
 
   # Desktop

@@ -19,6 +19,8 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
+  late InAppWebViewController? webViewController;
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -26,6 +28,12 @@ class _AppWebViewState extends State<AppWebView> {
       showAppBar: true,
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+        onWebViewCreated: (controller) {
+          webViewController = controller;
+        },
+        onLoadStop: (controller, url) async {
+          _showWebViewUrl();
+        },
         initialSettings: InAppWebViewSettings(
           isInspectable: true,
           javaScriptEnabled: true,
@@ -45,6 +53,51 @@ class _AppWebViewState extends State<AppWebView> {
         },
       ),
     );
+  }
+
+  Future<void> _showWebViewUrl() async {
+    try {
+      // Get the current URL from the WebView
+      var currentUrl = await webViewController?.getUrl();
+      String urlToShow =
+          currentUrl != null ? currentUrl.toString() : "No URL loaded";
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Current WebView URL"),
+            content: Text(urlToShow),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: Text("Failed to get URL: $e"),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
 
