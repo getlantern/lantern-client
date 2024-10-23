@@ -1833,5 +1833,8 @@ msgstr "Socks Proxy copied"
 msgid "proxy_everything"
 msgstr "Proxy Everything"
 
+msgid "errorSubmittingToGooglePlay"
+msgstr "We are currently experiencing difficulties processing your request for Google Play. Please try again later."
+
 
 

@@ -93,10 +93,14 @@ jobs:
         env:
           ANDROID_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID }}
           IOS_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID_IOS }}
+          TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID: ${{ secrets.TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID }}
+          TAPSELL_INTERSTITIAL_ZONE_ID: ${{ secrets.TAPSELL_INTERSTITIAL_ZONE_ID }}
         run: |
           touch app.env
           echo "Android_interstitialAd=$ANDROID_INTERSTITIAL_AD_ID" > app.env
           echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
+          echo "VideoInterstitialZoneId=$TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID" >> app.env
+          echo "InterstitialZoneId=$TAPSELL_INTERSTITIAL_ZONE_ID" >> app.env
 
 
       - name: Clean packages to save disk space

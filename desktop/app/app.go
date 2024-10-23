@@ -32,8 +32,6 @@ import (
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
 
-	"github.com/getlantern/lantern-client/desktop/analytics"
-
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/settings"
@@ -65,13 +63,12 @@ type App struct {
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
 
-	Flags            flashlight.Flags
-	configDir        string
-	exited           eventual.Value
-	analyticsSession analytics.Session
-	settings         *settings.Settings
-	configService    *configService
-	statsTracker     *statsTracker
+	Flags         flashlight.Flags
+	configDir     string
+	exited        eventual.Value
+	settings      *settings.Settings
+	configService *configService
+	statsTracker  *statsTracker
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
@@ -104,14 +101,12 @@ type App struct {
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
 func NewApp(flags flashlight.Flags, configDir string) *App {
 	ss := settings.LoadSettings(configDir)
-	analyticsSession := newAnalyticsSession(ss)
 	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
 		settings:                  ss,
-		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
 		configService:             new(configService),
@@ -125,7 +120,6 @@ func NewApp(flags flashlight.Flags, configDir string) *App {
 	}
 	golog.OnFatal(app.exitOnFatal)
 
-	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
 	app.onProStatusChange(func(isPro bool) {
 		statsTracker.SetIsPro(isPro)
 	})
@@ -140,18 +134,6 @@ func NewApp(flags flashlight.Flags, configDir string) *App {
 	app.translations.Set(os.DirFS("locale/translation"))
 
 	return app
-}
-
-func newAnalyticsSession(settings *settings.Settings) analytics.Session {
-	if settings.IsAutoReport() {
-		session := analytics.Start(settings.GetDeviceID(), common.ApplicationVersion)
-		go func() {
-			session.SetIP(geolookup.GetIP(eventual.Forever))
-		}()
-		return session
-	} else {
-		return analytics.NullSession{}
-	}
 }
 
 // Run starts the app.
@@ -228,7 +210,8 @@ func (app *App) Run(ctx context.Context) {
 			app.IsPro,
 			settings.GetLanguage,
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-			app.analyticsSession.EventWithLabel,
+			// Dummy analytics function
+			func(category, action, label string) {},
 			flashlight.WithOnConfig(app.onConfigUpdate),
 			flashlight.WithOnProxies(app.onProxiesUpdate),
 		)
@@ -322,14 +305,12 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 
 // Connect turns on proxying
 func (app *App) Connect() {
-	app.analyticsSession.Event("systray-menu", "connect")
 	ops.Begin("connect").End()
 	app.settings.SetDisconnected(false)
 }
 
 // Disconnect turns off proxying
 func (app *App) Disconnect() {
-	app.analyticsSession.Event("systray-menu", "disconnect")
 	ops.Begin("disconnect").End()
 	app.settings.SetDisconnected(true)
 }
