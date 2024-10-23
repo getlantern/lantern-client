@@ -8,4 +8,4 @@ publisher: getlantern
 publisher_url: https://github.com/getlantern/lantern-client
 executable_name: lantern.exe
 output_base_file_name: lantern.exe
-setup_icon_file: ..\windows\runner\resources\app_icon.ico
+#setup_icon_file: ..\windows\runner\resources\app_icon.ico
