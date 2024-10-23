@@ -200,7 +200,7 @@ class SessionModel internal constructor(
             setDeviceId(deviceId)
             return deviceId
         }
-        return model.getDeviceID()
+        return model.deviceID
     }
 
     fun setDeviceId(deviceId: String) {
@@ -233,7 +233,7 @@ class SessionModel internal constructor(
     }
 
     fun userId(): Long {
-        return model.getUserID()
+        return model.userID
     }
 
     fun email(): String {

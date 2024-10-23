@@ -102,16 +102,11 @@ jobs:
           echo "VideoInterstitialZoneId=$TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID" >> app.env
           echo "InterstitialZoneId=$TAPSELL_INTERSTITIAL_ZONE_ID" >> app.env
 
-      - name: Build Lantern library
-        env:
-          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
-          VERSION: "${{ env.version }}"
-        run: make android-lib ANDROID_ARCH=all
-
       - name: Clean Go module and build cache
         run: |
-          go clean -modcache
-          go clean -cache -testcache
+          sudo apt-get clean
+          sudo apt-get autoremove -y
+          sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
 
       - name: Build Android installers
         env:
@@ -120,13 +115,15 @@ jobs:
           VERSION: "${{ env.version }}"
         run: make package-android
 
-      - name: Clean up disk space
+      - name: Clean Go module and build cache
         run: |
           sudo rm -rf /tmp/*
           sudo rm -rf /var/cache/*
           sudo apt-get clean
           sudo apt-get autoremove -y
           sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
+          go clean -modcache
+          go clean -cache -testcache
           df -h
 
       - name: Delete Gradle cache
