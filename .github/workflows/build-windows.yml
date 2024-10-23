@@ -103,6 +103,7 @@ jobs:
 
       - name: Build Flutter app
         run: |
+          Get-FileHash "build/windows/${{inputs.arch}}/runner/Release/liblantern.dll" -Algorithm SHA256
           New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
           flutter_distributor package --platform windows --targets exe --skip-clean
         env:
@@ -112,6 +113,8 @@ jobs:
       - name: Rename installer
         shell: bash
         run: |
+          ls -ltr "build/windows/${{inputs.arch}}/runner"
+          ls -ltr "build/windows/${{inputs.arch}}/runner/Release"
           mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
 
       - name: Sign EXE with Azure Code Signing
