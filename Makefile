@@ -719,23 +719,47 @@ clean:
 require-patrol-cli:
 	@if [[ -z "$(patrol)" ]]; then echo 'Patrol CLI is not installed. Please install it before running this target'; exit 1; fi
 
+# Application test cases
 
+# Run all native tests
 nativeTest: require-patrol-cli
 	@echo "Running native tests..."
 	patrol test --target integration_test/features/vpn/vpn_flow_test.dart --dart-define native=true --flavor=prod --verbose
 
+# Run specific native tests
+
+runNativeTest: require-patrol-cli
+	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
+	echo "Running  patrol native tests on: $$ARGUMENTS" && \
+	patrol test --target $$ARGUMENTS --flavor=prod
+
+
+#Runs all integration tests
 appWorkflowTest:
 	@echo "Running all integration tests..."
 	flutter test integration_test/ --flavor=prod
 
-# Target to run tests on a specific file
+
+# Run specific integration tests
+# Usage: make run-specific-integration-tests integration_test/app_startup_flow_test.dart
 runTest:
 	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
 	echo "Running tests on: $$ARGUMENTS" && \
 	flutter test $$ARGUMENTS --flavor=prod
 
 
-runNativeTest: require-patrol-cli
+#------- Desktop test and utils ------------
+
+# Run all workflow tests on desktop
+desktopWorkflowTest:
+	@echo "Running all integration tests..."
+	flutter test integration_test/
+
+
+# Run specific tests on desktop
+runDesktopTest:
 	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
-	echo "Running  patrol native tests on: $$ARGUMENTS" && \
-	patrol test --target $$ARGUMENTS --flavor=prod
+	echo "Running tests on: $$ARGUMENTS" && \
+	flutter test $$ARGUMENTS -d macOS
+
+

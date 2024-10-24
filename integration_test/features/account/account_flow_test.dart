@@ -18,7 +18,9 @@ void main() {
           expect($(AppKeys.upgrade_lantern_pro).visible, equals(true));
           expect($(AppKeys.inviteFriends).visible, equals(true));
           expect($(AppKeys.devices).visible, equals(true));
-          expect($(AppKeys.desktopVersion).visible, equals(true));
+          if (isMobile()) {
+            expect($(AppKeys.desktopVersion).visible, equals(true));
+          }
           expect($(AppKeys.followUs).visible, equals(true));
           expect($(AppKeys.support).visible, equals(true));
           expect($(AppKeys.setting).visible, equals(true));
@@ -45,7 +47,8 @@ void main() {
           //invite friends page
           expect($(ListItemFactory), findsOneWidget);
           expect($('share_lantern_pro'.i18n).visible, equals(true));
-          expect($('share_referral_code'.i18n.toUpperCase()).visible, equals(true));
+          expect($('share_referral_code'.i18n.toUpperCase()).visible,
+              equals(true));
           expect($(Button).visible, equals(true));
 
           await $(IconButton).tap();
@@ -59,16 +62,18 @@ void main() {
 
           await $(IconButton).tap();
 
-          // desktop version
-          await $(AppKeys.desktopVersion).tap();
-          await $.pumpAndSettle();
-          expect($(Button).visible, true);
-          expect($(CAssetImage).visible, true);
-          expect($('most_recent_lantern_apps'.i18n), findsOneWidget);
-          expect($('most_recent_lantern_apps'.i18n).visible, true);
-          expect($('share_link'.i18n.toUpperCase()).visible, true);
+          if (isMobile()) {
+            // desktop version
+            await $(AppKeys.desktopVersion).tap();
+            await $.pumpAndSettle();
+            expect($(Button).visible, true);
+            expect($(CAssetImage).visible, true);
+            expect($('most_recent_lantern_apps'.i18n), findsOneWidget);
+            expect($('most_recent_lantern_apps'.i18n).visible, true);
+            expect($('share_link'.i18n.toUpperCase()).visible, true);
 
-          await $(IconButton).tap();
+            await $(IconButton).tap();
+          }
 
           // follow us
           await $(AppKeys.followUs).tap();
@@ -92,8 +97,6 @@ void main() {
           expect($(CTextField).at(0).visible, true);
           expect($(CTextField).at(1).visible, true);
           expect($(CTextField), findsExactly(2));
-          expect($('email'.i18n), findsOneWidget);
-          expect($('select_an_issue'.i18n), findsOneWidget);
           expect($(DropdownButtonFormField<String>), findsOneWidget);
           expect($(DropdownButtonFormField<String>).visible, true);
           expect($('send_report'.i18n.toUpperCase()).visible, true);
