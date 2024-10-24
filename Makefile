@@ -539,12 +539,6 @@ $(WINDOWS64_LIB_NAME): desktop-lib
 
 ## APP_VERSION is the version defined in pubspec.yaml
 APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
-INNO_VERSION=6.2.0
-
-innoinstall:
-	powershell curl -o build\installer.exe http://files.jrsoftware.org/is/6/innosetup-${INNO_VERSION}.exe
-	powershell git clone https://github.com/DomGries/InnoDependencyInstaller.git  build\inno-depend
-	powershell build\installer.exe /verysilent /allusers /dir=build\iscc
 
 .PHONY: windows-release
 windows-release: ffigen
