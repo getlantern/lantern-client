@@ -1,3 +1,9 @@
+; https://github.com/DomGries/InnoDependencyInstaller
+; requires netcorecheck.exe and netcorecheck_x64.exe (see CodeDependencies.iss)
+; path is relative to dist\{VERSION} directory
+#define public Dependency_Path_NetCoreCheck "..\..\build\inno-depend\dependencies\"
+#include "..\..\build\inno-depend\CodeDependencies.iss"
+
 [Setup]
 AppId={{APP_ID}}
 AppVersion={{APP_VERSION}}
@@ -6,7 +12,7 @@ AppPublisher={{PUBLISHER_NAME}}
 AppPublisherURL={{PUBLISHER_URL}}
 AppSupportURL={{PUBLISHER_URL}}
 AppUpdatesURL={{PUBLISHER_URL}}
-DefaultDirName={{INSTALL_DIR_NAME}}
+DefaultDirName={autopf}\{{DISPLAY_NAME}}
 DisableProgramGroupPage=yes
 OutputDir=.
 OutputBaseFilename={{OUTPUT_BASE_FILENAME}}
@@ -62,4 +68,11 @@ begin
   begin
     Result := True; // WebView2 is not installed
   end;
+end;
+
+[Code]
+function InitializeSetup: Boolean;
+begin
+  Dependency_AddVC2015To2022;
+  Result := True;
 end;
