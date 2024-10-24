@@ -65,6 +65,12 @@ class _AppWebViewState extends State<AppWebView> {
           allowsInlineMediaPlayback: true,
           underPageBackgroundColor: Colors.white,
           transparentBackground: true,
+          // Windows-specific settings
+          windows: WindowsInAppWebViewSettings(
+            useHybridComposition: true, // Ensure WebView2 is used on Windows
+            userDataFolder:
+                "C:\\Users\\<Username>\\AppData\\Local\\MyApp\\WebView2", // Custom data directory for WebView2
+          ),
         ),
         onProgressChanged: (controller, progress) {
           appLogger.i("Loading progress: $progress%");
