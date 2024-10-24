@@ -56,7 +56,7 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
       await windowManager.setSize(
         Size(size.width + 1, size.height + 1),
       );
-      await windowManager.setResizable(false);
+      //await windowManager.setResizable(false);
       setState(() => {});
     });
   }
