@@ -45,13 +45,6 @@ class _AppWebViewState extends State<AppWebView> {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isWindows) {
-      return _DesktopWebView(
-        url: widget.url,
-        title: widget.title,
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
