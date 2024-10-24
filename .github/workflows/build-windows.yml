@@ -106,10 +106,18 @@ jobs:
         run: |
           Get-FileHash "build/windows/${{inputs.arch}}/runner/Release/liblantern_x64.dll" -Algorithm SHA256
           New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
-          flutter_distributor package --platform windows --targets "zip,msix" --skip-clean
+          flutter_distributor package --platform windows --targets "exe,msix" --skip-clean
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
+
+      - name: Upload Windows APP to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            dist/*/*.msix
+            dist/*/*.zip
 
       - name: Rename installer
         shell: bash
