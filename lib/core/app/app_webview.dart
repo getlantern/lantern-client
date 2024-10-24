@@ -293,17 +293,16 @@ class _DesktopWebViewState extends State<_DesktopWebView> {
   @override
   void initState() {
     super.initState();
-    _initPlatformState();
+    if (Platform.isWindows) {
+      _initWindowsWebview();
+    }
   }
 
-  Future<void> _initPlatformState() async {
+  Future<void> _initWindowsWebview() async {
     _controller = WebviewController();
     await _controller.initialize();
     await _controller.loadUrl(widget.url);
-    if (!mounted) {
-      return;
-    }
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -316,7 +315,17 @@ class _DesktopWebViewState extends State<_DesktopWebView> {
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.title,
-      body: Webview(_controller),
+      body: _controller.value.isInitialized
+          ? Webview(_controller)
+          : const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            ),
     );
   }
 }
