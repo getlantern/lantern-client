@@ -716,10 +716,11 @@ clean:
 
 # Test environment scripts and other utilities
 
-guard-patrol-cli:
-	@command -v patrol > /dev/null || (echo "Patrol CLI is not installed. Please install it before running this target." && exit 1)
+require-patrol-cli:
+	@if [[ -z "$(patrol)" ]]; then echo 'Patrol CLI is not installed. Please install it before running this target'; exit 1; fi
 
-nativeTest: guard-patrol-cli
+
+nativeTest: require-patrol-cli
 	@echo "Running native tests..."
 	patrol test --target integration_test/features/vpn/vpn_flow_test.dart --dart-define native=true --flavor=prod --verbose
 
@@ -727,3 +728,14 @@ appWorkflowTest:
 	@echo "Running all integration tests..."
 	flutter test integration_test/ --flavor=prod
 
+# Target to run tests on a specific file
+runTest:
+	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
+	echo "Running tests on: $$ARGUMENTS" && \
+	flutter test $$ARGUMENTS --flavor=prod
+
+
+runNativeTest: require-patrol-cli
+	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
+	echo "Running  patrol native tests on: $$ARGUMENTS" && \
+	patrol test --target $$ARGUMENTS --flavor=prod

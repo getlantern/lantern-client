@@ -1833,5 +1833,7 @@ msgstr "Socks Proxy copied"
 msgid "proxy_everything"
 msgstr "Proxy Everything"
 
+msgid "activation_lantern_pro_code"
+msgstr "Have a Lantern Pro activation code? Click here."
 
 

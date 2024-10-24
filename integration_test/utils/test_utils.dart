@@ -1,17 +1,17 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/main.dart' as app;
 import 'package:patrol/patrol.dart';
+import 'package:patrol_finders/src/custom_finders/patrol_tester.dart';
 
 export 'package:flutter_test/flutter_test.dart';
 export 'package:lantern/core/service/injection_container.dart';
+export 'package:lantern/core/utils/common.dart'
+    hide Notification, Selector, Verification;
 export 'package:lantern/features/home/session_model.dart';
 export 'package:lantern/features/replica/common.dart';
 export 'package:mockito/mockito.dart';
 export 'package:patrol/patrol.dart';
-
-export  'package:lantern/core/utils/common.dart' hide Notification, Selector, Verification;
 
 export '../../test/utils/test.mocks.mocks.dart';
 
@@ -24,17 +24,21 @@ TestVariant mobileVariant() {
   return const TargetPlatformVariant(
       {TargetPlatform.android, TargetPlatform.iOS});
 }
-bool shouldSkipNative(){
-  if(isMobile()){
-    final bool isNative = const String.fromEnvironment('native', defaultValue: 'false') == 'true';
+
+bool shouldSkipNative() {
+  if (isMobile()) {
+    final bool isNative =
+        const String.fromEnvironment('native', defaultValue: 'false') == 'true';
     print("isNative: $isNative");
     print("isNative return value: ${!isNative}");
     return !isNative;
   }
   return true;
 }
-bool isNative(){
-  return   const String.fromEnvironment('native', defaultValue: 'false') == 'true';
+
+bool isNative() {
+  return const String.fromEnvironment('native', defaultValue: 'false') ==
+      'true';
 }
 
 /// Use this function to interact with the native layer.
@@ -49,9 +53,8 @@ void patrolNative(
   LiveTestWidgetsFlutterBindingFramePolicy framePolicy =
       LiveTestWidgetsFlutterBindingFramePolicy.fadePointers,
 }) {
-
   /// if we are not running native test then return
-  if(!isNative()){
+  if (!isNative()) {
     return;
   }
   patrolTest(
@@ -66,6 +69,33 @@ void patrolNative(
 }
 
 Future<void> createApp(PatrolIntegrationTester $) async {
+  await app.main();
+  await $.pumpAndSettle();
+}
+
+/// Use this function to interact with the widget layer.
+/// Should be used on desktop platforms and most parts of mobile platforms.
+/// Should be used only when testing the UI.
+/// Avoid using it on when VPN turn on/off for mobile since it needs to interact with the native layer.
+/// App is already created in this function.
+void patrolWidget(
+    String description, Future<void> Function(PatrolTester $) callback,
+    {bool? skip,
+    List<String> tags = const [],
+    NativeAutomatorConfig? nativeAutomatorConfig}) {
+  patrolWidgetTest(
+    description,
+    config: _patrolTesterConfig,
+    skip: skip,
+    ($) async {
+      await createWidgetApp($);
+      await callback($);
+    },
+    tags: tags,
+  );
+}
+
+Future<void> createWidgetApp(PatrolTester $) async {
   await app.main();
   await $.pumpAndSettle();
 }

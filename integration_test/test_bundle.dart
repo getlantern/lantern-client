@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:patrol/patrol.dart';
 
 // START: GENERATED TEST IMPORTS
-import 'features/home/homepage_flow_mock_test.dart' as features__home__homepage_flow_mock_test;
+import 'features/account/account_flow_test.dart' as features__account__account_flow_test;
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {
@@ -16,6 +16,6 @@ Future<void> main() async {
         debugDefaultTargetPlatformOverride;
 
   // START: GENERATED TEST GROUPS
-  group('features.home.homepage_flow_mock_test', features__home__homepage_flow_mock_test.main);
+  group('features.account.account_flow_test', features__account__account_flow_test.main);
   // END: GENERATED TEST GROUPS
 }

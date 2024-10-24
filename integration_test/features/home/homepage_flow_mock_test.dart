@@ -66,6 +66,8 @@ void main() {
   tearDown(
     () async {
       clearInteractions(mockSessionModel);
+      clearInteractions(mockReplicaModel);
+      clearInteractions(mockVpnModel);
     },
   );
 
@@ -130,7 +132,7 @@ void main() {
         (realInvocation) {
           final builder = realInvocation.positionalArguments[0]
               as ValueWidgetBuilder<String>;
-          return builder(mockBuildContext, "test", null);
+          return builder(mockBuildContext, "", null);
         },
       );
 
@@ -261,7 +263,7 @@ void main() {
         },
       );
 
-      when(sessionModel.isUserFirstTimeVisit())
+      when(mockSessionModel.isUserFirstTimeVisit())
           .thenAnswer((realInvocation) => Future.value(true));
 
       /// messageing model
