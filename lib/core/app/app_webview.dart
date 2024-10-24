@@ -57,12 +57,14 @@ class _AppWebViewState extends State<AppWebView> {
           isInspectable: true,
           javaScriptEnabled: true,
           supportZoom: true,
+          useWideViewPort: true,
           loadWithOverviewMode: true,
           builtInZoomControls: true,
           displayZoomControls: false,
           mediaPlaybackRequiresUserGesture: false,
           allowsInlineMediaPlayback: true,
           underPageBackgroundColor: Colors.white,
+          transparentBackground: true,
         ),
         onProgressChanged: (controller, progress) {
           appLogger.i("Loading progress: $progress%");
