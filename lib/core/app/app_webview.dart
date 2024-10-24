@@ -1,7 +1,6 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:io';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -66,19 +65,16 @@ class _AppWebViewState extends State<AppWebView> {
           isInspectable: true,
           javaScriptEnabled: true,
           supportZoom: true,
-          useWideViewPort: true,
-          loadWithOverviewMode: true,
+          useWideViewPort: !isDesktop(),
+          loadWithOverviewMode: !isDesktop(),
           clearCache: true,
           javaScriptCanOpenWindowsAutomatically: true,
           supportMultipleWindows: true,
-          builtInZoomControls: true,
+          builtInZoomControls: Platform.isAndroid,
           displayZoomControls: false,
           mediaPlaybackRequiresUserGesture: false,
-          allowsInlineMediaPlayback: true,
+          allowsInlineMediaPlayback: Platform.isIOS,
           underPageBackgroundColor: Colors.white,
-          transparentBackground: true,
-          // Windows-specific settings
-          useHybridComposition: true,
         ),
         onProgressChanged: (controller, progress) {
           appLogger.i("Loading progress: $progress%");
