@@ -1,4 +1,5 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:lantern/app.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_windows/webview_windows.dart';
@@ -342,8 +343,36 @@ class _DesktopWebViewState extends State<_DesktopWebView> {
 
   @override
   void dispose() {
-    super.dispose();
+    for (var s in _subscriptions) {
+      s.cancel();
+    }
     _controller.dispose();
+    super.dispose();
+  }
+
+  Future<WebviewPermissionDecision> _onPermissionRequested(
+      String url, WebviewPermissionKind kind, bool isUserInitiated) async {
+    final decision = await showDialog<WebviewPermissionDecision>(
+      context: globalRouter.navigatorKey.currentContext!,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('WebView permission requested'),
+        content: Text('WebView has requested permission \'$kind\''),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, WebviewPermissionDecision.deny),
+            child: const Text('Deny'),
+          ),
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, WebviewPermissionDecision.allow),
+            child: const Text('Allow'),
+          ),
+        ],
+      ),
+    );
+
+    return decision ?? WebviewPermissionDecision.none;
   }
 
   @override
@@ -351,7 +380,10 @@ class _DesktopWebViewState extends State<_DesktopWebView> {
     return BaseScreen(
       title: widget.title,
       body: _controller.value.isInitialized
-          ? Webview(_controller)
+          ? Webview(
+              _controller,
+              permissionRequested: _onPermissionRequested,
+            )
           : const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
