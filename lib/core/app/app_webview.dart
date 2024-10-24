@@ -310,7 +310,6 @@ class _DesktopWebViewState extends State<_DesktopWebView> {
   void dispose() {
     super.dispose();
     _controller.dispose();
-    _subscription.cancel();
   }
 
   @override
