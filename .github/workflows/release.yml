@@ -128,6 +128,11 @@ jobs:
         with:
           name: windows64-installer-signed
 
+      - name: Download the windows msix
+        uses: actions/download-artifact@v4
+        with:
+          name: windows${{inputs.build-suffix}}-installer-msix
+
       - name: Grant private modules access
         run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
@@ -137,6 +142,7 @@ jobs:
       - name: Rename builds
         run: |
           diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
+          diff lantern-installer-x64.msix ${{ env.prefix }}-64-bit.msix || mv -f lantern-installer-x64.msix ${{ env.prefix }}-64-bit.msix
 
       - name: Prepare sha256 sums
         run: |

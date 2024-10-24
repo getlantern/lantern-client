@@ -117,7 +117,7 @@ jobs:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
 
-      - name: Upload Windows APP to Artifacts
+      - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows
@@ -132,6 +132,7 @@ jobs:
           ls -ltr "build/windows/${{inputs.arch}}/runner"
           ls -ltr "build/windows/${{inputs.arch}}/runner/Release"
           mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
+          mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows.msix" lantern-installer${{inputs.installer-suffix}}.msix
 
       - name: Sign EXE with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -143,7 +144,7 @@ jobs:
           code-signing-account-name: code-signing
           certificate-profile-name: Lantern
           files-folder: ${{ github.workspace }}\
-          files-folder-filter: exe
+          files-folder-filter: exe,dll,msix
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
@@ -154,6 +155,14 @@ jobs:
           name: windows${{inputs.build-suffix}}-installer-signed
           path: |
             lantern-installer${{inputs.installer-suffix}}.exe
+
+      - name: Upload msix artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows${{inputs.build-suffix}}-installer-msix
+          path: |
+            lantern-installer${{inputs.installer-suffix}}.msix
+
 
   upload-windows:
     needs: build-windows
