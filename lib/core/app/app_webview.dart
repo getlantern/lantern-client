@@ -1,6 +1,7 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -20,39 +21,47 @@ class AppWebView extends StatefulWidget {
 class _AppWebViewState extends State<AppWebView> {
   late InAppWebViewController webViewController;
 
+  void showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      title: widget.title,
-      showAppBar: true,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
       body: InAppWebView(
-        initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+        initialUrlRequest: URLRequest(url: Uri.parse(url)),
         onWebViewCreated: (controller) {
           webViewController = controller;
         },
         /*onLoadStop: (controller, url) async {
           _showWebViewUrl();
         },*/
-        onReceivedError: (controller, request, error) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text("Error"),
-                content: Text(
-                    "Failed to load URL: ${request.url}\nError: ${error.description}"),
-                actions: [
-                  TextButton(
-                    child: const Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
+        onReceivedHttpError: (controller, request, response) {
+          print("HTTP error: ${response.statusCode} for ${request.url}");
+          showErrorDialog("HTTP Error",
+              "Status code: ${response.statusCode}\nDescription: ${response.reasonPhrase ?? ''}");
         },
+        onReceivedError: (controller, request, error) =>
+            showErrorDialog("Failed to load", error.description),
         initialSettings: InAppWebViewSettings(
           isInspectable: true,
           javaScriptEnabled: true,
@@ -215,13 +224,14 @@ class AppBrowser extends InAppBrowser {
   }
 
   // navigateWebview navigates to the webview route and displays the given url
-  static Future<void> navigateWebview(BuildContext context, String url) async =>
-      await context.pushRoute(
-        AppWebview(
-          url: url,
-          title: 'lantern_pro_checkout'.i18n,
-        ),
-      );
+  static Future<void> navigateWebview(BuildContext context, String url) async {
+    await context.pushRoute(
+      AppWebview(
+        url: url,
+        title: 'lantern_pro_checkout'.i18n,
+      ),
+    );
+  }
 
   // openWithSystemBrowser opens a URL in the browser
   static Future<void> openWithSystemBrowser(String url) async =>
