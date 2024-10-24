@@ -1,6 +1,7 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_windows/webview_windows.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -42,6 +43,13 @@ class _AppWebViewState extends State<AppWebView> {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isWindows) {
+      return _DesktopWebView(
+        url: widget.url,
+        title: widget.title,
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -262,6 +270,54 @@ class AppBrowser extends InAppBrowser {
     await instance.openUrlRequest(
       urlRequest: URLRequest(url: WebUri(url), allowsCellularAccess: true),
       settings: settings,
+    );
+  }
+}
+
+class _DesktopWebView extends StatefulWidget {
+  final String url;
+  final String title;
+
+  const _DesktopWebView({
+    required this.url,
+    required this.title,
+  });
+
+  @override
+  _DesktopWebViewState createState() => _DesktopWebViewState();
+}
+
+class _DesktopWebViewState extends State<_DesktopWebView> {
+  late WebviewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _initPlatformState();
+  }
+
+  Future<void> _initPlatformState() async {
+    _controller = WebviewController();
+    await _controller.initialize();
+    await _controller.loadUrl(widget.url);
+    if (!mounted) {
+      return;
+    }
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+    _subscription.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseScreen(
+      title: widget.title,
+      body: Webview(_controller),
     );
   }
 }

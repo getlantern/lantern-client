@@ -13,6 +13,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   share_plus
   tray_manager
   url_launcher_windows
+  webview_windows
   window_manager
 )
 
