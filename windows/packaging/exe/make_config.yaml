@@ -8,6 +8,5 @@ publisher: getlantern
 publisher_url: https://github.com/getlantern/lantern-client
 executable_name: Lantern.exe
 output_base_file_name: Lantern.exe
-install_dir_name: "{autopf64}\\Lantern"
 script_template: inno_setup.iss
 #setup_icon_file: ..\windows\runner\resources\app_icon.ico

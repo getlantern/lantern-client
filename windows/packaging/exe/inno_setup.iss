@@ -13,6 +13,7 @@ OutputBaseFilename={{OUTPUT_BASE_FILENAME}}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+PrivilegesRequired=admin
 
 [Languages]
 {% for locale in LOCALES %}
@@ -34,3 +35,24 @@ Name: "{autodesktop}\\{{APP_NAME}}"; Filename: "{app}\\{{EXECUTABLE_NAME}}"; Tas
 Name: "{userstartup}\\{{APP_NAME}}"; Filename: "{app}\\{{EXECUTABLE_NAME}}"; WorkingDir: "{app}"; Tasks: launchAtStartup
 [Run]
 Filename: "{app}\\{{EXECUTABLE_NAME}}"; Description: "{cm:LaunchProgram,{{DISPLAY_NAME}}}"; Flags: nowait postinstall skipifsilent
+
+[Run]
+Filename: "{tmp}\MicrosoftEdgeWebView2Setup.exe"; Parameters: "/silent /install"; StatusMsg: "Installing WebView2 Runtime..."; Check: NeedsWebView2Runtime
+
+[Code]
+function NeedsWebView2Runtime(): Boolean;
+var
+  EdgeVersion: string;
+begin
+  if RegQueryStringValue(HKLM64, 'Software\Microsoft\EdgeUpdate\Clients\{F2C8B2F8-5A81-41D0-873A-D1D9F4922A3A}', 'pv', EdgeVersion) then
+  begin
+    Result := False;
+  end
+  else
+  begin
+    Result := True; // WebView2 is not installed
+  end;
+end;
+
+[Downloads]
+Source: "https://go.microsoft.com/fwlink/p/?LinkId=2124703"; DestFile: "{tmp}\MicrosoftEdgeWebView2Setup.exe"; Flags: external
