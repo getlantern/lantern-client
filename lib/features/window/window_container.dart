@@ -23,9 +23,9 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
     super.initState();
     if (isDesktop()) {
       windowManager.addListener(this);
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
+      /*WidgetsBinding.instance.addPostFrameCallback((_) async {
         await _initializeWindow();
-      });
+      });*/
     }
   }
 
