@@ -106,7 +106,7 @@ jobs:
         run: |
           Get-FileHash "build/windows/${{inputs.arch}}/runner/Release/liblantern_x64.dll" -Algorithm SHA256
           New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
-          flutter_distributor package --platform windows --targets exe --skip-clean
+          flutter_distributor package --platform windows --targets "exe,msix" --skip-clean
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
