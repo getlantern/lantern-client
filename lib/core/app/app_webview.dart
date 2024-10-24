@@ -45,10 +45,8 @@ class _AppWebViewState extends State<AppWebView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+    return BaseScreen(
+      title: widget.title,
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
         onWebViewCreated: (controller) {
