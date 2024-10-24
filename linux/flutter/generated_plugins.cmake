@@ -4,7 +4,6 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_linux
-  desktop_webview_window
   emoji_picker_flutter
   gtk
   screen_retriever

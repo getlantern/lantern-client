@@ -1,4 +1,3 @@
-import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -231,12 +230,7 @@ class AppBrowser extends InAppBrowser {
         await navigateWebview(context, url);
         break;
       case 'linux':
-        try {
-          final webview = await WebviewWindow.create();
-          webview.launch(url);
-        } catch (e) {
-          mainLogger.e("Error opening linux webview: $e");
-        }
+        await navigateWebview(url);
         break;
       case 'macos':
         await openWithSystemBrowser(url);
