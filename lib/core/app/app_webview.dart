@@ -230,7 +230,7 @@ class AppBrowser extends InAppBrowser {
         await navigateWebview(context, url);
         break;
       case 'linux':
-        await navigateWebview(url);
+        await navigateWebview(context, url);
         break;
       case 'macos':
         await openWithSystemBrowser(url);
