@@ -2,6 +2,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_windows/webview_windows.dart';
+import 'package:window_manager/window_manager.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -289,6 +290,7 @@ class _DesktopWebView extends StatefulWidget {
 
 class _DesktopWebViewState extends State<_DesktopWebView> {
   late WebviewController _controller;
+  final List<StreamSubscription> _subscriptions = [];
 
   @override
   void initState() {
@@ -299,10 +301,43 @@ class _DesktopWebViewState extends State<_DesktopWebView> {
   }
 
   Future<void> _initWindowsWebview() async {
-    _controller = WebviewController();
-    await _controller.initialize();
-    await _controller.loadUrl(widget.url);
-    if (mounted) setState(() {});
+    try {
+      _controller = WebviewController();
+      await _controller.initialize();
+
+      _subscriptions
+          .add(_controller.containsFullScreenElementChanged.listen((flag) {
+        windowManager.setFullScreen(flag);
+      }));
+      await _controller.setBackgroundColor(Colors.transparent);
+      await _controller.setPopupWindowPolicy(WebviewPopupWindowPolicy.deny);
+      await _controller.loadUrl(widget.url);
+      if (mounted) setState(() {});
+    } on PlatformException catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Error'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Code: ${e.code}'),
+                      Text('Message: ${e.message}'),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text('Continue'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                ));
+      });
+    }
   }
 
   @override
