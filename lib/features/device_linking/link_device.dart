@@ -17,9 +17,12 @@ class _LinkDeviceState extends State<LinkDevice> {
   @override
   void initState() {
     super.initState();
-    if (isMobile()) {
-      requestLinkCode();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (isMobile()) {
+        requestLinkCode();
+      }
+    });
+
   }
 
   Future<void> requestLinkCode() async {

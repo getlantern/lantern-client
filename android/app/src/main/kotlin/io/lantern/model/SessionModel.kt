@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.webkit.ProxyConfig
 import androidx.webkit.ProxyController
 import androidx.webkit.WebViewFeature
-import com.google.protobuf.ByteString
 import internalsdk.SessionModel
 import internalsdk.SessionModelOpts
 import io.flutter.embedding.engine.FlutterEngine
@@ -23,9 +22,11 @@ import io.lantern.model.dbadapter.DBAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.add
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.activity.WebViewActivity
@@ -139,6 +140,13 @@ class SessionModel internal constructor(
 
             "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
+            }
+
+            "trackUserAction" -> {
+                val props: Map<String, String> = mapOf("title" to call.argument("title")!!)
+                Plausible.event(
+                    call.argument("name")!!, url = call.argument("url")!!, props = props
+                )
             }
 
             else -> super.doOnMethodCall(call, result)
@@ -390,20 +398,26 @@ class SessionModel internal constructor(
         // this ends up in memory out of exception
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                val start = System.currentTimeMillis()
                 val appsList = appsDataProvider.listOfApps()
                 // First add just the app names to get a list quickly
                 val apps = buildJsonArray {
                     appsList.forEach { app ->
                         add(
                             buildJsonObject {
-                                val byte = ByteString.copyFrom(app.icon)
+                                val byte = app.icon!!
                                 put("packageName", app.packageName)
                                 put("name", app.name)
-                                put("icon", byte.toByteArray().toUByteArray().joinToString(", "))
+                                putJsonArray("icon") {
+                                    byte.toUByteArray().forEach { add(it.toInt()) }
+                                }
                             }
                         )
                     }
                 }
+                val end = System.currentTimeMillis()
+                Logger.debug(TAG, "Time taken to get app data: ${end - start} ms")
+
                 model.invokeMethod(
                     "updateAppsData",
                     Arguments(mapOf("appsList" to apps.toString()))

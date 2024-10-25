@@ -1837,3 +1837,8 @@ msgid "activation_lantern_pro_code"
 msgstr "Have a Lantern Pro activation code? Click here."
 
 
+msgid "errorSubmittingToGooglePlay"
+msgstr "We are currently experiencing difficulties processing your request for Google Play. Please try again later."
+
+
+
