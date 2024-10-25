@@ -99,7 +99,7 @@ jobs:
       - name: Move liblantern.dll to release directory
         shell: bash
         run: |
-          mv liblantern_x64.dll "build/windows/${{inputs.arch}}/runner/Release"
+          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
 
       - name: Extract app version from pubspec.yaml
         id: extract_version
@@ -110,29 +110,16 @@ jobs:
 
       - name: Build Flutter app
         run: |
-          Get-FileHash "build/windows/${{inputs.arch}}/runner/Release/liblantern_x64.dll" -Algorithm SHA256
           New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
           flutter_distributor package --platform windows --targets exe --skip-clean
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
 
-      - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows
-          path: |
-            dist/*/*.msix
-            dist/*/*.zip
-
       - name: Rename installer
         shell: bash
         run: |
-          ls -ltr ./dist
-          ls -ltr "build/windows/${{inputs.arch}}/runner"
-          ls -ltr "build/windows/${{inputs.arch}}/runner/Release"
           mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
-          # mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows.msix" lantern-installer${{inputs.installer-suffix}}.msix
 
       - name: Sign EXE with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -155,14 +142,6 @@ jobs:
           name: windows${{inputs.build-suffix}}-installer-signed
           path: |
             lantern-installer${{inputs.installer-suffix}}.exe
-
-      # - name: Upload msix artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: windows${{inputs.build-suffix}}-installer-msix
-      #     path: |
-      #       lantern-installer${{inputs.installer-suffix}}.msix
-
 
   upload-windows:
     needs: build-windows
