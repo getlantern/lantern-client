@@ -47,16 +47,17 @@ jobs:
         with:
           go-version-file: "go.mod"
 
-      - name: Chocolatey Action
-        uses: crazy-max/ghaction-chocolatey@v3.0.0
-        with:
-          args: -h
+      - name: Install WebView2 Runtime
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile "MicrosoftEdgeWebView2Setup.exe"
+          Start-Process -FilePath ".\MicrosoftEdgeWebView2Setup.exe" -ArgumentList "/silent", "/install" -Wait
 
       - name: Set up MinGW
         run: choco install mingw -y
 
-      # Install Flutter
-      - uses: subosito/flutter-action@v2
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: "stable"
 
@@ -67,16 +68,18 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+
       - name: Build Lantern Library
+        shell: bash
         run: |
           touch app.env
           mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
           make windows64
-          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
 
       - name: Activate plugins
         run: |
           dart pub global activate protoc_plugin
+          dart pub global activate flutter_distributor
 
       - name: Sign liblantern.dll with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -93,18 +96,43 @@ jobs:
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
 
+      - name: Move liblantern.dll to release directory
+        shell: bash
+        run: |
+          mv liblantern_x64.dll "build/windows/${{inputs.arch}}/runner/Release"
+
+      - name: Extract app version from pubspec.yaml
+        id: extract_version
+        shell: bash
+        run: |
+          APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+
       - name: Build Flutter app
-        run: make windows-release
+        run: |
+          Get-FileHash "build/windows/${{inputs.arch}}/runner/Release/liblantern_x64.dll" -Algorithm SHA256
+          New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
+          flutter_distributor package --platform windows --targets exe --skip-clean
         env:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
 
-      - name: Upload EXE artifact
+      - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-exe-build
-          path: lantern-installer-x64.exe
+          name: windows
+          path: |
+            dist/*/*.msix
+            dist/*/*.zip
+
+      - name: Rename installer
+        shell: bash
+        run: |
+          ls -ltr ./dist
+          ls -ltr "build/windows/${{inputs.arch}}/runner"
+          ls -ltr "build/windows/${{inputs.arch}}/runner/Release"
+          mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
+          # mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows.msix" lantern-installer${{inputs.installer-suffix}}.msix
 
       - name: Sign EXE with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -115,17 +143,26 @@ jobs:
           endpoint: https://wus2.codesigning.azure.net/
           code-signing-account-name: code-signing
           certificate-profile-name: Lantern
-          files-folder: ${{ github.workspace }}\
-          files-folder-filter: exe
+          files-folder: ${{ github.workspace }}/
+          files-folder-filter: exe,dll,msix
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
         with:
           name: windows${{inputs.build-suffix}}-installer-signed
           path: |
             lantern-installer${{inputs.installer-suffix}}.exe
+
+      # - name: Upload msix artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: windows${{inputs.build-suffix}}-installer-msix
+      #     path: |
+      #       lantern-installer${{inputs.installer-suffix}}.msix
+
 
   upload-windows:
     needs: build-windows

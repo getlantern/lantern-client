@@ -102,7 +102,6 @@ dependencies:
   # Desktop
   window_manager: ^0.4.2
   tray_manager: ^0.2.4
-  flutter_distributor: ^0.0.2
 
   flutter_dotenv: ^5.1.0
 

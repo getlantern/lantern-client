@@ -137,7 +137,7 @@ INSTALLER_RESOURCES ?= installer-resources-$(APP)
 INSTALLER_NAME ?= $(APP)-installer
 WINDOWS_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
 WINDOWS_APP_NAME ?= $(APP).exe
-WINDOWS64_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
+WINDOWS64_LIB_NAME ?= $(DESKTOP_LIB_NAME)_x64.dll
 WINDOWS64_APP_NAME ?= $(APP)_x64.exe
 LINUX_LIB_NAME ?= $(DESKTOP_LIB_NAME).so
 
@@ -470,7 +470,8 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 
 desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: echo-build-tags
-	CGO_ENABLED=1 go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
+	go mod download
+	CGO_ENABLED=1 go build -v -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
 # This runs a development build for lantern. For production builds, see
 # 'lantern-prod' target
@@ -523,7 +524,7 @@ $(WINDOWS_LIB_NAME): export Environment = production
 $(WINDOWS_LIB_NAME): desktop-lib
 
 .PHONY: windows64
-windows64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
+windows64: $(WINDOWS64_LIB_NAME) ## Build lantern for windows
 $(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
 $(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
 $(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static
@@ -536,10 +537,12 @@ $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
-.PHONY: windows-release
+## APP_VERSION is the version defined in pubspec.yaml
+APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
 
+.PHONY: windows-release
 windows-release: ffigen
-	flutter build windows
+	flutter_distributor package --flutter-build-args=verbose --platform windows --targets "msix,exe"
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
 
 ## Darwin

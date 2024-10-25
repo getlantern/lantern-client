@@ -1,7 +1,10 @@
-import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:lantern/app.dart';
 import 'package:lantern/core/utils/common.dart';
+import 'package:lantern/main.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_windows/webview_windows.dart';
+import 'package:window_manager/window_manager.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -19,33 +22,120 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
+  late InAppWebViewController webViewController;
+
+  void showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    /*if (Platform.isWindows) {
+      return _DesktopWebView(url: widget.url, title: widget.title);
+    }*/
+
     return BaseScreen(
       title: widget.title,
-      showAppBar: true,
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+        onWebViewCreated: (controller) {
+          webViewController = controller;
+        },
+        webViewEnvironment: webViewEnvironment,
+        /*onLoadStop: (controller, url) async {
+          _showWebViewUrl();
+        },*/
+        onReceivedHttpError: (controller, request, response) {
+          print("HTTP error: ${response.statusCode} for ${request.url}");
+          showErrorDialog("HTTP Error",
+              "Status code: ${response.statusCode}\nDescription: ${response.reasonPhrase ?? ''}");
+        },
+        onReceivedError: (controller, request, error) =>
+            showErrorDialog("Failed to load", error.description),
         initialSettings: InAppWebViewSettings(
-          isInspectable: kDebugMode,
+          isInspectable: true,
           javaScriptEnabled: true,
           supportZoom: true,
-          useWideViewPort: true,
-          loadWithOverviewMode: true,
-          builtInZoomControls: true,
+          domStorageEnabled: true,
+          allowFileAccess: true,
+          useWideViewPort: !isDesktop(),
+          loadWithOverviewMode: !isDesktop(),
+          clearCache: true,
+          javaScriptCanOpenWindowsAutomatically: true,
+          supportMultipleWindows: true,
+          mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+          builtInZoomControls: Platform.isAndroid,
           displayZoomControls: false,
           mediaPlaybackRequiresUserGesture: false,
-          allowsInlineMediaPlayback: false,
+          allowsInlineMediaPlayback: Platform.isIOS,
           underPageBackgroundColor: Colors.white,
-          allowBackgroundAudioPlaying: false,
-          allowFileAccessFromFileURLs: true,
-          preferredContentMode: UserPreferredContentMode.MOBILE,
         ),
         onProgressChanged: (controller, progress) {
           appLogger.i("Loading progress: $progress%");
         },
       ),
     );
+  }
+
+  Future<void> _showWebViewUrl() async {
+    try {
+      // Get the current URL from the WebView
+      var currentUrl = await webViewController.getUrl();
+      String urlToShow =
+          currentUrl != null ? currentUrl.toString() : "No URL loaded";
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Current WebView URL"),
+            content: Text(urlToShow),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: Text("Failed to get URL: $e"),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
 
@@ -143,13 +233,14 @@ class AppBrowser extends InAppBrowser {
   }
 
   // navigateWebview navigates to the webview route and displays the given url
-  static Future<void> navigateWebview(BuildContext context, String url) async =>
-      await context.pushRoute(
-        AppWebview(
-          url: url,
-          title: 'lantern_pro_checkout'.i18n,
-        ),
-      );
+  static Future<void> navigateWebview(BuildContext context, String url) async {
+    await context.pushRoute(
+      AppWebview(
+        url: url,
+        title: 'lantern_pro_checkout'.i18n,
+      ),
+    );
+  }
 
   // openWithSystemBrowser opens a URL in the browser
   static Future<void> openWithSystemBrowser(String url) async =>
@@ -161,15 +252,11 @@ class AppBrowser extends InAppBrowser {
         await navigateWebview(context, url);
         break;
       case 'linux':
-        try {
-          final webview = await WebviewWindow.create();
-          webview.launch(url);
-        } catch (e) {
-          mainLogger.e("Error opening linux webview: $e");
-        }
+        await navigateWebview(context, url);
         break;
       case 'macos':
         await openWithSystemBrowser(url);
+        break;
       case 'ios':
         await openWithSystemBrowser(url);
         break;
@@ -185,6 +272,127 @@ class AppBrowser extends InAppBrowser {
     await instance.openUrlRequest(
       urlRequest: URLRequest(url: WebUri(url), allowsCellularAccess: true),
       settings: settings,
+    );
+  }
+}
+
+class _DesktopWebView extends StatefulWidget {
+  final String url;
+  final String title;
+
+  const _DesktopWebView({
+    required this.url,
+    required this.title,
+  });
+
+  @override
+  _DesktopWebViewState createState() => _DesktopWebViewState();
+}
+
+class _DesktopWebViewState extends State<_DesktopWebView> {
+  late WebviewController _controller;
+  final List<StreamSubscription> _subscriptions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isWindows) {
+      _initWindowsWebview();
+    }
+  }
+
+  Future<void> _initWindowsWebview() async {
+    try {
+      _controller = WebviewController();
+      await _controller.initialize();
+
+      _subscriptions
+          .add(_controller.containsFullScreenElementChanged.listen((flag) {
+        windowManager.setFullScreen(flag);
+      }));
+      await _controller.setBackgroundColor(Colors.transparent);
+      await _controller.setPopupWindowPolicy(WebviewPopupWindowPolicy.deny);
+      await _controller.loadUrl(widget.url);
+      if (mounted) setState(() {});
+    } on PlatformException catch (e) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  title: Text('Error'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Code: ${e.code}'),
+                      Text('Message: ${e.message}'),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text('Continue'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                ));
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var s in _subscriptions) {
+      s.cancel();
+    }
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<WebviewPermissionDecision> _onPermissionRequested(
+      String url, WebviewPermissionKind kind, bool isUserInitiated) async {
+    final decision = await showDialog<WebviewPermissionDecision>(
+      context: globalRouter.navigatorKey.currentContext!,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('WebView permission requested'),
+        content: Text('WebView has requested permission \'$kind\''),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, WebviewPermissionDecision.deny),
+            child: const Text('Deny'),
+          ),
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, WebviewPermissionDecision.allow),
+            child: const Text('Allow'),
+          ),
+        ],
+      ),
+    );
+
+    return decision ?? WebviewPermissionDecision.none;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BaseScreen(
+      title: widget.title,
+      body: _controller.value.isInitialized
+          ? Webview(
+              _controller,
+              permissionRequested: _onPermissionRequested,
+            )
+          : const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            ),
     );
   }
 }
