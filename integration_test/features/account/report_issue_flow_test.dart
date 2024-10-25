@@ -19,7 +19,7 @@ void main() {
       final email = $.tester.widget<CTextField>($(CTextField).at(0));
       final desc = $.tester.widget<CTextField>($(CTextField).at(1));
       final sendReport = $.tester.widget<Button>($(Button));
-      
+
       email.controller.clear();
       desc.controller.clear();
       await $.pumpAndSettle();
