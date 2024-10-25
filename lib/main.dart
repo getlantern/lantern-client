@@ -13,8 +13,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
-WebViewEnvironment? webViewEnvironment;
-
 // IOS issue
 // https://github.com/flutter/flutter/issues/133465
 Future<void> main() async {
@@ -35,7 +33,7 @@ Future<void> main() async {
   }
 
   if (isDesktop()) {
-    await initializeWebViewEnvironment();
+    if (Platform.isWindows) await initializeWebViewEnvironment();
     await windowManager.ensureInitialized();
     await windowManager.setSize(const ui.Size(360, 712));
     LanternFFI.startDesktopService();
@@ -69,21 +67,4 @@ Future<void> main() async {
 Future<void> _initGoogleMobileAds() async {
   await MobileAds.instance.initialize();
   // await MobileAds.instance.setAppMuted(true);
-}
-
-Future<void> initializeWebViewEnvironment() async {
-  if (!isDesktop()) return;
-  final directory = await getApplicationDocumentsDirectory();
-  final localAppDataPath = directory.path;
-
-  // Ensure WebView2 runtime is available
-  final availableVersion = await WebViewEnvironment.getAvailableVersion();
-  assert(availableVersion != null,
-      'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
-
-  webViewEnvironment = await WebViewEnvironment.create(
-    settings: WebViewEnvironmentSettings(
-      userDataFolder: '$localAppDataPath\\Lantern\\WebView2',
-    ),
-  );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/main.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage(name: 'AppWebview')
@@ -59,7 +60,7 @@ class _AppWebViewState extends State<AppWebView> {
         onReceivedError: (controller, request, error) =>
             showErrorDialog("Failed to load", error.description),
         initialSettings: InAppWebViewSettings(
-          isInspectable: true,
+          isInspectable: kDebugMode,
           javaScriptEnabled: true,
           supportZoom: true,
           domStorageEnabled: true,
@@ -67,14 +68,15 @@ class _AppWebViewState extends State<AppWebView> {
           useWideViewPort: !isDesktop(),
           loadWithOverviewMode: !isDesktop(),
           clearCache: true,
-          javaScriptCanOpenWindowsAutomatically: true,
-          supportMultipleWindows: true,
           mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
           builtInZoomControls: Platform.isAndroid,
           displayZoomControls: false,
           mediaPlaybackRequiresUserGesture: false,
-          allowsInlineMediaPlayback: Platform.isIOS,
+          allowsInlineMediaPlayback: false,
           underPageBackgroundColor: Colors.white,
+          transparentBackground: true,
+          allowFileAccessFromFileURLs: true,
+          preferredContentMode: UserPreferredContentMode.MOBILE,
         ),
         onProgressChanged: (controller, progress) {
           appLogger.i("Loading progress: $progress%");
@@ -219,4 +221,23 @@ class AppBrowser extends InAppBrowser {
       settings: settings,
     );
   }
+}
+
+WebViewEnvironment? webViewEnvironment;
+
+Future<void> initializeWebViewEnvironment() async {
+  if (!isDesktop()) return;
+  final directory = await getApplicationDocumentsDirectory();
+  final localAppDataPath = directory.path;
+
+  // Ensure WebView2 runtime is available
+  final availableVersion = await WebViewEnvironment.getAvailableVersion();
+  assert(availableVersion != null,
+      'Failed to find WebView2 Runtime or non-stable Microsoft Edge installation.');
+
+  webViewEnvironment = await WebViewEnvironment.create(
+    settings: WebViewEnvironmentSettings(
+      userDataFolder: '$localAppDataPath\\Lantern\\WebView2',
+    ),
+  );
 }
