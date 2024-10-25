@@ -73,7 +73,6 @@ Future<void> _initGoogleMobileAds() async {
 
 Future<void> initializeWebViewEnvironment() async {
   if (!isDesktop()) return;
-  // Get the user's Local AppData directory
   final directory = await getApplicationDocumentsDirectory();
   final localAppDataPath = directory.path;
 
@@ -82,10 +81,9 @@ Future<void> initializeWebViewEnvironment() async {
   assert(availableVersion != null,
       'Failed to find an installed WebView2 Runtime or non-stable Microsoft Edge installation.');
 
-  // Set the WebView2 user data folder to Local AppData
   webViewEnvironment = await WebViewEnvironment.create(
     settings: WebViewEnvironmentSettings(
-      userDataFolder: '$localAppDataPath\\YourAppName\\WebView2',
+      userDataFolder: '$localAppDataPath\\Lantern\\WebView2',
     ),
   );
 }
