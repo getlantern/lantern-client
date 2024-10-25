@@ -10,5 +10,5 @@ executable_name: lantern.exe
 output_base_file_name: lantern.exe
 create_desktop_icon: true
 install_dir_name: Lantern
-#script_template: inno_setup.iss
+script_template: inno_setup.iss
 #setup_icon_file: ..\windows\runner\resources\app_icon.ico
