@@ -1,6 +1,5 @@
 import 'package:intl/intl.dart';
 import 'package:lantern/core/localization/localization_constants.dart';
-
 import '../../utils/test_utils.dart';
 
 const enUs = 'en_US';
