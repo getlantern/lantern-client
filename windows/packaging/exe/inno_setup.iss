@@ -39,7 +39,7 @@ Name: "{userstartup}\\{{APP_NAME}}"; Filename: "{app}\\{{EXECUTABLE_NAME}}"; Wor
 
 [Dirs]
 ; Create WebView2 data directory in AppData
-Name: "{userappdata}\{{APP_NAME}}\WebView2"; Permissions: everyone-modify
+Name: "{app}\{{APP_NAME}}\WebView2"; Permissions: everyone-modify
 
 [Downloads]
 Source: "https://go.microsoft.com/fwlink/p/?LinkId=2124703"; DestFile: "{tmp}\MicrosoftEdgeWebView2Setup.exe"; Flags: external
