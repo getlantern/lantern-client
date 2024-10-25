@@ -117,6 +117,14 @@ jobs:
         with:
           name: android-aab-build
 
+      - name: Upload Android App bundle to Play Store (production)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: org.getlantern.lantern
+          releaseFiles: lantern-installer.aab
+          track: production
+
       - name: Grant private modules access
         run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
