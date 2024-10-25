@@ -180,14 +180,13 @@ class AppBrowser extends InAppBrowser {
   }
 
   // navigateWebview navigates to the webview route and displays the given url
-  static Future<void> navigateWebview(BuildContext context, String url) async {
-    await context.pushRoute(
-      AppWebview(
-        url: url,
-        title: 'lantern_pro_checkout'.i18n,
-      ),
-    );
-  }
+  static Future<void> navigateWebview(BuildContext context, String url) async =>
+      await context.pushRoute(
+        AppWebview(
+          url: url,
+          title: 'lantern_pro_checkout'.i18n,
+        ),
+      );
 
   // openWithSystemBrowser opens a URL in the browser
   static Future<void> openWithSystemBrowser(String url) async =>
