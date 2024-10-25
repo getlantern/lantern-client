@@ -1,6 +1,7 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/core/utils/common.dart';
+import 'package:lantern/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_windows/webview_windows.dart';
 import 'package:window_manager/window_manager.dart';
@@ -48,6 +49,7 @@ class _AppWebViewState extends State<AppWebView> {
     /*if (Platform.isWindows) {
       return _DesktopWebView(url: widget.url, title: widget.title);
     }*/
+
     return BaseScreen(
       title: widget.title,
       body: InAppWebView(
@@ -55,6 +57,7 @@ class _AppWebViewState extends State<AppWebView> {
         onWebViewCreated: (controller) {
           webViewController = controller;
         },
+        webViewEnvironment: webViewEnvironment,
         /*onLoadStop: (controller, url) async {
           _showWebViewUrl();
         },*/
