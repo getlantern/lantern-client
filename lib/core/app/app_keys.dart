@@ -41,5 +41,20 @@ class AppKeys {
   static const faq = ValueKey('faq');
   static const reportDescription = 'report_description';
   static const sendReport = 'send_report';
+
+  //Settings
+  static const language = ValueKey('language');
+  static const checkForUpdates = ValueKey('check_for_updates');
+  static const splitTunneling = ValueKey('split_tunnel');
+  static const privacyPolicy = ValueKey('privacy_policy');
+  static const termsOfServices = ValueKey('terms_of_services');
+  static const proxyAll = ValueKey('proxy_all');
+  static const proxySetting = ValueKey('proxy_setting');
+  static const chat = ValueKey('chat');
+
+  // Proxies setting
+  static const httpProxy = ValueKey('http_proxy');
+  static const socksProxy = ValueKey('socks_proxy');
+
 }
 

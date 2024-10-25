@@ -25,6 +25,11 @@ TestVariant mobileVariant() {
       {TargetPlatform.android, TargetPlatform.iOS});
 }
 
+TestVariant androidVariant() {
+  return const TargetPlatformVariant(
+      {TargetPlatform.android});
+}
+
 bool shouldSkipNative() {
   if (isMobile()) {
     final bool isNative =
@@ -79,23 +84,28 @@ Future<void> createApp(PatrolIntegrationTester $) async {
 /// Avoid using it on when VPN turn on/off for mobile since it needs to interact with the native layer.
 /// App is already created in this function.
 void patrolWidget(
-    String description, Future<void> Function(PatrolTester $) callback,
-    {bool? skip,
-    List<String> tags = const [],
-    NativeAutomatorConfig? nativeAutomatorConfig}) {
+  String description,
+  Future<void> Function(PatrolTester $) callback, {
+  bool? skip,
+  List<String> tags = const [],
+  NativeAutomatorConfig? nativeAutomatorConfig,
+  TestVariant variant = const DefaultTestVariant(),
+}) {
   patrolWidgetTest(
     description,
     config: _patrolTesterConfig,
     skip: skip,
     ($) async {
-      await createWidgetApp($);
+      await _createWidgetApp($);
       await callback($);
     },
     tags: tags,
+    variant: variant,
   );
 }
 
-Future<void> createWidgetApp(PatrolTester $) async {
+Future<void> _createWidgetApp(PatrolTester $) async {
   await app.main();
   await $.pumpAndSettle();
 }
+
