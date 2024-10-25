@@ -1,10 +1,7 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:lantern/app.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/main.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_windows/webview_windows.dart';
-import 'package:window_manager/window_manager.dart';
 
 @RoutePage(name: 'AppWebview')
 class AppWebView extends StatefulWidget {
@@ -33,7 +30,7 @@ class _AppWebViewState extends State<AppWebView> {
           content: Text(message),
           actions: [
             TextButton(
-              child: Text("OK"),
+              child: Text('continue'.i18n),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -46,10 +43,6 @@ class _AppWebViewState extends State<AppWebView> {
 
   @override
   Widget build(BuildContext context) {
-    /*if (Platform.isWindows) {
-      return _DesktopWebView(url: widget.url, title: widget.title);
-    }*/
-
     return BaseScreen(
       title: widget.title,
       body: InAppWebView(
@@ -58,11 +51,8 @@ class _AppWebViewState extends State<AppWebView> {
           webViewController = controller;
         },
         webViewEnvironment: webViewEnvironment,
-        /*onLoadStop: (controller, url) async {
-          _showWebViewUrl();
-        },*/
         onReceivedHttpError: (controller, request, response) {
-          print("HTTP error: ${response.statusCode} for ${request.url}");
+          appLogger.i("HTTP error: ${response.statusCode} for ${request.url}");
           showErrorDialog("HTTP Error",
               "Status code: ${response.statusCode}\nDescription: ${response.reasonPhrase ?? ''}");
         },
@@ -91,51 +81,6 @@ class _AppWebViewState extends State<AppWebView> {
         },
       ),
     );
-  }
-
-  Future<void> _showWebViewUrl() async {
-    try {
-      // Get the current URL from the WebView
-      var currentUrl = await webViewController.getUrl();
-      String urlToShow =
-          currentUrl != null ? currentUrl.toString() : "No URL loaded";
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Current WebView URL"),
-            content: Text(urlToShow),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } catch (e) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Error"),
-            content: Text("Failed to get URL: $e"),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
   }
 }
 
@@ -272,127 +217,6 @@ class AppBrowser extends InAppBrowser {
     await instance.openUrlRequest(
       urlRequest: URLRequest(url: WebUri(url), allowsCellularAccess: true),
       settings: settings,
-    );
-  }
-}
-
-class _DesktopWebView extends StatefulWidget {
-  final String url;
-  final String title;
-
-  const _DesktopWebView({
-    required this.url,
-    required this.title,
-  });
-
-  @override
-  _DesktopWebViewState createState() => _DesktopWebViewState();
-}
-
-class _DesktopWebViewState extends State<_DesktopWebView> {
-  late WebviewController _controller;
-  final List<StreamSubscription> _subscriptions = [];
-
-  @override
-  void initState() {
-    super.initState();
-    if (Platform.isWindows) {
-      _initWindowsWebview();
-    }
-  }
-
-  Future<void> _initWindowsWebview() async {
-    try {
-      _controller = WebviewController();
-      await _controller.initialize();
-
-      _subscriptions
-          .add(_controller.containsFullScreenElementChanged.listen((flag) {
-        windowManager.setFullScreen(flag);
-      }));
-      await _controller.setBackgroundColor(Colors.transparent);
-      await _controller.setPopupWindowPolicy(WebviewPopupWindowPolicy.deny);
-      await _controller.loadUrl(widget.url);
-      if (mounted) setState(() {});
-    } on PlatformException catch (e) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-                  title: Text('Error'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Code: ${e.code}'),
-                      Text('Message: ${e.message}'),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      child: Text('Continue'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                ));
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    for (var s in _subscriptions) {
-      s.cancel();
-    }
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Future<WebviewPermissionDecision> _onPermissionRequested(
-      String url, WebviewPermissionKind kind, bool isUserInitiated) async {
-    final decision = await showDialog<WebviewPermissionDecision>(
-      context: globalRouter.navigatorKey.currentContext!,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('WebView permission requested'),
-        content: Text('WebView has requested permission \'$kind\''),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () =>
-                Navigator.pop(context, WebviewPermissionDecision.deny),
-            child: const Text('Deny'),
-          ),
-          TextButton(
-            onPressed: () =>
-                Navigator.pop(context, WebviewPermissionDecision.allow),
-            child: const Text('Allow'),
-          ),
-        ],
-      ),
-    );
-
-    return decision ?? WebviewPermissionDecision.none;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BaseScreen(
-      title: widget.title,
-      body: _controller.value.isInitialized
-          ? Webview(
-              _controller,
-              permissionRequested: _onPermissionRequested,
-            )
-          : const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ],
-            ),
     );
   }
 }
