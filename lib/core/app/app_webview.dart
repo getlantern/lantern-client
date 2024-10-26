@@ -178,6 +178,6 @@ Future<void> openWebview(BuildContext context, String url) async {
         throw UnsupportedError('Platform not supported');
     }
   } catch (e) {
-    appLogger.e("Failed to open webview: $e");
+    appLogger.e("Failed to open webview", error: e);
   }
 }
