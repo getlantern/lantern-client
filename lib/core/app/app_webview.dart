@@ -230,8 +230,8 @@ class AppBrowser extends InAppBrowser {
 WebViewEnvironment? webViewEnvironment;
 
 Future<void> initializeWebViewEnvironment() async {
-  if (!isDesktop()) return;
-  final directory = await getApplicationDocumentsDirectory();
+  if (!Platform.isWindows) return;
+  final directory = await getApplicationSupportDirectory();
   final localAppDataPath = directory.path;
 
   // Ensure WebView2 runtime is available
