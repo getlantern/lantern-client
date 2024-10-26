@@ -92,6 +92,8 @@ class _AppWebViewState extends State<AppWebView> {
               setProxyAddr();
             },
             webViewEnvironment: webViewEnvironment,
+            onLoadStart: (controller, url) => setState(() => isLoading = true),
+            onLoadStop: (controller, url) => setState(() => isLoading = false),
             onReceivedHttpError: (controller, request, response) {
               appLogger
                   .i("HTTP error: ${response.statusCode} for ${request.url}");
@@ -122,10 +124,8 @@ class _AppWebViewState extends State<AppWebView> {
                   ? UserPreferredContentMode.MOBILE
                   : UserPreferredContentMode.RECOMMENDED,
             ),
-            onProgressChanged: (controller, progress) {
-              setState(() => isLoading = progress < 100);
-              appLogger.i("Loading progress: $progress%");
-            },
+            onProgressChanged: (controller, progress) =>
+                appLogger.i("Loading progress: $progress%"),
           ),
           if (isLoading) const Center(child: CircularProgressIndicator()),
         ],
