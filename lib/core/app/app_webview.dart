@@ -1,6 +1,7 @@
 import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage(name: 'AppWebview')
@@ -19,25 +20,61 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
+  late InAppWebViewController webViewController;
+
+  void showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text('continue'.i18n),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
       title: widget.title,
-      showAppBar: true,
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+        onWebViewCreated: (controller) {
+          webViewController = controller;
+        },
+        webViewEnvironment: webViewEnvironment,
+        onReceivedHttpError: (controller, request, response) {
+          appLogger.i("HTTP error: ${response.statusCode} for ${request.url}");
+          showErrorDialog("HTTP Error",
+              "Status code: ${response.statusCode}\nDescription: ${response.reasonPhrase ?? ''}");
+        },
+        onReceivedError: (controller, request, error) =>
+            showErrorDialog("Failed to load", error.description),
         initialSettings: InAppWebViewSettings(
           isInspectable: kDebugMode,
           javaScriptEnabled: true,
           supportZoom: true,
-          useWideViewPort: true,
-          loadWithOverviewMode: true,
-          builtInZoomControls: true,
+          domStorageEnabled: true,
+          allowFileAccess: true,
+          useWideViewPort: !isDesktop(),
+          loadWithOverviewMode: !isDesktop(),
+          clearCache: true,
+          mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+          builtInZoomControls: Platform.isAndroid,
           displayZoomControls: false,
           mediaPlaybackRequiresUserGesture: false,
           allowsInlineMediaPlayback: false,
           underPageBackgroundColor: Colors.white,
-          allowBackgroundAudioPlaying: false,
+          transparentBackground: true,
           allowFileAccessFromFileURLs: true,
           preferredContentMode: UserPreferredContentMode.MOBILE,
         ),
@@ -170,6 +207,7 @@ class AppBrowser extends InAppBrowser {
         break;
       case 'macos':
         await openWithSystemBrowser(url);
+        break;
       case 'ios':
         await openWithSystemBrowser(url);
         break;
@@ -187,4 +225,23 @@ class AppBrowser extends InAppBrowser {
       settings: settings,
     );
   }
+}
+
+WebViewEnvironment? webViewEnvironment;
+
+Future<void> initializeWebViewEnvironment() async {
+  if (!isDesktop()) return;
+  final directory = await getApplicationDocumentsDirectory();
+  final localAppDataPath = directory.path;
+
+  // Ensure WebView2 runtime is available
+  final availableVersion = await WebViewEnvironment.getAvailableVersion();
+  assert(availableVersion != null,
+      'Failed to find WebView2 Runtime or non-stable Microsoft Edge installation.');
+
+  webViewEnvironment = await WebViewEnvironment.create(
+    settings: WebViewEnvironmentSettings(
+      userDataFolder: '$localAppDataPath\\Lantern\\WebView2',
+    ),
+  );
 }

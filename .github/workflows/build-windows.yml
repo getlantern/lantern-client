@@ -29,95 +29,7 @@ env:
   GOPRIVATE: github.com/getlantern
   S3_BUCKET: lantern
 jobs:
-  build-desktop:
-    permissions:
-      contents: "read"
-      id-token: "write"
-    env:
-      version: ${{ inputs.version }}
-      prefix: ${{ inputs.prefix }}
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          lfs: true
-
-      - name: Pull LFS objects
-        run: git lfs pull
-
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version-file: "go.mod"
-
-      - name: Granting private modules access
-        run: |
-          git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
-      - name: Repo access
-        run: |
-          mkdir /tmp/cache
-          echo "machine github.com login ${{ secrets.GH_TOKEN }} password x-oauth-basic" > /tmp/cache/.netrc
-          chmod 600 /tmp/cache/.netrc
-
-      - name: Setup Sentry CLI
-        uses: mathieu-bour/setup-sentry-cli@v2
-        with:
-          version: latest
-          token: ${{ SECRETS.SENTRY_TOKEN }} # from GitHub secrets
-          organization: getlantern
-          project: android
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get install -y file build-essential pkg-config
-          sudo apt-get install -y mingw-w64 nsis
-
-      - name: Build liblantern.dll
-        if: ${{inputs.update-suffix == '386'}}
-        run: |
-          make windows
-
-      - name: Build liblantern.dll
-        if: ${{inputs.update-suffix == 'x64'}}
-        env:
-          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
-          VERSION: "${{ env.version }}"
-        run: |
-          make windows64
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: libgo-windows-${{inputs.update-suffix}}-build
-          if-no-files-found: error
-          path: |
-            liblantern.dll
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: libgo-windows-${{inputs.update-suffix}}-header
-          if-no-files-found: error
-          path: |
-            liblantern.h
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.12"
-
-      - name: Install s3cmd
-        run: pip install s3cmd
-
-      - name: Set s3cmd permissions
-        run: |
-          echo "[default]" > "$HOME/.s3cfg"
-          echo "access_key = ${{ secrets.AWS_ACCESS_KEY }}" >> "$HOME/.s3cfg"
-          echo "secret_key = ${{ secrets.AWS_SECRET_KEY }}" >> "$HOME/.s3cfg"
-
-      - name: Push libgo to S3
-        run: s3cmd put --acl-public liblantern.dll "s3://lantern/liblantern-${{inputs.update-suffix}}.dll"
-
   build-windows:
-    needs: build-desktop
     permissions:
       contents: "read"
       id-token: "write"
@@ -129,8 +41,23 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true
-      # Install Flutter
-      - uses: subosito/flutter-action@v2
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: Install WebView2 Runtime
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile "MicrosoftEdgeWebView2Setup.exe"
+          Start-Process -FilePath ".\MicrosoftEdgeWebView2Setup.exe" -ArgumentList "/silent", "/install" -Wait
+
+      - name: Set up MinGW
+        run: choco install mingw -y
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: "stable"
 
@@ -141,26 +68,18 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Activate protoc-gen-dart plugin
+
+      - name: Build Lantern Library
+        shell: bash
+        run: |
+          touch app.env
+          mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
+          make windows64
+
+      - name: Activate plugins
         run: |
           dart pub global activate protoc_plugin
-
-      - name: Download the win build output
-        uses: actions/download-artifact@v4
-        with:
-          name: libgo-windows-${{inputs.update-suffix}}-build
-
-      - name: Download the win build output
-        uses: actions/download-artifact@v4
-        with:
-          name: libgo-windows-${{inputs.update-suffix}}-header
-
-      - run: make ffigen
-
-      - run: touch app.env
-
-      - name: Build Flutter app
-        run: flutter build windows
+          dart pub global activate flutter_distributor
 
       - name: Sign liblantern.dll with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -177,74 +96,30 @@ jobs:
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
 
-      - uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-build-signed
-          path: |
-            liblantern.dll
-
-      - name: Create archive
+      - name: Move liblantern.dll to release directory
+        shell: bash
         run: |
-          ls build/windows
-          cp liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
-          Compress-Archive "build/windows/${{inputs.arch}}/runner/Release" lantern.zip
+          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
 
-      - uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-build
-          path: lantern.zip
-
-  build-installer:
-    needs: build-windows
-    permissions:
-      contents: "read"
-      id-token: "write"
-    env:
-      version: ${{ inputs.version }}
-      prefix: ${{ inputs.prefix }}
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Install dependencies
+      - name: Extract app version from pubspec.yaml
+        id: extract_version
+        shell: bash
         run: |
-          sudo apt-get install -y file build-essential pkg-config
-          sudo apt-get install -y mingw-w64 nsis
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: windows${{inputs.build-suffix}}-build
-      - name: Make installer
+          APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+
+      - name: Build Flutter app
         run: |
-          pwd
-          unzip lantern.zip
-          cp installer-resources-lantern/.packaged-lantern.yaml installer-resources-lantern/windows/.packaged-lantern.yaml
-          cp installer-resources-lantern/lantern.yaml installer-resources-lantern/windows/lantern.yaml
-          cp -r Release/* installer-resources-lantern/windows
-          makensis -V1 -DVERSION=${{ inputs.version }} -DAPP_NAME=lantern.exe -DOUT_FILE="lantern-installer${{inputs.installer-suffix}}.exe" installer-resources-lantern/windows/lantern.nsi
-          mv installer-resources-lantern/windows/lantern-installer${{inputs.installer-suffix}}.exe lantern-installer${{inputs.installer-suffix}}.exe
+          New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
+          flutter_distributor package --platform windows --targets exe --skip-clean
+        env:
+          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+          VERSION: "${{ env.version }}"
 
-      - uses: actions/upload-artifact@v4
-        with:
-          if-no-files-found: error
-          name: windows${{inputs.build-suffix}}-installer-unsigned
-          path: lantern-installer${{inputs.installer-suffix}}.exe
-
-  sign-installer:
-    needs: build-installer
-    permissions:
-      contents: "read"
-      id-token: "write"
-    env:
-      version: ${{ inputs.version }}
-      prefix: ${{ inputs.prefix }}
-    runs-on: windows-latest
-    steps:
-      - name: Download the win build output
-        uses: actions/download-artifact@v4
-        with:
-          name: windows${{inputs.build-suffix}}-installer-unsigned
+      - name: Rename installer
+        shell: bash
+        run: |
+          mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
 
       - name: Sign EXE with Azure Code Signing
         uses: getlantern/trusted-signing-action@main
@@ -255,27 +130,28 @@ jobs:
           endpoint: https://wus2.codesigning.azure.net/
           code-signing-account-name: code-signing
           certificate-profile-name: Lantern
-          files-folder: ${{ github.workspace }}\
-          files-folder-filter: exe
+          files-folder: ${{ github.workspace }}/
+          files-folder-filter: exe,dll,msix
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
         with:
           name: windows${{inputs.build-suffix}}-installer-signed
           path: |
             lantern-installer${{inputs.installer-suffix}}.exe
 
   upload-windows:
-    needs: sign-installer
+    needs: build-windows
     permissions:
       contents: "read"
       id-token: "write"
     env:
       version: ${{ inputs.version }}
       prefix: ${{ inputs.prefix }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Download the artifact
