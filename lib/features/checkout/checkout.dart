@@ -278,7 +278,7 @@ class _CheckoutState extends State<Checkout>
   }
 
   Future<void> _openWebview(String url) async =>
-      await openWebview(context, url);
+      await openWebview(context, url, 'lantern_pro_checkout'.i18n);
 
   void _proceedWithBTCPay() async {
     try {

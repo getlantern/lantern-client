@@ -158,14 +158,14 @@ Future<void> initializeWebViewEnvironment() async {
 Future<void> openWithSystemBrowser(String url) async =>
     await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
 
-Future<void> openWebview(BuildContext context, String url) async {
+Future<void> openWebview(BuildContext context, String url,
+    [String? title]) async {
   try {
     switch (Platform.operatingSystem) {
       case 'android':
       case 'macos':
       case 'windows':
-        await context.pushRoute(
-            AppWebview(url: url, title: 'lantern_pro_checkout'.i18n));
+        await context.pushRoute(AppWebview(url: url, title: title ?? ''));
         break;
       case 'linux':
         final webview = await WebviewWindow.create();
