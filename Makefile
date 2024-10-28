@@ -753,7 +753,10 @@ runTest:
 # Run all workflow tests on desktop
 desktopWorkflowTest:
 	@echo "Running all integration tests..."
-	flutter test integration_test/
+	echo "Current directory: $(CURDIR)"
+	sh $(CURDIR)/integration_test/run_test.sh
+
+
 
 
 # Run specific tests on desktop

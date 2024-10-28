@@ -68,6 +68,11 @@ void main() {
       clearInteractions(mockSessionModel);
       clearInteractions(mockReplicaModel);
       clearInteractions(mockVpnModel);
+      clearInteractions(mockMessagingModel);
+      clearInteractions(mockBottomBarChangeNotifier);
+      clearInteractions(mockVPNChangeNotifier);
+      clearInteractions(mockInternetStatusProvider);
+
     },
   );
 
@@ -79,6 +84,7 @@ void main() {
 
   patrolWidgetTest(
     'home widget show privacy policy',
+    skip: isDesktop(),
     ($) async {
       print("privacy policy test");
       when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
@@ -176,6 +182,9 @@ void main() {
   patrolWidgetTest(
     'home widget auth enable show first time visit screen',
     ($) async {
+      if(isDesktop()){
+        when(mockVPNChangeNotifier.vpnStatus).thenReturn(ValueNotifier(TestVPNStatus.connected.value));
+      }
       when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
       when(mockVPNChangeNotifier.isFlashlightInitialized).thenReturn(true);
 

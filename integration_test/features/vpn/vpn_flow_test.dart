@@ -6,29 +6,21 @@ import 'package:lantern/features/vpn/vpn_server_location.dart';
 import 'package:lantern/features/vpn/vpn_status.dart';
 import 'package:lantern/features/vpn/vpn_switch.dart';
 import 'package:lantern/features/vpn/vpn_tab.dart';
-import 'package:lantern/main.dart' as app;
-
 import '../../utils/test_utils.dart';
 
 void main() {
-  setUp(
-    () {},
-  );
-
   tearDown(
-    () {
-      sl.reset();
+    () async {
+      await sl.reset();
     },
   );
 
   group(
     'vpn tap end to end test',
     () {
-      patrolWidgetTest(
-        'renders VPN tap properly',
+      patrolWidget(
+        'renders VPN tap properly and navigation work properly',
         ($) async {
-          await app.main();
-          await $.pumpAndSettle();
           await $(VPNTab).waitUntilVisible();
           await $.pump(const Duration(seconds: 6));
 
@@ -46,38 +38,29 @@ void main() {
           } else {
             expect($(SplitTunnelingWidget), findsNothing);
           }
-        },
-      );
 
-      patrolWidgetTest(
-        'renders VPN tap navigation work properly',
-        ($) async {
-          await app.main();
-          await $.pumpAndSettle();
-          await $(VPNTab).waitUntilVisible();
-          await $.pump(const Duration(seconds: 6));
           await $(ProBanner).tap();
           await $.pumpAndSettle();
           await $.pump(const Duration(seconds: 1));
           expect($(FullScreenDialog), findsOneWidget);
+          await $(IconButton).tap();
+          expect($(FullScreenDialog), findsNothing);
+          await $.pumpAndSettle();
           if (isAndroid()) {
-            //go back
-            await $(IconButton).tap();
             await $.pump(const Duration(seconds: 1));
             await $('split_tunneling'.i18n).tap();
             await $.pump(const Duration(seconds: 1));
             expect($('split_tunneling'.i18n), findsOneWidget);
+            await $(IconButton).tap();
+            await $.pumpAndSettle();
           }
         },
       );
 
-      patrolWidgetTest(
-        'toggles VPN switch on and off for desktop platforms',
+      patrolWidget(
+        'toggles VPN switch on & off for desktop platforms',
         skip: isMobile(),
         ($) async {
-          await app.main();
-          await $.pumpAndSettle();
-          await $(VPNTab).waitUntilVisible();
           await $.pump(const Duration(seconds: 3));
           await $(CustomAnimatedToggleSwitch<String>).tap();
           await $.pumpAndSettle();

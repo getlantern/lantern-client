@@ -28,6 +28,7 @@ class NoPlansUpdate implements Exception {
 
 class LanternFFI {
   static final NativeLibrary _lanternFFI = NativeLibrary(_getLanternLib());
+  static bool hasServiceStarted = false;
 
   static DynamicLibrary _getLanternLib() {
     if (Platform.isMacOS) {
@@ -46,7 +47,15 @@ class LanternFFI {
   static SendPort? _proxySendPort;
   static final Completer<void> _isolateInitialized = Completer<void>();
 
-  static startDesktopService() => _lanternFFI.start();
+  static startDesktopService() {
+    if(hasServiceStarted) {
+      print('Desktop service already started');
+      return;
+    }
+    _lanternFFI.start();
+    hasServiceStarted = true;
+    print('Starting desktop service');
+  }
 
   static void sysProxyOn() {
     final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();

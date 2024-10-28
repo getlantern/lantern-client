@@ -23,3 +23,27 @@ ValueWidgetBuilder<String> stringEmptyBuilder =
     (context, value, child) => const SizedBox();
 
 final desktopWindowSize = const ui.Size(360, 712);
+
+
+
+enum TestVPNStatus {
+  connected,
+  disconnected,
+  connecting,
+  disconnecting,
+}
+
+extension Status on TestVPNStatus {
+  String get value {
+    switch (this) {
+      case TestVPNStatus.connected:
+        return 'connected';
+      case TestVPNStatus.disconnected:
+        return 'disconnected';
+      case TestVPNStatus.connecting:
+        return 'connecting';
+      case TestVPNStatus.disconnecting:
+        return 'disconnecting';
+    }
+  }
+}

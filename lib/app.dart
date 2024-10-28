@@ -165,6 +165,7 @@ class _LanternAppState extends State<LanternApp>
 
   @override
   Widget build(BuildContext context) {
+    print("app.dart build");
     final currentLocal = View.of(context).platformDispatcher.locale;
 
     return MultiProvider(

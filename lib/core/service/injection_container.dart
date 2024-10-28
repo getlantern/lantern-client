@@ -10,12 +10,12 @@ import 'package:lantern/features/vpn/vpn_notifier.dart';
 
 final GetIt sl = GetIt.instance;
 
-void initServices() {
+Future<void> initServices() async {
   //Inject
 
   if (isMobile()) {
     sl.registerLazySingleton(() => AppPurchase());
-    sl<AppPurchase>().init();
+     sl<AppPurchase>().init();
   }
   sl.registerLazySingleton(() => AppRouter());
   sl.registerLazySingleton(() => SessionModel());
@@ -24,8 +24,7 @@ void initServices() {
   sl.registerLazySingleton(() => VpnModel());
 
   /// Notifiers
-   sl.registerLazySingleton(() => BottomBarChangeNotifier());
-   sl.registerLazySingleton(() => VPNChangeNotifier());
-   sl.registerLazySingleton(() => InternetStatusProvider());
-
+  sl.registerLazySingleton(() => BottomBarChangeNotifier());
+  sl.registerLazySingleton(() => VPNChangeNotifier());
+  sl.registerLazySingleton(() => InternetStatusProvider());
 }
