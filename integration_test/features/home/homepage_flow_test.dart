@@ -16,7 +16,7 @@ void main() {
 
   tearDownAll(
     () async {
-      sl.reset();
+    await  sl.reset();
     },
   );
 

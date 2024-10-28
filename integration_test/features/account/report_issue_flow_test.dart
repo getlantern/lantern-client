@@ -34,10 +34,6 @@ void main() {
 
       expect(sendReport.onPressed, isNotNull);
 
-
-
-
-
     },
   );
 }
