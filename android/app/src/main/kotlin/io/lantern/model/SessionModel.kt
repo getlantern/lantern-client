@@ -40,11 +40,16 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.util.DnsDetector
+import java.io.File
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.lang.reflect.InvocationTargetException
 import java.util.Currency
 import java.util.Locale
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.encodeToStream
 
 class SessionModel internal constructor(
     private val activity: Activity,
@@ -76,9 +81,9 @@ class SessionModel internal constructor(
         LanternApp.session = this
         LanternApp.setGoSession(model)
         LanternApp.setInAppBilling(inAppBilling)
-        updateAppsData()
         paymentUtils = PaymentsUtil(activity)
         LanternProxySelector(this)
+        updateAppsData()
     }
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -396,28 +401,53 @@ class SessionModel internal constructor(
                 val start = System.currentTimeMillis()
                 val appsList = appsDataProvider.listOfApps()
                 // First add just the app names to get a list quickly
-                val apps = buildJsonArray {
-                    appsList.forEach { app ->
-                        add(
-                            buildJsonObject {
-                                val byte = app.icon!!
-                                put("packageName", app.packageName)
-                                put("name", app.name)
-                                putJsonArray("icon") {
-                                    byte.toUByteArray().forEach { add(it.toInt()) }
+                val file = File(activity.cacheDir, "appsData.json")
+
+
+                // Write JSON data directly to the file to reduce memory usage
+                file.outputStream().use { outputStream ->
+                    Json.encodeToStream(buildJsonArray {
+                        appsList.forEach { app ->
+                            add(
+                                buildJsonObject {
+                                    val byte = app.icon ?: ByteArray(0)  // Safeguard for null icons
+                                    put("packageName", app.packageName)
+                                    put("name", app.name)
+                                    putJsonArray("icon") {
+                                        byte.toUByteArray().forEach { add(it.toInt()) }  // Store each UByte as an Int
+                                    }
                                 }
-                            }
-                        )
-                    }
+                            )
+                        }
+                    }, outputStream)
                 }
+
+//                val apps = buildJsonArray {
+//                    appsList.forEach { app ->
+//                        add(
+//                            buildJsonObject {
+//                                val byte = app.icon!!
+//                                put("packageName", app.packageName)
+//                                put("name", app.name)
+//                                putJsonArray("icon") {
+//                                    throw OutOfMemoryError("Testing memory out of exception")
+//                                    byte.toUByteArray().forEach { add(it.toInt()) }
+//                                }
+//                            }
+//                        )
+//                    }
+//                }
                 val end = System.currentTimeMillis()
                 Logger.debug(TAG, "Time taken to get app data: ${end - start} ms")
 
                 model.invokeMethod(
                     "updateAppsData",
-                    Arguments(mapOf("appsList" to apps.toString()))
+                    Arguments(mapOf("filePath" to file.absolutePath))
                 )
-            } catch (e: Exception) {
+            }catch (e: OutOfMemoryError) {
+                Logger.error(TAG, "OutOfMemoryError occurred", e)
+            }
+            catch (e: Exception) {
                 Logger.error(TAG, "Error updating apps data", e)
             }
         }

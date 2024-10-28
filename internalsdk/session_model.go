@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
@@ -541,7 +542,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return apps, nil
 	case "updateAppsData":
-		appsData := arguments.Get("appsList").String()
+		appsData := arguments.Get("filePath").String()
 		err := m.updateAppsData(appsData)
 		if err != nil {
 			return nil, err
@@ -2370,12 +2371,22 @@ type AppInfo struct {
 	Icon        []int  `json:"icon"`
 }
 
-func (session *SessionModel) updateAppsData(appsList string) error {
+func (session *SessionModel) updateAppsData(filePath string) error {
+	// Read the JSON file
+	fileContent, err := os.ReadFile(filePath)
+	if err != nil {
+		log.Fatalf("Error reading file: %v", err)
+		return err
+	}
+
 	var apps []AppInfo
-	err := json.Unmarshal([]byte(appsList), &apps)
+	err = json.Unmarshal(fileContent, &apps)
 	if err != nil {
 		log.Fatalf("Error decoding JSON: %v", err)
+		return err
 	}
+
+	log.Debugf("Successfully loaded %d apps\n", len(apps))
 
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		for _, app := range apps {
