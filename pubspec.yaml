@@ -37,6 +37,7 @@ dependencies:
 
   # UI Enhancements & User Input
   flutter_advanced_switch: ^3.1.0
+  animated_toggle_switch: ^0.8.3
   flag: ^7.0.0
 
   #Loogs and crash reporting
@@ -95,16 +96,12 @@ dependencies:
   # URL & Sharing utilities
   url_launcher: ^6.3.0
   share_plus: ^10.0.2
-  flutter_inappwebview: ^6.1.1
-  flutter_windows_webview:
-    git:
-      url: https://github.com/wgh136/flutter_windows_webview
-      ref: master
+  flutter_inappwebview: ^6.1.5
+  desktop_webview_window: ^0.2.3
 
   # Desktop
   window_manager: ^0.4.2
   tray_manager: ^0.2.4
-  flutter_distributor: ^0.0.2
 
   flutter_dotenv: ^5.1.0
 
@@ -159,17 +156,6 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 dependency_overrides:
-
-#  flutter_inappwebview_macos:
-#    git:
-#      url: https://github.com/andychucs/flutter_inappwebview.git
-#      ref: master
-#      path: flutter_inappwebview_macos
-#  flutter_inappwebview_ios:
-#    git:
-#      url: https://github.com/andychucs/flutter_inappwebview.git
-#      ref: master
-#      path: flutter_inappwebview_ios
 
 # The following section is specific to Flutter.
 flutter:

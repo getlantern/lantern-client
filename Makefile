@@ -230,7 +230,7 @@ tag: require-version
 	git push
 
 define osxcodesign
-	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Innovate Labs LLC (4FYC28AXA2)" -v $(1)
+	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Brave New Software Project, Inc (ACZRKC3LQ9)" -v $(1)
 endef
 
 guard-%:
@@ -444,6 +444,15 @@ ios-release:set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PR
 	echo "iOS IPA generated under: $$IPA_PATH"; \
 	open "$$IPA_PATH"
 
+## Mocks
+MOCKERY=mockery
+MOCKERY_FLAGS=--case=underscore --output=internalsdk/mocks --outpkg=mocks
+
+.PHONY: mocks
+mocks:
+	@$(MOCKERY) --name=AdProvider --name=AdSettings --name=Session --dir=./internalsdk $(MOCKERY_FLAGS)
+	@$(MOCKERY) --name=ProClient --dir=./internalsdk/pro $(MOCKERY_FLAGS)
+
 .PHONY: echo-build-tags
 echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=1 make echo-build-tags` for example to see how it changes
 	@if [[ -z "$$VERSION" ]]; then \
@@ -461,7 +470,7 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 
 desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: echo-build-tags
-	CGO_ENABLED=1 go build -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
+	CGO_ENABLED=1 go build -v -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
 # This runs a development build for lantern. For production builds, see
 # 'lantern-prod' target
@@ -472,6 +481,9 @@ lantern: ## Build lantern without REPLICA enabled
 
 ffigen:
 	dart run ffigen --config ffigen.yaml
+
+## APP_VERSION is the version defined in pubspec.yaml
+APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
 
 .PHONY: linux-amd64
 linux-amd64: export GOOS = linux
@@ -496,7 +508,7 @@ package-linux:
 	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
 
 .PHONY: windows
-windows: require-mingw $(WINDOWS_LIB_NAME) ## Build lantern for windows
+windows: $(WINDOWS_LIB_NAME) ## Build lantern for windows
 $(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
 $(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
 $(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
@@ -511,7 +523,7 @@ $(WINDOWS_LIB_NAME): export Environment = production
 $(WINDOWS_LIB_NAME): desktop-lib
 
 .PHONY: windows64
-windows64: require-mingw $(WINDOWS64_LIB_NAME) ## Build lantern for windows
+windows64: $(WINDOWS64_LIB_NAME) ## Build lantern for windows
 $(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
 $(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
 $(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static
@@ -523,6 +535,14 @@ $(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS +=
 $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
+
+## APP_VERSION is the version defined in pubspec.yaml
+APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
+
+.PHONY: windows-release
+windows-release: ffigen
+	flutter_distributor package --flutter-build-args=verbose --platform windows --targets "msix,exe"
+	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
 
 ## Darwin
 .PHONY: darwin-amd64

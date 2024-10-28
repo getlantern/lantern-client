@@ -1,4 +1,3 @@
-
 import '../utils/common.dart';
 
 extension ErrorX on Object {
@@ -8,6 +7,10 @@ extension ErrorX on Object {
       if (this is PlatformException) {
         // Extract the message from the PlatformException
         String description = (this as PlatformException).message ?? '';
+        if (description.contains("proxy_error")) {
+          return "proxy_error".i18n;
+        }
+
         if (description.contains("user_not_found")) {
           return "user_not_found".i18n;
         }
@@ -17,6 +20,7 @@ extension ErrorX on Object {
         if (description.contains("recovery_not_found")) {
           return "recovery_not_found".i18n;
         }
+
         if (description.contains("wrong-link-code")) {
           return "wrong_link_code".i18n;
         }
@@ -28,7 +32,9 @@ extension ErrorX on Object {
         if (description.contains("wrong-reseller-code")) {
           return "wrong_seller_code".i18n;
         }
-        if (description.contains("user already exists") || description.contains("user with this legacy user ID already exists")) {
+        if (description.contains("user already exists") ||
+            description
+                .contains("user with this legacy user ID already exists")) {
           return "signup_error_user_exists".i18n;
         }
 
@@ -62,9 +68,13 @@ extension ErrorX on Object {
 
         if (description.contains("error while sign up")) {
           return "signup_error".i18n;
-        } else {
-          return 'we_are_experiencing_technical_difficulties'.i18n;
         }
+
+        if (description.contains("errorSubmittingToGooglePlay")) {
+          return "errorSubmittingToGooglePlay".i18n;
+        }
+
+        return 'we_are_experiencing_technical_difficulties'.i18n;
       } else {
         return toString().i18n;
       }

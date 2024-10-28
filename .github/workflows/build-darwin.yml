@@ -131,8 +131,8 @@ jobs:
         make package-darwin
       env:
         VERSION: "${{ env.version }}"
-        MACOS_CERTIFICATE: ${{ secrets.MACOS_CERT }}
-        MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERT_PASS }}
+        MACOS_CERTIFICATE: ${{ secrets.MACOS_BNS_CERT }}
+        MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_BNS_CERT_PASS }}
 
     - name: Install s3cmd
       run: pip install s3cmd

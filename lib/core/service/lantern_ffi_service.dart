@@ -1,8 +1,9 @@
-import 'dart:ffi'; // For FFI
+import 'dart:isolate';
 
-import 'package:ffi/src/utf8.dart';
+import 'package:ffi/ffi.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../../generated_bindings.dart';
 
@@ -42,13 +43,20 @@ class LanternFFI {
     throw Exception("Platform is not supported");
   }
 
+  static SendPort? _proxySendPort;
+  static final Completer<void> _isolateInitialized = Completer<void>();
+
   static startDesktopService() => _lanternFFI.start();
 
-  static void sysProxyOn() => _lanternFFI.sysProxyOn();
+  static void sysProxyOn() {
+    final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();
+    checkAPIError(response, 'cannot_connect_to_vpn'.i18n);
+  }
 
   static void sysProxyOff() => _lanternFFI.sysProxyOff();
 
-  static void setLang(String lang) => _lanternFFI.setSelectLang(lang.toPointerChar());
+  static void setLang(String lang) =>
+      _lanternFFI.setSelectLang(lang.toPointerChar());
 
   static void setProxyAll(String isOn) =>
       _lanternFFI.setProxyAll(isOn.toPointerChar());
@@ -56,9 +64,57 @@ class LanternFFI {
   static String websocketAddr() =>
       _lanternFFI.websocketAddr().cast<Utf8>().toDartString();
 
-  static void exit() {
-    _lanternFFI.exitApp();
-    //SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  static void exit() => _lanternFFI.exitApp();
+
+  // Initialize the system proxy isolate
+  static Future<void> _initializeSystemProxyIsolate() async {
+    final receivePort = ReceivePort();
+    // create isolate that listens for system proxy commands
+    await Isolate.spawn(_proxyIsolateEntry, receivePort.sendPort);
+    _proxySendPort = await receivePort.first;
+    _isolateInitialized.complete();
+  }
+
+  // initialize the isolate if need be and send the vpnStatus to it
+  static Future<String> sendVpnStatus(String vpnStatus) async {
+    if (!_isolateInitialized.isCompleted) {
+      await _initializeSystemProxyIsolate();
+    }
+
+    final responsePort = ReceivePort(); // Port to receive isolate's response
+    _proxySendPort?.send([vpnStatus, responsePort.sendPort]);
+
+    // Listen for the result (success or error)
+    final message = await responsePort.first;
+    if (message == "done") {
+      mainLogger.i("System proxy updated successfully.");
+      responsePort.close();
+      return "done";
+    } else {
+      responsePort.close();
+      throw PlatformException(code: 'proxy_error', message: message);
+    }
+  }
+
+  // The FFI code for toggling the system proxy is run on a separate isolate
+  // to avoid conflicting signal handling between Dart and the Go runtime.
+  // This provides an effective way to catch and manage signals before they
+  // propagate and cause the runtime to crash.
+  static void _proxyIsolateEntry(SendPort sendPort) {
+    final commandPort = ReceivePort();
+    sendPort.send(commandPort.sendPort);
+    commandPort.listen((message) async {
+      final vpnStatus = message[0] as String;
+      final replyPort = message[1] as SendPort;
+
+      try {
+        vpnStatus == 'connected' ? sysProxyOn() : sysProxyOff();
+        replyPort.send("done");
+      } catch (e, stackTrace) {
+        await Sentry.captureException(e, stackTrace: stackTrace);
+        replyPort.send("error");
+      }
+    });
   }
 
   static Future<User> ffiUserData() async {
@@ -69,7 +125,6 @@ class LanternFFI {
     // Protobuf JSON decoding failed at: root["telephone"]. Unknown field name 'telephone'
     return User.create()..mergeFromProto3Json(jsonDecode(res));
   }
-
 
   static Future<String> approveDevice(String code) async {
     final json = await _lanternFFI
@@ -136,14 +191,12 @@ class LanternFFI {
     return Future.value();
   }
 
-  static Pointer<Utf8> checkUpdates() =>
-      _lanternFFI.checkUpdates().cast<Utf8>();
-
-  static Pointer<Utf8> paymentMethods() =>
-      _lanternFFI.paymentMethodsV3().cast<Utf8>();
-
-  static Pointer<Utf8> paymentMethodsV4() =>
-      _lanternFFI.paymentMethodsV4().cast<Utf8>();
+  static FutureOr<String> checkUpdates(dynamic args) async {
+    final updateUrl =
+        await _lanternFFI.checkUpdates().cast<Utf8>().toDartString();
+    checkAPIError(updateUrl, 'we_are_experiencing_technical_difficulties'.i18n);
+    return updateUrl;
+  }
 
   static Future<void> reportIssue(List<String> list) {
     final email = list[0].toPointerChar();
@@ -179,8 +232,8 @@ class LanternFFI {
     }
   }
 
-  static Pointer<Utf8> ffIsPlayVersion() => "false".toPointerChar().cast<Utf8>();
-
+  static Pointer<Utf8> ffIsPlayVersion() =>
+      "false".toPointerChar().cast<Utf8>();
 
   static Future<void> ffiApplyRefCode(String refCode) {
     final code = refCode.toPointerChar();
@@ -188,7 +241,6 @@ class LanternFFI {
     checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
     return Future.value();
   }
-
 
   static Future<void> testPaymentRequest(List<String> params) {
     final email = params[0].toPointerChar();

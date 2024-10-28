@@ -1,14 +1,13 @@
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
-import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/app/app_loading_dialog.dart';
 import 'package:lantern/core/localization/localization_constants.dart';
+import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/features/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 @RoutePage(name: 'Settings')
 class Settings extends StatelessWidget {
-  Settings({Key? key}) : super(key: key);
+  Settings({super.key});
 
   final packageInfo = PackageInfo.fromPlatform();
 
@@ -30,16 +29,26 @@ class Settings extends StatelessWidget {
   void openSplitTunneling(BuildContext context) =>
       context.pushRoute(SplitTunneling());
 
-  void openWebView(String url, BuildContext context, String title) async =>
-      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+  Future<void> openWebView(
+          String url, BuildContext context, String title) async =>
+      await AppBrowser.openWebview(context, url);
+
+  void openProxySetting(BuildContext context) =>
+      context.pushRoute(ProxiesSetting());
 
   Future<void> checkForUpdateTap(BuildContext context) async {
-    AppLoadingDialog.showLoadingDialog(context);
-    final result = await sessionModel.checkForUpdates();
-    AppLoadingDialog.dismissLoadingDialog(context);
-    if (result != null && result != "" && result == "no_new_update") {
-      CDialog.showInfo(context,
-          title: "app_name".i18n, description: "no_new_update".i18n);
+    try {
+      AppLoadingDialog.showLoadingDialog(context);
+      final result = await sessionModel.checkForUpdates();
+      AppLoadingDialog.dismissLoadingDialog(context);
+      if (result != null && result != "" && result == "no_new_update") {
+        CDialog.showInfo(context,
+            title: "app_name".i18n, description: "no_new_update".i18n);
+      }
+    } catch (e) {
+      AppLoadingDialog.dismissLoadingDialog(context);
+      CDialog.showError(context,
+          description: 'we_are_experiencing_technical_difficulties'.i18n);
     }
   }
 
@@ -145,7 +154,7 @@ class Settings extends StatelessWidget {
               (BuildContext context, bool proxyAll, Widget? child) =>
                   ListItemFactory.settingsItem(
                 header: 'VPN'.i18n,
-                icon: ImagePaths.key,
+                icon: ImagePaths.split_tunneling,
                 content: CInkWell(
                   onTap: () => openInfoProxyAll(context),
                   child: Row(
@@ -154,9 +163,7 @@ class Settings extends StatelessWidget {
                     children: [
                       Flexible(
                         child: CText(
-                          'proxy_everything_is'
-                              .i18n
-                              .fill([proxyAll ? 'ON'.i18n : 'OFF'.i18n]),
+                          'proxy_everything'.i18n,
                           softWrap: false,
                           style: tsSubtitle1.short,
                         ),
@@ -186,6 +193,16 @@ class Settings extends StatelessWidget {
                 ],
               ),
             ),
+          if (isDesktop())
+            ListItemFactory.settingsItem(
+              icon: ImagePaths.proxySetting,
+              content: 'proxy_settings'.i18n,
+              trailingArray: [
+                mirrorLTR(context: context, child: const ContinueArrow())
+              ],
+              onTap: () => {openProxySetting(context)},
+            ),
+
           ListItemFactory.settingsItem(
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,

@@ -182,13 +182,15 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('start');
   late final _start = _startPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  void sysProxyOn() {
+  ffi.Pointer<ffi.Char> sysProxyOn() {
     return _sysProxyOn();
   }
 
   late final _sysProxyOnPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('sysProxyOn');
-  late final _sysProxyOn = _sysProxyOnPtr.asFunction<void Function()>();
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'sysProxyOn');
+  late final _sysProxyOn =
+      _sysProxyOnPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   void sysProxyOff() {
     return _sysProxyOff();
@@ -207,35 +209,6 @@ class NativeLibrary {
           'websocketAddr');
   late final _websocketAddr =
       _websocketAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> paymentMethodsV3() {
-    return _paymentMethodsV3();
-  }
-
-  late final _paymentMethodsV3Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'paymentMethodsV3');
-  late final _paymentMethodsV3 =
-      _paymentMethodsV3Ptr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> paymentMethodsV4() {
-    return _paymentMethodsV4();
-  }
-
-  late final _paymentMethodsV4Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'paymentMethodsV4');
-  late final _paymentMethodsV4 =
-      _paymentMethodsV4Ptr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> proxyAll() {
-    return _proxyAll();
-  }
-
-  late final _proxyAllPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('proxyAll');
-  late final _proxyAll =
-      _proxyAllPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   void setProxyAll(
     ffi.Pointer<ffi.Char> value,

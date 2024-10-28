@@ -1,10 +1,12 @@
+import 'dart:ui' as ui;
+
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/core/helpers/ad_helper.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
-
 
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
@@ -49,41 +51,67 @@ class _VPNSwitchState extends State<VPNSwitch> {
         });
       });
     } else {
-      // This ui for desktop
-      return AdvancedSwitch(
-        width: 160,
-        height: 70,
-        borderRadius: BorderRadius.circular(40),
-        disabledOpacity: 1,
-        enabled: (internetStatusProvider.isConnected &&
+      return CustomAnimatedToggleSwitch<String>(
+        current: vpnNotifier.vpnStatus.value,
+        values: const ['disconnected', 'connected'],
+        iconBuilder: (context, local, global) => const SizedBox(),
+        height: 72,
+        spacing: 28.0,
+        active: (internetStatusProvider.isConnected &&
             !vpnNotifier.isFlashlightInitializedFailed),
-        initialValue: vpnNotifier.vpnStatus.value == 'connected' ||
-            vpnNotifier.vpnStatus.value == 'disconnecting',
-        activeColor: onSwitchColor,
-        inactiveColor: (internetStatusProvider.isConnected &&
-                !vpnNotifier.isFlashlightInitializedFailed)
-            ? offSwitchColor
-            : grey3,
-        onChanged: (newValue) {
-          final newStatus = newValue ? 'connected' : 'disconnected';
-          context.read<VPNChangeNotifier>().vpnStatus.value = newStatus;
-          vpnProcessForDesktop(newStatus);
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        indicatorSize: const ui.Size(60, 60),
+        animationDuration: const Duration(milliseconds: 350),
+        animationCurve: Curves.easeIn,
+        foregroundIndicatorBuilder: (context, global) {
+          return Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: (internetStatusProvider.isConnected &&
+                      !vpnNotifier.isFlashlightInitializedFailed)
+                  ? grey3
+                  : Colors.white,
+              shape: BoxShape.circle,
+            ),
+          );
+        },
+        wrapperBuilder: (context, global, child) {
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              color: getWrapperColor(
+                  vpnNotifier.isConnected(),
+                  internetStatusProvider.isConnected,
+                  vpnNotifier.isFlashlightInitializedFailed),
+              borderRadius: BorderRadius.circular(50.0),
+            ),
+            child: child,
+          );
+        },
+        onChanged: (newValue) {},
+        onTap: (props) {
+          if (vpnNotifier.vpnStatus.value == 'connected') {
+            vpnProcessForDesktop('disconnected');
+          } else {
+            vpnProcessForDesktop('connected');
+          }
         },
       );
     }
   }
 
+  Color getWrapperColor(bool vpnStatus, bool internetConnected,
+      bool isFlashlightInitializedFailed) {
+    if (internetConnected && !isFlashlightInitializedFailed) {
+      if (vpnStatus) {
+        return onSwitchColor;
+      }
+      return offSwitchColor;
+    }
+    return grey3;
+  }
+
   bool isIdle(String vpnStatus) =>
       vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
-
-  Future<void> vpnProcessForDesktop(String vpnStatus) async {
-    bool isConnected = vpnStatus == 'connected';
-    if (isConnected) {
-      LanternFFI.sysProxyOn();
-    } else {
-      LanternFFI.sysProxyOff();
-    }
-  }
 
   Future<void> vpnProcessForMobile(
       bool newValue, String vpnStatus, bool userHasPermission) async {
@@ -108,6 +136,18 @@ class _VPNSwitchState extends State<VPNSwitch> {
           await adHelper.showAds();
         },
       );
+    }
+  }
+
+  Future<void> vpnProcessForDesktop(String vpnStatus) async {
+    final vpnNotifier = Provider.of<VPNChangeNotifier>(context, listen: false);
+    try {
+      await LanternFFI.sendVpnStatus(vpnStatus);
+      vpnNotifier.updateVpnStatus(vpnStatus);
+    } catch (e) {
+      await vpnNotifier.updateVpnStatus('disconnected');
+      showSnackbar(context: context, content: e.localizedDescription);
+      mainLogger.e("Error while sending vpn status: $e");
     }
   }
 }

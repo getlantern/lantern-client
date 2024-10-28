@@ -69,6 +69,11 @@ class WebsocketSubscriber {
               sessionModel.deviceIdNotifier.value = deviceID;
             }
 
+            final proxyAll = message['proxyAll'];
+            if (proxyAll != null) {
+              sessionModel.proxyAllNotifier.value = proxyAll as bool;
+            }
+
           case _WebsocketMessageType.stats:
             if (message['countryCode'] != null) {
               sessionModel.serverInfoNotifier.value = ServerInfo.create()
@@ -107,8 +112,9 @@ class WebsocketSubscriber {
             final Map res = jsonDecode(jsonEncode(message));
             sessionModel.bandwidthNotifier.value = Bandwidth.create()
               ..mergeFromProto3Json({
-                'allowed': res['mibAllowed'],
-                'remaining': res['mibUsed'],
+                'allowed': res['allowed'],
+                'remaining': res['remaining'],
+                'percent': res['percent'],
               });
           case _WebsocketMessageType.config:
             _webSocketLogger.i("Websocket message[config]: $json");

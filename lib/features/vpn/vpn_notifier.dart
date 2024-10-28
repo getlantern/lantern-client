@@ -22,13 +22,14 @@ class VPNChangeNotifier with ChangeNotifier {
   bool isConnected() => vpnStatus.value == 'connected';
 
   void toggleConnection() {
-    if (isConnected()) {
-      LanternFFI.sysProxyOff();
-      _vpnStatus.value = 'disconnected';
-    } else {
-      LanternFFI.sysProxyOn();
-      _vpnStatus.value = 'connected';
-    }
+    final newStatus = isConnected() ? 'disconnected' : 'connected';
+    LanternFFI.sendVpnStatus(newStatus);
+    _vpnStatus.value = newStatus;
+    notifyListeners();
+  }
+
+  Future<void> updateVpnStatus(String status) async {
+    _vpnStatus.value = status;
     notifyListeners();
   }
 
@@ -65,7 +66,7 @@ class VPNChangeNotifier with ChangeNotifier {
       if (timer!.tick >= 6) {
         // Timer has reached 6 seconds
         // Stop the timer and set isFlashlightInitialized to true
-        print("flashlight fail initialized");
+        appLogger.i("flashlight fail initialized");
         isFlashlightInitialized = true;
         isFlashlightInitializedFailed = true;
         notifyListeners();
@@ -87,7 +88,7 @@ class VPNChangeNotifier with ChangeNotifier {
           proxyNotifier.value!, configNotifier.value!, successNotifier.value!);
     });
     successNotifier.addListener(() {
-      print("successNotifier Notfier ${successNotifier.value}");
+      appLogger.i("successNotifier Notfier ${successNotifier.value}");
       updateStatus(
           proxyNotifier.value!, configNotifier.value!, successNotifier.value!);
     });
@@ -107,7 +108,7 @@ class VPNChangeNotifier with ChangeNotifier {
       isFlashlightInitialized = true;
       isFlashlightInitializedFailed = false;
       timer?.cancel();
-      print("flashlight initialized");
+      appLogger.i("flashlight initialized");
       notifyListeners();
     }
   }

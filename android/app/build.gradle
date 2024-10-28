@@ -344,8 +344,11 @@ dependencies {
 
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
-    implementation 'com.github.getlantern:db-android:d92368c7f'
-    implementation 'com.github.getlantern:messaging-android:3f23f07b4e'
+//    implementation 'com.github.getlantern:db-android:6c0525eeb9'
+//    implementation 'com.github.getlantern:messaging-android:eabf104396'
+
+    implementation 'com.github.getlantern:db-android:a137a028d4'
+    implementation 'com.github.getlantern:messaging-android:4c346e64ee'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
     //Test implementation

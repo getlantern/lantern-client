@@ -15,12 +15,28 @@ import (
 	"time"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/pathdb"
 	"golang.org/x/crypto/pbkdf2"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )
+
+// createProClient creates a new instance of ProClient with the given client session information
+func createProClient(session ClientSession, platform string) pro.ProClient {
+	dialTimeout := 30 * time.Second
+	if platform == "ios" {
+		dialTimeout = 20 * time.Second
+	}
+	webclientOpts := &webclient.Opts{
+		Timeout:    dialTimeout,
+		UserConfig: newUserConfig(session, platform),
+	}
+	return pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIBaseURL), webclientOpts)
+}
 
 func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 	if len(b) != 8 {

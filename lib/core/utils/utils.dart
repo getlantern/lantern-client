@@ -1,8 +1,6 @@
 import 'package:fixnum/fixnum.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:intl/intl.dart';
 import 'package:lantern/core/utils/common.dart';
-import 'package:lantern/core/app/app_webview.dart';
 
 const defaultTimeoutDuration = Duration(seconds: 10);
 
@@ -14,6 +12,27 @@ bool isProdPlay() {
     return true;
   }
   return false;
+}
+
+
+String getPlanDisplayName(String plan) {
+  if (Platform.isIOS) {
+    if (plan == '1y') {
+      return 'lantern_pro_one_year'.i18n;
+    } else if (plan == '1m') {
+      return 'lantern_pro_one_month'.i18n;
+    } else {
+      return 'lantern_pro_two_year'.i18n;
+    }
+  } else {
+    if (plan == '1y') {
+      return 'one_year_plan'.i18n;
+    } else if (plan == '1m') {
+      return 'one_month_plan'.i18n;
+    } else {
+      return 'two_year_plan'.i18n;
+    }
+  }
 }
 
 const lanternStarLogo = CAssetImage(
@@ -142,21 +161,12 @@ Future<void> openDesktopPaymentWebview(
     required Providers provider,
     VoidCallback? onClose}) async {
   switch (Platform.operatingSystem) {
-    case 'windows':
-      await AppBrowser.openWindowsWebview(redirectUrl);
-      break;
     case 'macos':
-      if (provider == Providers.shepherd || provider == Providers.fropay) {
-        // Open with system browser browser on mac due to not able to by pass human verification.
-        await InAppBrowser.openWithSystemBrowser(url: WebUri(redirectUrl));
-      } else {
-        final browser = AppBrowser(onClose: onClose);
-        await browser.openMacWebview(redirectUrl);
-      }
+    case 'windows':
+      await AppBrowser.navigateWebview(context, redirectUrl);
       break;
     default:
-      await context.pushRoute(
-          AppWebview(title: 'lantern_pro_checkout'.i18n, url: redirectUrl));
+      await AppBrowser.openWebview(context, redirectUrl);
   }
 }
 

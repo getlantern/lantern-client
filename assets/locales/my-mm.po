@@ -2001,3 +2001,27 @@ msgstr "သင်နောက်ဆုံးပေါ်အဆင့်ရော
 
 msgid "error_referral"
 msgstr "သင့်ရဲ့ရည်ညွှန်းကုဒ်ကိုအသုံးပြုရာတွင် အမှားတစ်ခုဖြစ်ပွားခဲ့သည်။ "
+
+msgid "proxy_error"
+msgstr ""
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""
+
+msgid "errorSubmittingToGooglePlay"
+msgstr ""
