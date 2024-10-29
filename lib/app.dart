@@ -204,9 +204,9 @@ class _LanternAppState extends State<LanternApp>
     if (!Platform.isAndroid) {
       return DeepLink.defaultPath;
     }
-    logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
+    appLogger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
     if (deepLink.path.toLowerCase().startsWith('/report-issue')) {
-      logger.d("DeepLink uri: ${deepLink.uri.toString()}");
+      appLogger.d("DeepLink uri: ${deepLink.uri.toString()}");
       final pathUrl = deepLink.uri.toString();
       final segment = pathUrl.split('#');
       //If deeplink doesn't have data it should send to report issue with empty description'

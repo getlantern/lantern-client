@@ -1,6 +1,12 @@
 import '../../utils/test_utils.dart';
 
 void main() {
+  tearDown(
+    () async {
+      await sl.reset();
+    },
+  );
+
   patrolWidget(
     "report issue end to end test",
     ($) async {

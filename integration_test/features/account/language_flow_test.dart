@@ -8,6 +8,12 @@ final englishLang= toBeginningOfSentenceCase(displayLanguage(enUs));
 final persianLang= toBeginningOfSentenceCase(displayLanguage(faIr));
 
 void main() {
+  tearDown(
+        () async {
+      await sl.reset();
+    },
+  );
+
   patrolWidget("language end to end test", ($)async {
      await $('Account'.i18n).tap();
     await $.pumpAndSettle();

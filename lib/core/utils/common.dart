@@ -127,11 +127,10 @@ export '../../common/ui/custom/heading_text.dart';
 
 final appLogger = Logger(
   printer: PrettyPrinter(
-    methodCount: 0,
-    errorMethodCount: 5,
-    colors: true,
     printEmojis: true,
-    printTime: true,
+    methodCount: 0,
+    colors: true,
+    dateTimeFormat: DateTimeFormat.none
   ),
   filter: ProductionFilter(),
   output: ConsoleOutput(),
@@ -139,7 +138,6 @@ final appLogger = Logger(
 
 // We need to check platform using flutter foundation defaultTargetPlatform
 // so while testing we can easily override the platform
-// Als this recommended way to check platform from Flutter Team
 bool isMobile() {
   if (kDebugMode) {
   return (defaultTargetPlatform == TargetPlatform.android ||

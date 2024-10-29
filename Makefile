@@ -753,7 +753,6 @@ runTest:
 # Run all workflow tests on desktop
 desktopWorkflowTest:
 	@echo "Running all integration tests..."
-	echo "Current directory: $(CURDIR)"
 	sh $(CURDIR)/integration_test/run_test.sh
 
 
