@@ -105,11 +105,7 @@ void patrolWidget(
 }
 
 Future<void> _createWidgetApp(PatrolTester $) async {
-  try {
     await app.main(testMode: true);
-  } catch (e) {
-    print("Error creating app: $e");
-  }
-  await $.pumpAndSettle();
+    await $.pumpAndSettle();
 }
 

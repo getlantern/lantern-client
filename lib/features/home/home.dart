@@ -152,11 +152,9 @@ class _HomePageState extends State<HomePage> {
             bool isPlayVersion =
                 (sessionModel.isTestPlayVersion.value ?? false);
             bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
-            print("store version: $isStoreVersion");
             if ((isStoreVersion || isPlayVersion) && version == 0) {
               // show privacy disclosure if it's a Play build and the terms have
               // not already been accepted
-              print("showing privacy disclosure");
               return const PrivacyDisclosure();
             }
 

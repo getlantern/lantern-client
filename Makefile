@@ -737,7 +737,7 @@ runNativeTest: require-patrol-cli
 #Runs all integration tests
 appWorkflowTest:
 	@echo "Running all integration tests..."
-	flutter test integration_test/ --flavor=prod
+	flutter test integration_test/ --flavor=prod -r expanded
 
 
 # Run specific integration tests
@@ -745,7 +745,7 @@ appWorkflowTest:
 runTest:
 	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
 	echo "Running tests on: $$ARGUMENTS" && \
-	flutter test $$ARGUMENTS --flavor=prod
+	flutter test $$ARGUMENTS --flavor=prod -r expanded
 
 
 #------- Desktop test and utils ------------
@@ -763,6 +763,6 @@ desktopWorkflowTest:
 runDesktopTest:
 	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
 	echo "Running tests on: $$ARGUMENTS" && \
-	flutter test $$ARGUMENTS -d macOS
+	flutter test $$ARGUMENTS -d macOS -r expanded
 
 

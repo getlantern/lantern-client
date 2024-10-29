@@ -86,7 +86,6 @@ void main() {
     'home widget show privacy policy',
     skip: isDesktop(),
     ($) async {
-      print("privacy policy test");
       when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
 
       /// Stub session model
@@ -96,7 +95,7 @@ void main() {
 
       when(mockSessionModel.language(any)).thenAnswer(
         (invocation) {
-          print("language called");
+
           final builder =
               invocation.positionalArguments[0] as ValueWidgetBuilder<String>;
           return builder(mockBuildContext, 'en_us', null);
@@ -120,7 +119,6 @@ void main() {
       when(mockSessionModel.isTestPlayVersion)
           .thenAnswer((realInvocation) => ValueNotifier(false));
       when(mockSessionModel.isStoreVersion).thenAnswer((realInvocation) {
-        print("privacy policy ");
         return ValueNotifier(true);
       });
       when(mockSessionModel.isAuthEnabled)
@@ -166,13 +164,11 @@ void main() {
         },
       );
 
-      print("privacy policy pushing");
       await $.pumpWidget(const LanternApp());
       await $.pumpAndSettle();
 
       await $.pump(const Duration(seconds: 5));
-      await $(FullScreenDialog)
-          .waitUntilVisible(timeout: Duration(seconds: 20));
+      await $(FullScreenDialog).waitUntilVisible(timeout: const Duration(seconds: 20));
 
       expect($('privacy_disclosure_accept'.i18n.toUpperCase()), findsOneWidget);
       expect($(BottomNavigationBar), findsNothing);

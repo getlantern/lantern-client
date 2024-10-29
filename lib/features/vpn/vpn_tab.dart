@@ -115,7 +115,6 @@ class VPNTapSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("VPNTapSkeleton");
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade100,
       highlightColor: Colors.grey.shade200,

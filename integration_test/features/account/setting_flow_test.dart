@@ -19,6 +19,7 @@ void main() {
           expect($(AppKeys.language).visible, true);
           expect($(AppKeys.checkForUpdates).visible, true);
           if (isAndroid()) {
+            await $(AppKeys.splitTunneling).waitUntilVisible();
             expect($(AppKeys.splitTunneling).visible, true);
           } else {
             expect($(AppKeys.splitTunneling), findsNothing);
@@ -69,7 +70,7 @@ void main() {
               await $.pumpAndTrySettle();
               await $.pump(const Duration(seconds: 2));
               expect($(SplitTunnelingAppsList), findsOneWidget);
-            }else{
+            } else {
               expect($(SplitTunnelingAppsList), findsOneWidget);
               await switchFinder.tap();
               await $.pumpAndTrySettle();
@@ -80,7 +81,7 @@ void main() {
           }
 
           //proxy setting
-          if(isDesktop()){
+          if (isDesktop()) {
             await $(AppKeys.proxySetting).tap();
             await $.pumpAndSettle();
             expect($(CText).$('proxy_settings'.i18n), findsOneWidget);

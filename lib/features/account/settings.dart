@@ -93,7 +93,7 @@ class Settings extends StatelessWidget {
             ],
             onTap: () => checkForUpdateTap(context),
           ),
-          //* Blocked
+
           if (!isDesktop())
             messagingModel.getOnBoardingStatus(
               (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
@@ -113,44 +113,46 @@ class Settings extends StatelessWidget {
                   : const SizedBox(),
             ),
           //* Split tunneling
-          if (Platform.isAndroid)
+          if (isAndroid())
             sessionModel.splitTunneling(
-              (BuildContext context, bool value, Widget? child) =>
-                  ListItemFactory.settingsItem(
-                key: AppKeys.splitTunneling,
-                header: 'VPN'.i18n,
-                icon: ImagePaths.split_tunneling,
-                onTap: () {
-                  openSplitTunneling(context);
-                },
-                content: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
+              (BuildContext context, bool value, Widget? child) {
+               return ListItemFactory.settingsItem(
+                  key: AppKeys.splitTunneling,
+                  header: 'VPN'.i18n,
+                  icon: ImagePaths.split_tunneling,
+                  onTap: () {
+                    openSplitTunneling(context);
+                  },
+                  content: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: CText(
+                          'split_tunneling'.i18n,
+                          softWrap: false,
+                          style: tsSubtitle1.short,
+                        ),
+                      ),
+                    ],
+                  ),
+                  trailingArray: [
+                    Padding(
+                      padding:
+                      const EdgeInsetsDirectional.only(start: 16, end: 16),
                       child: CText(
-                        'split_tunneling'.i18n,
-                        softWrap: false,
-                        style: tsSubtitle1.short,
+                        value ? 'ON'.i18n : 'OFF'.i18n,
+                        style: tsSubtitle2.copiedWith(color: pink4),
                       ),
                     ),
+                    mirrorLTR(
+                      context: context,
+                      child: const ContinueArrow(),
+                    )
                   ],
-                ),
-                trailingArray: [
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.only(start: 16, end: 16),
-                    child: CText(
-                      value ? 'ON'.i18n : 'OFF'.i18n,
-                      style: tsSubtitle2.copiedWith(color: pink4),
-                    ),
-                  ),
-                  mirrorLTR(
-                    context: context,
-                    child: const ContinueArrow(),
-                  )
-                ],
-              ),
+                );
+              }
+
             ),
           //* Proxy all
           if (isDesktop())

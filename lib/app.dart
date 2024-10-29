@@ -40,7 +40,6 @@ class _LanternAppState extends State<LanternApp>
 
   @override
   void initState() {
-    print("initState");
     _animateNetworkWarning();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initDeepLinks();
@@ -108,7 +107,7 @@ class _LanternAppState extends State<LanternApp>
       if (showConnectivityWarning) {
         networkWarningAnimationController.forward();
       } else {
-        print("networkWarningAnimationController reverse");
+
         networkWarningAnimationController.reverse();
       }
       // Update the state after running the animations.
@@ -165,7 +164,6 @@ class _LanternAppState extends State<LanternApp>
 
   @override
   Widget build(BuildContext context) {
-    print("app.dart build");
     final currentLocal = View.of(context).platformDispatcher.locale;
 
     return MultiProvider(
@@ -176,7 +174,6 @@ class _LanternAppState extends State<LanternApp>
       ],
       child: sessionModel.language(
         (context, lang, child) {
-          print("selected language: $lang");
           Localization.locale = lang.startsWith('en') ? "en_us" : lang;
           return GlobalLoaderOverlay(
             useDefaultLoading: false,

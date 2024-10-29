@@ -17,6 +17,9 @@ import 'package:lantern/main.dart' as app;
 /// 2
 /// if you do not want not to interact with the native layer, then use patrolWidgetTest
 /// For running patrolWidgetTest, you need to run the patrol test or flutter test both will work
+
+// Implement coverage for the test
+// https://codewithandrea.com/articles/flutter-test-coverage/
 void main() {
   tearDownAll(() async {
     await sl.reset();
