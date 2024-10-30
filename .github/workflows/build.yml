@@ -191,6 +191,19 @@ jobs:
           APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
+      - uses: actions/setup-node@v5
+        if: matrix.platform == 'macos'
+        with:
+          node-version: latest
+    
+      - name: Install darwin installer dependencies
+        if: matrix.platform == 'macos'
+        run: |
+          npm install -g appdmg
+          brew tap joshdk/tap
+          brew install joshdk/tap/retry
+          brew install imagemagick || true
+
       - name: Build Flutter app (Windows)
         if: matrix.platform == 'windows'
         run: |
