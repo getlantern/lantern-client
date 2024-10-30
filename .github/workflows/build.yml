@@ -83,6 +83,15 @@ jobs:
         if: matrix.platform == 'windows'
         run: choco install mingw -y
 
+      - name: Setup Sentry CLI on Android
+        if: matrix.platform == 'android'
+        uses: mathieu-bour/setup-sentry-cli@v2
+        with:
+          version: latest
+          token: ${{ SECRETS.SENTRY_TOKEN }}
+          organization: getlantern
+          project: android
+
       - name: Install Linux dependencies
         if: matrix.platform == 'linux'
         run: |
