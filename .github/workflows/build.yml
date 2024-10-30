@@ -219,36 +219,29 @@ jobs:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
 
+      - name: Build Flutter app (macOS)
+        if: matrix.platform == 'macos'
+        run: |
+          flutter build macos --release
+          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
+          security create-keychain -p temporaty-password build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p temporaty-password build.keychain
+          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k temporaty-password build.keychain
+          make package-macos
+        env:
+          VERSION: "${{ env.version }}"
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_BNS_CERT }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_BNS_CERT_PASS }}
+
       - name: Build Flutter app
-        if: matrix.platform != 'windows'
+        if: matrix.platform == 'android' || matrix.platform == 'linux'
         run: make package-${{ matrix.platform }} 
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
-
-      - name: Build darwin installer
-        if: matrix.platform == 'macos'
-        run: |
-            echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
-            security create-keychain -p temporaty-password build.keychain
-            security default-keychain -s build.keychain
-            security unlock-keychain -p temporaty-password build.keychain
-            security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
-            security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k temporaty-password build.keychain
-            make package-darwin
-            env:
-            VERSION: "${{ env.version }}"
-            MACOS_CERTIFICATE: ${{ secrets.MACOS_BNS_CERT }}
-            MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_BNS_CERT_PASS }}
-
-      - name: Build installer
-        if: matrix.platform == 'linux'
-        run: |
-          cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
-          make package-linux
-          mv dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-linux.deb lantern_${{inputs.version}}_x64.deb
-          mv dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-linux.rpm lantern_${{inputs.version}}_x64.rpm
 
       - name: Rename installer
         if: matrix.platform == 'windows'
