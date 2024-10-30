@@ -578,6 +578,7 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 	@echo "Generating distribution package for darwin/amd64..." && \
 	if [[ "$$(uname -s)" == "Darwin" ]]; then \
 		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
+		mkdir -p build/macos/Build/Products/Release/Lantern.app && \
 		DARWIN_APP_NAME="build/macos/Build/Products/Release/Lantern.app" && \
 		ls $$DARWIN_APP_NAME && \
 		cp $(DARWIN_LIB_NAME) $$DARWIN_APP_NAME/Contents/Frameworks && \
