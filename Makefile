@@ -586,13 +586,13 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/Frameworks/liblantern.dylib) && \
 		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/MacOS/Lantern) && \
 		$(call osxcodesign,$$DARWIN_APP_NAME) && \
-		cat $(DARWIN_APP_NAME)/Contents/MacOS/$(APP) | bzip2 > $(APP)_update_darwin.bz2 && \
+		cat $(DARWIN_APP_NAME)/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin.bz2 && \
 		ls -l $(APP)_update_darwin.bz2 && \
 		rm -rf $(INSTALLER_NAME).dmg && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
 		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
-		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
+		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg --force && \
 		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
 		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
 		$(call osxcodesign,$(INSTALLER_NAME).dmg) && \
