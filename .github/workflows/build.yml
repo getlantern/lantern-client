@@ -243,8 +243,25 @@ jobs:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_BNS_CERT }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_BNS_CERT_PASS }}
 
-      - name: Build Flutter app
-        if: matrix.platform == 'android' || matrix.platform == 'linux'
+      - name: Build Flutter app (Android)
+        if: matrix.platform == 'android'
+        run: |
+          sudo apt-get clean
+          sudo apt-get autoremove -y
+          sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
+          make package-android
+          go clean -modcache
+          go clean -cache -testcache
+          df -h
+          
+        env:
+          INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
+          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+          VERSION: "${{ env.version }}"
+
+
+      - name: Build Flutter app (Linux)
+        if: matrix.platform == 'linux'
         run: make package-${{ matrix.platform }} 
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
