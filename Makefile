@@ -630,7 +630,8 @@ require-bundler:
 	fi
 
 .PHONY: package-macos
-package-macos: darwin-installer notarize-darwin
+package-macos:
+	flutter_distributor package --platform macos --targets dmg --skip-clean
 
 android-bundle: $(MOBILE_BUNDLE)
 
