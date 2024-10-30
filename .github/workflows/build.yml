@@ -171,8 +171,6 @@ jobs:
       - name: Build Lantern Library
         shell: bash
         run: |
-          touch app.env
-          mkdir -p "build/windows/${{inputs.windows-arch}}/runner/Release"
           make ${{matrix.platform}}
 
       - name: Activate plugins
@@ -200,6 +198,7 @@ jobs:
         if: matrix.platform == 'windows'
         shell: bash
         run: |
+          mkdir -p "build/windows/${{inputs.windows-arch}}/runner/Release"
           mv liblantern.dll "build/windows/${{inputs.windows-arch}}/runner/Release"
 
       - name: Extract app version from pubspec.yaml

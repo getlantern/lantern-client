@@ -539,7 +539,6 @@ $(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS +=
 $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
-$(WINDOWS64_LIB_NAME): mkdir -p build/windows/x64/runner/Release
 
 ## APP_VERSION is the version defined in pubspec.yaml
 APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
