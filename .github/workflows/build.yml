@@ -66,18 +66,18 @@ jobs:
           go-version-file: "go.mod"
 
       - name: Install WebView2 Runtime
-        if: ${{ matrix.platform }} == 'windows'
+        if: matrix.platform == 'windows'
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile "MicrosoftEdgeWebView2Setup.exe"
           Start-Process -FilePath ".\MicrosoftEdgeWebView2Setup.exe" -ArgumentList "/silent", "/install" -Wait
 
       - name: Set up MinGW
-        if: ${{ matrix.platform }} == 'windows'
+        if: matrix.platform == 'windows'
         run: choco install mingw -y
 
       - name: Install dependencies
-        if: ${{ matrix.platform }} == 'linux'
+        if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y file build-essential pkg-config
@@ -99,7 +99,7 @@ jobs:
       - run: flutter --version
 
       - name: Setup JDK
-        if: ${{ matrix.platform }} == 'android'
+        if: matrix.platform == 'android'
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -107,7 +107,7 @@ jobs:
           cache: 'gradle'
 
       - name: Set gradle properties
-        if: ${{ matrix.platform }} == 'android'
+        if: matrix.platform == 'android'
         env:
           GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
         run: |
@@ -117,7 +117,7 @@ jobs:
 
       - name: Decode Keystore
         id: write_file
-        if: ${{ matrix.platform }} == 'android'
+        if: matrix.platform == 'android'
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: 'keystore.release.jks'
@@ -155,7 +155,7 @@ jobs:
           dart pub global activate flutter_distributor
 
       - name: Sign liblantern.dll with Azure Code Signing
-        if: ${{ matrix.platform }} == 'windows'
+        if: matrix.platform == 'windows'
         uses: getlantern/trusted-signing-action@main
         with:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -171,7 +171,7 @@ jobs:
           timestamp-digest: SHA256
 
       - name: Move liblantern.dll to release directory
-        if: ${{ matrix.platform }} == 'windows'
+        if: matrix.platform == 'windows'
         shell: bash
         run: |
           mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
@@ -193,7 +193,7 @@ jobs:
           VERSION: "${{ env.version }}"
 
       - name: Install darwin installer dependencies
-        if: ${{ matrix.platform }} == 'macos'
+        if: matrix.platform == 'macos'
         run: |
           npm install -g appdmg
           brew tap joshdk/tap
@@ -201,7 +201,7 @@ jobs:
           brew install imagemagick || true
 
       - name: Build darwin installer
-        if: ${{ matrix.platform }} == 'macos'
+        if: matrix.platform == 'macos'
         run: |
             echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
             security create-keychain -p temporaty-password build.keychain
@@ -216,7 +216,7 @@ jobs:
             MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_BNS_CERT_PASS }}
 
       - name: Build installer
-        if: ${{ matrix.platform }} == 'linux'
+        if: matrix.platform == 'linux'
         run: |
           cp liblantern.so "build/linux/${{inputs.dist-suffix}}/release/bundle"
           make package-linux
@@ -224,13 +224,13 @@ jobs:
           mv dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-linux.rpm lantern_${{inputs.version}}_x64.rpm
 
       - name: Rename installer
-        if: ${{ matrix.platform }} == 'windows'
+        if: matrix.platform == 'windows'
         shell: bash
         run: |
           mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
 
       - name: Sign EXE with Azure Code Signing
-        if: ${{ matrix.platform }} == 'windows'
+        if: matrix.platform == 'windows'
         uses: getlantern/trusted-signing-action@main
         with:
           azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -246,7 +246,7 @@ jobs:
           timestamp-digest: SHA256
 
       - uses: actions/upload-artifact@v4
-        if: ${{ matrix.platform }} == 'android'
+        if: matrix.platform == 'android'
         with:
           name: android-apk-build
           retention-days: 2
@@ -255,21 +255,21 @@ jobs:
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
-        if: ${{ matrix.platform }} == 'windows'
+        if: matrix.platform == 'windows'
         with:
           name: windows${{inputs.build-suffix}}-installer-signed
           path: |
             lantern-installer${{inputs.installer-suffix}}.exe
 
       - uses: actions/upload-artifact@v4
-        if: ${{ matrix.platform }} == 'linux'
+        if: matrix.platform == 'linux'
         with:
           name: linux-deb-build
           path: |
             lantern_${{inputs.version}}_x64.deb
 
       - uses: actions/upload-artifact@v4
-        if: ${{ matrix.platform }} == 'linux'
+        if: matrix.platform == 'linux'
         with:
           name: linux-rpm-build
           path: |
