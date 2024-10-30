@@ -9,6 +9,9 @@ on:
       prefix:
         type: string
         required: true
+      version_file:
+        type: string
+        required: true
       build-suffix: # "64" or ""
         type: string
         required: false
