@@ -7,7 +7,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"net/http/httputil"
@@ -208,7 +207,7 @@ func (cf *configurer) writeUserConfig() error {
 }
 
 func (cf *configurer) readUserConfig() (*UserConfig, error) {
-	bytes, err := ioutil.ReadFile(cf.fullPathTo(userConfigYaml))
+	bytes, err := os.ReadFile(cf.fullPathTo(userConfigYaml))
 	if err != nil {
 		return nil, errors.New("Unable to read userconfig.yaml: %v", err)
 	}
@@ -387,7 +386,7 @@ func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name string, etag st
 		}
 	}()
 
-	bytes, err := ioutil.ReadAll(gzReader)
+	bytes, err := io.ReadAll(gzReader)
 	if err != nil {
 		return nil, "", errors.New("Unable to read response for %v: %v", name, err)
 	}
@@ -412,7 +411,7 @@ func (cf *configurer) configureFronting(global *config.Global, timeout time.Dura
 	}
 
 	fronted.Configure(certs, global.Client.FrontedProviders(), "cloudfront", cf.fullPathTo("masquerade_cache"))
-	rt, ok := fronted.NewDirect(timeout)
+	rt, ok := fronted.NewFronted(timeout)
 	if !ok {
 		return errors.New("Timed out waiting for fronting to finish configuring")
 	}
