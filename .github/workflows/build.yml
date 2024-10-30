@@ -253,7 +253,6 @@ jobs:
           go clean -modcache
           go clean -cache -testcache
           df -h
-          
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
