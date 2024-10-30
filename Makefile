@@ -342,8 +342,8 @@ $(ANDROID_LIB): $(GO_SOURCES)
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
-.PHONY: android-lib appium-test-build
-android-lib: $(MOBILE_ANDROID_LIB)
+.PHONY: android appium-test-build
+android: $(MOBILE_ANDROID_LIB)
 
 appium-test-build:
 	flutter build apk --flavor=appiumTest --dart-define=app.flavor=appiumTest --debug
@@ -503,12 +503,14 @@ linux-arm64: export GO_BUILD_FLAGS += -a -buildmode=c-shared
 linux-arm64: export Environment = production
 linux-arm64: desktop-lib ## Build lantern for linux-arm64
 
+linux: linux-amd64
+
 .PHONY: package-linux
 package-linux:
 	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
 
-.PHONY: windows
-windows: $(WINDOWS_LIB_NAME) ## Build lantern for windows
+.PHONY: windows-386
+windows-386: $(WINDOWS_LIB_NAME)
 $(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
 $(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
 $(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
@@ -522,8 +524,8 @@ $(WINDOWS_LIB_NAME): export BUILD_RACE =
 $(WINDOWS_LIB_NAME): export Environment = production
 $(WINDOWS_LIB_NAME): desktop-lib
 
-.PHONY: windows64
-windows64: $(WINDOWS64_LIB_NAME) ## Build lantern for windows
+.PHONY: windows
+windows: $(WINDOWS64_LIB_NAME)
 $(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
 $(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
 $(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static
@@ -535,6 +537,7 @@ $(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS +=
 $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
+$(WINDOWS64_LIB_NAME): mkdir -p build/windows/x64/runner/Release
 
 ## APP_VERSION is the version defined in pubspec.yaml
 APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
