@@ -1,8 +1,6 @@
 name: Build Lantern
 
 on:
-  push:
-    branches: atavism/ci-updates
   workflow_call:
     inputs:
       version:
@@ -27,6 +25,9 @@ on:
         type: string
         required: false
       xcode_version:
+        type: string
+        required: true
+      macos_version:
         type: string
         required: true
 
