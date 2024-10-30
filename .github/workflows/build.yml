@@ -191,7 +191,7 @@ jobs:
           APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v4
         if: matrix.platform == 'macos'
         with:
           node-version: latest
