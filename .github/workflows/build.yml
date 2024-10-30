@@ -15,9 +15,6 @@ on:
       dist-suffix: # "64-bit" or "32-bit"
         type: string
         required: true
-      update-suffix: # "x64" or "386"
-        type: string
-        required: true
       windows-arch:
         type: string
         required: true
