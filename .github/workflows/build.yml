@@ -83,7 +83,7 @@ jobs:
         if: matrix.platform == 'windows'
         run: choco install mingw -y
 
-      - name: Install dependencies
+      - name: Install Linux dependencies
         if: matrix.platform == 'linux'
         run: |
           sudo apt-get update
@@ -96,6 +96,20 @@ jobs:
       - name: Install the ninja build tool
         if: matrix.platform == 'linux'
         uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install node on macOS
+        uses: actions/setup-node@v4
+        if: matrix.platform == 'macos'
+        with:
+          node-version: latest
+    
+      - name: Install macOS dependencies
+        if: matrix.platform == 'macos'
+        run: |
+          npm install -g appdmg
+          brew tap joshdk/tap
+          brew install joshdk/tap/retry
+          brew install imagemagick || true
 
       - name: Setup Xcode
         if: matrix.platform == 'macos'
@@ -194,19 +208,6 @@ jobs:
         run: |
           APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
-
-      - uses: actions/setup-node@v4
-        if: matrix.platform == 'macos'
-        with:
-          node-version: latest
-    
-      - name: Install darwin installer dependencies
-        if: matrix.platform == 'macos'
-        run: |
-          npm install -g appdmg
-          brew tap joshdk/tap
-          brew install joshdk/tap/retry
-          brew install imagemagick || true
 
       - name: Build Flutter app (Windows)
         if: matrix.platform == 'windows'
