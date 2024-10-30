@@ -103,8 +103,9 @@ jobs:
       version: ${{ needs.set-version.outputs.version }}
       version_file: ${{ needs.set-version.outputs.version_file }}
       prefix: ${{ needs.set-version.outputs.prefix }}
+      dist-suffix: x64
       installer-suffix: -x64
-      arch: x64
+      windows-arch: x64
 
   push-binaries:
     runs-on: ubuntu-latest

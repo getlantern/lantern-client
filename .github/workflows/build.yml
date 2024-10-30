@@ -18,7 +18,7 @@ on:
       update-suffix: # "x64" or "386"
         type: string
         required: true
-      arch:
+      windows-arch:
         type: string
         required: true
       installer-suffix: # "-x64" or ""
@@ -154,7 +154,7 @@ jobs:
         shell: bash
         run: |
           touch app.env
-          mkdir -p "build/windows/${{inputs.arch}}/runner/Release"
+          mkdir -p "build/windows/${{inputs.windows-arch}}/runner/Release"
           make ${{matrix.platform}}
 
       - name: Activate plugins
@@ -182,7 +182,7 @@ jobs:
         if: matrix.platform == 'windows'
         shell: bash
         run: |
-          mv liblantern.dll "build/windows/${{inputs.arch}}/runner/Release"
+          mv liblantern.dll "build/windows/${{inputs.windows-arch}}/runner/Release"
 
       - name: Extract app version from pubspec.yaml
         id: extract_version
