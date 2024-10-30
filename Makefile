@@ -507,7 +507,8 @@ linux: linux-amd64
 
 .PHONY: package-linux
 package-linux:
-	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
+	cp liblantern.so build/linux/x64/release/bundle
+	flutter_distributor package --platform linux --targets "deb,rpm" --skip-clean
 
 .PHONY: windows-386
 windows-386: $(WINDOWS_LIB_NAME)
