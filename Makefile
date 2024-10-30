@@ -627,8 +627,8 @@ require-bundler:
 		echo "Missing 'bundle' command. See https://rubygems.org/gems/bundler/versions/1.16.1 or just gem install bundler -v '1.16.1'" && exit 1; \
 	fi
 
-.PHONY: package-darwin
-package-darwin: darwin-installer notarize-darwin
+.PHONY: package-macos
+package-macos: darwin-installer notarize-darwin
 
 android-bundle: $(MOBILE_BUNDLE)
 
