@@ -487,15 +487,11 @@ class SessionModel internal constructor(
     }
 
     private fun calculateHash(appsList: List<AppData>): String {
-        val start = System.currentTimeMillis()
-        Logger.debug(TAG, "Calculating hash for apps list")
         val digest = MessageDigest.getInstance("MD5")
         appsList.forEach { app ->
             digest.update(app.packageName.toByteArray())
         }
         val hash = digest.digest().joinToString("") { "%02x".format(it) }
-        val end = System.currentTimeMillis()
-        Logger.debug(TAG, "Time taken to calculate hash: ${end - start} ms")
         return hash;
     }
 }
