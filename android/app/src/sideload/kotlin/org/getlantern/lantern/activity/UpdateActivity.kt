@@ -1,5 +1,7 @@
 package org.getlantern.lantern.activity
 
+import android.os.Bundle
+import android.widget.Button
 import android.Manifest
 import android.app.Activity
 import android.content.Context
@@ -22,9 +24,6 @@ import internalsdk.Internalsdk
 import internalsdk.Updater
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import org.androidannotations.annotations.Click
-import org.androidannotations.annotations.EActivity
-import org.androidannotations.annotations.ViewById
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.model.Utils
 import org.getlantern.lantern.R
@@ -35,7 +34,6 @@ import org.getlantern.lantern.util.SignatureVerificationException
 import org.getlantern.mobilesdk.Logger
 import java.io.File
 
-@EActivity(R.layout.update_dialog)
 open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListener {
 
     companion object {
@@ -45,26 +43,32 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
 
     private var apkInstaller: ApkInstaller? = null
 
-    @ViewById
     lateinit var title: TextView
-
-    @ViewById
     lateinit var subTitle: TextView
-
-    @ViewById
     lateinit var progressBarLayout: LinearLayout
-
-    @ViewById
     lateinit var progressBar: ProgressBar
-
-    @ViewById
     lateinit var updateButtons: RelativeLayout
-
-    @ViewById
     lateinit var percentage: TextView
+    lateinit var installUpdate: Button
+    lateinit var notNow: Button
 
-    override fun onStart() {
-        super.onStart()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.update_dialog)
+        title = findViewById(R.id.title)
+        subTitle = findViewById(R.id.subTitle)
+        progressBarLayout = findViewById(R.id.progressBarLayout)
+        progressBar = findViewById(R.id.progressBar)
+        updateButtons = findViewById(R.id.updateButtons)
+        percentage = findViewById(R.id.percentage)
+        installUpdate = findViewById(R.id.installUpdate)
+        notNow = findViewById(R.id.notNow)
+        installUpdate.setOnClickListener {
+            installUpdateClicked()
+        }
+        notNow.setOnClickListener {
+            finish()
+        }
         subTitle.setText(getString(R.string.update_available, getString(R.string.app_name)))
     }
 
@@ -160,11 +164,6 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         return Html.fromHtml("<span>" + getString(R.string.manual_update) + "</span>")
     }
 
-    @Click(R.id.notNow)
-    fun notNowClicked() {
-        finish()
-    }
-
     private fun hasInstallPackagesPermission(): Boolean {
         return PackageManager.PERMISSION_GRANTED ==
                 packageManager.checkPermission(Manifest.permission.REQUEST_INSTALL_PACKAGES, packageName)
@@ -185,7 +184,6 @@ open class UpdateActivity : BaseFragmentActivity(), DialogInterface.OnClickListe
         }
     }
 
-    @Click(R.id.installUpdate)
     fun installUpdateClicked() {
         when {
             Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 -> installUpdate()

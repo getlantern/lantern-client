@@ -22,10 +22,10 @@ func NewSRPClient(email string, password string, salt []byte) *srp.SRP {
 		log.Errorf("salt, password and email should not be empty %v %v %v", salt, password, email)
 		return nil
 	}
-	log.Debugf("NewSRPClient email %v password %v salt %v", email, password, salt)
+	// log.Debugf("NewSRPClient email %v password %v salt %v", email, password, salt)
 	lowerCaseEmail := strings.ToLower(email)
 	encryptedKey := GenerateEncryptedKey(password, lowerCaseEmail, salt)
-	log.Debugf("Encrypted key %v", encryptedKey)
+	// log.Debugf("Encrypted key %v", encryptedKey)
 	return srp.NewSRPClient(srp.KnownGroups[group], encryptedKey, nil)
 }
 
@@ -182,7 +182,7 @@ func (c *authClient) Login(email string, password string, deviceId string) (*pro
 		Proof:    clientProof,
 		DeviceId: deviceId,
 	}
-	log.Debugf("Login request body %v", loginRequestBody)
+	// log.Debugf("Login request body %v", loginRequestBody)
 	resp, err := c.login(context.Background(), loginRequestBody)
 	return resp, salt, err
 }

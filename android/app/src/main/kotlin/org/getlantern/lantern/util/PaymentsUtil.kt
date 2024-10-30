@@ -16,7 +16,7 @@ import org.getlantern.mobilesdk.Logger
 
 class PaymentsUtil(private val activity: Activity) {
 
-    val session = LanternApp.getSession()
+    val session = LanternApp.session
 
     fun submitStripePayment(
         planID: String,
@@ -110,74 +110,84 @@ class PaymentsUtil(private val activity: Activity) {
         planID: String,
         methodCallResult: MethodChannel.Result,
     ) {
-        assert(email.isNotEmpty(), { "Email cannot be empty" })
-        assert(planID.isNotEmpty(), { "PlanId cannot be empty" })
-        val inAppBilling = LanternApp.getInAppBilling()
-        val plan = getPlanYear(planID)
-        Logger.debug(TAG, "Starting in-app purchase for plan with ID $plan")
-        inAppBilling.startPurchase(
-            activity,
-            plan,
-            object : PurchasesUpdatedListener {
-                override fun onPurchasesUpdated(
-                    billingResult: BillingResult,
-                    purchases: MutableList<Purchase>?,
-                ) {
-                    if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
-                        methodCallResult.error(
-                            "unknownError",
-                            activity.resources.getString(R.string.error_making_purchase),
-                            null,
-                        )
-                        return
-                    }
+        try {
 
-                    val tokens = mutableListOf<String>()
-                    for (purchase in purchases!!) {
-                        if (!purchase.isAcknowledged) tokens.add(purchase.purchaseToken)
-                    }
 
-                    if (tokens.size != 1) {
-                        Logger.error(
-                            TAG,
-                            "Unexpected number of purchased products, not proceeding with purchase",
-                        )
-                        methodCallResult.error(
-                            "unknownError",
-                            activity.resources.getString(R.string.error_making_purchase),
-                            null,
-                        )
-                        return
-                    }
+            assert(planID.isNotEmpty(), { "PlanId cannot be empty" })
+            val inAppBilling = LanternApp.getInAppBilling()
+            val plan = getPlanYear(planID)
+            Logger.debug(TAG, "Starting in-app purchase for plan with ID $plan")
+            inAppBilling.startPurchase(
+                activity,
+                plan,
+                object : PurchasesUpdatedListener {
+                    override fun onPurchasesUpdated(
+                        billingResult: BillingResult,
+                        purchases: MutableList<Purchase>?,
+                    ) {
+                        if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+                            methodCallResult.error(
+                                "unknownError",
+                                activity.resources.getString(R.string.error_making_purchase),
+                                null,
+                            )
+                            return
+                        }
 
-                    if (purchases[0].purchaseState != Purchase.PurchaseState.PURCHASED) {
-                        /*
+                        val tokens = mutableListOf<String>()
+                        for (purchase in purchases!!) {
+                            if (!purchase.isAcknowledged) tokens.add(purchase.purchaseToken)
+                        }
+
+                        if (tokens.size != 1) {
+                            Logger.error(
+                                TAG,
+                                "Unexpected number of purchased products, not proceeding with purchase",
+                            )
+                            methodCallResult.error(
+                                "unknownError",
+                                activity.resources.getString(R.string.error_making_purchase),
+                                null,
+                            )
+                            return
+                        }
+
+                        if (purchases[0].purchaseState != Purchase.PurchaseState.PURCHASED) {
+                            /*
                         * if the purchase state is not purchased then do not call api
                         * make user pro temporary next user open app it will check the purchase state and call api accordingly
                         * */
-                        LanternApp.getSession().setUserPro(true)
-                        return
-                    }
+                            LanternApp.session.setUserPro(true)
+                            return
+                        }
 
-                    /*
+                        /*
                     * Important: Google Play payment ignores the app-selected locale and currency
                     * It always uses the device's locale so
                     * We need to pass device local it does not mismatch to server while acknolgment*/
-                    try {
-                        session.submitGooglePlayPayment(email, planID, tokens.first())
-                        methodCallResult.success("purchaseSuccessful")
-                    } catch (e: Exception) {
-                        methodCallResult.error(
-                            "errorMakingPurchase",
-                            activity.getString(
-                                R.string.error_making_purchase,
-                            ),
-                            null,
-                        )
+                        try {
+                            session.submitGooglePlayPayment(email, planID, tokens.first())
+                            methodCallResult.success("purchaseSuccessful")
+                        } catch (e: Exception) {
+                            methodCallResult.error(
+                                "errorMakingPurchase",
+                                activity.getString(
+                                    R.string.error_making_purchase,
+                                ),
+                                null,
+                            )
+                        }
                     }
-                }
-            },
-        )
+                },
+            )
+        }catch (t: Exception) {
+            Logger.error(TAG, "Error submitting to Google Play", t)
+            methodCallResult.error(
+                "errorSubmittingToGooglePlay",
+                activity.getString(R.string.error_making_purchase),
+                null,
+            )
+        }
     }
 
     companion object {

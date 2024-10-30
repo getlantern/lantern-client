@@ -98,6 +98,7 @@ class VpnHelper: NSObject {
       self.configuring = false
     }
     performAppSetUp()
+    Constants.appGroupDefaults.set(false, forKey: Constants.configupdate)
   }
 
   // MARK: Set Up
@@ -165,7 +166,6 @@ class VpnHelper: NSObject {
     onError: ((Error) -> Void)? = nil,
     onSuccess: (() -> Void)? = nil
   ) {
-    guard state.isIdle else { return }
     if !hasConfiguredThisSession {
       initiateConfigFetching(onError: onError, onSuccess: onSuccess)
     } else {
@@ -182,6 +182,7 @@ class VpnHelper: NSObject {
         self?.configuring = false
         guard let state = self?.state, state.isIdle else { return }
         if result.isSuccess {
+          self?.hasConfiguredThisSession = true
           self?.startVPN(onError: onError, onSuccess: onSuccess)
         } else {
           self?.state = .idle(.unableToFetchConfig)
@@ -266,6 +267,10 @@ class VpnHelper: NSObject {
         switch result {
         case .success:
           logger.debug("Config fetch succeeded.")
+          if !strongSelf.hasConfiguredThisSession {
+            logger.debug("Sending configupdate.")
+            Constants.appGroupDefaults.set(true, forKey: Constants.configupdate)
+          }
           strongSelf.configuring = false
           strongSelf.hasConfiguredThisSession = true
           strongSelf.configFetchInProcess = false
@@ -316,32 +321,6 @@ class VpnHelper: NSObject {
     // Start the timer
     configFetchTimer?.resume()
   }
-
-  //  private func startConfigFetchTimer() {
-  //    DispatchQueue.main.async { [weak self] in
-  //      guard let strongSelf = self else { return }
-  //      let time: TimeInterval = 60
-  //      strongSelf.configFetchTimer?.invalidate()  // Invalidate any existing timer
-  //      logger.debug("Setting up config fetch timer with interval: \(time) seconds")
-  //      strongSelf.configFetchTimer = Timer.scheduledTimer(withTimeInterval: time, repeats: true) {
-  //        [weak self] _ in
-  //        guard let strongSelf = self else { return }
-  //        guard strongSelf.state == .connected else {
-  //          logger.debug("Skipping config fetch because state is not connected.")
-  //          return
-  //        }
-  //        logger.debug("Config fetch timer fired, fetching config...")
-  //        strongSelf.fetchConfig { result in
-  //          switch result {
-  //          case .success:
-  //            logger.debug("Auto-config fetch succeeded.")
-  //          case .failure(let error):
-  //            logger.error("Auto-config fetch failed: \(error.localizedDescription)")
-  //          }
-  //        }
-  //      }
-  //    }
-  //  }
 
   func fetchConfig(
     refreshProxies: Bool = true, _ completion: @escaping (Result<Void, Swift.Error>) -> Void

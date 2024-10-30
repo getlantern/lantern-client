@@ -3,7 +3,6 @@ package internalsdk
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net"
 	"os"
@@ -29,6 +28,7 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/analytics"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/mtime"
+	"github.com/getsentry/sentry-go"
 
 	// import gomobile just to make sure it stays in go.mod
 	_ "golang.org/x/mobile/bind/java"
@@ -58,22 +58,33 @@ type Settings interface {
 	TimeoutMillis() int
 }
 
+// AdSettings is an interface for retrieving mobile ad settings from the global config
+type AdSettings interface {
+	// GetAdProvider gets an ad provider if and only if ads are enabled based on the passed parameters.
+	GetAdProvider(isPro bool, countryCode string, daysSinceInstalled int) (AdProvider, error)
+}
+
+// AdProvider provides information for displaying an ad and makes decisions on whether or not to display it.
+type AdProvider interface {
+	GetNativeBannerZoneID() string
+	GetStandardBannerZoneID() string
+	GetInterstitialZoneID() string
+	ShouldShowAd() bool
+}
+
 // Session provides an interface for interacting with the Android Java/Kotlin code.
 // Note - all methods return an error so that Go has the opportunity to inspect any exceptions
 // thrown from the Java code. If a method interface doesn't include an error, exceptions on the
 // Java side immediately result in a panic from which Go cannot recover.
 type Session interface {
+	ClientSession
 	GetAppName() string
-	GetDeviceID() (string, error)
-	GetUserID() (int64, error)
-	GetToken() (string, error)
 	SetCountry(string) error
 	SetIP(string) error
 	UpdateAdSettings(AdSettings) error
 	UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error
 	SetStaging(bool) error
 	BandwidthUpdate(int, int, int, int) error
-	Locale() (string, error)
 	GetTimeZone() (string, error)
 	Code() (string, error)
 	GetCountryCode() (string, error)
@@ -90,22 +101,17 @@ type Session interface {
 	SetAuthEnabled(bool)
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
-	SetShowInterstitialAdsEnabled(bool)
+	SetShowGoogleAds(bool)
+	SetShowTapSellAds(bool)
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
+	SetUserIdAndToken(int64, string) error
 	SetOnSuccess(bool)
 	ChatEnable() bool
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() (string, error)
-}
-
-// Callback that updates ui
-type InitCallback struct {
-	hasConfigFected bool
-	hasProxyFected  bool
-	onSuccess       bool
 }
 
 // PanickingSession wraps the Session interface but panics instead of returning errors
@@ -132,13 +138,15 @@ type PanickingSession interface {
 	SetChatEnabled(bool)
 	SetIP(string)
 	SplitTunnelingEnabled() bool
-	SetShowInterstitialAdsEnabled(bool)
+	SetShowGoogleAds(bool)
+	SetShowTapSellAds(bool)
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() string
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
+	SetUserIdAndToken(int64, string)
 	SetOnSuccess(bool)
 	ChatEnable() bool
 
@@ -289,8 +297,17 @@ func (s *panickingSessionImpl) SetAuthEnabled(enabled bool) {
 	s.wrapped.SetAuthEnabled(enabled)
 }
 
-func (s *panickingSessionImpl) SetShowInterstitialAdsEnabled(enabled bool) {
-	s.wrapped.SetShowInterstitialAdsEnabled(enabled)
+func (s *panickingSessionImpl) SetShowGoogleAds(enabled bool) {
+	s.wrapped.SetShowGoogleAds(enabled)
+}
+
+func (s *panickingSessionImpl) SetShowTapSellAds(enabled bool) {
+	s.wrapped.SetShowTapSellAds(enabled)
+}
+
+func (s *panickingSessionImpl) SetUserIdAndToken(userID int64, token string) {
+	err := s.wrapped.SetUserIdAndToken(userID, token)
+	panicIfNecessary(err)
 }
 
 func (s *panickingSessionImpl) SerializedInternalHeaders() string {
@@ -309,42 +326,6 @@ func (s *panickingSessionImpl) SetHasProxyFetched(fetached bool) {
 
 func (s *panickingSessionImpl) SetOnSuccess(fetached bool) {
 	s.wrapped.SetOnSuccess(fetached)
-}
-
-type UserConfig struct {
-	session PanickingSession
-}
-
-func (uc *UserConfig) GetAppName() string              { return common.DefaultAppName }
-func (uc *UserConfig) GetDeviceID() string             { return uc.session.GetDeviceID() }
-func (uc *UserConfig) GetUserID() int64                { return uc.session.GetUserID() }
-func (uc *UserConfig) GetToken() string                { return uc.session.GetToken() }
-func (uc *UserConfig) GetEnabledExperiments() []string { return nil }
-func (uc *UserConfig) GetLanguage() string             { return uc.session.Locale() }
-func (uc *UserConfig) GetTimeZone() (string, error)    { return uc.session.GetTimeZone(), nil }
-func (uc *UserConfig) GetInternalHeaders() map[string]string {
-	h := make(map[string]string)
-
-	var f interface{}
-	if err := json.Unmarshal([]byte(uc.session.SerializedInternalHeaders()), &f); err != nil {
-		return h
-	}
-	m, ok := f.(map[string]interface{})
-	if !ok {
-		return h
-	}
-
-	for k, v := range m {
-		vv, ok := v.(string)
-		if ok {
-			h[k] = vv
-		}
-	}
-	return h
-}
-
-func NewUserConfig(session PanickingSession) *UserConfig {
-	return &UserConfig{session: session}
 }
 
 func getClient(ctx context.Context) *client.Client {
@@ -380,20 +361,6 @@ type StartResult struct {
 	DNSGrabAddr string
 }
 
-// AdSettings is an interface for retrieving mobile ad settings from the global config
-type AdSettings interface {
-	// GetAdProvider gets an ad provider if and only if ads are enabled based on the passed parameters.
-	GetAdProvider(isPro bool, countryCode string, daysSinceInstalled int) (AdProvider, error)
-}
-
-// AdProvider provides information for displaying an ad and makes decisions on whether or not to display it.
-type AdProvider interface {
-	GetNativeBannerZoneID() string
-	GetStandardBannerZoneID() string
-	GetInterstitialZoneID() string
-	ShouldShowAd() bool
-}
-
 type adSettings struct {
 	wrapped *config.AdSettings
 }
@@ -425,13 +392,17 @@ func Start(configDir string,
 	locale string,
 	settings Settings,
 	wrappedSession Session) (*StartResult, error) {
-
+	err := sentry.Init(sentry.ClientOptions{
+		Dsn:              common.SentrtAndroidDSN,
+		AttachStacktrace: true,
+	})
+	if err != nil {
+		log.Fatalf("sentry.Init failed: %v", err)
+	}
 	logging.EnableFileLogging(common.DefaultAppName, filepath.Join(configDir, "logs"))
 
-	session := &panickingSessionImpl{wrappedSession}
-
 	startOnce.Do(func() {
-		go run(configDir, locale, settings, session)
+		go run(configDir, locale, settings, wrappedSession)
 	})
 
 	startTimeout := time.Duration(settings.TimeoutMillis()) * time.Millisecond
@@ -469,7 +440,8 @@ func newAnalyticsSession(session PanickingSession) analytics.Session {
 	return analyticsSession
 }
 
-func InitDnsGrab(configDir string, session PanickingSession) (dnsgrab.Server, error) {
+// initDnsGrab initializes and starts running the dns grab server
+func initDnsGrab(configDir string, session PanickingSession) (dnsgrab.Server, error) {
 	cache, err := persistentcache.New(filepath.Join(configDir, "dnsgrab.cache"), maxDNSGrabAge)
 	if err != nil {
 		log.Errorf("unable to open dnsgrab cache: %v", err)
@@ -495,7 +467,8 @@ func InitDnsGrab(configDir string, session PanickingSession) (dnsgrab.Server, er
 	return grabber, nil
 }
 
-func ReverseDns(grabber dnsgrab.Server) func(string) (string, error) {
+// reverseDns returns a function that can be used to perform a reverse DNS lookup using the dns grab server
+func reverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 	return func(addr string) (string, error) {
 		op := ops.Begin("reverse_dns")
 		defer op.End()
@@ -520,7 +493,17 @@ func ReverseDns(grabber dnsgrab.Server) func(string) (string, error) {
 	}
 }
 
-func run(configDir, locale string, settings Settings, session PanickingSession) {
+// logPanicAndRecover attempts to recoveer from panics that occur running the client proxy and logs them to Sentry
+func logPanicAndRecover() {
+	if err := recover(); err != nil {
+		sentry.CurrentHub().Recover(err)
+		sentry.Flush(time.Second * 5)
+	}
+}
+
+func run(configDir, locale string, settings Settings, wrappedSession Session) {
+	session := &panickingSessionImpl{wrappedSession}
+
 	appdir.SetHomeDir(configDir)
 	session.SetStaging(false)
 
@@ -546,7 +529,7 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 
 	log.Debugf("Writing log messages to %s/lantern.log", configDir)
 
-	grabber, err := InitDnsGrab(configDir, session)
+	grabber, err := initDnsGrab(configDir, session)
 	if err != nil {
 		return
 	}
@@ -560,7 +543,7 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		config.ForceCountry(forcedCountryCode)
 	}
 
-	userConfig := NewUserConfig(session)
+	userConfig := newUserConfig(session)
 	globalConfigChanged := make(chan interface{})
 	geoRefreshed := geolookup.OnRefresh()
 
@@ -580,7 +563,7 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 		NewStatsTracker(session),
 		session.IsProUser,
 		func() string { return "" }, // only used for desktop
-		ReverseDns(grabber),
+		reverseDns(grabber),
 		func(category, action, label string) {},
 		flashlight.WithOnConfig(func(g *config.Global, s config.Source) {
 			session.SetHasConfigFetched(true)
@@ -618,21 +601,27 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 	//       remembering enabled features, seems like it should just be baked into the enabled features logic in flashlight.
 	checkFeatures := func() {
 		replicaServer.CheckEnabled()
-		chatEnabled := runner.FeatureEnabled("chat", common.ApplicationVersion)
-		log.Debugf("Chat enabled? %v", chatEnabled)
+		chatEnabled := runner.FeatureEnabled(config.FeatureChat, common.ApplicationVersion)
+		log.Debugf("Feature: Chat enabled? %v", chatEnabled)
 		session.SetChatEnabled(chatEnabled)
 
-		authEnabled := runner.FeatureEnabled("auth", common.ApplicationVersion)
-		log.Debugf("Auth enabled? %v", authEnabled)
+		authEnabled := runner.FeatureEnabled(config.FeatureAuth, common.ApplicationVersion)
+		log.Debugf("Feature: Auth enabled? %v", authEnabled)
 		session.SetAuthEnabled(authEnabled)
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
-			showAdsEnabled := runner.FeatureEnabled("interstitialads", common.ApplicationVersion)
-			log.Debugf("Show ads enabled? %v", showAdsEnabled)
-			session.SetShowInterstitialAdsEnabled(showAdsEnabled)
+			showAdsEnabled := runner.FeatureEnabled(config.FeatureInterstitialAds, common.ApplicationVersion)
+			log.Debugf("Feature: Show ads enabled? %v", showAdsEnabled)
+			session.SetShowGoogleAds(showAdsEnabled)
+
+			showTapSellAdsEnabled := runner.FeatureEnabled(config.FeatureTapsellAds, common.ApplicationVersion)
+			log.Debugf("Feature: Show tapsell ads enabled? %v", showTapSellAdsEnabled)
+			session.SetShowTapSellAds(showTapSellAdsEnabled)
+
 		} else {
 			// Explicitly disable ads for Pro users.
-			session.SetShowInterstitialAdsEnabled(false)
+			session.SetShowGoogleAds(false)
+			session.SetShowTapSellAds(false)
 		}
 	}
 
@@ -650,15 +639,18 @@ func run(configDir, locale string, settings Settings, session PanickingSession) 
 
 	replicaServer.CheckEnabled()
 
-	go runner.Run(
-		httpProxyAddr, // listen for HTTP on provided address
-		"127.0.0.1:0", // listen for SOCKS on random address
-		func(c *client.Client) {
-			clEventual.Set(c)
-			afterStart(session)
-		},
-		nil, // onError
-	)
+	go func() {
+		defer logPanicAndRecover()
+		runner.Run(
+			httpProxyAddr, // listen for HTTP on provided address
+			"127.0.0.1:0", // listen for SOCKS on random address
+			func(c *client.Client) {
+				clEventual.Set(c)
+				afterStart(wrappedSession, session)
+			},
+			nil, // onError
+		)
+	}()
 }
 
 func bandwidthUpdates(session PanickingSession) {
@@ -698,7 +690,13 @@ func geoLookup(session PanickingSession) {
 	session.SetCountry(country)
 }
 
-func afterStart(session PanickingSession) {
+func afterStart(wrappedSession Session, session PanickingSession) {
+
+	if session.GetUserID() == 0 {
+		ctx := context.Background()
+		go retryCreateUser(ctx, wrappedSession)
+	}
+
 	bandwidthUpdates(session)
 
 	go func() {

@@ -45,6 +45,19 @@ type ConfigResult struct {
 	IPSToExcludeFromVPN string
 }
 
+type configurer struct {
+	configFolderPath string
+	hardcodedProxies string
+	uc               *UserConfig
+	rt               http.RoundTripper
+}
+
+type Configurer interface {
+	Configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error)
+	OpenGlobal() (*config.Global, string, bool, error)
+	HasGlobalConfig() bool
+}
+
 // Configure fetches updated configuration from the cloud and stores it in
 // configFolderPath. There are 5 files that must be initialized in
 // configFolderPath - global.yaml, global.yaml.etag, proxies.yaml,
@@ -60,20 +73,22 @@ func Configure(configFolderPath string, userID int, proToken, deviceID string, r
 		hardcodedProxies: hardcodedProxies,
 		uc:               uc,
 	}
-	return cf.configure(userID, proToken, refreshProxies)
+	return cf.Configure(userID, proToken, refreshProxies)
+}
+
+// NewConfigurer returns a new instance of Configurer
+func NewConfigurer(configFolderPath string, userID int, proToken, deviceID, hardcodedProxies string) Configurer {
+	return &configurer{
+		configFolderPath: configFolderPath,
+		hardcodedProxies: hardcodedProxies,
+		uc:               userConfigFor(userID, proToken, deviceID),
+	}
 }
 
 type UserConfig struct {
 	common.UserConfigData
 	Country     string
 	AllowProbes bool
-}
-
-type configurer struct {
-	configFolderPath string
-	hardcodedProxies string
-	uc               *UserConfig
-	rt               http.RoundTripper
 }
 
 // Important:
@@ -85,14 +100,14 @@ type configurer struct {
 // config.go:176 Configured completed in 3.700574125s
 
 // TODO: Implement a timeout mechanism to handle prolonged execution times and potentially execute this method in the background to maintain smooth UI startup performance.
-func (cf *configurer) configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
+func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
 	result := &ConfigResult{}
 	start := time.Now()
 	if err := cf.writeUserConfig(); err != nil {
 		return nil, err
 	}
 
-	global, globalEtag, globalInitialized, err := cf.openGlobal()
+	global, globalEtag, globalInitialized, err := cf.OpenGlobal()
 	if err != nil {
 		return nil, err
 	}
@@ -186,7 +201,7 @@ func (cf *configurer) writeUserConfig() error {
 	if err != nil {
 		return errors.New("Unable to marshal user config: %v", err)
 	}
-	if writeErr := ioutil.WriteFile(cf.fullPathTo(userConfigYaml), bytes, 0644); writeErr != nil {
+	if writeErr := os.WriteFile(cf.fullPathTo(userConfigYaml), bytes, 0644); writeErr != nil {
 		return errors.New("Unable to save userconfig.yaml: %v", err)
 	}
 	return nil
@@ -207,10 +222,15 @@ func (cf *configurer) readUserConfig() (*UserConfig, error) {
 	return uc, nil
 }
 
-func (cf *configurer) openGlobal() (*config.Global, string, bool, error) {
+func (cf *configurer) OpenGlobal() (*config.Global, string, bool, error) {
 	cfg := &config.Global{}
 	etag, updated, err := cf.openConfig(globalYaml, cfg, embeddedconfig.Global)
 	return cfg, etag, updated, err
+}
+
+func (cf *configurer) HasGlobalConfig() bool {
+	_, err := os.Stat(cf.fullPathTo(globalYaml))
+	return err == nil
 }
 
 func (cf *configurer) openProxies() (map[string]*commonconfig.ProxyConfig, string, bool, error) {
@@ -227,21 +247,21 @@ func (cf *configurer) openConfig(name string, cfg interface{}, embedded []byte) 
 	var initialized bool
 	configFile := cf.fullPathTo(name)
 	log.Debugf("Opening config file at %s", configFile)
-	bytes, err := ioutil.ReadFile(configFile)
+	bytes, err := os.ReadFile(configFile)
 	if err == nil && len(bytes) > 0 {
 		log.Debugf("Loaded %v from file", name)
 	} else {
 		log.Debugf("Initializing %v from embedded", name)
 		bytes = embedded
 		initialized = true
-		if writeErr := ioutil.WriteFile(configFile, bytes, 0644); writeErr != nil {
+		if writeErr := os.WriteFile(configFile, bytes, 0644); writeErr != nil {
 			return "", false, errors.New("Unable to write embedded %v to disk: %v", name, writeErr)
 		}
 	}
 	if parseErr := yaml.Unmarshal(bytes, cfg); parseErr != nil {
 		return "", false, errors.New("Unable to parse %v: %v", name, parseErr)
 	}
-	etagBytes, err := ioutil.ReadFile(cf.fullPathTo(name + ".etag"))
+	etagBytes, err := os.ReadFile(cf.fullPathTo(name + ".etag"))
 	if err != nil {
 		log.Debugf("No known etag for %v", name)
 		etagBytes = []byte{}
@@ -411,14 +431,14 @@ func (cf *configurer) openFile(filename string) (*os.File, error) {
 }
 
 func (cf *configurer) saveConfig(name string, bytes []byte) {
-	err := ioutil.WriteFile(cf.fullPathTo(name), bytes, 0644)
+	err := os.WriteFile(cf.fullPathTo(name), bytes, 0644)
 	if err != nil {
 		log.Errorf("Unable to save config for %v: %v", name, err)
 	}
 }
 
 func (cf *configurer) saveEtag(name string, etag string) {
-	err := ioutil.WriteFile(cf.fullPathTo(name+".etag"), []byte(etag), 0644)
+	err := os.WriteFile(cf.fullPathTo(name+".etag"), []byte(etag), 0644)
 	if err != nil {
 		log.Errorf("Unable to save etag for %v: %v", name, err)
 	}

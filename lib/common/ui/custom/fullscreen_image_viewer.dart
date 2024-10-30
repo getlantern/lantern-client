@@ -1,4 +1,4 @@
-import 'package:lantern/messaging/messaging.dart';
+import 'package:lantern/features/messaging/messaging.dart';
 
 class FullScreenImageViewer extends FullScreenViewer {
   final Future<Uint8List> loadImageFile;

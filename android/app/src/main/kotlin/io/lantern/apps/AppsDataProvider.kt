@@ -3,6 +3,11 @@ package io.lantern.apps
 import android.Manifest
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import java.io.ByteArrayOutputStream
 
 class AppsDataProvider(
     private val packageManager: PackageManager,
@@ -25,6 +30,7 @@ class AppsDataProvider(
             .toList().sortedBy { it.name }
     }
 
+
     // check whether a particular package has been granted permission to open network sockets
     private fun hasInternetPermission(packageName: String): Boolean {
         return PackageManager.PERMISSION_GRANTED ==
@@ -40,6 +46,8 @@ class AppsDataProvider(
     private fun isSelfApplication(packageName: String): Boolean {
         return packageName == thisPackageName
     }
+
+
 
     companion object {
         private val TAG = AppsDataProvider::class.java.name

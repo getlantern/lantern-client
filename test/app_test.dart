@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lantern/app.dart';
-import 'package:lantern/common/common.dart';
+import 'package:lantern/core/utils/common.dart';
 
 void main() {
   group(

@@ -21,6 +21,7 @@
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
 
     <permission
         android:name="${applicationId}.mobiamo.PAYMENT_BROADCAST_PERMISSION"
@@ -33,12 +34,13 @@
         android:name="org.getlantern.lantern.LanternApp"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:resizeableActivity="false"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:persistent="true"
         android:requestLegacyExternalStorage="true"
+        android:resizeableActivity="false"
         android:theme="@style/AppTheme"
         tools:replace="allowBackup, label"
         tools:targetApi="n">
@@ -86,14 +88,20 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:exported="false" />
+
         <service
             android:name=".service.LanternService"
             android:enabled="true"
             android:exported="false"
             android:stopWithTask="false" />
 
-        <receiver android:name=".model.DeclineCallBroadcastReceiver"
-        android:exported="false"/>
+        <receiver
+            android:name=".model.DeclineCallBroadcastReceiver"
+            android:exported="false" />
 
         <receiver
             android:name="org.getlantern.lantern.notification.NotificationReceiver"
@@ -102,19 +110,6 @@
                 <action android:name="org.getlantern.lantern.intent.VPN_DISCONNECTED" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".activity.FreeKassaActivity_"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.WelcomeActivity_"
-            android:noHistory="true"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.WebViewActivity_"
-            android:screenOrientation="portrait" />
 
         <!-- It's required to update Lantern on API 24+ -->
         <provider

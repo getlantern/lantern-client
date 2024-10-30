@@ -36,7 +36,7 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
   * NDK should be version 26.x, for example 26.0.10792818.
 * [Git LFS](https://git-lfs.github.com)
   - more information in [Usage](#usage)
-* [Flutter (3.19.6)](https://flutter.dev)
+* [Flutter (3.24.0)](https://flutter.dev)
 * [sentry-cli](https://docs.sentry.io/product/cli/installation/)
   - This is used for uploading native debug symbols to Sentry
 * [gomobile](https://github.com/golang/go/wiki/Mobile#tools)
@@ -365,6 +365,15 @@ WARNING - if you try to run an instance of the app using `--observatory-port` an
 TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
 
 NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation is to move to using `integration_test`. [Here](https://github.com/flutter/flutter/issues/12810) is a good depiction of related conversations.
+
+#### Generating Mocks
+
+To generate mocks for the interfaces using Mockery, follow these steps:
+
+1. Install mockery: `go install github.com/vektra/mockery/v2@latest`
+2. Generate mocks: `make mocks`
+
+The generated mocks will be output to the `./mocks` directory.
 
 #### Testing Replica
 A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.

@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.webkit.ProxyConfig
 import androidx.webkit.ProxyController
 import androidx.webkit.WebViewFeature
-import com.google.protobuf.ByteString
 import internalsdk.SessionModel
 import internalsdk.SessionModelOpts
 import io.flutter.embedding.engine.FlutterEngine
@@ -23,14 +22,17 @@ import io.lantern.model.dbadapter.DBAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.add
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.putJsonArray
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.activity.WebViewActivity
 import org.getlantern.lantern.model.InAppBilling
 import org.getlantern.lantern.model.Utils
+import org.getlantern.lantern.plausible.Plausible
 import org.getlantern.lantern.util.AutoUpdater
 import org.getlantern.lantern.util.LanternProxySelector
 import org.getlantern.lantern.util.PaymentsUtil
@@ -71,17 +73,12 @@ class SessionModel internal constructor(
     private val autoUpdater = AutoUpdater(activity, activity)
 
     init {
-        LanternApp.setSession(this)
+        LanternApp.session = this
         LanternApp.setGoSession(model)
         LanternApp.setInAppBilling(inAppBilling)
         updateAppsData()
         paymentUtils = PaymentsUtil(activity)
         LanternProxySelector(this)
-    }
-
-    fun createUser(): Boolean {
-        val result = model.invokeMethod("createUser", Arguments(""))
-        return result.toJava().toString() == "true";
     }
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -106,19 +103,6 @@ class SessionModel internal constructor(
                 val planId = args["planID"] as String
                 paymentUtils.submitGooglePlayPayment(email, planId, result)
             }
-
-//            "submitFreekassa" -> {
-//                val userEmail = call.argument("email") ?: ""
-//                val planID = call.argument("planID") ?: ""
-//                val currencyPrice = call.argument("currencyPrice") ?: ""
-//                activity.startActivity(
-//                    Intent(activity, FreeKassaActivity_::class.java).apply {
-//                        putExtra("userEmail", userEmail)
-//                        putExtra("planID", planID)
-//                        putExtra("currencyPrice", currencyPrice)
-//                    },
-//                )
-//            }
 
             "openWebview" -> {
                 val url = call.argument("url") ?: ""
@@ -147,8 +131,17 @@ class SessionModel internal constructor(
 
             }
 
+            "proxyAddr" -> result.success(LanternApp.session.hTTPAddr)
+
             "isPlayServiceAvailable" -> {
                 result.success(LanternApp.getInAppBilling().isPlayStoreAvailable())
+            }
+
+            "trackUserAction" -> {
+                val props: Map<String, String> = mapOf("title" to call.argument("title")!!)
+                Plausible.event(
+                    call.argument("name")!!, url = call.argument("url")!!, props = props
+                )
             }
 
             else -> super.doOnMethodCall(call, result)
@@ -214,6 +207,12 @@ class SessionModel internal constructor(
         model.invokeMethod("setDevice", Arguments(mapOf("deviceID" to deviceId)))
     }
 
+    fun setUserIdAndToken(userId: Long, token: String) {
+        model.invokeMethod(
+            "setUserIdAndToken",
+            Arguments(mapOf("userId" to userId, "token" to token))
+        )
+    }
 
     fun setUserPro(isPro: Boolean) {
         model.invokeMethod("setProUser", Arguments(isPro))
@@ -263,6 +262,7 @@ class SessionModel internal constructor(
         } else {
             startResult!!.httpAddr
         }
+
     val sOCKS5Addr: String
         get() = if (startResult == null) {
             ""
@@ -389,25 +389,37 @@ class SessionModel internal constructor(
     // user in the database
     private fun updateAppsData() {
         // This can be quite slow, run it on its own coroutine
+        ///Figure out how to get the list of apps from quickly
+        // this ends up in memory out of exception
         CoroutineScope(Dispatchers.IO).launch {
-            val appsList = appsDataProvider.listOfApps()
-            // First add just the app names to get a list quickly
-            val apps = buildJsonArray {
-                appsList.forEach { app ->
-                    add(
-                        buildJsonObject {
-                            val byte = ByteString.copyFrom(app.icon)
-                            put("packageName", app.packageName)
-                            put("name", app.name)
-                            put("icon", byte.toByteArray().toUByteArray().joinToString(", "))
-                        }
-                    )
+            try {
+                val start = System.currentTimeMillis()
+                val appsList = appsDataProvider.listOfApps()
+                // First add just the app names to get a list quickly
+                val apps = buildJsonArray {
+                    appsList.forEach { app ->
+                        add(
+                            buildJsonObject {
+                                val byte = app.icon!!
+                                put("packageName", app.packageName)
+                                put("name", app.name)
+                                putJsonArray("icon") {
+                                    byte.toUByteArray().forEach { add(it.toInt()) }
+                                }
+                            }
+                        )
+                    }
                 }
+                val end = System.currentTimeMillis()
+                Logger.debug(TAG, "Time taken to get app data: ${end - start} ms")
+
+                model.invokeMethod(
+                    "updateAppsData",
+                    Arguments(mapOf("appsList" to apps.toString()))
+                )
+            } catch (e: Exception) {
+                Logger.error(TAG, "Error updating apps data", e)
             }
-            model.invokeMethod(
-                "updateAppsData",
-                Arguments(mapOf("appsList" to apps.toString()))
-            )
         }
     }
 
@@ -453,5 +465,5 @@ class SessionModel internal constructor(
         val result = model.invokeMethod("checkIfSurveyLinkOpened", Arguments(surveyLink))
         return result.toJava().toString() == "true"
     }
-
 }
+

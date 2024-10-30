@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/fs"
@@ -31,15 +32,16 @@ import (
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
 
-	"github.com/getlantern/lantern-client/desktop/analytics"
-
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 )
 
 var (
@@ -61,13 +63,12 @@ type App struct {
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
 
-	Flags            flashlight.Flags
-	configDir        string
-	exited           eventual.Value
-	analyticsSession analytics.Session
-	settings         *settings.Settings
-	configService    *configService
-	statsTracker     *statsTracker
+	Flags         flashlight.Flags
+	configDir     string
+	exited        eventual.Value
+	settings      *settings.Settings
+	configService *configService
+	statsTracker  *statsTracker
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
@@ -77,6 +78,7 @@ type App struct {
 	flashlight *flashlight.Flashlight
 
 	issueReporter *issueReporter
+	authClient    auth.AuthClient
 	proClient     proclient.ProClient
 
 	selectedTab Tab
@@ -93,20 +95,18 @@ type App struct {
 
 	onUserData []func(current *protos.User, new *protos.User)
 
-	mu sync.Mutex
+	mu sync.RWMutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, ss *settings.Settings) *App {
-	analyticsSession := newAnalyticsSession(ss)
+func NewApp(flags flashlight.Flags, configDir string) *App {
+	ss := settings.LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
-		proClient:                 proClient,
 		settings:                  ss,
-		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
 		configService:             new(configService),
@@ -120,7 +120,6 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 	}
 	golog.OnFatal(app.exitOnFatal)
 
-	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
 	app.onProStatusChange(func(isPro bool) {
 		statsTracker.SetIsPro(isPro)
 	})
@@ -137,25 +136,12 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 	return app
 }
 
-func newAnalyticsSession(settings *settings.Settings) analytics.Session {
-	if settings.IsAutoReport() {
-		session := analytics.Start(settings.GetDeviceID(), common.ApplicationVersion)
-		go func() {
-			session.SetIP(geolookup.GetIP(eventual.Forever))
-		}()
-		return session
-	} else {
-		return analytics.NullSession{}
-	}
-}
-
 // Run starts the app.
 func (app *App) Run(ctx context.Context) {
 	golog.OnFatal(app.exitOnFatal)
-
 	go func() {
 		for <-geolookup.OnRefresh() {
-			app.settings.SetCountry(geolookup.GetCountry(0))
+			app.Settings().SetCountry(geolookup.GetCountry(0))
 		}
 	}()
 
@@ -163,14 +149,29 @@ func (app *App) Run(ctx context.Context) {
 	// for the first time. User can still quit Lantern through systray menu when it happens.
 	go func() {
 		log.Debug(app.Flags)
+		userConfig := func() common.UserConfig {
+			return settings.UserConfig(app.Settings())
+		}
+		proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
+			UserConfig: userConfig,
+		})
+		authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
+
+		app.mu.Lock()
+		app.proClient = proClient
+		app.authClient = authClient
+		app.mu.Unlock()
+
+		settings := app.Settings()
+
 		if app.Flags.ProxyAll {
 			// If proxyall flag was supplied, force proxying of all
-			app.settings.SetProxyAll(true)
+			settings.SetProxyAll(true)
 		}
 
 		listenAddr := app.Flags.Addr
 		if listenAddr == "" {
-			listenAddr = app.settings.GetAddr()
+			listenAddr = settings.GetAddr()
 		}
 		if listenAddr == "" {
 			listenAddr = defaultHTTPProxyAddress
@@ -178,7 +179,7 @@ func (app *App) Run(ctx context.Context) {
 
 		socksAddr := app.Flags.SocksAddr
 		if socksAddr == "" {
-			socksAddr = app.settings.GetSOCKSAddr()
+			socksAddr = settings.GetSOCKSAddr()
 		}
 		if socksAddr == "" {
 			socksAddr = defaultSOCKSProxyAddress
@@ -199,17 +200,18 @@ func (app *App) Run(ctx context.Context) {
 			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
-			app.settings.GetProxyAll,
+			func() bool { return settings.GetDisconnected() }, // check whether we're disconnected
+			settings.GetProxyAll,
 			func() bool { return false }, // on desktop, we do not allow private hosts
-			app.settings.IsAutoReport,
+			settings.IsAutoReport,
 			app.Flags.AsMap(),
-			app.settings,
+			settings,
 			app.statsTracker,
 			app.IsPro,
-			app.settings.GetLanguage,
+			settings.GetLanguage,
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-			app.analyticsSession.EventWithLabel,
+			// Dummy analytics function
+			func(category, action, label string) {},
 			flashlight.WithOnConfig(app.onConfigUpdate),
 			flashlight.WithOnProxies(app.onProxiesUpdate),
 		)
@@ -303,14 +305,12 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 
 // Connect turns on proxying
 func (app *App) Connect() {
-	app.analyticsSession.Event("systray-menu", "connect")
 	ops.Begin("connect").End()
 	app.settings.SetDisconnected(false)
 }
 
 // Disconnect turns off proxying
 func (app *App) Disconnect() {
-	app.analyticsSession.Event("systray-menu", "disconnect")
 	ops.Begin("disconnect").End()
 	app.settings.SetDisconnected(true)
 }
@@ -325,7 +325,6 @@ func (app *App) SetLanguage(lang string) {
 	app.settings.SetLanguage(lang)
 	log.Debugf("Setting language to %v", lang)
 	app.SendMessageToUI("pro", map[string]interface{}{
-		"type":     "pro",
 		"language": lang,
 	})
 }
@@ -349,6 +348,19 @@ func (app *App) SendMessageToUI(service string, message interface{}) {
 	}
 }
 
+func (app *App) SendUpdateUserDataToUI() {
+	user, found := app.GetUserData(app.Settings().GetUserID())
+	if !found {
+		return
+	}
+	if user.UserLevel == "" {
+		user.UserLevel = "free"
+	}
+	b, _ := json.Marshal(user)
+	log.Debugf("SendUpdateUserDataToUI: %s", string(b))
+	app.ws.SendMessage("pro", user)
+}
+
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
 func (app *App) OnSettingChange(attr settings.SettingName, cb func(interface{})) {
@@ -363,7 +375,7 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	ctx := context.Background()
 	go app.fetchOrCreateUser(ctx)
-	go app.PaymentMethods(ctx)
+	go app.GetPaymentMethods(ctx)
 	go app.fetchDeviceLinkingCode(ctx)
 
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
@@ -392,6 +404,14 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	if err := app.servePro(app.ws); err != nil {
 		log.Errorf("Unable to serve pro data to UI: %v", err)
 	}
+	// send configs to UI
+	app.SendMessageToUI("pro", map[string]interface{}{
+		"login": app.settings.IsUserLoggedIn(),
+	})
+}
+
+func (app *App) SendConfig() {
+	app.sendConfigOptions()
 }
 
 func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
@@ -589,6 +609,7 @@ func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
 	app.SetUserData(ctx, user.UserId, user)
 	settings.SetReferralCode(user.Referral)
 	settings.SetUserIDAndToken(user.UserId, user.Token)
+	go app.UserData(ctx)
 	return resp.User, nil
 }
 
@@ -599,21 +620,22 @@ func (app *App) Plans(ctx context.Context) ([]protos.Plan, error) {
 		log.Debugf("Returning plans from cache %s", v)
 		return resp, nil
 	}
-	resp, err := app.paymentMethods(ctx)
+	resp, err := app.FetchPaymentMethods(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return resp.Plans, nil
 }
 
-// PaymentMethods returns the plans and payment plans available to a user
-func (app *App) PaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
+// GetPaymentMethods returns the plans and payment from cache if available
+// if not then call FetchPaymentMethods
+func (app *App) GetPaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
 	if v, ok := app.plansCache.Load("paymentMethods"); ok {
 		resp := v.([]protos.PaymentMethod)
 		log.Debugf("Returning payment methods from cache %s", v)
 		return resp, nil
 	}
-	resp, err := app.paymentMethods(ctx)
+	resp, err := app.FetchPaymentMethods(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -624,8 +646,8 @@ func (app *App) PaymentMethods(ctx context.Context) ([]protos.PaymentMethod, err
 	return desktopProviders, nil
 }
 
-// PaymentMethods returns the plans and payment plans available to a user
-func (app *App) paymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
+// FetchPaymentMethods returns the plans and payment plans available to a user
+func (app *App) FetchPaymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
 	resp, err := app.proClient.PaymentMethodsV4(context.Background())
 	if err != nil {
 		return nil, errors.New("Could not get payment methods: %v", err)
@@ -644,10 +666,14 @@ func (app *App) paymentMethods(ctx context.Context) (*proclient.PaymentMethodsRe
 			}
 		}
 	}
+	//clear previous store cache
+	app.plansCache.Delete("plans")
+	app.plansCache.Delete("paymentMethods")
 	log.Debugf("DEBUG: Payment methods plans: %+v", resp.Plans)
 	log.Debugf("DEBUG: Payment methods providers: %+v", desktopPaymentMethods)
 	app.plansCache.Store("plans", resp.Plans)
 	app.plansCache.Store("paymentMethods", desktopPaymentMethods)
+	app.sendConfigOptions()
 	return resp, nil
 }
 
@@ -669,8 +695,6 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 
 	currentDevice := app.Settings().GetDeviceID()
 
-	log.Debugf("Current device %v", currentDevice)
-
 	// Check if device id is connect to same device if not create new user
 	// this is for the case when user removed device from other device
 	deviceFound := false
@@ -682,7 +706,7 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 			}
 		}
 	}
-	log.Debugf("Device found %v", deviceFound)
+
 	/// Check if user has installed app first time
 	firstTime := settings.GetUserFirstVisit()
 	log.Debugf("First time visit %v", firstTime)
@@ -696,20 +720,23 @@ func (app *App) UserData(ctx context.Context) (*protos.User, error) {
 		log.Debugf("User is not pro")
 		setProUser(false)
 	}
+	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
 	settings.SetExpiration(userDetail.Expiration)
 	settings.SetReferralCode(resp.User.Referral)
-	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
 	log.Debugf("User caching successful: %+v", userDetail)
 	// Save data in userData cache
 	app.SetUserData(ctx, userDetail.UserId, userDetail)
+	app.SendUpdateUserDataToUI()
 	return resp.User, nil
 }
 
 func (app *App) devices() protos.Devices {
 	user, found := app.GetUserData(app.Settings().GetUserID())
-	if !found {
+
+	if !found && user == nil {
 		return protos.Devices{}
 	}
+	log.Debugf("Devices: %v", user.Devices)
 	return protos.Devices{
 		Devices: user.Devices,
 	}
@@ -758,5 +785,19 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 }
 
 func (app *App) Settings() *settings.Settings {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
 	return app.settings
+}
+
+func (app *App) AuthClient() auth.AuthClient {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.authClient
+}
+
+func (app *App) ProClient() pro.ProClient {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.proClient
 }

@@ -3,12 +3,12 @@
 # tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2023
 # Derek F <derek@getlantern.org>, 2024
 # e2f <projects@e2f.com>, 2024
-# tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2024
 # Diversity83 83, 2024
+# tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Diversity83 83, 2024\n"
+"Last-Translator: tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2024\n"
 "Language-Team: Urdu (https://app.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -513,6 +513,9 @@ msgstr "آپ کا اکاؤنٹ ڈیٹا حاصل کرنے کے دوران کچھ
 
 msgid "reseller_timeout"
 msgstr "آپ کے فعالیتی کوڈ کی توثیق کے دوران کچھ غلط ہو گیا۔"
+
+msgid "wrong_reseller_code"
+msgstr "غلط ایکٹیویشن کوڈ"
 
 msgid "reseller_success"
 msgstr "فعالیتی کوڈ کامیابی سے ریڈیم کر دیا گیا۔"
@@ -1849,16 +1852,16 @@ msgid "follow_us"
 msgstr "ہمیں فالو کریں "
 
 msgid "follow_us_telegram"
-msgstr "ہمیں فالو کریں Telegram پر "
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "ہمیں فالو کریں Instagram پر "
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "ہمیں فالو کریں Facebook پر "
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "ہمیں فالو کریں X پر "
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "ہمیں تکنیکی مشکلات کا سامنا ہے۔ بعد میں دوبارہ کوشش کریں۔ "
@@ -1911,8 +1914,80 @@ msgstr ""
 " \n"
 " "
 
+msgid "lantern_pro_one_year"
+msgstr ""
+
+msgid "lantern_pro_two_year"
+msgstr ""
+
+msgid "lantern_pro_one_month"
+msgstr ""
+
+msgid "non_renewing_subscription"
+msgstr ""
+
+msgid "restore_purchase"
+msgstr ""
+
+msgid "skip_for_now"
+msgstr ""
+
+msgid "purchase_not_found"
+msgstr ""
+
+msgid "no_previous_purchase"
+msgstr ""
+
+msgid "warning_restore_purchase"
+msgstr ""
+
+msgid "purchase_restored"
+msgstr ""
+
+msgid "purchase_restored_message"
+msgstr ""
+
+msgid "purchase_restored_error"
+msgstr ""
+
+msgid "err_while_sending_code"
+msgstr ""
+
+msgid "email_hint"
+msgstr ""
+
+msgid "email_hint_pro"
+msgstr ""
+
+msgid "continue_without_email"
+msgstr ""
+
 msgid "no_new_update"
 msgstr "آپ اَپ ٹو ڈیٹ ہیں !"
 
 msgid "error_referral"
 msgstr "آپ کے ریفرل کوڈ کا اطلاق کرتے ہوئے کچھ غلط ہو گیا۔"
+
+msgid "proxy_error"
+msgstr ""
+
+msgid "proxy_settings"
+msgstr ""
+
+msgid "http_proxy"
+msgstr ""
+
+msgid "socks_proxy"
+msgstr ""
+
+msgid "http_proxy_copied"
+msgstr ""
+
+msgid "socks_proxy_copied"
+msgstr ""
+
+msgid "proxy_everything"
+msgstr ""
+
+msgid "errorSubmittingToGooglePlay"
+msgstr ""

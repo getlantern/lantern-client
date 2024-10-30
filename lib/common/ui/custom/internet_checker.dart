@@ -1,6 +1,6 @@
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
-import '../../common.dart';
+import '../../../core/utils/common.dart';
 
 class InternetChecker extends StatelessWidget {
   const InternetChecker({super.key});
@@ -43,6 +43,24 @@ class InternetStatusProvider extends ChangeNotifier {
   bool _isConnected = true;
   late StreamSubscription<InternetStatus> _connectionSubscription;
   bool _isDisconnected = false;
+  final List<InternetCheckOption> _defaultCheckOptions = [
+    InternetCheckOption(
+      uri: Uri.parse('https://icanhazip.com/'),
+      timeout: const Duration(seconds: 5),
+    ),
+    InternetCheckOption(
+      uri: Uri.parse('https://jsonplaceholder.typicode.com/todos/1'),
+      timeout: const Duration(seconds: 5),
+    ),
+    InternetCheckOption(
+      uri: Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=1'),
+      timeout: const Duration(seconds: 5),
+    ),
+    InternetCheckOption(
+      uri: Uri.parse('https://reqres.in/api/users/1'),
+      timeout: const Duration(seconds: 5),
+    ),
+  ];
 
   /// Using debounce to avoid flickering when the connection is unstable
   final _debounceDuration = Duration(seconds: Platform.isIOS ? 4 : 2);
@@ -51,7 +69,9 @@ class InternetStatusProvider extends ChangeNotifier {
   InternetStatusProvider() {
     // Listen for connection status changes
     _connectionSubscription = InternetConnection.createInstance(
-            checkInterval: const Duration(seconds: 10))
+            checkInterval: const Duration(seconds: 10),
+            useDefaultOptions: false,
+            customCheckOptions: _defaultCheckOptions)
         .onStatusChange
         .listen((status) {
       if (status == InternetStatus.connected) {

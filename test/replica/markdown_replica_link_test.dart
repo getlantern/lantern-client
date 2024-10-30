@@ -2,8 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lantern/replica/logic/api.dart';
-import 'package:lantern/replica/logic/markdown_link_builder.dart';
+import 'package:lantern/features/replica/logic/api.dart';
+import 'package:lantern/features/replica/logic/markdown_link_builder.dart';
 import 'package:markdown/markdown.dart' as md;
 
 // XXX <06-12-21, soltzen> Discussion here as to why use flutter_markdown and

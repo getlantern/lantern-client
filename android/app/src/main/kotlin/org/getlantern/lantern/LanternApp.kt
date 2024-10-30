@@ -43,7 +43,6 @@ open class LanternApp : Application() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         appContext = applicationContext
         messaging.init(this)
-//        session = LanternSessionManager(this)
 //        // When the app starts, reset our "hasSucceedingProxy" flag to clear any old warnings
 //        // about proxies being unavailable.
 //        session.resetHasSucceedingProxy()
@@ -57,7 +56,8 @@ open class LanternApp : Application() {
         private val TAG = LanternApp::class.java.simpleName
         private lateinit var appContext: Context
         private lateinit var inAppBilling: InAppBilling
-        private lateinit var session: SessionModel
+        lateinit var session: SessionModel
+        val sessionInitialized = ::session.isInitialized
         private lateinit var goSession: internalsdk.SessionModel
         var messaging: MessagingHolder = MessagingHolder()
 
@@ -70,9 +70,10 @@ open class LanternApp : Application() {
         fun getInAppBilling(): InAppBilling {
             return inAppBilling
         }
+
         @JvmStatic
-        fun setInAppBilling(inAppBilling: InAppBilling)  {
-             this.inAppBilling= inAppBilling
+        fun setInAppBilling(inAppBilling: InAppBilling) {
+            this.inAppBilling = inAppBilling
         }
 
 
@@ -82,17 +83,8 @@ open class LanternApp : Application() {
         }
 
         @JvmStatic
-        fun getSession(): SessionModel {
-            return session
-        }
-
-        @JvmStatic
-        fun setSession(sessionModel :SessionModel) {
-            session= sessionModel
-        }
-        @JvmStatic
-        fun setGoSession(sessionModel :internalsdk.SessionModel) {
-            goSession= sessionModel
+        fun setGoSession(sessionModel: internalsdk.SessionModel) {
+            goSession = sessionModel
         }
     }
 }

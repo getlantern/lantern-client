@@ -461,6 +461,9 @@ msgstr "Something went wrong while fetching your account data."
 msgid "reseller_timeout"
 msgstr "Something went wrong while validating your activation code."
 
+msgid "wrong_reseller_code"
+msgstr "Invalid activation code"
+
 msgid "reseller_success"
 msgstr "Successfully redeemed activation code."
 
@@ -1699,16 +1702,16 @@ msgid "follow_us"
 msgstr "Follow Us"
 
 msgid "follow_us_telegram"
-msgstr "Follow us Telegram "
+msgstr "Follow us on Telegram"
 
 msgid "follow_us_instagram"
-msgstr "Follow us Instagram"
+msgstr "Follow us on Instagram"
 
 msgid "follow_us_facebook"
-msgstr "Follow us Facebook "
+msgstr "Follow us on Facebook"
 
 msgid "follow_us_x"
-msgstr "Follow us X "
+msgstr "Follow us on X"
 
 msgid "report_issue_error"
 msgstr "We're experiencing technical difficulties. Try again later."
@@ -1755,11 +1758,83 @@ msgstr "Limit Reached"
 msgid "file_size_limit_description"
 msgstr "Attachment sizes should be under 100 MB"
 
+msgid "lantern_pro_one_year"
+msgstr "Lantern Pro: One Year Plan"
+
+msgid "lantern_pro_two_year"
+msgstr "Lantern Pro: Two Year Plan"
+
+msgid "lantern_pro_one_month"
+msgstr "Lantern Pro: One Month Plan"
+
+msgid "non_renewing_subscription"
+msgstr "Non-renewing subscription"
+
+msgid "restore_purchase"
+msgstr "Restore Purchase"
+
+msgid "skip_for_now"
+msgstr "Skip for now"
+
+msgid "purchase_not_found"
+msgstr "No purchase found with provided email"
+
+msgid "no_previous_purchase"
+msgstr "No previous purchase found"
+
+msgid "warning_restore_purchase"
+msgstr "Enter the email you entered during checkout to recover your purchase."
+
+msgid "purchase_restored"
+msgstr "Purchase Restored"
+
+msgid "purchase_restored_message"
+msgstr "Your purchase has been restored successfully"
+
+msgid "purchase_restored_error"
+msgstr "It looks like something went wrong with the restore purchase. Please double-check that you've entered the correct email or code."
+
+msgid "err_while_sending_code"
+msgstr "Something went wrong while sending the code, please try again"
+
+msgid "email_hint"
+msgstr "*Email is optional but encouraged"
+
+msgid "email_hint_pro"
+msgstr "Add an email to access your purchases on any device. Without an email purchases are tied to this device and could be lost. "
+
+msgid "continue_without_email"
+msgstr "Continue without Email"
+
 msgid "no_new_update"
 msgstr "You're up to date!"
 
 msgid "error_referral"
 msgstr "Something went wrong while applying your referral code."
+
+msgid "proxy_error"
+msgstr "We are having problem starting lantern Please try again later."
+
+msgid "proxy_settings"
+msgstr "Proxy Settings"
+
+msgid "http_proxy"
+msgstr "HTTPS proxy"
+
+msgid "socks_proxy"
+msgstr "Socks proxy"
+
+msgid "http_proxy_copied"
+msgstr "HTTP Proxy copied"
+
+msgid "socks_proxy_copied"
+msgstr "Socks Proxy copied"
+
+msgid "proxy_everything"
+msgstr "Proxy Everything"
+
+msgid "errorSubmittingToGooglePlay"
+msgstr "We are currently experiencing difficulties processing your request for Google Play. Please try again later."
 
 
 
