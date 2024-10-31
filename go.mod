@@ -2,7 +2,7 @@ module github.com/getlantern/lantern-client
 
 go 1.22.3
 
-toolchain go1.22.4
+toolchain go1.22.8
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
 // replace github.com/getlantern/ipproxy => ../ipproxy
@@ -38,8 +38,8 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.118
-	github.com/getlantern/fronted v0.0.0-20241018162326-8501716d3eb0
+	github.com/getlantern/flashlight/v7 v7.6.124
+	github.com/getlantern/fronted v0.0.0-20241028162429-6616677cce5d
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
@@ -104,12 +104,12 @@ require (
 	github.com/anacrolix/confluence v1.15.0 // indirect
 	github.com/anacrolix/dht/v2 v2.21.1 // indirect
 	github.com/anacrolix/envpprof v1.3.0 // indirect
-	github.com/anacrolix/generics v0.0.2 // indirect
+	github.com/anacrolix/generics v0.0.3-0.20240902042256-7fb2702ef0ca // indirect
 	github.com/anacrolix/go-libutp v1.3.1 // indirect
-	github.com/anacrolix/log v0.15.2 // indirect
+	github.com/anacrolix/log v0.15.3-0.20240627045001-cd912c641d83 // indirect
 	github.com/anacrolix/missinggo v1.3.0 // indirect
 	github.com/anacrolix/missinggo/perf v1.0.0 // indirect
-	github.com/anacrolix/missinggo/v2 v2.7.3 // indirect
+	github.com/anacrolix/missinggo/v2 v2.7.4 // indirect
 	github.com/anacrolix/mmsg v1.0.0 // indirect
 	github.com/anacrolix/multiless v0.3.1-0.20221221005021-2d12701f83f7 // indirect
 	github.com/anacrolix/squirrel v0.6.4 // indirect
@@ -330,7 +330,7 @@ require (
 	go.uber.org/mock v0.4.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa // indirect
+	golang.org/x/exp v0.0.0-20240823005443-9b4947da3948 // indirect
 	golang.org/x/mod v0.21.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/text v0.19.0 // indirect
