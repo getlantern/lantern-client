@@ -412,7 +412,7 @@ func (cf *configurer) configureFronting(global *config.Global, timeout time.Dura
 	}
 
 	fronted.Configure(certs, global.Client.FrontedProviders(), "cloudfront", cf.fullPathTo("masquerade_cache"))
-	rt, ok := fronted.NewDirect(timeout)
+	rt, ok := fronted.NewFronted(timeout)
 	if !ok {
 		return errors.New("Timed out waiting for fronting to finish configuring")
 	}
