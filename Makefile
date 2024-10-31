@@ -606,7 +606,7 @@ notarize-darwin: require-ac-username require-ac-password
 		./$(INSTALLER_RESOURCES)/tools/notarize-darwin.py \
 		  -u $$AC_USERNAME \
 		  -p $$AC_PASSWORD \
-		  -a 4FYC28AXA2 \
+		  -a ACZRKC3LQ9 \
 		  $(INSTALLER_NAME).dmg; \
 	else \
 		echo "-> Skipped: Can not notarize a package on a non-OSX host."; \
