@@ -10,7 +10,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   emoji_picker_flutter
   flutter_inappwebview_windows
   permission_handler_windows
-  screen_retriever
+  screen_retriever_windows
   share_plus
   tray_manager
   url_launcher_windows
