@@ -2,7 +2,7 @@ module github.com/getlantern/lantern-client
 
 go 1.23
 
-toolchain go1.23.0
+toolchain go1.22.8
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
 // replace github.com/getlantern/ipproxy => ../ipproxy
