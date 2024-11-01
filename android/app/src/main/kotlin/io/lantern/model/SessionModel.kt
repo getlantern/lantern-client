@@ -17,16 +17,13 @@ import internalsdk.SessionModelOpts
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.lantern.apps.AppData
 import io.lantern.apps.AppsDataProvider
+import io.lantern.messaging.conversions.byteString
 import io.lantern.model.dbadapter.DBAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.add
-import kotlinx.serialization.json.buildJsonArray
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
-import kotlinx.serialization.json.putJsonArray
 import org.getlantern.lantern.BuildConfig
 import org.getlantern.lantern.LanternApp
 import org.getlantern.lantern.activity.WebViewActivity
@@ -40,9 +37,12 @@ import org.getlantern.mobilesdk.Logger
 import org.getlantern.mobilesdk.Settings
 import org.getlantern.mobilesdk.StartResult
 import org.getlantern.mobilesdk.util.DnsDetector
+import java.io.File
+import java.io.FileOutputStream
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.lang.reflect.InvocationTargetException
+import java.security.MessageDigest
 import java.util.Currency
 import java.util.Locale
 
@@ -76,9 +76,9 @@ class SessionModel internal constructor(
         LanternApp.session = this
         LanternApp.setGoSession(model)
         LanternApp.setInAppBilling(inAppBilling)
-        updateAppsData()
         paymentUtils = PaymentsUtil(activity)
         LanternProxySelector(this)
+        updateAppsData()
     }
 
     override fun doOnMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -396,27 +396,47 @@ class SessionModel internal constructor(
                 val start = System.currentTimeMillis()
                 val appsList = appsDataProvider.listOfApps()
                 // First add just the app names to get a list quickly
-                val apps = buildJsonArray {
-                    appsList.forEach { app ->
-                        add(
-                            buildJsonObject {
-                                val byte = app.icon!!
-                                put("packageName", app.packageName)
-                                put("name", app.name)
-                                putJsonArray("icon") {
-                                    byte.toUByteArray().forEach { add(it.toInt()) }
-                                }
-                            }
-                        )
-                    }
+                val file = File(activity.cacheDir, "appsData.bin")
+                val hasFile = File(activity.cacheDir, "appsDataHash.json")
+                val hash = calculateHash(appsList)
+                val prevHash = if (hasFile.exists()) {
+                    val prevHash = hasFile.readText()
+                    prevHash
+                } else {
+                    ""
                 }
+                if (hash == prevHash) {
+                    Logger.debug(TAG, "Apps data has not changed")
+                    return@launch
+                }
+
+                // Apps list has changed, update the hash
+                hasFile.writeText(hash)
+
+                val allAppsData = Vpn.AppsData.newBuilder()
+                appsList.forEach { app ->
+                    // Build AppData using the builder pattern
+                    val appData = Vpn.AppData.newBuilder()
+                        .setPackageName(app.packageName)
+                        .setName(app.name)
+                        .setIcon(app.icon!!.byteString())
+                        .build()
+                    allAppsData.addAppsList(appData)
+                }
+
+                FileOutputStream(file).use { outputStream ->
+                    allAppsData.build().writeTo(outputStream)
+                }
+
                 val end = System.currentTimeMillis()
                 Logger.debug(TAG, "Time taken to get app data: ${end - start} ms")
 
                 model.invokeMethod(
                     "updateAppsData",
-                    Arguments(mapOf("appsList" to apps.toString()))
+                    Arguments(mapOf("filePath" to file.absolutePath))
                 )
+            } catch (e: OutOfMemoryError) {
+                Logger.error(TAG, "OutOfMemoryError occurred", e)
             } catch (e: Exception) {
                 Logger.error(TAG, "Error updating apps data", e)
             }
@@ -464,6 +484,15 @@ class SessionModel internal constructor(
     fun checkIfSurveyLinkOpened(surveyLink: String): Boolean {
         val result = model.invokeMethod("checkIfSurveyLinkOpened", Arguments(surveyLink))
         return result.toJava().toString() == "true"
+    }
+
+    private fun calculateHash(appsList: List<AppData>): String {
+        val digest = MessageDigest.getInstance("MD5")
+        appsList.forEach { app ->
+            digest.update(app.packageName.toByteArray())
+        }
+        val hash = digest.digest().joinToString("") { "%02x".format(it) }
+        return hash;
     }
 }
 
