@@ -86,6 +86,9 @@ open class LanternService : Service(), Runnable {
         } catch (lnre: LanternNotRunningException) {
             Logger.e(TAG, "Unable to start LanternService", lnre)
             throw RuntimeException("Could not start Lantern", lnre)
+        }catch (e: Exception) {
+            Logger.e(TAG, "Unable to start LanternService", e)
+            throw RuntimeException("Could not start Lantern", e)
         }
     }
 

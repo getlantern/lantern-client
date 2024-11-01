@@ -22,6 +22,11 @@ message AppData {
   bool allowedAccess = 4;
 }
 
+
+message AppsData {
+  repeated AppData appsList = 1;
+}
+
 message Device {
   string id = 1;
   string name = 2;
