@@ -643,7 +643,6 @@ android-release-install: $(MOBILE_RELEASE_APK)
 
 package-android: pubget require-version
 	@ANDROID_ARCH=all make android-release && \
-	ANDROID_ARCH=all make android-bundle && \
 	echo "-> $(MOBILE_RELEASE_APK)"
 
 upload-aab-to-play: require-release-track require-pip
