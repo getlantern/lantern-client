@@ -144,7 +144,7 @@ LINUX_LIB_NAME ?= $(DESKTOP_LIB_NAME).so
 APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
 PACKAGED_YAML := .packaged-$(APP_YAML)
-DARWIN_APP_PATH := build/macos/Build/Products/Release/Lantern.app
+DARWIN_OUT := build/macos/Build/Products/Release/Lantern.app
 
 ANDROID_ARCH ?= arm32
 
@@ -581,18 +581,16 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 	if [[ "$$(uname -s)" == "Darwin" ]]; then \
 		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
 		flutter build macos --release && \
-		DARWIN_APP_NAME="build/macos/Build/Products/Release/Lantern.app" && \
-		ls $$DARWIN_APP_NAME && \
-		cp $(DARWIN_LIB_NAME) $$DARWIN_APP_NAME/Contents/Frameworks && \
-		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/Frameworks/liblantern.dylib) && \
-		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/MacOS/Lantern) && \
-		$(call osxcodesign,$$DARWIN_APP_NAME) && \
-		cat $(DARWIN_APP_NAME)/Contents/MacOS/$(APP) | bzip2 > $(APP)_update_darwin.bz2 && \
+		cp $(DARWIN_LIB_NAME) $(DARWIN_OUT)/Contents/Frameworks && \
+		$(call osxcodesign,$(DARWIN_OUT)/Contents/Frameworks/liblantern.dylib) && \
+		$(call osxcodesign,$(DARWIN_OUT)/Contents/MacOS/Lantern) && \
+		$(call osxcodesign,$(DARWIN_OUT)) && \
+		cat $(DARWIN_OUT)/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin.bz2 && \
 		ls -l $(APP)_update_darwin.bz2 && \
-		rm -rf $(INSTALLER_NAME).dmg && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
 		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
 		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
+		rm -rf $(INSTALLER_NAME).dmg && \
 		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
 		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
 		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
