@@ -88,7 +88,7 @@ jobs:
         uses: apple-actions/import-codesign-certs@v1
         with:
           p12-file-base64: ${{ secrets.MACOS_BNS_CERT }}
-          p12-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+          p12-password: ${{ secrets.MACOS_BNS_CERT_PASS }}
 
       - name: Setup Sentry CLI on Android
         if: matrix.platform == 'android'
@@ -188,14 +188,6 @@ jobs:
         shell: bash
         run: |
           make ${{matrix.platform}}
-
-      - name: Sign liblantern.dylib
-        if: matrix.platform == 'macos'
-        uses: lando/code-sign-action@v2
-        with:
-          file: liblantern.dylib
-          certificate-data: ${{ secrets.MACOS_BNS_CERT }}
-          certificate-password: ${{ secrets.MACOS_BNS_CERT_PASS }}
 
       - name: Activate plugins
         run: |
