@@ -186,8 +186,7 @@ jobs:
 
       - name: Build Lantern Library
         shell: bash
-        run: |
-          make ${{matrix.platform}}
+        run: make ${{matrix.platform}}
 
       - name: Activate plugins
         run: |

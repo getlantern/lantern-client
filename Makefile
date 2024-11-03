@@ -144,6 +144,7 @@ LINUX_LIB_NAME ?= $(DESKTOP_LIB_NAME).so
 APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
 PACKAGED_YAML := .packaged-$(APP_YAML)
+DARWIN_APP_PATH := build/macos/Build/Products/Release/Lantern.app
 
 ANDROID_ARCH ?= arm32
 
@@ -606,9 +607,11 @@ require-bundler:
 .PHONY: package-macos
 package-macos: require-appdmg pubget
 	flutter build macos --release
-	$(call osxcodesign,liblantern.dylib)
-	cp $(DARWIN_LIB_NAME) build/macos/Build/Products/Release
+	cp $(DARWIN_LIB_NAME) $$DARWIN_APP_PATH/Contents/Frameworks
+	$(call osxcodesign,$$DARWIN_APP_PATH/Contents/Frameworks/liblantern.dylib)
 	flutter_distributor package --platform macos --targets dmg --skip-clean
+	$(call osxcodesign,$$DARWIN_APP_PATH/Contents/MacOS/Lantern)
+	$(call osxcodesign,$$DARWIN_APP_NAME)
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-macos.dmg lantern-installer.dmg
 	$(call osxcodesign,lantern-installer.dmg)
 	make notarize-darwin
