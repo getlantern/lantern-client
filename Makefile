@@ -609,9 +609,9 @@ package-macos: require-appdmg pubget
 	flutter build macos --release
 	cp $(DARWIN_LIB_NAME) $$DARWIN_APP_PATH/Contents/Frameworks
 	$(call osxcodesign,$$DARWIN_APP_PATH/Contents/Frameworks/liblantern.dylib)
-	flutter_distributor package --platform macos --targets dmg --skip-clean
 	$(call osxcodesign,$$DARWIN_APP_PATH/Contents/MacOS/Lantern)
 	$(call osxcodesign,$$DARWIN_APP_PATH)
+	flutter_distributor package --platform macos --targets dmg --skip-clean
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-macos.dmg lantern-installer.dmg
 	$(call osxcodesign,lantern-installer.dmg)
 	make notarize-darwin
