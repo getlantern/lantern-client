@@ -189,7 +189,6 @@ jobs:
           file: liblantern.dylib
           certificate-data: ${{ secrets.MACOS_BNS_CERT }}
           certificate-password: ${{ secrets.MACOS_BNS_CERT_PASS }}
-          apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
 
       - name: Activate plugins
         run: |
