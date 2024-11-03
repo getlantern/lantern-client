@@ -605,9 +605,9 @@ require-bundler:
 
 .PHONY: package-macos
 package-macos: require-appdmg pubget
+	flutter build macos --release
 	$(call osxcodesign,liblantern.dylib)
 	cp $(DARWIN_LIB_NAME) build/macos/Build/Products/Release
-	flutter build macos --release
 	flutter_distributor package --platform macos --targets dmg --skip-clean
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-macos.dmg lantern-installer.dmg
 	$(call osxcodesign,lantern-installer.dmg)
