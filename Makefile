@@ -342,8 +342,8 @@ $(ANDROID_LIB): $(GO_SOURCES)
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
 	mkdir -p $(MOBILE_LIBS) && cp $(ANDROID_LIB) $(MOBILE_ANDROID_LIB)
 
-.PHONY: android-lib appium-test-build
-android-lib: $(MOBILE_ANDROID_LIB)
+.PHONY: android appium-test-build
+android: $(MOBILE_ANDROID_LIB)
 
 appium-test-build:
 	flutter build apk --flavor=appiumTest --dart-define=app.flavor=appiumTest --debug
@@ -503,12 +503,15 @@ linux-arm64: export GO_BUILD_FLAGS += -a -buildmode=c-shared
 linux-arm64: export Environment = production
 linux-arm64: desktop-lib ## Build lantern for linux-arm64
 
-.PHONY: package-linux
-package-linux:
-	flutter_distributor package --skip-clean --platform linux --targets "deb,rpm" --flutter-build-args=verbose
+linux: linux-amd64
 
-.PHONY: windows
-windows: $(WINDOWS_LIB_NAME) ## Build lantern for windows
+.PHONY: package-linux
+package-linux: pubget
+	cp liblantern.so build/linux/x64/release/bundle
+	flutter_distributor package --platform linux --targets "deb,rpm" --skip-clean
+
+.PHONY: windows-386
+windows-386: $(WINDOWS_LIB_NAME)
 $(WINDOWS_LIB_NAME): export CXX = i686-w64-mingw32-g++
 $(WINDOWS_LIB_NAME): export CC = i686-w64-mingw32-gcc
 $(WINDOWS_LIB_NAME): export CGO_LDFLAGS = -static
@@ -522,8 +525,8 @@ $(WINDOWS_LIB_NAME): export BUILD_RACE =
 $(WINDOWS_LIB_NAME): export Environment = production
 $(WINDOWS_LIB_NAME): desktop-lib
 
-.PHONY: windows64
-windows64: $(WINDOWS64_LIB_NAME) ## Build lantern for windows
+.PHONY: windows
+windows: $(WINDOWS64_LIB_NAME)
 $(WINDOWS64_LIB_NAME): export CXX = x86_64-w64-mingw32-g++
 $(WINDOWS64_LIB_NAME): export CC = x86_64-w64-mingw32-gcc
 $(WINDOWS64_LIB_NAME): export CGO_LDFLAGS = -static
@@ -545,56 +548,31 @@ windows-release: ffigen
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
 
 ## Darwin
-.PHONY: darwin-amd64
-darwin-amd64: $(DARWIN_LIB_AMD64)
+.PHONY: macos-amd64
+macos-amd64: $(DARWIN_LIB_AMD64)
 $(DARWIN_LIB_AMD64): export LIB_NAME = $(DARWIN_LIB_AMD64)
 $(DARWIN_LIB_AMD64): export GOOS = darwin
 $(DARWIN_LIB_AMD64): export GOARCH = amd64
 $(DARWIN_LIB_AMD64): export GO_BUILD_FLAGS += -buildmode=c-shared
 $(DARWIN_LIB_AMD64): desktop-lib
 
-.PHONY: darwin-arm64
-darwin-arm64: $(DARWIN_LIB_ARM64)
+.PHONY: macos-arm64
+macos-arm64: $(DARWIN_LIB_ARM64)
 $(DARWIN_LIB_ARM64): export LIB_NAME = $(DARWIN_LIB_ARM64)
 $(DARWIN_LIB_ARM64): export GOOS = darwin
 $(DARWIN_LIB_ARM64): export GOARCH = arm64
 $(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -buildmode=c-shared
 $(DARWIN_LIB_ARM64): desktop-lib
 
-.PHONY: darwin
-darwin: darwin-arm64
-	make darwin-amd64
+.PHONY: macos
+macos: macos-arm64
+	make macos-amd64
 	lipo \
 		-create \
 		${DESKTOP_LIB_NAME}_arm64.dylib \
 		${DESKTOP_LIB_NAME}_amd64.dylib \
 		-output ${DARWIN_LIB_NAME}
 	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" ${DARWIN_LIB_NAME}
-
-$(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
-	@echo "Generating distribution package for darwin/amd64..." && \
-	if [[ "$$(uname -s)" == "Darwin" ]]; then \
-		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
-		DARWIN_APP_NAME="build/macos/Build/Products/Release/Lantern.app" && \
-		ls $$DARWIN_APP_NAME && \
-		cp $(DARWIN_LIB_NAME) $$DARWIN_APP_NAME/Contents/Frameworks && \
-		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/Frameworks/liblantern.dylib) && \
-		$(call osxcodesign,$$DARWIN_APP_NAME/Contents/MacOS/Lantern) && \
-		$(call osxcodesign,$$DARWIN_APP_NAME) && \
-		cat $(DARWIN_APP_NAME)/Contents/MacOS/$(APP) | bzip2 > $(APP)_update_darwin.bz2 && \
-		ls -l $(APP)_update_darwin.bz2 && \
-		rm -rf $(INSTALLER_NAME).dmg && \
-		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
-		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
-		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
-		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
-		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
-		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
-		$(call osxcodesign,$(INSTALLER_NAME).dmg) && \
-		rm $(CAPITALIZED_APP).dmg.zlib; \
-	else \
-		echo "-> Skipped: Can not generate a package on a non-OSX host."; \
-	fi;
 
 .PHONY: darwin-installer
 darwin-installer: $(INSTALLER_NAME).dmg
@@ -624,8 +602,14 @@ require-bundler:
 		echo "Missing 'bundle' command. See https://rubygems.org/gems/bundler/versions/1.16.1 or just gem install bundler -v '1.16.1'" && exit 1; \
 	fi
 
-.PHONY: package-darwin
-package-darwin: darwin-installer notarize-darwin
+.PHONY: package-macos
+package-macos: require-appdmg pubget
+	$(call osxcodesign,liblantern.dylib)
+	cp $(DARWIN_LIB_NAME) build/macos/Build/Products/Release
+	flutter_distributor package --platform macos --targets dmg --skip-clean
+	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-macos.dmg lantern-installer.dmg
+	$(call osxcodesign,lantern-installer.dmg)
+	make notarize-darwin
 
 android-bundle: $(MOBILE_BUNDLE)
 
@@ -637,7 +621,6 @@ android-release-install: $(MOBILE_RELEASE_APK)
 
 package-android: pubget require-version
 	@ANDROID_ARCH=all make android-release && \
-	ANDROID_ARCH=all make android-bundle && \
 	echo "-> $(MOBILE_RELEASE_APK)"
 
 upload-aab-to-play: require-release-track require-pip

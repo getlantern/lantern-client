@@ -83,6 +83,13 @@ jobs:
         if: matrix.platform == 'windows'
         run: choco install mingw -y
 
+      - name: Import Code Signing Certificates
+        if: matrix.platform == 'macos'
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.MACOS_BNS_CERT }}
+          p12-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+
       - name: Setup Sentry CLI on Android
         if: matrix.platform == 'android'
         uses: mathieu-bour/setup-sentry-cli@v2
@@ -265,18 +272,6 @@ jobs:
         shell: bash
         run: |
           mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
-
-      - name: Sign and notarize DMG
-        if: matrix.platform == 'macos'
-        uses: lando/code-sign-action@v2
-        with:
-          file: lantern-installer.dmg
-          certificate-data: ${{ secrets.MACOS_BNS_CERT }}
-          certificate-password: ${{ secrets.MACOS_BNS_CERT_PASS }}
-          apple-notary-user: ${{ secrets.AC_USERNAME }}
-          apple-notary-password: ${{ secrets.AC_PASSWORD }}
-          apple-notary-tool: altool
-          apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
 
       - name: Sign EXE with Azure Code Signing
         if: matrix.platform == 'windows'
