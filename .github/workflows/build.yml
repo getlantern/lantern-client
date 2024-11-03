@@ -182,6 +182,15 @@ jobs:
         run: |
           make ${{matrix.platform}}
 
+      - name: Sign liblantern.dylib
+        if: matrix.platform == 'macos'
+        uses: lando/code-sign-action@v2
+        with:
+          file: liblantern.dylib
+          certificate-data: ${{ secrets.MACOS_BNS_CERT }}
+          certificate-password: ${{ secrets.MACOS_BNS_CERT_PASS }}
+          apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
+
       - name: Activate plugins
         run: |
           dart pub global activate protoc_plugin
@@ -227,22 +236,6 @@ jobs:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
 
-      - name: Build Flutter app (macOS)
-        if: matrix.platform == 'macos'
-        run: |
-          flutter build macos --release
-          echo $MACOS_CERTIFICATE | base64 --decode > certificate.p12
-          security create-keychain -p temporaty-password build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p temporaty-password build.keychain
-          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k temporaty-password build.keychain
-          make package-macos
-        env:
-          VERSION: "${{ env.version }}"
-          MACOS_CERTIFICATE: ${{ secrets.MACOS_BNS_CERT }}
-          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_BNS_CERT_PASS }}
-
       - name: Build Flutter app (Android)
         if: matrix.platform == 'android'
         run: |
@@ -258,10 +251,11 @@ jobs:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
 
-
-      - name: Build Flutter app (Linux)
-        if: matrix.platform == 'linux'
-        run: make package-${{ matrix.platform }} 
+      - name: Build Flutter app
+        if: matrix.platform == 'linux' || matrix.platform == 'macos'
+        run: |
+          flutter build ${{ matrix.platform }} --release
+          make package-${{ matrix.platform }}
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
@@ -272,6 +266,18 @@ jobs:
         shell: bash
         run: |
           mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
+
+      - name: Sign and notarize DMG
+        if: matrix.platform == 'macos'
+        uses: lando/code-sign-action@v2
+        with:
+          file: lantern-installer.dmg
+          certificate-data: ${{ secrets.MACOS_BNS_CERT }}
+          certificate-password: ${{ secrets.MACOS_BNS_CERT_PASS }}
+          apple-notary-user: ${{ secrets.AC_USERNAME }}
+          apple-notary-password: ${{ secrets.AC_PASSWORD }}
+          apple-notary-tool: altool
+          apple-team-id: ${{ secrets.APPLE_TEAM_ID }}
 
       - name: Sign EXE with Azure Code Signing
         if: matrix.platform == 'windows'
@@ -294,8 +300,14 @@ jobs:
         with:
           name: android-apk-build
           retention-days: 2
-          path: |
-            lantern-installer.apk
+          path: lantern-installer.apk
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        if: matrix.platform == 'macos'
+        with:
+          name: macos-build
+          path: lantern-installer.dmg
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4
