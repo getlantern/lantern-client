@@ -507,6 +507,7 @@ linux: linux-amd64
 
 .PHONY: package-linux
 package-linux: pubget
+	flutter build linux --release
 	cp liblantern.so build/linux/x64/release/bundle
 	flutter_distributor package --platform linux --targets "deb,rpm" --skip-clean
 
@@ -606,6 +607,7 @@ require-bundler:
 package-macos: require-appdmg pubget
 	$(call osxcodesign,liblantern.dylib)
 	cp $(DARWIN_LIB_NAME) build/macos/Build/Products/Release
+	flutter build macos --release
 	flutter_distributor package --platform macos --targets dmg --skip-clean
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-macos.dmg lantern-installer.dmg
 	$(call osxcodesign,lantern-installer.dmg)

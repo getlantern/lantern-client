@@ -251,9 +251,7 @@ jobs:
 
       - name: Build Flutter app
         if: matrix.platform == 'linux' || matrix.platform == 'macos'
-        run: |
-          flutter build ${{ matrix.platform }} --release
-          make package-${{ matrix.platform }}
+        run: make package-${{ matrix.platform }}
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
