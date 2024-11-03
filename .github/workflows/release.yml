@@ -4,7 +4,7 @@ on:
   # Triggers the workflow on push when pushing to a version tag
   push:
     branches:
-      - atavism/macos-code-signingg
+      - atavism/macos-code-signing
     tags:
       - '*lantern-*'
   workflow_run:
