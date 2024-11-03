@@ -580,7 +580,6 @@ $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magi
 	@echo "Generating distribution package for darwin/amd64..." && \
 	if [[ "$$(uname -s)" == "Darwin" ]]; then \
 		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
-		flutter build macos --release && \
 		cp $(DARWIN_LIB_NAME) $(DARWIN_OUT)/Contents/Frameworks && \
 		$(call osxcodesign,$(DARWIN_OUT)/Contents/Frameworks/liblantern.dylib) && \
 		$(call osxcodesign,$(DARWIN_OUT)/Contents/MacOS/Lantern) && \
@@ -629,7 +628,9 @@ require-bundler:
 	fi
 
 .PHONY: package-macos
-package-macos: require-appdmg pubget darwin-installer notarize-darwin
+package-macos: require-appdmg pubget
+	flutter build macos --release
+	make darwin-installer notarize-darwin
 
 android-bundle: $(MOBILE_BUNDLE)
 
