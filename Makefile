@@ -639,17 +639,9 @@ android-debug-install: $(MOBILE_DEBUG_APK)
 android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
-
 android-apk-release: pubget require-version $(MOBILE_RELEASE_APK)
 
 android-aab-release: pubget require-version $(MOBILE_BUNDLE)
-
-android-release:
-ifeq ($(TARGET), apk)
-	$(MAKE) ANDROID_ARCH=$(ANDROID_ARCH) android-apk-release
-else
-	$(MAKE) ANDROID_ARCH=$(ANDROID_ARCH) android-aab-release
-endif
 
 upload-aab-to-play: require-release-track require-pip
 	@echo "Uploading APK to Play store on $$APK_RELEASE_TRACK release track.." && \
