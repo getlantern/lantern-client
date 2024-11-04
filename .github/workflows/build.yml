@@ -361,11 +361,11 @@ jobs:
         with:
           name: linux-deb-build
           path: |
-            lantern_${{inputs.version}}_x64.deb
+            lantern-${{inputs.version}}-x64.deb
 
       - uses: actions/upload-artifact@v4
         if: matrix.platform == 'linux'
         with:
           name: linux-rpm-build
           path: |
-            lantern_${{inputs.version}}_x64.rpm
+            lantern-${{inputs.version}}-x64.rpm

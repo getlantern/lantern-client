@@ -510,6 +510,8 @@ linux-release: pubget
 	flutter build linux --release
 	cp liblantern.so build/linux/x64/release/bundle
 	flutter_distributor package --platform linux --targets "deb,rpm" --skip-clean
+	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-linux.rpm lantern-installer-x64.rpm
+	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-linux.deb lantern-installer-x64.deb
 
 .PHONY: windows-386
 windows-386: $(WINDOWS_LIB_NAME)
