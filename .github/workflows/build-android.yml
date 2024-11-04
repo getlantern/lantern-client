@@ -107,6 +107,8 @@ jobs:
           sudo apt-get clean
           sudo apt-get autoremove -y
           sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/cache/*
 
       - name: Build Android installers
         env:
@@ -117,11 +119,6 @@ jobs:
 
       - name: Clean Go module and build cache
         run: |
-          sudo rm -rf /tmp/*
-          sudo rm -rf /var/cache/*
-          sudo apt-get clean
-          sudo apt-get autoremove -y
-          sudo apt-get remove --purge $(dpkg --list | grep '^rc' | awk '{print $2}')
           go clean -modcache
           go clean -cache -testcache
           df -h
