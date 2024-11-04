@@ -116,7 +116,7 @@ jobs:
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
         run: |
-          make android-lib
+          make android-lib ANDROID_ARCH=all
           go clean -modcache
           go clean -cache -testcache
 
