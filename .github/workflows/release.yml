@@ -115,7 +115,7 @@ jobs:
       - name: Download the mac build output
         uses: actions/download-artifact@v4
         with:
-          name: osx-build
+          name: macos-build
       - name: Download the linux deb build output
         uses: actions/download-artifact@v4
         with:
