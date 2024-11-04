@@ -146,7 +146,7 @@ APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
 PACKAGED_YAML := .packaged-$(APP_YAML)
 DARWIN_OUT := build/macos/Build/Products/Release/Lantern.app
 
-ANDROID_ARCH ?= arm32
+ANDROID_ARCH ?= all
 
 ifeq ($(ANDROID_ARCH), x86)
   ANDROID_ARCH_JAVA := x86
@@ -420,8 +420,6 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 
 android-debug: $(MOBILE_DEBUG_APK)
 
-android-release: pubget $(MOBILE_RELEASE_APK)
-
 set-version:
 	@echo "Setting the CFBundleShortVersionString to $(VERSION)"
 	@cd ios && agvtool new-marketing-version $(VERSION)
@@ -430,8 +428,9 @@ set-version:
 	NEXT_BUILD=$$(($$CURRENT_BUILD + 1)); \
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
 
+ios: macos ffigen
 
-ios-release:set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS build-framework
+ios-release: set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS pubget build-framework
 	@echo "Flutter Clean"
 	flutter clean
 	@echo "Flutter pub get"
@@ -506,8 +505,8 @@ linux-arm64: desktop-lib ## Build lantern for linux-arm64
 
 linux: linux-amd64
 
-.PHONY: package-linux
-package-linux: pubget
+.PHONY: linux-release
+linux-release: pubget
 	flutter build linux --release
 	cp liblantern.so build/linux/x64/release/bundle
 	flutter_distributor package --platform linux --targets "deb,rpm" --skip-clean
@@ -627,8 +626,8 @@ require-bundler:
 		echo "Missing 'bundle' command. See https://rubygems.org/gems/bundler/versions/1.16.1 or just gem install bundler -v '1.16.1'" && exit 1; \
 	fi
 
-.PHONY: package-macos
-package-macos: require-appdmg pubget
+.PHONY: macos-release
+macos-release: require-appdmg pubget
 	flutter build macos --release
 	make darwin-installer notarize-darwin
 
@@ -640,9 +639,17 @@ android-debug-install: $(MOBILE_DEBUG_APK)
 android-release-install: $(MOBILE_RELEASE_APK)
 	$(ADB) install -r $(MOBILE_RELEASE_APK)
 
-package-android: pubget require-version
-	@ANDROID_ARCH=all make android-release && \
-	echo "-> $(MOBILE_RELEASE_APK)"
+
+android-apk-release: pubget require-version $(MOBILE_RELEASE_APK)
+
+android-aab-release: pubget require-version $(MOBILE_BUNDLE)
+
+android-release:
+ifeq ($(TARGET), apk)
+	$(MAKE) ANDROID_ARCH=$(ANDROID_ARCH) android-apk-release
+else
+	$(MAKE) ANDROID_ARCH=$(ANDROID_ARCH) android-aab-release
+endif
 
 upload-aab-to-play: require-release-track require-pip
 	@echo "Uploading APK to Play store on $$APK_RELEASE_TRACK release track.." && \
