@@ -110,18 +110,22 @@ jobs:
           sudo rm -rf /tmp/*
           sudo rm -rf /var/cache/*
 
+      - name: Build Android library
+        env:
+          INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
+          SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+          VERSION: "${{ env.version }}"
+        run: |
+          make android-lib
+          go clean -modcache
+          go clean -cache -testcache
+
       - name: Build Android installers
         env:
           INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
           SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
           VERSION: "${{ env.version }}"
         run: make package-android
-
-      - name: Clean Go module and build cache
-        run: |
-          go clean -modcache
-          go clean -cache -testcache
-          df -h
 
       - name: Delete Gradle cache
         run: |
