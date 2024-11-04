@@ -328,11 +328,18 @@ jobs:
           retention-days: 2
 
       - uses: actions/upload-artifact@v4
-        if: matrix.platform == 'android'
+        if: matrix.platform == 'android' && matrix.target == 'apk'
         with:
           name: android-apk-build
           retention-days: 2
           path: lantern-installer.apk
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.platform == 'android' && matrix.target == 'aab'
+        with:
+          name: android-aab-build
+          retention-days: 2
+          path: lantern-installer.aab
 
       - name: Upload DMG artifact
         uses: actions/upload-artifact@v4
