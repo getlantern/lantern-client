@@ -542,9 +542,6 @@ $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
-## APP_VERSION is the version defined in pubspec.yaml
-APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
-
 .PHONY: windows-release
 windows-release: ffigen
 	flutter_distributor package --flutter-build-args=verbose --platform windows --targets "msix,exe"
