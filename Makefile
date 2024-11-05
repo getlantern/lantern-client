@@ -483,7 +483,7 @@ ffigen:
 	dart run ffigen --config ffigen.yaml
 
 ## APP_VERSION is the version defined in pubspec.yaml
-APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //')
+APP_VERSION := $(shell grep '^version:' pubspec.yaml | sed 's/version: //;s/ //g')
 
 .PHONY: linux-amd64
 linux-amd64: export GOOS = linux
