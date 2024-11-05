@@ -141,20 +141,6 @@ jobs:
         with:
           name: android-aab-build
 
-      # - name: Download the IPA
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: Lantern.ipa
-
-      # - name: Upload Lantern to TestFlight
-      #   uses: apple-actions/upload-testflight-build@v1
-      #   if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
-      #   with:
-      #     app-path: Lantern.ipa
-      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
-
       - name: Upload Android App bundle to Play Store (beta)
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
         uses: r0adkll/upload-google-play@v1
@@ -187,7 +173,6 @@ jobs:
           mv lantern-${{env.version}}-x64.rpm ${{ env.prefix }}.rpm
           mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
           diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
-          mv -f Lantern.ipa ${{ env.prefix }}.ipa
 
       - name: Prepare sha256 sums
         run: |
@@ -197,7 +182,6 @@ jobs:
           shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
           shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
           shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
-          shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
 
       - name: Commit
         run: |
