@@ -169,8 +169,8 @@ jobs:
         run: |
           diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
           diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
-          mv lantern-${{env.version}}-x64.deb ${{ env.prefix }}-64-bit.deb
-          mv lantern-${{env.version}}-x64.rpm ${{ env.prefix }}.rpm
+          mv -f lantern-installer-x64.deb ${{ env.prefix }}-64-bit.deb
+          mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
           mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
           diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
 
