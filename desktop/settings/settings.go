@@ -706,8 +706,8 @@ func (s *Settings) setVal(name SettingName, val interface{}) {
 }
 
 func (s *Settings) setVals(vals map[SettingName]interface{}) {
-	s.log.Debugf("Setting %v in %v", vals, s.m)
 	s.Lock()
+	s.log.Debugf("Setting %v in %v", vals, s.m)
 	for name, val := range vals {
 		s.m[name] = val
 	}
