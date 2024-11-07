@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/1Password/srp"
+	"google.golang.org/protobuf/proto"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/config"
@@ -541,7 +543,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return apps, nil
 	case "updateAppsData":
-		appsData := arguments.Get("appsList").String()
+		appsData := arguments.Get("filePath").String()
 		err := m.updateAppsData(appsData)
 		if err != nil {
 			return nil, err
@@ -2370,23 +2372,28 @@ type AppInfo struct {
 	Icon        []int  `json:"icon"`
 }
 
-func (session *SessionModel) updateAppsData(appsList string) error {
-	var apps []AppInfo
-	err := json.Unmarshal([]byte(appsList), &apps)
+func (session *SessionModel) updateAppsData(filePath string) error {
+	// Read the JSON file
+	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
-		log.Fatalf("Error decoding JSON: %v", err)
+		log.Debugf("Error opening file: %v", err)
+		return err
 	}
 
+	log.Debugf("Successfully fileContent %v ", len(fileContent))
+	var appsList = &protos.AppsData{}
+	parseErr := proto.Unmarshal(fileContent, appsList)
+	if parseErr != nil {
+		log.Errorf("Error decoding JSON: %v", parseErr)
+		return parseErr
+	}
+
+	log.Debugf("Successfully loaded %d apps\n", len(appsList.AppsList))
+
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		for _, app := range apps {
+		for _, app := range appsList.AppsList {
 			path := pathAppsData + app.PackageName
-			imagebyte, _ := convertIntArrayToByteArray(app.Icon)
-			vpn := &protos.AppData{
-				PackageName: app.PackageName,
-				Name:        app.Name,
-				Icon:        imagebyte,
-			}
-			pathdb.PutIfAbsent(tx, path, vpn, "")
+			pathdb.PutIfAbsent(tx, path, app, "")
 		}
 		return nil
 	})
