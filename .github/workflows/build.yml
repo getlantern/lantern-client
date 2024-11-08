@@ -1,0 +1,371 @@
+name: Build Lantern
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      prefix:
+        type: string
+        required: true
+      version_file:
+        type: string
+        required: true
+      build-suffix: # "64" or ""
+        type: string
+        required: false
+      dist-suffix: # "64-bit" or "32-bit"
+        type: string
+        required: true
+      windows-arch:
+        type: string
+        required: true
+      installer-suffix: # "-x64" or ""
+        type: string
+        required: false
+      xcode_version:
+        type: string
+        required: true
+      macos_version:
+        type: string
+        required: true
+
+jobs:
+  build:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      version: ${{ inputs.version }}
+      prefix: ${{ inputs.prefix }}
+      AC_USERNAME: ${{ secrets.AC_USERNAME }}
+      AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
+      GOPRIVATE: github.com/getlantern
+      S3_BUCKET: lantern
+      INTERSTITIAL_AD_UNIT: "${{ secrets.INTERSTITIAL_AD_UNIT_ID }}"
+      SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
+      SENTRY_ORG: getlantern
+      SENTRY_PROJECT_IOS: lantern-ios
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            platform: macos
+          - os: windows-latest
+            platform: windows
+          - os: ubuntu-latest
+            platform: android
+            target: apk
+          - os: ubuntu-latest
+            platform: android
+            target: aab
+          - os: ubuntu-latest
+            platform: linux
+          # - os: macos-latest
+          #   platform: ios
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: Granting private modules access
+        run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Install latest protoc-gen-go
+        run: go install github.com/golang/protobuf/protoc-gen-go@latest
+
+      - name: Install WebView2 Runtime
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile "MicrosoftEdgeWebView2Setup.exe"
+          Start-Process -FilePath ".\MicrosoftEdgeWebView2Setup.exe" -ArgumentList "/silent", "/install" -Wait
+
+      - name: Set up MinGW
+        if: matrix.platform == 'windows'
+        run: choco install mingw -y
+
+      - name: Import Code Signing Certificates
+        if: matrix.platform == 'macos'
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.MACOS_BNS_CERT }}
+          p12-password: ${{ secrets.MACOS_BNS_CERT_PASS }}
+
+      - name: Install the Apple certificate and provisioning profile
+        if: matrix.platform == 'ios'
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
+          P12_PASSWORD: ${{ secrets.IOS_CERTIFICATE_P12_PASS }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE6 }}
+          BUILD_TUNNEL_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_TUNNEL_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          EXPORT_OPTIONS: ${{ secrets.EXPORT_OPTION_PLIST }}
+        run: |
+          set -x
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          TPP_PATH=$RUNNER_TEMP/build_tpp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          EXPORT_OPTIONS_PATH=$GITHUB_WORKSPACE/ExportOptions.plist
+
+          # import certificate from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          PROVISIONING_PROFILES_DIR=~/Library/MobileDevice/Provisioning\ Profiles
+          mkdir -p "$PROVISIONING_PROFILES_DIR"
+
+            # apply main provisioning profile
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+          # apply tunnel provisioning profile
+          echo -n "$BUILD_TUNNEL_PROVISION_PROFILE_BASE64" | base64 --decode -o $TPP_PATH
+          cp $TPP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+
+            # Create ExportOptions.plist
+          echo "$EXPORT_OPTIONS" | base64 --decode > "$EXPORT_OPTIONS_PATH"
+
+      - name: Setup Sentry CLI on Android
+        if: matrix.platform == 'android'
+        uses: mathieu-bour/setup-sentry-cli@v2
+        with:
+          version: latest
+          token: ${{ SECRETS.SENTRY_TOKEN }}
+          organization: getlantern
+          project: android
+
+      - name: Install Linux dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y file build-essential pkg-config
+          sudo apt-get install -y libwebkit2gtk-4.1-dev
+          sudo apt-get install -y libunwind-dev libstdc++-12-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-d cmake
+          sudo apt-get install -y libgtk-3-0 libblkid1 liblzma5
+          sudo apt-get install -y libpcap-dev libgtk-3-dev libayatana-appindicator3-dev ruby ruby-dev && sudo gem install bundler -v 2.2.26
+
+      - name: Install the ninja build tool
+        if: matrix.platform == 'linux'
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install node on macOS
+        uses: actions/setup-node@v4
+        if: matrix.platform == 'macos'
+        with:
+          node-version: 18
+    
+      - name: Install macOS dependencies
+        if: matrix.platform == 'macos'
+        run: |
+          npm install -g appdmg
+          brew tap joshdk/tap
+          brew install joshdk/tap/retry
+          brew install imagemagick || true
+
+      - name: Setup Xcode
+        if: matrix.platform == 'macos'
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ inputs.xcode_version }}
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - run: flutter --version
+
+      - name: Setup JDK
+        if: matrix.platform == 'android'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Set gradle properties
+        if: matrix.platform == 'android'
+        env:
+          GRADLE_PROPERTIES: ${{ secrets.GRADLE_PROPERTIES }}
+        run: |
+          mkdir -p ~/.gradle/
+          echo "GRADLE_USER_HOME=${HOME}/.gradle" >> $GITHUB_ENV
+          echo "${GRADLE_PROPERTIES}" > ~/.gradle/gradle.properties
+
+      - name: Decode Keystore
+        id: write_file
+        if: matrix.platform == 'android'
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'keystore.release.jks'
+          fileDir: './android/app'
+          encodedString: ${{ secrets.KEYSTORE }}
+
+      - name: Generate app.env
+        env:
+          ANDROID_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID }}
+          IOS_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID_IOS }}
+          TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID: ${{ secrets.TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID }}
+          TAPSELL_INTERSTITIAL_ZONE_ID: ${{ secrets.TAPSELL_INTERSTITIAL_ZONE_ID }}
+        run: |
+          touch app.env
+          echo "Android_interstitialAd=$ANDROID_INTERSTITIAL_AD_ID" > app.env
+          echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
+          echo "VideoInterstitialZoneId=$TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID" >> app.env
+          echo "InterstitialZoneId=$TAPSELL_INTERSTITIAL_ZONE_ID" >> app.env
+
+      - name: Setup protoc
+        uses: arduino/setup-protoc@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Lantern Library
+        shell: bash
+        run: make ${{matrix.platform}}
+
+      - name: Activate plugins
+        run: |
+          dart pub global activate protoc_plugin
+          dart pub global activate flutter_distributor
+
+      - name: Sign liblantern.dll with Azure Code Signing
+        if: matrix.platform == 'windows'
+        uses: getlantern/trusted-signing-action@main
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: https://wus2.codesigning.azure.net/
+          code-signing-account-name: code-signing
+          certificate-profile-name: Lantern
+          files-folder: ${{ github.workspace }}\
+          files-folder-filter: dll
+          file-digest: SHA256
+          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+          timestamp-digest: SHA256
+
+      - name: Move liblantern.dll to release directory
+        if: matrix.platform == 'windows'
+        shell: bash
+        run: |
+          mkdir -p "build/windows/${{inputs.windows-arch}}/runner/Release"
+          mv liblantern.dll "build/windows/${{inputs.windows-arch}}/runner/Release"
+
+      - name: Extract app version from pubspec.yaml
+        id: extract_version
+        shell: bash
+        run: |
+          APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+
+      - name: Build Flutter app (Windows)
+        if: matrix.platform == 'windows'
+        run: |
+          New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
+          flutter_distributor package --platform windows --targets exe --skip-clean
+        env:
+          VERSION: "${{ env.version }}"
+
+      - name: Build Flutter app (Android)
+        if: matrix.platform == 'android'
+        run: make ${{ matrix.platform }}-${{ matrix.target }}-release
+        env:
+          VERSION: "${{ env.version }}"
+
+      - name: Build Flutter app
+        if: matrix.platform != 'windows' && matrix.platform != 'android' 
+        run: make ${{ matrix.platform }}-release
+        env:
+          VERSION: "${{ env.version }}"
+
+      - name: Rename installer
+        if: matrix.platform == 'windows'
+        shell: bash
+        run: |
+          mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
+
+      - name: Sign EXE with Azure Code Signing
+        if: matrix.platform == 'windows'
+        uses: getlantern/trusted-signing-action@main
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: https://wus2.codesigning.azure.net/
+          code-signing-account-name: code-signing
+          certificate-profile-name: Lantern
+          files-folder: ${{ github.workspace }}/
+          files-folder-filter: exe,dll,msix
+          file-digest: SHA256
+          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+          timestamp-digest: SHA256
+
+      - name: Upload application
+        if: matrix.platform == 'ios'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lantern.ipa
+          path: ${{ github.workspace }}/build/ios/ipa/Lantern.ipa
+          retention-days: 2
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.platform == 'android' && matrix.target == 'apk'
+        with:
+          name: android-apk-build
+          retention-days: 2
+          path: lantern-installer.apk
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.platform == 'android' && matrix.target == 'aab'
+        with:
+          name: android-aab-build
+          retention-days: 2
+          path: lantern-installer.aab
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        if: matrix.platform == 'macos'
+        with:
+          name: macos-build
+          path: lantern-installer.dmg
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        if: matrix.platform == 'windows'
+        with:
+          name: windows${{inputs.build-suffix}}-installer-signed
+          path: |
+            lantern-installer${{inputs.installer-suffix}}.exe
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.platform == 'linux'
+        with:
+          name: linux-deb-build
+          path: |
+            lantern-installer-x64.deb
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.platform == 'linux'
+        with:
+          name: linux-rpm-build
+          path: |
+            lantern-installer-x64.rpm

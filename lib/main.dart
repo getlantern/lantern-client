@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
@@ -5,6 +7,7 @@ import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/replica/ui/utils.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:window_manager/window_manager.dart';
 
 // IOS issue
 // https://github.com/flutter/flutter/issues/133465
@@ -49,6 +52,9 @@ Future<void> main({bool testMode = false}) async {
 
 Future<void> _desktopService() async {
   if (!isDesktop()) return;
+  if (Platform.isWindows) await initializeWebViewEnvironment();
+  await windowManager.ensureInitialized();
+  await windowManager.setSize(const ui.Size(360, 712));
   // start backend services before setting up window
   LanternFFI.startDesktopService();
   await WebsocketSubscriber().connect();

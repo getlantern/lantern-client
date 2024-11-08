@@ -23,17 +23,15 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
     super.initState();
     if (isDesktop()) {
       windowManager.addListener(this);
-      _initializeWindow();
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await windowManager.setPreventClose(true);
-        await _setWindowResizable();
+        await _initializeWindow();
       });
     }
   }
 
   Future<void> _initializeWindow() async {
-    await windowManager.ensureInitialized();
-    await windowManager.setSize(const Size(360, 712));
+    await windowManager.setPreventClose(true);
+    await windowManager.setResizable(false);
     await windowManager.show();
     await windowManager.focus();
   }
@@ -42,27 +40,6 @@ class _WindowContainerState extends State<WindowContainer> with WindowListener {
   void dispose() {
     if (isDesktop()) windowManager.removeListener(this);
     super.dispose();
-  }
-
-  Future<void> _setWindowResizable() async {
-    if (!Platform.isWindows) {
-      await windowManager.setResizable(false);
-      return;
-    }
-    // temporary workaround for distorted layout on Windows. The problem goes away
-    // after the window is resized.
-    // See https://github.com/leanflutter/window_manager/issues/464
-    // and https://github.com/KRTirtho/spotube/issues/1553
-    await Future<void>.delayed(const Duration(milliseconds: 100), () async {
-      windowManager.getSize().then((Size value) {
-        windowManager
-            .setSize(
-              Size(value.width + 1, value.height + 1),
-            )
-            .then((_) => setState(() => {}));
-      });
-      await windowManager.setResizable(false);
-    });
   }
 
   @override
