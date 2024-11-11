@@ -4,7 +4,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"runtime/debug"
@@ -290,11 +289,9 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 	if err != nil {
 		log.Errorf("error redeeming reseller code: %v", err)
 		return sendError(err)
-	}
-	log.Debugf("response redeeming reseller code: %v", response)
-	if response != nil && response.Error != "" {
-		err = fmt.Errorf("error redeeming reseller code: %v", response.Error)
-		return sendError(log.Error(err))
+	} else if response.Error != "" {
+		log.Errorf("error redeeming reseller code: %v", response.Error)
+		return sendError(err)
 	}
 	log.Debug("redeeming reseller code success")
 	return C.CString("true")
