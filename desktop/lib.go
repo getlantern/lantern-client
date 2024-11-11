@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"runtime/debug"
@@ -12,7 +13,6 @@ import (
 	"time"
 
 	"github.com/getlantern/appdir"
-	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/logging"
@@ -287,16 +287,16 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 		ResellerCode:   C.GoString(resellerCode),
 		Provider:       "reseller-code",
 	})
-	log.Debugf("DEBUG: redeeming reseller code response: %v", response)
-	if response != nil && response.Error != "" {
-		log.Debugf("DEBUG: error while redeeming reseller code reponse is: %v", response.Error)
-		return sendError(errors.New("Error while redeeming reseller code: %v", response.Error))
-	}
 	if err != nil {
-		log.Debugf("DEBUG: error while redeeming reseller code: %v", err)
+		log.Errorf("error redeeming reseller code: %v", err)
 		return sendError(err)
 	}
-	log.Debug("DEBUG: redeeming reseller code success")
+	log.Debugf("response redeeming reseller code: %v", response)
+	if response != nil && response.Error != "" {
+		err = fmt.Errorf("error redeeming reseller code: %v", response.Error)
+		return sendError(log.Error(err))
+	}
+	log.Debug("redeeming reseller code success")
 	return C.CString("true")
 }
 
