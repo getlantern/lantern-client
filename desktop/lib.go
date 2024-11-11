@@ -288,7 +288,7 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 		Provider:       "reseller-code",
 	})
 	log.Debugf("DEBUG: redeeming reseller code response: %v", response)
-	if response.Error != "" {
+	if response != nil && response.Error != "" {
 		log.Debugf("DEBUG: error while redeeming reseller code reponse is: %v", response.Error)
 		return sendError(errors.New("Error while redeeming reseller code: %v", response.Error))
 	}
