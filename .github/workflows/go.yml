@@ -26,6 +26,11 @@ jobs:
       run: |
           git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
+    - name: Setup protoc
+      uses: arduino/setup-protoc@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Build
       run: LIB_NAME=liblantern.so make lantern
 

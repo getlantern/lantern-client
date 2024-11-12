@@ -78,8 +78,10 @@ jobs:
       - name: Granting private modules access
         run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v3
+      - name: Setup protoc
+        uses: arduino/setup-protoc@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install latest protoc-gen-go
         run: go install github.com/golang/protobuf/protoc-gen-go@latest
@@ -235,11 +237,6 @@ jobs:
           echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
           echo "VideoInterstitialZoneId=$TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID" >> app.env
           echo "InterstitialZoneId=$TAPSELL_INTERSTITIAL_ZONE_ID" >> app.env
-
-      - name: Setup protoc
-        uses: arduino/setup-protoc@v2
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Extract app version from pubspec.yaml
         id: extract_version
