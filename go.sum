@@ -426,8 +426,8 @@ github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627 h1:eYXtxjR
 github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627/go.mod h1:QJUudepmTj/KQXnReV6DZSJY/xO05fnfcZf3t8zkNLg=
 github.com/getlantern/shortcut v0.0.0-20211026183428-bf59a137fdec h1:8TfjIMydnhBs4edmXu2Nz1f2P0QOcXfol2rR1cxfrSs=
 github.com/getlantern/shortcut v0.0.0-20211026183428-bf59a137fdec/go.mod h1:3VQ6qvEBehqDBNbEKfNtSjK6MR5ydOdjMPgKjKay7vo=
-github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b h1:sn68kKTXZ6k7vyhPfYvjtoDSMufTlvvkAZ6Y+VJ25ZA=
-github.com/getlantern/sysproxy v0.0.0-20230319110552-63a8cacb7b9b/go.mod h1:qjD2ty3qu7E12mJ2gVU/I2wCuebaLR5ePSQLY3eXrDQ=
+github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb h1:9eaFCu1MZ5yp1vpg6KNOkjTzQnfo2MAbgqOqL/AnmAw=
+github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb/go.mod h1:sIaf1EQGv8d+l71iPiFYiLJtBp9fRy5wgO3mTFXSPzM=
 github.com/getlantern/telemetry v0.0.0-20230523155019-be7c1d8cd8cb h1:6XZ3Q4oD6A1Tjq6QLgzzQrdQ8FvulzW16HhNQOSECAM=
 github.com/getlantern/telemetry v0.0.0-20230523155019-be7c1d8cd8cb/go.mod h1:nGOdDc0aD/LRTaY2SGKQ7nsYcWFXrhgkrhIhJuYN614=
 github.com/getlantern/testify v0.0.0-20160317154340-2eeb3906e78f h1:R6iv+VzCrbxlBm2TcgyJi9c7tQguNXi9JmIvuUJKrdc=
