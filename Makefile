@@ -105,10 +105,8 @@ CIBASE := $(shell printf "CI=$${CI:-false}" | base64)
 STAGING = false
 UPDATE_SERVER_URL ?=
 VERSION ?= 9999.99.99
-# Note - we don't bother stripping symbols or DWARF table as Android's packaging seems to take care of that for us
-LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDate=$(REVISION_DATE) \
--X github.com/getlantern/lantern-client/internalsdk/common.ApplicationVersion=$(VERSION) \
--X github.com/getlantern/lantern-client/internalsdk/common.BuildDate=$(BUILD_DATE)
+
+LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/lantern-client/internalsdk/common.BuildDate=$(BUILD_DATE)
 
 # Ref https://pkg.go.dev/cmd/link
 # -w omits the DWARF table
@@ -217,6 +215,20 @@ dumpvars:
 		$(filter-out $(VARS_OLD) VARS_OLD,$(.VARIABLES)), \
 		$(info $(v) = $($(v))))
 
+EXTRA_LDFLAGS ?=
+
+ifdef VERSION
+EXTRA_LDFLAGS += -X github.com/getlantern/lantern-client/internalsdk/common.ApplicationVersion=$(VERSION)
+endif
+
+ifdef REPLICA
+EXTRA_LDFLAGS += -X github.com/getlantern/antern-client/desktop/features.EnableReplicaFeatures=$(REPLICA)
+endif
+
+ifdef TRAFFICLOG
+EXTRA_LDFLAGS += -X github.com/getlantern/lantern-client/desktop/features.EnableTrafficlogFeatures=true
+endif
+
 .PHONY: tag
 tag: require-version
 	@(git diff-index --quiet HEAD -- || (echo "Attempted to tag dirty working tree" && exit 1)) && \
@@ -242,6 +254,10 @@ require-app: guard-APP
 
 .PHONY: require-version
 require-version: guard-VERSION
+	@if ! [[ "$$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-.+)?$$ ]]; then \
+		echo "VERSION must be a semantic version like '1.2.10' or '1.2.10-foo"; \
+		exit 1; \
+	fi
 
 .PHONY: require-sentry-auth-token
 require-secrets-dir: guard-SENTRY_AUTH_TOKEN
@@ -469,7 +485,7 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 .PHONY: desktop-lib ffigen
 
 desktop-lib: export GOPRIVATE = github.com/getlantern
-desktop-lib: echo-build-tags
+desktop-lib: $(GO_SOURCES) echo-build-tags
 	CGO_ENABLED=1 go build -v -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
 # This runs a development build for lantern. For production builds, see
