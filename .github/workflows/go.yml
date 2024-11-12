@@ -31,6 +31,9 @@ jobs:
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Install latest protoc-gen-go
+      run: go install github.com/golang/protobuf/protoc-gen-go@latest
+
     - name: Build
       run: LIB_NAME=liblantern.so make lantern
 
