@@ -27,7 +27,6 @@ String getSystemTrayIconPath(BuildContext context, bool connected) {
     final brightness = PlatformDispatcher.instance.platformBrightness;
     // Check if the theme is dark
     final isDarkMode = brightness == Brightness.dark;
-    // Check if the theme is dark
     if (isDarkMode) {
       return connected
           ? ImagePaths.lanternLightConnected
