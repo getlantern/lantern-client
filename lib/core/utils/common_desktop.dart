@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:lantern/common/ui/image_paths.dart';
 
 export 'dart:convert';
@@ -15,14 +17,27 @@ export 'package:lantern/core/service/lantern_ffi_service.dart';
 export 'package:web_socket_channel/io.dart';
 export 'package:web_socket_channel/web_socket_channel.dart';
 
-
-String getSystemTrayIconPath(bool connected) {
-  if (connected) {
-    return Platform.isWindows
+String getSystemTrayIconPath(BuildContext context, bool connected) {
+  if (Platform.isWindows) {
+    return connected
         ? ImagePaths.lanternConnectedIco
-        : ImagePaths.lanternConnected;
+        : ImagePaths.lanternDisconnectedIco;
+  } else if (Platform.isMacOS) {
+    // Use platform brightness to identify system theme
+    final brightness = PlatformDispatcher.instance.platformBrightness;
+    // Check if the theme is dark
+    final isDarkMode = brightness == Brightness.dark;
+    if (isDarkMode) {
+      return connected
+          ? ImagePaths.lanternLightConnected
+          : ImagePaths.lanternLightDisconnected;
+    }
+    return connected
+        ? ImagePaths.lanternDarkConnected
+        : ImagePaths.lanternDarkDisconnected;
   }
-  return Platform.isWindows
-      ? ImagePaths.lanternDisconnectedIco
+
+  return connected
+      ? ImagePaths.lanternConnected
       : ImagePaths.lanternDisconnected;
 }
