@@ -48,7 +48,7 @@ class _TrayContainerState extends State<TrayContainer> with TrayListener {
   Future<void> _updateTrayMenu() async {
     final vpnNotifier = context.read<VPNChangeNotifier>();
     final isConnected = vpnNotifier.isConnected();
-    await trayManager.setIcon(getSystemTrayIconPath(isConnected));
+    trayManager.setIcon(getSystemTrayIconPath(context, isConnected));
     Menu menu = Menu(
       items: [
         MenuItem(
