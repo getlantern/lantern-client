@@ -75,7 +75,6 @@ func (c testSession) SetAuthEnabled(enabled bool)                        {}
 func (c testSession) SetMatomoEnabled(bool)                              {}
 func (c testSession) IsPlayVersion() (bool, error)                       { return false, nil }
 func (c testSession) SetShowGoogleAds(enabled bool)                      {}
-func (c testSession) SetShowTapSellAds(enabled bool)                     {}
 func (c testSession) SetHasConfigFetched(enabled bool)                   {}
 func (c testSession) SetHasProxyFetched(enabled bool)                    {}
 func (c testSession) SetOnSuccess(enabled bool)                          {}

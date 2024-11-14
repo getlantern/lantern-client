@@ -602,11 +602,6 @@ func (_m *Session) SetShowGoogleAds(_a0 bool) {
 	_m.Called(_a0)
 }
 
-// SetShowTapSellAds provides a mock function with given fields: _a0
-func (_m *Session) SetShowTapSellAds(_a0 bool) {
-	_m.Called(_a0)
-}
-
 // SetStaging provides a mock function with given fields: _a0
 func (_m *Session) SetStaging(_a0 bool) error {
 	ret := _m.Called(_a0)
