@@ -10,6 +10,7 @@ import (
 
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
+
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -61,7 +62,7 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 		log.Debug("using proxied.Fronted")
 		//this is ios version
 		httpClient = &http.Client{
-			Transport: proxied.Fronted(30 * time.Second),
+			Transport: proxied.Fronted("internalsdk_auth_fronted", 30*time.Second),
 		}
 	} else {
 		log.Debug("using proxied.ChainedNonPersistent")
