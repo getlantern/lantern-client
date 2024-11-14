@@ -537,7 +537,7 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 		config.ForceCountry(forcedCountryCode)
 	}
 
-	userConfig := newUserConfig(session)
+	userConfig := &userConfig{session}
 	globalConfigChanged := make(chan interface{})
 	geoRefreshed := geolookup.OnRefresh()
 

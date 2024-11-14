@@ -32,27 +32,10 @@ func createProClient(session ClientSession, platform string) pro.ProClient {
 		dialTimeout = 20 * time.Second
 	}
 	webclientOpts := &webclient.Opts{
-		Timeout: dialTimeout,
-		UserConfig: func() common.UserConfig {
-			internalHeaders := map[string]string{
-				common.PlatformHeader:   platform,
-				common.AppVersionHeader: common.ApplicationVersion,
-			}
-			deviceID, _ := session.GetDeviceID()
-			userID, _ := session.GetUserID()
-			token, _ := session.GetToken()
-			lang, _ := session.Locale()
-			return common.NewUserConfig(
-				common.DefaultAppName,
-				deviceID,
-				userID,
-				token,
-				internalHeaders,
-				lang,
-			)
-		},
+		Timeout:    dialTimeout,
+		UserConfig: newUserConfig(session, platform),
 	}
-	return pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+	return pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIBaseURL), webclientOpts)
 }
 
 func BytesToFloat64LittleEndian(b []byte) (float64, error) {

@@ -158,35 +158,13 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m := &SessionModel{baseModel: base}
 
-	deviceID, _ := m.GetDeviceID()
-	userID, _ := m.GetUserID()
-	token, _ := m.GetToken()
-	lang, _ := m.Locale()
-
 	m.proClient = createProClient(m, opts.Platform)
 
-	authUrl := common.DFBaseUrl
-	if opts.Platform == "ios" {
-		authUrl = common.APIBaseUrl
-	}
-	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), func() common.UserConfig {
-		internalHeaders := map[string]string{
-			common.PlatformHeader:   opts.Platform,
-			common.AppVersionHeader: common.ApplicationVersion,
-		}
-		return common.NewUserConfig(
-			common.DefaultAppName,
-			deviceID,
-			userID,
-			token,
-			internalHeaders,
-			lang,
-		)
-	})
+	m.authClient = auth.NewClient(common.APIBaseURL, newUserConfig(m, opts.Platform))
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
-		go m.setupIosConfigure(opts.ConfigPath, int(userID), token, deviceID)
+		go m.setupIosConfigure(opts.ConfigPath)
 	}
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
@@ -194,9 +172,12 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 // setupIosConfigure sets up the iOS configuration for the session model.
 // It continuously checks if the global configuration is available and retries every second if not.
-func (m *SessionModel) setupIosConfigure(configPath string, userId int, token string, deviceId string) {
+func (m *SessionModel) setupIosConfigure(configPath string) {
+	deviceId, _ := m.GetDeviceID()
+	userId, _ := m.GetUserID()
+	token, _ := m.GetToken()
 	go func() {
-		cf := ios.NewConfigurer(configPath, userId, token, deviceId, "")
+		cf := ios.NewConfigurer(configPath, int(userId), token, deviceId, "")
 		ticker := time.NewTicker(1 * time.Second)
 		defer ticker.Stop()
 		for range ticker.C {

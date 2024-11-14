@@ -53,8 +53,25 @@ func (uc *userConfig) GetInternalHeaders() map[string]string {
 	return h
 }
 
-func newUserConfig(session PanickingSession) *userConfig {
-	return &userConfig{session: session}
+func newUserConfig(session ClientSession, platform string) func() common.UserConfig {
+	return func() common.UserConfig {
+		internalHeaders := map[string]string{
+			common.PlatformHeader:   platform,
+			common.AppVersionHeader: common.ApplicationVersion,
+		}
+		deviceID, _ := session.GetDeviceID()
+		userID, _ := session.GetUserID()
+		token, _ := session.GetToken()
+		lang, _ := session.Locale()
+		return common.NewUserConfig(
+			common.DefaultAppName,
+			deviceID,
+			userID,
+			token,
+			internalHeaders,
+			lang,
+		)
+	}
 }
 
 func createUser(ctx context.Context, proClient pro.ProClient, session ClientSession) error {
