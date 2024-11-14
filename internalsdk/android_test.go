@@ -15,6 +15,7 @@ import (
 	"golang.org/x/net/proxy"
 
 	"github.com/getlantern/flashlight/v7/integrationtest"
+
 	"github.com/getlantern/lantern-client/internalsdk/common"
 
 	"github.com/stretchr/testify/assert"
@@ -95,10 +96,6 @@ func TestProxying(t *testing.T) {
 		newResult, err := Start("testapp", "en_US", testSettings{}, testSession{})
 		require.NoError(t, err, "Should have been able to start lantern twice")
 		require.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address")
-
-		// give the client time to initialize. This helps with consistency in tests
-		time.Sleep(1 * time.Second)
-
 		err = testProxiedRequest(helper, result.HTTPAddr, result.DNSGrabAddr, false)
 		require.NoError(t, err, "Proxying request via HTTP should have worked")
 		err = testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
