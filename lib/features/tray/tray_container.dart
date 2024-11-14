@@ -43,26 +43,6 @@ class _TrayContainerState extends State<TrayContainer> with TrayListener {
     final vpnNotifier = context.read<VPNChangeNotifier>();
     await _updateTrayMenu();
     vpnNotifier.vpnStatus.addListener(_updateTrayMenu);
-    // Listen for changes in platform brightness
-    PlatformDispatcher.instance.onPlatformBrightnessChanged = () {
-      trayManager.setIcon(
-        _trayIconBasedOnBrightness(),
-        isTemplate: true,
-      );
-    };
-  }
-
-  String _trayIconBasedOnBrightness() {
-    final vpnNotifier = context.read<VPNChangeNotifier>();
-    final isConnected = vpnNotifier.isConnected();
-    // Check the current brightness
-    final brightness = PlatformDispatcher.instance.platformBrightness;
-    print("Brightness is $brightness");
-
-    // Set the tray icon based on brightness
-    return isConnected
-        ? ImagePaths.lanternDarkConnected
-        : ImagePaths.lanternDarkDisconnected;
   }
 
   String getSystemTrayIconPath(BuildContext context, bool connected) {
@@ -71,7 +51,9 @@ class _TrayContainerState extends State<TrayContainer> with TrayListener {
           ? ImagePaths.lanternConnectedIco
           : ImagePaths.lanternDisconnectedIco;
     } else if (Platform.isMacOS) {
-      return _trayIconBasedOnBrightness();
+      return connected
+          ? ImagePaths.lanternDarkConnected
+          : ImagePaths.lanternDarkDisconnected;
     }
 
     return connected
