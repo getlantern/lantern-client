@@ -102,7 +102,6 @@ type Session interface {
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
 	SetShowGoogleAds(bool)
-	SetShowTapSellAds(bool)
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
 	SetUserIdAndToken(int64, string) error
@@ -139,7 +138,6 @@ type PanickingSession interface {
 	SetIP(string)
 	SplitTunnelingEnabled() bool
 	SetShowGoogleAds(bool)
-	SetShowTapSellAds(bool)
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
@@ -299,10 +297,6 @@ func (s *panickingSessionImpl) SetAuthEnabled(enabled bool) {
 
 func (s *panickingSessionImpl) SetShowGoogleAds(enabled bool) {
 	s.wrapped.SetShowGoogleAds(enabled)
-}
-
-func (s *panickingSessionImpl) SetShowTapSellAds(enabled bool) {
-	s.wrapped.SetShowTapSellAds(enabled)
 }
 
 func (s *panickingSessionImpl) SetUserIdAndToken(userID int64, token string) {
@@ -613,15 +607,9 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 			showAdsEnabled := runner.FeatureEnabled(config.FeatureInterstitialAds, common.ApplicationVersion)
 			log.Debugf("Feature: Show ads enabled? %v", showAdsEnabled)
 			session.SetShowGoogleAds(showAdsEnabled)
-
-			showTapSellAdsEnabled := runner.FeatureEnabled(config.FeatureTapsellAds, common.ApplicationVersion)
-			log.Debugf("Feature: Show tapsell ads enabled? %v", showTapSellAdsEnabled)
-			session.SetShowTapSellAds(showTapSellAdsEnabled)
-
 		} else {
 			// Explicitly disable ads for Pro users.
 			session.SetShowGoogleAds(false)
-			session.SetShowTapSellAds(false)
 		}
 	}
 
