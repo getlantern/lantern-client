@@ -45,7 +45,7 @@ class _TrayContainerState extends State<TrayContainer> with TrayListener {
     vpnNotifier.vpnStatus.addListener(_updateTrayMenu);
   }
 
-  String getSystemTrayIconPath(BuildContext context, bool connected) {
+  String _getSystemTrayIconPath(bool connected) {
     if (Platform.isWindows) {
       return connected
           ? ImagePaths.lanternConnectedIco
@@ -64,8 +64,8 @@ class _TrayContainerState extends State<TrayContainer> with TrayListener {
   Future<void> _updateTrayMenu() async {
     final vpnNotifier = context.read<VPNChangeNotifier>();
     final isConnected = vpnNotifier.isConnected();
-    trayManager.setIcon(getSystemTrayIconPath(context, isConnected),
-        isTemplate: true);
+    await trayManager.setIcon(_getSystemTrayIconPath(isConnected),
+        isTemplate: Platform.isMacOS);
     Menu menu = Menu(
       items: [
         MenuItem(
