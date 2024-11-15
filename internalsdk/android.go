@@ -17,18 +17,19 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/lantern-client/internalsdk/analytics"
-	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/mtime"
 	"github.com/getsentry/sentry-go"
+
+	"github.com/getlantern/lantern-client/internalsdk/analytics"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 
 	// import gomobile just to make sure it stays in go.mod
 	_ "golang.org/x/mobile/bind/java"
@@ -562,7 +563,7 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 		flashlight.WithOnConfig(func(g *config.Global, s config.Source) {
 			session.SetHasConfigFetched(true)
 		}),
-		flashlight.WithOnProxies(func(d []bandit.Dialer, s config.Source) {
+		flashlight.WithOnProxies(func(d []dialer.ProxyDialer, s config.Source) {
 			session.SetHasProxyFetched(true)
 		}),
 		flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
