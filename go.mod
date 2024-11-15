@@ -8,7 +8,7 @@ go 1.23
 // replace github.com/getlantern/fronted => ../fronted
 // replace github.com/getlantern/pathdb => ../pathDb/pathDb
 
-replace github.com/getlantern/flashlight/v7 => github.com/getlantern/flashlight/v7 v7.6.133-0.20241115000854-b11f96c88108
+// replace github.com/getlantern/flashlight/v7 => github.com/getlantern/flashlight/v7 v7.6.133-0.20241115000854-b11f96c88108
 
 replace github.com/elazarl/goproxy => github.com/getlantern/goproxy v0.0.0-20220805074304-4a43a9ed4ec6
 
@@ -81,7 +81,10 @@ require (
 	nhooyr.io/websocket v1.8.17
 )
 
-require github.com/coder/websocket v1.8.12 // indirect
+require (
+	github.com/coder/websocket v1.8.12 // indirect
+	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 // indirect
+)
 
 require (
 	filippo.io/edwards25519 v1.0.0 // indirect
