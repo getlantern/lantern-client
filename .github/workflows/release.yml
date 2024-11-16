@@ -197,7 +197,6 @@ jobs:
           shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
           shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
           shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
-          shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
 
       - name: Commit
         run: |
