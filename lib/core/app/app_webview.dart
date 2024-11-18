@@ -155,8 +155,16 @@ Future<void> initializeWebViewEnvironment() async {
 }
 
 // openWithSystemBrowser opens a URL in the browser
-Future<void> openWithSystemBrowser(String url) async =>
-    await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+Future<void> openWithSystemBrowser(String url) async {
+  switch (Platform.operatingSystem) {
+    case 'linux':
+      final webview = await WebviewWindow.create();
+      webview.launch(url);
+      break;
+    default:
+      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+  }
+}
 
 Future<void> openWebview(BuildContext context, String url,
     [String? title]) async {
