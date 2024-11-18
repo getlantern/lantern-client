@@ -29,9 +29,9 @@ dependencies:
     sdk: flutter
 
   # State management and Data handling
-  provider: ^6.0.5
+  provider: ^6.1.2
   protobuf: any
-  uuid: ^4.4.0
+  uuid: ^4.5.1
 
   sliver_tools: ^0.2.12
 
@@ -95,7 +95,7 @@ dependencies:
 
   # URL & Sharing utilities
   url_launcher: ^6.3.0
-  share_plus: ^10.0.2
+  share_plus: ^10.1.2
   flutter_inappwebview: ^6.1.5
   desktop_webview_window: ^0.2.3
 
@@ -103,11 +103,11 @@ dependencies:
   window_manager: ^0.4.3
   tray_manager: ^0.2.4
 
-  flutter_dotenv: ^5.1.0
+  flutter_dotenv: ^5.2.1
 
   # Notifications & Logging
   flutter_local_notifications: ^18.0.1
-  logger: ^2.4.0
+  logger: ^2.5.0
 
   # Error handling
   device_info_plus: ^11.1.1
@@ -116,9 +116,9 @@ dependencies:
   package_info_plus: ^8.0.2
 
   # Path, permission & Markdown handling
-  path_provider: ^2.1.4
+  path_provider: ^2.1.5
   permission_handler: ^11.3.1
-  flutter_markdown: ^0.7.3+2
+  flutter_markdown: ^0.7.4+1
 
   # Purchase
   in_app_purchase: ^3.2.0
@@ -132,7 +132,7 @@ dependencies:
   # Deeplink handling
   app_links: ^6.3.2
   # Service Locator
-  get_it: ^8.0.0
+  get_it: ^8.0.2
   #Loading
   animated_loading_border: ^0.0.2
   shimmer: ^3.0.0
