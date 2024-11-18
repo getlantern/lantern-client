@@ -84,8 +84,8 @@ class MainActivity :
             opts.platform = DeviceUtil.devicePlatform()
             opts.developmentMode = BuildConfig.DEVELOPMENT_MODE
             opts.timeZone = TimeZone.getDefault().displayName
-            vpnModel = VpnModel(flutterEngine, ::switchLantern)
             sessionModel = SessionModel(this, flutterEngine, opts)
+            vpnModel = VpnModel(flutterEngine, ::switchLantern)
 
             messagingModel = MessagingModel(this, flutterEngine, LanternApp.messaging.messaging)
             replicaModel = ReplicaModel(this, flutterEngine)
@@ -201,6 +201,7 @@ class MainActivity :
         super.onDestroy()
         accountInitDialog?.let { it.dismiss() }
         vpnModel.destroy()
+
         sessionModel.destroy()
         replicaModel.destroy()
         if (sessionModel.chatEnabled()) {

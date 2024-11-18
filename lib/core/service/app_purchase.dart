@@ -154,7 +154,7 @@ class AppPurchase {
         }
       }
     } catch (e, stacktrace) {
-      Sentry.captureException(e, stackTrace: stacktrace);
+      Sentry.captureException(e, stackTrace: stacktrace, hint: Hint.withMap({'planId': planId}));
       mainLogger.e('Failed to get price from plan');
     }
     return "";
