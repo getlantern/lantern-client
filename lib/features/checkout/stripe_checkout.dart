@@ -80,7 +80,7 @@ class _StripeCheckoutState extends State<StripeCheckout> {
       if (!determineFormIsValid()) {
         return;
       }
-      context.loaderOverlay.show(widget: spinner);
+      context.loaderOverlay.show();
       await sessionModel.submitStripePayment(
         widget.plan.id,
         widget.email,
