@@ -24,6 +24,7 @@ import (
 
 type testSession struct {
 	serializedInternalHeaders string
+	rdy                       chan bool
 }
 
 type testSettings struct {
@@ -77,30 +78,48 @@ func (c testSession) IsPlayVersion() (bool, error)                       { retur
 func (c testSession) SetShowGoogleAds(enabled bool)                      {}
 func (c testSession) SetHasConfigFetched(enabled bool)                   {}
 func (c testSession) SetHasProxyFetched(enabled bool)                    {}
-func (c testSession) SetOnSuccess(enabled bool)                          {}
 func (c testSession) ChatEnable() bool                                   { return false }
+
+func (c testSession) SetOnSuccess(enabled bool) {
+	if !enabled {
+		return
+	}
+	// we need to wait for flashlight.fastConnect dialer to "test" and get a successful connection
+	// before any dialer can be used ("no top dialer" error)
+	select {
+	case c.rdy <- true:
+	default:
+	}
+}
 
 func (c testSession) SerializedInternalHeaders() (string, error) {
 	return c.serializedInternalHeaders, nil
 }
 
 func TestProxying(t *testing.T) {
-
 	baseListenPort := 24000
 	helper, err := integrationtest.NewHelper(t, baseListenPort)
-	if assert.NoError(t, err, "Unable to create temp configDir") {
-		defer helper.Close()
-		result, err := Start(helper.ConfigDir, "en_US", testSettings{}, testSession{})
-		require.NoError(t, err, "Should have been able to start lantern")
-		newResult, err := Start("testapp", "en_US", testSettings{}, testSession{})
-		require.NoError(t, err, "Should have been able to start lantern twice")
-		require.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address")
-		err = testProxiedRequest(helper, result.HTTPAddr, result.DNSGrabAddr, false)
-		require.NoError(t, err, "Proxying request via HTTP should have worked")
-		err = testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
-		assert.NoError(t, err, "Proxying request via SOCKS should have worked")
-		// testRelay(t)
-	}
+	require.NoError(t, err, "Unable to create temp configDir")
+	defer helper.Close()
+
+	tSess := testSession{rdy: make(chan bool, 1)}
+	result, err := Start(helper.ConfigDir, "en_US", testSettings{}, tSess)
+	require.NoError(t, err, "Should have been able to start lantern")
+	newResult, err := Start("testapp", "en_US", testSettings{}, tSess)
+	require.NoError(t, err, "Should have been able to start lantern twice")
+	require.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address")
+
+	assert.Eventually(t,
+		func() bool { return <-tSess.rdy },
+		4*time.Second,
+		10*time.Millisecond,
+		"Should have received onSuccess callback",
+	)
+	err = testProxiedRequest(helper, result.HTTPAddr, result.DNSGrabAddr, false)
+	require.NoError(t, err, "Proxying request via HTTP should have worked")
+	err = testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
+	assert.NoError(t, err, "Proxying request via SOCKS should have worked")
+	// testRelay(t)
 }
 
 func testProxiedRequest(helper *integrationtest.Helper, proxyAddr string, dnsGrabAddr string, socks bool) error {
