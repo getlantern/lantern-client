@@ -12,11 +12,12 @@ import (
 	"github.com/getlantern/dnsgrab"
 	"github.com/getlantern/dnsgrab/persistentcache"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/chained"
+	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/ipproxy"
+
 	"github.com/getlantern/lantern-client/internalsdk/common"
 )
 
@@ -115,7 +116,7 @@ type BandwidthTracker interface {
 type cw struct {
 	ipStack        io.WriteCloser
 	client         *iosClient
-	dialer         *bandit.BanditDialer
+	dialer         dialer.Dialer
 	ipp            ipproxy.Proxy
 	quotaTextPath  string
 	lastSavedQuota time.Time
@@ -136,7 +137,7 @@ func (c *cw) Reconfigure() {
 		panic(log.Errorf("Unable to load dialers on reconfigure: %v", err))
 	}
 
-	c.dialer, err = bandit.New(bandit.Options{
+	c.dialer = dialer.New(&dialer.Options{
 		Dialers: dialers,
 	})
 	if err != nil {
@@ -215,9 +216,8 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, errors.New("No dialers found")
 	}
 	tracker := stats.NewTracker()
-	dialer, err := bandit.New(bandit.Options{
-		Dialers:      dialers,
-		StatsTracker: tracker,
+	dialer := dialer.New(&dialer.Options{
+		Dialers: dialers,
 	})
 	if err != nil {
 		return nil, err
@@ -313,7 +313,7 @@ func (c *iosClient) loadUserConfig() error {
 	return nil
 }
 
-func (c *iosClient) loadDialers() ([]bandit.Dialer, error) {
+func (c *iosClient) loadDialers() ([]dialer.ProxyDialer, error) {
 	cf := &configurer{configFolderPath: c.configDir}
 	chained.PersistSessionStates(c.configDir)
 

@@ -97,7 +97,7 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
 
 #### macOS
 
-* `make darwin`
+* `make macos`
 * `make ffigen`
 * `flutter run -d macos`
 

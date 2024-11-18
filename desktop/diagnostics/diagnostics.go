@@ -8,7 +8,7 @@ import (
 
 	"github.com/getlantern/diagnostics"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/bandit"
+	"github.com/getlantern/flashlight/v7/dialer"
 )
 
 const (
@@ -33,7 +33,7 @@ type Report struct {
 }
 
 // Run the diagnostics.
-func Run(proxies []bandit.Dialer) Report {
+func Run(proxies []dialer.ProxyDialer) Report {
 	s := newSuite()
 	s.initAndAdd(func() (*diagnostic, error) {
 		defaultGateway, err := gateway.DiscoverGateway()
