@@ -41,7 +41,7 @@ dependencies:
   flag: ^7.0.0
 
   #Loogs and crash reporting
-  sentry_flutter: ^8.9.0
+  sentry_flutter: ^8.10.1
 
   badges: ^3.1.2
   dotted_border: ^2.1.0
@@ -124,9 +124,7 @@ dependencies:
   in_app_purchase: ^3.2.0
 
   # Ads
-  google_mobile_ads: ^5.1.0
-  tapsell_mediation: ^1.0.1-beta06
-  tapsell_mediation_legacy: ^1.0.1-beta06
+  google_mobile_ads: ^5.2.0
 
   retry: ^3.1.2
   # Generate bindings to native libraries
@@ -146,11 +144,11 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  ffigen: ^15.0.0
+  ffigen: ^16.0.0
   flutter_lints: ^5.0.0
   mockito: ^5.4.4
   auto_route_generator: ^9.0.0
-  build_runner: ^2.4.12
+  build_runner: ^2.4.13
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

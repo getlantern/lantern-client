@@ -17,18 +17,19 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
-	"github.com/getlantern/lantern-client/internalsdk/analytics"
-	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/mtime"
 	"github.com/getsentry/sentry-go"
+
+	"github.com/getlantern/lantern-client/internalsdk/analytics"
+	"github.com/getlantern/lantern-client/internalsdk/common"
 
 	// import gomobile just to make sure it stays in go.mod
 	_ "golang.org/x/mobile/bind/java"
@@ -102,7 +103,6 @@ type Session interface {
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
 	SetShowGoogleAds(bool)
-	SetShowTapSellAds(bool)
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
 	SetUserIdAndToken(int64, string) error
@@ -139,7 +139,6 @@ type PanickingSession interface {
 	SetIP(string)
 	SplitTunnelingEnabled() bool
 	SetShowGoogleAds(bool)
-	SetShowTapSellAds(bool)
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
@@ -299,10 +298,6 @@ func (s *panickingSessionImpl) SetAuthEnabled(enabled bool) {
 
 func (s *panickingSessionImpl) SetShowGoogleAds(enabled bool) {
 	s.wrapped.SetShowGoogleAds(enabled)
-}
-
-func (s *panickingSessionImpl) SetShowTapSellAds(enabled bool) {
-	s.wrapped.SetShowTapSellAds(enabled)
 }
 
 func (s *panickingSessionImpl) SetUserIdAndToken(userID int64, token string) {
@@ -568,7 +563,7 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 		flashlight.WithOnConfig(func(g *config.Global, s config.Source) {
 			session.SetHasConfigFetched(true)
 		}),
-		flashlight.WithOnProxies(func(d []bandit.Dialer, s config.Source) {
+		flashlight.WithOnProxies(func(d []dialer.ProxyDialer, s config.Source) {
 			session.SetHasProxyFetched(true)
 		}),
 		flashlight.WithOnDialError(func(err error, hasSucceeding bool) {
@@ -613,15 +608,9 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 			showAdsEnabled := runner.FeatureEnabled(config.FeatureInterstitialAds, common.ApplicationVersion)
 			log.Debugf("Feature: Show ads enabled? %v", showAdsEnabled)
 			session.SetShowGoogleAds(showAdsEnabled)
-
-			showTapSellAdsEnabled := runner.FeatureEnabled(config.FeatureTapsellAds, common.ApplicationVersion)
-			log.Debugf("Feature: Show tapsell ads enabled? %v", showTapSellAdsEnabled)
-			session.SetShowTapSellAds(showTapSellAdsEnabled)
-
 		} else {
 			// Explicitly disable ads for Pro users.
 			session.SetShowGoogleAds(false)
-			session.SetShowTapSellAds(false)
 		}
 	}
 

@@ -82,7 +82,6 @@ const (
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
 	pathShowAds                = "showAds"
-	pathTapSellAdsEnabled      = "tapsellAdsEnabled"
 	pathStoreVersion           = "storeVersion"
 	pathTestPlayVersion        = "testPlayVersion"
 	pathServerInfo             = "/server_info"
@@ -776,9 +775,6 @@ func (m *SessionModel) checkAvailableFeatures() {
 	// Check for ads feature
 	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
 	m.SetShowGoogleAds(googleAdsEnabled)
-
-	tapSellAdsEnabled := m.featureEnabled(config.FeatureTapsellAds)
-	m.SetShowTapSellAds(tapSellAdsEnabled)
 }
 
 // check if feature is enabled or not
@@ -1273,14 +1269,6 @@ func (m *SessionModel) SetShowGoogleAds(adsEnable bool) {
 	checkAdsEnabled(m)
 }
 
-func (m *SessionModel) SetShowTapSellAds(adsEnable bool) {
-	log.Debugf("SetShowTapSellAds %v", adsEnable)
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathTapSellAdsEnabled, adsEnable, "")
-	}))
-	checkAdsEnabled(m)
-}
-
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 	// Return static for now
 	// Todo implement this method
@@ -1564,20 +1552,10 @@ func checkAdsEnabled(session *SessionModel) error {
 	if err != nil {
 		return err
 	}
-	tapSellAdsEnable, err := pathdb.Get[bool](session.db, pathTapSellAdsEnabled)
-	if err != nil {
-		return err
-	}
 	if googleAdsEnable {
 		log.Debug("Google Ads is enabled")
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 			return pathdb.Put[string](tx, pathShowAds, "google", "")
-		})
-	}
-	if tapSellAdsEnable {
-		log.Debug("TapSell Ads is enabled")
-		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put[string](tx, pathShowAds, "tapsell", "")
 		})
 	}
 	return nil
