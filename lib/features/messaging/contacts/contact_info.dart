@@ -268,7 +268,7 @@ class _ContactInfoState extends State<ContactInfo> {
                         iconPath: ImagePaths.delete,
                         agreeText: 'delete_contact'.i18n,
                         agreeAction: () async {
-                          context.loaderOverlay.show(widget: spinner);
+                          context.loaderOverlay.show();
                           try {
                             await messagingModel
                                 .deleteDirectContact(contact.contactId.id);
