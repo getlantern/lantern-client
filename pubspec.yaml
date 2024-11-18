@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 8.0.0+1
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
@@ -125,8 +125,6 @@ dependencies:
 
   # Ads
   google_mobile_ads: ^5.1.0
-  tapsell_mediation: ^1.0.1-beta06
-  tapsell_mediation_legacy: ^1.0.1-beta06
 
   retry: ^3.1.2
   # Generate bindings to native libraries
