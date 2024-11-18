@@ -19,9 +19,9 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/bandit"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
@@ -424,7 +424,7 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
 }
 
-func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
+func (app *App) onProxiesUpdate(proxies []dialer.ProxyDialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
 	app.fetchedProxiesConfig.Store(true)
 	app.hasSucceedingProxy.Store(true)
