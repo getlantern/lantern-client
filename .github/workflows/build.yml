@@ -251,6 +251,11 @@ jobs:
         env:
           VERSION: ${{ env.version }}
 
+      - name: Clean Go Module Cache
+        if: matrix.platform == 'android'
+        run: |
+          go clean -modcache
+
       - name: Activate plugins
         run: |
           dart pub global activate protoc_plugin
