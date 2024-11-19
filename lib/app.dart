@@ -130,7 +130,6 @@ class _LanternAppState extends State<LanternApp>
         ),
         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
       ),
-      darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
       title: 'app_name'.i18n,
       localizationsDelegates: const [
