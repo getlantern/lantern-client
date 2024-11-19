@@ -67,8 +67,8 @@ android {
         }
         ndk {
             // Specifies the ABI configurations of native libraries Gradle should build and package with the app.
-            abiFilters = ["arm64-v8a"]
-            debugSymbolLevel 'FULL'
+            abiFilters "armeabi-v7a", "arm64-v8a"
+            debugSymbolLevel 'SYMBOL_TABLE'
         }
 
         if (project.hasProperty('lanternVersion')) {
