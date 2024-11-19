@@ -205,7 +205,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: 'gradle'
 
       - name: Set gradle properties
         if: matrix.platform == 'android'
@@ -255,8 +254,8 @@ jobs:
         if: matrix.platform == 'android'
         run: |
           df -h
-          sudo apt-get clean
-          sudo apt-get autoremove
+          sudo apt-get remove --purge '^dotnet-.*' '^ghc-.*' 'azure-cli' -y
+          sudo apt-get autoremove -y
           go clean -modcache
 
       - name: Activate plugins
