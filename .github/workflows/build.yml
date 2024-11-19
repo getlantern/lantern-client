@@ -254,6 +254,9 @@ jobs:
       - name: Clean Go Module Cache
         if: matrix.platform == 'android'
         run: |
+          df -h
+          sudo apt-get clean
+          sudo apt-get autoremove
           go clean -modcache
 
       - name: Activate plugins
