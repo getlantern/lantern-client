@@ -5,7 +5,6 @@ package sdk
 import "C"
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"net"
@@ -13,9 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/getlantern/eventual/v2"
+	"github.com/getlantern/flashlight/client"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -26,11 +24,11 @@ const startTimeout = 5 * time.Second
 var (
 	log = golog.LoggerFor("lantern")
 
-	clEventual = eventual.NewValue()
+	once sync.Once
 
-	startOnce  sync.Once
-	cl         *client.Client
-	clientMu   sync.Mutex
+	cl       *client.Client
+	clientMu sync.Mutex
+
 	ss         *settings
 	settingsMu sync.Mutex
 )
@@ -64,33 +62,15 @@ func StartHTTPProxy(httpProxyAddr string) (*StartResult, error) {
 	if settings == nil {
 		return nil, errors.New("Missing setup call")
 	}
-	startOnce.Do(func() {
+	once.Do(func() {
 		go runFlashlight(settings, httpProxyAddr)
 	})
+
 	addr, ok := client.Addr(startTimeout)
 	if !ok {
 		return nil, fmt.Errorf("HTTP Proxy didn't start within %v timeout", startTimeout)
 	}
 	return &StartResult{addr.(string)}, nil
-}
-
-func StopHTTPProxy() error {
-	client := getClient(context.Background())
-	if client == nil {
-		return errors.New("client is not running")
-	}
-	return client.Stop()
-}
-
-// HTTPProxyPort returns the port the HTTP proxy is listening on
-func HTTPProxyPort() (int, error) {
-	addr, ok := client.Addr(startTimeout)
-	if !ok {
-		return 0, fmt.Errorf("HTTP Proxy didn't start within %v timeout", startTimeout)
-	}
-	_, portStr, _ := net.SplitHostPort(addr.(string))
-	port, _ := strconv.Atoi(portStr)
-	return port, nil
 }
 
 func setClient(c *client.Client) {
@@ -99,15 +79,36 @@ func setClient(c *client.Client) {
 	cl = c
 }
 
-func getClient(ctx context.Context) *client.Client {
-	_cl, _ := clEventual.Get(ctx)
-	if _cl == nil {
-		return nil
-	}
-	return _cl.(*client.Client)
+func getClient() *client.Client {
+	clientMu.Lock()
+	c := cl
+	clientMu.Unlock()
+	return c
 }
 
-func runFlashlight(ss *settings, httpProxyAddr string) {
+func StopHTTPProxy() error {
+	cl := getClient()
+	if cl == nil {
+		return errors.New("flashlight is not running")
+	}
+	if err := cl.Stop(); err != nil {
+		return err
+	}
+	return nil
+}
+
+// HTTPProxyPort returns the port the HTTP proxy is listening on
+func HTTPProxyPort() (int, error) {
+	result, isValid := client.Addr(5 * time.Second)
+	if !isValid {
+		return 0, errors.New("flashlight is not running")
+	}
+	_, portStr, _ := net.SplitHostPort(result.(string))
+	port, _ := strconv.Atoi(portStr)
+	return port, nil
+}
+
+func runFlashlight(ss *settings, httpProxyAddr string) *flashlight.Flashlight {
 	configDir, locale := ss.configDir, ss.locale
 	log.Debugf("Starting lantern: configDir %s locale %s", configDir, locale)
 
@@ -135,11 +136,6 @@ func runFlashlight(ss *settings, httpProxyAddr string) {
 		log.Fatalf("failed to start flashlight: %v", err)
 	}
 	go func() {
-		defer func() {
-			if err := recover(); err != nil {
-				log.Error(err)
-			}
-		}()
 		runner.Run(
 			httpProxyAddr, // listen for HTTP on provided address
 			"127.0.0.1:0", // listen for SOCKS on random address
