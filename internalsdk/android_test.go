@@ -84,8 +84,9 @@ func (c testSession) SetOnSuccess(enabled bool) {
 	if !enabled {
 		return
 	}
-	// we need to wait for flashlight.fastConnect dialer to "test" and get a successful connection
-	// before any dialer can be used ("no top dialer" error)
+	// we need to wait for flashlight.fastconnect dialer to "test" and get a successful connection
+	// before any dialer can be used ("no top dialer" error). fastConnect will call onSuccess when
+	// it gets a successful connection, this give us a way to listen for that before we continue.
 	select {
 	case c.rdy <- true:
 	default:
@@ -109,6 +110,7 @@ func TestProxying(t *testing.T) {
 	require.NoError(t, err, "Should have been able to start lantern twice")
 	require.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address")
 
+	// Wait for flashlight.fastconnect to call onSuccess callback
 	assert.Eventually(t,
 		func() bool { return <-tSess.rdy },
 		4*time.Second,
