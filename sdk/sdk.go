@@ -8,6 +8,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
+	"strconv"
 	"sync"
 	"time"
 
@@ -70,6 +72,25 @@ func StartHTTPProxy(httpProxyAddr string) (*StartResult, error) {
 		return nil, fmt.Errorf("HTTP Proxy didn't start within %v timeout", startTimeout)
 	}
 	return &StartResult{addr.(string)}, nil
+}
+
+func StopHTTPProxy() error {
+	client := getClient(context.Background())
+	if client == nil {
+		return errors.New("client is not running")
+	}
+	return client.Stop()
+}
+
+// HTTPProxyPort returns the port the HTTP proxy is listening on
+func HTTPProxyPort() (int, error) {
+	addr, ok := client.Addr(startTimeout)
+	if !ok {
+		return 0, fmt.Errorf("HTTP Proxy didn't start within %v timeout", startTimeout)
+	}
+	_, portStr, _ := net.SplitHostPort(addr.(string))
+	port, _ := strconv.Atoi(portStr)
+	return port, nil
 }
 
 func setClient(c *client.Client) {
