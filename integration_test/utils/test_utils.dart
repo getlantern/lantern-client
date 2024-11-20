@@ -85,13 +85,13 @@ Future<void> createApp(PatrolIntegrationTester $) async {
 /// App is already created in this function.
 void patrolWidget(
   String description,
-  Future<void> Function(PatrolTester $) callback, {
+  Future<void> Function(PatrolIntegrationTester $) callback, {
   bool? skip,
   List<String> tags = const [],
   NativeAutomatorConfig? nativeAutomatorConfig,
   TestVariant variant = const DefaultTestVariant(),
 }) {
-  patrolWidgetTest(
+  patrolTest(
     description,
     config: _patrolTesterConfig,
     skip: skip,
@@ -104,7 +104,7 @@ void patrolWidget(
   );
 }
 
-Future<void> _createWidgetApp(PatrolTester $) async {
+Future<void> _createWidgetApp(PatrolIntegrationTester $) async {
     await app.main(testMode: true);
     await $.pumpAndSettle();
 }

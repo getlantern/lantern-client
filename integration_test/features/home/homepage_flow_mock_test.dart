@@ -63,7 +63,7 @@ void main() {
     },
   );
 
-  tearDown(
+  patrolTearDown(
     () async {
       clearInteractions(mockSessionModel);
       clearInteractions(mockReplicaModel);
@@ -82,7 +82,7 @@ void main() {
     },
   );
 
-  patrolWidgetTest(
+  patrolTest(
     'home widget show privacy policy',
     skip: isDesktop(),
     ($) async {
@@ -175,7 +175,7 @@ void main() {
     },
   );
 
-  patrolWidgetTest(
+  patrolTest(
     'home widget auth enable show first time visit screen',
     ($) async {
       if(isDesktop()){

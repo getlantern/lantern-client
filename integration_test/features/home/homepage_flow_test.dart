@@ -10,39 +10,26 @@ import '../../utils/test_utils.dart';
 /// This helps verify that the app functions correctly in real-world scenarios.
 /// For mock tests, refer to [homepage_flow_mock_test.dart].
 void main() {
-  setUp(
-    () {},
-  );
-
-  tearDownAll(
+  patrolTearDown(
     () async {
     await  sl.reset();
     },
   );
 
-  group(
-    'home page flow end to end test',
-    () {
-      patrolWidgetTest(
-        'app initializes and navigates to homepage',
+  patrolWidget(
+    'app initializes and navigates to homepage',
         ($) async {
-          await app.main();
+      await $(HomePage).waitUntilVisible();
 
-          await $.pumpAndSettle();
+      expect($(BottomNavigationBar), findsOneWidget);
+      expect($('VPN'.i18n).visible, equals(true));
+      expect($('Account'.i18n).visible, equals(true));
 
-          await $(HomePage).waitUntilVisible();
+      await $('Account').tap();
+      await $.pumpAndSettle();
 
-          expect($(BottomNavigationBar), findsOneWidget);
-          expect($('VPN'.i18n).visible, equals(true));
-          expect($('Account'.i18n).visible, equals(true));
-
-          await $('Account').tap();
-          await $.pumpAndSettle();
-
-          expect($(AccountTab), findsOneWidget);
-          expect($(AppBar), findsOneWidget);
-        },
-      );
+      expect($(AccountTab), findsOneWidget);
+      expect($(AppBar), findsOneWidget);
     },
   );
 }

@@ -19,17 +19,16 @@ import 'package:lantern/main.dart' as app;
 /// For running patrolWidgetTest, you need to run the patrol test or flutter test both will work
 
 // Implement coverage for the test
-// https://codewithandrea.com/articles/flutter-te st-coverage/
+// https://codewithandrea.com/articles/flutter-test-coverage/
+// https://github.com/flutter/flutter/issues/101031
 void main() {
-  tearDownAll(() async {
+  tearDown(() async {
     await sl.reset();
   },);
 
-  patrolWidgetTest(
+  patrolWidget(
     "app start up sequence",
     ($) async {
-      await app.main();
-      await $.pumpAndSettle();
       await $(HomePage).waitUntilVisible();
       final bottombar = find.byType(BottomNavigationBar);
       expect(bottombar, findsOneWidget);
