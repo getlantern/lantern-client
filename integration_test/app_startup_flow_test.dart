@@ -26,7 +26,7 @@ void main() {
     await sl.reset();
   },);
 
-  patrolWidget(
+  patrol(
     "app start up sequence",
     ($) async {
       await $(HomePage).waitUntilVisible();

@@ -12,7 +12,7 @@ void main() {
     },
   );
 
-  patrolWidget(
+  patrol(
     'account page end to end test [free user]',
         ($) async {
       await $('Account'.i18n).tap();

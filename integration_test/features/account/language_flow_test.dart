@@ -16,7 +16,7 @@ void main() {
   );
 
 
-  patrolWidget(
+  patrol(
     "language end to end test",
     ($) async {
       await $('Account'.i18n).tap();

@@ -14,13 +14,8 @@ void main() {
     await sl.reset();
   },);
 
-  // tearDown(
-  //   () async {
-  //     await sl.reset();
-  //   },
-  // );
 
-  patrolWidget(
+  patrol(
     'renders VPN tap properly and navigation work properly',
         ($) async {
       await $(VPNTab).waitUntilVisible();
@@ -59,7 +54,7 @@ void main() {
     },
   );
 
-  patrolWidget(
+  patrol(
     'toggles VPN switch on & off for desktop platforms',
     skip: isMobile(),
         ($) async {
@@ -79,26 +74,27 @@ void main() {
     },
   );
 
-  patrolNative(
-    'VPN turn off/on on mobile platforms',
-    skip: isDesktop(),
-        ($) async {
-      await createApp($);
-      await $(VPNTab).waitUntilVisible();
-      await $.pump(const Duration(seconds: 3));
-      expect($('Disconnected'.i18n), findsOneWidget);
-      await $(const AdvancedSwitch()).tap();
-      await $.pump(const Duration(seconds: 1));
-      //Turn on
-      $.native.tap(Selector(text: 'OK'));
-      await $.pumpAndSettle();
-      expect($('connected'.i18n), findsOneWidget);
-      expect($('Disconnected'.i18n), findsNothing);
-      //Turn off
-      await $.pump(const Duration(seconds: 1));
-      await $(const AdvancedSwitch()).tap();
-      expect($('connected'.i18n), findsNothing);
-      expect($('Disconnected'.i18n), findsOneWidget);
-    },
-  );
+  if(isNative()){
+    patrol(
+      'VPN turn off/on on mobile platforms',
+          ($) async {
+        await $(VPNTab).waitUntilVisible();
+        await $.pump(const Duration(seconds: 3));
+        expect($('Disconnected'.i18n), findsOneWidget);
+        await $(const AdvancedSwitch()).tap();
+        await $.pump(const Duration(seconds: 1));
+        //Turn on
+        $.native.tap(Selector(text: 'OK'));
+        await $.pumpAndSettle();
+        expect($('connected'.i18n), findsOneWidget);
+        expect($('Disconnected'.i18n), findsNothing);
+        //Turn off
+        await $.pump(const Duration(seconds: 1));
+        await $(const AdvancedSwitch()).tap();
+        expect($('connected'.i18n), findsNothing);
+        expect($('Disconnected'.i18n), findsOneWidget);
+      },
+    );
+  }
+
 }

@@ -16,7 +16,7 @@ void main() {
     },
   );
 
-  patrolWidget(
+  patrol(
     'app initializes and navigates to homepage',
         ($) async {
       await $(HomePage).waitUntilVisible();

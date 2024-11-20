@@ -34,8 +34,6 @@ bool shouldSkipNative() {
   if (isMobile()) {
     final bool isNative =
         const String.fromEnvironment('native', defaultValue: 'false') == 'true';
-    print("isNative: $isNative");
-    print("isNative return value: ${!isNative}");
     return !isNative;
   }
   return true;
@@ -46,44 +44,13 @@ bool isNative() {
       'true';
 }
 
-/// Use this function to interact with the native layer.
-/// Avoid using it on desktop platforms and most parts of mobile platforms.
-/// Should be used only on when VPN turn on/off
-void patrolNative(
-  String description,
-  Future<void> Function(PatrolIntegrationTester $) callback, {
-  bool? skip,
-  List<String> tags = const [],
-  NativeAutomatorConfig? nativeAutomatorConfig,
-  LiveTestWidgetsFlutterBindingFramePolicy framePolicy =
-      LiveTestWidgetsFlutterBindingFramePolicy.fadePointers,
-}) {
-  /// if we are not running native test then return
-  if (!isNative()) {
-    return;
-  }
-  patrolTest(
-    description,
-    config: _patrolTesterConfig,
-    nativeAutomatorConfig: nativeAutomatorConfig ?? _nativeAutomatorConfig,
-    framePolicy: framePolicy,
-    skip: skip,
-    callback,
-    tags: tags,
-  );
-}
-
-Future<void> createApp(PatrolIntegrationTester $) async {
-  await app.main();
-  await $.pumpAndSettle();
-}
 
 /// Use this function to interact with the widget layer.
 /// Should be used on desktop platforms and most parts of mobile platforms.
 /// Should be used only when testing the UI.
 /// Avoid using it on when VPN turn on/off for mobile since it needs to interact with the native layer.
 /// App is already created in this function.
-void patrolWidget(
+void patrol(
   String description,
   Future<void> Function(PatrolIntegrationTester $) callback, {
   bool? skip,
@@ -96,7 +63,7 @@ void patrolWidget(
     config: _patrolTesterConfig,
     skip: skip,
     ($) async {
-      await _createWidgetApp($);
+      await _createApp($);
       await callback($);
     },
     tags: tags,
@@ -104,7 +71,7 @@ void patrolWidget(
   );
 }
 
-Future<void> _createWidgetApp(PatrolIntegrationTester $) async {
+Future<void> _createApp(PatrolIntegrationTester $) async {
     await app.main(testMode: true);
     await $.pumpAndSettle();
 }

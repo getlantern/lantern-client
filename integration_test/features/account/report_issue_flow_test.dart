@@ -7,7 +7,7 @@ void main() {
     },
   );
 
-  patrolWidget(
+  patrol(
     "report issue end to end test",
     ($) async {
       await $('Account'.i18n).tap();

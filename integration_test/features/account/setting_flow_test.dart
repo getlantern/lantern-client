@@ -12,7 +12,7 @@ void main() {
     },
   );
 
-  patrolWidget(
+  patrol(
     'setting end to end',
         ($) async {
       await $('Account'.i18n).tap();
