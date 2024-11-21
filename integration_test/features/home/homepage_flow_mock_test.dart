@@ -30,7 +30,7 @@ void main() {
   setUpAll(
     () async {
       await Localization.ensureInitialized();
-
+      await initDesktopTestServices();
       mockSessionModel = MockSessionModel();
       mockBuildContext = MockBuildContext();
       mockMessagingModel = MockMessagingModel();
@@ -63,7 +63,7 @@ void main() {
     },
   );
 
-  patrolTearDown(
+  appTearDown(
     () async {
       clearInteractions(mockSessionModel);
       clearInteractions(mockReplicaModel);
@@ -72,7 +72,6 @@ void main() {
       clearInteractions(mockBottomBarChangeNotifier);
       clearInteractions(mockVPNChangeNotifier);
       clearInteractions(mockInternetStatusProvider);
-
     },
   );
 
@@ -82,7 +81,7 @@ void main() {
     },
   );
 
-  patrolTest(
+  patrol(
     'home widget show privacy policy',
     skip: isDesktop(),
     ($) async {
@@ -95,7 +94,6 @@ void main() {
 
       when(mockSessionModel.language(any)).thenAnswer(
         (invocation) {
-
           final builder =
               invocation.positionalArguments[0] as ValueWidgetBuilder<String>;
           return builder(mockBuildContext, 'en_us', null);
@@ -168,18 +166,21 @@ void main() {
       await $.pumpAndSettle();
 
       await $.pump(const Duration(seconds: 5));
-      await $(FullScreenDialog).waitUntilVisible(timeout: const Duration(seconds: 20));
+      await $(FullScreenDialog)
+          .waitUntilVisible(timeout: const Duration(seconds: 20));
 
       expect($('privacy_disclosure_accept'.i18n.toUpperCase()), findsOneWidget);
       expect($(BottomNavigationBar), findsNothing);
     },
+    initApp: false,
   );
 
-  patrolTest(
+  patrol(
     'home widget auth enable show first time visit screen',
     ($) async {
-      if(isDesktop()){
-        when(mockVPNChangeNotifier.vpnStatus).thenReturn(ValueNotifier(TestVPNStatus.connected.value));
+      if (isDesktop()) {
+        when(mockVPNChangeNotifier.vpnStatus)
+            .thenReturn(ValueNotifier(TestVPNStatus.connected.value));
       }
       when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
       when(mockVPNChangeNotifier.isFlashlightInitialized).thenReturn(true);
@@ -306,5 +307,6 @@ void main() {
       expect($(AppBarProHeader), findsOneWidget);
       expect($('sign_in'.i18n), findsOneWidget);
     },
+    initApp: false,
   );
 }

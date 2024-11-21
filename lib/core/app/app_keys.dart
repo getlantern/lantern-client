@@ -13,6 +13,7 @@ class AppKeys {
   static const upgrade_lantern_pro = ValueKey('upgrade_lantern_pro');
   static const inviteFriends = ValueKey('invite_friends');
   static const devices = ValueKey('devices');
+  static const addDevices = ValueKey('add_devices');
   static const signIn = ValueKey('sign_in');
   static const desktopVersion = ValueKey('desktop_version');
   static const followUs = ValueKey('follow_us');

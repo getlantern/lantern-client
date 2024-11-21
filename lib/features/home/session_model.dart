@@ -245,6 +245,7 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<String>(
         'referral',
         builder: builder,
+        defaultValue: ''
       );
     }
     return FfiValueBuilder<String>('referralCode', referralNotifier, builder);

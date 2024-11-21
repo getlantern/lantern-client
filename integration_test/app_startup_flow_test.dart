@@ -21,8 +21,12 @@ import 'package:lantern/main.dart' as app;
 // Implement coverage for the test
 // https://codewithandrea.com/articles/flutter-test-coverage/
 // https://github.com/flutter/flutter/issues/101031
+// https://stackoverflow.com/questions/61535142/how-to-use-dylibs-from-a-plugin-inside-a-macos-sandboxed-application
+// https://github.com/flutter/flutter/issues/135673
+
+///Make sure to use custom tear down function  
 void main() {
-  tearDown(() async {
+  appTearDown(() async {
     await sl.reset();
   },);
 

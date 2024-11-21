@@ -9,7 +9,7 @@ final englishLang = toBeginningOfSentenceCase(displayLanguage(enUs));
 final persianLang = toBeginningOfSentenceCase(displayLanguage(faIr));
 
 void main() {
-  patrolTearDown(
+  appTearDown(
     () async {
       await sl.reset();
     },

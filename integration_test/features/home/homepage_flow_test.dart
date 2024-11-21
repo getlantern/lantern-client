@@ -10,7 +10,7 @@ import '../../utils/test_utils.dart';
 /// This helps verify that the app functions correctly in real-world scenarios.
 /// For mock tests, refer to [homepage_flow_mock_test.dart].
 void main() {
-  patrolTearDown(
+  appTearDown(
     () async {
     await  sl.reset();
     },

@@ -169,6 +169,7 @@ class _AccountMenuState extends State<AccountMenu> {
                 )),
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.inviteFriends,
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
         onTap: () {
@@ -176,6 +177,7 @@ class _AccountMenuState extends State<AccountMenu> {
         },
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.addDevices,
         icon: ImagePaths.devices,
         content: 'add_device'.i18n,
         onTap: () async => await context.pushRoute(ApproveDevice()),

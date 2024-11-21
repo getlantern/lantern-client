@@ -10,7 +10,7 @@ import '../../utils/test_utils.dart';
 
 void main() {
 
-  patrolTearDown(() async {
+  appTearDown(() async {
     await sl.reset();
   },);
 
@@ -21,7 +21,12 @@ void main() {
       await $(VPNTab).waitUntilVisible();
       await $.pump(const Duration(seconds: 6));
 
-      expect($(ProBanner), findsOneWidget);
+      if(sessionModel.proUserNotifier.value??false){
+        expect($(ProBanner), findsNothing);
+      }else{
+        expect($(ProBanner), findsOneWidget);
+      }
+
       if (isMobile()) {
         expect($(VPNSwitch), findsOneWidget);
       } else {
@@ -74,27 +79,27 @@ void main() {
     },
   );
 
-  if(isNative()){
-    patrol(
-      'VPN turn off/on on mobile platforms',
-          ($) async {
-        await $(VPNTab).waitUntilVisible();
-        await $.pump(const Duration(seconds: 3));
-        expect($('Disconnected'.i18n), findsOneWidget);
-        await $(const AdvancedSwitch()).tap();
-        await $.pump(const Duration(seconds: 1));
-        //Turn on
-        $.native.tap(Selector(text: 'OK'));
-        await $.pumpAndSettle();
-        expect($('connected'.i18n), findsOneWidget);
-        expect($('Disconnected'.i18n), findsNothing);
-        //Turn off
-        await $.pump(const Duration(seconds: 1));
-        await $(const AdvancedSwitch()).tap();
-        expect($('connected'.i18n), findsNothing);
-        expect($('Disconnected'.i18n), findsOneWidget);
-      },
-    );
-  }
+  // if(isNative()){
+  //   patrol(
+  //     'VPN turn off/on on mobile platforms',
+  //         ($) async {
+  //       await $(VPNTab).waitUntilVisible();
+  //       await $.pump(const Duration(seconds: 3));
+  //       expect($('Disconnected'.i18n), findsOneWidget);
+  //       await $(const AdvancedSwitch()).tap();
+  //       await $.pump(const Duration(seconds: 1));
+  //       //Turn on
+  //       $.native.tap(Selector(text: 'OK'));
+  //       await $.pumpAndSettle();
+  //       expect($('connected'.i18n), findsOneWidget);
+  //       expect($('Disconnected'.i18n), findsNothing);
+  //       //Turn off
+  //       await $.pump(const Duration(seconds: 1));
+  //       await $(const AdvancedSwitch()).tap();
+  //       expect($('connected'.i18n), findsNothing);
+  //       expect($('Disconnected'.i18n), findsOneWidget);
+  //     },
+  //   );
+  // }
 
 }

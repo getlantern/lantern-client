@@ -1,7 +1,7 @@
 import '../../utils/test_utils.dart';
 
 void main() {
-  patrolTearDown(
+  appTearDown(
     () async {
       await sl.reset();
     },
