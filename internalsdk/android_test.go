@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -25,6 +26,7 @@ import (
 type testSession struct {
 	serializedInternalHeaders string
 	rdy                       chan bool
+	rdyOnce                   *sync.Once // needs to be a pointer since testSession is being passed by value
 }
 
 type testSettings struct {
@@ -84,13 +86,8 @@ func (c testSession) SetOnSuccess(enabled bool) {
 	if !enabled {
 		return
 	}
-	// we need to wait for flashlight.fastconnect dialer to "test" and get a successful connection
-	// before any dialer can be used ("no top dialer" error). fastConnect will call onSuccess when
-	// it gets a successful connection, this give us a way to listen for that before we continue.
-	select {
-	case c.rdy <- true:
-	default:
-	}
+	// Signal that we connected to the first proxy and we're ready
+	c.rdyOnce.Do(func() { close(c.rdy) })
 }
 
 func (c testSession) SerializedInternalHeaders() (string, error) {
@@ -103,16 +100,22 @@ func TestProxying(t *testing.T) {
 	require.NoError(t, err, "Unable to create temp configDir")
 	defer helper.Close()
 
-	tSess := testSession{rdy: make(chan bool, 1)}
+	tSess := testSession{
+		rdy:     make(chan bool),
+		rdyOnce: &sync.Once{},
+	}
 	result, err := Start(helper.ConfigDir, "en_US", testSettings{}, tSess)
 	require.NoError(t, err, "Should have been able to start lantern")
 	newResult, err := Start("testapp", "en_US", testSettings{}, tSess)
 	require.NoError(t, err, "Should have been able to start lantern twice")
 	require.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address")
 
-	// Wait for flashlight.fastconnect to call onSuccess callback
+	// Wait for rdy signal
 	assert.Eventually(t,
-		func() bool { return <-tSess.rdy },
+		func() bool {
+			_, ok := <-tSess.rdy
+			return !ok
+		},
 		4*time.Second,
 		10*time.Millisecond,
 		"Should have received onSuccess callback",
