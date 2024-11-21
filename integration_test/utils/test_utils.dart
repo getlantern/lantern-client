@@ -45,11 +45,11 @@ bool isNative() {
       'true';
 }
 
-/// Use this function to interact with the widget layer.
-/// Should be used on desktop platforms and most parts of mobile platforms.
-/// Should be used only when testing the UI.
-/// Avoid using it on when VPN turn on/off for mobile since it needs to interact with the native layer.
-/// App is already created in this function.
+/// Use this function to write tests for integration test
+/// this methods uses custom patrol for mobile version and for desktop it uses patrolWidgetTest that extension of flutter test
+/// Since desktop does not interface with native layer uses same
+///Faq there is issue with patrol with native layer
+///https://stackoverflow.com/questions/61535142/how-to-use-dylibs-from-a-plugin-inside-a-macos-sandboxed-application
 @isTest
 void patrol(
   String description,
@@ -63,8 +63,6 @@ void patrol(
   if (isDesktop()) {
     patrolWidgetTest(
       description,
-      config: _patrolTesterConfig,
-      skip: skip,
       ($) async {
         if (initApp) {
           await _createApp($);
@@ -72,26 +70,31 @@ void patrol(
 
         await callback($);
       },
+      config: _patrolTesterConfig,
+      skip: skip,
       tags: tags,
       variant: variant,
     );
   } else {
     patrolTest(
       description,
-      config: _patrolTesterConfig,
-      skip: skip,
       ($) async {
         if (initApp) {
           await _createApp($);
         }
         await callback($);
       },
+      config: _patrolTesterConfig,
+      nativeAutomatorConfig: nativeAutomatorConfig ?? _nativeAutomatorConfig,
+      skip: skip,
       tags: tags,
       variant: variant,
     );
   }
 }
 
+/// Make sure to use this function to tear down the test
+/// this will reset according to which platform you are running
 void appTearDown(dynamic Function() body) {
   if (isMobile()) {
     patrolTearDown(body);
@@ -106,8 +109,6 @@ Future<void> initDesktopTestServices() async {
   await windowManager.ensureInitialized();
   await windowManager.setSize(const Size(360, 712));
 }
-
-
 
 Future<void> _createApp(PatrolTester $) async {
   await app.main(testMode: true);

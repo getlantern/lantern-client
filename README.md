@@ -331,49 +331,50 @@ SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-bundle
 ```
 
 ## Testing
+For testing we are using [patrol](https://pub.dev/packages/patrol) framework, Patrol simplifies interaction with the native layer and offers an extensive set of easy-to-use testing APIs.
 
-### Flutter
+### Integration Testing
+
+#### Running Integration Testing
+
+* Make sure you install patrol_cli globally by running `flutter pub global activate patrol_cli`
+* Make sure to connect any device or emulator to run the test.
+
+
+To run all integration the test on mobile
+```sh
+make appWorkflowTest
+```
+
+To run and single test on mobile
+```sh
+make runTest testfile or make runTest integration_test/app_startup_flow_test.dart
+```
+
+To run all integration the test on desktop
+```sh
+make desktopWorkflowTest
+```
+
+To run and single test on dekstop
+```sh
+make runDesktopTest testfile or integration_test/app_startup_flow_test.dart
+```
+
+
+#### Writing Integration Testing
+* Always use our custom [patrol](https://github.com/getlantern/lantern-client/blob/d5c36eba30e8072c0327eca4eea8472cbfa49cb5/integration_test/utils/test_utils.dart#L54) method for writing any new integration tests. Similarly, utilize [appTearDown](https://github.com/getlantern/lantern-client/blob/d5c36eba30e8072c0327eca4eea8472cbfa49cb5/integration_test/utils/test_utils.dart#L95) for cleanup. These methods ensure compatibility across different environments for mobile and desktop platforms.
+* Structure tests to simulate real user flows, such as changing app settings (e.g., language preferences) or completing actions
+* Ensure tests are compatible with all supported platforms (mobile and desktop).
+* If mocks are necessary for specific scenarios, ensure they are clearly documented and cover all critical edge cases.
+
+
 
 #### Unit Testing
 * Run running Flutter unit tests run `make test`
 * To run independent Flutter tests, go to the root of the project and type: `flutter test test/my_folder_test.dart`
   * in case that you need the code coverage just add the following argument: `flutter test --coverage test/my_folder_test.dart`
 
-#### Integration Testing
-You can run integration tests from the integration_test directory against a live app using the following steps:
-
-1. Run the app with these additional run arguments `--dart-define=driver=true --observatory-port 8888 --disable-service-auth-codes`
-2. Run the integration test as a dart application
-3. When running tests in different locales, change `const simulatedLocale = 'en_US';` in `integration_test_contants.dart` to the desired locale.
-4. Go to SETTINGS view and then run `change_language_test.dart`.
-5. All tests should start with testing device showing Chats tab.
-6. Start by running test `1A`.
-7. A handful of tests have specific requirements, marked by a "Test requirements" comment at the start of the test:
-  1. `6A_scan_QR_code_test` needs another phone to do the QR scanning process with
-  2. `6B_request_flow_test` requires a message request to have just been received
-  3. `6C_introductions_test` requires the testing device/emulator to have received an introduction to another contact
-  4. `17C_verify_contact_test` requires the most recent message to have been shared in conversation with an unverified contact
-8. We will have some duplicate screenshots in there - run `python3 scripts/screenshot_generation_assets/remove_dups.py [your android-lantern-path]/screenshots/` to deduplicate.
-9. To generate stitched landscape images for all screenshots in a given test folder, run `python3 scripts/screenshot_generation_assets/merge_screenshots.py [your android-lantern-path]/screenshots/[a locale e.g. en_US]`
-
-This mechanism for running integration tests follows [this article](https://medium.com/flutter-community/hot-reload-for-flutter-integration-tests-e0478b63bd54). Using this mechanism, you can modify and rerun the integration test without having to redeploy the application.
-
-WARNING - when running with flutter driver enabled, the on-screen keyboard does not work.
-
-WARNING - if you try to run an instance of the app using `--observatory-port` and you already have another instance running with that same observatory-port, the 2nd instance will hang on launch because flutter cannot bind to that port.
-
-TODO: we need to automate the running of integration tests in a CI environment using Flutter driver.
-
-NOTE ⚠ : Flutter driver is borderline maintained and clearly the expectation is to move to using `integration_test`. [Here](https://github.com/flutter/flutter/issues/12810) is a good depiction of related conversations.
-
-#### Generating Mocks
-
-To generate mocks for the interfaces using Mockery, follow these steps:
-
-1. Install mockery: `go install github.com/vektra/mockery/v2@latest`
-2. Generate mocks: `make mocks`
-
-The generated mocks will be output to the `./mocks` directory.
 
 #### Testing Replica
 A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.

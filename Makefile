@@ -766,7 +766,7 @@ runNativeTest: require-patrol-cli
 #Runs all integration tests
 appWorkflowTest:
 	@echo "Running all integration tests..."
-	flutter test integration_test/ --flavor=prod -r expanded
+	patrol test
 
 
 # Run specific integration tests
