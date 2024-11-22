@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/proxied"
@@ -29,8 +30,10 @@ type proClient struct {
 	webclient.RESTClient
 	backoffRunner *backoffRunner
 	userConfig    func() common.UserConfig
+	client        ProClient
 }
 
+//go:generate mockery --name=ProClient --output=../mocks/proclient --with-expecter
 type ProClient interface {
 	webclient.RESTClient
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
@@ -38,9 +41,9 @@ type ProClient interface {
 	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
 	Plans(ctx context.Context) (*PlansResponse, error)
-	PollUserData(ctx context.Context, session ClientSession, onUserData func(*protos.User))
+	PollUserData(ctx context.Context, session ClientSession, maxElapsedTime time.Duration)
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
-	RetryCreateUser(ctx context.Context, session ClientSession)
+	RetryCreateUser(ctx context.Context, ss ClientSession, maxElapsedTime time.Duration)
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
 	UpdateUserData(ctx context.Context, ss ClientSession) (*protos.User, error)

@@ -61,6 +61,7 @@ func (c testSession) UpdateStats(string, string, string, int, int, bool) error {
 func (c testSession) UpdateAdSettings(AdSettings) error { return nil }
 
 func (c testSession) GetAppName() string                                 { return "lantern" }
+func (c testSession) GetUserFirstVisit() (bool, error)                   { return false, nil }
 func (c testSession) AppVersion() (string, error)                        { return "6.9.0", nil }
 func (c testSession) Code() (string, error)                              { return "1", nil }
 func (c testSession) Currency() (string, error)                          { return "usd", nil }
@@ -70,9 +71,12 @@ func (c testSession) GetCountryCode() (string, error)                    { retur
 func (c testSession) IsStoreVersion() (bool, error)                      { return false, nil }
 func (c testSession) Provider() (string, error)                          { return "stripe", nil }
 func (c testSession) SetChatEnabled(enabled bool)                        {}
-func (c testSession) SetUserIdAndToken(userId int64, token string) error { return nil }
+func (c testSession) SetUserIDAndToken(userId int64, token string) error { return nil }
 func (c testSession) SetAuthEnabled(enabled bool)                        {}
 func (c testSession) SetMatomoEnabled(bool)                              {}
+func (c testSession) SetExpiration(expiration int64) error               { return nil }
+func (c testSession) SetProUser(proUser bool) error                      { return nil }
+func (c testSession) SetReferralCode(referralCode string) error          { return nil }
 func (c testSession) IsPlayVersion() (bool, error)                       { return false, nil }
 func (c testSession) SetShowGoogleAds(enabled bool)                      {}
 func (c testSession) SetHasConfigFetched(enabled bool)                   {}

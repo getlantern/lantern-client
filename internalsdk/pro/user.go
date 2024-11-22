@@ -2,7 +2,6 @@ package pro
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
@@ -11,13 +10,18 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
-// ClientSession includes information needed to createa new client session
-type ClientSession interface {
+// UserConfig represents the minimal configuration necessary for a client session
+type UserConfig interface {
 	GetDeviceID() string
 	GetUserFirstVisit() bool
 	GetUserID() int64
 	GetToken() string
-	//Locale() string
+	Locale() string
+}
+
+// ClientSession represents a client session
+type ClientSession interface {
+	UserConfig
 	SetExpiration(int64)
 	SetProUser(bool)
 	SetReferralCode(string)
@@ -46,12 +50,12 @@ func (c *proClient) createUser(ctx context.Context, session ClientSession) error
 }
 
 // RetryCreateUser is used to retry creating a user with an exponential backoff strategy
-func (c *proClient) RetryCreateUser(ctx context.Context, ss ClientSession) {
+func (c *proClient) RetryCreateUser(ctx context.Context, ss ClientSession, maxElapsedTime time.Duration) {
 	expBackoff := backoff.NewExponentialBackOff()
 	expBackoff.Multiplier = 2.0
 	expBackoff.InitialInterval = 3 * time.Second
 	expBackoff.MaxInterval = 1 * time.Minute
-	expBackoff.MaxElapsedTime = 10 * time.Minute
+	expBackoff.MaxElapsedTime = maxElapsedTime
 	expBackoff.RandomizationFactor = 0.5 // Add jitter to backoff interval
 	err := backoff.Retry(func() error {
 		return c.createUser(ctx, ss)
@@ -102,7 +106,8 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 }
 
 // RetryCreateUser is used to retry creating a user with an exponential backoff strategy
-func (c *proClient) PollUserData(ctx context.Context, session ClientSession, onUserData func(*protos.User)) {
+func (c *proClient) PollUserData(ctx context.Context, session ClientSession, maxElapsedTime time.Duration) {
+	log.Debug("Polling user data")
 	b := c.backoffRunner
 	b.mu.Lock()
 	if b.isRunning {
@@ -112,7 +117,9 @@ func (c *proClient) PollUserData(ctx context.Context, session ClientSession, onU
 	b.isRunning = true
 	b.mu.Unlock()
 
+	ctx, cancel := context.WithTimeout(ctx, maxElapsedTime)
 	defer func() {
+		cancel()
 		b.mu.Lock()
 		b.isRunning = false
 		b.mu.Unlock()
@@ -122,33 +129,39 @@ func (c *proClient) PollUserData(ctx context.Context, session ClientSession, onU
 	expBackoff.Multiplier = 2.0
 	expBackoff.InitialInterval = 10 * time.Second
 	expBackoff.MaxInterval = 2 * time.Minute
-	expBackoff.MaxElapsedTime = 10 * time.Minute
-	expBackoff.RandomizationFactor = 0.5 // Add jitter to backoff interval
-	timer := time.NewTimer(0)            // Start immediately
+	expBackoff.MaxElapsedTime = maxElapsedTime
+	// Add jitter to backoff interval
+	expBackoff.RandomizationFactor = 0.5
+
+	if _, err := c.UpdateUserData(ctx, session); err != nil {
+		log.Errorf("Initial user data update failed: %v", err)
+	}
+
+	timer := time.NewTimer(expBackoff.NextBackOff())
 	defer timer.Stop()
 
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("Task cancelled:", ctx.Err())
+			log.Errorf("Poll user data cancelled: %v", ctx.Err())
 			return
 		case <-timer.C:
-			// Wait for the timer to expire
-			user, err := c.UpdateUserData(ctx, session)
+			_, err := c.UpdateUserData(ctx, session)
 			if err != nil {
-				log.Error(err)
-			} else if onUserData != nil {
-				onUserData(user)
+				if ctx.Err() != nil {
+					log.Errorf("UpdateUserData terminated due to context: %v", ctx.Err())
+					return
+				}
+				log.Errorf("UpdateUserData failed: %v", err)
 			}
 
 			// Get the next backoff interval
 			waitTime := expBackoff.NextBackOff()
 			if waitTime == backoff.Stop {
-				expBackoff.Reset()
-				waitTime = expBackoff.NextBackOff()
+				log.Debug("Exponential backoff reached max elapsed time. Exiting...")
+				timer.Stop()
+				return
 			}
-			fmt.Printf("Next attempt in %v...\n", waitTime)
-			// Reset the timer with the next backoff interval
 			timer.Reset(waitTime)
 		}
 	}

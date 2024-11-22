@@ -78,10 +78,17 @@ type AdProvider interface {
 // thrown from the Java code. If a method interface doesn't include an error, exceptions on the
 // Java side immediately result in a panic from which Go cannot recover.
 type Session interface {
-	ClientSession
+	GetDeviceID() (string, error)
+	GetUserID() (int64, error)
+	GetToken() (string, error)
+	Locale() (string, error)
+	GetUserFirstVisit() (bool, error)
 	GetAppName() string
 	SetCountry(string) error
+	SetExpiration(int64) error
 	SetIP(string) error
+	SetReferralCode(string) error
+	SetProUser(bool) error
 	UpdateAdSettings(AdSettings) error
 	UpdateStats(serverCity string, serverCountry string, serverCountryCode string, p3 int, p4 int, hasSucceedingProxy bool) error
 	SetStaging(bool) error
@@ -105,7 +112,7 @@ type Session interface {
 	SetShowGoogleAds(bool)
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
-	SetUserIdAndToken(int64, string) error
+	SetUserIDAndToken(int64, string) error
 	SetOnSuccess(bool)
 	ChatEnable() bool
 	// workaround for lack of any sequence types in gomobile bind... ;_;
@@ -117,9 +124,11 @@ type Session interface {
 // PanickingSession wraps the Session interface but panics instead of returning errors
 type PanickingSession interface {
 	common.AuthConfig
+	GetUserFirstVisit() bool
 	SetCountry(string)
 	UpdateAdSettings(AdSettings)
 	UpdateStats(string, string, string, int, int, bool)
+	SetExpiration(int64)
 	SetStaging(bool)
 	BandwidthUpdate(int, int, int, int)
 	Locale() string
@@ -145,7 +154,9 @@ type PanickingSession interface {
 	SerializedInternalHeaders() string
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
-	SetUserIdAndToken(int64, string)
+	SetProUser(bool)
+	SetReferralCode(string)
+	SetUserIDAndToken(int64, string)
 	SetOnSuccess(bool)
 	ChatEnable() bool
 
@@ -183,8 +194,26 @@ func (s *panickingSessionImpl) GetToken() string {
 	return result
 }
 
+func (s *panickingSessionImpl) GetUserFirstVisit() bool {
+	result, err := s.wrapped.GetUserFirstVisit()
+	panicIfNecessary(err)
+	return result
+}
+
 func (s *panickingSessionImpl) SetCountry(country string) {
 	panicIfNecessary(s.wrapped.SetCountry(country))
+}
+
+func (s *panickingSessionImpl) SetExpiration(expiration int64) {
+	panicIfNecessary(s.wrapped.SetExpiration(expiration))
+}
+
+func (s *panickingSessionImpl) SetProUser(proUser bool) {
+	panicIfNecessary(s.wrapped.SetProUser(proUser))
+}
+
+func (s *panickingSessionImpl) SetReferralCode(referralCode string) {
+	panicIfNecessary(s.wrapped.SetReferralCode(referralCode))
 }
 
 func (s *panickingSessionImpl) SetIP(ipAddress string) {
@@ -300,8 +329,8 @@ func (s *panickingSessionImpl) SetShowGoogleAds(enabled bool) {
 	s.wrapped.SetShowGoogleAds(enabled)
 }
 
-func (s *panickingSessionImpl) SetUserIdAndToken(userID int64, token string) {
-	err := s.wrapped.SetUserIdAndToken(userID, token)
+func (s *panickingSessionImpl) SetUserIDAndToken(userID int64, token string) {
+	err := s.wrapped.SetUserIDAndToken(userID, token)
 	panicIfNecessary(err)
 }
 
@@ -538,7 +567,7 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 		config.ForceCountry(forcedCountryCode)
 	}
 
-	userConfig := newUserConfig(session)
+	userConfig := &userConfig{session: session}
 	globalConfigChanged := make(chan interface{})
 	geoRefreshed := geolookup.OnRefresh()
 
@@ -683,7 +712,8 @@ func afterStart(wrappedSession Session, session PanickingSession) {
 
 	if session.GetUserID() == 0 {
 		ctx := context.Background()
-		go retryCreateUser(ctx, wrappedSession)
+		proClient := createProClient(wrappedSession, "android")
+		go proClient.RetryCreateUser(ctx, session, 10*time.Minute)
 	}
 
 	bandwidthUpdates(session)

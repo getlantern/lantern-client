@@ -149,7 +149,7 @@ func setProxyAll(value *C.char) {
 //export hasPlanUpdatedOrBuy
 func hasPlanUpdatedOrBuy() *C.char {
 	ctx := context.Background()
-	go a.ProClient().PollUserData(ctx, a.Settings(), nil)
+	go a.ProClient().PollUserData(ctx, a.Settings(), 10*time.Minute)
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	cacheUserData, isOldFound := cachedUserData()
@@ -397,7 +397,6 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 		return sendError(err)
 	}
 
-	go a.ProClient().PollUserData(ctx, a.Settings(), nil)
 	return sendJson(resp)
 }
 

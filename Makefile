@@ -462,12 +462,14 @@ ios-release: set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_P
 
 ## Mocks
 MOCKERY=mockery
-MOCKERY_FLAGS=--case=underscore --output=internalsdk/mocks --outpkg=mocks
+MOCKERY_FLAGS=--case=underscore --output=./internalsdk/mocks --outpkg=mocks  --with-expecter
 
 .PHONY: mocks
 mocks:
 	@$(MOCKERY) --name=AdProvider --name=AdSettings --name=Session --dir=./internalsdk $(MOCKERY_FLAGS)
-	@$(MOCKERY) --name=ProClient --dir=./internalsdk/pro $(MOCKERY_FLAGS)
+	@$(MOCKERY) --name=ProClient --dir=./internalsdk/pro --outpkg=pro --output=./internalsdk/pro --structname=MockProClient
+	@$(MOCKERY) --name=ClientSession --dir=./internalsdk/pro  --outpkg=pro --output=./internalsdk/pro $(MOCKERY_FLAGS)
+
 
 .PHONY: echo-build-tags
 echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=1 make echo-build-tags` for example to see how it changes
