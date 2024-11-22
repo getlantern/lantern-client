@@ -11,7 +11,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-// Define the mock proClient
 type mockProClient struct {
 	mock.Mock
 }
@@ -53,7 +52,7 @@ func TestPollUserData(t *testing.T) {
 	assert.GreaterOrEqual(t, callCount, 2, "Expected UpdateUserData to be called at least twice")
 }
 
-// Test PollUserData Handles Errors
+// Test PollUserData (Handles Errors)
 func TestPollUserDataWithError(t *testing.T) {
 	mockClient := new(mockProClient)
 	var session ClientSession
