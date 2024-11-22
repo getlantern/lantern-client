@@ -159,14 +159,12 @@ func hasPlanUpdatedOrBuy() *C.char {
 	}
 	if isOldFound {
 		user := resp.User
-		log.Debugf("Expiration %v prev %v", user.Expiration, cacheUserData.Expiration)
 		if cacheUserData.Expiration < user.Expiration {
 			// New data has a later expiration
 			// if foud then update the cache
 			a.Settings().SetExpiration(user.Expiration)
 			return C.CString(string("true"))
 		}
-		a.SetUserData(ctx, user.UserId, user)
 	}
 	return C.CString(string("true"))
 }
@@ -272,8 +270,6 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 	if err != nil {
 		return sendError(err)
 	}
-	//a.SetProUser(true)
-	go a.UserData(ctx)
 	return C.CString("true")
 }
 

@@ -10,16 +10,20 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
-// ClientSession includes information needed to create a new client session
+// ClientSession includes information needed to createa new client session
 type ClientSession interface {
-	GetDeviceID() (string, error)
-	GetUserID() (int64, error)
-	GetToken() (string, error)
-	Locale() (string, error)
-	SetUserIdAndToken(int64, string) error
+	GetDeviceID() string
+	GetUserFirstVisit() bool
+	GetUserID() int64
+	GetToken() string
+	//Locale() string
+	SetExpiration(int64)
+	SetProUser(bool)
+	SetReferralCode(string)
+	SetUserIDAndToken(int64, string)
 }
 
-func (c *proClient) createUser(ctx context.Context, onUserCreate func(*protos.User)) error {
+func (c *proClient) createUser(ctx context.Context, session ClientSession) error {
 	log.Debug("New user, calling user create")
 	resp, err := c.UserCreate(ctx)
 	if err != nil {
@@ -30,14 +34,13 @@ func (c *proClient) createUser(ctx context.Context, onUserCreate func(*protos.Us
 	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
 		return errors.New("Could not create new Pro user: %v", err)
 	}
-	if onUserCreate != nil {
-		onUserCreate(resp.User)
-	}
+	session.SetReferralCode(user.Referral)
+	session.SetUserIDAndToken(user.UserId, user.Token)
 	return nil
 }
 
 // RetryCreateUser is used to retry creating a user with an exponential backoff strategy
-func (c *proClient) RetryCreateUser(ctx context.Context, onUserCreate func(*protos.User)) {
+func (c *proClient) RetryCreateUser(ctx context.Context, ss ClientSession) {
 	expBackoff := backoff.NewExponentialBackOff()
 	expBackoff.Multiplier = 2.0
 	expBackoff.InitialInterval = 3 * time.Second
@@ -45,28 +48,58 @@ func (c *proClient) RetryCreateUser(ctx context.Context, onUserCreate func(*prot
 	expBackoff.MaxElapsedTime = 10 * time.Minute
 	expBackoff.RandomizationFactor = 0.5 // Add jitter to backoff interval
 	err := backoff.Retry(func() error {
-		return c.createUser(ctx, onUserCreate)
+		return c.createUser(ctx, ss)
 	}, backoff.WithContext(expBackoff, ctx))
 	if err != nil {
 		log.Fatal("Unable to create Lantern user after max retries")
 	}
 }
 
-func (c *proClient) updateUserData(ctx context.Context, onUserData func(*protos.User)) error {
+func (c *proClient) updateUserData(ctx context.Context, ss ClientSession, onUserData func(*protos.User)) error {
 	resp, err := c.UserData(ctx)
 	if err != nil {
 		return errors.New("error fetching user data: %v", err)
 	} else if resp.User == nil {
 		return errors.New("error fetching user data")
 	}
+	user := resp.User
+	currentDevice := ss.GetDeviceID()
+
+	// Check if device id is connect to same device if not create new user
+	// this is for the case when user removed device from other device
+	deviceFound := false
+	if user.Devices != nil {
+		for _, device := range user.Devices {
+			if device.Id == currentDevice {
+				deviceFound = true
+				break
+			}
+		}
+	}
+	/// Check if user has installed app first time
+	firstTime := ss.GetUserFirstVisit()
+	log.Debugf("First time visit %v", firstTime)
+	if user.UserLevel == "pro" && firstTime {
+		log.Debugf("User is pro and first time")
+		ss.SetProUser(true)
+	} else if user.UserLevel == "pro" && !firstTime && deviceFound {
+		log.Debugf("User is pro and not first time")
+		ss.SetProUser(true)
+	} else {
+		log.Debugf("User is not pro")
+		ss.SetProUser(false)
+	}
+	ss.SetUserIDAndToken(user.UserId, user.Token)
+	ss.SetExpiration(user.Expiration)
+	ss.SetReferralCode(user.Referral)
 	if onUserData != nil {
-		onUserData(resp.User)
+		onUserData(user)
 	}
 	return nil
 }
 
 // RetryCreateUser is used to retry creating a user with an exponential backoff strategy
-func (c *proClient) PollUserData(ctx context.Context, onUserData func(*protos.User)) {
+func (c *proClient) PollUserData(ctx context.Context, session ClientSession, onUserData func(*protos.User)) {
 	expBackoff := backoff.NewExponentialBackOff()
 	expBackoff.Multiplier = 2.0
 	expBackoff.InitialInterval = 3 * time.Second
@@ -82,7 +115,7 @@ func (c *proClient) PollUserData(ctx context.Context, onUserData func(*protos.Us
 			return
 		case <-timer.C:
 			// Wait for the timer to expire
-			c.updateUserData(ctx, onUserData)
+			c.updateUserData(ctx, session, onUserData)
 
 			// Get the next backoff interval
 			waitTime := expBackoff.NextBackOff()

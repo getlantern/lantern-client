@@ -571,42 +571,9 @@ func (app *App) fetchOrCreateUser(ctx context.Context) {
 	}
 	if userID := ss.GetUserID(); userID == 0 {
 		ss.SetUserFirstVisit(true)
-		app.proClient.RetryCreateUser(ctx, func(u *protos.User) {
-			ss.SetReferralCode(u.Referral)
-			ss.SetUserIDAndToken(u.UserId, u.Token)
-		})
+		app.proClient.RetryCreateUser(ctx, ss)
 	} else {
-		app.proClient.PollUserData(ctx, func(u *protos.User) {
-			currentDevice := ss.GetDeviceID()
-
-			// Check if device id is connect to same device if not create new user
-			// this is for the case when user removed device from other device
-			deviceFound := false
-			if u.Devices != nil {
-				for _, device := range u.Devices {
-					if device.Id == currentDevice {
-						deviceFound = true
-						break
-					}
-				}
-			}
-			/// Check if user has installed app first time
-			firstTime := ss.GetUserFirstVisit()
-			log.Debugf("First time visit %v", firstTime)
-			if u.UserLevel == "pro" && firstTime {
-				log.Debugf("User is pro and first time")
-				ss.SetProUser(true)
-			} else if u.UserLevel == "pro" && !firstTime && deviceFound {
-				log.Debugf("User is pro and not first time")
-				ss.SetProUser(true)
-			} else {
-				log.Debugf("User is not pro")
-				ss.SetProUser(false)
-			}
-			ss.SetUserIDAndToken(u.UserId, u.Token)
-			ss.SetExpiration(u.Expiration)
-			ss.SetReferralCode(u.Referral)
-
+		app.proClient.PollUserData(ctx, ss, func(u *protos.User) {
 			app.SetUserData(ctx, u.UserId, u)
 			app.SendUpdateUserDataToUI()
 		})
