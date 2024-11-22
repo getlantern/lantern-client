@@ -369,6 +369,19 @@ make runDesktopTest testfile or integration_test/app_startup_flow_test.dart
 * If mocks are necessary for specific scenarios, ensure they are clearly documented and cover all critical edge cases.
 
 
+#### Running Test on Firebase Test Lab
+
+#### Setup
+* Make sure you have the `gcloud` CLI installed. If not, you can install it by following the instructions [here](https://cloud.google.com/sdk/docs/install).
+* Login to your Google Cloud account by running `gcloud auth login`.
+* Set the project ID by running `gcloud config set project lantern-android`.
+
+
+#### Running the test
+To Run test on android device on  Firebase Test Lab, you need to run the following command:
+```sh
+make ci-android-test
+```
 
 #### Unit Testing
 * Run running Flutter unit tests run `make test`

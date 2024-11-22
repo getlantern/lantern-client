@@ -746,7 +746,14 @@ clean:
 # Test environment scripts and other utilities
 
 require-patrol-cli:
-	@if [[ -z "$(patrol)" ]]; then echo 'Patrol CLI is not installed. Please install it before running this target'; exit 1; fi
+	@if ! command -v patrol &> /dev/null; then \
+		echo "Error: patrol-cli is not installed. Please install it with 'dart pub global activate patrol_cli'."; \
+		exit 1; \
+	fi
+# Build android apk for test
+test-build-android:require-patrol-cli
+	@echo "Building apk for test..."
+	@patrol build android
 
 # Application test cases
 
@@ -785,12 +792,15 @@ desktopWorkflowTest:
 	sh $(CURDIR)/integration_test/run_test.sh
 
 
-
-
 # Run specific tests on desktop
 runDesktopTest:
 	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
 	echo "Running tests on: $$ARGUMENTS" && \
 	flutter test $$ARGUMENTS -d macOS -r expanded
 
+
+# Run all android test on Firebase test lab
+ci-android-test:test-build-android
+	@echo "Running tests on Firebase test labs..."
+	sh $(CURDIR)/integration_test/run_android_testlabs.sh
 
