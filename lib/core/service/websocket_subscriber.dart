@@ -88,12 +88,10 @@ class WebsocketSubscriber {
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
             final deviceLinkingCode = message['deviceLinkingCode'];
-            if (userLevel != null) {
-              if (userLevel == 'pro' || userStatus == 'active') {
-                sessionModel.proUserNotifier.value = true;
-              } else {
-                sessionModel.proUserNotifier.value = false;
-              }
+            final isLevelPro = userLevel != null && userLevel == 'pro';
+            final isStatusPro = userStatus != null && userStatus == 'active';
+            if (isLevelPro || isStatusPro) {
+              sessionModel.proUserNotifier.value = true;
             }
             if (deviceLinkingCode != null) {
               sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
@@ -141,7 +139,6 @@ class WebsocketSubscriber {
     );
   }
 }
-
 
 /// Method to update plans
 void _updatePlans(Map<String, Plan>? plans) {

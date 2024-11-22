@@ -562,17 +562,54 @@ func (app *App) IsPro() bool {
 	return isPro
 }
 
-func (app *App) fetchOrCreateUser(ctx context.Context) (*protos.User, error) {
-	settings := app.Settings()
-	lang := settings.GetLanguage()
+func (app *App) fetchOrCreateUser(ctx context.Context) {
+	ss := app.Settings()
+	lang := ss.GetLanguage()
 	if lang == "" {
 		// set default language
-		settings.SetLanguage("en_us")
+		ss.SetLanguage("en_us")
 	}
-	if userID := settings.GetUserID(); userID == 0 {
-		return app.CreateUser(ctx)
+	if userID := ss.GetUserID(); userID == 0 {
+		ss.SetUserFirstVisit(true)
+		app.proClient.RetryCreateUser(ctx, func(u *protos.User) {
+			ss.SetReferralCode(u.Referral)
+			ss.SetUserIDAndToken(u.UserId, u.Token)
+		})
 	} else {
-		return app.UserData(ctx)
+		app.proClient.PollUserData(ctx, func(u *protos.User) {
+			currentDevice := ss.GetDeviceID()
+
+			// Check if device id is connect to same device if not create new user
+			// this is for the case when user removed device from other device
+			deviceFound := false
+			if u.Devices != nil {
+				for _, device := range u.Devices {
+					if device.Id == currentDevice {
+						deviceFound = true
+						break
+					}
+				}
+			}
+			/// Check if user has installed app first time
+			firstTime := ss.GetUserFirstVisit()
+			log.Debugf("First time visit %v", firstTime)
+			if u.UserLevel == "pro" && firstTime {
+				log.Debugf("User is pro and first time")
+				ss.SetProUser(true)
+			} else if u.UserLevel == "pro" && !firstTime && deviceFound {
+				log.Debugf("User is pro and not first time")
+				ss.SetProUser(true)
+			} else {
+				log.Debugf("User is not pro")
+				ss.SetProUser(false)
+			}
+			ss.SetUserIDAndToken(u.UserId, u.Token)
+			ss.SetExpiration(u.Expiration)
+			ss.SetReferralCode(u.Referral)
+
+			app.SetUserData(ctx, u.UserId, u)
+			app.SendUpdateUserDataToUI()
+		})
 	}
 }
 
@@ -590,27 +627,6 @@ func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
 		"deviceLinkingCode": resp.Code,
 	})
 	return resp.Code, nil
-}
-
-// CreateUser is used when Lantern is run for the first time and creates a new user with the pro server
-func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
-	log.Debug("New user, calling user create")
-	settings := app.Settings()
-	settings.SetUserFirstVisit(true)
-	resp, err := app.proClient.UserCreate(ctx)
-	if err != nil {
-		return nil, errors.New("Could not create new Pro user: %v", err)
-	}
-	user := resp.User
-	log.Debugf("DEBUG: User created: %v", user)
-	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
-		return nil, errors.New("Could not create new Pro user: %v", err)
-	}
-	app.SetUserData(ctx, user.UserId, user)
-	settings.SetReferralCode(user.Referral)
-	settings.SetUserIDAndToken(user.UserId, user.Token)
-	go app.UserData(ctx)
-	return resp.User, nil
 }
 
 // Plans returns the plans available to a user
@@ -675,59 +691,6 @@ func (app *App) FetchPaymentMethods(ctx context.Context) (*proclient.PaymentMeth
 	app.plansCache.Store("paymentMethods", desktopPaymentMethods)
 	app.sendConfigOptions()
 	return resp, nil
-}
-
-// UserData looks up user data that is associated with the given UserConfig
-func (app *App) UserData(ctx context.Context) (*protos.User, error) {
-	log.Debug("Refreshing user data")
-	resp, err := app.proClient.UserData(context.Background())
-	if err != nil {
-		return nil, errors.New("error fetching user data: %v", err)
-	} else if resp.User == nil {
-		return nil, errors.New("error fetching user data")
-	}
-	userDetail := resp.User
-	settings := app.Settings()
-
-	setProUser := func(isPro bool) {
-		app.Settings().SetProUser(isPro)
-	}
-
-	currentDevice := app.Settings().GetDeviceID()
-
-	// Check if device id is connect to same device if not create new user
-	// this is for the case when user removed device from other device
-	deviceFound := false
-	if userDetail.Devices != nil {
-		for _, device := range userDetail.Devices {
-			if device.Id == currentDevice {
-				deviceFound = true
-				break
-			}
-		}
-	}
-
-	/// Check if user has installed app first time
-	firstTime := settings.GetUserFirstVisit()
-	log.Debugf("First time visit %v", firstTime)
-	if userDetail.UserLevel == "pro" && firstTime {
-		log.Debugf("User is pro and first time")
-		setProUser(true)
-	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
-		log.Debugf("User is pro and not first time")
-		setProUser(true)
-	} else {
-		log.Debugf("User is not pro")
-		setProUser(false)
-	}
-	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
-	settings.SetExpiration(userDetail.Expiration)
-	settings.SetReferralCode(resp.User.Referral)
-	log.Debugf("User caching successful: %+v", userDetail)
-	// Save data in userData cache
-	app.SetUserData(ctx, userDetail.UserId, userDetail)
-	app.SendUpdateUserDataToUI()
-	return resp.User, nil
 }
 
 func (app *App) devices() protos.Devices {

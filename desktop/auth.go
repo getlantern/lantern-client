@@ -128,10 +128,6 @@ func logout() *C.char {
 	}
 
 	clearLocalUserData()
-	// Create new user
-	if _, err := a.CreateUser(ctx); err != nil {
-		return sendError(err)
-	}
 	return C.CString("true")
 }
 
@@ -253,7 +249,7 @@ func deleteAccount(password *C.char) *C.char {
 		A:     A.Bytes(),
 	}
 	log.Debugf("Delete Account request email %v A %v", lowerCaseEmail, A.Bytes())
-	srpB, err := a.AuthClient().LoginPrepare(context.Background(), prepareRequestBody)
+	srpB, err := a.AuthClient().LoginPrepare(ctx, prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -309,10 +305,5 @@ func deleteAccount(password *C.char) *C.char {
 	clearLocalUserData()
 	// Set user id and token to nil
 	a.Settings().SetUserIDAndToken(0, "")
-	// Create new user
-	// Create new user
-	if _, err := a.CreateUser(ctx); err != nil {
-		return sendError(err)
-	}
 	return C.CString("true")
 }

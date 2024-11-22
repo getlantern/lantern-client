@@ -151,20 +151,24 @@ func hasPlanUpdatedOrBuy() *C.char {
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	cacheUserData, isOldFound := cachedUserData()
+	ctx := context.Background()
 	//Get latest user data
-	resp, err := a.ProClient().UserData(context.Background())
+	resp, err := a.ProClient().UserData(ctx)
 	if err != nil {
 		return sendError(err)
 	}
 	if isOldFound {
-		if cacheUserData.Expiration < resp.User.Expiration {
+		user := resp.User
+		log.Debugf("Expiration %v prev %v", user.Expiration, cacheUserData.Expiration)
+		if cacheUserData.Expiration < user.Expiration {
 			// New data has a later expiration
 			// if foud then update the cache
-			a.Settings().SetExpiration(resp.User.Expiration)
+			a.Settings().SetExpiration(user.Expiration)
 			return C.CString(string("true"))
 		}
+		a.SetUserData(ctx, user.UserId, user)
 	}
-	return C.CString(string("false"))
+	return C.CString(string("true"))
 }
 
 //export applyRef
