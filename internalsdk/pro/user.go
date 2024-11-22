@@ -19,7 +19,6 @@ type UserConfig interface {
 	Locale() string
 }
 
-// ClientSession represents a client session
 type ClientSession interface {
 	UserConfig
 	SetExpiration(int64)
@@ -105,7 +104,7 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 	return user, nil
 }
 
-// RetryCreateUser is used to retry creating a user with an exponential backoff strategy
+// PollUserData polls for user data with a retry handler up to max elapsed time
 func (c *proClient) PollUserData(ctx context.Context, session ClientSession,
 	maxElapsedTime time.Duration, client Client) {
 	log.Debug("Polling user data")

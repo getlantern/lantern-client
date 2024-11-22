@@ -40,7 +40,6 @@ func TestPollUserData(t *testing.T) {
 	// Run PollUserData
 	go c.PollUserData(ctx, session, 10*time.Second, mockClient)
 
-	// Wait for the context to expire
 	time.Sleep(12 * time.Second)
 
 	// Count the number of calls
