@@ -234,8 +234,8 @@ github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da h1:T/pxF37Z9SIQC
 github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da/go.mod h1:3vR6+jQdWfWojZ77w+htCqEF5MO/Y2twJOpAvFuM9po=
 github.com/getlantern/autoupdate v0.0.0-20240926204302-11d9aa2df948 h1:QPpGiY3ljAaNe3qdx22cTVzDPQLS/4yUeuvyGgfADCA=
 github.com/getlantern/autoupdate v0.0.0-20240926204302-11d9aa2df948/go.mod h1:ohIVs2H6Wb58ZaCw/OAP+z6RPFVaRokAnldy+ATGwdQ=
-github.com/getlantern/broflake v0.0.0-20240726141511-b0693659265d h1:1CP0+0UYTn/sl0VfQhcvaisAZxoCqVoTfsl59dmajb0=
-github.com/getlantern/broflake v0.0.0-20240726141511-b0693659265d/go.mod h1:tiDZ3G1JdjwLZDG0O4LYpeFMAxGjFb9L15s7NO4ibVk=
+github.com/getlantern/broflake v0.0.0-20241120131914-6817e280a926 h1:vfBrgLj+CVtMqtERkm9zOoGU6yLv9Pl7iMRB6kgz4WQ=
+github.com/getlantern/broflake v0.0.0-20241120131914-6817e280a926/go.mod h1:Or0pIamSYF9lpsr8CYMeyBzRVC1cIRNltdTMKbtm40U=
 github.com/getlantern/bufconn v0.0.0-20190625204133-a08544339f8d/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 h1:8WjDNmpDLFVsAfcnHxqF4pfVKkdAQxyJ9iCHB4LxSfc=
 github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493/go.mod h1:d6O4RY+V87kIt4o9wru4SaNo7C2NAkD3YnmJFXEpODo=
@@ -293,12 +293,12 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight/v7 v7.6.140-0.20241122002414-ee02a2bfba64 h1:fhr2IpjomMGvWPczoNsRwUnCtiAGlL6uNuI0NMkOH8Q=
-github.com/getlantern/flashlight/v7 v7.6.140-0.20241122002414-ee02a2bfba64/go.mod h1:est8ctsMlt9NKPVzHuYrJ2GQWid3So5hITALGMsahqg=
+github.com/getlantern/flashlight/v7 v7.6.146 h1:DxiFntdzDti6RLQ8ylb5tqqAjyJTpePRKiXTaqs2sJE=
+github.com/getlantern/flashlight/v7 v7.6.146/go.mod h1:qp7PkHc/dodv4YWw9CY1sBNruBGjHpGV97ctO20K9uU=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
-github.com/getlantern/fronted v0.0.0-20241119164829-e357a9279198 h1:HnYF4cbOsQwLWxykQZmOYSj2j2xeANdD1PlkeJTSFcc=
-github.com/getlantern/fronted v0.0.0-20241119164829-e357a9279198/go.mod h1:scF5Zfdh9jZAokdxSg+WnBahMyWDKZIPdLtaAmMEuoc=
+github.com/getlantern/fronted v0.0.0-20241120203013-eedcd71609d2 h1:h3TZ7ye/1fqOLqfwTho4iRSEQqTMKVJIsOF+5XNyhus=
+github.com/getlantern/fronted v0.0.0-20241120203013-eedcd71609d2/go.mod h1:NfZDG8pmTL3wvo/s/sflpJFsgIL7etelgwzDRtO4HIM=
 github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9 h1:mSg57/+t59Q08AqArlhW+3N1AVPn5ox0dTOYonRps6w=
 github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9/go.mod h1:RjQ0krF8NTCc5xo2Q1995/vZBnYg33h8svn15do7dLg=
 github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 h1:RBKofGGMt2k6eGBwX8mky9qunjL+KnAp9JdzXjiRkRw=

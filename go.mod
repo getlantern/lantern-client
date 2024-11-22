@@ -37,8 +37,8 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.140-0.20241122002414-ee02a2bfba64
-	github.com/getlantern/fronted v0.0.0-20241119164829-e357a9279198
+	github.com/getlantern/flashlight/v7 v7.6.146
+	github.com/getlantern/fronted v0.0.0-20241120203013-eedcd71609d2
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
@@ -145,7 +145,7 @@ require (
 	github.com/gaukas/godicttls v0.0.4 // indirect
 	github.com/gaukas/wazerofs v0.1.0 // indirect
 	github.com/getlantern/algeneva v0.0.0-20240605225338-caba0b3edf03 // indirect
-	github.com/getlantern/broflake v0.0.0-20240726141511-b0693659265d // indirect
+	github.com/getlantern/broflake v0.0.0-20241120131914-6817e280a926 // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
 	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
