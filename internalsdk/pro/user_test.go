@@ -3,6 +3,7 @@ package pro
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -10,41 +11,81 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestCreateUser_Success(t *testing.T) {
-	mockClient := new(MockProClient)
-	mockSession := new(MockClientSession)
-
-	// Set up expected behavior
-	mockClient.On("UserCreate", mock.Anything).Return(&UserDataResponse{
-		User: &protos.User{
-			UserId: 123,
-			Token:  "test-token",
-		},
-	}, nil)
-	mockClient.On("SetUserIdAndToken", int64(123), "test-token").Return(nil)
-
-	_, err := mockClient.UserCreate(context.Background())
-	assert.NoError(t, err, "expected no error")
-	// Verify that UserCreate and SetUserIdAndToken were called once
-	mockClient.AssertCalled(t, "UserCreate", mock.Anything)
-	mockSession.AssertCalled(t, "SetUserIdAndToken", int64(123), "test-token")
-}
-
-func TestCreateUser_Failure(t *testing.T) {
-	mockClient := new(MockProClient)
-
-	mockClient.On("UserCreate", mock.Anything).Return(nil, errors.New("failed to create user"))
-
-	_, err := mockClient.UserCreate(context.Background())
-	assert.Error(t, err, "expected an error")
-	mockClient.AssertCalled(t, "UserCreate", mock.Anything)
-}
-
-type mockClient struct {
+// Define the mock proClient
+type mockProClient struct {
 	mock.Mock
 }
 
-func (m *mockClient) UpdateUserData(ctx context.Context, session ClientSession) (interface{}, error) {
+func (m *mockProClient) UpdateUserData(ctx context.Context, session ClientSession) (*protos.User, error) {
 	args := m.Called(ctx, session)
-	return args.Get(0), args.Error(1)
+	user, _ := args.Get(0).(*protos.User)
+	return user, args.Error(1)
+}
+
+// Test PollUserData
+func TestPollUserData(t *testing.T) {
+	mockClient := new(mockProClient)
+	var session ClientSession
+
+	// Configure the mock behavior
+	mockClient.On("UpdateUserData", mock.Anything, session).Return(nil, nil)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	c := &proClient{
+		backoffRunner: &backoffRunner{},
+	}
+
+	// Run PollUserData
+	go c.PollUserData(ctx, session, 10*time.Second, mockClient)
+
+	// Wait for the context to expire
+	time.Sleep(12 * time.Second)
+
+	// Count the number of calls
+	callCount := 0
+	for _, call := range mockClient.Calls {
+		if call.Method == "UpdateUserData" {
+			callCount++
+		}
+	}
+
+	// Verify the minimum number of calls
+	assert.GreaterOrEqual(t, callCount, 2, "Expected UpdateUserData to be called at least twice")
+}
+
+// Test PollUserData Handles Errors
+func TestPollUserDataWithError(t *testing.T) {
+	mockClient := new(mockProClient)
+	var session ClientSession
+
+	// Configure the mock to simulate errors
+	mockClient.On("UpdateUserData", mock.Anything, session).Return(nil, errors.New("mock error"))
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	c := &proClient{
+		backoffRunner: &backoffRunner{},
+	}
+
+	// Run PollUserData
+	go c.PollUserData(ctx, session, 5*time.Second, mockClient)
+
+	// Wait for the context to expire
+	time.Sleep(6 * time.Second)
+
+	// Verify that UpdateUserData was retried multiple times
+	AssertAtLeastCalled(t, &mockClient.Mock, "UpdateUserData", 2)
+}
+
+func AssertAtLeastCalled(t *testing.T, mock *mock.Mock, methodName string, minCalls int) {
+	callCount := 0
+	for _, call := range mock.Calls {
+		if call.Method == methodName {
+			callCount++
+		}
+	}
+	assert.GreaterOrEqual(t, callCount, minCalls, "Expected at least %d calls to %s, but got %d", minCalls, methodName, callCount)
 }

@@ -149,7 +149,8 @@ func setProxyAll(value *C.char) {
 //export hasPlanUpdatedOrBuy
 func hasPlanUpdatedOrBuy() *C.char {
 	ctx := context.Background()
-	go a.ProClient().PollUserData(ctx, a.Settings(), 10*time.Minute)
+	proClient := a.ProClient()
+	go proClient.PollUserData(ctx, a.Settings(), 10*time.Minute, proClient)
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	cacheUserData, isOldFound := cachedUserData()
@@ -167,7 +168,7 @@ func hasPlanUpdatedOrBuy() *C.char {
 			return C.CString(string("true"))
 		}
 	}
-	return C.CString(string("true"))
+	return C.CString(string("false"))
 }
 
 //export applyRef

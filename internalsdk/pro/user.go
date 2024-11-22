@@ -106,7 +106,8 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 }
 
 // RetryCreateUser is used to retry creating a user with an exponential backoff strategy
-func (c *proClient) PollUserData(ctx context.Context, session ClientSession, maxElapsedTime time.Duration) {
+func (c *proClient) PollUserData(ctx context.Context, session ClientSession,
+	maxElapsedTime time.Duration, client Client) {
 	log.Debug("Polling user data")
 	b := c.backoffRunner
 	b.mu.Lock()
@@ -133,7 +134,7 @@ func (c *proClient) PollUserData(ctx context.Context, session ClientSession, max
 	// Add jitter to backoff interval
 	expBackoff.RandomizationFactor = 0.5
 
-	if _, err := c.UpdateUserData(ctx, session); err != nil {
+	if _, err := client.UpdateUserData(ctx, session); err != nil {
 		log.Errorf("Initial user data update failed: %v", err)
 	}
 
@@ -146,7 +147,7 @@ func (c *proClient) PollUserData(ctx context.Context, session ClientSession, max
 			log.Errorf("Poll user data cancelled: %v", ctx.Err())
 			return
 		case <-timer.C:
-			_, err := c.UpdateUserData(ctx, session)
+			_, err := client.UpdateUserData(ctx, session)
 			if err != nil {
 				if ctx.Err() != nil {
 					log.Errorf("UpdateUserData terminated due to context: %v", ctx.Err())

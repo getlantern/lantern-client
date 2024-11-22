@@ -30,23 +30,25 @@ type proClient struct {
 	webclient.RESTClient
 	backoffRunner *backoffRunner
 	userConfig    func() common.UserConfig
-	client        ProClient
 }
 
-//go:generate mockery --name=ProClient --output=../mocks/proclient --with-expecter
+type Client interface {
+	UpdateUserData(ctx context.Context, session ClientSession) (*protos.User, error)
+}
+
 type ProClient interface {
 	webclient.RESTClient
+	Client
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
 	Plans(ctx context.Context) (*PlansResponse, error)
-	PollUserData(ctx context.Context, session ClientSession, maxElapsedTime time.Duration)
+	PollUserData(ctx context.Context, session ClientSession, maxElapsedTime time.Duration, client Client)
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
 	RetryCreateUser(ctx context.Context, ss ClientSession, maxElapsedTime time.Duration)
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
-	UpdateUserData(ctx context.Context, ss ClientSession) (*protos.User, error)
 	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
 	RestorePurchase(ctx context.Context, req map[string]interface{}) (*OkResponse, error)
 	EmailRequest(ctx context.Context, email string) (*OkResponse, error)
