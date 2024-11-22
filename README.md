@@ -330,16 +330,22 @@ ANDROID_ARCH=386 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make 
 SECRETS_DIR=$PATH_TO_TOO_MANY_SECRETS VERSION=2.0.0-beta1 make android-bundle
 ```
 
-## Testing
+## 🧪 Testing
 For testing we are using [patrol](https://pub.dev/packages/patrol) framework, Patrol simplifies interaction with the native layer and offers an extensive set of easy-to-use testing APIs.
 
 ### Integration Testing
+
+#### Writing Integration Testing
+* Always use our custom [patrol](https://github.com/getlantern/lantern-client/blob/d5c36eba30e8072c0327eca4eea8472cbfa49cb5/integration_test/utils/test_utils.dart#L54) method for writing any new integration tests. Similarly, utilize [appTearDown](https://github.com/getlantern/lantern-client/blob/d5c36eba30e8072c0327eca4eea8472cbfa49cb5/integration_test/utils/test_utils.dart#L95) for cleanup. These methods ensure compatibility across different environments for mobile and desktop platforms.
+* Structure tests to simulate real user flows, such as changing app settings (e.g., language preferences) or completing actions
+* Ensure tests are compatible with all supported platforms (mobile and desktop).
+* If mocks are necessary for specific scenarios, ensure they are clearly documented and cover all critical edge cases.
+
 
 #### Running Integration Testing
 
 * Make sure you install patrol_cli globally by running `flutter pub global activate patrol_cli`
 * Make sure to connect any device or emulator to run the test.
-
 
 To run all integration the test on mobile
 ```sh
@@ -361,33 +367,19 @@ To run and single test on dekstop
 make runDesktopTest testfile or integration_test/app_startup_flow_test.dart
 ```
 
-
-#### Writing Integration Testing
-* Always use our custom [patrol](https://github.com/getlantern/lantern-client/blob/d5c36eba30e8072c0327eca4eea8472cbfa49cb5/integration_test/utils/test_utils.dart#L54) method for writing any new integration tests. Similarly, utilize [appTearDown](https://github.com/getlantern/lantern-client/blob/d5c36eba30e8072c0327eca4eea8472cbfa49cb5/integration_test/utils/test_utils.dart#L95) for cleanup. These methods ensure compatibility across different environments for mobile and desktop platforms.
-* Structure tests to simulate real user flows, such as changing app settings (e.g., language preferences) or completing actions
-* Ensure tests are compatible with all supported platforms (mobile and desktop).
-* If mocks are necessary for specific scenarios, ensure they are clearly documented and cover all critical edge cases.
-
-
 #### Running Test on Firebase Test Lab
 
-#### Setup
-* Make sure you have the `gcloud` CLI installed. If not, you can install it by following the instructions [here](https://cloud.google.com/sdk/docs/install).
+##### Setup
+* Install `gcloud CLI`. If not, you can install it by following the instructions [here](https://cloud.google.com/sdk/docs/install).
 * Login to your Google Cloud account by running `gcloud auth login`.
 * Set the project ID by running `gcloud config set project lantern-android`.
 
 
 #### Running the test
-To Run test on android device on  Firebase Test Lab, you need to run the following command:
+To Run test on android device on Firebase Test Lab, you need to run the following command:
 ```sh
 make ci-android-test
 ```
-
-#### Unit Testing
-* Run running Flutter unit tests run `make test`
-* To run independent Flutter tests, go to the root of the project and type: `flutter test test/my_folder_test.dart`
-  * in case that you need the code coverage just add the following argument: `flutter test --coverage test/my_folder_test.dart`
-
 
 #### Testing Replica
 A few Replica tests run [json-server](https://github.com/typicode/json-server) to serve dummy data during tests instead of hitting an actual Replica instance.
