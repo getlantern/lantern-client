@@ -80,7 +80,10 @@ require (
 	nhooyr.io/websocket v1.8.17
 )
 
-require github.com/coder/websocket v1.8.12 // indirect
+require (
+	github.com/cloudflare/circl v1.3.7 // indirect
+	github.com/coder/websocket v1.8.12 // indirect
+)
 
 require (
 	filippo.io/edwards25519 v1.0.0 // indirect
@@ -143,7 +146,6 @@ require (
 	github.com/enobufs/go-nats v0.0.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/frankban/quicktest v1.14.6 // indirect
-	github.com/gaukas/godicttls v0.0.4 // indirect
 	github.com/gaukas/wazerofs v0.1.0 // indirect
 	github.com/getlantern/algeneva v0.0.0-20240605225338-caba0b3edf03 // indirect
 	github.com/getlantern/broflake v0.0.0-20240726141511-b0693659265d // indirect
@@ -284,7 +286,7 @@ require (
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/quic-go/quic-go v0.46.0 // indirect
-	github.com/refraction-networking/utls v1.3.3 // indirect
+	github.com/refraction-networking/utls v1.6.7 // indirect
 	github.com/refraction-networking/water v0.7.0-alpha // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
