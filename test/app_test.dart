@@ -1,10 +1,12 @@
 import 'package:lantern/app.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
+import 'package:lantern/core/router/router.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/messaging/messaging_model.dart';
 import 'package:lantern/features/replica/models/replica_model.dart';
 import 'package:lantern/features/tray/tray_container.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
+import 'package:lantern/features/vpn/vpn_status.dart';
 import 'package:lantern/features/window/window_container.dart';
 
 import 'utils/test_common.dart';
@@ -15,6 +17,8 @@ void main() {
   late MockMessagingModel mockMessagingModel;
   late MockReplicaModel mockReplicaModel;
   late MockVpnModel mockVpnModel;
+  late MockBottomBarChangeNotifier mockBottomBarChangeNotifier;
+  late MockInternetStatusProvider mockInternetStatusProvider;
   late MockEventManager mockEventManager;
   late MockVPNChangeNotifier mockVPNChangeNotifier;
 
@@ -29,12 +33,19 @@ void main() {
       mockEventManager = MockEventManager();
 
       mockVPNChangeNotifier = MockVPNChangeNotifier();
-
+      mockBottomBarChangeNotifier = MockBottomBarChangeNotifier();
+      mockInternetStatusProvider = MockInternetStatusProvider();
       // Injection models
       sl.registerLazySingleton<SessionModel>(() => mockSessionModel);
       sl.registerLazySingleton<MessagingModel>(() => mockMessagingModel);
       sl.registerLazySingleton<ReplicaModel>(() => mockReplicaModel);
       sl.registerLazySingleton<VpnModel>(() => mockVpnModel);
+      sl.registerLazySingleton<AppRouter>(() => AppRouter());
+      sl.registerLazySingleton<BottomBarChangeNotifier>(
+          () => mockBottomBarChangeNotifier);
+      sl.registerLazySingleton<VPNChangeNotifier>(() => mockVPNChangeNotifier);
+      sl.registerLazySingleton<InternetStatusProvider>(
+          () => mockInternetStatusProvider);
     },
   );
 
@@ -115,6 +126,9 @@ void main() {
 
       testWidgets('Desktop-specific widgets are used on desktop platforms',
           (WidgetTester tester) async {
+        when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
+        when(mockVPNChangeNotifier.vpnStatus).thenReturn(ValueNotifier(TestVPNStatus.disconnected.value));
+
         when(mockSessionModel.proxyAvailable).thenReturn(ValueNotifier(true));
         when(mockSessionModel.isTestPlayVersion)
             .thenReturn(ValueNotifier(false));
