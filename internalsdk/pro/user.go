@@ -3,6 +3,7 @@ package pro
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
@@ -21,6 +22,11 @@ type ClientSession interface {
 	SetProUser(bool)
 	SetReferralCode(string)
 	SetUserIDAndToken(int64, string)
+}
+
+type backoffRunner struct {
+	mu        sync.Mutex
+	isRunning bool
 }
 
 func (c *proClient) createUser(ctx context.Context, session ClientSession) error {
@@ -55,12 +61,12 @@ func (c *proClient) RetryCreateUser(ctx context.Context, ss ClientSession) {
 	}
 }
 
-func (c *proClient) updateUserData(ctx context.Context, ss ClientSession, onUserData func(*protos.User)) error {
+func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*protos.User, error) {
 	resp, err := c.UserData(ctx)
 	if err != nil {
-		return errors.New("error fetching user data: %v", err)
+		return nil, errors.New("error fetching user data: %v", err)
 	} else if resp.User == nil {
-		return errors.New("error fetching user data")
+		return nil, errors.New("error fetching user data")
 	}
 	user := resp.User
 	currentDevice := ss.GetDeviceID()
@@ -92,18 +98,30 @@ func (c *proClient) updateUserData(ctx context.Context, ss ClientSession, onUser
 	ss.SetUserIDAndToken(user.UserId, user.Token)
 	ss.SetExpiration(user.Expiration)
 	ss.SetReferralCode(user.Referral)
-	if onUserData != nil {
-		onUserData(user)
-	}
-	return nil
+	return user, nil
 }
 
 // RetryCreateUser is used to retry creating a user with an exponential backoff strategy
 func (c *proClient) PollUserData(ctx context.Context, session ClientSession, onUserData func(*protos.User)) {
+	b := c.backoffRunner
+	b.mu.Lock()
+	if b.isRunning {
+		b.mu.Unlock()
+		return
+	}
+	b.isRunning = true
+	b.mu.Unlock()
+
+	defer func() {
+		b.mu.Lock()
+		b.isRunning = false
+		b.mu.Unlock()
+	}()
+
 	expBackoff := backoff.NewExponentialBackOff()
 	expBackoff.Multiplier = 2.0
-	expBackoff.InitialInterval = 3 * time.Second
-	expBackoff.MaxInterval = 10 * time.Minute
+	expBackoff.InitialInterval = 10 * time.Second
+	expBackoff.MaxInterval = 2 * time.Minute
 	expBackoff.MaxElapsedTime = 10 * time.Minute
 	expBackoff.RandomizationFactor = 0.5 // Add jitter to backoff interval
 	timer := time.NewTimer(0)            // Start immediately
@@ -112,10 +130,16 @@ func (c *proClient) PollUserData(ctx context.Context, session ClientSession, onU
 	for {
 		select {
 		case <-ctx.Done():
+			fmt.Println("Task cancelled:", ctx.Err())
 			return
 		case <-timer.C:
 			// Wait for the timer to expire
-			c.updateUserData(ctx, session, onUserData)
+			user, err := c.UpdateUserData(ctx, session)
+			if err != nil {
+				log.Error(err)
+			} else if onUserData != nil {
+				onUserData(user)
+			}
 
 			// Get the next backoff interval
 			waitTime := expBackoff.NextBackOff()

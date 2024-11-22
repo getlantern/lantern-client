@@ -573,10 +573,7 @@ func (app *App) fetchOrCreateUser(ctx context.Context) {
 		ss.SetUserFirstVisit(true)
 		app.proClient.RetryCreateUser(ctx, ss)
 	} else {
-		app.proClient.PollUserData(ctx, ss, func(u *protos.User) {
-			app.SetUserData(ctx, u.UserId, u)
-			app.SendUpdateUserDataToUI()
-		})
+		app.proClient.UpdateUserData(ctx, ss)
 	}
 }
 

@@ -27,7 +27,8 @@ var (
 
 type proClient struct {
 	webclient.RESTClient
-	userConfig func() common.UserConfig
+	backoffRunner *backoffRunner
+	userConfig    func() common.UserConfig
 }
 
 type ProClient interface {
@@ -42,6 +43,7 @@ type ProClient interface {
 	RetryCreateUser(ctx context.Context, session ClientSession)
 	UserCreate(ctx context.Context) (*UserDataResponse, error)
 	UserData(ctx context.Context) (*UserDataResponse, error)
+	UpdateUserData(ctx context.Context, ss ClientSession) (*protos.User, error)
 	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
 	RestorePurchase(ctx context.Context, req map[string]interface{}) (*OkResponse, error)
 	EmailRequest(ctx context.Context, email string) (*OkResponse, error)
@@ -70,9 +72,11 @@ func NewClient(baseURL string, opts *webclient.Opts) ProClient {
 			return nil
 		}
 	}
+
 	return &proClient{
-		userConfig: opts.UserConfig,
-		RESTClient: webclient.NewRESTClient(opts),
+		userConfig:    opts.UserConfig,
+		backoffRunner: &backoffRunner{},
+		RESTClient:    webclient.NewRESTClient(opts),
 	}
 }
 

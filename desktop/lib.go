@@ -148,10 +148,11 @@ func setProxyAll(value *C.char) {
 //
 //export hasPlanUpdatedOrBuy
 func hasPlanUpdatedOrBuy() *C.char {
+	ctx := context.Background()
+	go a.ProClient().PollUserData(ctx, a.Settings(), nil)
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	cacheUserData, isOldFound := cachedUserData()
-	ctx := context.Background()
 	//Get latest user data
 	resp, err := a.ProClient().UserData(ctx)
 	if err != nil {
@@ -383,7 +384,8 @@ func deviceLinkingCode() *C.char {
 //export paymentRedirect
 func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
-	resp, err := a.ProClient().PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
+	ctx := context.Background()
+	resp, err := a.ProClient().PaymentRedirect(ctx, &protos.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
 		Provider:    C.GoString(provider),
 		Currency:    strings.ToUpper(C.GoString(currency)),
@@ -394,6 +396,8 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 	if err != nil {
 		return sendError(err)
 	}
+
+	go a.ProClient().PollUserData(ctx, a.Settings(), nil)
 	return sendJson(resp)
 }
 
