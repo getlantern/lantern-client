@@ -6,8 +6,8 @@ import 'package:lantern/features/messaging/messaging_model.dart';
 import 'package:lantern/features/replica/models/replica_model.dart';
 import 'package:lantern/features/tray/tray_container.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
-import 'package:lantern/features/vpn/vpn_status.dart';
 import 'package:lantern/features/window/window_container.dart';
+import 'package:patrol/patrol.dart';
 
 import 'utils/test_common.dart';
 
@@ -49,6 +49,20 @@ void main() {
     },
   );
 
+  tearDown(
+    () {
+      clearInteractions(mockSessionModel);
+      clearInteractions(mockBuildContext);
+      clearInteractions(mockMessagingModel);
+      clearInteractions(mockReplicaModel);
+      clearInteractions(mockVpnModel);
+      clearInteractions(mockEventManager);
+      clearInteractions(mockVPNChangeNotifier);
+      clearInteractions(mockBottomBarChangeNotifier);
+      clearInteractions(mockInternetStatusProvider);
+    },
+  );
+
   tearDownAll(
     () {
       sl.reset();
@@ -58,148 +72,85 @@ void main() {
   group(
     'app widget',
     () {
-      testWidgets(
+      patrolWidgetTest('app start with proper setting', ($) async {
+        mockStartApp(
+            mockSessionModel: mockSessionModel,
+            mockBottomBarChangeNotifier: mockBottomBarChangeNotifier,
+            mockVPNChangeNotifier: mockVPNChangeNotifier,
+            mockMessagingModel: mockMessagingModel,
+            mockEventManager: mockEventManager,
+            mockBuildContext: mockBuildContext,
+            mockVpnModel: mockVpnModel);
+
+        await $.pumpWidget(const LanternApp());
+
+        final app = $.tester.widget<MaterialApp>(find.byType(MaterialApp));
+        final theme = app.theme!;
+
+        expect(app.locale, const Locale('en', 'US'));
+        expect(theme.useMaterial3, false);
+        expect(theme.brightness, Brightness.light);
+        expect(app.title, 'app_name'.i18n);
+        expect($(I18n), findsOneWidget);
+        expect($(ScaffoldMessenger), findsOneWidget);
+        expect($(GlobalLoaderOverlay), findsOneWidget);
+      }, variant: TargetPlatformVariant.all());
+
+      patrolWidgetTest(
         'Providers are correctly initialized',
-        (WidgetTester tester) async {
-          tester.view.devicePixelRatio = 2.0;
-          tester.platformDispatcher.localesTestValue = <Locale>[
-            const Locale('en-us'),
-            const Locale('ar-jo')
-          ];
-          tester.platformDispatcher.localeTestValue = const Locale('en-us');
+        ($) async {
+          mockStartApp(
+              mockSessionModel: mockSessionModel,
+              mockBottomBarChangeNotifier: mockBottomBarChangeNotifier,
+              mockVPNChangeNotifier: mockVPNChangeNotifier,
+              mockMessagingModel: mockMessagingModel,
+              mockEventManager: mockEventManager,
+              mockBuildContext: mockBuildContext,
+              mockVpnModel: mockVpnModel);
 
-          when(mockSessionModel.proxyAvailable).thenReturn(ValueNotifier(true));
-          when(mockSessionModel.pathValueNotifier(any, false))
-              .thenReturn(ValueNotifier(true));
-
-          when(mockSessionModel.language(any)).thenAnswer(
-            (realInvocation) {
-              final builder = realInvocation.positionalArguments[0]
-                  as ValueWidgetBuilder<String>;
-              return builder(mockBuildContext, 'en_in', null);
-            },
-          );
-
-          when(mockSessionModel.acceptedTermsVersion(any)).thenAnswer(
-            (realInvocation) {
-              final builder = realInvocation.positionalArguments[0]
-                  as ValueWidgetBuilder<int>;
-              return builder(mockBuildContext, 0, null);
-            },
-          );
-
-          when(mockSessionModel.chatEnabled(any)).thenAnswer(
-            (realInvocation) {
-              final builder = realInvocation.positionalArguments[0]
-                  as ValueWidgetBuilder<bool>;
-              return builder(mockBuildContext, false, null);
-            },
-          );
-
-          when(mockSessionModel.developmentMode(any)).thenAnswer(
-            (realInvocation) {
-              final builder = realInvocation.positionalArguments[0]
-                  as ValueWidgetBuilder<bool>;
-              return builder(mockBuildContext, false, null);
-            },
-          );
-
-          await tester.pumpWidget(const LanternApp());
+          await $.pumpWidget(const LanternApp());
 
           final bottomBarProvider = Provider.of<BottomBarChangeNotifier>(
-              tester.element(find.byType(MaterialApp)),
+              $.tester.element(find.byType(MaterialApp)),
               listen: false);
           expect(bottomBarProvider, isNotNull);
 
           final vpnProvider = Provider.of<VPNChangeNotifier>(
-              tester.element(find.byType(MaterialApp)),
+              $.tester.element(find.byType(MaterialApp)),
               listen: false);
 
           expect(vpnProvider, isNotNull);
 
           final internetStatusProvider = Provider.of<InternetStatusProvider>(
-              tester.element(find.byType(MaterialApp)),
+              $.tester.element(find.byType(MaterialApp)),
               listen: false);
           expect(internetStatusProvider, isNotNull);
         },
+        variant: TargetPlatformVariant.all(),
       );
 
-      testWidgets('Desktop-specific widgets are used on desktop platforms',
-          (WidgetTester tester) async {
-        when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
-        when(mockVPNChangeNotifier.vpnStatus).thenReturn(ValueNotifier(TestVPNStatus.disconnected.value));
+      patrolWidgetTest('Desktop-specific widgets are used on desktop platforms',
+          ($) async {
+        mockStartApp(
+            mockSessionModel: mockSessionModel,
+            mockBottomBarChangeNotifier: mockBottomBarChangeNotifier,
+            mockVPNChangeNotifier: mockVPNChangeNotifier,
+            mockMessagingModel: mockMessagingModel,
+            mockEventManager: mockEventManager,
+            mockBuildContext: mockBuildContext,
+            mockVpnModel: mockVpnModel);
 
-        when(mockSessionModel.proxyAvailable).thenReturn(ValueNotifier(true));
-        when(mockSessionModel.isTestPlayVersion)
-            .thenReturn(ValueNotifier(false));
-        when(mockSessionModel.isStoreVersion).thenReturn(ValueNotifier(false));
-        when(mockSessionModel.isAuthEnabled).thenReturn(ValueNotifier(false));
-
-        when(mockSessionModel.language(any)).thenAnswer(
-          (realInvocation) {
-            final builder = realInvocation.positionalArguments[0]
-                as ValueWidgetBuilder<String>;
-            return builder(mockBuildContext, 'en_us', null);
-          },
-        );
-
-        when(mockSessionModel.acceptedTermsVersion(any)).thenAnswer(
-          (realInvocation) {
-            final builder = realInvocation.positionalArguments[0]
-                as ValueWidgetBuilder<int>;
-            return builder(mockBuildContext, 0, null);
-          },
-        );
-
-        when(mockSessionModel.proUser(any)).thenAnswer(
-          (realInvocation) {
-            final builder = realInvocation.positionalArguments[0]
-                as ValueWidgetBuilder<bool>;
-            return builder(mockBuildContext, false, null);
-          },
-        );
-
-        when(mockSessionModel.developmentMode(any)).thenAnswer(
-          (realInvocation) {
-            final builder = realInvocation.positionalArguments[0]
-                as ValueWidgetBuilder<bool>;
-            return builder(mockBuildContext, false, null);
-          },
-        );
-
-        when(mockSessionModel.chatEnabled(any)).thenAnswer(
-          (realInvocation) {
-            final builder = realInvocation.positionalArguments[0]
-                as ValueWidgetBuilder<bool>;
-            return builder(mockBuildContext, false, null);
-          },
-        );
-
-        when(mockSessionModel.replicaAddr(any)).thenAnswer(
-          (realInvocation) {
-            final builder = realInvocation.positionalArguments[0]
-                as ValueWidgetBuilder<String>;
-            return builder(mockBuildContext, '', null);
-          },
-        );
-
-        when(mockMessagingModel.getOnBoardingStatus(any)).thenAnswer(
-          (realInvocation) {
-            final builder = realInvocation.positionalArguments[0]
-                as ValueWidgetBuilder<bool?>;
-            return builder(mockBuildContext, null, null);
-          },
-        );
-
-        stubVpnModel(
-            mockVpnModel: mockVpnModel, mockBuildContext: mockBuildContext);
-
-        await tester.pumpWidget(const LanternApp());
+        await $.pumpWidget(const LanternApp());
 
         // Verify that WindowContainer and TrayContainer are used
-        expect(find.byType(WindowContainer), findsOneWidget);
-        expect(find.byType(TrayContainer), findsOneWidget);
-      }, variant: TargetPlatformVariant.desktop());
+        if (isMobile()) {
+          expect($(WindowContainer), findsNothing);
+          expect($(TrayContainer), findsNothing);
+        } else {
+          expect($(WindowContainer), findsOneWidget);
+          expect($(TrayContainer), findsOneWidget);
+        }
+      }, variant: TargetPlatformVariant.all(excluding: {TargetPlatform.fuchsia}));
     },
   );
 }

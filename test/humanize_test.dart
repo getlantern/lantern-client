@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
-import 'package:lantern/core/utils/common.dart';
+
+import 'utils/test_common.dart';
 
 void main() {
   setUpAll(() async {
@@ -69,33 +69,24 @@ void main() {
       final now = DateTime.now();
       final dateTime = now.subtract(const Duration(seconds: 20));
       final expected = 'just now';
-
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
       expect(result, expected);
-      print('result: $result');
     });
 
     test('Event was 6 hours ago', () {
       final now = DateTime.now();
       final dateTime = now.subtract(const Duration(hours: 6));
       final expected = DateFormat('jm').format(dateTime);
-
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
       expect(result, expected);
-      print('result: $result');
     });
 
     test('Event was yesterday', () {
       final now = DateTime.now();
       final dateTime = now.subtract(const Duration(days: 1));
       final expected = 'yesterday';
-
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
       expect(result, expected);
-      print('result: $result');
     });
 
     test('Event was 3 days ago', () {
@@ -104,18 +95,14 @@ void main() {
       final expected = DateFormat('EEEE').format(dateTime);
 
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
       expect(result, expected);
-      print('result: $result');
     });
     test('Event was far in the past', () {
       final now = DateTime.now();
       final dateTime = DateTime(2021, 9, 8, 16, 30);
       final expected = '9/8/2021';
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
       expect(result, expected);
-      print('actual: $result');
     });
   });
 
@@ -124,52 +111,38 @@ void main() {
       final now = DateTime.now();
       final dateTime = now.add(const Duration(seconds: 30));
       final expected = 'within one minute';
-
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
       expect(result, expected);
-      print('actual: $result');
     });
     test('Event will be by EOD today', () {
       final now = DateTime.now();
       final dateTime = now.add(const Duration(minutes: 45));
       final expected = 'at ${DateFormat('jm').format(dateTime)}';
-
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
       expect(result, expected);
-      print('actual: $result');
     });
     test('Event will be tomorrow', () {
       final now = DateTime.now();
       final dateTime = now.add(const Duration(days: 1));
       final expected = 'tomorrow';
-
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
       expect(result, expected);
-      print('actual: $result');
     });
     test('Event will be 3 days from now', () {
       final now = DateTime.now();
       final dateTime = now.add(const Duration(days: 3));
       final expected =
           'on ${DateFormat('EEEE').format(dateTime)}, at ${DateFormat('jm').format(dateTime)}';
-
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
       expect(result, expected);
-      print('actual: $result');
     });
+
     test('Event will be far in the future', () {
       final now = DateTime.now();
-      final dateTime = DateTime(2022, 9, 8, 16, 30);
-      final expected = 'on 9/8/2022, at 4:30 PM';
-
+      final dateTime = DateTime(2030, 9, 8, 16, 30);
+      final expected = 'on 9/8/2030, at 4:30 PM';
       var result = humanizePastFuture(now, dateTime);
-      print('expected: $expected');
-      expect(result, expected);
-      print('actual: $result');
+      expect(normalizeSpaces(result), normalizeSpaces(expected));
     });
   });
 }

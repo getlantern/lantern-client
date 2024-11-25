@@ -193,9 +193,7 @@ class _LanternAppState extends State<LanternApp>
             ),
             child: I18n(
               initialLocale: currentLocale(lang),
-              child: ScaffoldMessenger(
-                child: _buildMaterialApp(context, lang, currentLocal),
-              ),
+              child: _buildMaterialApp(context, lang, currentLocal),
             ),
           );
         },

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lantern/features/account/account_tab.dart';
 import 'package:lantern/features/home/home.dart';
-import 'package:lantern/main.dart' as app;
 
 import '../../utils/test_utils.dart';
 
