@@ -4,23 +4,18 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"os"
 	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/issue"
-	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
-	"github.com/getlantern/lantern-client/desktop/sentry"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -31,8 +26,7 @@ import (
 import "C"
 
 const (
-	defaultLocale        = "en-US"
-	defaultConfigDirPerm = 0750
+	defaultLocale = "en-US"
 )
 
 var (
@@ -67,62 +61,10 @@ func start() *C.char {
 		log.Debug("Successfully loaded .env file")
 	}
 
-	_, err = logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
-	if err != nil {
-		log.Error(err)
-		// Nothing we can do if fails to create log files, leave logFile nil so
-		// the child process writes to standard outputs as usual.
-	}
-
-	// This init needs to be called before the panicwrapper fork so that it has been
-	// defined in the parent process
-	if app.ShouldReportToSentry() {
-		sentry.InitSentry(sentry.Opts{
-			DSN:             common.SentryDSN,
-			MaxMessageChars: common.SentryMaxMessageChars,
-		})
-	}
-	golog.SetPrepender(logging.Timestamped)
-
-	flags := initializeAppConfig()
-	a = app.NewApp(flags, flags.ConfigDir)
+	a = app.NewApp()
 	a.Run(context.Background())
 
 	return C.CString("")
-}
-
-// initializeAppConfig initializes application configuration and flags based on
-// environment variables
-func initializeAppConfig() flashlight.Flags {
-	flags := flashlight.ParseFlags()
-	if flags.Pprof {
-		go startPprof("localhost:6060")
-	}
-	parseBoolEnv := func(key string, defaultValue bool) bool {
-		val := os.Getenv(key)
-		parsedValue, err := strconv.ParseBool(val)
-		if err != nil {
-			return defaultValue
-		}
-		return parsedValue
-	}
-	stickyConfig := parseBoolEnv("STICKY_CONFIG", false)
-	readableConfig := parseBoolEnv("READABLE_CONFIG", true)
-	configDir := os.Getenv("CONFIG_DIR")
-	if configDir == "" {
-		configDir = appdir.General(common.DefaultAppName)
-		log.Debugf("CONFIG_DIR not set. Using default: %s", configDir)
-	}
-	if err := createDirIfNotExists(configDir, defaultConfigDirPerm); err != nil {
-		log.Errorf("Unable to create config directory %s: %v", configDir, err)
-	}
-	flags.StickyConfig = stickyConfig
-	flags.ReadableConfig = readableConfig
-	flags.ConfigDir = configDir
-
-	log.Debugf("Config options: directory %v sticky %v readable %v", configDir,
-		stickyConfig, readableConfig)
-	return flags
 }
 
 func getDeviceID() string {
