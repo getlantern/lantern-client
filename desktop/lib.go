@@ -9,13 +9,16 @@ import (
 	"strings"
 	"time"
 
+	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/issue"
+	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
+	"github.com/getlantern/lantern-client/desktop/sentry"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -60,6 +63,23 @@ func start() *C.char {
 	} else {
 		log.Debug("Successfully loaded .env file")
 	}
+
+	_, err = logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+	if err != nil {
+		log.Error(err)
+		// Nothing we can do if fails to create log files, leave logFile nil so
+		// the child process writes to standard outputs as usual.
+	}
+
+	// This init needs to be called before the panicwrapper fork so that it has been
+	// defined in the parent process
+	if app.ShouldReportToSentry() {
+		sentry.InitSentry(sentry.Opts{
+			DSN:             common.SentryDSN,
+			MaxMessageChars: common.SentryMaxMessageChars,
+		})
+	}
+	golog.SetPrepender(logging.Timestamped)
 
 	a = app.NewApp()
 	a.Run(context.Background())

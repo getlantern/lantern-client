@@ -3,12 +3,6 @@ package app
 import (
 	"net/http"
 	"os"
-
-	"github.com/getlantern/appdir"
-	"github.com/getlantern/flashlight/v7/logging"
-	"github.com/getlantern/golog"
-	"github.com/getlantern/lantern-client/desktop/sentry"
-	"github.com/getlantern/lantern-client/internalsdk/common"
 )
 
 // createDirIfNotExists checks that a directory exists, creating it if necessary
@@ -29,22 +23,4 @@ func startPprof(addr string) {
 	if err := srv.ListenAndServe(); err != nil {
 		log.Errorf("Error starting pprof server: %v", err)
 	}
-}
-
-// initLogging is used to setup application logging
-func initLogging(configDir string) {
-	_, err := logging.RotatedLogsUnder(configDir, appdir.Logs(configDir))
-	if err != nil {
-		log.Error(err)
-	}
-
-	// This init needs to be called before the panicwrapper fork so that it has been
-	// defined in the parent process
-	if ShouldReportToSentry() {
-		sentry.InitSentry(sentry.Opts{
-			DSN:             common.SentryDSN,
-			MaxMessageChars: common.SentryMaxMessageChars,
-		})
-	}
-	golog.SetPrepender(logging.Timestamped)
 }

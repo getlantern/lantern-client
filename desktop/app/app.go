@@ -103,8 +103,6 @@ func NewApp() *App {
 	// initialize app config and flags based on environment variables
 	flags := initializeAppConfig()
 	configDir := flags.ConfigDir
-	initLogging(configDir)
-
 	ss := settings.LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
 	app := &App{
