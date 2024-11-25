@@ -804,3 +804,9 @@ ci-android-test:test-build-android
 	@echo "Running tests on Firebase test labs..."
 	sh $(CURDIR)/integration_test/run_android_testlabs.sh
 
+
+#Runs widget tets
+widget-tests:
+	@echo "Running widget tests..."
+	flutter test test/
+

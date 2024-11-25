@@ -1,0 +1,71 @@
+name: Test Suite
+
+on:
+  push:
+    branches:
+      - main
+      - jigar/setup-test-suite
+  pull_request:
+    branches:
+      - main
+
+env:
+  GOPRIVATE: github.com/getlantern
+
+
+jobs:
+  test-suite:
+    runs-on: macos-13
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Pull LFS objects
+        run: git lfs pull
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: Granting private modules access
+        run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Setup protoc
+        uses: arduino/setup-protoc@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install latest protoc-gen-go
+        run: go install github.com/golang/protobuf/protoc-gen-go@latest
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: 'gradle'
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Install CLI
+        run: |
+          dart pub global activate protoc_plugin
+          dart pub global activate patrol_cli
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Running widget tests
+        run: make widget-tests
+
+      - name: Running workflow test for macos
+        run: make desktopWorkflowTest
+
+      - name: Running workflow test for android on Firebase test labs
+        run: make ci-android-test

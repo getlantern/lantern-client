@@ -364,7 +364,7 @@ void main() {
     },
   );
 
-  // Dekstop tests
+  // Desktop tests
   group(
     "Home widget render properly for Desktop",
     () {
