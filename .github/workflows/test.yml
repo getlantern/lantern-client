@@ -85,6 +85,7 @@ jobs:
 
       - name: Running workflow test for macos
         run: make desktopWorkflowTest
+        timeout-minutes: 60
 
       - name: Running workflow test for android on Firebase test labs
         run: make ci-android-test

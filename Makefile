@@ -808,5 +808,5 @@ ci-android-test:test-build-android
 #Runs widget tets
 widget-tests:
 	@echo "Running widget tests..."
-	flutter test test/ -r expanded
+	flutter test test/
 
