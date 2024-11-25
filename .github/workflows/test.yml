@@ -74,6 +74,11 @@ jobs:
           echo "VideoInterstitialZoneId=$TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID" >> app.env
           echo "InterstitialZoneId=$TAPSELL_INTERSTITIAL_ZONE_ID" >> app.env
 
+      - name: Build Libraries
+        run: |
+            make android ANDROID_ARCH=all
+            make macos
+            make ffigen
 
       - name: Running widget tests
         run: make widget-tests
