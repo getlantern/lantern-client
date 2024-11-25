@@ -48,6 +48,12 @@ jobs:
           java-version: 17
           cache: 'gradle'
 
+      - name: Setup Xcode
+        if: matrix.platform == 'macos'
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -84,7 +90,7 @@ jobs:
         run: make widget-tests
 
       - name: Running workflow test for macos
-        run: flutter test integration_test/app_startup_flow_test.dart -d macos
+        run: make desktopWorkflowTest
         timeout-minutes: 60
 
       - name: Running workflow test for android on Firebase test labs

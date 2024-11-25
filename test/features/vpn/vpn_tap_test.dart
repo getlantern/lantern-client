@@ -175,8 +175,7 @@ void main() {
           ], child: wrapWithMaterialApp(const VPNTab()));
 
           if (isDesktop()) {
-            when(mockVPNChangeNotifier.vpnStatus)
-                .thenReturn(ValueNotifier('disconnected'));
+            when(mockVPNChangeNotifier.vpnStatus).thenReturn(ValueNotifier('disconnected'));
           }
           stubSessionModel(
               mockSessionModel: mockSessionModel,
