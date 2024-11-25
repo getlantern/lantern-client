@@ -98,6 +98,10 @@ func start() *C.char {
 	}
 
 	// i18nInit(a)
+	stickyConfig, _ := strconv.ParseBool(os.Getenv("STICKY_CONFIG"))
+	readableConfig, _ := strconv.ParseBool(os.Getenv("READABLE_CONFIG"))
+	flags.StickyConfig = stickyConfig
+	flags.ReadableConfig = readableConfig
 	configDir := configDir(&flags)
 
 	a = app.NewApp(flags, configDir)
