@@ -23,11 +23,14 @@ import 'utils/test_utils.dart';
 // https://stackoverflow.com/questions/61535142/how-to-use-dylibs-from-a-plugin-inside-a-macos-sandboxed-application
 // https://github.com/flutter/flutter/issues/135673
 
-///Make sure to use custom tear down function  
+///Make sure to use custom tear down function
 void main() {
-  appTearDown(() async {
-    await sl.reset();
-  },);
+  WidgetsFlutterBinding.ensureInitialized();
+  appTearDown(
+    () async {
+      await sl.reset();
+    },
+  );
 
   patrol(
     "app start up sequence",

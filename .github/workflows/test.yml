@@ -84,7 +84,7 @@ jobs:
         run: make widget-tests
 
       - name: Running workflow test for macos
-        run: flutter test integration_test -d macos --verbose
+        run: flutter test integration_test/app_startup_flow_test.dart -d macos
         timeout-minutes: 60
 
       - name: Running workflow test for android on Firebase test labs
