@@ -4,7 +4,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"net/http"
 	"os"
 	"runtime/debug"
 	"strconv"
@@ -32,7 +31,8 @@ import (
 import "C"
 
 const (
-	defaultLocale = "en-US"
+	defaultLocale        = "en-US"
+	defaultConfigDirPerm = 0750
 )
 
 var (
@@ -83,31 +83,46 @@ func start() *C.char {
 		})
 	}
 	golog.SetPrepender(logging.Timestamped)
-	flags := flashlight.ParseFlags()
-	if flags.Pprof {
-		addr := "localhost:6060"
-		go func() {
-			log.Debugf("Starting pprof page at http://%s/debug/pprof", addr)
-			srv := &http.Server{
-				Addr: addr,
-			}
-			if err := srv.ListenAndServe(); err != nil {
-				log.Error(err)
-			}
-		}()
-	}
 
-	// i18nInit(a)
-	stickyConfig, _ := strconv.ParseBool(os.Getenv("STICKY_CONFIG"))
-	readableConfig, _ := strconv.ParseBool(os.Getenv("READABLE_CONFIG"))
-	flags.StickyConfig = stickyConfig
-	flags.ReadableConfig = readableConfig
-	configDir := configDir(&flags)
-
-	a = app.NewApp(flags, configDir)
+	flags := initializeAppConfig()
+	a = app.NewApp(flags, flags.ConfigDir)
 	a.Run(context.Background())
 
 	return C.CString("")
+}
+
+// initializeAppConfig initializes application configuration and flags based on
+// environment variables
+func initializeAppConfig() flashlight.Flags {
+	flags := flashlight.ParseFlags()
+	if flags.Pprof {
+		go startPprof("localhost:6060")
+	}
+	parseBoolEnv := func(key string, defaultValue bool) bool {
+		val := os.Getenv(key)
+		parsedValue, err := strconv.ParseBool(val)
+		if err != nil {
+			return defaultValue
+		}
+		return parsedValue
+	}
+	stickyConfig := parseBoolEnv("STICKY_CONFIG", false)
+	readableConfig := parseBoolEnv("READABLE_CONFIG", true)
+	configDir := os.Getenv("CONFIG_DIR")
+	if configDir == "" {
+		configDir = appdir.General(common.DefaultAppName)
+		log.Debugf("CONFIG_DIR not set. Using default: %s", configDir)
+	}
+	if err := createDirIfNotExists(configDir, defaultConfigDirPerm); err != nil {
+		log.Errorf("Unable to create config directory %s: %v", configDir, err)
+	}
+	flags.StickyConfig = stickyConfig
+	flags.ReadableConfig = readableConfig
+	flags.ConfigDir = configDir
+
+	log.Debugf("Config options: directory %v sticky %v readable %v", configDir,
+		stickyConfig, readableConfig)
+	return flags
 }
 
 func getDeviceID() string {
@@ -451,7 +466,7 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 //export checkUpdates
 func checkUpdates() *C.char {
 	log.Debug("Checking for updates")
-	ss := settings.LoadSettings(configDir(nil))
+	ss := settings.LoadSettings("")
 	userID := ss.GetUserID()
 	deviceID := ss.GetDeviceID()
 	op := ops.Begin("check_update").
@@ -468,23 +483,6 @@ func checkUpdates() *C.char {
 	return C.CString(updateURL)
 }
 
-func configDir(flags *flashlight.Flags) string {
-	cdir := appdir.General(common.DefaultAppName)
-	if flags != nil && flags.ConfigDir != "" {
-		cdir = flags.ConfigDir
-	}
-	log.Debugf("Using config dir %v", cdir)
-	if _, err := os.Stat(cdir); err != nil {
-		if os.IsNotExist(err) {
-			// Create config dir
-			if err := os.MkdirAll(cdir, 0750); err != nil {
-				log.Errorf("Unable to create configdir at %s: %s", configDir, err)
-			}
-		}
-	}
-	return cdir
-}
-
 // useOSLocale detect OS locale for current user and let i18n to use it
 func useOSLocale() (string, error) {
 	userLocale, err := jibber_jabber.DetectIETF()
@@ -496,28 +494,6 @@ func useOSLocale() (string, error) {
 	a.SetLanguage(userLocale)
 	return userLocale, nil
 }
-
-//Do not need to call this function
-// Since localisation is happing on client side
-// func i18nInit(a *app.App) {
-// 	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
-// 		return a.GetTranslations(filename)
-// 	})
-// 	locale := a.GetLanguage()
-// 	log.Debugf("Using locale: %v", locale)
-// 	if _, err := i18n.SetLocale(locale); err != nil {
-// 		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
-
-// 		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
-// 		// populated.
-// 		if locale, err := useOSLocale(); err != nil {
-// 			log.Debugf("i18n.UseOSLocale: %q", err)
-// 			a.SetLanguage(defaultLocale)
-// 		} else {
-// 			a.SetLanguage(locale)
-// 		}
-// 	}
-// }
 
 // clearLocalUserData clears the local user data from the settings
 func clearLocalUserData() {
