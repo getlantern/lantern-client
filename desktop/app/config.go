@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -116,7 +117,7 @@ func (app *App) sendConfigOptions() {
 }
 
 // initializeAppConfig initializes application configuration and flags based on environment variables
-func initializeAppConfig() flashlight.Flags {
+func initializeAppConfig() (flashlight.Flags, error) {
 	flags := flashlight.ParseFlags()
 	if flags.Pprof {
 		go startPprof("localhost:6060")
@@ -153,7 +154,7 @@ func initializeAppConfig() flashlight.Flags {
 		configDir = resolveConfigDir(configDir)
 	}
 	if err := createDirIfNotExists(configDir, defaultConfigDirPerm); err != nil {
-		log.Errorf("Unable to create config directory %s: %v", configDir, err)
+		return flags, fmt.Errorf("Unable to create config directory %s: %v", configDir, err)
 	}
 	flags.StickyConfig = stickyConfig
 	flags.ReadableConfig = readableConfig
@@ -161,5 +162,5 @@ func initializeAppConfig() flashlight.Flags {
 
 	log.Debugf("Config options: directory %v sticky %v readable %v", configDir,
 		stickyConfig, readableConfig)
-	return flags
+	return flags, nil
 }

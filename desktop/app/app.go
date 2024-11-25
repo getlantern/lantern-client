@@ -16,6 +16,7 @@ import (
 
 	"github.com/getsentry/sentry-go"
 
+	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
@@ -101,8 +102,19 @@ type App struct {
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
 func NewApp() *App {
 	// initialize app config and flags based on environment variables
-	flags := initializeAppConfig()
-	configDir := flags.ConfigDir
+	flags, err := initializeAppConfig()
+	if err != nil {
+		log.Fatalf("failed to initialize app config: %w", err)
+	}
+	return NewAppWithFlags(flags, flags.ConfigDir)
+}
+
+// NewAppWithFlags creates a new instance of App initialized with the given flags and configDir
+func NewAppWithFlags(flags flashlight.Flags, configDir string) *App {
+	if configDir == "" {
+		log.Debug("Config directory is empty, using default location")
+		configDir = appdir.General(common.DefaultAppName)
+	}
 	ss := settings.LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
 	app := &App{
