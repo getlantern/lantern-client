@@ -49,7 +49,6 @@ jobs:
           cache: 'gradle'
 
       - name: Setup Xcode
-        if: matrix.platform == 'macos'
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
