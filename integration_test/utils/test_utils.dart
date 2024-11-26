@@ -17,9 +17,15 @@ export 'package:patrol/patrol.dart';
 
 export '../../test/utils/test.mocks.mocks.dart';
 
-final _patrolTesterConfig = const PatrolTesterConfig();
+final _patrolTesterConfig = const PatrolTesterConfig(
+  visibleTimeout: Duration(seconds: 20),
+  settleTimeout: Duration(seconds: 20),
+  printLogs: true,
+
+);
 final _nativeAutomatorConfig = const NativeAutomatorConfig(
   findTimeout: Duration(seconds: 20),
+  
 );
 
 TestVariant mobileVariant() {
