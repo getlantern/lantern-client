@@ -109,13 +109,9 @@ class WebsocketSubscriber {
 
           case _WebsocketMessageType.bandwidth:
             _webSocketLogger.i("Websocket message[Bandwidth]: $json");
-            final Map res = jsonDecode(jsonEncode(message));
-            sessionModel.bandwidthNotifier.value = Bandwidth.create()
-              ..mergeFromProto3Json({
-                'allowed': res['allowed'],
-                'remaining': res['remaining'],
-                'percent': res['percent'],
-              });
+            final b = Bandwidth.create()..mergeFromProto3Json(message);
+            _webSocketLogger.i("Websocket22 message[Bandwidth]: $b");
+            sessionModel.bandwidthNotifier.value = b;
           case _WebsocketMessageType.config:
             _webSocketLogger.i("Websocket message[config]: $json");
             final ConfigOptions config = ConfigOptions.fromJson(message);
@@ -141,7 +137,6 @@ class WebsocketSubscriber {
     );
   }
 }
-
 
 /// Method to update plans
 void _updatePlans(Map<String, Plan>? plans) {
