@@ -58,6 +58,7 @@ jobs:
         with:
           channel: "stable"
 
+
       - name: Install CLI
         run: |
           dart pub global activate protoc_plugin
@@ -81,9 +82,11 @@ jobs:
 
       - name: Build Libraries
         run: |
-            make android ANDROID_ARCH=all
-            make macos
-            make ffigen
+          make android ANDROID_ARCH=all
+          make macos
+          make ffigen
+          flutter config enable-macos-desktop
+          
 
       - name: Running widget tests
         run: make widget-tests
