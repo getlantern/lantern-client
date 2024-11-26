@@ -15,7 +15,7 @@ env:
 
 jobs:
   test-suite:
-    runs-on: macos-14-xlarge
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -83,9 +83,9 @@ jobs:
       - name: Build Libraries
         run: |
           make android ANDROID_ARCH=all
-          make macos
+          make linux
           make ffigen
-          flutter config --enable-macos-desktop
+          flutter config --enable-linux-desktop
 
       - name: Running workflow test for macos
         run: make desktopWorkflowTest
