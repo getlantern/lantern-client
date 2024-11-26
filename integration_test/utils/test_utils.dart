@@ -25,7 +25,7 @@ final _patrolTesterConfig = const PatrolTesterConfig(
 );
 final _nativeAutomatorConfig = const NativeAutomatorConfig(
   findTimeout: Duration(seconds: 20),
-  
+
 );
 
 TestVariant mobileVariant() {
