@@ -86,14 +86,14 @@ jobs:
           make macos
           make ffigen
           flutter config --enable-macos-desktop
-          
-
-      - name: Running widget tests
-        run: make widget-tests
 
       - name: Running workflow test for macos
         run: make desktopWorkflowTest
         timeout-minutes: 60
+
+      - name: Running widget tests
+        run: make widget-tests
+
 
       - name: Running workflow test for android on Firebase test labs
         run: make ci-android-test
