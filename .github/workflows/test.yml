@@ -90,14 +90,6 @@ jobs:
       - name: Running workflow test for macos
         run: make desktopWorkflowTest
         timeout-minutes: 60
-        env:
-          DISPLAY: ':99'
-
-      - name: Upload Test Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: screenshots
-          path: build/screenshots
 
       - name: Running widget tests
         run: make widget-tests
