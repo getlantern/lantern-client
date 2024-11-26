@@ -57,8 +57,6 @@ var issueMap = map[string]string{
 func start() *C.char {
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
-	start := time.Now()
-	log.Debug("Starting Lantern")
 	debug.SetTraceback("all")
 
 	// Load application configuration from .env file
@@ -104,8 +102,7 @@ func start() *C.char {
 
 	a = app.NewApp(flags, configDir)
 	a.Run(context.Background())
-	end := time.Now()
-	log.Debugf("Time taken to start the app: %v", end.Sub(start))
+
 	return C.CString("")
 }
 

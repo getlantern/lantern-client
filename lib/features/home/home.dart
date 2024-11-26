@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    appLogger.d('HomePage initState');
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
@@ -142,10 +141,8 @@ class _HomePageState extends State<HomePage> {
     final tabModel = context.watch<BottomBarChangeNotifier>();
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
-        appLogger.d('HomePage build');
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
-            appLogger.d('HomePage developmentMode: $developmentMode');
             if (developmentMode) {
               Logger.level = Level.trace;
             } else {
@@ -167,9 +164,7 @@ class _HomePageState extends State<HomePage> {
               });
             }
 
-            appLogger.d('HomePage build: tabModel.currentIndex: ${tabModel.currentIndex}');
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
-              appLogger.d('HomePage build: isOnboarded: $isOnboarded');
               final tab = tabModel.currentIndex;
               return Scaffold(
                 body: buildBody(tab, isOnboarded),
