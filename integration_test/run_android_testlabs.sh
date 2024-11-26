@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+##!/usr/bin/env bash
+#set -euo pipefail
 
 #This script is used to run the integration test on Firebase Test Lab
 #this will use pixel 5 device with android 11
