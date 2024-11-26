@@ -94,11 +94,11 @@ jobs:
         env:
           DISPLAY: ':99'
 
-      - name: Upload Lantern Logs Folder
+      - name: Upload Test Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: lantern-logs
-          path: $HOME/Library/Logs/Lantern/
+          name: screenshots
+          path: build/screenshots
 
       - name: Running widget tests
         run: make widget-tests

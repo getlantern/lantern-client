@@ -57,7 +57,9 @@ import 'package:window_manager/window_manager.dart';
 Future<void> main({bool testMode = false}) async {
 // CI will be true only when running appium test
   WidgetsFlutterBinding.ensureInitialized();
-  Localization.ensureInitialized();
+  compute((message) {
+    Localization.ensureInitialized();
+  }, 'init');
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   appLogger.d('LanternApp main');
   try {
