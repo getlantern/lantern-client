@@ -113,7 +113,11 @@ jobs:
         if: runner.os == 'linux'
         timeout-minutes: 60
         with:
-          run: make linuxDesktopTest
+          run: |
+            sudo apt-get install -y network-manager dbus-x11
+            sudo systemctl start dbus
+            sudo systemctl start NetworkManager
+            make linuxDesktopTest
 
 
       - name: Running widget tests
