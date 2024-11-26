@@ -15,7 +15,10 @@ Future<void> main({bool testMode = false}) async {
 // CI will be true only when running appium test
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-   Localization.ensureInitialized();
+  // Inject all the services
+  await initServices();
+  await _desktopService();
+  await Localization.ensureInitialized();
 
   try {
     // To load the .env file contents into dotenv.
@@ -23,10 +26,6 @@ Future<void> main({bool testMode = false}) async {
   } catch (error) {
     appLogger.e("Error loading .env file: $error");
   }
-
-  await _desktopService();
-  // Inject all the services
-  await initServices();
 
   await _initGoogleMobileAds();
   // Due to replica we are using lot of cache
