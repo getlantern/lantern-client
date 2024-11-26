@@ -10,7 +10,7 @@ import 'package:lantern/features/vpn/vpn_notifier.dart';
 
 final GetIt sl = GetIt.instance;
 
-Future<void> initServices() async {
+void initServices() async {
   //Inject
 
   if (isMobile()) {

@@ -15,7 +15,8 @@ env:
 
 jobs:
   test-suite:
-    runs-on: ubuntu-latest
+#    runs-on: ubuntu-latest
+    runs-on: macos-14-xlarge
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -87,8 +88,8 @@ jobs:
           sudo apt-get install -y network-manager dbus-x11
           sudo apt-get install -y libwebkit2gtk-4.1-dev
           sudo apt-get install -y libunwind-dev libstdc++-12-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-d cmake
-#          sudo apt-get install -y libgtk-3-0 libblkid1 liblzma5
-#          sudo apt-get install -y libpcap-dev libgtk-3-dev libayatana-appindicator3-dev ruby ruby-dev && sudo gem install bundler -v 2.2.26
+          sudo apt-get install -y libgtk-3-0 libblkid1 liblzma5
+          sudo apt-get install -y libpcap-dev libgtk-3-dev libayatana-appindicator3-dev ruby ruby-dev && sudo gem install bundler -v 2.2.26
 
       - name: Install the ninja build tool
         if: runner.os == 'linux'
@@ -97,7 +98,7 @@ jobs:
       - name: Build Libraries
         run: |
           make android ANDROID_ARCH=all
-          make linux
+          make runner.os
           make ffigen
 
       - name: Running widget tests

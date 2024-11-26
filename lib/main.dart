@@ -14,24 +14,23 @@ import 'package:window_manager/window_manager.dart';
 Future<void> main({bool testMode = false}) async {
 // CI will be true only when running appium test
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  // Inject all the services
-  await initServices();
-
-  await Localization.ensureInitialized();
-
   try {
     // To load the .env file contents into dotenv.
     await dotenv.load(fileName: "app.env");
   } catch (error) {
     appLogger.e("Error loading .env file: $error");
   }
-
-  await _initGoogleMobileAds();
-  // Due to replica we are using lot of cache
-  // clear if goes to above limit
-  CustomCacheManager().clearCacheIfExceeded();
+  // Inject all the services
+  initServices();
   await _desktopService();
+  await Localization.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await _initGoogleMobileAds();
+  if(isAndroid()){
+    // Due to replica we are using lot of cache
+    // clear if goes to above limit
+    CustomCacheManager().clearCacheIfExceeded();
+  }
   if (testMode) {
     runApp(const LanternApp());
   } else {
