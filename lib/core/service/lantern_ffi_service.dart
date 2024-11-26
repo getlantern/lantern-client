@@ -48,13 +48,14 @@ class LanternFFI {
   static final Completer<void> _isolateInitialized = Completer<void>();
 
   static startDesktopService() {
-    if(hasServiceStarted) {
-      print('Desktop service already started');
-      return;
-    }
+    // if(hasServiceStarted) {
+    //   print('Desktop service already started');
+    //   return;
+    // }
+    print("FFI: Starting desktop service");
     _lanternFFI.start();
-    hasServiceStarted = true;
-    print('Starting desktop service');
+    // hasServiceStarted = true;
+    // print('Starting desktop service');
   }
 
   static void sysProxyOn() {

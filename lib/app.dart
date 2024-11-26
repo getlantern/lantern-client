@@ -44,6 +44,7 @@ class _LanternAppState extends State<LanternApp>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initDeepLinks();
     });
+    appLogger.d('LanternApp initState');
     super.initState();
   }
 
@@ -116,6 +117,7 @@ class _LanternAppState extends State<LanternApp>
 
   Widget _buildMaterialApp(
       BuildContext context, String lang, Locale currentLocal) {
+    appLogger.d('LanternApp _buildMaterialApp');
     final app = MaterialApp.router(
       locale: currentLocale(lang),
       debugShowCheckedModeBanner: false,
@@ -168,7 +170,7 @@ class _LanternAppState extends State<LanternApp>
   @override
   Widget build(BuildContext context) {
     final currentLocal = View.of(context).platformDispatcher.locale;
-
+    appLogger.d('LanternApp build');
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => sl<BottomBarChangeNotifier>()),
