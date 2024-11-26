@@ -61,7 +61,7 @@ Future<void> main({bool testMode = false}) async {
     Localization.ensureInitialized();
   }, 'init');
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
+  appLogger.d('LanternApp main');
   try {
     // To load the .env file contents into dotenv.
     await dotenv.load(fileName: "app.env");
@@ -70,15 +70,19 @@ Future<void> main({bool testMode = false}) async {
   }
 
   await Future.microtask(_desktopService);
+  appLogger.d('LanternApp main after desktop service');
   // Inject all the services
   await initServices();
+  appLogger.d('LanternApp main after init services');
   await _initGoogleMobileAds();
   // Due to replica we are using lot of cache
   // clear if goes to above limit
-  CustomCacheManager().clearCacheIfExceeded();
   if (testMode) {
+    appLogger.d('Running in test mode');
     runApp(const LanternApp());
   } else {
+    appLogger.d('Running in normal mode');
+    await CustomCacheManager().clearCacheIfExceeded();
     SentryFlutter.init((options) {
       // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
       // We recommend adjusting this value in production.
