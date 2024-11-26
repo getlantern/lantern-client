@@ -98,7 +98,8 @@ jobs:
       - name: Build Libraries
         run: |
           make android ANDROID_ARCH=all
-          make runner.os
+          make ${{runner.os}}
+          make 
           make ffigen
 
       - name: Running widget tests
