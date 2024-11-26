@@ -109,9 +109,12 @@ jobs:
         timeout-minutes: 60
 
       - name: Running workflow test for linux
-        run: make linuxDesktopTest
+        uses: username/xvfb-action@v1.1.2
         if: runner.os == 'linux'
         timeout-minutes: 60
+        with:
+          run: make linuxDesktopTest
+
 
       - name: Running widget tests
         run: make widget-tests
