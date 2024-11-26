@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
     appLogger.d('HomePage build');
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
-        appLogger.d('HomePage acceptedTermsVersion');
+        appLogger.d('HomePage build');
         return sessionModel.developmentMode(
           (BuildContext context, bool developmentMode, Widget? child) {
             appLogger.d('HomePage developmentMode: $developmentMode');
