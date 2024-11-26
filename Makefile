@@ -789,7 +789,7 @@ runTest:
 # Run all workflow tests on desktop
 desktopWorkflowTest:
 	@echo "Running all integration tests..."
-	flutter test integration_test/app_startup_flow_test.dart -d macos --verbose
+	flutter test integration_test/app_startup_flow_test.dart -d macos
 	#sh $(CURDIR)/integration_test/run_test.sh
 
 

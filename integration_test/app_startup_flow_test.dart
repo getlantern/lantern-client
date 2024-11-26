@@ -28,8 +28,8 @@ import 'utils/test_utils.dart';
 void main() {
   if(isDesktop()){
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
   }
-
   appTearDown(
     () async {
       await sl.reset();
