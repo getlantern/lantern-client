@@ -789,9 +789,12 @@ runTest:
 # Run all workflow tests on desktop
 desktopWorkflowTest:
 	@echo "Running all integration tests..."
-	flutter test integration_test/app_startup_flow_test.dart -d linux --verbose
+	flutter test integration_test/app_startup_flow_test.dart -d macos --verbose
 	#sh $(CURDIR)/integration_test/run_test.sh
 
+linuxDesktopTest:
+	@echo "Running all integration tests..."
+	flutter test integration_test/app_startup_flow_test.dart -d linux --verbose
 
 # Run specific tests on desktop
 runDesktopTest:

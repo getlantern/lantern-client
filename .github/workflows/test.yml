@@ -68,6 +68,13 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+
+      - name: Install Linux Dependencies
+        if: runner.os == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build build-essential cmake clang
+
       - name: Generate app.env
         env:
           ANDROID_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID }}
@@ -90,6 +97,12 @@ jobs:
 
       - name: Running workflow test for macos
         run: make desktopWorkflowTest
+        if: runner.os == 'macOS'
+        timeout-minutes: 60
+
+      - name: Running workflow test for linux
+        run: make linuxDesktopTest
+        if: runner.os == 'linux'
         timeout-minutes: 60
 
       - name: Running widget tests

@@ -17,7 +17,7 @@ Future<void> main({bool testMode = false}) async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   // Inject all the services
   await initServices();
-  await _desktopService();
+
   await Localization.ensureInitialized();
 
   try {
@@ -31,7 +31,7 @@ Future<void> main({bool testMode = false}) async {
   // Due to replica we are using lot of cache
   // clear if goes to above limit
   CustomCacheManager().clearCacheIfExceeded();
-
+  await _desktopService();
   if (testMode) {
     runApp(const LanternApp());
   } else {
