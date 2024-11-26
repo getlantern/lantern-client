@@ -90,6 +90,7 @@ class WebsocketImpl implements WebsocketService {
   }
 
   Future<void> _handleMessage(message) async {
+    print("Websocket message: $message");
     final Map<String, dynamic> json = jsonDecode(message ?? {});
     streamController.add(json);
   }

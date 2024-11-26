@@ -4,6 +4,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"runtime/debug"
@@ -59,6 +60,7 @@ func start() *C.char {
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	start := time.Now()
 	log.Debug("Starting Lantern")
+	fmt.Println("Initializing Go library...")
 	debug.SetTraceback("all")
 
 	// Load application configuration from .env file
@@ -106,6 +108,7 @@ func start() *C.char {
 	a.Run(context.Background())
 	end := time.Now()
 	log.Debugf("Time taken to start the app: %v", end.Sub(start))
+	fmt.Println("Time taken to start the app: %v", end.Sub(start))
 	return C.CString("")
 }
 
