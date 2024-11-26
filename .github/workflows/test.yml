@@ -109,7 +109,7 @@ jobs:
         timeout-minutes: 60
 
       - name: Running workflow test for linux
-        uses: username/xvfb-action@v1.1.2
+        uses: coactions/setup-xvfb@v1
         if: runner.os == 'linux'
         timeout-minutes: 60
         with:
