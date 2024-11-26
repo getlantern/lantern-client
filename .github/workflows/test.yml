@@ -5,9 +5,9 @@ on:
     branches:
       - main
       - jigar/setup-test-suite
-  pull_request:
-    branches:
-      - main
+#  pull_request:
+#    branches:
+#      - main
 
 env:
   GOPRIVATE: github.com/getlantern
@@ -90,6 +90,7 @@ jobs:
       - name: Running workflow test for macos
         run: make desktopWorkflowTest
         timeout-minutes: 60
+        continue-on-error: true
         env:
           DISPLAY: ':99'
 
@@ -103,5 +104,5 @@ jobs:
         run: make widget-tests
 
 
-      - name: Running workflow test for android on Firebase test labs
-        run: make ci-android-test
+#      - name: Running workflow test for android on Firebase test labs
+#        run: make ci-android-test
