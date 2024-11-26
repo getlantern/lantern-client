@@ -13,7 +13,6 @@ import (
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
-	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/proxied"
 	replicaConfig "github.com/getlantern/replica/config"
 	replicaServer "github.com/getlantern/replica/server"
@@ -126,7 +125,7 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 			return s.Flashlight.FeatureOptions(config.FeatureReplica, options)
 		},
 		s.Session.GetCountryCode,
-		geolookup.Refresh)
+		func() {})
 
 	input := replicaServer.NewHttpHandlerInput{}
 	input.SetDefaults()

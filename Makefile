@@ -254,7 +254,7 @@ require-app: guard-APP
 
 .PHONY: require-version
 require-version: guard-VERSION
-	@if ! [[ "$$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-.+)?$$ ]]; then \
+	@if ! echo "$$VERSION" | grep -Eq "^[0-9]+\.[0-9]+\.[0-9]+(-.+)?$$"; then \
 		echo "VERSION must be a semantic version like '1.2.10' or '1.2.10-foo"; \
 		exit 1; \
 	fi
@@ -352,7 +352,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
-		-ldflags="-s -w $(LDFLAGS)" \
+		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
