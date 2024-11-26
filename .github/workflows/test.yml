@@ -85,7 +85,7 @@ jobs:
           make android ANDROID_ARCH=all
           make macos
           make ffigen
-          flutter config enable-macos-desktop
+          flutter config --enable-macos-desktop
           
 
       - name: Running widget tests
