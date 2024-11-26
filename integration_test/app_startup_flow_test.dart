@@ -1,3 +1,4 @@
+import 'package:integration_test/integration_test.dart';
 import 'package:lantern/features/home/home.dart';
 
 import 'utils/test_utils.dart';
@@ -25,7 +26,10 @@ import 'utils/test_utils.dart';
 
 ///Make sure to use custom tear down function
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  if(isDesktop()){
+    IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  }
+
   appTearDown(
     () async {
       await sl.reset();
