@@ -26,9 +26,9 @@ import 'utils/test_utils.dart';
 
 ///Make sure to use custom tear down function
 void main() {
-  if(isDesktop()){
-    IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  }
+  // if(isDesktop()){
+    final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  // }
   appTearDown(
     () async {
       await sl.reset();
@@ -38,10 +38,12 @@ void main() {
   patrol(
     "app start up sequence",
     ($) async {
+      await $.pump(Durations.extralong4);
       await $(HomePage).waitUntilVisible();
       final bottombar = find.byType(BottomNavigationBar);
+      await binding.takeScreenshot('app start up sequence');
+
       expect(bottombar, findsOneWidget);
     },
-
   );
 }
