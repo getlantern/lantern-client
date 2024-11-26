@@ -140,6 +140,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final tabModel = context.watch<BottomBarChangeNotifier>();
+    appLogger.d('HomePage build');
     return sessionModel.acceptedTermsVersion(
       (BuildContext context, int version, Widget? child) {
         appLogger.d('HomePage build');

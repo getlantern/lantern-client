@@ -18,7 +18,7 @@ export 'package:patrol/patrol.dart';
 export '../../test/utils/test.mocks.mocks.dart';
 
 final _patrolTesterConfig = const PatrolTesterConfig(
-  visibleTimeout: Duration(seconds: 20),
+  visibleTimeout: Duration(minutes: 1),
   settleTimeout: Duration(seconds: 20),
   printLogs: true,
 

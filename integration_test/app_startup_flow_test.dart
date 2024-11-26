@@ -42,5 +42,6 @@ void main() {
       final bottombar = find.byType(BottomNavigationBar);
       expect(bottombar, findsOneWidget);
     },
+
   );
 }
