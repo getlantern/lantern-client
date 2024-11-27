@@ -15,7 +15,7 @@ env:
 jobs:
   test-suite:
     runs-on: ubuntu-latest
-#    runs-on: macos-13-large
+    #    runs-on: macos-13-large
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,6 +33,16 @@ jobs:
       - name: Granting private modules access
         run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
+      - name: GCloud Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 'Use gcloud CLI'
+        run: gcloud info
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
