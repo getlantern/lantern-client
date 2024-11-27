@@ -75,13 +75,12 @@ void main() {
 
     test('Event was 6 hours ago', () {
       final now = DateTime.now();
-      print("dateTime: now $now");
-      final dateTime = now.subtract(const Duration(hours: 6));
-      print("dateTime: $dateTime");
-      final expected = DateFormat('jm').format(dateTime);
+      DateTime dateTime = now.subtract(const Duration(hours: 6));
+      String expected = DateFormat('jm').format(dateTime);
+      if (dateTime.day != now.day) {
+        expected = 'yesterday';
+      }
       var result = humanizePastFuture(now, dateTime);
-      print("result: $result");
-      print("expected: $expected");
       expect(result, expected);
     });
 
