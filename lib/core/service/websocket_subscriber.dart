@@ -109,9 +109,8 @@ class WebsocketSubscriber {
 
           case _WebsocketMessageType.bandwidth:
             _webSocketLogger.i("Websocket message[Bandwidth]: $json");
-            final b = Bandwidth.create()..mergeFromProto3Json(message);
-            _webSocketLogger.i("Websocket22 message[Bandwidth]: $b");
-            sessionModel.bandwidthNotifier.value = b;
+            sessionModel.bandwidthNotifier.value = Bandwidth.create()
+              ..mergeFromProto3Json(message);
           case _WebsocketMessageType.config:
             _webSocketLogger.i("Websocket message[config]: $json");
             final ConfigOptions config = ConfigOptions.fromJson(message);
