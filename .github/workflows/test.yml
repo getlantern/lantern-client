@@ -97,10 +97,12 @@ jobs:
 
       - name: Build Libraries
         run: |
+          echo "Building Android libraries"
           make android ANDROID_ARCH=all
-          make ${{runner.os}}
-          make 
+          echo "Building macos libraries"
+          make macos
           make ffigen
+          
 
       - name: Running widget tests
         run: make widget-tests
