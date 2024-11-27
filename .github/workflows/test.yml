@@ -14,8 +14,8 @@ env:
 
 jobs:
   test-suite:
-#    runs-on: ubuntu-latest
-    runs-on: macos-13-large
+    runs-on: ubuntu-latest
+#    runs-on: macos-13-large
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -96,12 +96,14 @@ jobs:
 
       - name: Build Libraries
         run: |
-          echo "Building Android libraries"
           make android ANDROID_ARCH=all
           echo "Building macos libraries"
-          make macos
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            make macos
+          elif [[ "$RUNNER_OS" == "Linux" ]]; then
+            make linux
+          fi
           make ffigen
-          
 
       - name: Running widget tests
         run: make widget-tests
@@ -110,13 +112,6 @@ jobs:
         run: make desktopWorkflowTest
         if: runner.os == 'macOS'
         timeout-minutes: 60
-        continue-on-error: true
-
-      - name: Navigate to /home/runner and list Lantern Log Folder
-        run: |
-          echo "Navigating to /home/runner"
-          cd $HOME/Library/Logs/Lantern/
-          ls -la  
 
       - name: Running workflow test for linux
         uses: coactions/setup-xvfb@v1
