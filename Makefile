@@ -751,7 +751,7 @@ require-patrol:
 
 
 # Build android apk for test
-test-build-android:require-patrol
+test-build-android:
 	@echo "Building apk for test..."
 	@patrol build android
 

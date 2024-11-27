@@ -43,6 +43,7 @@ jobs:
 
       - name: 'Use gcloud CLI'
         run: gcloud info
+        
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
@@ -115,6 +116,9 @@ jobs:
           fi
           make ffigen
 
+      - name: Running workflow test for android on Firebase test labs
+        run: make ci-android-test
+
       - name: Running widget tests
         run: make widget-tests
 
@@ -133,5 +137,3 @@ jobs:
             sudo systemctl start NetworkManager
             make linuxDesktopTest
 
-      - name: Running workflow test for android on Firebase test labs
-        run: make ci-android-test
