@@ -32,7 +32,9 @@ class LanternFFI {
 
   static DynamicLibrary _getLanternLib() {
     if (Platform.isMacOS) {
-      return DynamicLibrary.open('$_libName.dylib');
+      String dir = Directory.current.path;
+      print("Dir path ${Directory.current.path}");
+      return DynamicLibrary.open('$dir/$_libName.dylib');
     }
     if (Platform.isLinux) {
       String dir = Directory.current.path;
