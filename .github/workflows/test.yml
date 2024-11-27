@@ -12,11 +12,10 @@ on:
 env:
   GOPRIVATE: github.com/getlantern
 
-
 jobs:
   test-suite:
 #    runs-on: ubuntu-latest
-    runs-on: macos-14-xlarge
+    runs-on: macos-13-large
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
