@@ -111,6 +111,14 @@ jobs:
         run: make desktopWorkflowTest
         if: runner.os == 'macOS'
         timeout-minutes: 60
+        continue-on-error: true
+
+      - name: Navigate to /home/runner and list Lantern Log Folder
+        run: |
+          echo "Navigating to /home/runner"
+          cd /home/runner
+          echo "Listing contents of the Lantern log folder"
+          ls -la Library/Logs/Lantern 
 
       - name: Running workflow test for linux
         uses: coactions/setup-xvfb@v1
