@@ -116,9 +116,8 @@ jobs:
       - name: Navigate to /home/runner and list Lantern Log Folder
         run: |
           echo "Navigating to /home/runner"
-          cd /home/runner
-          echo "Listing contents of the Lantern log folder"
-          ls -la Library/Logs/Lantern 
+          cd $HOME/Library/Logs/Lantern/
+          ls -la  
 
       - name: Running workflow test for linux
         uses: coactions/setup-xvfb@v1
