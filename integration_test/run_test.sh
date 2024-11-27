@@ -3,6 +3,6 @@ find integration_test -maxdepth 4 -type f -name '*_test.dart' | while read test_
     flutter test "$test_file" -d macOS --verbose
     if [ $? -ne 0 ]; then
         echo "Test $test_file failed."
-        continue
+        exit 1
     fi
 done
