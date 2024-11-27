@@ -106,7 +106,7 @@ func start() *C.char {
 	a.Run(context.Background())
 	end := time.Now()
 	log.Debugf("Lantern client started in %v", end.Sub(start))
-	return C.CString("")
+	return C.CString("ok")
 }
 
 func getDeviceID() string {

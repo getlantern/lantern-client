@@ -1,6 +1,5 @@
 import 'dart:isolate';
 
-import 'package:ffi/ffi.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -50,11 +49,12 @@ class LanternFFI {
   static final Completer<void> _isolateInitialized = Completer<void>();
 
   static startDesktopService() {
-    if(hasServiceStarted) {
+    if (hasServiceStarted) {
       print('Desktop service already started');
       return;
     }
-    _lanternFFI.start();
+    final okay = _lanternFFI.start().cast<Utf8>().toDartString();
+    appLogger.i('ffi service $okay');
     hasServiceStarted = true;
     print('Starting desktop service');
   }
