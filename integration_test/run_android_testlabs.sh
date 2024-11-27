@@ -10,7 +10,7 @@ gcloud firebase test android run \
     --type instrumentation \
     --app build/app/outputs/apk/prod/debug/app-prod-debug.apk \
     --test build/app/outputs/apk/androidTest/prod/debug/app-prod-debug-androidTest.apk \
-    --device model=redfin,version=30,locale=en,orientation=portrait \
+    --device model=redfin,version=30,locale=en_US,orientation=portrait \
     --timeout 10m \
     --use-orchestrator \
     --environment-variables clearPackageData=true \

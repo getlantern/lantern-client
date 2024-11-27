@@ -41,9 +41,6 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: 'Use gcloud CLI'
-        run: gcloud info
-        
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
