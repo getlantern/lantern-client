@@ -61,10 +61,10 @@ func ServeDataCap(channel ws.UIChannel, iconURL func() string, clickURL func() s
 	}
 	go func() {
 		for quota := range bandwidth.Updates {
-			dataAllowedBytes, dataUsageBytes, percent := 0, 0, 0
+			mibAllowed, mibUsed, percent := 0, 0, 0
 			if quota != nil {
-				dataUsageBytes = int(quota.MiBUsed)
-				dataAllowedBytes = int(quota.MiBAllowed)
+				mibUsed = int(quota.MiBUsed)
+				mibAllowed = int(quota.MiBAllowed)
 				if quota.MiBUsed >= quota.MiBAllowed {
 					percent = 100
 				} else {
@@ -73,9 +73,9 @@ func ServeDataCap(channel ws.UIChannel, iconURL func() string, clickURL func() s
 			}
 
 			bservice.Out <- map[string]interface{}{
-				"percent":          percent,
-				"dataUsageBytes":   dataUsageBytes,
-				"dataAllowedBytes": dataAllowedBytes,
+				"percent":    percent,
+				"mibUsed":    mibUsed,
+				"mibAllowed": mibAllowed,
 			}
 		}
 	}()

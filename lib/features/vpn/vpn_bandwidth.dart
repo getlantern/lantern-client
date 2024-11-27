@@ -34,7 +34,7 @@ class VPNBandwidth extends StatelessWidget {
                 ),
                 Expanded(
                   child: CText(
-                    '${bandwidth.dataUsageBytes}/${bandwidth.dataAllowedBytes} MB',
+                    '${bandwidth.mibUsed}/${bandwidth.mibAllowed} MB',
                     textAlign: TextAlign.end,
                     style: tsSubtitle4,
                   ),

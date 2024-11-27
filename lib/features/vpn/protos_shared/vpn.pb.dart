@@ -95,19 +95,19 @@ class ServerInfo extends $pb.GeneratedMessage {
 class Bandwidth extends $pb.GeneratedMessage {
   factory Bandwidth({
     $fixnum.Int64? percent,
-    $fixnum.Int64? dataUsageBytes,
-    $fixnum.Int64? dataAllowedBytes,
+    $fixnum.Int64? mibUsed,
+    $fixnum.Int64? mibAllowed,
     $fixnum.Int64? ttlSeconds,
   }) {
     final $result = create();
     if (percent != null) {
       $result.percent = percent;
     }
-    if (dataUsageBytes != null) {
-      $result.dataUsageBytes = dataUsageBytes;
+    if (mibUsed != null) {
+      $result.mibUsed = mibUsed;
     }
-    if (dataAllowedBytes != null) {
-      $result.dataAllowedBytes = dataAllowedBytes;
+    if (mibAllowed != null) {
+      $result.mibAllowed = mibAllowed;
     }
     if (ttlSeconds != null) {
       $result.ttlSeconds = ttlSeconds;
@@ -120,8 +120,8 @@ class Bandwidth extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Bandwidth', createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'percent')
-    ..aInt64(2, _omitFieldNames ? '' : 'dataUsageBytes', protoName: 'dataUsageBytes')
-    ..aInt64(3, _omitFieldNames ? '' : 'dataAllowedBytes', protoName: 'dataAllowedBytes')
+    ..aInt64(2, _omitFieldNames ? '' : 'mibUsed', protoName: 'mibUsed')
+    ..aInt64(3, _omitFieldNames ? '' : 'mibAllowed', protoName: 'mibAllowed')
     ..aInt64(4, _omitFieldNames ? '' : 'ttlSeconds', protoName: 'ttlSeconds')
     ..hasRequiredFields = false
   ;
@@ -157,22 +157,22 @@ class Bandwidth extends $pb.GeneratedMessage {
   void clearPercent() => clearField(1);
 
   @$pb.TagNumber(2)
-  $fixnum.Int64 get dataUsageBytes => $_getI64(1);
+  $fixnum.Int64 get mibUsed => $_getI64(1);
   @$pb.TagNumber(2)
-  set dataUsageBytes($fixnum.Int64 v) { $_setInt64(1, v); }
+  set mibUsed($fixnum.Int64 v) { $_setInt64(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasDataUsageBytes() => $_has(1);
+  $core.bool hasMibUsed() => $_has(1);
   @$pb.TagNumber(2)
-  void clearDataUsageBytes() => clearField(2);
+  void clearMibUsed() => clearField(2);
 
   @$pb.TagNumber(3)
-  $fixnum.Int64 get dataAllowedBytes => $_getI64(2);
+  $fixnum.Int64 get mibAllowed => $_getI64(2);
   @$pb.TagNumber(3)
-  set dataAllowedBytes($fixnum.Int64 v) { $_setInt64(2, v); }
+  set mibAllowed($fixnum.Int64 v) { $_setInt64(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasDataAllowedBytes() => $_has(2);
+  $core.bool hasMibAllowed() => $_has(2);
   @$pb.TagNumber(3)
-  void clearDataAllowedBytes() => clearField(3);
+  void clearMibAllowed() => clearField(3);
 
   @$pb.TagNumber(4)
   $fixnum.Int64 get ttlSeconds => $_getI64(3);
