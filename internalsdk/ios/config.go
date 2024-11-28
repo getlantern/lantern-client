@@ -125,7 +125,8 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 		defer log.Debug("Set up fronting")
 		if frontingErr := cf.configureFronting(global, shortFrontedAvailableTimeout); frontingErr != nil {
 			log.Errorf("Unable to configure fronting on first try, update global config directly from GitHub and try again: %v", frontingErr)
-			global, globalUpdated = cf.updateGlobal(&http.Transport{}, global, globalEtag, "https://raw.githubusercontent.com/getlantern/lantern-binaries/main/cloud.yaml.gz")
+			cf.rt = http.DefaultTransport
+			global, globalUpdated = cf.updateGlobal(global, globalEtag, "https://raw.githubusercontent.com/getlantern/lantern-binaries/main/cloud.yaml.gz")
 			return cf.configureFronting(global, longFrontedAvailableTimeout)
 		}
 		return nil
@@ -154,7 +155,7 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 		}()
 
 		log.Debug("Updating global config")
-		global, globalUpdated = cf.updateGlobal(cf.rt, global, globalEtag, "https://globalconfig.flashlightproxy.com/global.yaml.gz")
+		global, globalUpdated = cf.updateGlobal(global, globalEtag, "https://globalconfig.flashlightproxy.com/global.yaml.gz")
 		log.Debug("Updated global config")
 		if refreshProxies {
 			log.Debug("Refreshing proxies")
@@ -268,9 +269,9 @@ func (cf *configurer) openConfig(name string, cfg interface{}, embedded []byte) 
 	return string(etagBytes), initialized, nil
 }
 
-func (cf *configurer) updateGlobal(rt http.RoundTripper, cfg *config.Global, etag string, url string) (*config.Global, bool) {
+func (cf *configurer) updateGlobal(cfg *config.Global, etag string, url string) (*config.Global, bool) {
 	updated := &config.Global{}
-	didFetch, err := cf.updateFromWeb(rt, globalYaml, etag, updated, url)
+	didFetch, err := cf.updateFromWeb(globalYaml, etag, updated, url)
 	if err != nil {
 		log.Error(err)
 	}
@@ -282,7 +283,7 @@ func (cf *configurer) updateGlobal(rt http.RoundTripper, cfg *config.Global, eta
 
 func (cf *configurer) updateProxies(cfg map[string]*commonconfig.ProxyConfig, etag string) (map[string]*commonconfig.ProxyConfig, bool) {
 	updated := make(map[string]*commonconfig.ProxyConfig)
-	didFetch, err := cf.updateFromWeb(cf.rt, proxiesYaml, etag, updated, "http://config.getiantem.org/proxies.yaml.gz")
+	didFetch, err := cf.updateFromWeb(proxiesYaml, etag, updated, "http://config.getiantem.org/proxies.yaml.gz")
 	if err != nil {
 		log.Error(err)
 	}
@@ -296,7 +297,7 @@ func (cf *configurer) updateProxies(cfg map[string]*commonconfig.ProxyConfig, et
 	return cfg, didFetch
 }
 
-func (cf *configurer) updateFromWeb(rt http.RoundTripper, name string, etag string, cfg interface{}, url string) (bool, error) {
+func (cf *configurer) updateFromWeb(name string, etag string, cfg interface{}, url string) (bool, error) {
 	var bytes []byte
 	var newETag string
 	var err error
@@ -304,7 +305,7 @@ func (cf *configurer) updateFromWeb(rt http.RoundTripper, name string, etag stri
 	if name == proxiesYaml && cf.hardcodedProxies != "" {
 		bytes, newETag, err = cf.updateFromHardcodedProxies()
 	} else {
-		bytes, newETag, err = cf.doUpdateFromWeb(rt, name, etag, cfg, url)
+		bytes, newETag, err = cf.doUpdateFromWeb(name, etag, cfg, url)
 	}
 	if err != nil {
 		return false, err
@@ -327,7 +328,7 @@ func (cf *configurer) updateFromWeb(rt http.RoundTripper, name string, etag stri
 	return newETag != etag, nil
 }
 
-func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name string, etag string, cfg interface{}, url string) ([]byte, string, error) {
+func (cf *configurer) doUpdateFromWeb(name string, etag string, cfg interface{}, url string) ([]byte, string, error) {
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, "", errors.New("Unable to construct request to fetch %v from %v: %v", name, url, err)
@@ -346,7 +347,7 @@ func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name string, etag st
 	// successive requests
 	req.Close = true
 
-	resp, err := rt.RoundTrip(req)
+	resp, err := cf.rt.RoundTrip(req)
 	if err != nil {
 		return nil, "", errors.New("Unable to fetch cloud config at %s: %s", url, err)
 	}
@@ -410,9 +411,9 @@ func (cf *configurer) configureFronting(global *config.Global, timeout time.Dura
 		return errors.New("Unable to read trusted CAs from global config, can't configure domain fronting: %v", err)
 	}
 
-	fronted.Configure(certs, global.Client.FrontedProviders(), "cloudfront", cf.fullPathTo("masquerade_cache"))
-	rt, ok := fronted.NewFronted(timeout)
-	if !ok {
+	fronted, err := fronted.NewFronted(certs, global.Client.FrontedProviders(), "cloudfront", cf.fullPathTo("masquerade_cache"))
+	rt, err := fronted.NewRoundTripper(timeout)
+	if err != nil {
 		return errors.New("Timed out waiting for fronting to finish configuring")
 	}
 
