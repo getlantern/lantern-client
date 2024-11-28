@@ -81,140 +81,7 @@ void main() {
     },
   );
 
-  patrol(
-    'home widget auth enable show first time visit screen',
-    ($) async {
-      if (isDesktop()) {
-        when(mockVPNChangeNotifier.vpnStatus)
-            .thenReturn(ValueNotifier(TestVPNStatus.connected.value));
-      }
-      when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
-      when(mockVPNChangeNotifier.isFlashlightInitialized).thenReturn(true);
 
-      /// Stub session model
-      when(mockSessionModel.proxyAvailable).thenReturn(ValueNotifier(true));
-
-      when(mockSessionModel.pathValueNotifier(any, false))
-          .thenReturn(ValueNotifier(true));
-
-      when(mockSessionModel.language(any)).thenAnswer(
-        (invocation) {
-          final builder =
-              invocation.positionalArguments[0] as ValueWidgetBuilder<String>;
-          return builder(mockBuildContext, 'en_us', null);
-        },
-      );
-
-      when(mockSessionModel.acceptedTermsVersion(any)).thenAnswer((invocation) {
-        final builder =
-            invocation.positionalArguments[0] as ValueWidgetBuilder<int>;
-        return builder(mockBuildContext, 0, null);
-      });
-
-      when(mockSessionModel.developmentMode(any)).thenAnswer(
-        (invocation) {
-          final builder =
-              invocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
-          return builder(mockBuildContext, true, null);
-        },
-      );
-
-      when(mockSessionModel.shouldShowAds(any)).thenAnswer(
-        (invocation) {
-          final builder =
-              invocation.positionalArguments[0] as ValueWidgetBuilder<String>;
-          return builder(mockBuildContext, "", null);
-        },
-      );
-
-      when(mockSessionModel.isTestPlayVersion)
-          .thenAnswer((realInvocation) => ValueNotifier(false));
-      when(mockSessionModel.proUserNotifier)
-          .thenAnswer((realInvocation) => ValueNotifier(false));
-      when(mockSessionModel.isStoreVersion).thenAnswer((realInvocation) {
-        return ValueNotifier(false);
-      });
-      when(mockSessionModel.isAuthEnabled)
-          .thenAnswer((realInvocation) => ValueNotifier(true));
-
-      when(mockSessionModel.chatEnabled(any)).thenAnswer(
-        (realInvocation) {
-          final builder =
-              realInvocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
-          return builder(mockBuildContext, false, null);
-        },
-      );
-
-      when(mockSessionModel.replicaAddr(any)).thenAnswer(
-        (realInvocation) {
-          final builder = realInvocation.positionalArguments[0]
-              as ValueWidgetBuilder<String>;
-          return builder(mockBuildContext, "", null);
-        },
-      );
-
-      stubSessionModel(
-          mockSessionModel: mockSessionModel,
-          mockBuildContext: mockBuildContext);
-
-      when(mockSessionModel.eventManager).thenReturn(mockEventManager);
-      when(mockEventManager.subscribe(any, any)).thenAnswer((realInvocation) {
-        final event = realInvocation.positionalArguments[0] as Event;
-        final onNewEvent =
-            realInvocation.positionalArguments[1] as void Function(Event, Map);
-        return () {
-          onNewEvent(event, {});
-        };
-      });
-
-      when(mockSessionModel.acceptedTermsVersion(any)).thenAnswer(
-        (realInvocation) {
-          final builder =
-              realInvocation.positionalArguments[0] as ValueWidgetBuilder<int>;
-          return builder(mockBuildContext, 0, null);
-        },
-      );
-
-      when(mockSessionModel.isUserFirstTimeVisit())
-          .thenAnswer((realInvocation) => Future.value(true));
-
-      /// messageing model
-      when(mockMessagingModel.getOnBoardingStatus(any)).thenAnswer(
-        (realInvocation) {
-          final builder = realInvocation.positionalArguments[0]
-              as ValueWidgetBuilder<bool?>;
-          return builder(mockBuildContext, null, null);
-        },
-      );
-
-      stubVpnModel(
-          mockVpnModel: mockVpnModel, mockBuildContext: mockBuildContext);
-
-      await $.pumpWidget(const LanternApp());
-      await $.pumpAndSettle();
-      await $.pump(const Duration(seconds: 2));
-
-      final signInFinder = $(Button).$('sign_in'.i18n.toUpperCase());
-      final lanternProFinder =
-          $(Button).$('get_lantern_pro'.i18n.toUpperCase());
-
-      expect($(Button), findsExactly(2));
-      expect(lanternProFinder, findsOneWidget);
-      expect(signInFinder, findsOneWidget);
-
-      when(mockSessionModel.hasUserSignedInNotifier)
-          .thenReturn(ValueNotifier(false));
-      when(mockSessionModel.userEmail).thenReturn(ValueNotifier(""));
-
-      await signInFinder.tap();
-      await $.pumpAndSettle();
-
-      expect($(AuthLanding), findsNothing);
-      expect($(AppBarProHeader), findsOneWidget);
-      expect($('sign_in'.i18n), findsOneWidget);
-    },
-    initApp: false,
-  );
 
 
   patrol(
@@ -307,6 +174,142 @@ void main() {
 
       expect($('privacy_disclosure_accept'.i18n.toUpperCase()), findsOneWidget);
       expect($(BottomNavigationBar), findsNothing);
+    },
+    initApp: false,
+  );
+
+
+  patrol(
+    'home widget auth enable show first time visit screen',
+        ($) async {
+      if (isDesktop()) {
+        when(mockVPNChangeNotifier.vpnStatus)
+            .thenReturn(ValueNotifier(TestVPNStatus.connected.value));
+      }
+      when(mockBottomBarChangeNotifier.currentIndex).thenReturn(TAB_VPN);
+      when(mockVPNChangeNotifier.isFlashlightInitialized).thenReturn(true);
+
+      /// Stub session model
+      when(mockSessionModel.proxyAvailable).thenReturn(ValueNotifier(true));
+
+      when(mockSessionModel.pathValueNotifier(any, false))
+          .thenReturn(ValueNotifier(true));
+
+      when(mockSessionModel.language(any)).thenAnswer(
+            (invocation) {
+          final builder =
+          invocation.positionalArguments[0] as ValueWidgetBuilder<String>;
+          return builder(mockBuildContext, 'en_us', null);
+        },
+      );
+
+      when(mockSessionModel.acceptedTermsVersion(any)).thenAnswer((invocation) {
+        final builder =
+        invocation.positionalArguments[0] as ValueWidgetBuilder<int>;
+        return builder(mockBuildContext, 0, null);
+      });
+
+      when(mockSessionModel.developmentMode(any)).thenAnswer(
+            (invocation) {
+          final builder =
+          invocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
+          return builder(mockBuildContext, true, null);
+        },
+      );
+
+      when(mockSessionModel.shouldShowAds(any)).thenAnswer(
+            (invocation) {
+          final builder =
+          invocation.positionalArguments[0] as ValueWidgetBuilder<String>;
+          return builder(mockBuildContext, "", null);
+        },
+      );
+
+      when(mockSessionModel.isTestPlayVersion)
+          .thenAnswer((realInvocation) => ValueNotifier(false));
+      when(mockSessionModel.proUserNotifier)
+          .thenAnswer((realInvocation) => ValueNotifier(false));
+      when(mockSessionModel.isStoreVersion).thenAnswer((realInvocation) {
+        return ValueNotifier(false);
+      });
+      when(mockSessionModel.isAuthEnabled)
+          .thenAnswer((realInvocation) => ValueNotifier(true));
+
+      when(mockSessionModel.chatEnabled(any)).thenAnswer(
+            (realInvocation) {
+          final builder =
+          realInvocation.positionalArguments[0] as ValueWidgetBuilder<bool>;
+          return builder(mockBuildContext, false, null);
+        },
+      );
+
+      when(mockSessionModel.replicaAddr(any)).thenAnswer(
+            (realInvocation) {
+          final builder = realInvocation.positionalArguments[0]
+          as ValueWidgetBuilder<String>;
+          return builder(mockBuildContext, "", null);
+        },
+      );
+
+      stubSessionModel(
+          mockSessionModel: mockSessionModel,
+          mockBuildContext: mockBuildContext);
+
+      when(mockSessionModel.eventManager).thenReturn(mockEventManager);
+      when(mockEventManager.subscribe(any, any)).thenAnswer((realInvocation) {
+        final event = realInvocation.positionalArguments[0] as Event;
+        final onNewEvent =
+        realInvocation.positionalArguments[1] as void Function(Event, Map);
+        return () {
+          onNewEvent(event, {});
+        };
+      });
+
+      when(mockSessionModel.acceptedTermsVersion(any)).thenAnswer(
+            (realInvocation) {
+          final builder =
+          realInvocation.positionalArguments[0] as ValueWidgetBuilder<int>;
+          return builder(mockBuildContext, 0, null);
+        },
+      );
+
+      when(mockSessionModel.isUserFirstTimeVisit())
+          .thenAnswer((realInvocation) => Future.value(true));
+
+      /// messageing model
+      when(mockMessagingModel.getOnBoardingStatus(any)).thenAnswer(
+            (realInvocation) {
+          final builder = realInvocation.positionalArguments[0]
+          as ValueWidgetBuilder<bool?>;
+          return builder(mockBuildContext, null, null);
+        },
+      );
+
+      stubVpnModel(
+          mockVpnModel: mockVpnModel, mockBuildContext: mockBuildContext);
+
+      await $.pumpWidget(const LanternApp());
+      await $.pumpAndSettle();
+      await $.pump(const Duration(seconds: 2));
+
+      final signInFinder = $(Button).$('sign_in'.i18n.toUpperCase());
+      final lanternProFinder =
+      $(Button).$('get_lantern_pro'.i18n.toUpperCase());
+
+      expect($(Button), findsExactly(2));
+      expect(lanternProFinder, findsOneWidget);
+      expect(signInFinder, findsOneWidget);
+
+      when(mockSessionModel.hasUserSignedInNotifier)
+          .thenReturn(ValueNotifier(false));
+      when(mockSessionModel.userEmail).thenReturn(ValueNotifier(""));
+
+      await signInFinder.tap();
+      await $.pumpAndSettle();
+
+      expect($(AuthLanding), findsNothing);
+      expect($(AppBarProHeader), findsOneWidget);
+      expect($('sign_in'.i18n), findsOneWidget);
     },
     initApp: false,
   );
