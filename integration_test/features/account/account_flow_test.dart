@@ -17,7 +17,6 @@ void main() {
     ($) async {
       //Wait until we call all the apis
       await $(VPNSwitch).waitUntilVisible();
-      
       await $('Account'.i18n).tap();
       await $.pumpAndSettle();
       await $.pump(const Duration(seconds: 2));
@@ -41,7 +40,7 @@ void main() {
       expect($(AppKeys.support).visible, equals(true));
       expect($(AppKeys.setting).visible, equals(true));
 
-      if(!sessionModel.proUserNotifier.value!) {
+      if (!sessionModel.proUserNotifier.value!) {
         //check for navigation
         await $(AppKeys.upgrade_lantern_pro).tap();
         await $.pumpAndSettle();
@@ -51,7 +50,17 @@ void main() {
         expect($(IconButton).visible, true);
         expect($(FullScreenDialog).visible, true);
 
-        await $(PlanCard).waitUntilVisible();
+        try {
+          await $(PlanCard).waitUntilVisible();
+        } on WaitUntilVisibleTimeoutException {
+          ///This is case when user is not able to get the plans
+          expect($(RetryWidget), findsOneWidget);
+          expect($(IconButton), findsOneWidget);
+          await $('refresh'.toUpperCase()).tap();
+          await $.pumpAndSettle();
+          await $(PlanCard).waitUntilVisible();
+        }
+
         expect($(PlanCard), findsAtLeast(2));
         expect($(PlanCard).at(0).visible, true);
         expect($(PlanCard).at(1).visible, true);
@@ -75,7 +84,7 @@ void main() {
 
       await $(IconButton).tap();
 
-      if(!sessionModel.proUserNotifier.value!){
+      if (!sessionModel.proUserNotifier.value!) {
         // approve device page
         await $(AppKeys.devices).tap();
         await $.pumpAndSettle();
@@ -85,7 +94,6 @@ void main() {
 
         await $(IconButton).tap();
       }
-
 
       if (isMobile()) {
         // desktop version

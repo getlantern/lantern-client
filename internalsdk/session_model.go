@@ -754,7 +754,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	go func() {
 		err = m.paymentMethods()
 		if err != nil {
-			log.Debugf("Plans V3 error: %v", err)
+			log.Debugf("Plans V4 error: %v", err)
 			// return err
 		}
 	}()
