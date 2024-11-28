@@ -789,7 +789,7 @@ runTest:
 # Run all workflow tests on desktop
 desktopWorkflowTest:
 	@echo "Running all integration tests..."
-	sh $(CURDIR)/integration_test/run_test.sh
+	sh $(CURDIR)/integration_test/run_macos_test.sh
 
 linuxDesktopTest:
 	@echo "Running all integration tests..."
