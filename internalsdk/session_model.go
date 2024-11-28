@@ -739,25 +739,26 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 			return pathdb.Put(tx, pathIsFirstTime, true, "")
 		})
-		err = m.userCreate(ctx)
+		go retryCreateUser(ctx, m)
+	} else {
+		/// Get all user details if user is created
+		/// Since user creation is async so we need to wait for user to be created
+		/// so if user is not created no need to waste resources to call other api
+		/// all details wil be fetch by [GetUserData] method
+		err = m.userDetail(ctx)
 		if err != nil {
 			log.Error(err)
 		}
+
+		go func() {
+			err = m.paymentMethods()
+			if err != nil {
+				log.Debugf("Plans V4 error: %v", err)
+				// return err
+			}
+		}()
 	}
 
-	// Get all user details
-	err = m.userDetail(ctx)
-	if err != nil {
-		log.Error(err)
-	}
-
-	go func() {
-		err = m.paymentMethods()
-		if err != nil {
-			log.Debugf("Plans V4 error: %v", err)
-			// return err
-		}
-	}()
 	go checkSplitTunneling(m)
 	m.surveyModel, _ = NewSurveyModel(*m)
 	return nil
@@ -1354,6 +1355,14 @@ func (m *SessionModel) SetUserIdAndToken(p1 int64, p2 string) error {
 		return pathdb.Put(tx, pathToken, p2, "")
 	})
 }
+
+// / This method is used to get user data mainly for the new user
+// / This method is called by user.go after user creation is done.
+func (m *SessionModel) GetUserData() error {
+	m.userDetail(context.Background())
+	return m.paymentMethods()
+
+}
 func setResellerCode(m *baseModel, resellerCode string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathResellerCode, resellerCode, "")
@@ -1402,6 +1411,13 @@ func (session *SessionModel) userCreate(ctx context.Context) error {
 }
 
 func (session *SessionModel) userDetail(ctx context.Context) error {
+	userID, err := session.GetUserID()
+	if err != nil {
+		return log.Errorf("Error while getting user id %v", err)
+	}
+	if userID == 0 {
+		return log.Error("User id is 0")
+	}
 	resp, err := session.proClient.UserData(ctx)
 	if err != nil {
 		return nil

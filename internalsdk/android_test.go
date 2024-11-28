@@ -81,6 +81,7 @@ func (c testSession) SetShowGoogleAds(enabled bool)                      {}
 func (c testSession) SetHasConfigFetched(enabled bool)                   {}
 func (c testSession) SetHasProxyFetched(enabled bool)                    {}
 func (c testSession) ChatEnable() bool                                   { return false }
+func (c testSession) GetUserData() error                                 { return nil }
 
 func (c testSession) SetOnSuccess(enabled bool) {
 	if !enabled {

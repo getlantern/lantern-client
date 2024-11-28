@@ -681,10 +681,10 @@ func geoLookup(session PanickingSession) {
 
 func afterStart(wrappedSession Session, session PanickingSession) {
 
-	if session.GetUserID() == 0 {
-		ctx := context.Background()
-		go retryCreateUser(ctx, wrappedSession)
-	}
+	// if session.GetUserID() == 0 {
+	// 	ctx := context.Background()
+	// 	go retryCreateUser(ctx, wrappedSession)
+	// }
 
 	bandwidthUpdates(session)
 
