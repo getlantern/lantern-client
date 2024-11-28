@@ -16,6 +16,7 @@ void main() {
     'account page end to end test',
     ($) async {
       //Wait until we call all the apis
+
       await $(VPNSwitch).waitUntilVisible();
       await $('Account'.i18n).tap();
       await $.pumpAndSettle();
