@@ -1,6 +1,7 @@
 import 'package:lantern/features/account/follow_us.dart';
 import 'package:lantern/features/checkout/feature_list.dart';
 import 'package:lantern/features/checkout/plan_details.dart';
+import 'package:lantern/features/vpn/vpn_switch.dart';
 
 import '../../utils/test_utils.dart';
 
@@ -14,6 +15,9 @@ void main() {
   patrol(
     'account page end to end test',
     ($) async {
+      //Wait until we call all the apis
+      await $(VPNSwitch).waitUntilVisible();
+      
       await $('Account'.i18n).tap();
       await $.pumpAndSettle();
       await $.pump(const Duration(seconds: 2));
