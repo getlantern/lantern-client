@@ -117,11 +117,8 @@ jobs:
           fi
           make ffigen
 
-#      - name: Running widget tests
-#        run: make widget-tests
-
-      - name: Running workflow test for android on Firebase test labs
-        run: make ci-android-test
+      #      - name: Running widget tests
+      #        run: make widget-tests
 
       - name: Clean up space
         run: |
@@ -129,6 +126,9 @@ jobs:
           sudo rm -rf /tmp/*
           flutter clean
           flutter pub get
+
+      - name: Running workflow test for android on Firebase test labs
+        run: make ci-android-test
 
       #      - name: Check disk space
       #        run: df -h
