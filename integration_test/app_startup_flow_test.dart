@@ -1,5 +1,5 @@
-import 'package:integration_test/integration_test.dart';
 import 'package:lantern/features/home/home.dart';
+import 'package:lantern/features/vpn/vpn_switch.dart';
 
 import 'utils/test_utils.dart';
 
@@ -36,6 +36,8 @@ void main() {
     "app start up sequence",
     ($) async {
       await $(HomePage).waitUntilVisible();
+      await $.pumpAndSettle();
+      await $(AdvancedSwitch).waitUntilVisible();
       final bottombar = find.byType(BottomNavigationBar);
       expect(bottombar, findsOneWidget);
     },

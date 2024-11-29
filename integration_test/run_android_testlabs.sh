@@ -13,6 +13,7 @@ gcloud firebase test android run \
     --app build/app/outputs/apk/prod/debug/app-prod-debug.apk \
     --test build/app/outputs/apk/androidTest/prod/debug/app-prod-debug-androidTest.apk \
     --device model=lynx,version=33,locale=en_US,orientation=portrait \
+    --num-flaky-test-attempts=2 \
     --timeout 10m \
     --use-orchestrator \
     --environment-variables clearPackageData=true \
