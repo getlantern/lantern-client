@@ -193,7 +193,7 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true
+//        unitTests.returnDefaultValues = true
         execution "ANDROIDX_TEST_ORCHESTRATOR"
     }
     namespace 'org.getlantern.lantern'
