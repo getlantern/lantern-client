@@ -39,7 +39,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.146
+	github.com/getlantern/flashlight/v7 v7.6.147
 	github.com/getlantern/fronted v0.0.0-20241120203013-eedcd71609d2
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
@@ -147,7 +147,7 @@ require (
 	github.com/gaukas/godicttls v0.0.4 // indirect
 	github.com/gaukas/wazerofs v0.1.0 // indirect
 	github.com/getlantern/algeneva v0.0.0-20240605225338-caba0b3edf03 // indirect
-	github.com/getlantern/broflake v0.0.0-20241120131914-6817e280a926 // indirect
+	github.com/getlantern/broflake v0.0.0-20241127130800-763b7ebbf090 // indirect
 	github.com/getlantern/bufconn v0.0.0-20210901195825-fd7c0267b493 // indirect
 	github.com/getlantern/byteexec v0.0.0-20220903142956-e6ed20032cfd // indirect
 	github.com/getlantern/cmux v0.0.0-20230301223233-dac79088a4c0 // indirect
@@ -261,7 +261,7 @@ require (
 	github.com/pierrec/lz4/v4 v4.1.18 // indirect
 	github.com/pion/datachannel v1.5.8 // indirect
 	github.com/pion/dtls/v2 v2.2.12 // indirect
-	github.com/pion/ice/v2 v2.3.34 // indirect
+	github.com/pion/ice/v2 v2.3.36 // indirect
 	github.com/pion/interceptor v0.1.30 // indirect
 	github.com/pion/logging v0.2.2 // indirect
 	github.com/pion/mdns v0.0.12 // indirect
@@ -276,14 +276,14 @@ require (
 	github.com/pion/transport/v2 v2.2.10 // indirect
 	github.com/pion/turn v1.4.0 // indirect
 	github.com/pion/turn/v2 v2.1.6 // indirect
-	github.com/pion/webrtc/v3 v3.2.51 // indirect
+	github.com/pion/webrtc/v3 v3.3.4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v1.19.1 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
-	github.com/quic-go/quic-go v0.46.0 // indirect
+	github.com/quic-go/quic-go v0.48.0 // indirect
 	github.com/refraction-networking/utls v1.3.3 // indirect
 	github.com/refraction-networking/water v0.7.0-alpha // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
