@@ -6,12 +6,12 @@
 #this will use pixel 5 device with android 11
 #If you want to find device model, version, using gcloud firebase test android models list
 #add --device model=MODEL_NAME,version=OS_VERSION_IDS,locale=en,orientation=portrait
+#   --device model=redfin,version=30,locale=en_US,orientation=portrait \
+#    --device model=panther,version=33,locale=en_US,orientation=portrait \
 gcloud firebase test android run \
     --type instrumentation \
     --app build/app/outputs/apk/prod/debug/app-prod-debug.apk \
     --test build/app/outputs/apk/androidTest/prod/debug/app-prod-debug-androidTest.apk \
-    --device model=redfin,version=30,locale=en_US,orientation=portrait \
-    --device model=panther,version=33,locale=en_US,orientation=portrait \
     --device model=lynx,version=33,locale=en_US,orientation=portrait \
     --timeout 10m \
     --use-orchestrator \
