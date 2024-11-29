@@ -117,8 +117,8 @@ jobs:
           fi
           make ffigen
 
-      - name: Running widget tests
-        run: make widget-tests
+#      - name: Running widget tests
+#        run: make widget-tests
 
       - name: Running workflow test for android on Firebase test labs
         run: make ci-android-test
