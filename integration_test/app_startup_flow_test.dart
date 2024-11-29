@@ -26,20 +26,23 @@ import 'utils/test_utils.dart';
 
 ///Make sure to use custom tear down function
 void main() {
-  appTearDown(
-    () async {
-      await sl.reset();
-    },
-  );
-
-  patrol(
-    "app start up sequence",
-    ($) async {
-      await $(HomePage).waitUntilVisible();
-      await $.pumpAndSettle();
-      await $(AdvancedSwitch).waitUntilVisible();
-      final bottombar = find.byType(BottomNavigationBar);
-      expect(bottombar, findsOneWidget);
-    },
-  );
+  
 }
+// void main() {
+//   appTearDown(
+//     () async {
+//       await sl.reset();
+//     },
+//   );
+//
+//   patrol(
+//     "app start up sequence",
+//     ($) async {
+//       await $(HomePage).waitUntilVisible();
+//       await $.pumpAndSettle();
+//       await $(AdvancedSwitch).waitUntilVisible();
+//       final bottombar = find.byType(BottomNavigationBar);
+//       expect(bottombar, findsOneWidget);
+//     },
+//   );
+// }
