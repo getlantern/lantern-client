@@ -29,8 +29,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: "go.mod"
-          run: |
-            go env CGO_ENABLED
 
       - name: Granting private modules access
         run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
@@ -120,6 +118,9 @@ jobs:
       #      - name: Running widget tests
       #        run: make widget-tests
 
+      - name: Check disk space
+        run: df -h
+
       - name: Clean up space
         run: |
           rm -rf ~/.gradle/caches
@@ -127,11 +128,12 @@ jobs:
           flutter clean
           flutter pub get
 
+      - name: Check disk space
+        run: df -h
+
       - name: Running workflow test for android on Firebase test labs
         run: make ci-android-test
 
-      #      - name: Check disk space
-      #        run: df -h
 
       - name: Running workflow test for macos
         run: make desktopWorkflowTest
