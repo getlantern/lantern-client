@@ -12,9 +12,13 @@ on:
 env:
   GOPRIVATE: github.com/getlantern
 
+
 jobs:
   test-suite:
     runs-on: ubuntu-latest-16-cores
+    concurrency:
+      group: test-ci-${{ github.ref }}
+      cancel-in-progress: true
     #    runs-on: macos-13-large
     steps:
       - name: Checkout code
@@ -115,25 +119,11 @@ jobs:
           fi
           make ffigen
 
-      #      - name: Running widget tests
-      #        run: make widget-tests
-
-      - name: Check disk space
-        run: df -h
-
-      - name: Clean up space
-        run: |
-          rm -rf ~/.gradle/caches
-          sudo rm -rf /tmp/*
-          flutter clean
-          flutter pub get
-
-      - name: Check disk space
-        run: df -h
+      - name: Running widget tests
+        run: make widget-tests
 
       - name: Running workflow test for android on Firebase test labs
         run: make ci-android-test
-
 
       - name: Running workflow test for macos
         run: make desktopWorkflowTest
@@ -149,4 +139,3 @@ jobs:
             sudo systemctl start dbus
             sudo systemctl start NetworkManager
             make linuxDesktopTest
-
