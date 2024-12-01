@@ -500,10 +500,10 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "updateBandwidth":
 		percent := arguments.Get("percent").Int()
-		remaining := arguments.Get("remaining").Int()
-		allowed := arguments.Get("allowed").Int()
+		mibUsed := arguments.Get("mibUsed").Int()
+		mibAllowed := arguments.Get("mibAllowed").Int()
 		ttlSeconds := arguments.Get("ttlSeconds").Int()
-		err := m.BandwidthUpdate(percent, remaining, allowed, ttlSeconds)
+		err := m.BandwidthUpdate(percent, mibUsed, mibAllowed, ttlSeconds)
 		if err != nil {
 			return nil, err
 		}
@@ -947,15 +947,15 @@ func (m *SessionModel) SetStaging(staging bool) error {
 	return nil
 }
 
-// Keep name as p1,p2,p3..... percent: Long, remaining: Long, allowed: Long, ttlSeconds: Long
+// Keep name as p1,p2,p3..... percent: Long, mibUsed: Long, mibAllowed: Long, ttlSeconds: Long
 // Name become part of Objective c so this is important
 func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
-	log.Debugf("BandwidthUpdate percent %v remaining %v allowed %v ttl %v", p1, p2, p3, p4)
+	log.Debugf("BandwidthUpdate percent %v mibUsed %v allowed %v ttl %v", p1, p2, p3, p4)
 
 	bandwidth := &protos.Bandwidth{
 		Percent:    int64(p1),
-		Remaining:  int64(p2),
-		Allowed:    int64(p3),
+		MibUsed:    int64(p2),
+		MibAllowed: int64(p3),
 		TtlSeconds: int64(p4),
 	}
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {

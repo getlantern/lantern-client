@@ -101,12 +101,12 @@ func (m *VPNModel) SaveVPNStatus(status string) error {
 	})
 }
 
-func (m *VPNModel) UpdateBandwidth(percent int64, remaining int64, allowedint int64, ttlSeconds int64) error {
+func (m *VPNModel) UpdateBandwidth(percent int64, mibUsed int64, mibAllowed int64, ttlSeconds int64) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		bandwidth := &protos.Bandwidth{
 			Percent:    percent,
-			Remaining:  remaining,
-			Allowed:    allowedint,
+			MibUsed:    mibUsed,
+			MibAllowed: mibAllowed,
 			TtlSeconds: ttlSeconds,
 		}
 		return pathdb.Put(tx, pathBandwidth, bandwidth, "")
