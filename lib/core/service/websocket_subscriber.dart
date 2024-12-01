@@ -84,7 +84,7 @@ class WebsocketSubscriber {
                 });
             }
           case _WebsocketMessageType.pro:
-            _webSocketLogger.i("Websocket message[Pro]: $json");
+            _webSocketLogger.i("Websocket message[Pro]: $message");
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
             final deviceLinkingCode = message['deviceLinkingCode'];
@@ -108,16 +108,11 @@ class WebsocketSubscriber {
             }
 
           case _WebsocketMessageType.bandwidth:
-            _webSocketLogger.i("Websocket message[Bandwidth]: $json");
-            final Map res = jsonDecode(jsonEncode(message));
+            _webSocketLogger.i("Websocket message[Bandwidth]: $message");
             sessionModel.bandwidthNotifier.value = Bandwidth.create()
-              ..mergeFromProto3Json({
-                'allowed': res['allowed'],
-                'remaining': res['remaining'],
-                'percent': res['percent'],
-              });
+              ..mergeFromProto3Json(message);
           case _WebsocketMessageType.config:
-            _webSocketLogger.i("Websocket message[config]: $json");
+            _webSocketLogger.i("Websocket message[config]: $message");
             final ConfigOptions config = ConfigOptions.fromJson(message);
 
             sessionModel.isAuthEnabled.value = config.authEnabled;
@@ -141,7 +136,6 @@ class WebsocketSubscriber {
     );
   }
 }
-
 
 /// Method to update plans
 void _updatePlans(Map<String, Plan>? plans) {
