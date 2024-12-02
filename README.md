@@ -411,29 +411,21 @@ interaction with the native layer and offers an extensive set of easy-to-use tes
 * Make sure you install patrol_cli globally by running `flutter pub global activate patrol_cli`
 * Make sure to connect any device or emulator to run the test.
 
-To run all integration the test on mobile
+##### Run Test on Mobile
 
-```sh
+> Note: Integration for IOS is not supported at the moment.
+
+To run all integration the test on Android
+
+```_sh
 make appWorkflowTest
 ```
 
-To run and single test on mobile
+To run a single test on a mobile
 
-```sh
-make runTest testfile or make runTest integration_test/app_startup_flow_test.dart
-```
-
-To run all integration the test on desktop
-
-```sh
-make desktopWorkflowTest
-```
-
-To run and single test on desktop
-You need pass DEVICE=macOS or DEVICE=windows or DEVICE=linux
-
-```sh
-make integration_test/app_startup_flow_test.dart DEVICE=macOD
+```_sh
+make runTest [file_test].dart // Replace testfile with real file
+make runTest integration_test/app_startup_flow_test.dart
 ```
 
 #### Running Test on Firebase Test Lab
@@ -447,10 +439,29 @@ make integration_test/app_startup_flow_test.dart DEVICE=macOD
 
 #### Running the test
 
-To Run test on android device on Firebase Test Lab, you need to run the following command:
+To Run a test on Android device on Firebase Test Lab, you need to run the following command:
 
-```sh
+```_sh
 make ci-android-test
+```
+> Note-: If you want to customize which device you want to use change it [here](https://github.com/getlantern/lantern-client/blob/ebc6743840fa3ac5ef82c3d42eee508a2306fd7a/integration_test/run_android_testlabs.sh#L7)
+
+##### Run Test on Desktop
+
+> Note: Do not use direct patrol for dekstop there are some workaround that we need to do to run the test
+
+To run all integration the test on desktop
+
+```_sh
+make maOSWorkflowTest // For macOS
+make linuxDesktopTest // For Linux
+make windowsDesktopTest // For Windows
+```
+
+To run a single test on a desktop, you need to pass DEVICE=macOS or DEVICE=windows or DEVICE=linux
+
+```_sh
+make integration_test/app_startup_flow_test.dart DEVICE=macOS
 ```
 
 #### Testing Replica
