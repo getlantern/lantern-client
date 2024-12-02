@@ -795,10 +795,9 @@ linuxDesktopTest:
 	@echo "Running all integration tests..."
 	sh $(CURDIR)/integration_test/run_linux_test.sh
 
-
 windowsDesktopTest:
 	@echo "Running all integration tests..."
-	sh $(CURDIR)/integration_test/run_linux_test.sh
+	sh $(CURDIR)/integration_test/run_windows_test.sh
 
 # Run specific tests on desktop
 runDesktopTest:
