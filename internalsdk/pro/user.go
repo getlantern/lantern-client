@@ -133,10 +133,6 @@ func (c *proClient) PollUserData(ctx context.Context, session ClientSession,
 	// Add jitter to backoff interval
 	expBackoff.RandomizationFactor = 0.5
 
-	if _, err := client.UpdateUserData(ctx, session); err != nil {
-		log.Errorf("Initial user data update failed: %v", err)
-	}
-
 	timer := time.NewTimer(expBackoff.NextBackOff())
 	defer timer.Stop()
 
@@ -146,7 +142,7 @@ func (c *proClient) PollUserData(ctx context.Context, session ClientSession,
 			log.Errorf("Poll user data cancelled: %v", ctx.Err())
 			return
 		case <-timer.C:
-			_, err := client.UpdateUserData(ctx, session)
+			user, err := client.UpdateUserData(ctx, session)
 			if err != nil {
 				if ctx.Err() != nil {
 					log.Errorf("UpdateUserData terminated due to context: %v", ctx.Err())
@@ -155,11 +151,19 @@ func (c *proClient) PollUserData(ctx context.Context, session ClientSession,
 				log.Errorf("UpdateUserData failed: %v", err)
 			}
 
+			userIsPro := func(u *protos.User) bool {
+				return u != nil && (u.UserLevel == "pro" || u.UserStatus == "active")
+			}
+
+			if userIsPro(user) {
+				log.Debug("User became Pro. Stopping polling.")
+				return
+			}
+
 			// Get the next backoff interval
 			waitTime := expBackoff.NextBackOff()
 			if waitTime == backoff.Stop {
 				log.Debug("Exponential backoff reached max elapsed time. Exiting...")
-				timer.Stop()
 				return
 			}
 			timer.Reset(waitTime)
