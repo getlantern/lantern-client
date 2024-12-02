@@ -957,7 +957,7 @@ func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
 		Percent:    int64(p1),
 		MibUsed:    int64(p2),
 		MibAllowed: int64(p3),
-		TtlSeconds: int64(p4),
+		TTLSeconds: int64(p4),
 	}
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathBandwidth, bandwidth, "")

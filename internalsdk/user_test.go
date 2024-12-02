@@ -24,6 +24,8 @@ func TestCreateUser_Success(t *testing.T) {
 			Token:  "test-token",
 		},
 	}, nil)
+
+	mockSession.On("GetUserData", int64(123)).Return(nil)
 	mockSession.On("SetUserIdAndToken", int64(123), "test-token").Return(nil)
 
 	err := createUser(context.Background(), mockProClient, mockSession)

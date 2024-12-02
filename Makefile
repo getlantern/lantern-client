@@ -800,10 +800,16 @@ windowsDesktopTest:
 	sh $(CURDIR)/integration_test/run_windows_test.sh
 
 # Run specific tests on desktop
+#you can pass DEVICE=<platform> (e.g., macOS, linux, windows)
 runDesktopTest:
 	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
+	DEVICE=$(DEVICE); \
+	if [ -z "$$DEVICE" ]; then \
+		echo "Error: DEVICE is not specified. Use DEVICE=<platform> (e.g., macOS, linux, android)"; \
+		exit 1; \
+	fi; \
 	echo "Running tests on: $$ARGUMENTS" && \
-	flutter test $$ARGUMENTS -d macOS -r expanded
+	flutter test $$ARGUMENTS -d $$DEVICE -r expanded
 
 
 # Run all android test on Firebase test lab

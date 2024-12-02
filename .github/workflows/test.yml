@@ -126,7 +126,7 @@ jobs:
         run: make ci-android-test
 
       - name: Running workflow test for macos
-        run: make desktopWorkflowTest
+        run: make maOSWorkflowTest
         if: runner.os == 'macOS'
         timeout-minutes: 60
 
