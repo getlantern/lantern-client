@@ -41,8 +41,8 @@ void stubSessionModel({
     final builder =
     invocation.positionalArguments[0] as ValueWidgetBuilder<Bandwidth>;
     var usedData = Bandwidth()
-      ..allowed = Int64(250)
-      ..remaining = Int64(200)
+      ..mibAllowed = Int64(250)
+      ..mibUsed = Int64(200)
       ..percent = Int64(28);
     return builder(mockBuildContext, bandwidth ?? usedData, null);
   });

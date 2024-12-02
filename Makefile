@@ -781,17 +781,22 @@ appWorkflowTest:
 runTest:
 	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
 	echo "Running tests on: $$ARGUMENTS" && \
-	flutter test $$ARGUMENTS --flavor=prod -r expanded
+	patrol test --target $$ARGUMENTS
 
 
 #------- Desktop test and utils ------------
 
 # Run all workflow tests on desktop
-desktopWorkflowTest:
+maOSWorkflowTest:
 	@echo "Running all integration tests..."
 	sh $(CURDIR)/integration_test/run_macos_test.sh
 
 linuxDesktopTest:
+	@echo "Running all integration tests..."
+	sh $(CURDIR)/integration_test/run_linux_test.sh
+
+
+windowsDesktopTest:
 	@echo "Running all integration tests..."
 	sh $(CURDIR)/integration_test/run_linux_test.sh
 
@@ -806,7 +811,6 @@ runDesktopTest:
 ci-android-test:test-build-android
 	@echo "Running tests on Firebase test labs..."
 	sh $(CURDIR)/integration_test/run_android_testlabs.sh
-
 
 
 #Runs widget tets

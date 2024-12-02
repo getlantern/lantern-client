@@ -25,7 +25,10 @@ final _patrolTesterConfig = const PatrolTesterConfig(
 );
 final _nativeAutomatorConfig = const NativeAutomatorConfig(
   findTimeout: Duration(seconds: 20),
-
+  androidAppName: 'Lantern',
+  packageName: 'org.getlantern.lantern',
+  iosAppName: 'Lantern',
+  bundleId: 'org.getlantern.lantern',
 );
 
 TestVariant mobileVariant() {

@@ -9,14 +9,7 @@ import 'package:patrol/src/native/contracts/contracts.dart';
 import 'package:test_api/src/backend/invoker.dart';
 
 // START: GENERATED TEST IMPORTS
-import 'app_startup_flow_test.dart' as app_startup_flow_test;
 import 'features/account/account_flow_test.dart' as features__account__account_flow_test;
-import 'features/account/language_flow_test.dart' as features__account__language_flow_test;
-import 'features/account/report_issue_flow_test.dart' as features__account__report_issue_flow_test;
-import 'features/account/setting_flow_test.dart' as features__account__setting_flow_test;
-import 'features/home/homepage_flow_mock_test.dart' as features__home__homepage_flow_mock_test;
-import 'features/home/homepage_flow_test.dart' as features__home__homepage_flow_test;
-import 'features/vpn/vpn_flow_test.dart' as features__vpn__vpn_flow_test;
 // END: GENERATED TEST IMPORTS
 
 Future<void> main() async {
@@ -76,14 +69,7 @@ Future<void> main() async {
   });
 
   // START: GENERATED TEST GROUPS
-  group('app_startup_flow_test', app_startup_flow_test.main);
   group('features.account.account_flow_test', features__account__account_flow_test.main);
-  group('features.account.language_flow_test', features__account__language_flow_test.main);
-  group('features.account.report_issue_flow_test', features__account__report_issue_flow_test.main);
-  group('features.account.setting_flow_test', features__account__setting_flow_test.main);
-  group('features.home.homepage_flow_mock_test', features__home__homepage_flow_mock_test.main);
-  group('features.home.homepage_flow_test', features__home__homepage_flow_test.main);
-  group('features.vpn.vpn_flow_test', features__vpn__vpn_flow_test.main);
   // END: GENERATED TEST GROUPS
 
   final dartTestGroup = await testExplorationCompleter.future;
