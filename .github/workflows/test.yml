@@ -115,6 +115,13 @@ jobs:
         if: matrix.platform == 'windows'
         run: choco install mingw -y
 
+      - name: Build for Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          echo "Building for Windows..."
+          make windows
+          make ffigen
+
       - name: Build Libraries
         shell: bash
         run: |
@@ -137,7 +144,10 @@ jobs:
       - name: Running widget tests
         run: make widget-tests
 
+        # Run firebase tets only on one OS runner
+        # Does make sense to run on all OS runners
       - name: Running workflow test for android on Firebase test labs
+        if: runner.os == 'linux'
         run: make ci-android-test
 
       - name: Running workflow test for macos
