@@ -116,6 +116,7 @@ jobs:
         run: choco install mingw -y
 
       - name: Build Libraries
+        shell: bash
         run: |
           make android ANDROID_ARCH=all
           echo "Building macos libraries"
@@ -124,7 +125,7 @@ jobs:
             make linux
           elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
             echo "Running on Windows"
-            make windows
+            powershell.exe -Command "make windows"
           fi
           make ffigen
 
