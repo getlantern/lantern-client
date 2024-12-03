@@ -10,21 +10,23 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
-// UserConfig represents the minimal configuration necessary for a client session
-type UserConfig interface {
-	GetDeviceID() string
-	GetUserFirstVisit() bool
-	GetUserID() int64
-	GetToken() string
-	Locale() string
-}
+// // UserConfig represents the minimal configuration necessary for a client session
+// type UserConfig interface {
+// 	GetDeviceID() string
+// 	GetUserFirstVisit() bool
+// 	GetUserID() int64
+// 	GetToken() string
+// 	Locale() string
+// }
 
 type ClientSession interface {
-	UserConfig
-	SetExpiration(int64)
-	SetProUser(bool)
-	SetReferralCode(string)
-	SetUserIDAndToken(int64, string)
+	SetExpiration(int64) error
+	SetProUser(bool) error
+	SetReferralCode(string) error
+	SetUserIDAndToken(int64, string) error
+	FetchUserData() error
+	GetDeviceID() (string, error)
+	GetUserFirstVisit() (bool, error)
 }
 
 type backoffRunner struct {
@@ -45,6 +47,7 @@ func (c *proClient) createUser(ctx context.Context, session ClientSession) error
 	}
 	session.SetReferralCode(user.Referral)
 	session.SetUserIDAndToken(user.UserId, user.Token)
+	session.FetchUserData()
 	return nil
 }
 
@@ -72,7 +75,10 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 		return nil, errors.New("error fetching user data")
 	}
 	user := resp.User
-	currentDevice := ss.GetDeviceID()
+	currentDevice, err := ss.GetDeviceID()
+	if err != nil {
+		return nil, log.Errorf("error fetching device id: %v", err)
+	}
 
 	// Check if device id is connect to same device if not create new user
 	// this is for the case when user removed device from other device
@@ -86,7 +92,11 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 		}
 	}
 	/// Check if user has installed app first time
-	firstTime := ss.GetUserFirstVisit()
+	firstTime, err := ss.GetUserFirstVisit()
+	if err != nil {
+		return nil, log.Errorf("error fetching user first visit: %v", err)
+	}
+
 	log.Debugf("First time visit %v", firstTime)
 	if user.UserLevel == "pro" && firstTime {
 		log.Debugf("User is pro and first time")
