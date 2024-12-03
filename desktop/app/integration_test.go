@@ -190,7 +190,7 @@ func startApp(t *testing.T, helper *integrationtest.Helper) (*App, error) {
 		Timeout:            time.Duration(0),
 	}
 	ss := settings.EmptySettings()
-	a := NewApp(flags, helper.ConfigDir)
+	a := NewAppWithFlags(flags, helper.ConfigDir)
 	id := ss.GetUserID()
 	if id == 0 {
 		ss.SetUserIDAndToken(1, "token")
