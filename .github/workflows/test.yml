@@ -115,18 +115,26 @@ jobs:
         if: matrix.platform == 'windows'
         run: choco install mingw -y
 
-      - name: Build Libraries
+      - name: Build Lantern Library
+        shell: bash
         run: |
-          make android ANDROID_ARCH=all
-          echo "Building macos libraries"
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
-            make macos
-          elif [[ "$RUNNER_OS" == "Linux" ]]; then
-            make linux
-          elif [[ "$RUNNER_OS" == "Windows" ]]; then
-            make windows
-          fi
-          make ffigen
+            make android ANDROID_ARCH=all
+            echo "Building libraries"
+            make ${{matrix.platform}}
+            make ffigen
+
+#      - name: Build Libraries
+#        run: |
+#          make android ANDROID_ARCH=all
+#          echo "Building macos libraries"
+#          if [[ "$RUNNER_OS" == "macOS" ]]; then
+#            make macos
+#          elif [[ "$RUNNER_OS" == "Linux" ]]; then
+#            make linux
+#          elif [[ "$RUNNER_OS" == "Windows" ]]; then
+#            make windows
+#          fi
+#          make ffigen
 
       - name: Running workflow test for windows
         run: make windowsDesktopTest
