@@ -710,11 +710,11 @@ func geoLookup(session PanickingSession) {
 
 func afterStart(wrappedSession Session, session PanickingSession) {
 
-	if session.GetUserID() == 0 {
-		ctx := context.Background()
-		proClient := createProClient(wrappedSession, "android")
-		go proClient.RetryCreateUser(ctx, session, 10*time.Minute)
-	}
+	// if session.GetUserID() == 0 {
+	// 	ctx := context.Background()
+	// 	proClient := createProClient(wrappedSession, "android")
+	// 	go proClient.RetryCreateUser(ctx, session, 10*time.Minute)
+	// }
 
 	bandwidthUpdates(session)
 

@@ -188,6 +188,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if opts.Platform == "ios" {
 		go m.setupIosConfigure(opts.ConfigPath, int(userID), token, deviceID)
 	}
+	log.Debugf("SessionModel initialized")
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
 }
@@ -739,25 +740,27 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 			return pathdb.Put(tx, pathIsFirstTime, true, "")
 		})
-		err = m.userCreate(ctx)
+
+		// err = m.userCreate(ctx)
+		// if err != nil {
+		// 	log.Error(err)
+		// }
+		go m.proClient.RetryCreateUser(ctx, m, 10*time.Minute)
+	} else {
+		// Get all user details
+		err = m.userDetail(ctx)
 		if err != nil {
 			log.Error(err)
 		}
-	}
 
-	// Get all user details
-	err = m.userDetail(ctx)
-	if err != nil {
-		log.Error(err)
+		go func() {
+			err = m.paymentMethods()
+			if err != nil {
+				log.Debugf("Plans V3 error: %v", err)
+				// return err
+			}
+		}()
 	}
-
-	go func() {
-		err = m.paymentMethods()
-		if err != nil {
-			log.Debugf("Plans V3 error: %v", err)
-			// return err
-		}
-	}()
 	go checkSplitTunneling(m)
 	m.surveyModel, _ = NewSurveyModel(*m)
 	return nil
@@ -1364,6 +1367,12 @@ func (m *SessionModel) SetUserIDAndToken(p1 int64, p2 string) error {
 		return pathdb.Put(tx, pathToken, p2, "")
 	})
 }
+
+func (m *SessionModel) FetchUserData() error {
+	m.proClient.UserData(context.Background())
+	return m.paymentMethods()
+}
+
 func setResellerCode(m *baseModel, resellerCode string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathResellerCode, resellerCode, "")
