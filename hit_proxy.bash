@@ -25,10 +25,5 @@ else
 	echo $OUTPUT > $OUTFILE
 fi
 
-make darwin ffigen
-LANTERN_CONFIGDIR=$TMPDIR \
-LANTERN_STICKYCONFIG=true \
-LANTERN_READABLECONFIG=true \
-LANTERN_PROXYALL=true \
-LANTERN_STARTUP=false \
-flutter run -d macOS
+make macos ffigen
+CONFIG_DIR=$TMPDIR READABLE_CONFIG=true STICKY_CONFIG=true flutter run -d macOS
