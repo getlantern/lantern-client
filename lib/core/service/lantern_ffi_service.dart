@@ -1,6 +1,5 @@
 import 'dart:isolate';
 
-import 'package:ffi/ffi.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -28,10 +27,13 @@ class NoPlansUpdate implements Exception {
 
 class LanternFFI {
   static final NativeLibrary _lanternFFI = NativeLibrary(_getLanternLib());
+  static bool hasServiceStarted = false;
 
   static DynamicLibrary _getLanternLib() {
     if (Platform.isMacOS) {
-      return DynamicLibrary.open('$_libName.dylib');
+      String dir = Directory.current.path;
+      print("Dir path ${Directory.current.path}");
+      return DynamicLibrary.open('$dir/$_libName.dylib');
     }
     if (Platform.isLinux) {
       String dir = Directory.current.path;
@@ -46,7 +48,16 @@ class LanternFFI {
   static SendPort? _proxySendPort;
   static final Completer<void> _isolateInitialized = Completer<void>();
 
-  static startDesktopService() => _lanternFFI.start();
+  static startDesktopService() {
+    if (hasServiceStarted) {
+      print('Desktop service already started');
+      return;
+    }
+    final okay = _lanternFFI.start().cast<Utf8>().toDartString();
+    appLogger.i('ffi service $okay');
+    hasServiceStarted = true;
+    print('Starting desktop service');
+  }
 
   static void sysProxyOn() {
     final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();

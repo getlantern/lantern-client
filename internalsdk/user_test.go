@@ -24,6 +24,8 @@ func TestCreateUser_Success(t *testing.T) {
 			Token:  "test-token",
 		},
 	}, nil)
+
+	mockSession.On("GetUserData").Return(nil)
 	mockSession.On("SetUserIdAndToken", int64(123), "test-token").Return(nil)
 
 	err := createUser(context.Background(), mockProClient, mockSession)
@@ -38,6 +40,7 @@ func TestCreateUser_Failure(t *testing.T) {
 	mockSession := new(mocks.Session)
 
 	mockProClient.On("UserCreate", mock.Anything).Return(nil, errors.New("failed to create user"))
+	mockSession.On("GetUserData").Return(nil)
 
 	err := createUser(context.Background(), mockProClient, mockSession)
 	assert.Error(t, err, "expected an error")

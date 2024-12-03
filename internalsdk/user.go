@@ -18,6 +18,7 @@ type ClientSession interface {
 	GetToken() (string, error)
 	Locale() (string, error)
 	SetUserIdAndToken(int64, string) error
+	GetUserData() error
 }
 
 type userConfig struct {
@@ -72,6 +73,7 @@ func createUser(ctx context.Context, proClient pro.ProClient, session ClientSess
 	// Save user id and token
 	session.SetUserIdAndToken(int64(user.UserId), user.Token)
 	log.Debugf("Created new Lantern user: %+v", user)
+	go session.GetUserData()
 	return nil
 }
 

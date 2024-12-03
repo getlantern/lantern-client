@@ -91,7 +91,7 @@ class _ReportIssueState extends State<ReportIssue> {
                 ),
                 child: Form(
                     key: issueFieldKey,
-                    child: DropdownButtonFormField(
+                    child: DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderSide: BorderSide(

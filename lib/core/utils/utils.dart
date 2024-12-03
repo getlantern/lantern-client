@@ -14,7 +14,6 @@ bool isProdPlay() {
   return false;
 }
 
-
 String getPlanDisplayName(String plan) {
   if (Platform.isIOS) {
     if (plan == '1y') {
@@ -204,7 +203,11 @@ Plan planFromJson(Map<String, dynamic> item) {
   return plan;
 }
 
-Map<String, PaymentMethod> paymentMethodsFromJson(List<dynamic> items) {
+Map<String, PaymentMethod> paymentMethodsFromJson(dynamic json) {
+  if (json == null) {
+    return {};
+  }
+  List items = json as List;
   final paymentMethods = Map<String, PaymentMethod>();
   items.forEach((value) {
     final json = jsonDecode(jsonEncode(value));

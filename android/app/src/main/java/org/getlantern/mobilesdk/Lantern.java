@@ -224,12 +224,17 @@ public abstract class Lantern {
 
     private static void initConfigDir(final Context context) {
         final File dir = new File(context.getFilesDir(), ".lantern");
-        final boolean success = dir.mkdir();
-        if (success) {
-            Logger.d(TAG, "Created config directory");
-        } else {
-            Logger.d(TAG, "Error creating config directory");
+        try{
+            final boolean success = dir.mkdir();
+            if (success) {
+                Logger.d(TAG, "Created config directory");
+            } else {
+                Logger.d(TAG, "Error creating config directory");
+            }
+        }catch (Exception e){
+            Logger.e(TAG, "Error while creating config directory", e);
         }
+
     }
 
     public static String configDirFor(Context context, String suffix) {

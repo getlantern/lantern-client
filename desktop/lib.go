@@ -58,8 +58,9 @@ func start() *C.char {
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
-
+	start := time.Now()
 	// Load application configuration from .env file
+	log.Debug("Loading .env file")
 	err := godotenv.Load()
 	if err != nil {
 		log.Errorf("Error loading .env file: %v", err)
@@ -67,6 +68,7 @@ func start() *C.char {
 		log.Debug("Successfully loaded .env file")
 	}
 
+	log.Debug("Logs directory: ")
 	_, err = logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 	if err != nil {
 		log.Error(err)
@@ -102,8 +104,9 @@ func start() *C.char {
 
 	a = app.NewApp(flags, configDir)
 	a.Run(context.Background())
-
-	return C.CString("")
+	end := time.Now()
+	log.Debugf("Lantern client started in %v", end.Sub(start))
+	return C.CString("ok")
 }
 
 func getDeviceID() string {

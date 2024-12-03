@@ -34,6 +34,7 @@ class Support extends StatelessWidget {
           },
         ),
         ListItemFactory.settingsItem(
+          key: AppKeys.userForum,
           content: 'lantern_user_forum'.i18n,
           icon: ImagePaths.forum,
           trailingArray: [
@@ -50,6 +51,7 @@ class Support extends StatelessWidget {
           onTap: () => forumTap(context),
         ),
         ListItemFactory.settingsItem(
+          key: AppKeys.faq,
           content: 'faq'.i18n,
           icon: ImagePaths.info,
           trailingArray: [

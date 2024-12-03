@@ -89,6 +89,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
         },
         onChanged: (newValue) {},
         onTap: (props) {
+          print("Tapped on switch $props");
           if (vpnNotifier.vpnStatus.value == 'connected') {
             vpnProcessForDesktop('disconnected');
           } else {

@@ -29,9 +29,9 @@ dependencies:
     sdk: flutter
 
   # State management and Data handling
-  provider: ^6.0.5
+  provider: ^6.1.2
   protobuf: any
-  uuid: ^4.4.0
+  uuid: ^4.5.1
 
   sliver_tools: ^0.2.12
 
@@ -149,11 +149,20 @@ dev_dependencies:
   mockito: ^5.4.4
   auto_route_generator: ^9.0.0
   build_runner: ^2.4.12
+  analyzer: ^6.7.0
+  golden_toolkit: ^0.15.0
+#  Testing
+  patrol: ^3.13.0
+#  patrol:
+#    git:
+#      url: https://github.com/leancodepl/patrol.git
+#      path: packages/patrol
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-dependency_overrides:
 
 # The following section is specific to Flutter.
 flutter:
@@ -207,3 +216,16 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+
+# petrol configuration
+patrol:
+  app_name: Lantern
+  flavor: prod
+  android:
+    package_name: org.getlantern.lantern
+  ios:
+    bundle_id: org.getlantern.lantern
+  macos:
+    bundle_id: org.getlantern.lantern
