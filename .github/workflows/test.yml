@@ -18,9 +18,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest-16-cores, windows-latest]
-    concurrency:
-      group: test-ci-${{ github.ref }}
-      cancel-in-progress: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
