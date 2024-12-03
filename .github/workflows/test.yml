@@ -4,22 +4,23 @@ on:
   push:
     branches:
       - main
-      - jigar/setup-test-suite
-#  pull_request:
-#    branches:
-#      - main
+  pull_request:
+    branches:
+      - main
 
 env:
   GOPRIVATE: github.com/getlantern
 
-
 jobs:
   test-suite:
-    runs-on: ubuntu-latest-16-cores
+    runs-on: ${{ matrix.os }}
+#    runs-on: ubuntu-latest-16-cores
+    strategy:
+      matrix:
+        os: [ubuntu-latest-16-cores, windows-latest]
     concurrency:
       group: test-ci-${{ github.ref }}
       cancel-in-progress: true
-    #    runs-on: macos-13-large
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -106,6 +107,17 @@ jobs:
         if: runner.os == 'linux'
         uses: seanmiddleditch/gha-setup-ninja@master
 
+      - name: Install WebView2 Runtime
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile "MicrosoftEdgeWebView2Setup.exe"
+          Start-Process -FilePath ".\MicrosoftEdgeWebView2Setup.exe" -ArgumentList "/silent", "/install" -Wait
+
+      - name: Set up MinGW
+        if: matrix.platform == 'windows'
+        run: choco install mingw -y
+
       - name: Build Libraries
         run: |
           make android ANDROID_ARCH=all
@@ -118,6 +130,11 @@ jobs:
             make windows
           fi
           make ffigen
+
+      - name: Running workflow test for windows
+        run: make windowsDesktopTest
+        if: runner.os == 'windows'
+        timeout-minutes: 60
 
       - name: Running widget tests
         run: make widget-tests
@@ -139,3 +156,8 @@ jobs:
             sudo systemctl start dbus
             sudo systemctl start NetworkManager
             make linuxDesktopTest
+
+#      - name: Running workflow test for windows
+#        run: make windowsDesktopTest
+#        if: runner.os == 'windows'
+#        timeout-minutes: 60

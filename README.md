@@ -1,8 +1,7 @@
 # Lantern App
 [![Go Actions Status](https://github.com/getlantern/android-lantern/actions/workflows/go.yml/badge.svg)](https://github.com/getlantern/android-lantern/actions/workflows/go.yml) [![Coverage Status](https://coveralls.io/repos/github/getlantern/android-lantern/badge.svg?t=C4SaZX)](https://coveralls.io/github/getlantern/android-lantern)[![Publish releases](https://github.com/getlantern/lantern-client/actions/workflows/release.yml/badge.svg)](https://github.com/getlantern/lantern-client/actions/workflows/release.yml)
-Lantern APP is an app that uses
-the [VpnService](https://developer.android.com/reference/android/net/VpnService) API to intercept
-and reroute all device traffic to the Lantern circumvention tool.
+
+Lantern APP is an app that uses the [VpnService](https://developer.android.com/reference/android/net/VpnService) API to intercept and reroute all device traffic to the Lantern circumvention tool.
 
 ## Feature: Replica Mobile
 
