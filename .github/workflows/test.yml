@@ -105,14 +105,14 @@ jobs:
         uses: seanmiddleditch/gha-setup-ninja@master
 
       - name: Install WebView2 Runtime
-        if: matrix.platform == 'windows'
+        if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/p/?LinkId=2124703" -OutFile "MicrosoftEdgeWebView2Setup.exe"
           Start-Process -FilePath ".\MicrosoftEdgeWebView2Setup.exe" -ArgumentList "/silent", "/install" -Wait
 
       - name: Set up MinGW
-        if: matrix.platform == 'windows'
+        if: matrix.os == 'windows-latest'
         run: choco install mingw -y
 
       - name: Build for Windows
@@ -122,29 +122,18 @@ jobs:
           make windows
           make ffigen
 
-      - name: Build Libraries
+      - name: Build linux Libraries
         shell: bash
+        if: runner.os == 'linux'
         run: |
           make android ANDROID_ARCH=all
-          echo "Building macos libraries"
-          if [[ "${{ matrix.os }}" == "ubuntu-latest-16-cores" ]]; then
-            echo "Running on Ubuntu"
-            make linux
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            echo "Running on Windows"
-            powershell.exe -Command "make windows"
-          fi
+          make linux
           make ffigen
-
-      - name: Running workflow test for windows
-        run: make windowsDesktopTest
-        if: runner.os == 'windows'
-        timeout-minutes: 60
 
       - name: Running widget tests
         run: make widget-tests
 
-        # Run firebase tets only on one OS runner
+        # Run firebase test only on one OS runner
         # Does make sense to run on all OS runners
       - name: Running workflow test for android on Firebase test labs
         if: runner.os == 'linux'
@@ -165,7 +154,7 @@ jobs:
             sudo systemctl start NetworkManager
             make linuxDesktopTest
 
-#      - name: Running workflow test for windows
-#        run: make windowsDesktopTest
-#        if: runner.os == 'windows'
-#        timeout-minutes: 60
+      - name: Running workflow test for windows
+        run: make windowsDesktopTest
+        if: runner.os == 'windows'
+        timeout-minutes: 60
