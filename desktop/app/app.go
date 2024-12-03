@@ -571,9 +571,9 @@ func (app *App) fetchOrCreateUser(ctx context.Context) {
 	}
 	if userID := ss.GetUserID(); userID == 0 {
 		ss.SetUserFirstVisit(true)
-		app.proClient.RetryCreateUser(ctx, ss, 5*time.Minute)
+		app.proClient.RetryCreateUser(ctx, app, 5*time.Minute)
 	} else {
-		app.proClient.UpdateUserData(ctx, ss)
+		app.proClient.UpdateUserData(ctx, app)
 	}
 }
 
@@ -627,6 +627,7 @@ func (app *App) GetPaymentMethods(ctx context.Context) ([]protos.PaymentMethod, 
 }
 
 // FetchPaymentMethods returns the plans and payment plans available to a user
+// Updates cache with the fetched data
 func (app *App) FetchPaymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
 	resp, err := app.proClient.PaymentMethodsV4(context.Background())
 	if err != nil {
@@ -727,4 +728,38 @@ func (app *App) ProClient() pro.ProClient {
 	app.mu.RLock()
 	defer app.mu.RUnlock()
 	return app.proClient
+}
+
+// Client session methods
+func (app *App) FetchUserData() error {
+	go app.FetchPaymentMethods(context.Background())
+	return nil
+}
+
+func (app *App) GetDeviceID() (string, error) {
+	return app.Settings().GetDeviceID(), nil
+}
+
+func (app *App) GetUserFirstVisit() (bool, error) {
+	return app.Settings().GetUserFirstVisit(), nil
+}
+
+func (app *App) SetUserIDAndToken(id int64, token string) error {
+	app.Settings().SetUserIDAndToken(id, token)
+	return nil
+}
+
+func (app *App) SetProUser(pro bool) error {
+	app.Settings().SetProUser(pro)
+	return nil
+}
+
+func (app *App) SetReferralCode(referral string) error {
+	app.Settings().SetReferralCode(referral)
+	return nil
+}
+
+func (app *App) SetExpiration(exp int64) error {
+	app.Settings().SetExpiration(exp)
+	return nil
 }

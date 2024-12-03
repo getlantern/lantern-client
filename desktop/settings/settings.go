@@ -620,6 +620,11 @@ func (s *Settings) GetToken() string {
 	return s.getString(SNUserToken)
 }
 
+// GetToken returns the user token
+func (s *Settings) FetchUserData() error {
+	return nil
+}
+
 // GetMigratedDeviceIDForUserID returns the user ID (if any) for which the current device's ID has been migrated from the old style to the new style
 func (s *Settings) GetMigratedDeviceIDForUserID() int64 {
 	return s.getInt64(SNMigratedDeviceIDForUserID)
