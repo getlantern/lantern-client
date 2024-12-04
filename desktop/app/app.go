@@ -38,7 +38,6 @@ import (
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
-	"github.com/getlantern/lantern-client/internalsdk/pro"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
@@ -806,7 +805,7 @@ func (app *App) AuthClient() auth.AuthClient {
 	return app.authClient
 }
 
-func (app *App) ProClient() pro.ProClient {
+func (app *App) ProClient() proclient.ProClient {
 	app.mu.RLock()
 	defer app.mu.RUnlock()
 	return app.proClient
