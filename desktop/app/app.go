@@ -665,12 +665,13 @@ func (app *App) FetchPaymentMethods(ctx context.Context) (*proclient.PaymentMeth
 	if !ok {
 		return nil, errors.New("No desktop payment providers found")
 	}
-	for _, paymentMethod := range desktopPaymentMethods {
-		for i, provider := range paymentMethod.Providers {
+	for i := range desktopPaymentMethods {
+		paymentMethod := &desktopPaymentMethods[i]
+		for j, provider := range paymentMethod.Providers {
 			if resp.Logo[provider.Name] != nil {
 				logos := resp.Logo[provider.Name].([]interface{})
 				for _, logo := range logos {
-					paymentMethod.Providers[i].LogoUrls = append(paymentMethod.Providers[i].LogoUrls, logo.(string))
+					paymentMethod.Providers[j].LogoUrls = append(paymentMethod.Providers[j].LogoUrls, logo.(string))
 				}
 			}
 		}
