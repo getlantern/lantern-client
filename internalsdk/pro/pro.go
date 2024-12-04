@@ -66,10 +66,6 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
 			HttpClient: &http.Client{
 				Transport: proxied.ParallelForIdempotent(),
 				Timeout:   30 * time.Second,
-				// Don't follow redirects
-				CheckRedirect: func(req *http.Request, via []*http.Request) error {
-					return http.ErrUseLastResponse
-				},
 			},
 			OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
 				prepareProRequest(req, common.ProAPIHost, userConfig())
