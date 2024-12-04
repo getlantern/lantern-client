@@ -49,8 +49,27 @@ type AuthClient interface {
 	Healthz(ctx context.Context) (bool, error)
 }
 
+type serialTransport []http.RoundTripper
+
+func (tr serialTransport) RoundTrip(req *http.Request) (resp *http.Response, err error) {
+	for _, rt := range tr {
+		resp, err = rt.RoundTrip(req)
+		if err == nil {
+			return
+		}
+		log.Debugf("Error roundtripping request to %v, continuing to next transport", req.URL)
+	}
+	log.Errorf("Unable to roundtrip request to %v, out of transports", req.URL)
+	return
+}
+
 // NewClient creates a new instance of AuthClient
 func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
+	chained, err := proxied.ChainedNonPersistent("")
+	if err != nil {
+		log.Fatal(err)
+	}
+	frt := proxied.Fronted("auth_fronted_roundtrip", 10*time.Second)
 	rc := webclient.NewRESTClient(&webclient.Opts{
 		BaseURL: baseURL,
 		OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
@@ -58,7 +77,7 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 			return nil
 		},
 		HttpClient: &http.Client{
-			Transport: proxied.ChainedThenFronted(),
+			Transport: serialTransport{chained, frt},
 			Timeout:   30 * time.Second,
 		},
 		UserConfig: userConfig,
