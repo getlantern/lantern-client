@@ -114,12 +114,11 @@ type BandwidthTracker interface {
 }
 
 type cw struct {
-	ipStack        io.WriteCloser
-	client         *iosClient
-	dialer         dialer.Dialer
-	ipp            ipproxy.Proxy
-	quotaTextPath  string
-	lastSavedQuota time.Time
+	ipStack       io.WriteCloser
+	client        *iosClient
+	dialer        dialer.Dialer
+	ipp           ipproxy.Proxy
+	quotaTextPath string
 }
 
 func (c *cw) Write(b []byte) (int, error) {
@@ -279,6 +278,14 @@ func (c *iosClient) start() (ClientWriter, error) {
 
 func bandwidthUpdates(bt BandwidthTracker) {
 	go func() {
+
+		quota, _ := bandwidth.GetQuota()
+		if quota == nil {
+			// quota is nil, so then we are uncapped
+			bt.BandwidthUpdate("", 0, 0, 0, int(quota.TTLSeconds))
+			return
+		}
+
 		for quota := range bandwidth.Updates {
 			percent, remaining, allowed := getBandwidth(quota)
 			bt.BandwidthUpdate("", percent, remaining, allowed, int(quota.TTLSeconds))
