@@ -154,7 +154,7 @@ func initializeAppConfig() (flashlight.Flags, error) {
 		configDir = resolveConfigDir(configDir)
 	}
 	if err := createDirIfNotExists(configDir, defaultConfigDirPerm); err != nil {
-		return flags, fmt.Errorf("Unable to create config directory %s: %v", configDir, err)
+		return flags, fmt.Errorf("unable to create config directory %s: %v", configDir, err)
 	}
 	flags.StickyConfig = stickyConfig
 	flags.ReadableConfig = readableConfig

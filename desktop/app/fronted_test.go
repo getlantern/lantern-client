@@ -10,6 +10,7 @@ import (
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/fronted"
 	"github.com/getlantern/yaml"
+	tls "github.com/refraction-networking/utls"
 )
 
 func configureFronted() {
@@ -31,7 +32,12 @@ func configureFronted() {
 		log.Errorf("Unable to read trusted certs: %v", err)
 	}
 	log.Debug(cfg.Client.FrontedProviders())
-	fronted.Configure(certs, cfg.Client.FrontedProviders(), config.DefaultFrontedProviderID, filepath.Join(tempConfigDir, "masquerade_cache"))
+	f, err := fronted.NewFronted(filepath.Join(tempConfigDir, "masquerade_cache"), tls.Hello360_Auto, config.DefaultFrontedProviderID)
+	if err != nil {
+		log.Errorf("Unable to create fronted: %v", err)
+		os.Exit(1)
+	}
+	f.UpdateConfig(certs, cfg.Client.FrontedProviders())
 
 	// Perform initial geolookup with a high timeout so that we don't later timeout when trying to
 	geolookup.GetCountry(5 * time.Second)
