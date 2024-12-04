@@ -169,6 +169,7 @@ func (app *App) Run(ctx context.Context) {
 		}
 		proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
 			UserConfig: userConfig,
+			
 		})
 		authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
 
