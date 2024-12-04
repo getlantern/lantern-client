@@ -61,7 +61,7 @@ func (s *configService) StartService(channel ws.UIChannel) (err error) {
 	return err
 }
 
-func (s *configService) sendConfigOptions(cfg ConfigOptions) {
+func (s *configService) sendConfigOptions(cfg *ConfigOptions) {
 	b, _ := json.Marshal(&cfg)
 	log.Debugf("Sending config options to client %s", string(b))
 	s.service.Out <- cfg
@@ -90,7 +90,7 @@ func (app *App) sendConfigOptions() {
 	log.Debugf("DEBUG: Devices: %s", string(devices))
 	log.Debugf("Expiration date: %s", app.settings.GetExpirationDate())
 
-	app.configService.sendConfigOptions(ConfigOptions{
+	app.configService.sendConfigOptions(&ConfigOptions{
 		DevelopmentMode:      common.IsDevEnvironment(),
 		AppVersion:           common.ApplicationVersion,
 		ReplicaAddr:          "",
