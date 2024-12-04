@@ -5,10 +5,9 @@ import (
 
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
+	"github.com/getlantern/lantern-client/internalsdk/analytics"
 	notify "github.com/getlantern/notifier"
 	"github.com/getsentry/sentry-go"
-
-	"github.com/getlantern/lantern-client/desktop/analytics"
 )
 
 const (
@@ -30,11 +29,6 @@ var (
 // and waits for the result.
 func ShowNotification(note *notify.Notification, campaign string) bool {
 	log.Debug("Showing notification")
-	err := normalizeClickURL(note, campaign)
-	if err != nil {
-		log.Errorf("Could not normalize click URL: %v", err)
-		return false
-	}
 	chResult := make(chan bool)
 	ch <- notifierRequest{
 		note,
@@ -43,17 +37,6 @@ func ShowNotification(note *notify.Notification, campaign string) bool {
 	}
 
 	return <-chResult
-}
-
-func normalizeClickURL(note *notify.Notification, campaign string) error {
-	ga, err := analytics.AddCampaign(note.ClickURL, campaign, note.Title+"-"+note.Message, "notification")
-	if err != nil {
-		log.Errorf("Could not add campaign: %v", err)
-		return err
-	}
-
-	note.ClickURL = ga
-	return nil
 }
 
 // NotificationsLoop starts a goroutine to show the desktop notifications

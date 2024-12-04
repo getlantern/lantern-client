@@ -30,9 +30,8 @@ class Settings extends StatelessWidget {
       context.pushRoute(SplitTunneling());
 
   Future<void> openWebView(
-      String url, BuildContext context, String title) async {
-    await AppBrowser.openWebview(url);
-  }
+          String url, BuildContext context, String title) async =>
+      await AppBrowser.openWebview(context, url);
 
   void openProxySetting(BuildContext context) =>
       context.pushRoute(ProxiesSetting());

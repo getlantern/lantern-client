@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/big"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/1Password/srp"
+	"google.golang.org/protobuf/proto"
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/config"
@@ -19,7 +21,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/ios"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/pathdb"
 	"github.com/getlantern/pathdb/minisql"
 )
@@ -81,7 +82,6 @@ const (
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
 	pathShowAds                = "showAds"
-	pathTapSellAdsEnabled      = "tapsellAdsEnabled"
 	pathStoreVersion           = "storeVersion"
 	pathTestPlayVersion        = "testPlayVersion"
 	pathServerInfo             = "/server_info"
@@ -136,9 +136,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
-	dialTimeout := 30 * time.Second
 	if opts.Platform == "ios" {
-		dialTimeout = 20 * time.Second
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 		base.db.RegisterType(5000, &protos.Device{})
@@ -159,34 +157,32 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	}
 
 	m := &SessionModel{baseModel: base}
+
 	deviceID, _ := m.GetDeviceID()
 	userID, _ := m.GetUserID()
 	token, _ := m.GetToken()
 	lang, _ := m.Locale()
-	webclientOpts := &webclient.Opts{
-		Timeout: dialTimeout,
-		UserConfig: func() common.UserConfig {
-			internalHeaders := map[string]string{
-				common.PlatformHeader:   opts.Platform,
-				common.AppVersionHeader: common.ApplicationVersion,
-			}
-			return common.NewUserConfig(
-				common.DefaultAppName,
-				deviceID,
-				userID,
-				token,
-				internalHeaders,
-				lang,
-			)
-		},
-	}
-	m.proClient = pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+
+	m.proClient = createProClient(m, opts.Platform)
 
 	authUrl := common.DFBaseUrl
 	if opts.Platform == "ios" {
 		authUrl = common.APIBaseUrl
 	}
-	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), webclientOpts.UserConfig)
+	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), func() common.UserConfig {
+		internalHeaders := map[string]string{
+			common.PlatformHeader:   opts.Platform,
+			common.AppVersionHeader: common.ApplicationVersion,
+		}
+		return common.NewUserConfig(
+			common.DefaultAppName,
+			deviceID,
+			userID,
+			token,
+			internalHeaders,
+			lang,
+		)
+	})
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
@@ -326,6 +322,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "setDeviceId":
 		deviceId := arguments.Get("deviceID").String()
 		err := m.setDeviceId(deviceId)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "setUserIdAndToken":
+		userId := arguments.Get("userId").Int()
+		token := arguments.Get("token").String()
+		err := m.SetUserIdAndToken(int64(userId), token)
 		if err != nil {
 			return nil, err
 		}
@@ -496,10 +500,10 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		return true, nil
 	case "updateBandwidth":
 		percent := arguments.Get("percent").Int()
-		remaining := arguments.Get("remaining").Int()
-		allowed := arguments.Get("allowed").Int()
+		mibUsed := arguments.Get("mibUsed").Int()
+		mibAllowed := arguments.Get("mibAllowed").Int()
 		ttlSeconds := arguments.Get("ttlSeconds").Int()
-		err := m.BandwidthUpdate(percent, remaining, allowed, ttlSeconds)
+		err := m.BandwidthUpdate(percent, mibUsed, mibAllowed, ttlSeconds)
 		if err != nil {
 			return nil, err
 		}
@@ -538,7 +542,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return apps, nil
 	case "updateAppsData":
-		appsData := arguments.Get("appsList").String()
+		appsData := arguments.Get("filePath").String()
 		err := m.updateAppsData(appsData)
 		if err != nil {
 			return nil, err
@@ -771,9 +775,6 @@ func (m *SessionModel) checkAvailableFeatures() {
 	// Check for ads feature
 	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
 	m.SetShowGoogleAds(googleAdsEnabled)
-
-	tapSellAdsEnabled := m.featureEnabled(config.FeatureTapsellAds)
-	m.SetShowTapSellAds(tapSellAdsEnabled)
 }
 
 // check if feature is enabled or not
@@ -946,15 +947,15 @@ func (m *SessionModel) SetStaging(staging bool) error {
 	return nil
 }
 
-// Keep name as p1,p2,p3..... percent: Long, remaining: Long, allowed: Long, ttlSeconds: Long
+// Keep name as p1,p2,p3..... percent: Long, mibUsed: Long, mibAllowed: Long, ttlSeconds: Long
 // Name become part of Objective c so this is important
 func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
-	log.Debugf("BandwidthUpdate percent %v remaining %v allowed %v ttl %v", p1, p2, p3, p4)
+	log.Debugf("BandwidthUpdate percent %v mibUsed %v allowed %v ttl %v", p1, p2, p3, p4)
 
 	bandwidth := &protos.Bandwidth{
 		Percent:    int64(p1),
-		Remaining:  int64(p2),
-		Allowed:    int64(p3),
+		MibUsed:    int64(p2),
+		MibAllowed: int64(p3),
 		TtlSeconds: int64(p4),
 	}
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
@@ -1268,14 +1269,6 @@ func (m *SessionModel) SetShowGoogleAds(adsEnable bool) {
 	checkAdsEnabled(m)
 }
 
-func (m *SessionModel) SetShowTapSellAds(adsEnable bool) {
-	log.Debugf("SetShowTapSellAds %v", adsEnable)
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathTapSellAdsEnabled, adsEnable, "")
-	}))
-	checkAdsEnabled(m)
-}
-
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
 	// Return static for now
 	// Todo implement this method
@@ -1344,10 +1337,12 @@ func isShowFirstTimeUserVisit(m *baseModel) error {
 	})
 }
 
-func setUserIdAndToken(m *baseModel, userId int64, token string) error {
-	log.Debugf("Setting user id %v token %v", userId, token)
+// Keep name as p1,p2 somehow is conflicting with objective c
+// p1 is userid and p2 is token
+func (m *SessionModel) SetUserIdAndToken(p1 int64, p2 string) error {
+	log.Debugf("Setting user id %v token %v", p1, p2)
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		if err := pathdb.Put[int64](tx, pathUserID, userId, ""); err != nil {
+		if err := pathdb.Put[int64](tx, pathUserID, p1, ""); err != nil {
 			log.Errorf("Error while setting user id %v", err)
 			return err
 		}
@@ -1356,7 +1351,7 @@ func setUserIdAndToken(m *baseModel, userId int64, token string) error {
 			return err
 		}
 		log.Debugf("User id %v", userid)
-		return pathdb.Put(tx, pathToken, token, "")
+		return pathdb.Put(tx, pathToken, p2, "")
 	})
 }
 func setResellerCode(m *baseModel, resellerCode string) error {
@@ -1398,7 +1393,7 @@ func (session *SessionModel) userCreate(ctx context.Context) error {
 	}
 
 	//Save user id and token
-	err = setUserIdAndToken(session.baseModel, int64(user.UserId), user.Token)
+	err = session.SetUserIdAndToken(int64(user.UserId), user.Token)
 	if err != nil {
 		return err
 	}
@@ -1491,7 +1486,7 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 		return err
 	}
 	log.Debugf("User caching successful: %+v", userDetail)
-	return setUserIdAndToken(session.baseModel, int64(userDetail.UserId), userDetail.Token)
+	return session.SetUserIdAndToken(int64(userDetail.UserId), userDetail.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
@@ -1557,20 +1552,10 @@ func checkAdsEnabled(session *SessionModel) error {
 	if err != nil {
 		return err
 	}
-	tapSellAdsEnable, err := pathdb.Get[bool](session.db, pathTapSellAdsEnabled)
-	if err != nil {
-		return err
-	}
 	if googleAdsEnable {
 		log.Debug("Google Ads is enabled")
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 			return pathdb.Put[string](tx, pathShowAds, "google", "")
-		})
-	}
-	if tapSellAdsEnable {
-		log.Debug("TapSell Ads is enabled")
-		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put[string](tx, pathShowAds, "tapsell", "")
 		})
 	}
 	return nil
@@ -1882,7 +1867,7 @@ func deviceLimitFlow(session *SessionModel, login *protos.LoginResponse) error {
 	if err != nil {
 		return err
 	}
-	return setUserIdAndToken(session.baseModel, login.LegacyID, login.LegacyToken)
+	return session.SetUserIdAndToken(login.LegacyID, login.LegacyToken)
 }
 
 func startRecoveryByEmail(session *SessionModel, email string) error {
@@ -2258,7 +2243,7 @@ func linkCodeRedeem(session *SessionModel) error {
 		return err
 	}
 	log.Debugf("linkCodeRedeem response %+v", linkRedeemResponse)
-	err = setUserIdAndToken(session.baseModel, linkRedeemResponse.UserID, linkRedeemResponse.Token)
+	err = session.SetUserIdAndToken(linkRedeemResponse.UserID, linkRedeemResponse.Token)
 	if err != nil {
 		return log.Errorf("Error while setting user id and token %v", err)
 	}
@@ -2329,7 +2314,7 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 		return err
 	}
 	log.Debugf("ValidateRecovery code response %v", linkResponse)
-	err = setUserIdAndToken(session.baseModel, linkResponse.UserID, linkResponse.Token)
+	err = session.SetUserIdAndToken(linkResponse.UserID, linkResponse.Token)
 	if err != nil {
 		return err
 	}
@@ -2362,26 +2347,31 @@ func (session *SessionModel) appsAllowedAccess() (string, error) {
 type AppInfo struct {
 	PackageName string `json:"packageName"`
 	Name        string `json:"name"`
-	Icon        string `json:"icon"`
+	Icon        []int  `json:"icon"`
 }
 
-func (session *SessionModel) updateAppsData(appsList string) error {
-	var apps []AppInfo
-	err := json.Unmarshal([]byte(appsList), &apps)
+func (session *SessionModel) updateAppsData(filePath string) error {
+	// Read the JSON file
+	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
-		log.Fatalf("Error decoding JSON: %v", err)
+		log.Debugf("Error opening file: %v", err)
+		return err
 	}
+
+	log.Debugf("Successfully fileContent %v ", len(fileContent))
+	var appsList = &protos.AppsData{}
+	parseErr := proto.Unmarshal(fileContent, appsList)
+	if parseErr != nil {
+		log.Errorf("Error decoding JSON: %v", parseErr)
+		return parseErr
+	}
+
+	log.Debugf("Successfully loaded %d apps\n", len(appsList.AppsList))
+
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-		for _, app := range apps {
+		for _, app := range appsList.AppsList {
 			path := pathAppsData + app.PackageName
-			list, _ := convertStringArrayToIntArray(strings.Split(app.Icon, ", "))
-			imagebyte, _ := convertIntArrayToByteArray(list)
-			vpn := &protos.AppData{
-				PackageName: app.PackageName,
-				Name:        app.Name,
-				Icon:        imagebyte,
-			}
-			pathdb.PutIfAbsent(tx, path, vpn, "")
+			pathdb.PutIfAbsent(tx, path, app, "")
 		}
 		return nil
 	})

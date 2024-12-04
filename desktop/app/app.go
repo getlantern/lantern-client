@@ -16,12 +16,13 @@ import (
 
 	"github.com/getsentry/sentry-go"
 
+	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/bandit"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
@@ -32,15 +33,16 @@ import (
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
 
-	"github.com/getlantern/lantern-client/desktop/analytics"
-
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/lantern-client/internalsdk/webclient"
 )
 
 var (
@@ -62,13 +64,12 @@ type App struct {
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
 
-	Flags            flashlight.Flags
-	configDir        string
-	exited           eventual.Value
-	analyticsSession analytics.Session
-	settings         *settings.Settings
-	configService    *configService
-	statsTracker     *statsTracker
+	Flags         flashlight.Flags
+	configDir     string
+	exited        eventual.Value
+	settings      *settings.Settings
+	configService *configService
+	statsTracker  *statsTracker
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
@@ -78,6 +79,7 @@ type App struct {
 	flashlight *flashlight.Flashlight
 
 	issueReporter *issueReporter
+	authClient    auth.AuthClient
 	proClient     proclient.ProClient
 
 	selectedTab Tab
@@ -94,20 +96,32 @@ type App struct {
 
 	onUserData []func(current *protos.User, new *protos.User)
 
-	mu sync.Mutex
+	mu sync.RWMutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, ss *settings.Settings) *App {
-	analyticsSession := newAnalyticsSession(ss)
+func NewApp() *App {
+	// initialize app config and flags based on environment variables
+	flags, err := initializeAppConfig()
+	if err != nil {
+		log.Fatalf("failed to initialize app config: %w", err)
+	}
+	return NewAppWithFlags(flags, flags.ConfigDir)
+}
+
+// NewAppWithFlags creates a new instance of App initialized with the given flags and configDir
+func NewAppWithFlags(flags flashlight.Flags, configDir string) *App {
+	if configDir == "" {
+		log.Debug("Config directory is empty, using default location")
+		configDir = appdir.General(common.DefaultAppName)
+	}
+	ss := settings.LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
-		proClient:                 proClient,
 		settings:                  ss,
-		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
 		configService:             new(configService),
@@ -121,7 +135,6 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 	}
 	golog.OnFatal(app.exitOnFatal)
 
-	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
 	app.onProStatusChange(func(isPro bool) {
 		statsTracker.SetIsPro(isPro)
 	})
@@ -138,25 +151,12 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 	return app
 }
 
-func newAnalyticsSession(settings *settings.Settings) analytics.Session {
-	if settings.IsAutoReport() {
-		session := analytics.Start(settings.GetDeviceID(), common.ApplicationVersion)
-		go func() {
-			session.SetIP(geolookup.GetIP(eventual.Forever))
-		}()
-		return session
-	} else {
-		return analytics.NullSession{}
-	}
-}
-
 // Run starts the app.
 func (app *App) Run(ctx context.Context) {
 	golog.OnFatal(app.exitOnFatal)
-
 	go func() {
 		for <-geolookup.OnRefresh() {
-			app.settings.SetCountry(geolookup.GetCountry(0))
+			app.Settings().SetCountry(geolookup.GetCountry(0))
 		}
 	}()
 
@@ -164,14 +164,29 @@ func (app *App) Run(ctx context.Context) {
 	// for the first time. User can still quit Lantern through systray menu when it happens.
 	go func() {
 		log.Debug(app.Flags)
+		userConfig := func() common.UserConfig {
+			return settings.UserConfig(app.Settings())
+		}
+		proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
+			UserConfig: userConfig,
+		})
+		authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
+
+		app.mu.Lock()
+		app.proClient = proClient
+		app.authClient = authClient
+		app.mu.Unlock()
+
+		settings := app.Settings()
+
 		if app.Flags.ProxyAll {
 			// If proxyall flag was supplied, force proxying of all
-			app.settings.SetProxyAll(true)
+			settings.SetProxyAll(true)
 		}
 
 		listenAddr := app.Flags.Addr
 		if listenAddr == "" {
-			listenAddr = app.settings.GetAddr()
+			listenAddr = settings.GetAddr()
 		}
 		if listenAddr == "" {
 			listenAddr = defaultHTTPProxyAddress
@@ -179,7 +194,7 @@ func (app *App) Run(ctx context.Context) {
 
 		socksAddr := app.Flags.SocksAddr
 		if socksAddr == "" {
-			socksAddr = app.settings.GetSOCKSAddr()
+			socksAddr = settings.GetSOCKSAddr()
 		}
 		if socksAddr == "" {
 			socksAddr = defaultSOCKSProxyAddress
@@ -200,17 +215,18 @@ func (app *App) Run(ctx context.Context) {
 			common.RevisionDate,
 			app.configDir,
 			app.Flags.VPN,
-			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
-			app.settings.GetProxyAll,
+			func() bool { return settings.GetDisconnected() }, // check whether we're disconnected
+			settings.GetProxyAll,
 			func() bool { return false }, // on desktop, we do not allow private hosts
-			app.settings.IsAutoReport,
+			settings.IsAutoReport,
 			app.Flags.AsMap(),
-			app.settings,
+			settings,
 			app.statsTracker,
 			app.IsPro,
-			app.settings.GetLanguage,
+			settings.GetLanguage,
 			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-			app.analyticsSession.EventWithLabel,
+			// Dummy analytics function
+			func(category, action, label string) {},
 			flashlight.WithOnConfig(app.onConfigUpdate),
 			flashlight.WithOnProxies(app.onProxiesUpdate),
 		)
@@ -304,14 +320,12 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 
 // Connect turns on proxying
 func (app *App) Connect() {
-	app.analyticsSession.Event("systray-menu", "connect")
 	ops.Begin("connect").End()
 	app.settings.SetDisconnected(false)
 }
 
 // Disconnect turns off proxying
 func (app *App) Disconnect() {
-	app.analyticsSession.Event("systray-menu", "disconnect")
 	ops.Begin("disconnect").End()
 	app.settings.SetDisconnected(true)
 }
@@ -425,7 +439,7 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
 }
 
-func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
+func (app *App) onProxiesUpdate(proxies []dialer.ProxyDialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
 	app.fetchedProxiesConfig.Store(true)
 	app.hasSucceedingProxy.Store(true)
@@ -786,5 +800,19 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 }
 
 func (app *App) Settings() *settings.Settings {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
 	return app.settings
+}
+
+func (app *App) AuthClient() auth.AuthClient {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.authClient
+}
+
+func (app *App) ProClient() pro.ProClient {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.proClient
 }

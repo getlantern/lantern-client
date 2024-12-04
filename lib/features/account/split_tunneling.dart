@@ -107,8 +107,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
         Iterable<PathAndValue<AppData>> _appsData,
         Widget? child,
       ) {
-        return Expanded(
-            child: SplitTunnelingAppsList(appsList: _appsData.toList()));
+        return SplitTunnelingAppsList(appsList: _appsData.toList());
       },
     );
   }
@@ -264,8 +263,16 @@ class _SplitTunnelingAppsListState extends State<SplitTunnelingAppsList> {
                     width: 24,
                     height: 24,
                   )
-                : null,
-          ),
+                : CircleAvatar(
+                    backgroundColor: onSwitchColor,
+                    child: CText(
+                      appData.name.isNotEmpty
+                          ? appData.name[0].toUpperCase()
+                          : '',
+                      style: tsSubtitle3.copiedWith(color: Colors.white, fontSize: 14.0),
+                    ),
+                  ),
+            ),
           onTap: () => allowOrDenyAppAccess(appData),
           trailing: SizedBox(
             height: 24.0,

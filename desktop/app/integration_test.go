@@ -6,7 +6,6 @@ package app
 import (
 	"context"
 	"crypto/tls"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -29,9 +28,6 @@ import (
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/lantern-client/desktop/doh"
 	"github.com/getlantern/lantern-client/desktop/settings"
-	uicommon "github.com/getlantern/lantern-client/internalsdk/common"
-	"github.com/getlantern/lantern-client/internalsdk/pro"
-	"github.com/getlantern/lantern-client/internalsdk/webclient"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -193,16 +189,8 @@ func startApp(t *testing.T, helper *integrationtest.Helper) (*App, error) {
 		UIAddr:             "127.0.0.1:16823",
 		Timeout:            time.Duration(0),
 	}
-
 	ss := settings.EmptySettings()
-	webclientOpts := &webclient.Opts{
-		UserConfig: func() uicommon.UserConfig {
-			return settings.UserConfig(ss)
-		},
-	}
-	proClient := pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
-
-	a := NewApp(flags, helper.ConfigDir, proClient, ss)
+	a := NewAppWithFlags(flags, helper.ConfigDir)
 	id := ss.GetUserID()
 	if id == 0 {
 		ss.SetUserIDAndToken(1, "token")

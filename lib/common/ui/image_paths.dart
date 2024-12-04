@@ -139,7 +139,6 @@ class ImagePaths {
   static const warning = 'assets/images/warning.svg';
   static const emptyCheck = 'assets/images/empty_check.svg';
 
-
   // illustrations
   static const welcome_illustration = 'assets/images/welcome_illustration.svg';
   static const introducing_illustration_bubble =
@@ -155,18 +154,23 @@ class ImagePaths {
   static const empty_search = 'assets/images/empty_search.svg';
   static const lantern_logotype = 'assets/images/lantern_logotype.svg';
   static const lantern_pro_logotype = 'assets/images/lantern_pro_logotype.svg';
-  static const addAccountIllustration = 'assets/images/add_account_illustration.svg';
+  static const addAccountIllustration =
+      'assets/images/add_account_illustration.svg';
   static const cloudOff = 'assets/images/cloud_off.svg';
   static const restore = 'assets/images/restore.svg';
   static const lanternConnected = 'assets/images/lantern_connected.png';
   static const lanternDisconnected = 'assets/images/lantern_disconnected.png';
-  static const lanternDiss = 'assets/images/lantern_dis.png';
+  static const lanternLightConnected = 'assets/images/tray_light_connected.png';
+  static const lanternLightDisconnected =
+      'assets/images/tray_light_disconnected.png';
+  static const lanternDarkDisconnected =
+      'assets/images/tray_dark_disconnected.png';
+  static const lanternDarkConnected = 'assets/images/tray_dark_connected.png';
   static const lanternConnectedIco = 'assets/images/lantern_connected.ico';
-  static const lanternDisconnectedIco = 'assets/images/lantern_disconnected.ico';
+  static const lanternDisconnectedIco =
+      'assets/images/lantern_disconnected.ico';
   static const proxySetting = 'assets/images/proxy_setting.svg';
   static const copy = 'assets/images/copy.svg';
-
-
 
   static String countdownPath(int index) =>
       'assets/images/countdown_stopwatch/timer_$index.svg';

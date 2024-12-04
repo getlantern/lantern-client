@@ -10,8 +10,8 @@ message ServerInfo {
 
 message Bandwidth {
   int64 percent = 1; // [0, 100]
-  int64 remaining = 2; // in MB
-  int64 allowed = 3; // in MB
+  int64 mibUsed = 2; // in MB
+  int64 mibAllowed = 3; // in MB
   int64 ttlSeconds = 4; // number of seconds left before data reset
 }
 
@@ -20,6 +20,11 @@ message AppData {
   string name = 2;
   bytes icon = 3;
   bool allowedAccess = 4;
+}
+
+
+message AppsData {
+  repeated AppData appsList = 1;
 }
 
 message Device {

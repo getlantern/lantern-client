@@ -57,6 +57,7 @@ open class LanternApp : Application() {
         private lateinit var appContext: Context
         private lateinit var inAppBilling: InAppBilling
         lateinit var session: SessionModel
+        val sessionInitialized = ::session.isInitialized
         private lateinit var goSession: internalsdk.SessionModel
         var messaging: MessagingHolder = MessagingHolder()
 
@@ -69,9 +70,10 @@ open class LanternApp : Application() {
         fun getInAppBilling(): InAppBilling {
             return inAppBilling
         }
+
         @JvmStatic
-        fun setInAppBilling(inAppBilling: InAppBilling)  {
-             this.inAppBilling= inAppBilling
+        fun setInAppBilling(inAppBilling: InAppBilling) {
+            this.inAppBilling = inAppBilling
         }
 
 
@@ -81,8 +83,8 @@ open class LanternApp : Application() {
         }
 
         @JvmStatic
-        fun setGoSession(sessionModel :internalsdk.SessionModel) {
-            goSession= sessionModel
+        fun setGoSession(sessionModel: internalsdk.SessionModel) {
+            goSession = sessionModel
         }
     }
 }

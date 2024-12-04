@@ -33,17 +33,17 @@ open class LanternService : Service(), Runnable {
     }
 
     private var thread: Thread? = null
-    private val createUserHandler: Handler = Handler(Looper.getMainLooper())
-    private val createUserRunnable: CreateUser = CreateUser(this)
+
     private val random: Random = Random()
-    private val serviceIcon: Int = if (LanternApp.session.chatEnabled()) {
-        R.drawable.status_chat
-    } else {
-        R.drawable.status_plain
-    }
-    private val helper: ServiceHelper = ServiceHelper(this, serviceIcon, R.string.ready_to_connect)
+    private lateinit var helper: ServiceHelper
+
     private val started: AtomicBoolean = AtomicBoolean()
     private lateinit var autoUpdater: AutoUpdater
+
+    override fun onCreate() {
+        super.onCreate()
+        helper = ServiceHelper(this,  R.string.ready_to_connect)
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent == null) return START_NOT_STICKY
@@ -86,27 +86,19 @@ open class LanternService : Service(), Runnable {
         } catch (lnre: LanternNotRunningException) {
             Logger.e(TAG, "Unable to start LanternService", lnre)
             throw RuntimeException("Could not start Lantern", lnre)
+        }catch (e: Exception) {
+            Logger.e(TAG, "Unable to start LanternService", e)
+            throw RuntimeException("Could not start Lantern", e)
         }
     }
 
     private fun afterStart() {
-        if (LanternApp.session.userId().toInt() == 0) {
-            // create a user if no user id is stored
-            EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.PROCESSING)
-            createUser(0)
-        }
+        EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
         if (!BuildConfig.PLAY_VERSION && !BuildConfig.DEVELOPMENT_MODE) {
             // check if an update is available
             autoUpdater.checkForUpdates(null)
         }
         EventHandler.postStatusEvent(LanternStatus(Status.ON))
-    }
-
-    private fun createUser(attempt: Int) {
-        val maxBackOffTime = 60000L // maximum backoff time in milliseconds (e.g., 1 minute)
-        val timeOut =
-            (baseWaitMs * Math.pow(2.0, attempt.toDouble())).toLong().coerceAtMost(maxBackOffTime)
-        createUserHandler.postDelayed(createUserRunnable, timeOut)
     }
 
     override fun onDestroy() {
@@ -117,41 +109,12 @@ open class LanternService : Service(), Runnable {
         }
         helper.onDestroy()
         thread?.interrupt()
-        try {
-            Logger.debug(TAG, "Unregistering screen state receiver")
-            createUserHandler.removeCallbacks(createUserRunnable)
-        } catch (e: Exception) {
-            Logger.error(TAG, "Exception", e)
-        }
         // We want to keep the service running as much as possible to allow receiving messages, so
         // we start it back up automatically as explained at https://stackoverflow.com/a/52258125.
         val broadcastIntent = Intent()
             .setAction("restartservice")
             .setClass(this, AutoStarter::class.java)
         sendBroadcast(broadcastIntent)
-    }
-
-    private class CreateUser(val service: LanternService) : Runnable {
-        private var attempts: Int = 0
-
-        override fun run() {
-            try {
-                val userCreated = LanternApp.session.createUser()
-                if (userCreated) {
-                    service.createUserHandler.removeCallbacks(service.createUserRunnable)
-                    EventHandler.postStatusEvent(LanternStatus(Status.ON))
-                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.SUCCESS)
-                }
-            } catch (e: Exception) {
-                if (attempts >= MAX_CREATE_USER_TRIES) {
-                    Logger.error(TAG, "Max. number of tries made to create Pro user")
-                    EventHandler.postAccountInitializationStatus(AccountInitializationStatus.Status.FAILURE)
-                    return
-                }
-                attempts++
-                service.createUser(attempts)
-            }
-        }
     }
 }
 

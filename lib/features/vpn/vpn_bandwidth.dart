@@ -7,9 +7,13 @@ class VPNBandwidth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return sessionModel
-        .bandwidth((BuildContext context, Bandwidth bandwidth, Widget? child) {
-          // User does not have bandwidth cap off
-      if (bandwidth.remaining > 0 ) {
+        .bandwidth((BuildContext context, Bandwidth? bandwidth, Widget? child) {
+      return sessionModel.proUser((context, isProUser, child) {
+        if (bandwidth == null || isProUser) {
+          // Always disable the data cap if it's a pro user or we haven't
+          // received any bandwidth updates
+          return const SizedBox();
+        }
         return Column(
           children: [
             Container(
@@ -30,7 +34,7 @@ class VPNBandwidth extends StatelessWidget {
                 ),
                 Expanded(
                   child: CText(
-                    '${bandwidth.remaining}/${bandwidth.allowed} MB',
+                    '${bandwidth.mibUsed}/${bandwidth.mibAllowed} MB',
                     textAlign: TextAlign.end,
                     style: tsSubtitle4,
                   ),
@@ -60,9 +64,7 @@ class VPNBandwidth extends StatelessWidget {
             ),
           ],
         );
-      } else {
-        return const SizedBox();
-      }
+      });
     });
   }
 }

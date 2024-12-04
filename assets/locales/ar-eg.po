@@ -1975,3 +1975,6 @@ msgstr ""
 
 msgid "proxy_everything"
 msgstr ""
+
+msgid "errorSubmittingToGooglePlay"
+msgstr ""

@@ -14,6 +14,27 @@ bool isProdPlay() {
   return false;
 }
 
+
+String getPlanDisplayName(String plan) {
+  if (Platform.isIOS) {
+    if (plan == '1y') {
+      return 'lantern_pro_one_year'.i18n;
+    } else if (plan == '1m') {
+      return 'lantern_pro_one_month'.i18n;
+    } else {
+      return 'lantern_pro_two_year'.i18n;
+    }
+  } else {
+    if (plan == '1y') {
+      return 'one_year_plan'.i18n;
+    } else if (plan == '1m') {
+      return 'one_month_plan'.i18n;
+    } else {
+      return 'two_year_plan'.i18n;
+    }
+  }
+}
+
 const lanternStarLogo = CAssetImage(
   path: ImagePaths.lantern_star,
   size: 72,
@@ -141,16 +162,11 @@ Future<void> openDesktopPaymentWebview(
     VoidCallback? onClose}) async {
   switch (Platform.operatingSystem) {
     case 'macos':
-      if (provider == Providers.shepherd || provider == Providers.fropay) {
-        // Open with system browser browser on mac due to not able to by pass human verification.
-        await AppBrowser.openWebview(redirectUrl);
-      } else {
-        final browser = AppBrowser(onClose: onClose);
-        await browser.openMacWebview(redirectUrl);
-      }
+    case 'windows':
+      await AppBrowser.navigateWebview(context, redirectUrl);
       break;
     default:
-      await AppBrowser.openWebview(redirectUrl);
+      await AppBrowser.openWebview(context, redirectUrl);
   }
 }
 

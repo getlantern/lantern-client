@@ -7,6 +7,7 @@ import android.os.Environment
 import android.util.Log
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
+import io.sentry.Sentry
 import org.getlantern.lantern.MainActivity
 import org.getlantern.lantern.R
 
@@ -23,10 +24,20 @@ class ReplicaModel(
     }
 
     init {
-        db.mutate { tx ->
-            tx.put(PATH_SEARCH_TERM, "")
-            tx.put(PATH_SEARCH_TAB, 0)
+        initConfig();
+    }
+
+    private fun initConfig() {
+        try {
+            db.mutate { tx ->
+                tx.put(PATH_SEARCH_TERM, "")
+                tx.put(PATH_SEARCH_TAB, 0)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "initConfig: ", e)
+            Sentry.captureException(e);
         }
+
     }
 
     override fun doMethodCall(call: MethodCall, notImplemented: () -> Unit): Any? {
