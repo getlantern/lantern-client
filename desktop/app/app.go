@@ -148,6 +148,10 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) *App {
 	app.issueReporter = newIssueReporter(app)
 	app.translations.Set(os.DirFS("locale/translation"))
 
+	if e := app.configService.StartService(app.ws); e != nil {
+		app.Exit(fmt.Errorf("unable to register config service: %q", e))
+	}
+
 	return app
 }
 
@@ -169,7 +173,6 @@ func (app *App) Run(ctx context.Context) {
 		}
 		proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
 			UserConfig: userConfig,
-			
 		})
 		authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
 
@@ -283,11 +286,6 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 		}
 		app.Exit(nil)
 		os.Exit(0)
-	}
-
-	if e := app.configService.StartService(app.ws); e != nil {
-		app.Exit(fmt.Errorf("unable to register config service: %q", e))
-		return
 	}
 
 	if e := app.settings.StartService(app.ws); e != nil {
