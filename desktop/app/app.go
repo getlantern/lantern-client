@@ -40,7 +40,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-	"github.com/getlantern/lantern-client/internalsdk/webclient"
 )
 
 var (
@@ -165,9 +164,7 @@ func (app *App) Run(ctx context.Context) {
 		userConfig := func() common.UserConfig {
 			return settings.UserConfig(app.Settings())
 		}
-		proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), &webclient.Opts{
-			UserConfig: userConfig,
-		})
+		proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), userConfig)
 		authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
 
 		app.mu.Lock()
