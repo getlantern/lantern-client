@@ -9,7 +9,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -46,9 +45,8 @@ import (
 )
 
 var (
-	log                = golog.LoggerFor("lantern-desktop.app")
-	startTime          = time.Now()
-	translationAppName = strings.ToUpper(common.DefaultAppName)
+	log       = golog.LoggerFor("lantern-desktop.app")
+	startTime = time.Now()
 )
 
 func init() {
@@ -78,18 +76,16 @@ type App struct {
 
 	flashlight *flashlight.Flashlight
 
-	issueReporter *issueReporter
-	authClient    auth.AuthClient
-	proClient     proclient.ProClient
+	authClient auth.AuthClient
+	proClient  proclient.ProClient
 
 	selectedTab Tab
 
 	connectionStatusCallbacks []func(isConnected bool)
 
 	// Websocket-related settings
-	websocketAddr   string
-	websocketServer *http.Server
-	ws              ws.UIChannel
+	websocketAddr string
+	ws            ws.UIChannel
 
 	cachedUserData sync.Map
 	plansCache     sync.Map
@@ -145,7 +141,6 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) *App {
 
 	log.Debugf("Using configdir: %v", configDir)
 
-	app.issueReporter = newIssueReporter(app)
 	app.translations.Set(os.DirFS("locale/translation"))
 
 	if e := app.configService.StartService(app.ws); e != nil {
@@ -233,6 +228,7 @@ func (app *App) Run(ctx context.Context) {
 			func(category, action, label string) {},
 			flashlight.WithOnConfig(app.onConfigUpdate),
 			flashlight.WithOnProxies(app.onProxiesUpdate),
+			flashlight.WithOnSucceedingProxy(app.onSucceedingProxy),
 		)
 		if err != nil {
 			app.Exit(err)
@@ -441,13 +437,12 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 func (app *App) onProxiesUpdate(proxies []dialer.ProxyDialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
 	app.fetchedProxiesConfig.Store(true)
-	app.hasSucceedingProxy.Store(true)
 	app.sendConfigOptions()
 }
 
-func (app *App) onSucceedingProxy(succeeding bool) {
-	app.hasSucceedingProxy.Store(succeeding)
-	log.Debugf("[Startup Desktop] onSucceedingProxy %v", succeeding)
+func (app *App) onSucceedingProxy() {
+	app.hasSucceedingProxy.Store(true)
+	log.Debugf("[Startup Desktop] onSucceedingProxy")
 }
 
 // HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
