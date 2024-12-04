@@ -34,6 +34,8 @@ type backoffRunner struct {
 	isRunning bool
 }
 
+// createUser submits a request to create a new user with the Pro user and
+// configures a new client session
 func (c *proClient) createUser(ctx context.Context, session ClientSession) error {
 	log.Debug("New user, calling user create")
 	resp, err := c.UserCreate(ctx)

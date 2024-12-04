@@ -128,6 +128,10 @@ func logout() *C.char {
 	}
 
 	clearLocalUserData()
+	// Create new user
+	if _, err := a.ProClient().UserCreate(ctx); err != nil {
+		return sendError(err)
+	}
 	return C.CString("true")
 }
 
@@ -295,7 +299,7 @@ func deleteAccount(password *C.char) *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-	log.Debugf("Account Delted response %v", isAccountDeleted)
+	log.Debugf("Account deleted response %v", isAccountDeleted)
 
 	if !isAccountDeleted {
 		return sendError(log.Errorf("user_not_found error while deleting account %v", err))
@@ -305,5 +309,9 @@ func deleteAccount(password *C.char) *C.char {
 	clearLocalUserData()
 	// Set user id and token to nil
 	a.Settings().SetUserIDAndToken(0, "")
+	// Create new user
+	if _, err := a.ProClient().UserCreate(ctx); err != nil {
+		return sendError(err)
+	}
 	return C.CString("true")
 }
