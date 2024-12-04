@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/getlantern/errors"
@@ -29,6 +30,7 @@ var (
 type proClient struct {
 	webclient.RESTClient
 	backoffRunner *backoffRunner
+	plansCache    sync.Map
 	userConfig    func() common.UserConfig
 }
 
@@ -40,10 +42,12 @@ type ProClient interface {
 	webclient.RESTClient
 	Client
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
+	DesktopPaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
-	Plans(ctx context.Context) (*PlansResponse, error)
+	PaymentMethodsCache(ctx context.Context) (*PaymentMethodsResponse, error)
+	Plans(ctx context.Context) ([]protos.Plan, error)
 	PollUserData(ctx context.Context, session ClientSession, maxElapsedTime time.Duration, client Client)
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
 	RetryCreateUser(ctx context.Context, ss ClientSession, maxElapsedTime time.Duration)
@@ -187,30 +191,6 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 		resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
 		resp.Plans[i].TotalCost = ac.FormatMoneyDecimal(yearAmount)
 		resp.Plans[i].TotalCostBilledOneTime = fmt.Sprintf("%v billed one time", ac.FormatMoneyDecimal(yearAmount))
-	}
-	return &resp, nil
-}
-
-// Plans is used to hit the legacy /plans endpoint. Deprecated.
-func (c *proClient) Plans(ctx context.Context) (*PlansResponse, error) {
-	var resp PlansResponse
-	err := c.GetJSON(ctx, "/plans", c.defaultParams(), &resp)
-	if err != nil {
-		return nil, err
-	}
-	for i, plan := range resp.Plans {
-		parts := strings.Split(plan.Id, "-")
-		if len(parts) != 3 {
-			continue
-		}
-		cur := parts[1]
-		if currency, ok := accounting.LocaleInfo[strings.ToUpper(cur)]; ok {
-			if oneMonthCost, ok2 := plan.ExpectedMonthlyPrice[strings.ToLower(cur)]; ok2 {
-				ac := accounting.Accounting{Symbol: currency.ComSymbol, Precision: 2}
-				amount := decimal.NewFromInt(oneMonthCost).Div(decimal.NewFromInt(100))
-				resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
-			}
-		}
 	}
 	return &resp, nil
 }

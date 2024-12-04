@@ -87,7 +87,6 @@ type App struct {
 	ws            ws.UIChannel
 
 	cachedUserData sync.Map
-	plansCache     sync.Map
 
 	onUserData []func(current *protos.User, new *protos.User)
 
@@ -384,7 +383,7 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	ctx := context.Background()
 	go app.fetchOrCreateUser(ctx)
-	go app.GetPaymentMethods(ctx)
+	go app.proClient.DesktopPaymentMethods(ctx)
 	go app.fetchDeviceLinkingCode(ctx)
 
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
@@ -601,72 +600,6 @@ func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
 	return resp.Code, nil
 }
 
-// Plans returns the plans available to a user
-func (app *App) Plans(ctx context.Context) ([]protos.Plan, error) {
-	if v, ok := app.plansCache.Load("plans"); ok {
-		resp := v.([]protos.Plan)
-		log.Debugf("Returning plans from cache %s", v)
-		return resp, nil
-	}
-	resp, err := app.FetchPaymentMethods(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return resp.Plans, nil
-}
-
-// GetPaymentMethods returns the plans and payment from cache if available
-// if not then call FetchPaymentMethods
-func (app *App) GetPaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
-	if v, ok := app.plansCache.Load("paymentMethods"); ok {
-		resp := v.([]protos.PaymentMethod)
-		log.Debugf("Returning payment methods from cache %s", v)
-		return resp, nil
-	}
-	resp, err := app.FetchPaymentMethods(ctx)
-	if err != nil {
-		return nil, err
-	}
-	desktopProviders, ok := resp.Providers["desktop"]
-	if !ok {
-		return nil, errors.New("No desktop payment providers found")
-	}
-	return desktopProviders, nil
-}
-
-// FetchPaymentMethods returns the plans and payment plans available to a user
-// Updates cache with the fetched data
-func (app *App) FetchPaymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
-	resp, err := app.proClient.PaymentMethodsV4(context.Background())
-	if err != nil {
-		return nil, errors.New("Could not get payment methods: %v", err)
-	}
-	desktopPaymentMethods, ok := resp.Providers["desktop"]
-	if !ok {
-		return nil, errors.New("No desktop payment providers found")
-	}
-	for i := range desktopPaymentMethods {
-		paymentMethod := &desktopPaymentMethods[i]
-		for j, provider := range paymentMethod.Providers {
-			if resp.Logo[provider.Name] != nil {
-				logos := resp.Logo[provider.Name].([]interface{})
-				for _, logo := range logos {
-					paymentMethod.Providers[j].LogoUrls = append(paymentMethod.Providers[j].LogoUrls, logo.(string))
-				}
-			}
-		}
-	}
-	//clear previous store cache
-	app.plansCache.Delete("plans")
-	app.plansCache.Delete("paymentMethods")
-	log.Debugf("DEBUG: Payment methods plans: %+v", resp.Plans)
-	log.Debugf("DEBUG: Payment methods providers: %+v", desktopPaymentMethods)
-	app.plansCache.Store("plans", resp.Plans)
-	app.plansCache.Store("paymentMethods", desktopPaymentMethods)
-	app.sendConfigOptions()
-	return resp, nil
-}
-
 func (app *App) devices() protos.Devices {
 	user, found := app.GetUserData(app.Settings().GetUserID())
 
@@ -741,7 +674,7 @@ func (app *App) ProClient() proclient.ProClient {
 
 // Client session methods
 func (app *App) FetchUserData() error {
-	go app.FetchPaymentMethods(context.Background())
+	go app.proClient.PaymentMethodsCache(context.Background())
 	return nil
 }
 

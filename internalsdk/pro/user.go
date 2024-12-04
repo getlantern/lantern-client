@@ -43,10 +43,10 @@ func (c *proClient) createUser(ctx context.Context, session ClientSession) error
 		return errors.New("Could not create new Pro user: %v", err)
 	}
 	user := resp.User
-	log.Debugf("DEBUG: User created: %v", user)
 	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
 		return errors.New("Could not create new Pro user: %v", err)
 	}
+	log.Debugf("Successfully created new user with id %d", user.UserId)
 	session.SetReferralCode(user.Referral)
 	session.SetUserIDAndToken(user.UserId, user.Token)
 	session.FetchUserData()
@@ -55,6 +55,7 @@ func (c *proClient) createUser(ctx context.Context, session ClientSession) error
 
 // RetryCreateUser is used to retry creating a user with an exponential backoff strategy
 func (c *proClient) RetryCreateUser(ctx context.Context, ss ClientSession, maxElapsedTime time.Duration) {
+	log.Debug("Starting retry handler for user creation")
 	expBackoff := backoff.NewExponentialBackOff()
 	expBackoff.Multiplier = 2.0
 	expBackoff.InitialInterval = 3 * time.Second
