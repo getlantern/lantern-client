@@ -282,7 +282,7 @@ func bandwidthUpdates(bt BandwidthTracker) {
 		quota, _ := bandwidth.GetQuota()
 		if quota == nil {
 			// quota is nil, so then we are uncapped
-			bt.BandwidthUpdate("", 0, 0, 0, int(quota.TTLSeconds))
+			bt.BandwidthUpdate("", 0, 0, 0, 0)
 			return
 		}
 
