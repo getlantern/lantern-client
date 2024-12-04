@@ -218,20 +218,25 @@ func (c *iosClient) start() (ClientWriter, error) {
 	tracker := stats.NewTracker()
 	dialer := dialer.New(&dialer.Options{
 		Dialers: dialers,
+		OnSuccess: func(pd dialer.ProxyDialer) {
+			tracker.SetHasSucceedingProxy(true)
+			countryCode, country, city := pd.Location()
+			previousStats := tracker.Latest()
+			if previousStats.CountryCode == "" || previousStats.CountryCode != countryCode {
+				tracker.SetActiveProxyLocation(
+					city,
+					country,
+					countryCode,
+				)
+			}
+		},
 	})
 	if err != nil {
 		return nil, err
 	}
-	go func() {
-		tracker.AddListener(func(st stats.Stats) {
-			if st.City != "" && st.Country != "" && st.CountryCode != "" {
-				start := time.Now()
-				log.Debugf("Stats update at %v", start)
-				c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
-			}
-		})
-	}()
 
+	// get stats updates
+	go c.statsTrackerUpdates(tracker)
 	// get bandwidth updates
 	go bandwidthUpdates(c.bandwidthTracker)
 
@@ -280,7 +285,14 @@ func bandwidthUpdates(bt BandwidthTracker) {
 		}
 	}()
 }
-
+func (c *iosClient) statsTrackerUpdates(tracker stats.Tracker) {
+	tracker.AddListener(func(st stats.Stats) {
+		if st.City != "" && st.Country != "" && st.CountryCode != "" {
+			log.Debug("updating stats")
+			c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
+		}
+	})
+}
 func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	remaining := 0
 	percent := 100
