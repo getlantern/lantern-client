@@ -49,20 +49,6 @@ type AuthClient interface {
 	Healthz(ctx context.Context) (bool, error)
 }
 
-type serialTransport []http.RoundTripper
-
-func (tr serialTransport) RoundTrip(req *http.Request) (resp *http.Response, err error) {
-	for _, rt := range tr {
-		resp, err = rt.RoundTrip(req)
-		if err == nil {
-			return
-		}
-		log.Debugf("Error roundtripping request to %v, continuing to next transport", req.URL)
-	}
-	log.Errorf("Unable to roundtrip request to %v, out of transports", req.URL)
-	return
-}
-
 // NewClient creates a new instance of AuthClient
 func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 	chained, err := proxied.ChainedNonPersistent("")
@@ -76,6 +62,8 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 			prepareUserRequest(req, userConfig())
 			return nil
 		},
+		// The Auth client uses an http.Client that first attempts to connect via chained proxies
+		// and then falls back to using domain fronting with the custom op name above
 		HttpClient: &http.Client{
 			Transport: serialTransport{chained, frt},
 			Timeout:   30 * time.Second,
@@ -252,4 +240,18 @@ func (c *authClient) SignOut(ctx context.Context, logoutData *protos.LogoutReque
 		return false, err
 	}
 	return true, nil
+}
+
+type serialTransport []http.RoundTripper
+
+func (tr serialTransport) RoundTrip(req *http.Request) (resp *http.Response, err error) {
+	for _, rt := range tr {
+		resp, err = rt.RoundTrip(req)
+		if err == nil {
+			return
+		}
+		log.Debugf("Error roundtripping request to %v, continuing to next transport", req.URL)
+	}
+	log.Errorf("Unable to roundtrip request to %v, out of transports", req.URL)
+	return
 }
