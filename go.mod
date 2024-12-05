@@ -2,7 +2,7 @@ module github.com/getlantern/lantern-client
 
 go 1.22.6
 
-replace github.com/getlantern/flashlight/v7 => ../flashlight
+//replace github.com/getlantern/flashlight/v7 => ../flashlight
 
 // replace github.com/getlantern/ipproxy => ../ipproxy
 // replace github.com/getlantern/fronted => ../fronted
@@ -37,7 +37,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.151
+	github.com/getlantern/flashlight/v7 v7.6.151-0.20241204211949-dd8507e1c35a
 	github.com/getlantern/fronted v0.0.0-20241204181705-b9307b776331
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
@@ -283,7 +283,7 @@ require (
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/quic-go/quic-go v0.48.0 // indirect
-	github.com/refraction-networking/utls v1.3.3
+	github.com/refraction-networking/utls v1.6.7
 	github.com/refraction-networking/water v0.7.0-alpha // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
