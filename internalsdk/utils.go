@@ -25,7 +25,7 @@ import (
 )
 
 // createProClient creates a new instance of ProClient with the given client session information
-func createProClient(session ClientSession, platform string) pro.ProClient {
+func createProClient(session Session, platform string) pro.ProClient {
 	return pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), func() common.UserConfig {
 		internalHeaders := map[string]string{
 			common.PlatformHeader:   platform,
