@@ -15,7 +15,9 @@ mkdir -p "$TMPDIR"
 
 echo "Generating config for ${PROXY} in ${OUTFILE}..."
 CONFIG=$($LANTERN_CLOUD/bin/lc route dump-config $PROXY)
-OUTPUT="{\"proxy\":{\"proxies\":[${CONFIG}]}}"
+# wrap the proxy config to match the format expected by flashlight.
+# [ConfigResponse (getlantern/flashlight/apipb/types.proto)]
+OUTPUT="{\"country\": \"US\",\"proxy\":{\"proxies\":[${CONFIG}]}}"
 
 # check if jq is installed and reformat the output
 if command -v jq &> /dev/null
@@ -25,5 +27,12 @@ else
 	echo $OUTPUT > $OUTFILE
 fi
 
-make macos ffigen
-CONFIG_DIR=$TMPDIR READABLE_CONFIG=true STICKY_CONFIG=true flutter run -d macOS
+if [ "$(uname)" == "Linux" ]; then
+	make linux-amd64
+	CMD="flutter run"
+else
+	make macos ffigen
+	CMD="flutter run -d macOS"
+fi
+
+CONFIG_DIR=$TMPDIR READABLE_CONFIG=true STICKY_CONFIG=true $CMD
