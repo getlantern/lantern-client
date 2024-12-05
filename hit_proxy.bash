@@ -27,5 +27,12 @@ else
 	echo $OUTPUT > $OUTFILE
 fi
 
-# make macos ffigen
-CONFIG_DIR=$TMPDIR READABLE_CONFIG=true STICKY_CONFIG=true flutter run # -d macOS
+if [ "$(uname)" == "Linux" ]; then
+	make linux-amd64
+	CMD="flutter run"
+else
+	make macos ffigen
+	CMD="flutter run -d macOS"
+fi
+
+CONFIG_DIR=$TMPDIR READABLE_CONFIG=true STICKY_CONFIG=true $CMD
