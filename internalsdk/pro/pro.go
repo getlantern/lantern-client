@@ -68,24 +68,23 @@ type ProClient interface {
 }
 
 // NewClient creates a new instance of ProClient
-func NewClient(baseURL string, opts *webclient.Opts) ProClient {
-	if opts.HttpClient == nil {
-		// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
-		// attempts to send requests through both chained and direct fronted routes in parallel
-		// for HEAD and GET requests and ChainedThenFronted for all others.
-		opts.HttpClient = NewHTTPClient(proxied.ParallelForIdempotent(), opts.Timeout)
-	}
-	if opts.OnBeforeRequest == nil {
-		opts.OnBeforeRequest = func(client *resty.Client, req *http.Request) error {
-			prepareProRequest(req, common.ProAPIHost, opts.UserConfig())
-			return nil
-		}
-	}
-
+func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
 	return &proClient{
-		userConfig:    opts.UserConfig,
+		userConfig:    userConfig,
 		backoffRunner: &backoffRunner{},
-		RESTClient:    webclient.NewRESTClient(opts),
+		RESTClient: webclient.NewRESTClient(&webclient.Opts{
+			// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
+			// attempts to send requests through both chained and direct fronted routes in parallel
+			// for HEAD and GET requests and ChainedThenFronted for all others.
+			HttpClient: &http.Client{
+				Transport: proxied.ParallelForIdempotent(),
+				Timeout:   30 * time.Second,
+			},
+			OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
+				prepareProRequest(req, common.ProAPIHost, userConfig())
+				return nil
+			},
+		}),
 	}
 }
 
