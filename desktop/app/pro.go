@@ -12,7 +12,7 @@ import (
 )
 
 // onProStatusChange allows registering an event handler to learn when the
-// user's pro status or "yinbi enabled" status has changed.
+// user's pro status changes
 func (app *App) onProStatusChange(cb func(isPro bool)) {
 	app.setOnUserData(func(current *protos.User, new *protos.User) {
 		if current == nil || isActive(current) != isActive(new) {
@@ -107,53 +107,16 @@ func (app *App) IsProUserFast(uc common.UserConfig) (isPro bool, statusKnown boo
 // It loops forever in 10 seconds interval until the user is fetched or
 // created, as it's fundamental for the UI to work.
 func (app *App) servePro(channel ws.UIChannel) error {
-	// chFetch := make(chan bool)
-	// ctx := context.Background()
-	// go func() {
-	// 	fetchOrCreate := func() error {
-	// 		userID := app.settings.GetUserID()
-	// 		if userID == 0 {
-	// 			resp, err := app.proClient.UserCreate(ctx)
-	// 			if err != nil {
-	// 				return errors.New("Could not create new Pro user: %v", err)
-	// 			}
-	// 			app.settings.SetUserIDAndToken(resp.User.UserId, resp.User.Token)
-	// 		} else {
-	// 			_, err := app.proClient.UserData(ctx)
-	// 			if err != nil {
-	// 				return errors.New("Could not get user data for %v: %v", userID, err)
-	// 			}
-	// 		}
-	// 		return nil
-	// 	}
-
-	// 	retry := time.NewTimer(0)
-	// 	retryOnFail := func(drainChannel bool) {
-	// 		if err := fetchOrCreate(); err != nil {
-	// 			if drainChannel && !retry.Stop() {
-	// 				<-retry.C
-	// 			}
-	// 			retry.Reset(10 * time.Second)
-	// 		}
-	// 	}
-	// 	for {
-	// 		select {
-	// 		case <-chFetch:
-	// 			retryOnFail(true)
-	// 		case <-retry.C:
-	// 			retryOnFail(false)
-	// 		}
-	// 	}
-	// }()
-
 	service, err := channel.Register("pro", nil)
 	if err != nil {
 		return err
 	}
 	app.setOnUserData(func(current *protos.User, new *protos.User) {
-		b, _ := json.Marshal(new)
-		log.Debugf("Sending updated user data to all clients: %s", string(b))
-		service.Out <- new
+		if new != nil {
+			b, _ := json.Marshal(new)
+			log.Debugf("Sending updated user data to all clients: %s", string(b))
+			service.Out <- new
+		}
 	})
 	return err
 }
