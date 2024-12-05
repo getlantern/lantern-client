@@ -8,18 +8,22 @@ set -ef -o pipefail
 
 PROXY="${1:?please specify the proxy IP}"
 TMPDIR="${TMP:-/tmp}/hit_lc_proxy/$PROXY"
-OUTFILE="$TMPDIR/proxies.yaml"
+OUTFILE="$TMPDIR/user.conf"
 
 rm -rf "$TMPDIR"
 mkdir -p "$TMPDIR"
 
 echo "Generating config for ${PROXY} in ${OUTFILE}..."
-$LANTERN_CLOUD/bin/lc route dump-config --legacy "$PROXY" > "$OUTFILE"
+CONFIG=$($LANTERN_CLOUD/bin/lc route dump-config $PROXY)
+OUTPUT="{\"proxy\":{\"proxies\":[${CONFIG}]}}"
 
-make darwin ffigen
-LANTERN_CONFIGDIR=$TMPDIR \
-LANTERN_STICKYCONFIG=true \
-LANTERN_READABLECONFIG=true \
-LANTERN_PROXYALL=true \
-LANTERN_STARTUP=false \
-flutter run -d macOS
+# check if jq is installed and reformat the output
+if command -v jq &> /dev/null
+then
+	echo $OUTPUT | jq . > $OUTFILE
+else
+	echo $OUTPUT > $OUTFILE
+fi
+
+make macos ffigen
+CONFIG_DIR=$TMPDIR READABLE_CONFIG=true STICKY_CONFIG=true flutter run -d macOS

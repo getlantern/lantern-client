@@ -95,19 +95,19 @@ class ServerInfo extends $pb.GeneratedMessage {
 class Bandwidth extends $pb.GeneratedMessage {
   factory Bandwidth({
     $fixnum.Int64? percent,
-    $fixnum.Int64? remaining,
-    $fixnum.Int64? allowed,
+    $fixnum.Int64? mibUsed,
+    $fixnum.Int64? mibAllowed,
     $fixnum.Int64? ttlSeconds,
   }) {
     final $result = create();
     if (percent != null) {
       $result.percent = percent;
     }
-    if (remaining != null) {
-      $result.remaining = remaining;
+    if (mibUsed != null) {
+      $result.mibUsed = mibUsed;
     }
-    if (allowed != null) {
-      $result.allowed = allowed;
+    if (mibAllowed != null) {
+      $result.mibAllowed = mibAllowed;
     }
     if (ttlSeconds != null) {
       $result.ttlSeconds = ttlSeconds;
@@ -120,8 +120,8 @@ class Bandwidth extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Bandwidth', createEmptyInstance: create)
     ..aInt64(1, _omitFieldNames ? '' : 'percent')
-    ..aInt64(2, _omitFieldNames ? '' : 'remaining')
-    ..aInt64(3, _omitFieldNames ? '' : 'allowed')
+    ..aInt64(2, _omitFieldNames ? '' : 'mibUsed', protoName: 'mibUsed')
+    ..aInt64(3, _omitFieldNames ? '' : 'mibAllowed', protoName: 'mibAllowed')
     ..aInt64(4, _omitFieldNames ? '' : 'ttlSeconds', protoName: 'ttlSeconds')
     ..hasRequiredFields = false
   ;
@@ -157,22 +157,22 @@ class Bandwidth extends $pb.GeneratedMessage {
   void clearPercent() => clearField(1);
 
   @$pb.TagNumber(2)
-  $fixnum.Int64 get remaining => $_getI64(1);
+  $fixnum.Int64 get mibUsed => $_getI64(1);
   @$pb.TagNumber(2)
-  set remaining($fixnum.Int64 v) { $_setInt64(1, v); }
+  set mibUsed($fixnum.Int64 v) { $_setInt64(1, v); }
   @$pb.TagNumber(2)
-  $core.bool hasRemaining() => $_has(1);
+  $core.bool hasMibUsed() => $_has(1);
   @$pb.TagNumber(2)
-  void clearRemaining() => clearField(2);
+  void clearMibUsed() => clearField(2);
 
   @$pb.TagNumber(3)
-  $fixnum.Int64 get allowed => $_getI64(2);
+  $fixnum.Int64 get mibAllowed => $_getI64(2);
   @$pb.TagNumber(3)
-  set allowed($fixnum.Int64 v) { $_setInt64(2, v); }
+  set mibAllowed($fixnum.Int64 v) { $_setInt64(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasAllowed() => $_has(2);
+  $core.bool hasMibAllowed() => $_has(2);
   @$pb.TagNumber(3)
-  void clearAllowed() => clearField(3);
+  void clearMibAllowed() => clearField(3);
 
   @$pb.TagNumber(4)
   $fixnum.Int64 get ttlSeconds => $_getI64(3);
@@ -274,6 +274,50 @@ class AppData extends $pb.GeneratedMessage {
   $core.bool hasAllowedAccess() => $_has(3);
   @$pb.TagNumber(4)
   void clearAllowedAccess() => clearField(4);
+}
+
+class AppsData extends $pb.GeneratedMessage {
+  factory AppsData({
+    $core.Iterable<AppData>? appsList,
+  }) {
+    final $result = create();
+    if (appsList != null) {
+      $result.appsList.addAll(appsList);
+    }
+    return $result;
+  }
+  AppsData._() : super();
+  factory AppsData.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory AppsData.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AppsData', createEmptyInstance: create)
+    ..pc<AppData>(1, _omitFieldNames ? '' : 'appsList', $pb.PbFieldType.PM, protoName: 'appsList', subBuilder: AppData.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  AppsData clone() => AppsData()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  AppsData copyWith(void Function(AppsData) updates) => super.copyWith((message) => updates(message as AppsData)) as AppsData;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static AppsData create() => AppsData._();
+  AppsData createEmptyInstance() => create();
+  static $pb.PbList<AppsData> createRepeated() => $pb.PbList<AppsData>();
+  @$core.pragma('dart2js:noInline')
+  static AppsData getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AppsData>(create);
+  static AppsData? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<AppData> get appsList => $_getList(0);
 }
 
 class Device extends $pb.GeneratedMessage {

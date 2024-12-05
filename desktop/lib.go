@@ -4,8 +4,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"net/http"
-	"os"
 	"runtime/debug"
 	"strconv"
 	"strings"
@@ -13,7 +11,6 @@ import (
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
@@ -83,24 +80,8 @@ func start() *C.char {
 		})
 	}
 	golog.SetPrepender(logging.Timestamped)
-	flags := flashlight.ParseFlags()
-	if flags.Pprof {
-		addr := "localhost:6060"
-		go func() {
-			log.Debugf("Starting pprof page at http://%s/debug/pprof", addr)
-			srv := &http.Server{
-				Addr: addr,
-			}
-			if err := srv.ListenAndServe(); err != nil {
-				log.Error(err)
-			}
-		}()
-	}
 
-	// i18nInit(a)
-	configDir := configDir(&flags)
-
-	a = app.NewApp(flags, configDir)
+	a = app.NewApp()
 	a.Run(context.Background())
 
 	return C.CString("")
@@ -148,19 +129,23 @@ func setProxyAll(value *C.char) {
 //
 //export hasPlanUpdatedOrBuy
 func hasPlanUpdatedOrBuy() *C.char {
+	ctx := context.Background()
+	proClient := a.ProClient()
+	go proClient.PollUserData(ctx, a, 10*time.Minute, proClient)
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	cacheUserData, isOldFound := cachedUserData()
 	//Get latest user data
-	resp, err := a.ProClient().UserData(context.Background())
+	resp, err := a.ProClient().UserData(ctx)
 	if err != nil {
 		return sendError(err)
 	}
 	if isOldFound {
-		if cacheUserData.Expiration < resp.User.Expiration {
+		user := resp.User
+		if cacheUserData.Expiration < user.Expiration {
 			// New data has a later expiration
 			// if foud then update the cache
-			a.Settings().SetExpiration(resp.User.Expiration)
+			a.Settings().SetExpiration(user.Expiration)
 			return C.CString(string("true"))
 		}
 	}
@@ -268,8 +253,6 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 	if err != nil {
 		return sendError(err)
 	}
-	//a.SetProUser(true)
-	go a.UserData(ctx)
 	return C.CString("true")
 }
 
@@ -383,7 +366,8 @@ func deviceLinkingCode() *C.char {
 //export paymentRedirect
 func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
-	resp, err := a.ProClient().PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
+	ctx := context.Background()
+	resp, err := a.ProClient().PaymentRedirect(ctx, &protos.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
 		Provider:    C.GoString(provider),
 		Currency:    strings.ToUpper(C.GoString(currency)),
@@ -394,6 +378,7 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 	if err != nil {
 		return sendError(err)
 	}
+
 	return sendJson(resp)
 }
 
@@ -447,7 +432,7 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 //export checkUpdates
 func checkUpdates() *C.char {
 	log.Debug("Checking for updates")
-	ss := settings.LoadSettings(configDir(nil))
+	ss := settings.LoadSettings("")
 	userID := ss.GetUserID()
 	deviceID := ss.GetDeviceID()
 	op := ops.Begin("check_update").
@@ -464,23 +449,6 @@ func checkUpdates() *C.char {
 	return C.CString(updateURL)
 }
 
-func configDir(flags *flashlight.Flags) string {
-	cdir := appdir.General(common.DefaultAppName)
-	if flags != nil && flags.ConfigDir != "" {
-		cdir = flags.ConfigDir
-	}
-	log.Debugf("Using config dir %v", cdir)
-	if _, err := os.Stat(cdir); err != nil {
-		if os.IsNotExist(err) {
-			// Create config dir
-			if err := os.MkdirAll(cdir, 0750); err != nil {
-				log.Errorf("Unable to create configdir at %s: %s", configDir, err)
-			}
-		}
-	}
-	return cdir
-}
-
 // useOSLocale detect OS locale for current user and let i18n to use it
 func useOSLocale() (string, error) {
 	userLocale, err := jibber_jabber.DetectIETF()
@@ -492,28 +460,6 @@ func useOSLocale() (string, error) {
 	a.SetLanguage(userLocale)
 	return userLocale, nil
 }
-
-//Do not need to call this function
-// Since localisation is happing on client side
-// func i18nInit(a *app.App) {
-// 	i18n.SetMessagesFunc(func(filename string) ([]byte, error) {
-// 		return a.GetTranslations(filename)
-// 	})
-// 	locale := a.GetLanguage()
-// 	log.Debugf("Using locale: %v", locale)
-// 	if _, err := i18n.SetLocale(locale); err != nil {
-// 		log.Debugf("i18n.SetLocale(%s) failed, fallback to OS default: %q", locale, err)
-
-// 		// On startup GetLanguage will return '' We use the OS locale instead and make sure the language is
-// 		// populated.
-// 		if locale, err := useOSLocale(); err != nil {
-// 			log.Debugf("i18n.UseOSLocale: %q", err)
-// 			a.SetLanguage(defaultLocale)
-// 		} else {
-// 			a.SetLanguage(locale)
-// 		}
-// 	}
-// }
 
 // clearLocalUserData clears the local user data from the settings
 func clearLocalUserData() {

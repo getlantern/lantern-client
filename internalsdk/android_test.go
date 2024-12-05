@@ -5,17 +5,18 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
 	"golang.org/x/net/proxy"
 
 	"github.com/getlantern/flashlight/v7/integrationtest"
+
 	"github.com/getlantern/lantern-client/internalsdk/common"
 
 	"github.com/stretchr/testify/assert"
@@ -24,6 +25,8 @@ import (
 
 type testSession struct {
 	serializedInternalHeaders string
+	rdy                       chan bool
+	rdyOnce                   *sync.Once // needs to be a pointer since testSession is being passed by value
 }
 
 type testSettings struct {
@@ -61,6 +64,7 @@ func (c testSession) UpdateStats(string, string, string, int, int, bool) error {
 func (c testSession) UpdateAdSettings(AdSettings) error { return nil }
 
 func (c testSession) GetAppName() string                                 { return "lantern" }
+func (c testSession) GetUserFirstVisit() (bool, error)                   { return false, nil }
 func (c testSession) AppVersion() (string, error)                        { return "6.9.0", nil }
 func (c testSession) Code() (string, error)                              { return "1", nil }
 func (c testSession) Currency() (string, error)                          { return "usd", nil }
@@ -70,37 +74,61 @@ func (c testSession) GetCountryCode() (string, error)                    { retur
 func (c testSession) IsStoreVersion() (bool, error)                      { return false, nil }
 func (c testSession) Provider() (string, error)                          { return "stripe", nil }
 func (c testSession) SetChatEnabled(enabled bool)                        {}
-func (c testSession) SetUserIdAndToken(userId int64, token string) error { return nil }
+func (c testSession) SetUserIDAndToken(userId int64, token string) error { return nil }
 func (c testSession) SetAuthEnabled(enabled bool)                        {}
 func (c testSession) SetMatomoEnabled(bool)                              {}
+func (c testSession) SetExpiration(expiration int64) error               { return nil }
+func (c testSession) SetProUser(proUser bool) error                      { return nil }
+func (c testSession) SetReferralCode(referralCode string) error          { return nil }
 func (c testSession) IsPlayVersion() (bool, error)                       { return false, nil }
 func (c testSession) SetShowGoogleAds(enabled bool)                      {}
 func (c testSession) SetHasConfigFetched(enabled bool)                   {}
 func (c testSession) SetHasProxyFetched(enabled bool)                    {}
-func (c testSession) SetOnSuccess(enabled bool)                          {}
 func (c testSession) ChatEnable() bool                                   { return false }
+
+func (c testSession) SetOnSuccess(enabled bool) {
+	if !enabled {
+		return
+	}
+	// Signal that we connected to the first proxy and we're ready
+	c.rdyOnce.Do(func() { close(c.rdy) })
+}
 
 func (c testSession) SerializedInternalHeaders() (string, error) {
 	return c.serializedInternalHeaders, nil
 }
 
 func TestProxying(t *testing.T) {
-
 	baseListenPort := 24000
 	helper, err := integrationtest.NewHelper(t, baseListenPort)
-	if assert.NoError(t, err, "Unable to create temp configDir") {
-		defer helper.Close()
-		result, err := Start(helper.ConfigDir, "en_US", testSettings{}, testSession{})
-		require.NoError(t, err, "Should have been able to start lantern")
-		newResult, err := Start("testapp", "en_US", testSettings{}, testSession{})
-		require.NoError(t, err, "Should have been able to start lantern twice")
-		require.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address")
-		err = testProxiedRequest(helper, result.HTTPAddr, result.DNSGrabAddr, false)
-		require.NoError(t, err, "Proxying request via HTTP should have worked")
-		err = testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
-		assert.NoError(t, err, "Proxying request via SOCKS should have worked")
-		// testRelay(t)
+	require.NoError(t, err, "Unable to create temp configDir")
+	defer helper.Close()
+
+	tSess := testSession{
+		rdy:     make(chan bool),
+		rdyOnce: &sync.Once{},
 	}
+	result, err := Start(helper.ConfigDir, "en_US", testSettings{}, tSess)
+	require.NoError(t, err, "Should have been able to start lantern")
+	newResult, err := Start("testapp", "en_US", testSettings{}, tSess)
+	require.NoError(t, err, "Should have been able to start lantern twice")
+	require.Equal(t, result.HTTPAddr, newResult.HTTPAddr, "2nd start should have resulted in the same address")
+
+	// Wait for rdy signal
+	assert.Eventually(t,
+		func() bool {
+			_, ok := <-tSess.rdy
+			return !ok
+		},
+		4*time.Second,
+		10*time.Millisecond,
+		"Should have received onSuccess callback",
+	)
+	err = testProxiedRequest(helper, result.HTTPAddr, result.DNSGrabAddr, false)
+	require.NoError(t, err, "Proxying request via HTTP should have worked")
+	err = testProxiedRequest(helper, result.SOCKS5Addr, result.DNSGrabAddr, true)
+	assert.NoError(t, err, "Proxying request via SOCKS should have worked")
+	// testRelay(t)
 }
 
 func testProxiedRequest(helper *integrationtest.Helper, proxyAddr string, dnsGrabAddr string, socks bool) error {
@@ -161,7 +189,7 @@ func testProxiedRequest(helper *integrationtest.Helper, proxyAddr string, dnsGra
 
 	var buf []byte
 
-	buf, err = ioutil.ReadAll(res.Body)
+	buf, err = io.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}

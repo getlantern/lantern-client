@@ -26,7 +26,7 @@ import (
 )
 
 // createProClient creates a new instance of ProClient with the given client session information
-func createProClient(session ClientSession, platform string) pro.ProClient {
+func createProClient(session Session, platform string) pro.ProClient {
 	dialTimeout := 30 * time.Second
 	if platform == "ios" {
 		dialTimeout = 20 * time.Second
