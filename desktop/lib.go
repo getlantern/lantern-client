@@ -129,19 +129,23 @@ func setProxyAll(value *C.char) {
 //
 //export hasPlanUpdatedOrBuy
 func hasPlanUpdatedOrBuy() *C.char {
+	ctx := context.Background()
+	proClient := a.ProClient()
+	go proClient.PollUserData(ctx, a, 10*time.Minute, proClient)
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	cacheUserData, isOldFound := cachedUserData()
 	//Get latest user data
-	resp, err := a.ProClient().UserData(context.Background())
+	resp, err := a.ProClient().UserData(ctx)
 	if err != nil {
 		return sendError(err)
 	}
 	if isOldFound {
-		if cacheUserData.Expiration < resp.User.Expiration {
+		user := resp.User
+		if cacheUserData.Expiration < user.Expiration {
 			// New data has a later expiration
 			// if foud then update the cache
-			a.Settings().SetExpiration(resp.User.Expiration)
+			a.Settings().SetExpiration(user.Expiration)
 			return C.CString(string("true"))
 		}
 	}
@@ -249,8 +253,6 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 	if err != nil {
 		return sendError(err)
 	}
-	//a.SetProUser(true)
-	go a.UserData(ctx)
 	return C.CString("true")
 }
 
@@ -364,7 +366,8 @@ func deviceLinkingCode() *C.char {
 //export paymentRedirect
 func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
 	country := a.Settings().GetCountry()
-	resp, err := a.ProClient().PaymentRedirect(context.Background(), &protos.PaymentRedirectRequest{
+	ctx := context.Background()
+	resp, err := a.ProClient().PaymentRedirect(ctx, &protos.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
 		Provider:    C.GoString(provider),
 		Currency:    strings.ToUpper(C.GoString(currency)),
@@ -375,6 +378,7 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 	if err != nil {
 		return sendError(err)
 	}
+
 	return sendJson(resp)
 }
 
