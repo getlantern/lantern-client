@@ -674,7 +674,8 @@ func (app *App) ProClient() proclient.ProClient {
 
 // Client session methods
 func (app *App) FetchUserData() error {
-	go app.proClient.PaymentMethodsCache(context.Background())
+	go app.proClient.UserData(context.Background())
+	go app.proClient.FetchPaymentMethodsAndCache(context.Background())
 	return nil
 }
 

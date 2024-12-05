@@ -70,7 +70,7 @@ func signup(email *C.char, password *C.char) *C.char {
 	saveUserSalt(salt)
 	setting.SetEmailAddress(C.GoString(email))
 	a.SetUserLoggedIn(true)
-	a.ProClient().PaymentMethodsCache(context.Background())
+	a.ProClient().FetchPaymentMethodsAndCache(context.Background())
 	return C.CString("true")
 }
 

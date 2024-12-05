@@ -61,7 +61,7 @@ func (c *proClient) RetryCreateUser(ctx context.Context, ss ClientSession, maxEl
 	expBackoff.InitialInterval = 3 * time.Second
 	expBackoff.MaxInterval = 1 * time.Minute
 	expBackoff.MaxElapsedTime = maxElapsedTime
-	expBackoff.RandomizationFactor = 0.5 // Add jitter to backoff interval
+	expBackoff.RandomizationFactor = 0.5 
 	err := backoff.Retry(func() error {
 		return c.createUser(ctx, ss)
 	}, backoff.WithContext(expBackoff, ctx))

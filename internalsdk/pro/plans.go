@@ -14,7 +14,7 @@ func (c *proClient) Plans(ctx context.Context) ([]protos.Plan, error) {
 		log.Debugf("Returning plans from cache %s", v)
 		return resp, nil
 	}
-	resp, err := c.PaymentMethodsCache(ctx)
+	resp, err := c.FetchPaymentMethodsAndCache(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (c *proClient) paymentMethodsByPlatform(ctx context.Context, platform strin
 		log.Debugf("Returning payment methods from cache %s", v)
 		return resp, nil
 	}
-	resp, err := c.PaymentMethodsCache(ctx)
+	resp, err := c.FetchPaymentMethodsAndCache(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -48,9 +48,9 @@ func (c *proClient) paymentMethodsByPlatform(ctx context.Context, platform strin
 	return desktopProviders, nil
 }
 
-// PaymentMethodsCache returns the plans and payment plans available to a user
+// FetchPaymentMethodsAndCache returns the plans and payment plans available to a user
 // Updates cache with the fetched data
-func (c *proClient) PaymentMethodsCache(ctx context.Context) (*PaymentMethodsResponse, error) {
+func (c *proClient) FetchPaymentMethodsAndCache(ctx context.Context) (*PaymentMethodsResponse, error) {
 	resp, err := c.PaymentMethodsV4(context.Background())
 	if err != nil {
 		return nil, errors.New("Could not get payment methods: %v", err)

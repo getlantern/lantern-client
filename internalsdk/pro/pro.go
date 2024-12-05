@@ -46,7 +46,7 @@ type ProClient interface {
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
-	PaymentMethodsCache(ctx context.Context) (*PaymentMethodsResponse, error)
+	FetchPaymentMethodsAndCache(ctx context.Context) (*PaymentMethodsResponse, error)
 	Plans(ctx context.Context) ([]protos.Plan, error)
 	PollUserData(ctx context.Context, session ClientSession, maxElapsedTime time.Duration, client Client)
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
@@ -174,7 +174,8 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 	}
 
 	// process plans for currency
-	for i, plan := range resp.Plans {
+	for i := range resp.Plans {
+		plan := &resp.Plans[i]
 		parts := strings.Split(plan.Id, "-")
 		if len(parts) != 3 {
 			continue
@@ -188,9 +189,9 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 
 		amount := decimal.NewFromInt(monthlyPrice).Div(decimal.NewFromInt(100))
 		yearAmount := decimal.NewFromInt(yearlyPrice).Div(decimal.NewFromInt(100))
-		resp.Plans[i].OneMonthCost = ac.FormatMoneyDecimal(amount)
-		resp.Plans[i].TotalCost = ac.FormatMoneyDecimal(yearAmount)
-		resp.Plans[i].TotalCostBilledOneTime = fmt.Sprintf("%v billed one time", ac.FormatMoneyDecimal(yearAmount))
+		plan.OneMonthCost = ac.FormatMoneyDecimal(amount)
+		plan.TotalCost = ac.FormatMoneyDecimal(yearAmount)
+		plan.TotalCostBilledOneTime = fmt.Sprintf("%v billed one time", ac.FormatMoneyDecimal(yearAmount))
 	}
 	return &resp, nil
 }
