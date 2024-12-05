@@ -136,24 +136,18 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if err != nil {
 		return nil, err
 	}
+	base.db.RegisterType(1000, &protos.ServerInfo{})
+	base.db.RegisterType(2000, &protos.Devices{})
+	base.db.RegisterType(5000, &protos.Device{})
+	base.db.RegisterType(3000, &protos.Plan{})
+	base.db.RegisterType(4000, &protos.Plans{})
 	if opts.Platform == "ios" {
-		base.db.RegisterType(1000, &protos.ServerInfo{})
-		base.db.RegisterType(2000, &protos.Devices{})
-		base.db.RegisterType(5000, &protos.Device{})
-		base.db.RegisterType(3000, &protos.Plan{})
-		base.db.RegisterType(4000, &protos.Plans{})
 		base.db.RegisterType(5000, &protos.Bandwidth{})
 	} else {
-		base.db.RegisterType(1000, &protos.ServerInfo{})
-		base.db.RegisterType(2000, &protos.Devices{})
-		base.db.RegisterType(5000, &protos.Device{})
-		base.db.RegisterType(3000, &protos.Plan{})
-		base.db.RegisterType(4000, &protos.Plans{})
 		base.db.RegisterType(5000, &protos.AppData{})
 		base.db.RegisterType(6000, &protos.PaymentProviders{})
 		base.db.RegisterType(7000, &protos.PaymentMethod{})
 		base.db.RegisterType(8000, &protos.Bandwidth{})
-
 	}
 
 	m := &SessionModel{baseModel: base}
@@ -1068,7 +1062,8 @@ func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMe
 		return log.Errorf("Android Providers not found")
 	}
 	var paymentProviders []*protos.PaymentProviders
-	for index, provider := range providers {
+	for index := range providers {
+		provider := &providers[index]
 		paymentProviders = nil
 		path := pathPaymentMethods + ToString(int64(index))
 		for _, paymentMethod := range provider.Providers {
@@ -1113,10 +1108,10 @@ func (session *SessionModel) getStripePubKey() (string, error) {
 
 func setPlans(m *baseModel, plans []protos.Plan) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		for _, plans := range plans {
-			log.Debugf("Plans Values %+v", &plans)
-			pathPlanId := pathPlans + strings.Split(plans.Id, "-")[0]
-			err := pathdb.Put(tx, pathPlanId, &plans, "")
+		for i := range plans {
+			log.Debugf("Plans Values %+v", &plans[i])
+			pathPlanId := pathPlans + strings.Split(plans[i].Id, "-")[0]
+			err := pathdb.Put(tx, pathPlanId, &plans[i], "")
 			if err != nil {
 				log.Debugf("Error while addding price")
 				return err
@@ -1593,7 +1588,7 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 		return err
 	}
 
-	err, purchaseData := createPurchaseData(m, lowerCaseEmail, paymentProviderResellerCode, resellerCode, "", "")
+	purchaseData, err := createPurchaseData(m, lowerCaseEmail, paymentProviderResellerCode, resellerCode, "", "")
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
@@ -1613,7 +1608,7 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 
 func submitApplePayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
 	log.Debugf("Submit Apple Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
-	err, purchaseData := createPurchaseData(m, email, paymentProviderApplePay, "", purchaseToken, planId)
+	purchaseData, err := createPurchaseData(m, email, paymentProviderApplePay, "", purchaseToken, planId)
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
@@ -1657,7 +1652,7 @@ func restorePurchase(session *SessionModel, email string, code string, provider 
 
 func submitGooglePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
 	log.Debugf("Submit Google Pay Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
-	err, purchaseData := createPurchaseData(m, email, paymentProviderGooglePlay, "", purchaseToken, planId)
+	purchaseData, err := createPurchaseData(m, email, paymentProviderGooglePlay, "", purchaseToken, planId)
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
@@ -1678,7 +1673,7 @@ func submitGooglePlayPayment(m *SessionModel, email string, planId string, purch
 
 func submitStripePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
 	log.Debugf("Submit Stripe Payment planId %v purchaseToken %v email %v", planId, purchaseToken, email)
-	err, purchaseData := createPurchaseData(m, email, paymentProviderStripe, "", purchaseToken, planId)
+	purchaseData, err := createPurchaseData(m, email, paymentProviderStripe, "", purchaseToken, planId)
 	if err != nil {
 		log.Errorf("Error while creating  purchase data %v", err)
 		return err
@@ -1846,22 +1841,6 @@ func login(session *SessionModel, email string, password string) error {
 	end := time.Now()
 
 	log.Debugf("Login took %v", end.Sub(start))
-	return nil
-}
-
-// Add device to user currect device list
-// this gets called when user to login
-func deviceAdd(session *SessionModel, deviceName string) error {
-	device, err := pathdb.Get[string](session.db, pathDevice)
-	if err != nil {
-		log.Errorf("Error while getting device %v", err)
-		return err
-	}
-	addDevice, err := session.proClient.DeviceAdd(context.Background(), device)
-	if err != nil {
-		log.Errorf("Error while adding device %v", err)
-	}
-	log.Debugf("Add device response %v", addDevice)
 	return nil
 }
 

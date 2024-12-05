@@ -55,14 +55,14 @@ func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 }
 
 // Create Purchase Request
-func createPurchaseData(session *SessionModel, email string, paymentProvider string, resellerCode string, purchaseToken string, planId string) (error, map[string]interface{}) {
+func createPurchaseData(session *SessionModel, email string, paymentProvider string, resellerCode string, purchaseToken string, planId string) (map[string]interface{}, error) {
 	if email == "" && paymentProvider != paymentProviderApplePay {
-		return errors.New("Email is empty"), nil
+		return nil, errors.New("Email is empty")
 	}
 
 	device, err := pathdb.Get[string](session.db, pathModel)
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 	data := map[string]interface{}{
 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
@@ -78,7 +78,7 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 		// get currency from plan id
 		parts := strings.Split(planId, "-")
 		if len(parts) != 3 {
-			return errors.New("Invalid plan id"), nil
+			return nil, errors.New("Invalid plan id")
 		}
 		cur := parts[1]
 		data["token"] = purchaseToken
@@ -88,7 +88,7 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 		// get currency from plan id
 		parts := strings.Split(planId, "-")
 		if len(parts) != 3 {
-			return errors.New("Invalid plan id"), nil
+			return nil, errors.New("Invalid plan id")
 		}
 		cur := parts[1]
 		data["token"] = purchaseToken
@@ -99,7 +99,7 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 		// get currency from plan id
 		parts := strings.Split(planId, "-")
 		if len(parts) != 3 {
-			return errors.New("Invalid plan id"), nil
+			return nil, errors.New("Invalid plan id")
 		}
 		cur := parts[1]
 		data["token"] = purchaseToken
@@ -107,7 +107,7 @@ func createPurchaseData(session *SessionModel, email string, paymentProvider str
 		data["currency"] = cur
 	}
 
-	return nil, data
+	return data, nil
 }
 
 func BytesToInt64Slice(b []byte) []int {
