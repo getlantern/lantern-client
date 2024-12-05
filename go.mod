@@ -1,10 +1,10 @@
 module github.com/getlantern/lantern-client
 
-go 1.22.3
+go 1.22.6
 
-toolchain go1.22.8
+toolchain go1.23.3
 
-// replace github.com/getlantern/flashlight/v7 => ../flashlight
+replace github.com/getlantern/flashlight/v7 => ../flashlight
 
 // replace github.com/getlantern/ipproxy => ../ipproxy
 // replace github.com/getlantern/fronted => ../fronted
@@ -40,7 +40,7 @@ require (
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
 	github.com/getlantern/flashlight/v7 v7.6.150
-	github.com/getlantern/fronted v0.0.0-20241120203013-eedcd71609d2
+	github.com/getlantern/fronted v0.0.0-20241204181705-b9307b776331
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
@@ -77,7 +77,7 @@ require (
 	golang.org/x/mobile v0.0.0-20241016134751-7ff83004ec2c
 	golang.org/x/net v0.30.0
 	golang.org/x/sys v0.26.0
-	google.golang.org/protobuf v1.34.2
+	google.golang.org/protobuf v1.35.2
 	nhooyr.io/websocket v1.8.17
 )
 
@@ -164,7 +164,7 @@ require (
 	github.com/getlantern/event v0.0.0-20210901195647-a7e3145142e6 // indirect
 	github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731 // indirect
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
-	github.com/getlantern/geo v0.0.0-20240108161311-50692a1b69a9 // indirect
+	github.com/getlantern/geo v0.0.0-20241129152027-2fc88c10f91e // indirect
 	github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 // indirect
 	github.com/getlantern/go-update v0.0.0-20230221120840-8d795213a8bc // indirect
 	github.com/getlantern/gonat v0.0.0-20201001145726-634575ba87fb // indirect
@@ -214,7 +214,6 @@ require (
 	github.com/golang/gddo v0.0.0-20210115222349-20d68f94ee1f // indirect
 	github.com/golang/geo v0.0.0-20230421003525-6adc56603217 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
@@ -284,7 +283,7 @@ require (
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/quic-go/quic-go v0.48.0 // indirect
-	github.com/refraction-networking/utls v1.3.3 // indirect
+	github.com/refraction-networking/utls v1.3.3
 	github.com/refraction-networking/water v0.7.0-alpha // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rogpeppe/go-internal v1.12.0 // indirect
