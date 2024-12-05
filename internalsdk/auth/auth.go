@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 
-	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -12,7 +11,6 @@ import (
 	"github.com/getlantern/golog"
 
 	"github.com/getlantern/lantern-client/internalsdk/common"
-	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/lantern-client/internalsdk/webclient"
 
@@ -53,33 +51,20 @@ type AuthClient interface {
 
 // NewClient creates a new instance of AuthClient
 func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
-	// The default http.RoundTripper is ChainedNonPersistent which proxies requests through chained servers
-	// and does not use keep alive connections. Since no root CA is specified, we do not need to check for an error.
-
-	var httpClient *http.Client
-
-	if baseURL == fmt.Sprintf("https://%s", common.APIBaseUrl) {
-		log.Debug("using proxied.Fronted")
-		//this is ios version
-		httpClient = &http.Client{
-			Transport: proxied.Fronted("auth_fronted_roundtrip", 30*time.Second),
-		}
-	} else {
-		log.Debug("using proxied.ChainedNonPersistent")
-		rt, _ := proxied.ChainedNonPersistent("")
-		httpClient = pro.NewHTTPClient(rt, 30*time.Second)
-	}
-
 	rc := webclient.NewRESTClient(&webclient.Opts{
 		BaseURL: baseURL,
 		OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
 			prepareUserRequest(req, userConfig())
 			return nil
 		},
-		HttpClient: httpClient,
+		// The Auth client uses an http.Client that first attempts to connect via chained proxies
+		// and then falls back to using domain fronting with the custom op name above
+		HttpClient: &http.Client{
+			Transport: proxied.ChainedThenFronted(),
+			Timeout:   30 * time.Second,
+		},
 		UserConfig: userConfig,
 	})
-
 	return &authClient{rc}
 }
 

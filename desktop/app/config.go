@@ -84,8 +84,8 @@ func (app *App) sendConfigOptions() {
 		return authEnabled
 	}
 	ctx := context.Background()
-	plans, _ := app.Plans(ctx)
-	paymentMethods, _ := app.GetPaymentMethods(ctx)
+	plans, _ := app.proClient.Plans(ctx)
+	paymentMethods, _ := app.proClient.DesktopPaymentMethods(ctx)
 	devices, _ := json.Marshal(app.devices())
 	log.Debugf("DEBUG: Devices: %s", string(devices))
 	log.Debugf("Expiration date: %s", app.settings.GetExpirationDate())
