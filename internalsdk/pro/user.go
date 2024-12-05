@@ -10,15 +10,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
-// // UserConfig represents the minimal configuration necessary for a client session
-// type UserConfig interface {
-// 	GetDeviceID() string
-// 	GetUserFirstVisit() bool
-// 	GetUserID() int64
-// 	GetToken() string
-// 	Locale() string
-// }
-
 type ClientSession interface {
 	SetExpiration(int64) error
 	SetProUser(bool) error
@@ -61,7 +52,7 @@ func (c *proClient) RetryCreateUser(ctx context.Context, ss ClientSession, maxEl
 	expBackoff.InitialInterval = 3 * time.Second
 	expBackoff.MaxInterval = 1 * time.Minute
 	expBackoff.MaxElapsedTime = maxElapsedTime
-	expBackoff.RandomizationFactor = 0.5 
+	expBackoff.RandomizationFactor = 0.5
 	err := backoff.Retry(func() error {
 		return c.createUser(ctx, ss)
 	}, backoff.WithContext(expBackoff, ctx))
