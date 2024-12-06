@@ -432,6 +432,7 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 func (app *App) onProxiesUpdate(proxies []dialer.ProxyDialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
 	app.fetchedProxiesConfig.Store(true)
+	app.hasSucceedingProxy.Store(true)
 	app.sendConfigOptions()
 }
 
