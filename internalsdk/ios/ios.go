@@ -114,12 +114,11 @@ type BandwidthTracker interface {
 }
 
 type cw struct {
-	ipStack        io.WriteCloser
-	client         *iosClient
-	dialer         dialer.Dialer
-	ipp            ipproxy.Proxy
-	quotaTextPath  string
-	lastSavedQuota time.Time
+	ipStack       io.WriteCloser
+	client        *iosClient
+	dialer        dialer.Dialer
+	ipp           ipproxy.Proxy
+	quotaTextPath string
 }
 
 func (c *cw) Write(b []byte) (int, error) {
@@ -218,20 +217,25 @@ func (c *iosClient) start() (ClientWriter, error) {
 	tracker := stats.NewTracker()
 	dialer := dialer.New(&dialer.Options{
 		Dialers: dialers,
+		OnSuccess: func(pd dialer.ProxyDialer) {
+			tracker.SetHasSucceedingProxy(true)
+			countryCode, country, city := pd.Location()
+			previousStats := tracker.Latest()
+			if previousStats.CountryCode == "" || previousStats.CountryCode != countryCode {
+				tracker.SetActiveProxyLocation(
+					city,
+					country,
+					countryCode,
+				)
+			}
+		},
 	})
 	if err != nil {
 		return nil, err
 	}
-	go func() {
-		tracker.AddListener(func(st stats.Stats) {
-			if st.City != "" && st.Country != "" && st.CountryCode != "" {
-				start := time.Now()
-				log.Debugf("Stats update at %v", start)
-				c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
-			}
-		})
-	}()
 
+	// get stats updates
+	go c.statsTrackerUpdates(tracker)
 	// get bandwidth updates
 	go bandwidthUpdates(c.bandwidthTracker)
 
@@ -274,13 +278,28 @@ func (c *iosClient) start() (ClientWriter, error) {
 
 func bandwidthUpdates(bt BandwidthTracker) {
 	go func() {
+
+		quota, _ := bandwidth.GetQuota()
+		if quota == nil {
+			// quota is nil, so then we are uncapped
+			bt.BandwidthUpdate("", 0, 0, 0, 0)
+			return
+		}
+
 		for quota := range bandwidth.Updates {
 			percent, remaining, allowed := getBandwidth(quota)
 			bt.BandwidthUpdate("", percent, remaining, allowed, int(quota.TTLSeconds))
 		}
 	}()
 }
-
+func (c *iosClient) statsTrackerUpdates(tracker stats.Tracker) {
+	tracker.AddListener(func(st stats.Stats) {
+		if st.City != "" && st.Country != "" && st.CountryCode != "" {
+			log.Debug("updating stats")
+			c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
+		}
+	})
+}
 func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	remaining := 0
 	percent := 100

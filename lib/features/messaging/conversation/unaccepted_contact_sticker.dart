@@ -41,7 +41,7 @@ class UnacceptedContactSticker extends StatelessWidget {
                   iconPath: ImagePaths.delete,
                   agreeText: 'delete_contact'.i18n,
                   agreeAction: () async {
-                    context.loaderOverlay.show(widget: spinner);
+                    context.loaderOverlay.show();
                     try {
                       await messagingModel
                           .deleteDirectContact(contact.contactId.id);
@@ -78,7 +78,7 @@ class UnacceptedContactSticker extends StatelessWidget {
                   checkboxLabel: 'block_info_checkbox'.i18n,
                   agreeText: 'block'.i18n.toUpperCase(),
                   agreeAction: () async {
-                    context.loaderOverlay.show(widget: spinner);
+                    context.loaderOverlay.show();
                     try {
                       await messagingModel
                           .blockDirectContact(contact.contactId.id);

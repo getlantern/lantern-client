@@ -17,8 +17,8 @@ protos: lib/features/vpn internalsdk/protos/vpn.pb.go
 lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging.proto
 	@protoc --dart_out=./lib/messaging --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_flutteronly/messaging.proto
 
-lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
-	@protoc --dart_out=./lib/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
+lib/features/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
+	@protoc --dart_out=./lib/features/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
 
 internalsdk/protos/%.pb.go: protos_shared/%.proto
 	@echo "Generating Go protobuf for $<"
@@ -702,7 +702,7 @@ sourcedump: require-version
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
-build-framework: assert-go-version install-gomobile
+ios: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	@echo "generating Ios.xcFramework"

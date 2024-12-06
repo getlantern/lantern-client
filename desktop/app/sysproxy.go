@@ -61,7 +61,7 @@ func (app *App) SysProxyOff() error {
 	log.Debug("Force clearing system proxy directly, just in case")
 	addr, found := getProxyAddr()
 	if !found {
-		err := fmt.Errorf("Unable to find proxy address, can't force clear system proxy")
+		err := fmt.Errorf("unable to find proxy address, can't force clear system proxy")
 		op.FailIf(log.Error(err))
 		return err
 	}
