@@ -134,6 +134,6 @@ class _FollowUsState extends State<FollowUs> {
           duration: const Duration(seconds: 2));
       return;
     }
-    await AppBrowser.openWithSystemBrowser(url);
+    await openWithSystemBrowser(url);
   }
 }
