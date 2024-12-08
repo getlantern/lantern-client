@@ -77,10 +77,10 @@ class Button extends StatelessWidget {
 
 class AppTextButton extends StatelessWidget {
   final String text;
-  void Function()? onPressed;
-  Color? color;
+  final void Function()? onPressed;
+  final Color? color;
 
-  AppTextButton({
+  const AppTextButton({
     super.key,
     required this.text,
     this.onPressed,

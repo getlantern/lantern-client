@@ -79,7 +79,7 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
 
 ### 🤖 Running the project on Android
 
-* `make android-lib ANDROID_ARCH` (you need to generated liblantern-all.aar containing the Go backend code in order for the project to compile.)
+* `make android` (you need to generated liblantern-all.aar containing the Go backend code in order for the project to compile.)
 * `flutter pub get`
 * `flutter run --flavor prod`
 

@@ -4,7 +4,7 @@ import 'common.dart';
 
 extension BoolParsing on String {
   bool parseBool() {
-    return this.toLowerCase() == 'true';
+    return toLowerCase() == 'true';
   }
 }
 
@@ -77,7 +77,7 @@ class ConfigOptions {
     if (plansResponse is List<dynamic>) {
       for (var item in plansResponse) {
         var id = item['id'] ?? item['name'];
-        plans[id] = planFromJson(item) as Plan;
+        plans[id] = planFromJson(item);
       }
     }
     final paymentMethods = paymentMethodsFromJson(parsedJson['paymentMethods']);

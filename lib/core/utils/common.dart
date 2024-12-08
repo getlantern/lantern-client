@@ -44,7 +44,6 @@ export '../app/app_const.dart';
 export '../app/app_enums.dart';
 export '../app/app_extension.dart';
 export '../extension/error_extension.dart';
-export '../app/app_keys.dart';
 export '../app/app_methods.dart';
 export '../app/app_secret.dart';
 export 'disable_back_button.dart';
@@ -104,22 +103,6 @@ export '../../common/ui/show_snackbar.dart';
 export '../../common/ui/text_highlighter.dart';
 export '../theme/text_styles.dart';
 export '../../common/ui/transitions.dart';
-export '../../common/ui/custom/logo_with_text.dart';
-
-// custom components
-export '../../common/ui/custom/asset_image.dart';
-export '../../common/ui/custom/badge.dart';
-export '../../common/ui/custom/dialog.dart';
-export '../../common/ui/custom/divider.dart';
-export '../../common/ui/custom/ink_well.dart';
-export '../../common/ui/custom/list_item_factory.dart';
-export '../../common/ui/custom/rounded_rectangle_border.dart';
-export '../../common/ui/custom/text.dart';
-export '../../common/ui/custom/text_field.dart';
-export '../../common/ui/custom/fullscreen_video_viewer.dart';
-export '../../common/ui/custom/fullscreen_image_viewer.dart';
-export '../../common/ui/custom/fullscreen_viewer.dart';
-
 export '../../common/ui/custom/heading_text.dart';
 
 final appLogger = Logger(
@@ -128,7 +111,7 @@ final appLogger = Logger(
     errorMethodCount: 5,
     colors: true,
     printEmojis: true,
-    printTime: true,
+    dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
   ),
   filter: ProductionFilter(),
   output: ConsoleOutput(),
@@ -148,5 +131,8 @@ final mainLogger = Logger(
       errorMethodCount: 10,
       colors: true,
       printEmojis: true,
-      printTime: true,
-    ), filter: DevelopmentFilter(), level: Level.debug);
+      dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
+    ), 
+    filter: DevelopmentFilter(), 
+    level: Level.debug,
+  );

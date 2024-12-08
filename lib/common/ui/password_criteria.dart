@@ -52,7 +52,7 @@ class _PasswordCriteriaWidgetState extends State<PasswordCriteriaWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CText('Password must contain at least:',
-              style: tsBody2!.copiedWith(
+              style: tsBody2.copiedWith(
                 color: black,
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -80,7 +80,7 @@ class _PasswordCriteriaWidgetState extends State<PasswordCriteriaWidget> {
             size: 20,
           ),
           const SizedBox(width: 8),
-          CText(criteria, style: tsBody2!.copiedWith(color: grey5)),
+          CText(criteria, style: tsBody2.copiedWith(color: grey5)),
         ],
       ),
     );

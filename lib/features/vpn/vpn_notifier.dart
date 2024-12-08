@@ -103,10 +103,10 @@ class VPNChangeNotifier with ChangeNotifier {
     }
     notifyListeners();
 
-    if (proxy && proxy && success) {
+    if (proxy && config && success) {
       // everything is initialized
-      isFlashlightInitialized = true;
-      isFlashlightInitializedFailed = false;
+      //isFlashlightInitialized = true;
+      //isFlashlightInitializedFailed = false;
       timer?.cancel();
       appLogger.i("flashlight initialized");
       notifyListeners();

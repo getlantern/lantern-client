@@ -9,7 +9,7 @@ type statsTracker struct {
 	session PanickingSession
 }
 
-func NewStatsTracker(session PanickingSession) *statsTracker {
+func NewStatsTracker(session PanickingSession) stats.Tracker {
 	s := &statsTracker{
 		Tracker: stats.NewTracker(),
 		session: session,

@@ -118,7 +118,7 @@ class LanternFFI {
   }
 
   static Future<User> ffiUserData() async {
-    final res = await _lanternFFI.userData().cast<Utf8>().toDartString();
+    final res = _lanternFFI.userData().cast<Utf8>().toDartString();
     // it's necessary to use mergeFromProto3Json here instead of fromJson; otherwise, a FormatException with
     // message Invalid radix-10 number is thrown.In addition, all possible JSON fields have to be defined on
     // the User protobuf message or JSON decoding fails because of an "unknown field name" error:
@@ -151,7 +151,7 @@ class LanternFFI {
   }
 
   static Future<String> authorizeEmail(String email) async {
-    final json = await _lanternFFI
+    final json = _lanternFFI
         .approveDevice(email.toPointerChar())
         .cast<Utf8>()
         .toDartString();
@@ -160,7 +160,7 @@ class LanternFFI {
   }
 
   static Future<String> userLinkValidate(String code) async {
-    final json = await _lanternFFI
+    final json = _lanternFFI
         .userLinkValidate(code.toPointerChar())
         .cast<Utf8>()
         .toDartString();
@@ -193,7 +193,7 @@ class LanternFFI {
 
   static FutureOr<String> checkUpdates(dynamic args) async {
     final updateUrl =
-        await _lanternFFI.checkUpdates().cast<Utf8>().toDartString();
+       _lanternFFI.checkUpdates().cast<Utf8>().toDartString();
     checkAPIError(updateUrl, 'we_are_experiencing_technical_difficulties'.i18n);
     return updateUrl;
   }

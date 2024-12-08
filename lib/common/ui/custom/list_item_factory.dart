@@ -6,7 +6,7 @@ import 'package:lantern/features/replica/ui/utils.dart';
 class ListItemFactory extends StatelessWidget {
   final Widget Function(BuildContext, ListItemFactory) builder;
 
-  ListItemFactory(this.builder);
+  const ListItemFactory(this.builder, {super.key});
 
   ListItemFactory.replicaItem({
     Widget? leading,
@@ -174,7 +174,7 @@ class ListItemFactory extends StatelessWidget {
 
   Widget buildBase({
     dynamic leading,
-    dynamic? key,
+    dynamic key,
     required dynamic content,
     required bool showDivider,
     double? height,

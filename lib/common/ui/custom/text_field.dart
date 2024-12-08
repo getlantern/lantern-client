@@ -7,7 +7,7 @@ import 'package:lantern/core/utils/common.dart';
 class CTextField extends StatefulWidget {
   late final CustomTextEditingController controller;
   late final String? initialValue;
-  late final dynamic? label;
+  late final dynamic label;
   late final String? helperText;
   late final String? hintText;
   late final Widget? prefixIcon;
@@ -32,10 +32,10 @@ class CTextField extends StatefulWidget {
   late final bool removeBorder;
   late final bool? autofocus;
   late final void Function(String value)? onChanged;
-  String? tooltipMessage;
+  final String? tooltipMessage;
   final bool obscureText;
 
-  CTextField({
+  CTextField({super.key, 
     required this.controller,
     this.initialValue,
     this.label,

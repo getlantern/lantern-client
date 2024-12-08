@@ -31,9 +31,9 @@ class EmailTag extends StatelessWidget {
           const SizedBox(width: 8),
           CText(email,
               textAlign: TextAlign.center,
-              style: tsBody1!.copiedWith(
+              style: tsBody1.copiedWith(
                 leadingDistribution: TextLeadingDistribution.even,
-              ))
+              ),),
         ],
       ),
     );
