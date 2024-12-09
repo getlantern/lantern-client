@@ -42,8 +42,17 @@ class VPNChangeNotifier with ChangeNotifier {
       if (configNotifier == null) {
         return;
       }
+
+      if (timer!.tick >= 6) {
+        // Timer has reached 6 seconds
+        // Stop the timer and set isFlashlightInitialized to true
+        appLogger.i("flashlight fail initialized");
+        isFlashlightInitialized = true;
+        isFlashlightInitializedFailed = true;
+        notifyListeners();
+      }
       updateStatus(
-          configNotifier.fetchedProxiesConfig,
+          false,
           configNotifier.fetchedGlobalConfig,
           configNotifier.hasSucceedingProxy);
     });
