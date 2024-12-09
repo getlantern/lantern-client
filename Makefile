@@ -344,6 +344,11 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
+# github.com/wlynxg/anet relies on //go:linkname so we explicitly pass the -checklinkname=0
+# linker flag here to be able to build Android with Go 1.23
+# See https://github.com/wlynxg/anet#how-to-build-with-go-1230-or-later
+# and https://github.com/golang/go/pull/61089
+$(ANDROID_LIB): export EXTRA_LDFLAGS += -checklinkname=0
 $(ANDROID_LIB): $(GO_SOURCES)
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	go install golang.org/x/mobile/cmd/gomobile && \
@@ -352,7 +357,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
-		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
+		-ldflags="-s -w $(LDFLAGS) $(EXTRA_LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
