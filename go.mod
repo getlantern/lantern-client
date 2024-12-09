@@ -39,8 +39,8 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.151-0.20241204211949-dd8507e1c35a
-	github.com/getlantern/fronted v0.0.0-20241204181705-b9307b776331
+	github.com/getlantern/flashlight/v7 v7.6.153-0.20241209210827-0b2d613e98e3
+	github.com/getlantern/fronted v0.0.0-20241206211020-da8e3e9f49fd
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
@@ -82,8 +82,10 @@ require (
 )
 
 require (
+	github.com/alitto/pond/v2 v2.1.5 // indirect
 	github.com/cloudflare/circl v1.3.7 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
+	github.com/golang/protobuf v1.5.4 // indirect
 )
 
 require (
@@ -174,7 +176,7 @@ require (
 	github.com/getlantern/grtrack v0.0.0-20231025115619-bfbfadb228f3 // indirect
 	github.com/getlantern/hellosplitter v0.1.1 // indirect
 	github.com/getlantern/hex v0.0.0-20220104173244-ad7e4b9194dc // indirect
-	github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240614175233-0df4a97b806e // indirect
+	github.com/getlantern/http-proxy-lantern/v2 v2.10.1 // indirect
 	github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca // indirect
 	github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 // indirect
 	github.com/getlantern/kcp-go/v5 v5.0.0-20220503142114-f0c1cd6e1b54 // indirect
@@ -198,9 +200,9 @@ require (
 	github.com/getlantern/telemetry v0.0.0-20230523155019-be7c1d8cd8cb // indirect
 	github.com/getlantern/tinywss v0.0.0-20211216020538-c10008a7d461 // indirect
 	github.com/getlantern/tlsdefaults v0.0.0-20171004213447-cf35cfd0b1b4 // indirect
-	github.com/getlantern/tlsdialer/v3 v3.0.3 // indirect
+	github.com/getlantern/tlsdialer/v3 v3.0.4 // indirect
 	github.com/getlantern/tlsmasq v0.4.7-0.20230302000139-6e479a593298 // indirect
-	github.com/getlantern/tlsresumption v0.0.0-20211216020551-6a3f901d86b9 // indirect
+	github.com/getlantern/tlsresumption v0.0.0-20241203054031-f3e4eec291ad // indirect
 	github.com/getlantern/tlsutil v0.5.3 // indirect
 	github.com/getlantern/uuid v1.2.0 // indirect
 	github.com/getlantern/winsvc v0.0.0-20160824205134-8bb3a5dbcc1d // indirect
