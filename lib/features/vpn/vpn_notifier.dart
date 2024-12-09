@@ -52,7 +52,7 @@ class VPNChangeNotifier with ChangeNotifier {
         notifyListeners();
       }
       updateStatus(
-          false,
+          configNotifier.fetchedProxiesConfig,
           configNotifier.fetchedGlobalConfig,
           configNotifier.hasSucceedingProxy);
     });
