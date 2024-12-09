@@ -1,8 +1,6 @@
 module github.com/getlantern/lantern-client
 
-go 1.22.6
-
-toolchain go1.23.0
+go 1.23.4
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
 
