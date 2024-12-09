@@ -278,7 +278,7 @@ class _CheckoutState extends State<Checkout>
   }
 
   Future<void> _openWebview(String url) async =>
-      await AppBrowser.openWebview(context, url);
+      await openWebview(context, url, 'lantern_pro_checkout'.i18n);
 
   void _proceedWithBTCPay() async {
     try {
@@ -383,11 +383,7 @@ class _CheckoutState extends State<Checkout>
         provider,
       );
       context.loaderOverlay.hide();
-      openDesktopPaymentWebview(
-          context: context,
-          provider: provider,
-          redirectUrl: redirectUrl,
-          onClose: checkProUser);
+      openWebview(context, redirectUrl);
       // as soon user click we should start polling userData
       Future.delayed(const Duration(seconds: 2), hasPlansUpdateOrBuy);
     } catch (error, stackTrace) {

@@ -54,7 +54,7 @@ class AddDevice extends StatelessWidget {
   }
 
   Future<void> _onDone(String code, BuildContext context) async {
-    context.loaderOverlay.show(widget: spinner);
+    context.loaderOverlay.show();
     try {
       await sessionModel.approveDevice(code);
       pinCodeController.clear();
@@ -82,7 +82,6 @@ class AddDevice extends StatelessWidget {
         context,
         description: e.localizedDescription,
       );
-
     }
   }
 }

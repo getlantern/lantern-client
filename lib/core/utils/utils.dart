@@ -14,7 +14,6 @@ bool isProdPlay() {
   return false;
 }
 
-
 String getPlanDisplayName(String plan) {
   if (Platform.isIOS) {
     if (plan == '1y') {
@@ -152,21 +151,6 @@ extension PlansExtension on Plan {
     }
 
     return totalPrice / 24;
-  }
-}
-
-Future<void> openDesktopPaymentWebview(
-    {required BuildContext context,
-    required String redirectUrl,
-    required Providers provider,
-    VoidCallback? onClose}) async {
-  switch (Platform.operatingSystem) {
-    case 'macos':
-    case 'windows':
-      await AppBrowser.navigateWebview(context, redirectUrl);
-      break;
-    default:
-      await AppBrowser.openWebview(context, redirectUrl);
   }
 }
 

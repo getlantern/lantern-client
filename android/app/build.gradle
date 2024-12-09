@@ -6,7 +6,7 @@ plugins {
     id 'org.jlleitschuh.gradle.ktlint'
     id 'kotlin-parcelize'
     id 'com.google.protobuf'
-    id "io.sentry.android.gradle" version "4.11.0"
+    id "io.sentry.android.gradle" version "4.13.0"
 }
 
 android {
@@ -79,9 +79,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
-    kotlin {
-        jvmToolchain(17)
-    }
+//    kotlin {
+//        jvmToolchain(17)
+//    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17

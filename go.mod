@@ -2,7 +2,9 @@ module github.com/getlantern/lantern-client
 
 go 1.22.6
 
-//replace github.com/getlantern/flashlight/v7 => ../flashlight
+toolchain go1.22.10
+
+// replace github.com/getlantern/flashlight/v7 => ../flashlight
 
 // replace github.com/getlantern/ipproxy => ../ipproxy
 // replace github.com/getlantern/fronted => ../fronted
@@ -172,7 +174,7 @@ require (
 	github.com/getlantern/grtrack v0.0.0-20231025115619-bfbfadb228f3 // indirect
 	github.com/getlantern/hellosplitter v0.1.1 // indirect
 	github.com/getlantern/hex v0.0.0-20220104173244-ad7e4b9194dc // indirect
-	github.com/getlantern/http-proxy-lantern/v2 v2.10.1 // indirect
+	github.com/getlantern/http-proxy-lantern/v2 v2.10.1-0.20240614175233-0df4a97b806e // indirect
 	github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca // indirect
 	github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 // indirect
 	github.com/getlantern/kcp-go/v5 v5.0.0-20220503142114-f0c1cd6e1b54 // indirect
@@ -196,9 +198,9 @@ require (
 	github.com/getlantern/telemetry v0.0.0-20230523155019-be7c1d8cd8cb // indirect
 	github.com/getlantern/tinywss v0.0.0-20211216020538-c10008a7d461 // indirect
 	github.com/getlantern/tlsdefaults v0.0.0-20171004213447-cf35cfd0b1b4 // indirect
-	github.com/getlantern/tlsdialer/v3 v3.0.4 // indirect
+	github.com/getlantern/tlsdialer/v3 v3.0.3 // indirect
 	github.com/getlantern/tlsmasq v0.4.7-0.20230302000139-6e479a593298 // indirect
-	github.com/getlantern/tlsresumption v0.0.0-20241203054031-f3e4eec291ad // indirect
+	github.com/getlantern/tlsresumption v0.0.0-20211216020551-6a3f901d86b9 // indirect
 	github.com/getlantern/tlsutil v0.5.3 // indirect
 	github.com/getlantern/uuid v1.2.0 // indirect
 	github.com/getlantern/winsvc v0.0.0-20160824205134-8bb3a5dbcc1d // indirect
