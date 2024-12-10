@@ -4,7 +4,6 @@ import (
 	"context"
 	"os"
 	"os/signal"
-	"path/filepath"
 	"sync"
 	"syscall"
 	"time"
@@ -14,6 +13,7 @@ import (
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/stats"
 	"github.com/getlantern/golog"
+	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 
@@ -21,18 +21,20 @@ import (
 )
 
 var (
-	// lanternClient holds the reference to the running Lantern client instance
-	lanternClient *client.Client
-	mu            sync.Mutex
-	log           = golog.LoggerFor("lantern")
+	// client holds the reference to the running Lantern client instance
+	cl  *lanternClient
+	mu  sync.Mutex
+	log = golog.LoggerFor("lantern")
 )
+
+type lanternClient struct {
+	*app.App
+	client *client.Client
+}
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-
-	// Parse CLI arguments
-	flags := flashlight.ParseFlags()
 
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
@@ -42,13 +44,51 @@ func main() {
 		cancel()
 	}()
 
-	// Start Lantern
-	startLantern(flags)
+	startLantern(ctx)
 	defer stopLantern()
 	<-ctx.Done()
 }
 
-func startLantern(flags flashlight.Flags) {
+func startLantern(ctx context.Context) {
+	mu.Lock()
+	defer mu.Unlock()
+	if cl != nil {
+		pterm.Warning.Println("Lantern is already running")
+		return
+	}
+	// create new instance of Lantern app
+	cl = &lanternClient{App: app.NewApp()}
+	// Run Lantern in the background
+	cl.Run(ctx)
+}
+
+func stopLantern() {
+	mu.Lock()
+	defer mu.Unlock()
+
+	if cl == nil {
+		// Lantern is not running, no cleanup needed
+		return
+	}
+	pterm.Info.Println("Stopping Lantern...")
+	if cl.App != nil {
+		cl.Exit(nil)
+	} else if cl.client != nil {
+		if err := cl.client.Stop(); err != nil {
+			pterm.Error.Println("Error stopping lantern:", err)
+		}
+	}
+	cl = nil
+
+	// small delay to give Lantern time to cleanup
+	time.Sleep(1 * time.Second)
+	pterm.Success.Println("Lantern stopped successfully.")
+}
+
+func startStandalone() {
+	// Parse CLI arguments
+	flags := flashlight.ParseFlags()
+
 	cdir := configDir(&flags)
 	pterm.Info.Println("Starting lantern: configDir", cdir)
 
@@ -60,7 +100,7 @@ func startLantern(flags flashlight.Flags) {
 	}
 
 	// Create user configuration for Lantern
-	settings := loadSettings(cdir)
+	settings := settings.LoadSettings(cdir)
 	userConfig := common.NewUserConfig(common.DefaultAppName, settings.GetDeviceID(), settings.GetUserID(),
 		settings.GetToken(), map[string]string{}, settings.GetLanguage())
 
@@ -93,7 +133,7 @@ func startLantern(flags flashlight.Flags) {
 			"127.0.0.1:0", // listen for SOCKS on random address
 			func(c *client.Client) {
 				mu.Lock()
-				lanternClient = c
+				cl = &lanternClient{client: c}
 				mu.Unlock()
 			},
 			func(err error) {
@@ -102,32 +142,6 @@ func startLantern(flags flashlight.Flags) {
 		)
 	}()
 	pterm.Info.Println("Lantern is running. Waiting for shutdown signal...")
-}
-
-func stopLantern() {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if lanternClient == nil {
-		// Lantern is not running, no cleanup needed
-		return
-	}
-
-	pterm.Info.Println("Stopping Lantern...")
-	if err := lanternClient.Stop(); err != nil {
-		pterm.Error.Println("Failed to stop Lantern:", err)
-		return
-	}
-	lanternClient = nil
-	// small delay to give Lantern time to cleanup
-	time.Sleep(1 * time.Second)
-	pterm.Success.Println("Lantern stopped successfully.")
-}
-
-// loadSettings loads the initial settings at startup, either from disk or using defaults.
-func loadSettings(configDir string) *settings.Settings {
-	path := filepath.Join(configDir, "settings.yaml")
-	return settings.LoadSettingsFrom(common.ApplicationVersion, common.RevisionDate, common.BuildDate, path)
 }
 
 func configDir(flags *flashlight.Flags) string {
