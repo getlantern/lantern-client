@@ -163,11 +163,25 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	token, _ := m.GetToken()
 	lang, _ := m.Locale()
 
-	m.proClient = createProClient(m, opts.Platform)
-
 	authUrl := common.DFBaseUrl
 	if opts.Platform == "ios" {
 		authUrl = common.APIBaseUrl
+		m.proClient = pro.NewIOSClient(fmt.Sprintf("https://%s", common.ProAPIHost), func() common.UserConfig {
+			internalHeaders := map[string]string{
+				common.PlatformHeader:   opts.Platform,
+				common.AppVersionHeader: common.ApplicationVersion,
+			}
+			return common.NewUserConfig(
+				common.DefaultAppName,
+				deviceID,
+				userID,
+				token,
+				internalHeaders,
+				lang,
+			)
+		}, opts.ConfigPath)
+	} else {
+		m.proClient = createProClient(m, opts.Platform)
 	}
 	m.authClient = auth.NewClient(fmt.Sprintf("https://%s", authUrl), func() common.UserConfig {
 		internalHeaders := map[string]string{
