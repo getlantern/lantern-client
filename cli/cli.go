@@ -8,14 +8,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/alexflint/go-arg"
-	"github.com/getlantern/golog"
-
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/stats"
+	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+
+	"github.com/alexflint/go-arg"
 	"github.com/pterm/pterm"
 )
 
