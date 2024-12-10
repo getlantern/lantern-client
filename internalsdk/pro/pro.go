@@ -5,12 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/getlantern/errors"
+	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/proxied"
+	"github.com/getlantern/fronted"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -18,6 +21,7 @@ import (
 	"github.com/go-resty/resty/v2"
 
 	"github.com/leekchan/accounting"
+	tls "github.com/refraction-networking/utls"
 	"github.com/shopspring/decimal"
 	"google.golang.org/protobuf/encoding/protojson"
 )
@@ -80,6 +84,35 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
 				Transport: proxied.ParallelForIdempotent(),
 				Timeout:   30 * time.Second,
 			},
+			OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
+				prepareProRequest(req, common.ProAPIHost, userConfig())
+				return nil
+			},
+		}),
+	}
+}
+
+func NewIOSClient(baseURL string, userConfig func() common.UserConfig, configPath string) ProClient {
+	fronted, err := fronted.NewFronted(filepath.Join(configPath, "masquerade_cache"), tls.HelloChrome_102, config.DefaultFrontedProviderID)
+	if err != nil {
+		log.Errorf("Unable to configure fronted: %v", err)
+	}
+	proxied.SetFronted(fronted)
+	log.Debugf("Using fronted: %v", fronted)
+
+	httpClient := &http.Client{
+		Transport: proxied.ParallelForIdempotent(),
+		Timeout:   30 * time.Second,
+	}
+
+	return &proClient{
+		userConfig:    userConfig,
+		backoffRunner: &backoffRunner{},
+		RESTClient: webclient.NewRESTClient(&webclient.Opts{
+			// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
+			// attempts to send requests through both chained and direct fronted routes in parallel
+			// for HEAD and GET requests and ChainedThenFronted for all others.
+			HttpClient: httpClient,
 			OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
 				prepareProRequest(req, common.ProAPIHost, userConfig())
 				return nil
