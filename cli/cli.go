@@ -31,7 +31,9 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	// Parse CLI arguments
 	flags := flashlight.ParseFlags()
+
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 	go func() {
@@ -50,17 +52,19 @@ func startLantern(flags flashlight.Flags) {
 	cdir := configDir(&flags)
 	pterm.Info.Println("Starting lantern: configDir", cdir)
 
-	// Log provided CLI arguments
 	httpProxyAddr := "127.0.0.1:0"
+	// Log provided CLI arguments
 	if flags.ForceProxyAddr != "" {
 		pterm.Info.Println("Using http proxy address:", flags.ForceProxyAddr)
 		httpProxyAddr = flags.ForceProxyAddr
 	}
 
+	// Create user configuration for Lantern
 	settings := loadSettings(cdir)
 	userConfig := common.NewUserConfig(common.DefaultAppName, settings.GetDeviceID(), settings.GetUserID(),
 		settings.GetToken(), map[string]string{}, settings.GetLanguage())
 
+	// Initialize the Lantern runner
 	runner, err := flashlight.New(
 		common.DefaultAppName,
 		common.ApplicationVersion,
