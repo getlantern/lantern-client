@@ -62,7 +62,6 @@ func startLantern(ctx context.Context, args args) {
 	if args.StickyConfig {
 		pterm.Info.Println("Using sticky config...")
 	}
-	pterm.Info.Println("Starting lantern: configDir %s", configDir)
 
 	userConfig := common.NewUserConfig("", "a34113", 3456344, "tok123", map[string]string{}, "")
 
