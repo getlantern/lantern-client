@@ -20,7 +20,6 @@ import (
 )
 
 var (
-	// lanternClient holds the reference to the running Lantern client instance
 	log = golog.LoggerFor("lantern")
 )
 
@@ -39,9 +38,11 @@ func main() {
 		pterm.Warning.Println("Received shutdown signal.")
 		cancel()
 	}()
+
 	client := &cliClient{}
 	client.start(ctx)
 	defer client.stop()
+
 	<-ctx.Done()
 }
 
@@ -61,8 +62,8 @@ func (client *cliClient) stop() {
 		// Lantern is not running, no cleanup needed
 		return
 	}
-	pterm.Info.Println("Stopping Lantern...")
 
+	pterm.Info.Println("Stopping Lantern...")
 	client.App.Exit(nil)
 	client.App = nil
 
