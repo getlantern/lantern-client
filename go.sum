@@ -435,12 +435,12 @@ github.com/getlantern/tinywss v0.0.0-20211216020538-c10008a7d461 h1:3HOWV/uUGde6
 github.com/getlantern/tinywss v0.0.0-20211216020538-c10008a7d461/go.mod h1:ZLyPOKtNWU4vWnAiRiNQ7hbfLMqCEuj1DgQWBtHp7tQ=
 github.com/getlantern/tlsdefaults v0.0.0-20171004213447-cf35cfd0b1b4 h1:73U3J4msGw3cXeKtCEbY7hbOdD6aX8gJv8BOu+VagF8=
 github.com/getlantern/tlsdefaults v0.0.0-20171004213447-cf35cfd0b1b4/go.mod h1:f8WmDYKFOaC5/y0d3GWl6UKf1ZbSlIoMzkuC8x7pUhg=
-github.com/getlantern/tlsdialer/v3 v3.0.4 h1:j9GHqtD2+cwGP/q+Rvr/wC43nPrRPk6YfEmWfZJ4p1I=
-github.com/getlantern/tlsdialer/v3 v3.0.4/go.mod h1:G0rWRzTX9WuQ0r31c/Zg9sfwTrMs82kyQCswlhwv/Us=
+github.com/getlantern/tlsdialer/v3 v3.0.4 h1:WvuTYMknHygVVnqneci9snQ2ygwYELf/I7FfjVdVG7s=
+github.com/getlantern/tlsdialer/v3 v3.0.4/go.mod h1:aXHS9CXIzgsdHwlTcFmmPzFbw0l6QBLxkCdSCmclqDI=
 github.com/getlantern/tlsmasq v0.4.7-0.20230302000139-6e479a593298 h1:GxhCQ6zLnIeaIw2gtZsM7hSlpXHdd8DoXSEPObSHMuk=
 github.com/getlantern/tlsmasq v0.4.7-0.20230302000139-6e479a593298/go.mod h1:vcDVZe3TGEqd0nD0tVvqKoyGHY+5bPxCa+IklxroKd0=
-github.com/getlantern/tlsresumption v0.0.0-20241203054031-f3e4eec291ad h1:RsOMhwKzMD0M7FrsqZ0fKwTblr6pNCYrzmtnbnVr3Cg=
-github.com/getlantern/tlsresumption v0.0.0-20241203054031-f3e4eec291ad/go.mod h1:lAlPJK1Y5nFlydkty/imyPFpLCi5V+hzQHXOqeoeXyk=
+github.com/getlantern/tlsresumption v0.0.0-20241210052744-a1c6aacc1d4d h1:CM+1DbLVMvsrf5cvQnPF2txKKRI1H2sDj0+WvDrZ6zU=
+github.com/getlantern/tlsresumption v0.0.0-20241210052744-a1c6aacc1d4d/go.mod h1:YaLhn/xKC6Z0FUizXdCcPuNn/ODQ9fibA7q33dtuH9g=
 github.com/getlantern/tlsutil v0.2.0/go.mod h1:Vxsyr9DVnYwsqHaEzMYkg9fT8aBrnO2eI+gdICMQbQU=
 github.com/getlantern/tlsutil v0.5.3 h1:g1FjuG4/OTZe8kkbEmpSxvT9rXzYOG9jO4jHiDeQIxM=
 github.com/getlantern/tlsutil v0.5.3/go.mod h1:lVgvr4nxuQ1ocOho90UB6LnHFlpP16TXAGpHR8Z0QnI=
