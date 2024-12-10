@@ -4,7 +4,6 @@ import (
 	"context"
 	"os"
 	"os/signal"
-	"sync"
 	"syscall"
 	"time"
 
@@ -22,10 +21,12 @@ import (
 
 var (
 	// lanternClient holds the reference to the running Lantern client instance
-	lanternClient *app.App
-	mu            sync.Mutex
-	log           = golog.LoggerFor("lantern")
+	log = golog.LoggerFor("lantern")
 )
+
+type cliClient struct {
+	*app.App
+}
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
@@ -38,44 +39,39 @@ func main() {
 		pterm.Warning.Println("Received shutdown signal.")
 		cancel()
 	}()
-
-	startLantern(ctx)
-	defer stopLantern()
+	client := &cliClient{}
+	client.start(ctx)
+	defer client.stop()
 	<-ctx.Done()
 }
 
-func startLantern(ctx context.Context) {
-	mu.Lock()
-	defer mu.Unlock()
-	if lanternClient != nil {
+func (client *cliClient) start(ctx context.Context) {
+	if client.App != nil {
 		pterm.Warning.Println("Lantern is already running")
 		return
 	}
 	// create new instance of Lantern app
-	lanternClient = app.NewApp()
+	client.App = app.NewApp()
 	// Run Lantern in the background
-	lanternClient.Run(ctx)
+	client.Run(ctx)
 }
 
-func stopLantern() {
-	mu.Lock()
-	defer mu.Unlock()
-
-	if lanternClient == nil {
+func (client *cliClient) stop() {
+	if client.App == nil {
 		// Lantern is not running, no cleanup needed
 		return
 	}
 	pterm.Info.Println("Stopping Lantern...")
-	if lanternClient != nil {
-		lanternClient.Exit(nil)
-	}
-	lanternClient = nil
+
+	client.App.Exit(nil)
+	client.App = nil
 
 	// small delay to give Lantern time to cleanup
 	time.Sleep(1 * time.Second)
 	pterm.Success.Println("Lantern stopped successfully.")
 }
 
+// TODO: Move to sdk package for easy re-use across platforms
 func startStandalone() {
 	// Parse CLI arguments
 	flags := flashlight.ParseFlags()
