@@ -199,8 +199,8 @@ func (app *App) Run(ctx context.Context) error {
 			})
 		}()
 	}
-	var err error
-	app.flashlight, err = flashlight.New(
+
+	flashlight, err := flashlight.New(
 		common.DefaultAppName,
 		common.ApplicationVersion,
 		common.RevisionDate,
@@ -227,12 +227,13 @@ func (app *App) Run(ctx context.Context) error {
 	}
 	app.beforeStart(ctx, listenAddr)
 
-	app.flashlight.Run(
+	go flashlight.Run(
 		listenAddr,
 		socksAddr,
 		app.afterStart,
 		func(err error) { _ = app.Exit(err) },
 	)
+
 	return nil
 }
 

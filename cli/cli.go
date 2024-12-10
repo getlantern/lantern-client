@@ -61,22 +61,26 @@ func main() {
 func (client *cliClient) start(ctx context.Context) {
 	client.mu.Lock()
 	defer client.mu.Unlock()
+
 	if client.app != nil {
 		pterm.Warning.Println("Lantern is already running")
 		return
 	}
+
 	// create new instance of Lantern app
 	client.app = app.NewApp()
+	// Run Lantern in the background
+	go client.app.Run(ctx)
+
 	if client.setSystemProxy {
 		client.app.SysproxyOn()
 	}
-	// Run Lantern in the background
-	go client.app.Run(ctx)
 }
 
 func (client *cliClient) stop() {
 	client.mu.Lock()
 	defer client.mu.Unlock()
+
 	if client.app == nil {
 		// Lantern is not running, no cleanup needed
 		return
