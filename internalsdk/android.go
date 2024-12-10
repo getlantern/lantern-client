@@ -46,10 +46,9 @@ var (
 
 	startOnce sync.Once
 
-	clEventual               = eventual.NewValue()
-	dnsGrabEventual          = eventual.NewValue()
-	dnsGrabAddrEventual      = eventual.NewValue()
-	errNoAdProviderAvailable = errors.New("no ad provider available")
+	clEventual          = eventual.NewValue()
+	dnsGrabEventual     = eventual.NewValue()
+	dnsGrabAddrEventual = eventual.NewValue()
 )
 
 type Settings interface {
@@ -352,22 +351,6 @@ func (s *panickingSessionImpl) SetOnSuccess(fetached bool) {
 	s.wrapped.SetOnSuccess(fetached)
 }
 
-func getClient(ctx context.Context) *client.Client {
-	_cl, _ := clEventual.Get(ctx)
-	if _cl == nil {
-		return nil
-	}
-	return _cl.(*client.Client)
-}
-
-func getDNSGrab(ctx context.Context) dnsgrab.Server {
-	_dg, _ := dnsGrabEventual.Get(ctx)
-	if _dg == nil {
-		return nil
-	}
-	return _dg.(dnsgrab.Server)
-}
-
 type SurveyInfo struct {
 	Enabled     bool    `json:"enabled"`
 	Probability float64 `json:"probability"`
@@ -383,18 +366,6 @@ type StartResult struct {
 	HTTPAddr    string
 	SOCKS5Addr  string
 	DNSGrabAddr string
-}
-
-type adSettings struct {
-	wrapped *config.AdSettings
-}
-
-func (s *adSettings) GetAdProvider(isPro bool, countryCode string, daysSinceInstalled int) (AdProvider, error) {
-	adProvider := s.wrapped.GetAdProvider(isPro, countryCode, daysSinceInstalled)
-	if adProvider == nil {
-		return nil, errNoAdProviderAvailable
-	}
-	return adProvider, nil
 }
 
 type Updater autoupdate.Updater

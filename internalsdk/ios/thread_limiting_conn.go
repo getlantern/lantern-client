@@ -91,7 +91,7 @@ func (c *threadLimitingUDPConn) WriteFrom(b []byte, addr *net.UDPAddr) (int, err
 	writeResult := make(chan *safechannels.IOResult)
 	c.writeWorker.tasks <- func() {
 		n, err := c.UDPConn.WriteFrom(b, addr)
-		writeResult <- &safechannels.IOResult{n, err}
+		writeResult <- &safechannels.IOResult{N: n, Err: err}
 	}
 	result := <-writeResult
 	return result.N, result.Err

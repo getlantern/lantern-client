@@ -23,8 +23,13 @@ import (
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/embeddedconfig"
 	"github.com/getlantern/flashlight/v7/geolookup"
+	"github.com/getlantern/flashlight/v7/proxied"
+
+	"context"
 
 	"github.com/getlantern/lantern-client/internalsdk/common"
+
+	tls "github.com/refraction-networking/utls"
 )
 
 const (
@@ -100,8 +105,11 @@ type UserConfig struct {
 
 // TODO: Implement a timeout mechanism to handle prolonged execution times and potentially execute this method in the background to maintain smooth UI startup performance.
 func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
+	// Log the full method run time.
+	defer func(start time.Time) {
+		log.Debugf("Configured completed in %v", time.Since(start))
+	}(time.Now())
 	result := &ConfigResult{}
-	start := time.Now()
 	if err := cf.writeUserConfig(); err != nil {
 		return nil, err
 	}
@@ -187,8 +195,6 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 			log.Debugf("Added %v", host)
 		}
 	}
-	seconds := time.Since(start).Seconds()
-	log.Debugf("Configured completed in %v seconds", seconds)
 
 	email.SetDefaultRecipient(global.ReportIssueEmail)
 
@@ -328,7 +334,9 @@ func (cf *configurer) updateFromWeb(rt http.RoundTripper, name string, etag stri
 }
 
 func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name string, etag string, cfg interface{}, url string) ([]byte, string, error) {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	ctx, cancel := context.WithTimeout(context.Background(), 40*time.Second)
+	defer cancel()
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, "", errors.New("Unable to construct request to fetch %v from %v: %v", name, url, err)
 	}
@@ -410,23 +418,16 @@ func (cf *configurer) configureFronting(global *config.Global, timeout time.Dura
 		return errors.New("Unable to read trusted CAs from global config, can't configure domain fronting: %v", err)
 	}
 
-	fronted.Configure(certs, global.Client.FrontedProviders(), "cloudfront", cf.fullPathTo("masquerade_cache"))
-	rt, ok := fronted.NewFronted(timeout)
-	if !ok {
-		return errors.New("Timed out waiting for fronting to finish configuring")
+	fronted, err := fronted.NewFronted(cf.fullPathTo("masquerade_cache"), tls.HelloChrome_102, config.DefaultFrontedProviderID)
+	if err != nil {
+		log.Errorf("Unable to configure fronted: %v", err)
 	}
+	proxied.SetFronted(fronted)
+	fronted.UpdateConfig(certs, global.Client.FrontedProviders())
 
-	cf.rt = rt
+	cf.rt = fronted
 	log.Debug("Configured fronting")
 	return nil
-}
-
-func (cf *configurer) openFile(filename string) (*os.File, error) {
-	file, err := os.Open(cf.fullPathTo(filename))
-	if err != nil {
-		err = errors.New("Unable to open %v: %v", filename, err)
-	}
-	return file, err
 }
 
 func (cf *configurer) saveConfig(name string, bytes []byte) {

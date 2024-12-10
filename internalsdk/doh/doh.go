@@ -16,7 +16,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 
@@ -80,11 +80,10 @@ func MakeDohRequest(ctx context.Context,
 		return nil, log.Errorf("getting idna for domain [%v]: %v", domain, err)
 	}
 
-	req, err := http.NewRequest("GET", "https://cloudflare-dns.com/dns-query", nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", "https://cloudflare-dns.com/dns-query", nil)
 	if err != nil {
 		return nil, log.Errorf("building doh request to cloudflare %v", err)
 	}
-	req = req.WithContext(ctx)
 	req.Header.Set("accept", "application/dns-json")
 	q := req.URL.Query()
 	q.Add("name", name)
@@ -96,7 +95,7 @@ func MakeDohRequest(ctx context.Context,
 	}
 
 	defer resp.Body.Close()
-	bodyBuf, err := ioutil.ReadAll(resp.Body)
+	bodyBuf, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, log.Errorf("read doh response body %v", err)
 	}
