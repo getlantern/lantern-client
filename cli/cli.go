@@ -42,15 +42,16 @@ func main() {
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-signalChan
-		stopLantern()
+		pterm.Warning.Println("Received shutdown signal.")
 		cancel()
 	}()
 
-	startLantern(ctx, args)
+	startLantern(args)
+	defer stopLantern()
 	<-ctx.Done()
 }
 
-func startLantern(ctx context.Context, args args) {
+func startLantern(args args) {
 	configDir := appdir.General(common.DefaultAppName)
 	pterm.Info.Println("Starting lantern: configDir %s", configDir)
 
@@ -102,8 +103,6 @@ func startLantern(ctx context.Context, args args) {
 		)
 	}()
 	pterm.Info.Println("Lantern is running. Waiting for shutdown signal...")
-	<-ctx.Done()
-	stopLantern()
 }
 
 func stopLantern() {
