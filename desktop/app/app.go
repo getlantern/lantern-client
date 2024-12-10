@@ -148,7 +148,7 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) *App {
 }
 
 // Run starts the app.
-func (app *App) Run(ctx context.Context) {
+func (app *App) Run(ctx context.Context) error {
 	golog.OnFatal(app.exitOnFatal)
 	go func() {
 		for <-geolookup.OnRefresh() {
@@ -156,88 +156,84 @@ func (app *App) Run(ctx context.Context) {
 		}
 	}()
 
-	// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
-	// for the first time. User can still quit Lantern through systray menu when it happens.
-	go func() {
-		log.Debug(app.Flags)
-		userConfig := func() common.UserConfig {
-			return settings.UserConfig(app.Settings())
-		}
-		proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), userConfig)
-		authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
+	log.Debug(app.Flags)
+	userConfig := func() common.UserConfig {
+		return settings.UserConfig(app.Settings())
+	}
+	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), userConfig)
+	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
 
-		app.mu.Lock()
-		app.proClient = proClient
-		app.authClient = authClient
-		app.mu.Unlock()
+	app.mu.Lock()
+	app.proClient = proClient
+	app.authClient = authClient
+	app.mu.Unlock()
 
-		settings := app.Settings()
+	settings := app.Settings()
 
-		if app.Flags.ProxyAll {
-			// If proxyall flag was supplied, force proxying of all
-			settings.SetProxyAll(true)
-		}
+	if app.Flags.ProxyAll {
+		// If proxyall flag was supplied, force proxying of all
+		settings.SetProxyAll(true)
+	}
 
-		listenAddr := app.Flags.Addr
-		if listenAddr == "" {
-			listenAddr = settings.GetAddr()
-		}
-		if listenAddr == "" {
-			listenAddr = defaultHTTPProxyAddress
-		}
+	listenAddr := app.Flags.Addr
+	if listenAddr == "" {
+		listenAddr = settings.GetAddr()
+	}
+	if listenAddr == "" {
+		listenAddr = defaultHTTPProxyAddress
+	}
 
-		socksAddr := app.Flags.SocksAddr
-		if socksAddr == "" {
-			socksAddr = settings.GetSOCKSAddr()
-		}
-		if socksAddr == "" {
-			socksAddr = defaultSOCKSProxyAddress
-		}
+	socksAddr := app.Flags.SocksAddr
+	if socksAddr == "" {
+		socksAddr = settings.GetSOCKSAddr()
+	}
+	if socksAddr == "" {
+		socksAddr = defaultSOCKSProxyAddress
+	}
 
-		if app.Flags.Timeout > 0 {
-			go func() {
-				time.AfterFunc(app.Flags.Timeout, func() {
-					app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
-						app.Flags.Timeout, app.fetchedGlobalConfig.Load(), app.fetchedProxiesConfig.Load()))
-				})
-			}()
-		}
-		var err error
-		app.flashlight, err = flashlight.New(
-			common.DefaultAppName,
-			common.ApplicationVersion,
-			common.RevisionDate,
-			app.configDir,
-			app.Flags.VPN,
-			func() bool { return settings.GetDisconnected() }, // check whether we're disconnected
-			settings.GetProxyAll,
-			func() bool { return false }, // on desktop, we do not allow private hosts
-			settings.IsAutoReport,
-			app.Flags.AsMap(),
-			settings,
-			app.statsTracker,
-			app.IsPro,
-			settings.GetLanguage,
-			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-			// Dummy analytics function
-			func(category, action, label string) {},
-			flashlight.WithOnConfig(app.onConfigUpdate),
-			flashlight.WithOnProxies(app.onProxiesUpdate),
-			flashlight.WithOnSucceedingProxy(app.onSucceedingProxy),
-		)
-		if err != nil {
-			app.Exit(err)
-			return
-		}
-		app.beforeStart(ctx, listenAddr)
+	if app.Flags.Timeout > 0 {
+		go func() {
+			time.AfterFunc(app.Flags.Timeout, func() {
+				app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
+					app.Flags.Timeout, app.fetchedGlobalConfig.Load(), app.fetchedProxiesConfig.Load()))
+			})
+		}()
+	}
+	var err error
+	app.flashlight, err = flashlight.New(
+		common.DefaultAppName,
+		common.ApplicationVersion,
+		common.RevisionDate,
+		app.configDir,
+		app.Flags.VPN,
+		func() bool { return settings.GetDisconnected() }, // check whether we're disconnected
+		settings.GetProxyAll,
+		func() bool { return false }, // on desktop, we do not allow private hosts
+		settings.IsAutoReport,
+		app.Flags.AsMap(),
+		settings,
+		app.statsTracker,
+		app.IsPro,
+		settings.GetLanguage,
+		func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
+		// Dummy analytics function
+		func(category, action, label string) {},
+		flashlight.WithOnConfig(app.onConfigUpdate),
+		flashlight.WithOnProxies(app.onProxiesUpdate),
+		flashlight.WithOnSucceedingProxy(app.onSucceedingProxy),
+	)
+	if err != nil {
+		return err
+	}
+	app.beforeStart(ctx, listenAddr)
 
-		app.flashlight.Run(
-			listenAddr,
-			socksAddr,
-			app.afterStart,
-			func(err error) { _ = app.Exit(err) },
-		)
-	}()
+	app.flashlight.Run(
+		listenAddr,
+		socksAddr,
+		app.afterStart,
+		func(err error) { _ = app.Exit(err) },
+	)
+	return nil
 }
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight

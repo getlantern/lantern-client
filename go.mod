@@ -24,6 +24,7 @@ replace github.com/getlantern/replica => github.com/getlantern/replica v0.14.5-0
 
 require (
 	github.com/1Password/srp v0.2.0
+	github.com/alexflint/go-arg v1.4.3
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/dustin/go-humanize v1.0.1
 	github.com/eycorsican/go-tun2socks v1.16.12-0.20201107203946-301549c435ff
@@ -84,6 +85,7 @@ require (
 	atomicgo.dev/cursor v0.2.0 // indirect
 	atomicgo.dev/keyboard v0.2.9 // indirect
 	atomicgo.dev/schedule v0.1.0 // indirect
+	github.com/alexflint/go-scalar v1.1.0 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/gookit/color v1.5.4 // indirect

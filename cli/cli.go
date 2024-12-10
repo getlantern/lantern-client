@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
@@ -16,6 +17,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 
+	"github.com/alexflint/go-arg"
 	"github.com/pterm/pterm"
 )
 
@@ -23,13 +25,23 @@ var (
 	log = golog.LoggerFor("lantern")
 )
 
+type args struct {
+	SetSystemProxy bool `arg:"--set-system-proxy" help:"Set the system proxy during start" default:"false"`
+}
+
 type cliClient struct {
-	*app.App
+	app            *app.App
+	mu             sync.Mutex
+	setSystemProxy bool
 }
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+
+	// Parse CLI arguments
+	var args args
+	arg.Parse(&args)
 
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
@@ -39,7 +51,7 @@ func main() {
 		cancel()
 	}()
 
-	client := &cliClient{}
+	client := &cliClient{setSystemProxy: args.SetSystemProxy}
 	client.start(ctx)
 	defer client.stop()
 
@@ -47,25 +59,32 @@ func main() {
 }
 
 func (client *cliClient) start(ctx context.Context) {
-	if client.App != nil {
+	client.mu.Lock()
+	defer client.mu.Unlock()
+	if client.app != nil {
 		pterm.Warning.Println("Lantern is already running")
 		return
 	}
 	// create new instance of Lantern app
-	client.App = app.NewApp()
+	client.app = app.NewApp()
+	if client.setSystemProxy {
+		client.app.SysproxyOn()
+	}
 	// Run Lantern in the background
-	client.Run(ctx)
+	go client.app.Run(ctx)
 }
 
 func (client *cliClient) stop() {
-	if client.App == nil {
+	client.mu.Lock()
+	defer client.mu.Unlock()
+	if client.app == nil {
 		// Lantern is not running, no cleanup needed
 		return
 	}
 
 	pterm.Info.Println("Stopping Lantern...")
-	client.App.Exit(nil)
-	client.App = nil
+	client.app.Exit(nil)
+	client.app = nil
 
 	// small delay to give Lantern time to cleanup
 	time.Sleep(1 * time.Second)
