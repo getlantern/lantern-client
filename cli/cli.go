@@ -107,8 +107,6 @@ func startLantern(ctx context.Context, args args) {
 }
 
 func stopLantern() {
-	pterm.Info.Println("Stopping Lantern...")
-
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -116,6 +114,7 @@ func stopLantern() {
 		return
 	}
 
+	pterm.Info.Println("Stopping Lantern...")
 	if err := lanternClient.Stop(); err != nil {
 		pterm.Error.Println("Failed to stop Lantern:", err)
 		return
