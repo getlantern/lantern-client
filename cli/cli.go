@@ -1,0 +1,125 @@
+package main
+
+import (
+	"context"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
+
+	"github.com/alexflint/go-arg"
+	"github.com/getlantern/golog"
+
+	"github.com/getlantern/appdir"
+	"github.com/getlantern/flashlight/v7"
+	"github.com/getlantern/flashlight/v7/client"
+	"github.com/getlantern/flashlight/v7/stats"
+	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/pterm/pterm"
+)
+
+var (
+	lanternClient *client.Client
+	mu            sync.Mutex
+	log           = golog.LoggerFor("lantern")
+)
+
+type args struct {
+	HttpProxyAddress  string `arg:"--http-proxy" help:"The HTTP proxy address to use" default:":0"`
+	SocksProxyAddress string `arg:"--socks-proxy" help:"The SOCKS proxy address to use" default:":0"`
+	StickyConfig      bool   `arg:"--sticky-config" help:"Whether to use sticky config" default:"false"`
+}
+
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	var args args
+	arg.MustParse(&args)
+
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-signalChan
+		stopLantern()
+		cancel()
+	}()
+
+	startLantern(ctx, args)
+	<-ctx.Done()
+}
+
+func startLantern(ctx context.Context, args args) {
+	configDir := appdir.General(common.DefaultAppName)
+	pterm.Info.Println("Starting lantern: configDir %s", configDir)
+
+	if args.HttpProxyAddress != "" {
+		pterm.Info.Println("Using http proxy address:", args.HttpProxyAddress)
+	}
+	if args.SocksProxyAddress != "" {
+		pterm.Info.Println("Using socks proxy address:", args.SocksProxyAddress)
+	}
+	if args.StickyConfig {
+		pterm.Info.Println("Using sticky config...")
+	}
+	pterm.Info.Println("Starting lantern: configDir %s", configDir)
+
+	userConfig := common.NewUserConfig("", "a34113", 3456344, "tok123", map[string]string{}, "")
+
+	runner, err := flashlight.New(
+		common.DefaultAppName,
+		common.ApplicationVersion,
+		common.RevisionDate,
+		configDir, // place to store lantern configuration
+		false,
+		func() bool { return false }, // always connected
+		func() bool { return true },
+		func() bool { return false }, // do not proxy private hosts on Android
+		func() bool { return true },  // auto report
+		map[string]interface{}{},
+		userConfig,
+		stats.NewTracker(),
+		func() bool { return false },
+		func() string { return "" }, // only used for desktop
+		nil,
+		func(category, action, label string) {},
+	)
+	if err != nil {
+		log.Fatalf("failed to start flashlight: %v", err)
+	}
+	go func() {
+		runner.Run(
+			args.HttpProxyAddress,  // listen for HTTP on provided address
+			args.SocksProxyAddress, // listen for SOCKS on random address
+			func(c *client.Client) {
+				mu.Lock()
+				lanternClient = c
+				mu.Unlock()
+			},
+			func(err error) {
+				log.Errorf("Lantern error: %v", err)
+			},
+		)
+	}()
+	pterm.Info.Println("Lantern is running. Waiting for shutdown signal...")
+	<-ctx.Done()
+	stopLantern()
+}
+
+func stopLantern() {
+	pterm.Info.Println("Stopping Lantern...")
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	if lanternClient == nil {
+		return
+	}
+
+	if err := lanternClient.Stop(); err != nil {
+		pterm.Error.Println("Failed to stop Lantern:", err)
+		return
+	}
+	lanternClient = nil
+	pterm.Success.Println("Lantern stopped successfully.")
+}
