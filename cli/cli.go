@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
+	"time"
 
 	"github.com/alexflint/go-arg"
 	"github.com/getlantern/golog"
@@ -119,5 +120,7 @@ func stopLantern() {
 		return
 	}
 	lanternClient = nil
+	// small delay to give Lantern time to cleanup
+	time.Sleep(1 * time.Second)
 	pterm.Success.Println("Lantern stopped successfully.")
 }
