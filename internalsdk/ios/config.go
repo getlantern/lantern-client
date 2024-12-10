@@ -23,6 +23,7 @@ import (
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/embeddedconfig"
 	"github.com/getlantern/flashlight/v7/geolookup"
+	"github.com/getlantern/flashlight/v7/proxied"
 
 	"context"
 
@@ -421,6 +422,7 @@ func (cf *configurer) configureFronting(global *config.Global, timeout time.Dura
 	if err != nil {
 		log.Errorf("Unable to configure fronted: %v", err)
 	}
+	proxied.SetFronted(fronted)
 	fronted.UpdateConfig(certs, global.Client.FrontedProviders())
 
 	cf.rt = fronted
