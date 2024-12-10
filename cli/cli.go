@@ -53,7 +53,7 @@ func main() {
 
 func startLantern(args args) {
 	configDir := appdir.General(common.DefaultAppName)
-	pterm.Info.Println("Starting lantern: configDir %s", configDir)
+	pterm.Info.Println("Starting lantern: configDir", configDir)
 
 	if args.HttpProxyAddress != "" {
 		pterm.Info.Println("Using http proxy address:", args.HttpProxyAddress)
