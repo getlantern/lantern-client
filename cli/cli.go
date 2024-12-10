@@ -21,16 +21,11 @@ import (
 )
 
 var (
-	// client holds the reference to the running Lantern client instance
-	cl  *lanternClient
-	mu  sync.Mutex
-	log = golog.LoggerFor("lantern")
+	// lanternClient holds the reference to the running Lantern client instance
+	lanternClient *app.App
+	mu            sync.Mutex
+	log           = golog.LoggerFor("lantern")
 )
-
-type lanternClient struct {
-	*app.App
-	client *client.Client
-}
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
@@ -52,33 +47,29 @@ func main() {
 func startLantern(ctx context.Context) {
 	mu.Lock()
 	defer mu.Unlock()
-	if cl != nil {
+	if lanternClient != nil {
 		pterm.Warning.Println("Lantern is already running")
 		return
 	}
 	// create new instance of Lantern app
-	cl = &lanternClient{App: app.NewApp()}
+	lanternClient = app.NewApp()
 	// Run Lantern in the background
-	cl.Run(ctx)
+	lanternClient.Run(ctx)
 }
 
 func stopLantern() {
 	mu.Lock()
 	defer mu.Unlock()
 
-	if cl == nil {
+	if lanternClient == nil {
 		// Lantern is not running, no cleanup needed
 		return
 	}
 	pterm.Info.Println("Stopping Lantern...")
-	if cl.App != nil {
-		cl.Exit(nil)
-	} else if cl.client != nil {
-		if err := cl.client.Stop(); err != nil {
-			pterm.Error.Println("Error stopping lantern:", err)
-		}
+	if lanternClient != nil {
+		lanternClient.Exit(nil)
 	}
-	cl = nil
+	lanternClient = nil
 
 	// small delay to give Lantern time to cleanup
 	time.Sleep(1 * time.Second)
@@ -93,8 +84,8 @@ func startStandalone() {
 	pterm.Info.Println("Starting lantern: configDir", cdir)
 
 	httpProxyAddr := "127.0.0.1:0"
-	// Log provided CLI arguments
 	if flags.ForceProxyAddr != "" {
+		// Log provided CLI arguments
 		pterm.Info.Println("Using http proxy address:", flags.ForceProxyAddr)
 		httpProxyAddr = flags.ForceProxyAddr
 	}
@@ -132,9 +123,7 @@ func startStandalone() {
 			httpProxyAddr, // listen for HTTP on provided address
 			"127.0.0.1:0", // listen for SOCKS on random address
 			func(c *client.Client) {
-				mu.Lock()
-				cl = &lanternClient{client: c}
-				mu.Unlock()
+
 			},
 			func(err error) {
 				log.Errorf("Lantern error: %v", err)
