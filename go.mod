@@ -1,8 +1,8 @@
 module github.com/getlantern/lantern-client
 
-go 1.22.4
+go 1.23.1
 
-toolchain go1.22.8
+toolchain go1.23.4
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
 
@@ -53,7 +53,7 @@ require (
 	github.com/getlantern/notifier v0.0.0-20240830181717-11f4c6c3fa95
 	github.com/getlantern/ops v0.0.0-20231025133620-f368ab734534
 	github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175
-	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
+	github.com/getlantern/pathdb v0.0.0-20241211161442-69cb05914a59
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
 	github.com/getlantern/replica v0.14.5-0.20240909174421-21691d4b40f8
 	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627

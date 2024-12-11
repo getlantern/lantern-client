@@ -395,8 +395,8 @@ github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175 h1:JWH5BB2o0e
 github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175/go.mod h1:h3S9LBmmzN/xM+lwYZHE4abzTtCTtidKtG+nxZcCZX0=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360 h1:pijUoofaQcAM/8zbDzZM2LQ90kGVbKfnSAkFnQwLZZU=
 github.com/getlantern/packetforward v0.0.0-20201001150407-c68a447b0360/go.mod h1:nsJPNYUSY96xB+p7uiDW8O4uiKea+KjeUdS5d6tf9IU=
-github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb h1:rbkflUPjr83ON7c+4LqU2Y/rJzv9P/fmocXDLLm0hWQ=
-github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb/go.mod h1:SFQy+f58IbLpnbq2nVqlq7ccwaUiO7ablKv631WVIuc=
+github.com/getlantern/pathdb v0.0.0-20241211161442-69cb05914a59 h1:uG5tdeDN40wyEX21BxPW4js4UeOwvr66Tf4c2QX+Q8k=
+github.com/getlantern/pathdb v0.0.0-20241211161442-69cb05914a59/go.mod h1:6ylfyLeaekF7nVRbNSho3cMHRLVlpAiC0AMoqOowCzA=
 github.com/getlantern/preconn v1.0.0 h1:DsY3l/y/BJUj86WyaxXylbJnCC9QbKcc3D6js6rFL60=
 github.com/getlantern/preconn v1.0.0/go.mod h1:i/AnXvx715Fq7HgZLlmQlw3sGfEkku8BQT5hLHMK4+k=
 github.com/getlantern/probe v0.0.0-20191107230642-ed284e08029a/go.mod h1:EPE0nd9YNS2FTIz+2EOkqojCuqaQlJ+fTiLPklsqe/E=
@@ -1244,6 +1244,8 @@ google.golang.org/protobuf v1.21.0/go.mod h1:47Nbq4nVaFHyn7ilMalzfO3qCViNmqZ2kzi
 google.golang.org/protobuf v1.23.0/go.mod h1:EGpADcykh3NcUnDUJcl1+ZksZNG86OlYog2l/sGQquU=
 google.golang.org/protobuf v1.34.2 h1:6xV6lTsCfpGD21XK49h7MhtcApnLqkfYgPcdHftf6hg=
 google.golang.org/protobuf v1.34.2/go.mod h1:qYOHts0dSfpeUzUFpOMr/WGzszTmLH+DiWniOlNbLDw=
+google.golang.org/protobuf v1.35.2 h1:8Ar7bF+apOIoThw1EdZl0p1oWvMqTHmpA2fRTyZO8io=
+google.golang.org/protobuf v1.35.2/go.mod h1:9fA7Ob0pmnwhb644+1+CVWFRbNajQ6iRojtC/QF5bRE=
 gopkg.in/alecthomas/kingpin.v2 v2.2.6/go.mod h1:FMv+mEhP44yOT+4EoQTLFTRgOQ1FBLkstjWtayDeSgw=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
