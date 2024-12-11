@@ -195,6 +195,25 @@ android {
     namespace 'org.getlantern.lantern'
 }
 
+tasks.register('zipDebugSymbols') {
+    description "Generates a ZIP file containing debug symbols for the app"
+    doLast {
+        def flutterRootDir = rootDir.parentFile
+        def debugSymbolsDir = file("${flutterRootDir}/build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib")
+        def outputDir = file("${flutterRootDir}/build/outputs/debug-symbols")
+        outputDir.mkdirs()
+        copy {
+            from debugSymbolsDir
+            into outputDir
+        }
+        ant.zip(destfile: "${outputDir}/debug-symbols.zip") {
+            fileset(dir: debugSymbolsDir)
+        }
+        println "Debug symbols ZIP created at: ${outputDir}/debug-symbols.zip"
+    }
+}
+
+
 def androidArch() {
     def value = project.getProperties().get("androidArch")
     if (value == null || !value?.trim()) {
