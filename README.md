@@ -54,7 +54,6 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
 ### 🚀 Setup Project:
 
 * Install all prerequisites
-* Run `git submodule update --init --recursive`
 * Run `git lfs install && git pull`.
 * Put the [app.env](https://my.1password.com/app#/everything/AllItems/whdjlkyj7ku6pumtyc7nh5vg4yadqasjh2hspgjgvgfllyekhcrq) file (Frontend vault) from 1Password in the repo root.
 * Go to the **SDK MANAGER** (Tools->SDK Manager in Android Studio)
