@@ -436,6 +436,11 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 
 android-debug: $(MOBILE_DEBUG_APK)
 
+
+debug-symbols:
+	@echo "Generating debug symbols for Android..."
+	cd android && ./gradlew zipDebugSymbols
+
 set-version:
 	@echo "Setting the CFBundleShortVersionString to $(VERSION)"
 	@cd ios && agvtool new-marketing-version $(VERSION)
