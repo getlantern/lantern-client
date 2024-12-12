@@ -39,8 +39,8 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.153
-	github.com/getlantern/fronted v0.0.0-20241206211020-da8e3e9f49fd
+	github.com/getlantern/flashlight/v7 v7.6.160
+	github.com/getlantern/fronted v0.0.0-20241212194832-a55b6db2616e
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
 	github.com/getlantern/i18n v0.0.0-20181205222232-2afc4f49bb1c
@@ -200,9 +200,9 @@ require (
 	github.com/getlantern/telemetry v0.0.0-20230523155019-be7c1d8cd8cb // indirect
 	github.com/getlantern/tinywss v0.0.0-20211216020538-c10008a7d461 // indirect
 	github.com/getlantern/tlsdefaults v0.0.0-20171004213447-cf35cfd0b1b4 // indirect
-	github.com/getlantern/tlsdialer/v3 v3.0.4 // indirect
+	github.com/getlantern/tlsdialer/v3 v3.0.5 // indirect
 	github.com/getlantern/tlsmasq v0.4.7-0.20230302000139-6e479a593298 // indirect
-	github.com/getlantern/tlsresumption v0.0.0-20241203054031-f3e4eec291ad // indirect
+	github.com/getlantern/tlsresumption v0.0.0-20241210052744-a1c6aacc1d4d // indirect
 	github.com/getlantern/tlsutil v0.5.3 // indirect
 	github.com/getlantern/uuid v1.2.0 // indirect
 	github.com/getlantern/winsvc v0.0.0-20160824205134-8bb3a5dbcc1d // indirect
