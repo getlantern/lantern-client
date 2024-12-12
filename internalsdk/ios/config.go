@@ -73,6 +73,7 @@ func Configure(configFolderPath string, userID int, proToken, deviceID string, r
 		configFolderPath: configFolderPath,
 		hardcodedProxies: hardcodedProxies,
 		uc:               uc,
+		rt:               proxied.ParallelPreferChained(),
 	}
 	return cf.Configure(userID, proToken, refreshProxies)
 }
@@ -130,7 +131,7 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 		defer log.Debug("Set up fronting")
 		if frontingErr := cf.configureFronting(global, shortFrontedAvailableTimeout); frontingErr != nil {
 			log.Errorf("Unable to configure fronting on first try, update global config directly from GitHub and try again: %v", frontingErr)
-			global, globalUpdated = cf.updateGlobal(&http.Transport{}, global, globalEtag, "https://raw.githubusercontent.com/getlantern/lantern-binaries/main/cloud.yaml.gz")
+			global, globalUpdated = cf.updateGlobal(http.DefaultTransport, global, globalEtag, "https://raw.githubusercontent.com/getlantern/lantern-binaries/main/cloud.yaml.gz")
 			return cf.configureFronting(global, longFrontedAvailableTimeout)
 		}
 		return nil
