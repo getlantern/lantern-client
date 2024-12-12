@@ -15,7 +15,6 @@ import (
 	"time"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/fronted"
 	"github.com/getlantern/yaml"
 
 	commonconfig "github.com/getlantern/common/config"
@@ -28,8 +27,6 @@ import (
 	"context"
 
 	"github.com/getlantern/lantern-client/internalsdk/common"
-
-	tls "github.com/refraction-networking/utls"
 )
 
 const (
@@ -418,14 +415,8 @@ func (cf *configurer) configureFronting(global *config.Global, timeout time.Dura
 		return errors.New("Unable to read trusted CAs from global config, can't configure domain fronting: %v", err)
 	}
 
-	fronted, err := fronted.NewFronted(cf.fullPathTo("masquerade_cache"), tls.HelloChrome_102, config.DefaultFrontedProviderID)
-	if err != nil {
-		log.Errorf("Unable to configure fronted: %v", err)
-	}
-	proxied.SetFronted(fronted)
-	fronted.UpdateConfig(certs, global.Client.FrontedProviders())
+	proxied.OnNewFronts(certs, global.Client.FrontedProviders())
 
-	cf.rt = fronted
 	log.Debug("Configured fronting")
 	return nil
 }
