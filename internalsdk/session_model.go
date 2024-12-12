@@ -1068,7 +1068,8 @@ func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMe
 		return log.Errorf("Android Providers not found")
 	}
 	var paymentProviders []*protos.PaymentProviders
-	for index, provider := range providers {
+	for index := range providers {
+		provider := &providers[index]
 		paymentProviders = nil
 		path := pathPaymentMethods + ToString(int64(index))
 		for _, paymentMethod := range provider.Providers {
@@ -1111,12 +1112,13 @@ func (session *SessionModel) getStripePubKey() (string, error) {
 
 }
 
-func setPlans(m *baseModel, plans []protos.Plan) error {
+func setPlans(m *baseModel, allPlans []protos.Plan) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		for _, plans := range plans {
-			log.Debugf("Plans Values %+v", &plans)
+		for i := range allPlans {
+			plans := &allPlans[i]
+			log.Debugf("Plans Values %+v", plans)
 			pathPlanId := pathPlans + strings.Split(plans.Id, "-")[0]
-			err := pathdb.Put(tx, pathPlanId, &plans, "")
+			err := pathdb.Put(tx, pathPlanId, plans, "")
 			if err != nil {
 				log.Debugf("Error while addding price")
 				return err

@@ -16,7 +16,6 @@ import (
 	"github.com/getlantern/flashlight/v7/chained"
 	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/stats"
-	"github.com/getlantern/ipproxy"
 
 	"github.com/getlantern/lantern-client/internalsdk/common"
 )
@@ -117,7 +116,6 @@ type cw struct {
 	ipStack       io.WriteCloser
 	client        *iosClient
 	dialer        dialer.Dialer
-	ipp           ipproxy.Proxy
 	quotaTextPath string
 }
 
@@ -157,7 +155,6 @@ type iosClient struct {
 
 	memChecker      MemChecker
 	configDir       string
-	ipp             ipproxy.Proxy
 	mtu             int
 	capturedDNSHost string
 	realDNSHost     string
@@ -345,10 +342,6 @@ func (c *iosClient) loadDialers() ([]dialer.ProxyDialer, error) {
 	dialers := chained.CreateDialers(c.configDir, proxies, c.uc)
 	chained.TrackStatsFor(dialers, c.configDir)
 	return dialers, nil
-}
-
-func partialUserConfigFor(deviceID string) *UserConfig {
-	return userConfigFor(0, "", deviceID)
 }
 
 func userConfigFor(userID int, proToken, deviceID string) *UserConfig {
