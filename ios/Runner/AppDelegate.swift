@@ -3,6 +3,7 @@ import Internalsdk
 import SQLite
 import Toast_Swift
 import UIKit
+import app_links
 
 //know Issue
 //  CFPrefsPlistSource<0x28281e580> (Domain: group.getlantern.lantern, User: kCFPreferencesAnyUser, ByHost: Yes, Container: (null), Contents Need Refresh: Yes): Using kCFPreferencesAnyUser with a container is only allowed for System Containers,
@@ -33,6 +34,11 @@ import UIKit
     NSSetUncaughtExceptionHandler { exception in
       print(exception.reason)
       print(exception.callStackSymbols)
+    }
+    if let url = AppLinks.shared.getLink(launchOptions: launchOptions) {
+      // We have a link, propagate it to your Flutter app or not
+      AppLinks.shared.handleLink(url: url)
+      return true
     }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
