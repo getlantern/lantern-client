@@ -293,7 +293,6 @@ jobs:
           VERSION: ${{ env.version }}
         run: |
           make ${{ matrix.platform }}-${{ matrix.target }}-release
-          @echo "Generating debug symbols"
           make debug-symbols
 
       - name: Build Flutter app
