@@ -293,10 +293,6 @@ jobs:
           VERSION: ${{ env.version }}
         run: |
           make ${{ matrix.platform }}-${{ matrix.target }}-release
-          ls -ltr build/app/intermediates
-          ls -ltr build/app/intermediates/merged_native_libs
-          ls -ltr build/app/intermediates/merged_native_libs/prodPlay
-          make debug-symbols
 
       - name: Build Flutter app
         if: matrix.platform != 'windows' && matrix.platform != 'android'

@@ -200,14 +200,6 @@ tasks.register('zipDebugSymbols') {
     doLast {
         def flutterRootDir = rootDir.parentFile
         def debugSymbolsDir = file("${flutterRootDir}/build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib")
-        if (!debugSymbolsDir.exists()) {
-            debugSymbolsDir = file("${buildDir}/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib")
-        }
-
-        if (!debugSymbolsDir.exists()) {
-            throw new GradleException("Debug symbols directory not found: ${debugSymbolsDir}")
-        }
-
         def outputDir = file("${flutterRootDir}/build/outputs/debug-symbols")
         outputDir.mkdirs()
         copy {

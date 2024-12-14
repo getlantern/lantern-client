@@ -163,9 +163,6 @@ jobs:
           packageName: org.getlantern.lantern
           releaseFiles: lantern-installer.aab
           track: beta
-          debugSymbols: ${{ github.workspace }}/build/outputs/debug-symbols/debug-symbols.zip
-          mappingFile: ${{ github.workspace }}/build/app/outputs/mapping/prodPlay/mapping.txt
-
 
       - name: Upload Android App bundle to Play Store (production)
         if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
