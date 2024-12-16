@@ -3,8 +3,6 @@ name: Publish releases
 on:
   # Triggers the workflow on push when pushing to a version tag
   push:
-    branches:
-      - jigar/ios-8.0.3
     tags:
       - '*lantern-*'
   workflow_run:
@@ -69,7 +67,15 @@ jobs:
             vf = 'version-android-dev.txt'
             version = '9999.99.99-dev'
           else:
-            a = ref.strip().replace('refs/tags/lantern-', '')
+            tag = ref.strip()
+          if tag.startswith('refs/tags/android-lantern-'):
+            a = tag.replace('refs/tags/android-lantern-', '')
+          elif tag.startswith('refs/tags/ios-lantern-'):
+            a = tag.replace('refs/tags/ios-lantern-', '')
+          elif tag.startswith('refs/tags/desktop-lantern-'):
+            a = tag.replace('refs/tags/desktop-lantern-', '')
+          else:
+            a = tag.replace('refs/tags/lantern-', '')
             parts = a.split('-',1)
             suffix = parts[1] if len(parts)>1 else ''
             beta = 'beta' in suffix
