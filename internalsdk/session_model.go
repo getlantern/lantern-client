@@ -506,7 +506,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		ttlSeconds := arguments.Get("ttlSeconds").Int()
 		err := m.BandwidthUpdate(percent, mibUsed, mibAllowed, ttlSeconds)
 		if err != nil {
-			return nil, err
+			return nil, log.Errorf("Error while updating bandwidth %v", err)
 		}
 		return true, nil
 	case "isUserFirstTimeVisit":

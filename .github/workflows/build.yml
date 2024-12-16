@@ -104,7 +104,7 @@ jobs:
           p12-file-base64: ${{ secrets.MACOS_BNS_CERT }}
           p12-password: ${{ secrets.MACOS_BNS_CERT_PASS }}
 
-      - name: Install the Apple certificate and provisioning profile
+      - name: Install the Apple certificate and provisioning profile IOS
         if: matrix.platform == 'ios'
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
@@ -146,7 +146,7 @@ jobs:
           echo -n "$BUILD_TUNNEL_PROVISION_PROFILE_BASE64" | base64 --decode -o $TPP_PATH
           cp $TPP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
-            # Create ExportOptions.plist
+          # Create ExportOptions.plist
           echo "$EXPORT_OPTIONS" | base64 --decode > "$EXPORT_OPTIONS_PATH"
 
       - name: Setup Sentry CLI on Android
@@ -196,7 +196,6 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-
       - run: flutter --version
 
       - name: Setup JDK
@@ -298,7 +297,7 @@ jobs:
         if: matrix.platform == 'android' && matrix.target == 'aab'
         run: make debug-symbols
 
-      - name: Build Flutter app
+      - name: Build Flutter app (iOS,Linux,macOS)
         if: matrix.platform != 'windows' && matrix.platform != 'android'
         run: make ${{ matrix.platform }}-release
         env:
