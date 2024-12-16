@@ -21,8 +21,9 @@ import (
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/embeddedconfig"
-	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/proxied"
+
+	"github.com/getlantern/lantern-client/internalsdk/ios/geolookup"
 
 	"context"
 
