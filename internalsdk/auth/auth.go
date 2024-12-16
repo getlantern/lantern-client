@@ -51,6 +51,22 @@ type AuthClient interface {
 
 // NewClient creates a new instance of AuthClient
 func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
+	var httpClient *http.Client
+
+	if strings.HasSuffix(baseURL, common.APIBaseUrl) {
+		log.Debugf("Using Fronted proxy for auth client")
+		// iOS
+		// There is no use of chnained proxy in iOS since all requests will fail
+		httpClient = &http.Client{
+			Transport: proxied.Fronted(""),
+			Timeout:   30 * time.Second,
+		}
+	} else {
+		httpClient = &http.Client{
+			Transport: proxied.ChainedThenFronted(),
+			Timeout:   30 * time.Second,
+		}
+	}
 	rc := webclient.NewRESTClient(&webclient.Opts{
 		BaseURL: baseURL,
 		OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
@@ -59,10 +75,7 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 		},
 		// The Auth client uses an http.Client that first attempts to connect via chained proxies
 		// and then falls back to using domain fronting with the custom op name above
-		HttpClient: &http.Client{
-			Transport: proxied.ChainedThenFronted(),
-			Timeout:   30 * time.Second,
-		},
+		HttpClient: httpClient,
 		UserConfig: userConfig,
 	})
 	return &authClient{rc}

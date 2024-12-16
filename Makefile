@@ -449,7 +449,7 @@ set-version:
 	NEXT_BUILD=$$(($$CURRENT_BUILD + 1)); \
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
 
-ios: macos build-framework ffigen
+#ios: macos build-framework ffigen
 
 ios-release: set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS pubget
 	@echo "Flutter Clean"
