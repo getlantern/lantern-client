@@ -73,7 +73,7 @@ func Configure(configFolderPath string, userID int, proToken, deviceID string, r
 		configFolderPath: configFolderPath,
 		hardcodedProxies: hardcodedProxies,
 		uc:               uc,
-		rt:               proxied.ParallelPreferChained(),
+		rt:               proxied.Fronted("ios-configure"),
 	}
 	return cf.Configure(userID, proToken, refreshProxies)
 }
