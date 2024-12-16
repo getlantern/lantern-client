@@ -50,18 +50,18 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-latest
-            platform: macos
-          - os: windows-latest
-            platform: windows
-          - os: ubuntu-latest
-            platform: android
-            target: apk
-          - os: ubuntu-latest
-            platform: android
-            target: aab
-          - os: ubuntu-latest
-            platform: linux
+#          - os: macos-latest
+#            platform: macos
+#          - os: windows-latest
+#            platform: windows
+#          - os: ubuntu-latest
+#            platform: android
+#            target: apk
+#          - os: ubuntu-latest
+#            platform: android
+#            target: aab
+#          - os: ubuntu-latest
+#            platform: linux
           - os: macos-latest
             platform: ios
     runs-on: ${{ matrix.os }}
@@ -297,7 +297,11 @@ jobs:
         if: matrix.platform == 'android' && matrix.target == 'aab'
         run: make debug-symbols
 
-      - name: Build Flutter app (iOS,Linux,macOS)
+      - name: Setup Sentry CLI on IOS
+        if: matrix.platform == 'ios'
+        uses: mathieu-bour/setup-sentry-cli@v2
+
+      - name: Build Flutter app (iOS, Linux, macOS)
         if: matrix.platform != 'windows' && matrix.platform != 'android'
         run: make ${{ matrix.platform }}-release
         env:

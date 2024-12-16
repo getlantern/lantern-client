@@ -451,7 +451,7 @@ set-version:
 
 #ios: macos build-framework ffigen
 
-ios-release:require-version set-version pubget guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS
+ios-release:require-version set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS
 	@echo "Flutter Clean"
 	flutter clean
 	@echo "Flutter pub get"
