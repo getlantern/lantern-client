@@ -68,22 +68,33 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/leekchan/accounting v1.0.0
 	github.com/moul/http2curl v1.0.0
+	github.com/pterm/pterm v0.12.80
 	github.com/shopspring/decimal v1.4.0
 	github.com/stretchr/testify v1.9.0
-	golang.org/x/crypto v0.31.0
+	golang.org/x/crypto v0.28.0
 	golang.org/x/mobile v0.0.0-20241016134751-7ff83004ec2c
 	golang.org/x/net v0.30.0
-	golang.org/x/sys v0.28.0
+	golang.org/x/sys v0.27.0
 	google.golang.org/protobuf v1.35.2
 	nhooyr.io/websocket v1.8.17
 )
 
 require (
+	atomicgo.dev/cursor v0.2.0 // indirect
+	atomicgo.dev/keyboard v0.2.9 // indirect
+	atomicgo.dev/schedule v0.1.0 // indirect
 	github.com/alitto/pond/v2 v2.1.5 // indirect
 	github.com/cloudflare/circl v1.3.7 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
+	github.com/containerd/console v1.0.3 // indirect
 	github.com/getlantern/fronted v0.0.0-20241212194832-a55b6db2616e // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
+	github.com/gookit/color v1.5.4 // indirect
+	github.com/lithammer/fuzzysearch v1.1.8 // indirect
+	github.com/mattn/go-runewidth v0.0.16 // indirect
+	github.com/rivo/uniseg v0.4.4 // indirect
+	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
+	golang.org/x/term v0.26.0 // indirect
 )
 
 require (
@@ -332,8 +343,8 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240823005443-9b4947da3948 // indirect
 	golang.org/x/mod v0.21.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.9.0 // indirect
+	golang.org/x/text v0.20.0 // indirect
 	golang.org/x/time v0.6.0 // indirect
 	golang.org/x/tools v0.26.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240808171019-573a1156607a // indirect
