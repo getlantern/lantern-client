@@ -58,7 +58,7 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 		// iOS
 		// There is no use of chnained proxy in iOS since all requests will fail
 		httpClient = &http.Client{
-			Transport: proxied.Fronted(""),
+			Transport: proxied.Fronted("authClient-ios"),
 			Timeout:   30 * time.Second,
 		}
 	} else {

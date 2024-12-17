@@ -21,11 +21,15 @@ import UIKit
   private var lanternModel: LanternModel!
   private var vpnModel: VpnModel!
   private var messagingModel: MessagingModel!
+  private var vpnHelper: VpnHelper!
 
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+
+    // Init VPn helper as soon we can so it will start config methods on go
+
     initializeFlutterComponents()
     try! setupModels()
     try! setupAppComponents()
@@ -61,9 +65,17 @@ import UIKit
     }
     lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
     sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
+    vpnHelper = VpnHelper(
+      constants: Constants(process: .app),
+      fileManager: .default,
+      userDefaults: Constants.appGroupDefaults,
+      notificationCenter: .default,
+      flashlightManager: FlashlightManager.appDefault,
+      vpnManager: (isSimulator() ? MockVPNManager() : VPNManager.appDefault))
+
     vpnModel = try VpnModel(
       flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault,
-      sessionModel: sessionModel)
+      sessionModel: sessionModel, vpnHelper: vpnHelper)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
   }
 

@@ -73,7 +73,7 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
 	if common.Platform == "ios" {
 		//For iOS use fronted proxy chined proxy does not work with iOS at the moment
 		httpClient = &http.Client{
-			Transport: proxied.Fronted(""),
+			Transport: proxied.Fronted("proclient-ios"),
 			Timeout:   30 * time.Second,
 		}
 	} else {

@@ -10,13 +10,7 @@ import UIKit
 import UserNotifications
 
 class VpnHelper: NSObject {
-  static let shared = VpnHelper(
-    constants: Constants(process: .app),
-    fileManager: .default,
-    userDefaults: Constants.appGroupDefaults,
-    notificationCenter: .default,
-    flashlightManager: FlashlightManager.appDefault,
-    vpnManager: (isSimulator() ? MockVPNManager() : VPNManager.appDefault))
+
   // MARK: State
   static let didUpdateStateNotification = Notification.Name("Lantern.didUpdateState")
   enum VPNState: Equatable {
