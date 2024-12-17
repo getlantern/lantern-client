@@ -107,6 +107,17 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
 * `flutter pub get`
 * `flutter run --flavor prod` or if you are using android studio use desktop configuration
 
+#### As a Command-Line Application
+
+A command-line implementation of Lantern is defined in the `cli` directory.
+
+* `go build -o lantern-cli ./cli`
+* `./lantern-cli <arguments>` (run with `-h` or `--help` to see available arguments)
+
+You will likely want to specify the `-addr` argument (e.g. `-addr localhost:8080`) to define where the local proxy should be available.
+
+If you want to point at a specific remote proxy, consult `hit_proxy.bash` for an example on how to set up a config directory with specific proxy config.
+
 ### Running on emulators
 
 You can easily run emulators directly from the command line with the following:
