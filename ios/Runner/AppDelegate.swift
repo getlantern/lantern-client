@@ -27,9 +27,6 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-
-    // Init VPn helper as soon we can so it will start config methods on go
-
     initializeFlutterComponents()
     try! setupModels()
     try! setupAppComponents()
