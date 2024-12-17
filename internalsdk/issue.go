@@ -2,9 +2,11 @@ package internalsdk
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/ios/geolookup"
 )
 
 var issueMap = map[string]string{
@@ -34,6 +36,11 @@ func SendIssueReport(
 	if err != nil {
 		return err
 	}
+	var country string
+	if common.Platform == "ios" {
+		country = geolookup.GetCountry(5 * time.Second)
+		log.Debugf("Country For report issue %v", country)
+	}
 	return issue.SendReport(
 		&userConfig{&panickingSessionImpl{session}},
 		issueTypeInt,
@@ -45,5 +52,6 @@ func SendIssueReport(
 		model,
 		osVersion,
 		nil,
+		country,
 	)
 }
