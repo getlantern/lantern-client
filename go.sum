@@ -323,6 +323,8 @@ github.com/getlantern/fronted v0.0.0-20241212194832-a55b6db2616e h1:qk62Xhg+ha1s
 github.com/getlantern/fronted v0.0.0-20241212194832-a55b6db2616e/go.mod h1:UOynqDcVIlDMFk3sdUyHzNyY1cz4GHtJ+8qvWESHWhg=
 github.com/getlantern/geo v0.0.0-20241129152027-2fc88c10f91e h1:vpikNz6IzvEoqVYmiK5Uq+lE4TCzvMDqbZdxFbtGK1g=
 github.com/getlantern/geo v0.0.0-20241129152027-2fc88c10f91e/go.mod h1:RjQ0krF8NTCc5xo2Q1995/vZBnYg33h8svn15do7dLg=
+github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4 h1:Ju9l1RretVWJTNo2vpl/xAW8Dcuiyg5kJC6LRBpCigw=
+github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4/go.mod h1:4UNvIsawdB8WclVxqYv46Oe1zzWJ8wMhUO+q6tUzATo=
 github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 h1:RBKofGGMt2k6eGBwX8mky9qunjL+KnAp9JdzXjiRkRw=
 github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5/go.mod h1:kGHRXch95rnGLHjER/GhhFiHvfnqNz7KqWD9kGfATHY=
 github.com/getlantern/go-tun2socks v1.16.12-0.20201218023150-b68f09e5ae93 h1:CFLw2b6vgOmpxsRWRiTd46tiR6YKg2crIuTu4cINYcY=
