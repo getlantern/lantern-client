@@ -2,7 +2,7 @@ module github.com/getlantern/lantern-client
 
 go 1.22.4
 
-replace github.com/getlantern/flashlight/v7 => ../flashlight
+// replace github.com/getlantern/flashlight/v7 => ../flashlight
 
 // replace github.com/getlantern/ipproxy => ../ipproxy
 // replace github.com/getlantern/fronted => ../fronted
@@ -37,7 +37,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.165
+	github.com/getlantern/flashlight/v7 v7.6.168-0.20241217081327-6fc8e4f5835d
 	github.com/getlantern/fronted v0.0.0-20241212194832-a55b6db2616e
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
