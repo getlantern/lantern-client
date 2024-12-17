@@ -508,6 +508,11 @@ func (s *Settings) GetLanguage() string {
 	return s.getString(SNLanguage)
 }
 
+// Locale returns the user language
+func (s *Settings) Locale() string {
+	return s.getString(SNLanguage)
+}
+
 // SetReferralCode sets the user referral code
 func (s *Settings) SetReferralCode(referralCode string) {
 	s.setVal(SNReferralCode, referralCode)

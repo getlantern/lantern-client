@@ -188,6 +188,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if opts.Platform == "ios" {
 		go m.setupIosConfigure(opts.ConfigPath, int(userID), token, deviceID)
 	}
+	log.Debugf("SessionModel initialized")
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
 }
@@ -246,7 +247,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "setProUser":
-		err := setProUser(m.baseModel, arguments.Scalar().Bool())
+		err := m.SetProUser(arguments.Scalar().Bool())
 		if err != nil {
 			return nil, err
 		}
@@ -329,7 +330,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 	case "setUserIdAndToken":
 		userId := arguments.Get("userId").Int()
 		token := arguments.Get("token").String()
-		err := m.SetUserIdAndToken(int64(userId), token)
+		err := m.SetUserIDAndToken(int64(userId), token)
 		if err != nil {
 			return nil, err
 		}
@@ -739,12 +740,13 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 			return pathdb.Put(tx, pathIsFirstTime, true, "")
 		})
-		go retryCreateUser(ctx, m)
-	} else {
-		/// Get all user details if user is created
-		/// Since user creation is async so we need to wait for user to be created
-		/// so if user is not created no need to waste resources to call other api
-		/// all details wil be fetch by [GetUserData] method
+		
+	go m.proClient.RetryCreateUser(ctx, m, 10*time.Minute)
+
+
+	}
+	 else {
+		// Get all user details
 		err = m.userDetail(ctx)
 		if err != nil {
 			log.Error(err)
@@ -753,12 +755,11 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		go func() {
 			err = m.paymentMethods()
 			if err != nil {
-				log.Debugf("Plans V4 error: %v", err)
+				log.Debugf("Plans V3 error: %v", err)
 				// return err
 			}
 		}()
 	}
-
 	go checkSplitTunneling(m)
 	m.surveyModel, _ = NewSurveyModel(*m)
 	return nil
@@ -969,7 +970,7 @@ func setUserLevel(m *baseModel, userLevel string) error {
 		return pathdb.Put(tx, pathUserLevel, userLevel, "")
 	})
 }
-func setExpiration(m *baseModel, expiration int64) error {
+func (m *SessionModel) SetExpiration(expiration int64) error {
 	if expiration == 0 {
 		return nil
 	}
@@ -1066,7 +1067,8 @@ func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMe
 		return log.Errorf("Android Providers not found")
 	}
 	var paymentProviders []*protos.PaymentProviders
-	for index, provider := range providers {
+	for index := range providers {
+		provider := &providers[index]
 		paymentProviders = nil
 		path := pathPaymentMethods + ToString(int64(index))
 		for _, paymentMethod := range provider.Providers {
@@ -1109,12 +1111,13 @@ func (session *SessionModel) getStripePubKey() (string, error) {
 
 }
 
-func setPlans(m *baseModel, plans []protos.Plan) error {
+func setPlans(m *baseModel, allPlans []protos.Plan) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		for _, plans := range plans {
-			log.Debugf("Plans Values %+v", &plans)
+		for i := range allPlans {
+			plans := &allPlans[i]
+			log.Debugf("Plans Values %+v", plans)
 			pathPlanId := pathPlans + strings.Split(plans.Id, "-")[0]
-			err := pathdb.Put(tx, pathPlanId, &plans, "")
+			err := pathdb.Put(tx, pathPlanId, plans, "")
 			if err != nil {
 				log.Debugf("Error while addding price")
 				return err
@@ -1220,9 +1223,15 @@ func (m *SessionModel) IsProUser() (bool, error) {
 	return pathdb.Get[bool](m.db, pathProUser)
 }
 
-func setProUser(m *baseModel, isPro bool) error {
+func (m *SessionModel) SetProUser(isPro bool) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathProUser, isPro, "")
+	})
+}
+
+func (m *SessionModel) SetReferralCode(referralCode string) error {
+	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathReferralCode, referralCode, "")
 	})
 }
 
@@ -1322,6 +1331,10 @@ func (session *SessionModel) updateVpnPref(prefVPN bool) error {
 	})
 }
 
+func (m *SessionModel) GetUserFirstVisit() (bool, error) {
+	return pathdb.Get[bool](m.db, pathIsFirstTime)
+}
+
 func checkFirstTimeVisit(m *baseModel) (bool, error) {
 	firsttime, err := pathdb.Get[bool](m.db, pathIsFirstTime)
 	if err != nil {
@@ -1340,7 +1353,7 @@ func isShowFirstTimeUserVisit(m *baseModel) error {
 
 // Keep name as p1,p2 somehow is conflicting with objective c
 // p1 is userid and p2 is token
-func (m *SessionModel) SetUserIdAndToken(p1 int64, p2 string) error {
+func (m *SessionModel) SetUserIDAndToken(p1 int64, p2 string) error {
 	log.Debugf("Setting user id %v token %v", p1, p2)
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		if err := pathdb.Put[int64](tx, pathUserID, p1, ""); err != nil {
@@ -1356,13 +1369,11 @@ func (m *SessionModel) SetUserIdAndToken(p1 int64, p2 string) error {
 	})
 }
 
-// / This method is used to get user data mainly for the new user
-// / This method is called by user.go after user creation is done.
-func (m *SessionModel) GetUserData() error {
-	m.userDetail(context.Background())
+func (m *SessionModel) FetchUserData() error {
+	m.proClient.UserData(context.Background())
 	return m.paymentMethods()
-
 }
+
 func setResellerCode(m *baseModel, resellerCode string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathResellerCode, resellerCode, "")
@@ -1402,7 +1413,7 @@ func (session *SessionModel) userCreate(ctx context.Context) error {
 	}
 
 	//Save user id and token
-	err = session.SetUserIdAndToken(int64(user.UserId), user.Token)
+	err = session.SetUserIDAndToken(int64(user.UserId), user.Token)
 	if err != nil {
 		return err
 	}
@@ -1435,10 +1446,10 @@ func (session *SessionModel) userDetail(ctx context.Context) error {
 	if logged {
 		userDetail.Email = ""
 	}
-	return cacheUserDetail(session, userDetail)
+	return session.cacheUserDetail(userDetail)
 }
 
-func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
+func (session *SessionModel) cacheUserDetail(userDetail *protos.User) error {
 	if userDetail.Email != "" {
 		setEmail(session.baseModel, userDetail.Email)
 	}
@@ -1455,7 +1466,7 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 		return err
 	}
 
-	err = setExpiration(session.baseModel, userDetail.Expiration)
+	err = session.SetExpiration(userDetail.Expiration)
 	if err != nil {
 		return err
 	}
@@ -1485,15 +1496,15 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 	log.Debugf("First time visit %v", firstTime)
 	if userDetail.UserLevel == "pro" && firstTime {
 		log.Debugf("User is pro and first time")
-		setProUser(session.baseModel, true)
+		session.SetProUser(true)
 	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
 		log.Debugf("User is pro and not first time")
-		setProUser(session.baseModel, true)
+		session.SetProUser(true)
 	} else if userDetail.UserLevel == "pro" {
 		log.Debugf("user is pro and device not found")
-		setProUser(session.baseModel, true)
+		session.SetProUser(true)
 	} else {
-		setProUser(session.baseModel, false)
+		session.SetProUser(false)
 	}
 
 	//Store all device
@@ -1502,7 +1513,7 @@ func cacheUserDetail(session *SessionModel, userDetail *protos.User) error {
 		return err
 	}
 	log.Debugf("User caching successful: %+v", userDetail)
-	return session.SetUserIdAndToken(int64(userDetail.UserId), userDetail.Token)
+	return session.SetUserIDAndToken(int64(userDetail.UserId), userDetail.Token)
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {
@@ -1603,7 +1614,7 @@ func redeemResellerCode(m *SessionModel, email string, resellerCode string) erro
 	log.Debugf("Purchase Request response %v", purchase)
 
 	// Set user to pro
-	return setProUser(m.baseModel, true)
+	return m.SetProUser(true)
 }
 
 // Payment Methods
@@ -1626,7 +1637,7 @@ func submitApplePayPayment(m *SessionModel, email string, planId string, purchas
 		return errors.New("Purchase Request failed")
 	}
 	// Set user to pro
-	return setProUser(m.baseModel, true)
+	return m.SetProUser(true)
 }
 
 func restorePurchase(session *SessionModel, email string, code string, provider string) error {
@@ -1648,7 +1659,7 @@ func restorePurchase(session *SessionModel, email string, code string, provider 
 	if okResponse.Status != "ok" {
 		return errors.New("error restoring purchase")
 	}
-	setProUser(session.baseModel, true)
+	session.SetProUser(true)
 	return nil
 }
 
@@ -1670,7 +1681,7 @@ func submitGooglePlayPayment(m *SessionModel, email string, planId string, purch
 	log.Debugf("Purchase response %v", purchase)
 
 	// Set user to pro
-	return setProUser(m.baseModel, true)
+	return m.SetProUser(true)
 }
 
 func submitStripePlayPayment(m *SessionModel, email string, planId string, purchaseToken string) error {
@@ -1691,7 +1702,7 @@ func submitStripePlayPayment(m *SessionModel, email string, planId string, purch
 	}
 	log.Debugf("Purchase response %v", purchase)
 	// Set user to pro
-	return setProUser(m.baseModel, true)
+	return m.SetProUser(true)
 }
 
 func (session *SessionModel) applyRefCode(refCode string) error {
@@ -1731,7 +1742,7 @@ func testProviderRequest(session *SessionModel, email string, paymentProvider st
 	if err != nil {
 		return err
 	}
-	return setProUser(session.baseModel, true)
+	return session.SetProUser(true)
 }
 
 /// Auth APIS
@@ -1835,7 +1846,7 @@ func login(session *SessionModel, email string, password string) error {
 	// once login is successfull save user details
 	// but overide there email with login email
 	userData.Email = email
-	err = cacheUserDetail(session, userData)
+	err = session.cacheUserDetail(userData)
 	if err != nil {
 		log.Errorf("Error while caching user details %v", err)
 		return err
@@ -1883,7 +1894,7 @@ func deviceLimitFlow(session *SessionModel, login *protos.LoginResponse) error {
 	if err != nil {
 		return err
 	}
-	return session.SetUserIdAndToken(login.LegacyID, login.LegacyToken)
+	return session.SetUserIDAndToken(login.LegacyID, login.LegacyToken)
 }
 
 func startRecoveryByEmail(session *SessionModel, email string) error {
@@ -2259,7 +2270,7 @@ func linkCodeRedeem(session *SessionModel) error {
 		return err
 	}
 	log.Debugf("linkCodeRedeem response %+v", linkRedeemResponse)
-	err = session.SetUserIdAndToken(linkRedeemResponse.UserID, linkRedeemResponse.Token)
+	err = session.SetUserIDAndToken(linkRedeemResponse.UserID, linkRedeemResponse.Token)
 	if err != nil {
 		return log.Errorf("Error while setting user id and token %v", err)
 	}
@@ -2330,7 +2341,7 @@ func validateDeviceRecoveryCode(session *SessionModel, code string) error {
 		return err
 	}
 	log.Debugf("ValidateRecovery code response %v", linkResponse)
-	err = session.SetUserIdAndToken(linkResponse.UserID, linkResponse.Token)
+	err = session.SetUserIDAndToken(linkResponse.UserID, linkResponse.Token)
 	if err != nil {
 		return err
 	}

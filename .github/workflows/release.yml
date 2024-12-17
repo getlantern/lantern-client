@@ -141,19 +141,19 @@ jobs:
         with:
           name: android-aab-build
 
-      # - name: Download the IPA
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: Lantern.ipa
+      - name: Download the IPA
+        uses: actions/download-artifact@v4
+        with:
+          name: Lantern.ipa
 
-      # - name: Upload Lantern to TestFlight
-      #   uses: apple-actions/upload-testflight-build@v1
-      #   if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
-      #   with:
-      #     app-path: Lantern.ipa
-      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      - name: Upload Lantern to TestFlight
+        uses: apple-actions/upload-testflight-build@v1
+        if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+        with:
+          app-path: Lantern.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
       - name: Upload Android App bundle to Play Store (beta)
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
@@ -163,6 +163,8 @@ jobs:
           packageName: org.getlantern.lantern
           releaseFiles: lantern-installer.aab
           track: beta
+          debugSymbols: ${{ github.workspace }}/build/outputs/debug-symbols/debug-symbols.zip
+          mappingFile: ${{ github.workspace }}/build/app/outputs/mapping/prodPlay/mapping.txt
 
       - name: Upload Android App bundle to Play Store (production)
         if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
@@ -172,6 +174,8 @@ jobs:
           packageName: org.getlantern.lantern
           releaseFiles: lantern-installer.aab
           track: production
+          debugSymbols: ${{ github.workspace }}/build/outputs/debug-symbols/debug-symbols.zip
+          mappingFile: ${{ github.workspace }}/build/app/outputs/mapping/prodPlay/mapping.txt
 
       - name: Grant private modules access
         run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"

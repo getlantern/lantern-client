@@ -1,8 +1,10 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
+import 'package:lantern/core/service/app_purchase.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/replica/ui/utils.dart';

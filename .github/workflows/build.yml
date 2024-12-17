@@ -62,8 +62,8 @@ jobs:
             target: aab
           - os: ubuntu-latest
             platform: linux
-          # - os: macos-latest
-          #   platform: ios
+          - os: macos-latest
+            platform: ios
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -177,7 +177,7 @@ jobs:
         if: matrix.platform == 'macos'
         with:
           node-version: 18
-    
+
       - name: Install macOS dependencies
         if: matrix.platform == 'macos'
         run: |
@@ -289,12 +289,17 @@ jobs:
 
       - name: Build Flutter app (Android)
         if: matrix.platform == 'android'
-        run: make ${{ matrix.platform }}-${{ matrix.target }}-release
         env:
           VERSION: ${{ env.version }}
+        run: |
+          make ${{ matrix.platform }}-${{ matrix.target }}-release
+
+      - name: Generate debug symbols
+        if: matrix.platform == 'android' && matrix.target == 'aab'
+        run: make debug-symbols
 
       - name: Build Flutter app
-        if: matrix.platform != 'windows' && matrix.platform != 'android' 
+        if: matrix.platform != 'windows' && matrix.platform != 'android'
         run: make ${{ matrix.platform }}-release
         env:
           VERSION: ${{ env.version }}

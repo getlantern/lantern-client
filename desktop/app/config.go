@@ -3,15 +3,23 @@ package app
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"sync"
 
+	"github.com/getlantern/appdir"
+	"github.com/getlantern/flashlight/v7"
 	fcommon "github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+)
+
+const (
+	defaultConfigDirPerm = 0750
 )
 
 type configService struct {
@@ -53,7 +61,7 @@ func (s *configService) StartService(channel ws.UIChannel) (err error) {
 	return err
 }
 
-func (s *configService) sendConfigOptions(cfg ConfigOptions) {
+func (s *configService) sendConfigOptions(cfg *ConfigOptions) {
 	b, _ := json.Marshal(&cfg)
 	log.Debugf("Sending config options to client %s", string(b))
 	s.service.Out <- cfg
@@ -76,13 +84,13 @@ func (app *App) sendConfigOptions() {
 		return authEnabled
 	}
 	ctx := context.Background()
-	plans, _ := app.Plans(ctx)
-	paymentMethods, _ := app.GetPaymentMethods(ctx)
+	plans, _ := app.proClient.Plans(ctx)
+	paymentMethods, _ := app.proClient.DesktopPaymentMethods(ctx)
 	devices, _ := json.Marshal(app.devices())
 	log.Debugf("DEBUG: Devices: %s", string(devices))
 	log.Debugf("Expiration date: %s", app.settings.GetExpirationDate())
 
-	app.configService.sendConfigOptions(ConfigOptions{
+	app.configService.sendConfigOptions(&ConfigOptions{
 		DevelopmentMode:      common.IsDevEnvironment(),
 		AppVersion:           common.ApplicationVersion,
 		ReplicaAddr:          "",
@@ -106,4 +114,53 @@ func (app *App) sendConfigOptions() {
 			OnBoardingStatus:     false,
 		},
 	})
+}
+
+// initializeAppConfig initializes application configuration and flags based on environment variables
+func initializeAppConfig() (flashlight.Flags, error) {
+	flags := flashlight.ParseFlags()
+	if flags.Pprof {
+		go startPprof("localhost:6060")
+	}
+	parseBoolEnv := func(key string, defaultValue bool) bool {
+		val := os.Getenv(key)
+		parsedValue, err := strconv.ParseBool(val)
+		if err != nil {
+			return defaultValue
+		}
+		return parsedValue
+	}
+
+	// helper to resolve CONFIG_DIR to an absolute path
+	resolveConfigDir := func(dir string) string {
+		if filepath.IsAbs(dir) {
+			return dir
+		}
+		absPath, err := filepath.Abs(dir)
+		if err != nil {
+			return dir
+		}
+		return absPath
+	}
+
+	// Parse environment-based flags
+	stickyConfig := parseBoolEnv("STICKY_CONFIG", false)
+	readableConfig := parseBoolEnv("READABLE_CONFIG", true)
+	configDir := os.Getenv("CONFIG_DIR")
+	if configDir == "" {
+		configDir = appdir.General(common.DefaultAppName)
+		log.Debugf("CONFIG_DIR not set. Using default: %s", configDir)
+	} else {
+		configDir = resolveConfigDir(configDir)
+	}
+	if err := createDirIfNotExists(configDir, defaultConfigDirPerm); err != nil {
+		return flags, fmt.Errorf("unable to create config directory %s: %v", configDir, err)
+	}
+	flags.StickyConfig = stickyConfig
+	flags.ReadableConfig = readableConfig
+	flags.ConfigDir = configDir
+
+	log.Debugf("Config options: directory %v sticky %v readable %v", configDir,
+		stickyConfig, readableConfig)
+	return flags, nil
 }

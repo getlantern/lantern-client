@@ -154,21 +154,6 @@ extension PlansExtension on Plan {
   }
 }
 
-Future<void> openDesktopPaymentWebview(
-    {required BuildContext context,
-    required String redirectUrl,
-    required Providers provider,
-    VoidCallback? onClose}) async {
-  switch (Platform.operatingSystem) {
-    case 'macos':
-    case 'windows':
-      await AppBrowser.navigateWebview(context, redirectUrl);
-      break;
-    default:
-      await AppBrowser.openWebview(context, redirectUrl);
-  }
-}
-
 List<PathAndValue<PaymentMethod>> sortProviders(
   Iterable<PathAndValue<PaymentMethod>> paymentMethods,
 ) =>

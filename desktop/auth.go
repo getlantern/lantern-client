@@ -70,7 +70,7 @@ func signup(email *C.char, password *C.char) *C.char {
 	saveUserSalt(salt)
 	setting.SetEmailAddress(C.GoString(email))
 	a.SetUserLoggedIn(true)
-	a.FetchPaymentMethods(context.Background())
+	a.ProClient().FetchPaymentMethodsAndCache(context.Background())
 	return C.CString("true")
 }
 
@@ -129,7 +129,7 @@ func logout() *C.char {
 
 	clearLocalUserData()
 	// Create new user
-	if _, err := a.CreateUser(ctx); err != nil {
+	if _, err := a.ProClient().UserCreate(ctx); err != nil {
 		return sendError(err)
 	}
 	return C.CString("true")
@@ -253,7 +253,7 @@ func deleteAccount(password *C.char) *C.char {
 		A:     A.Bytes(),
 	}
 	log.Debugf("Delete Account request email %v A %v", lowerCaseEmail, A.Bytes())
-	srpB, err := a.AuthClient().LoginPrepare(context.Background(), prepareRequestBody)
+	srpB, err := a.AuthClient().LoginPrepare(ctx, prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -299,7 +299,7 @@ func deleteAccount(password *C.char) *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-	log.Debugf("Account Delted response %v", isAccountDeleted)
+	log.Debugf("Account deleted response %v", isAccountDeleted)
 
 	if !isAccountDeleted {
 		return sendError(log.Errorf("user_not_found error while deleting account %v", err))
@@ -310,8 +310,7 @@ func deleteAccount(password *C.char) *C.char {
 	// Set user id and token to nil
 	a.Settings().SetUserIDAndToken(0, "")
 	// Create new user
-	// Create new user
-	if _, err := a.CreateUser(ctx); err != nil {
+	if _, err := a.ProClient().UserCreate(ctx); err != nil {
 		return sendError(err)
 	}
 	return C.CString("true")

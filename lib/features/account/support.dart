@@ -99,7 +99,7 @@ class Support extends StatelessWidget {
 
   Future<void> faqTap(BuildContext context) async {
     try {
-      await AppBrowser.openWithSystemBrowser(faqUrl);
+      await openWithSystemBrowser(faqUrl);
     } catch (e) {
       showSnackbar(context: context, content: 'Fail to open link ');
     }
@@ -107,7 +107,7 @@ class Support extends StatelessWidget {
 
   Future<void> forumTap(BuildContext context) async {
     try {
-      await AppBrowser.openWithSystemBrowser(forumsUrl);
+      await openWithSystemBrowser(forumsUrl);
     } catch (e) {
       showSnackbar(context: context, content: 'Fail to open link ');
     }

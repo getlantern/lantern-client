@@ -88,13 +88,9 @@ class WebsocketSubscriber {
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
             final deviceLinkingCode = message['deviceLinkingCode'];
-            if (userLevel != null) {
-              if (userLevel == 'pro' || userStatus == 'active') {
-                sessionModel.proUserNotifier.value = true;
-              } else {
-                sessionModel.proUserNotifier.value = false;
-              }
-            }
+            final isLevelPro = userLevel != null && userLevel == 'pro';
+            final isStatusPro = userStatus != null && userStatus == 'active';
+            sessionModel.proUserNotifier.value = (isLevelPro || isStatusPro);
             if (deviceLinkingCode != null) {
               sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
             }
