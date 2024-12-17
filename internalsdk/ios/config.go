@@ -141,9 +141,8 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 	if frontingErr := setupFronting(); frontingErr != nil {
 		log.Errorf("Unable to configure fronting, sticking with embedded configuration: %v", err)
 	} else {
-		log.Debug("Refreshing geolookup")
-
 		go func() {
+			go geolookup.Refresh()
 			cf.uc.Country = geolookup.GetCountry(1 * time.Minute)
 			log.Debugf("Successful geolookup: country %s", cf.uc.Country)
 			cf.uc.AllowProbes = global.FeatureEnabled(
