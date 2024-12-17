@@ -1,3 +1,5 @@
+// Command cli provides a command-line implementation of the Lantern client. Run this command with
+// -h or --help to see all available arguments.
 package main
 
 import (
