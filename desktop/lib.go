@@ -80,8 +80,11 @@ func start() *C.char {
 	}
 	golog.SetPrepender(logging.Timestamped)
 
-	a = app.NewApp()
-	a.Run(context.Background())
+	a, err = app.NewApp()
+	if err != nil {
+		log.Fatal(err)
+	}
+	go a.Run(context.Background())
 
 	return C.CString("")
 }
