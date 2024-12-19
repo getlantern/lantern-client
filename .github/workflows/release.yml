@@ -69,37 +69,37 @@ jobs:
             vf = 'version-android-dev.txt'
             version = '9999.99.99-dev'
           else:
-          tag = ref.strip()
-          if tag.startswith('refs/tags/android-lantern-'):
-            a = tag.replace('refs/tags/android-lantern-', '')
-          elif tag.startswith('refs/tags/ios-lantern-'):
-            a = tag.replace('refs/tags/ios-lantern-', '')
-          elif tag.startswith('refs/tags/desktop-lantern-'):
-            a = tag.replace('refs/tags/desktop-lantern-', '')
-          else:
-            a = tag.replace('refs/tags/lantern-', '')
-            parts = a.split('-',1)
-            suffix = parts[1] if len(parts)>1 else ''
-            beta = 'beta' in suffix
-            internal = 'internal' in suffix
-            if beta:
-                li = 'lantern-installer-preview'
-                vf = 'version-android-beta.txt'
-                version = parts[0]
-            elif internal:
-                li = 'lantern-installer-internal'
-                vf = 'version-android-internal.txt'
-                version = parts[0]
+            tag = ref.strip()
+            if tag.startswith('refs/tags/android-lantern-'):
+              a = tag.replace('refs/tags/android-lantern-', '')
+            elif tag.startswith('refs/tags/ios-lantern-'):
+              a = tag.replace('refs/tags/ios-lantern-', '')
+            elif tag.startswith('refs/tags/desktop-lantern-'):
+              a = tag.replace('refs/tags/desktop-lantern-', '')
             else:
-                li = 'lantern-installer'
-                vf = 'version-android.txt'
-                version = a
-          print('Setting version to ' + version)
-          print('Setting prefix to ' + li)
-          print('Setting version file to ' + vf)
-          print(f'::set-output name=version::{version}')
-          print(f'::set-output name=prefix::{li}')
-          print(f'::set-output name=version_file::{vf}')
+              a = tag.replace('refs/tags/lantern-', '')
+              parts = a.split('-',1)
+              suffix = parts[1] if len(parts)>1 else ''
+              beta = 'beta' in suffix
+              internal = 'internal' in suffix
+              if beta:
+                  li = 'lantern-installer-preview'
+                  vf = 'version-android-beta.txt'
+                  version = parts[0]
+              elif internal:
+                  li = 'lantern-installer-internal'
+                  vf = 'version-android-internal.txt'
+                  version = parts[0]
+              else:
+                  li = 'lantern-installer'
+                  vf = 'version-android.txt'
+                  version = a
+            print('Setting version to ' + version)
+            print('Setting prefix to ' + li)
+            print('Setting version file to ' + vf)
+            print(f'::set-output name=version::{version}')
+            print(f'::set-output name=prefix::{li}')
+            print(f'::set-output name=version_file::{vf}')
 
   build:
     uses: ./.github/workflows/build.yml
