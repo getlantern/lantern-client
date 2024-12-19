@@ -94,12 +94,12 @@ jobs:
                   li = 'lantern-installer'
                   vf = 'version-android.txt'
                   version = a
-            print('Setting version to ' + version)
-            print('Setting prefix to ' + li)
-            print('Setting version file to ' + vf)
-            print(f'::set-output name=version::{version}')
-            print(f'::set-output name=prefix::{li}')
-            print(f'::set-output name=version_file::{vf}')
+          print('Setting version to ' + version)
+          print('Setting prefix to ' + li)
+          print('Setting version file to ' + vf)
+          print(f'::set-output name=version::{version}')
+          print(f'::set-output name=prefix::{li}')
+          print(f'::set-output name=version_file::{vf}')
 
   build:
     uses: ./.github/workflows/build.yml
