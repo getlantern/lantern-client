@@ -16,7 +16,6 @@ import (
 	"github.com/getlantern/flashlight/v7/chained"
 	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/stats"
-	"github.com/getlantern/ipproxy"
 
 	"github.com/getlantern/lantern-client/internalsdk/common"
 )
@@ -25,8 +24,6 @@ const (
 	maxDNSGrabAge = 1 * time.Hour // this doesn't need to be long because our fake DNS records have a TTL of only 1 second. We use a smaller value than on Android to be conservative with memory usag.
 
 	quotaSaveInterval            = 1 * time.Minute
-	shortFrontedAvailableTimeout = 30 * time.Second
-	longFrontedAvailableTimeout  = 5 * time.Minute
 
 	logMemoryInterval = 5 * time.Second
 	forceGCInterval   = 250 * time.Millisecond
@@ -117,7 +114,6 @@ type cw struct {
 	ipStack       io.WriteCloser
 	client        *iosClient
 	dialer        dialer.Dialer
-	ipp           ipproxy.Proxy
 	quotaTextPath string
 }
 
@@ -157,7 +153,6 @@ type iosClient struct {
 
 	memChecker      MemChecker
 	configDir       string
-	ipp             ipproxy.Proxy
 	mtu             int
 	capturedDNSHost string
 	realDNSHost     string
@@ -345,10 +340,6 @@ func (c *iosClient) loadDialers() ([]dialer.ProxyDialer, error) {
 	dialers := chained.CreateDialers(c.configDir, proxies, c.uc)
 	chained.TrackStatsFor(dialers, c.configDir)
 	return dialers, nil
-}
-
-func partialUserConfigFor(deviceID string) *UserConfig {
-	return userConfigFor(0, "", deviceID)
 }
 
 func userConfigFor(userID int, proToken, deviceID string) *UserConfig {

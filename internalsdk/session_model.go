@@ -208,7 +208,7 @@ func (m *SessionModel) setupIosConfigure(configPath string, userId int, token st
 					return
 				}
 				m.iosConfigurer = global
-				log.Debugf("Found global config IOS configure done %v", global)
+				log.Debug("Found global config IOS configure done")
 				return // Exit the loop after success
 			}
 			log.Debugf("global config not available, retrying...")
@@ -506,7 +506,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		ttlSeconds := arguments.Get("ttlSeconds").Int()
 		err := m.BandwidthUpdate(percent, mibUsed, mibAllowed, ttlSeconds)
 		if err != nil {
-			return nil, err
+			return nil, log.Errorf("Error while updating bandwidth %v", err)
 		}
 		return true, nil
 	case "isUserFirstTimeVisit":
@@ -1068,7 +1068,8 @@ func storePaymentProviders(m *SessionModel, paymentMethodsResponse pro.PaymentMe
 		return log.Errorf("Android Providers not found")
 	}
 	var paymentProviders []*protos.PaymentProviders
-	for index, provider := range providers {
+	for index := range providers {
+		provider := &providers[index]
 		paymentProviders = nil
 		path := pathPaymentMethods + ToString(int64(index))
 		for _, paymentMethod := range provider.Providers {
@@ -1111,12 +1112,13 @@ func (session *SessionModel) getStripePubKey() (string, error) {
 
 }
 
-func setPlans(m *baseModel, plans []protos.Plan) error {
+func setPlans(m *baseModel, allPlans []protos.Plan) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		for _, plans := range plans {
-			log.Debugf("Plans Values %+v", &plans)
+		for i := range allPlans {
+			plans := &allPlans[i]
+			log.Debugf("Plans Values %+v", plans)
 			pathPlanId := pathPlans + strings.Split(plans.Id, "-")[0]
-			err := pathdb.Put(tx, pathPlanId, &plans, "")
+			err := pathdb.Put(tx, pathPlanId, plans, "")
 			if err != nil {
 				log.Debugf("Error while addding price")
 				return err
