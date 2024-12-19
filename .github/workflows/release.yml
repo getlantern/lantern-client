@@ -69,7 +69,7 @@ jobs:
             vf = 'version-android-dev.txt'
             version = '9999.99.99-dev'
           else:
-            tag = ref.strip()
+          tag = ref.strip()
           if tag.startswith('refs/tags/android-lantern-'):
             a = tag.replace('refs/tags/android-lantern-', '')
           elif tag.startswith('refs/tags/ios-lantern-'):
