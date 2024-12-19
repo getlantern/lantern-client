@@ -451,11 +451,9 @@ set-version:
 #ios: macos build-framework ffigen
 
 ios-release:require-version set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS
-	@echo "Flutter Clean"
 	flutter clean
-	@echo "Flutter pub get"
 	flutter pub get
-	@echo "Creating the Flutter iOS build..."
+	@echo "Creating the Flutter iOS build.set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS.."
 	flutter build ipa --flavor prod --release --export-options-plist ./ExportOptions.plist
 	@echo "Uploading debug symbols to Sentry..."
 	export SENTRY_LOG_LEVEL=info
@@ -696,18 +694,19 @@ sourcedump: require-version
 
 ios: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
-	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
-	@echo "generating Ios.xcFramework"
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	@rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
+	@echo "Generating Ios.xcFramework"
+	@go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
     		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
-	@echo "moving framework"
-	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
-	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+	@echo "Moving framework"
+	@mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
+	@mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+	@echo "Framework generated"
 
 build-release-framework: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
