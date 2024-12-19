@@ -45,7 +45,7 @@ var (
 	DFBaseUrl  = "df.iantem.io/api/v1"
 	APIBaseUrl = "iantem.io/api/v1"
 
-	log = golog.LoggerFor("flashlight.common")
+	log = golog.LoggerFor("internalsdk.common")
 
 	forceAds bool
 )

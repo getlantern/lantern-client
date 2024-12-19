@@ -9,8 +9,8 @@ class PlanCard extends StatefulWidget {
   const PlanCard({
     required this.plan,
     required this.isPro,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<PlanCard> createState() => _PlanCardState();

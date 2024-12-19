@@ -24,8 +24,6 @@ const (
 	maxDNSGrabAge = 1 * time.Hour // this doesn't need to be long because our fake DNS records have a TTL of only 1 second. We use a smaller value than on Android to be conservative with memory usag.
 
 	quotaSaveInterval            = 1 * time.Minute
-	shortFrontedAvailableTimeout = 30 * time.Second
-	longFrontedAvailableTimeout  = 5 * time.Minute
 
 	logMemoryInterval = 5 * time.Second
 	forceGCInterval   = 250 * time.Millisecond

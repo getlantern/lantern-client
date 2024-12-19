@@ -190,11 +190,11 @@ class VPNManager: VPNBase {
     _ completion: @escaping (Result<Void, VPNManagerError>) -> Void
   ) {
     provider.saveToPreferences { saveError in
-      if let _ = saveError {
+      if saveError != nil {
         completion(.failure(.savingProviderFailed))
       } else {
         provider.loadFromPreferences { loadError in
-          if let _ = loadError {
+          if loadError != nil {
             completion(.failure(.loadingProviderFailed))
           } else {
             completion(.success(()))
