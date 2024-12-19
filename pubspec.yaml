@@ -130,7 +130,7 @@ dependencies:
   # Generate bindings to native libraries
   ffi: ^2.1.3
   # Deeplink handling
-  app_links: ^6.3.2
+  app_links: ^6.3.3
   # Service Locator
   get_it: ^8.0.2
   #Loading
