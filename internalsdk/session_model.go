@@ -208,7 +208,7 @@ func (m *SessionModel) setupIosConfigure(configPath string, userId int, token st
 					return
 				}
 				m.iosConfigurer = global
-				log.Debugf("Found global config IOS configure done %v", global)
+				log.Debug("Found global config IOS configure done")
 				return // Exit the loop after success
 			}
 			log.Debugf("global config not available, retrying...")
