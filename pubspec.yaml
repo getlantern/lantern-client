@@ -132,7 +132,7 @@ dependencies:
   # Deeplink handling
   app_links: ^6.3.3
   # Service Locator
-  get_it: ^8.0.2
+  get_it: ^8.0.3
   #Loading
   animated_loading_border: ^0.0.2
   shimmer: ^3.0.0

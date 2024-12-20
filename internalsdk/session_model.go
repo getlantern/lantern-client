@@ -186,11 +186,28 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
-		go m.setupIosConfigure(opts.ConfigPath, int(userID), token, deviceID)
+		go m.iosInit(opts.ConfigPath, int(userID), token, deviceID)
 	}
 	log.Debugf("SessionModel initialized")
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
+}
+
+// this method initializes the ios configuration for the session model
+// also this method check for geoLookup
+func (m *SessionModel) iosInit(configPath string, userId int, token string, deviceId string) error {
+	go m.setupIosConfigure(configPath, userId, token, deviceId)
+	// go iosGeoLookup.Refresh()
+	// go func() {
+	// 	country := iosGeoLookup.GetCountry(5 * time.Second)
+	// 	log.Debugf("Getting country for user %v", country)
+	// 	m.SetCountry(country)
+	// 	// if <-iosGeoLookup.OnRefresh() {
+	// 	// 	//get the country for the user
+
+	// 	// }
+	// }()
+	return nil
 }
 
 // setupIosConfigure sets up the iOS configuration for the session model.
@@ -898,7 +915,6 @@ func (m *SessionModel) GetToken() (string, error) {
 }
 
 func (m *SessionModel) SetCountry(country string) error {
-	//Find better way to do it
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathGeoCountryCode, country, "")
 	})
