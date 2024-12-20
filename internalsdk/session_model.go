@@ -19,6 +19,7 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/ios"
+	iosGeoLookup "github.com/getlantern/lantern-client/internalsdk/ios/geolookup"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
@@ -198,15 +199,14 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 func (m *SessionModel) iosInit(configPath string, userId int, token string, deviceId string) error {
 	go m.setupIosConfigure(configPath, userId, token, deviceId)
 	// go iosGeoLookup.Refresh()
-	// go func() {
-	// 	country := iosGeoLookup.GetCountry(5 * time.Second)
-	// 	log.Debugf("Getting country for user %v", country)
-	// 	m.SetCountry(country)
-	// 	// if <-iosGeoLookup.OnRefresh() {
-	// 	// 	//get the country for the user
-
-	// 	// }
-	// }()
+	go func() {
+		if <-iosGeoLookup.OnRefresh() {
+			country := iosGeoLookup.GetCountry(5 * time.Second)
+			//get the country for the user
+			log.Debugf("Getting country for user %v", country)
+			m.SetCountry(country)
+		}
+	}()
 	return nil
 }
 
@@ -1568,6 +1568,7 @@ func checkAdsEnabled(session *SessionModel) error {
 		return err
 	}
 	if isPro {
+		log.Debug("User is pro ads should be disabled")
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 			return pathdb.Put[string](tx, pathShowAds, "", "")
 		})
