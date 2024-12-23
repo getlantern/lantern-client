@@ -132,7 +132,7 @@ dependencies:
   # Deeplink handling
   app_links: ^6.3.3
   # Service Locator
-  get_it: ^8.0.3
+  get_it: ^7.7.0
   #Loading
   animated_loading_border: ^0.0.2
   shimmer: ^3.0.0
@@ -149,6 +149,7 @@ dev_dependencies:
   mockito: ^5.4.4
   auto_route_generator: ^9.0.0
   build_runner: ^2.4.13
+  msix: ^3.16.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -207,3 +208,15 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+#  Windows related setup
+msix_config:
+  display_name: Lantern
+  publisher_display_name: lantern
+  identity_name: org.getlantern.lantern
+  msix_version: 3.0.0.0
+  protocol_activation: https
+  app_uri_handler_hosts: www.lantern.io, lantern.io # Add the app uri handler hosts. You
+  logo_path: windows/runner/resources/app_icon.ico
+  capabilities: internetClient, internetClientServer, privateNetworkClientServer
