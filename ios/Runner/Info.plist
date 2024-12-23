@@ -19,19 +19,19 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>8.0.3</string>
+	<string>8.0.4</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>51</string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
+	<string>52</string>
 	<key>CURRENT_SCHEME_NAME</key>
 	<string>$(CURRENT_SCHEME_NAME)</string>
 	<key>FlutterDeepLinkingEnabled</key>
 	<false/>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-2685698271254859~9283700921</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
