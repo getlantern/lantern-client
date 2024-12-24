@@ -19,6 +19,7 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/ios"
+	iosGeoLookup "github.com/getlantern/lantern-client/internalsdk/ios/geolookup"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/pathdb"
@@ -186,11 +187,27 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
-		go m.setupIosConfigure(opts.ConfigPath, int(userID), token, deviceID)
+		go m.iosInit(opts.ConfigPath, int(userID), token, deviceID)
 	}
 	log.Debugf("SessionModel initialized")
 	go m.initSessionModel(context.Background(), opts)
 	return m, nil
+}
+
+// this method initializes the ios configuration for the session model
+// also this method check for geoLookup
+func (m *SessionModel) iosInit(configPath string, userId int, token string, deviceId string) error {
+	go m.setupIosConfigure(configPath, userId, token, deviceId)
+	// go iosGeoLookup.Refresh()
+	go func() {
+		if <-iosGeoLookup.OnRefresh() {
+			country := iosGeoLookup.GetCountry(5 * time.Second)
+			//get the country for the user
+			log.Debugf("Getting country for user %v", country)
+			m.SetCountry(country)
+		}
+	}()
+	return nil
 }
 
 // setupIosConfigure sets up the iOS configuration for the session model.
@@ -208,7 +225,7 @@ func (m *SessionModel) setupIosConfigure(configPath string, userId int, token st
 					return
 				}
 				m.iosConfigurer = global
-				log.Debugf("Found global config IOS configure done %v", global)
+				log.Debug("Found global config IOS configure done")
 				return // Exit the loop after success
 			}
 			log.Debugf("global config not available, retrying...")
@@ -506,7 +523,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		ttlSeconds := arguments.Get("ttlSeconds").Int()
 		err := m.BandwidthUpdate(percent, mibUsed, mibAllowed, ttlSeconds)
 		if err != nil {
-			return nil, err
+			return nil, log.Errorf("Error while updating bandwidth %v", err)
 		}
 		return true, nil
 	case "isUserFirstTimeVisit":
@@ -897,7 +914,6 @@ func (m *SessionModel) GetToken() (string, error) {
 }
 
 func (m *SessionModel) SetCountry(country string) error {
-	//Find better way to do it
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathGeoCountryCode, country, "")
 	})
@@ -1558,6 +1574,7 @@ func checkAdsEnabled(session *SessionModel) error {
 		return err
 	}
 	if isPro {
+		log.Debug("User is pro ads should be disabled")
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 			return pathdb.Put[string](tx, pathShowAds, "", "")
 		})

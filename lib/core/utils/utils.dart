@@ -189,10 +189,10 @@ Plan planFromJson(Map<String, dynamic> item) {
 }
 
 Map<String, PaymentMethod> paymentMethodsFromJson(dynamic json) {
-  if (json == null) {
+  if(json == null) {
     return {};
   }
-  List items = json as List;
+  List<dynamic> items = json as List<dynamic>;
   final paymentMethods = Map<String, PaymentMethod>();
   items.forEach((value) {
     final json = jsonDecode(jsonEncode(value));

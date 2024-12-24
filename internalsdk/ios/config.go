@@ -106,7 +106,7 @@ type UserConfig struct {
 func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
 	// Log the full method run time.
 	defer func(start time.Time) {
-		log.Debugf("Configured completed in %v", time.Since(start))
+		log.Debugf("Configured completed in %v seconds", time.Since(start).Seconds())
 	}(time.Now())
 	result := &ConfigResult{}
 	if err := cf.writeUserConfig(); err != nil {
@@ -128,12 +128,13 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 	var globalUpdated, proxiesUpdated bool
 
 	setupFronting := func() error {
+		start := time.Now()
 		log.Debug("Setting up fronting")
-		defer log.Debug("Set up fronting")
-		if frontingErr := cf.configureFronting(global, shortFrontedAvailableTimeout); frontingErr != nil {
+		defer log.Debugf("Setting up fronting completed in %v", time.Since(start).Seconds())
+		if frontingErr := cf.configureFronting(global); frontingErr != nil {
 			log.Errorf("Unable to configure fronting on first try, update global config directly from GitHub and try again: %v", frontingErr)
 			global, globalUpdated = cf.updateGlobal(http.DefaultTransport, global, globalEtag, "https://raw.githubusercontent.com/getlantern/lantern-binaries/main/cloud.yaml.gz")
-			return cf.configureFronting(global, longFrontedAvailableTimeout)
+			return cf.configureFronting(global)
 		}
 		return nil
 	}
@@ -158,10 +159,11 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 				log.Errorf("Unable to save updated UserConfig with country and allow probes: %v", err)
 			}
 		}()
-
+		globalStart := time.Now()
 		log.Debug("Updating global config")
 		global, globalUpdated = cf.updateGlobal(cf.rt, global, globalEtag, "https://globalconfig.flashlightproxy.com/global.yaml.gz")
 		log.Debug("Updated global config")
+		log.Debugf("Global config update completed in %v seconds", time.Since(globalStart).Seconds())
 		if refreshProxies {
 			log.Debug("Refreshing proxies")
 			proxies, proxiesUpdated = cf.updateProxies(proxies, proxiesEtag)
@@ -409,7 +411,7 @@ func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name string, etag st
 	return bytes, newEtag, nil
 }
 
-func (cf *configurer) configureFronting(global *config.Global, timeout time.Duration) error {
+func (cf *configurer) configureFronting(global *config.Global) error {
 	log.Debug("Configuring fronting")
 	certs, err := global.TrustedCACerts()
 	if err != nil {

@@ -423,6 +423,7 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 		osVersion,
 		"",
 		nil,
+		"",
 	)
 	if err != nil {
 		return sendError(err)

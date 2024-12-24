@@ -1,8 +1,8 @@
 import Flutter
 import Internalsdk
 import SQLite
-import Toast_Swift
 import UIKit
+import app_links
 
 //know Issue
 //  CFPrefsPlistSource<0x28281e580> (Domain: group.getlantern.lantern, User: kCFPreferencesAnyUser, ByHost: Yes, Container: (null), Contents Need Refresh: Yes): Using kCFPreferencesAnyUser with a container is only allowed for System Containers,
@@ -21,6 +21,7 @@ import UIKit
   private var lanternModel: LanternModel!
   private var vpnModel: VpnModel!
   private var messagingModel: MessagingModel!
+  private var vpnHelper: VpnHelper!
 
   override func application(
     _ application: UIApplication,
@@ -33,6 +34,11 @@ import UIKit
     NSSetUncaughtExceptionHandler { exception in
       print(exception.reason)
       print(exception.callStackSymbols)
+    }
+    if let url = AppLinks.shared.getLink(launchOptions: launchOptions) {
+      // We have a link, propagate it to your Flutter app or not
+      AppLinks.shared.handleLink(url: url)
+      return true
     }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
@@ -61,9 +67,17 @@ import UIKit
     }
     lanternModel = LanternModel(flutterBinary: self.flutterbinaryMessenger)
     sessionModel = try SessionModel(flutterBinary: self.flutterbinaryMessenger)
+    vpnHelper = VpnHelper(
+      constants: Constants(process: .app),
+      fileManager: .default,
+      userDefaults: Constants.appGroupDefaults,
+      notificationCenter: .default,
+      flashlightManager: FlashlightManager.appDefault,
+      vpnManager: (isSimulator() ? MockVPNManager() : VPNManager.appDefault))
+
     vpnModel = try VpnModel(
       flutterBinary: self.flutterbinaryMessenger, vpnBase: VPNManager.appDefault,
-      sessionModel: sessionModel)
+      sessionModel: sessionModel, vpnHelper: vpnHelper)
     messagingModel = try MessagingModel(flutterBinary: flutterbinaryMessenger)
   }
 

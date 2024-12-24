@@ -69,6 +69,19 @@ type ProClient interface {
 
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
+	var httpClient *http.Client
+	if common.Platform == "ios" {
+		//For iOS use fronted proxy chined proxy does not work with iOS at the moment
+		httpClient = &http.Client{
+			Transport: proxied.Fronted("proclient-ios"),
+			Timeout:   30 * time.Second,
+		}
+	} else {
+		httpClient = &http.Client{
+			Transport: proxied.ParallelForIdempotent(),
+			Timeout:   30 * time.Second,
+		}
+	}
 	return &proClient{
 		userConfig:    userConfig,
 		backoffRunner: &backoffRunner{},
@@ -76,10 +89,7 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
 			// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
 			// attempts to send requests through both chained and direct fronted routes in parallel
 			// for HEAD and GET requests and ChainedThenFronted for all others.
-			HttpClient: &http.Client{
-				Transport: proxied.ParallelForIdempotent(),
-				Timeout:   30 * time.Second,
-			},
+			HttpClient: httpClient,
 			OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
 				prepareProRequest(req, common.ProAPIHost, userConfig())
 				return nil
