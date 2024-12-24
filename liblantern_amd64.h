@@ -75,68 +75,68 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern char* isUserFirstTime();
-extern void setFirstTimeVisit();
-extern char* isUserLoggedIn();
-extern char* signup(char* email, char* password);
-extern char* login(char* email, char* password);
-extern char* logout();
+extern __declspec(dllexport) char* isUserFirstTime();
+extern __declspec(dllexport) void setFirstTimeVisit();
+extern __declspec(dllexport) char* isUserLoggedIn();
+extern __declspec(dllexport) char* signup(char* email, char* password);
+extern __declspec(dllexport) char* login(char* email, char* password);
+extern __declspec(dllexport) char* logout();
 
 // Send recovery code to user email
 //
-extern char* startRecoveryByEmail(char* email);
+extern __declspec(dllexport) char* startRecoveryByEmail(char* email);
 
 // Complete recovery by email
 //
-extern char* completeRecoveryByEmail(char* email, char* code, char* password);
+extern __declspec(dllexport) char* completeRecoveryByEmail(char* email, char* code, char* password);
 
 // // This will validate code send by server
 //
-extern char* validateRecoveryByEmail(char* email, char* code);
+extern __declspec(dllexport) char* validateRecoveryByEmail(char* email, char* code);
 
 // This will delete user accoutn and creates new user
 //
-extern char* deleteAccount(char* password);
-extern char* start();
-extern char* sysProxyOn();
-extern void sysProxyOff();
-extern char* websocketAddr();
-extern void setProxyAll(char* value);
+extern __declspec(dllexport) char* deleteAccount(char* password);
+extern __declspec(dllexport) char* start();
+extern __declspec(dllexport) char* sysProxyOn();
+extern __declspec(dllexport) void sysProxyOff();
+extern __declspec(dllexport) char* websocketAddr();
+extern __declspec(dllexport) void setProxyAll(char* value);
 
 // this method is reposible for checking if the user has updated plan or bought plans
 //
-extern char* hasPlanUpdatedOrBuy();
-extern char* applyRef(char* referralCode);
-extern char* devices();
-extern char* approveDevice(char* code);
-extern char* removeDevice(char* deviceId);
-extern char* userLinkValidate(char* code);
-extern char* expiryDate();
-extern char* userData();
-extern char* emailAddress();
-extern char* emailExists(char* email);
-extern char* testProviderRequest(char* email, char* paymentProvider, char* plan);
+extern __declspec(dllexport) char* hasPlanUpdatedOrBuy();
+extern __declspec(dllexport) char* applyRef(char* referralCode);
+extern __declspec(dllexport) char* devices();
+extern __declspec(dllexport) char* approveDevice(char* code);
+extern __declspec(dllexport) char* removeDevice(char* deviceId);
+extern __declspec(dllexport) char* userLinkValidate(char* code);
+extern __declspec(dllexport) char* expiryDate();
+extern __declspec(dllexport) char* userData();
+extern __declspec(dllexport) char* emailAddress();
+extern __declspec(dllexport) char* emailExists(char* email);
+extern __declspec(dllexport) char* testProviderRequest(char* email, char* paymentProvider, char* plan);
 
 // The function returns two C strings: the first represents success, and the second represents an error.
 // If the redemption is successful, the first string contains "true", and the second string is nil.
 // If an error occurs during redemption, the first string is nil, and the second string contains the error message.
 //
-extern char* redeemResellerCode(char* email, char* currency, char* deviceName, char* resellerCode);
-extern char* referral();
-extern char* myDeviceId();
-extern char* lang();
-extern void setSelectLang(char* lang);
-extern char* country();
-extern char* sdkVersion();
-extern char* hasSucceedingProxy();
-extern char* onBoardingStatus();
-extern char* acceptedTermsVersion();
-extern char* proUser();
-extern char* deviceLinkingCode();
-extern char* paymentRedirect(char* planID, char* currency, char* provider, char* email, char* deviceName);
-extern void exitApp();
-extern char* reportIssue(char* email, char* issueType, char* description);
-extern char* checkUpdates();
+extern __declspec(dllexport) char* redeemResellerCode(char* email, char* currency, char* deviceName, char* resellerCode);
+extern __declspec(dllexport) char* referral();
+extern __declspec(dllexport) char* myDeviceId();
+extern __declspec(dllexport) char* lang();
+extern __declspec(dllexport) void setSelectLang(char* lang);
+extern __declspec(dllexport) char* country();
+extern __declspec(dllexport) char* sdkVersion();
+extern __declspec(dllexport) char* hasSucceedingProxy();
+extern __declspec(dllexport) char* onBoardingStatus();
+extern __declspec(dllexport) char* acceptedTermsVersion();
+extern __declspec(dllexport) char* proUser();
+extern __declspec(dllexport) char* deviceLinkingCode();
+extern __declspec(dllexport) char* paymentRedirect(char* planID, char* currency, char* provider, char* email, char* deviceName);
+extern __declspec(dllexport) void exitApp();
+extern __declspec(dllexport) char* reportIssue(char* email, char* issueType, char* description);
+extern __declspec(dllexport) char* checkUpdates();
 
 #ifdef __cplusplus
 }
