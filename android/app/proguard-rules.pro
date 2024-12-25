@@ -219,8 +219,3 @@
 ##---------------Begin: proguard configuration for Signal  ----------
 -keep class org.whispersystems.** { *; }
 ##---------------End: proguard configuration for Signal  ----------
-
-
-##---------------Begin: proguard configuration for coroutines  ----------
--assumenosideeffects class kotlinx.coroutines.debug.** { *; }
-##---------------End: proguard configuration for Signal  ----------
