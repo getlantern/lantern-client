@@ -591,6 +591,7 @@ macos: macos-arm64
 		${DESKTOP_LIB_NAME}_amd64.dylib \
 		-output ${DARWIN_LIB_NAME}
 	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" ${DARWIN_LIB_NAME}
+	rm -Rf ${DESKTOP_LIB_NAME}_arm64.dylib ${DESKTOP_LIB_NAME}_amd64.dylib
 
 $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
 	@echo "Generating distribution package for darwin/amd64..." && \
