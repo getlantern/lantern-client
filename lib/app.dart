@@ -201,10 +201,7 @@ class _LanternAppState extends State<LanternApp>
   }
 
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {
-    if (!Platform.isAndroid) {
-      return DeepLink.defaultPath;
-    }
-    appLogger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
+    logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
     if (deepLink.path.toLowerCase().startsWith('/report-issue')) {
       appLogger.d("DeepLink uri: ${deepLink.uri.toString()}");
       final pathUrl = deepLink.uri.toString();

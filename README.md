@@ -60,6 +60,13 @@ platforms.
     * [gstreamer](https://gstreamer.freedesktop.org/documentation/installing/on-linux.html) (
       required by [flutter plugin audioplayers](https://pub.dev/packages/audioplayers_linux))
     * [libclang-dev](https://apt.llvm.org) (required by [ffigen](https://pub.dev/packages/ffigen))
+  * [libayatana-appindicator](https://github.com/AyatanaIndicators/libayatana-appindicator) (required by [tray_manager](https://github.com/leanflutter/tray_manager#linux-requirements))
+  * [gstreamer](https://gstreamer.freedesktop.org/documentation/installing/on-linux.html) (required by [flutter plugin audioplayers](https://pub.dev/packages/audioplayers_linux))
+  * [libclang-dev](https://apt.llvm.org) (required by [ffigen](https://pub.dev/packages/ffigen))
+* Windows
+  * Install [Visual Studio](https://visualstudio.microsoft.com/downloads/) with desktop development with c++ (including all of its default components)
+  * Install LLVM [LLVM](https://releases.llvm.org/download.html) (required by [flutter plugin ffigen](https://pub.dev/packages/audioplayers_linux))
+  * Install Nuget [Nuget](https://www.nuget.org/downloads) (required by [flutter_inappwebview ](https://pub.dev/packages/flutter_inappwebview))
 
 ### 🚀 Setup Project:
 
