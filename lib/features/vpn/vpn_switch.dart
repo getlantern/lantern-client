@@ -8,6 +8,8 @@ import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
 
+import '../../core/utils/utils.dart';
+
 class VPNSwitch extends StatefulWidget {
   const VPNSwitch({super.key});
 
@@ -26,7 +28,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
     final vpnNotifier = context.watch<VPNChangeNotifier>();
     if (isMobile()) {
       return sessionModel.shouldShowAds((context, provider, child) {
-        adHelper.loadAds(provider: provider);
+        if (!isTestRunning()) {
+          adHelper.loadAds(provider: provider);
+        }
         return vpnModel.vpnStatus(context,
             (BuildContext context, String vpnStatus, Widget? child) {
           // Changes scale on mobile due to hit target

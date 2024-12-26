@@ -212,3 +212,8 @@ Map<String, PaymentMethod> paymentMethodsFromJson(dynamic json) {
   });
   return paymentMethods;
 }
+
+bool isTestRunning() {
+  final patrol =  const String.fromEnvironment("PATROL_ANDROID_APP_NAME", defaultValue: "");
+  return patrol!="";
+}

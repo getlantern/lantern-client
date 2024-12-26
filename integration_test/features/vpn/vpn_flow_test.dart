@@ -6,6 +6,7 @@ import 'package:lantern/features/vpn/vpn_server_location.dart';
 import 'package:lantern/features/vpn/vpn_status.dart';
 import 'package:lantern/features/vpn/vpn_switch.dart';
 import 'package:lantern/features/vpn/vpn_tab.dart';
+import 'package:lantern/main.dart' as app;
 
 import '../../utils/test_utils.dart';
 
@@ -80,25 +81,37 @@ void main() {
     },
   );
 
-  patrol(
-    'VPN turn off/on on mobile platforms',
-    (pTester) async {
-      final $ = pTester as PatrolIntegrationTester;
-      await $(VPNTab).waitUntilVisible();
-      await $.pump(const Duration(seconds: 3));
-      expect($('Disconnected'.i18n), findsOneWidget);
-      await $(const AdvancedSwitch()).tap();
-      await $.pump(const Duration(seconds: 1));
-      //Turn on
-      $.native.tap(Selector(text: 'OK'));
-      await $.pumpAndSettle();
-      expect($('connected'.i18n), findsOneWidget);
-      expect($('Disconnected'.i18n), findsNothing);
-      //Turn off
-      await $.pump(const Duration(seconds: 1));
-      await $(const AdvancedSwitch()).tap();
-      expect($('connected'.i18n), findsNothing);
-      expect($('Disconnected'.i18n), findsOneWidget);
-    },
-  );
+  if (isMobile()) {
+    patrolTest(
+      "VPN end to end",
+      skip: isDesktop(),
+      ($) async {
+        await app.main(testMode: true);
+        await $.pumpAndSettle();
+        await $(VPNTab).waitUntilVisible();
+        await $.pump(const Duration(seconds: 6));
+        expect($('Disconnected'.i18n), findsOneWidget);
+        await $(AdvancedSwitch).tap();
+        await $.pump(const Duration(seconds: 1));
+
+        try {
+          //Turn on
+          await $.native.tap(Selector(text: 'OK'));
+        } on PatrolActionException {
+          //Do nothing it means user has already accepted the dialog
+        }
+        await $.pumpAndSettle();
+        await $.pump(const Duration(seconds: 1));
+        expect($('connected'.i18n), findsOneWidget);
+        expect($('Disconnected'.i18n), findsNothing);
+
+        //Tun off
+        await $(AdvancedSwitch).tap();
+        await $.pumpAndSettle();
+        await $.pump(const Duration(seconds: 1));
+        expect($('connected'.i18n), findsNothing);
+        expect($('Disconnected'.i18n), findsOneWidget);
+      },
+    );
+  }
 }
