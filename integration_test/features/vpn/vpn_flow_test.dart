@@ -6,24 +6,25 @@ import 'package:lantern/features/vpn/vpn_server_location.dart';
 import 'package:lantern/features/vpn/vpn_status.dart';
 import 'package:lantern/features/vpn/vpn_switch.dart';
 import 'package:lantern/features/vpn/vpn_tab.dart';
+
 import '../../utils/test_utils.dart';
 
 void main() {
-
-  appTearDown(() async {
-    await sl.reset();
-  },);
-
+  appTearDown(
+    () async {
+      await sl.reset();
+    },
+  );
 
   patrol(
     'renders VPN tap properly and navigation work properly',
-        ($) async {
+    ($) async {
       await $(VPNTab).waitUntilVisible();
       await $.pump(const Duration(seconds: 6));
 
-      if(sessionModel.proUserNotifier.value??false){
+      if (sessionModel.proUserNotifier.value ?? false) {
         expect($(ProBanner), findsNothing);
-      }else{
+      } else {
         expect($(ProBanner), findsOneWidget);
       }
 
@@ -62,7 +63,7 @@ void main() {
   patrol(
     'toggles VPN switch on & off for desktop platforms',
     skip: isMobile(),
-        ($) async {
+    ($) async {
       await $.pump(const Duration(seconds: 3));
       await $(CustomAnimatedToggleSwitch<String>).tap();
       await $.pumpAndSettle();
@@ -79,27 +80,25 @@ void main() {
     },
   );
 
-  // if(isNative()){
-  //   patrol(
-  //     'VPN turn off/on on mobile platforms',
-  //         ($) async {
-  //       await $(VPNTab).waitUntilVisible();
-  //       await $.pump(const Duration(seconds: 3));
-  //       expect($('Disconnected'.i18n), findsOneWidget);
-  //       await $(const AdvancedSwitch()).tap();
-  //       await $.pump(const Duration(seconds: 1));
-  //       //Turn on
-  //       $.native.tap(Selector(text: 'OK'));
-  //       await $.pumpAndSettle();
-  //       expect($('connected'.i18n), findsOneWidget);
-  //       expect($('Disconnected'.i18n), findsNothing);
-  //       //Turn off
-  //       await $.pump(const Duration(seconds: 1));
-  //       await $(const AdvancedSwitch()).tap();
-  //       expect($('connected'.i18n), findsNothing);
-  //       expect($('Disconnected'.i18n), findsOneWidget);
-  //     },
-  //   );
-  // }
-
+  patrol(
+    'VPN turn off/on on mobile platforms',
+    (pTester) async {
+      final $ = pTester as PatrolIntegrationTester;
+      await $(VPNTab).waitUntilVisible();
+      await $.pump(const Duration(seconds: 3));
+      expect($('Disconnected'.i18n), findsOneWidget);
+      await $(const AdvancedSwitch()).tap();
+      await $.pump(const Duration(seconds: 1));
+      //Turn on
+      $.native.tap(Selector(text: 'OK'));
+      await $.pumpAndSettle();
+      expect($('connected'.i18n), findsOneWidget);
+      expect($('Disconnected'.i18n), findsNothing);
+      //Turn off
+      await $.pump(const Duration(seconds: 1));
+      await $(const AdvancedSwitch()).tap();
+      expect($('connected'.i18n), findsNothing);
+      expect($('Disconnected'.i18n), findsOneWidget);
+    },
+  );
 }
