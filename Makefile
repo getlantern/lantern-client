@@ -734,7 +734,7 @@ assert-go-version:
 
 .PHONY: swift-format
 swift-format:
-	swift-format --in-place --recursive DBModule ios/Runner ios/Tunnel ios/LanternTests
+	swift-format --in-place --recursive DBModule ios/Runner ios/Tunnel ios/LanternTests macos/Runner
 
 clean:
 	rm -f liblantern*.aar && \
