@@ -757,12 +757,8 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 			return pathdb.Put(tx, pathIsFirstTime, true, "")
 		})
-		
-	go m.proClient.RetryCreateUser(ctx, m, 10*time.Minute)
-
-
-	}
-	 else {
+		go m.proClient.RetryCreateUser(ctx, m, 10*time.Minute)
+	} else {
 		// Get all user details
 		err = m.userDetail(ctx)
 		if err != nil {
