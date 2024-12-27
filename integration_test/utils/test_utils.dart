@@ -21,7 +21,6 @@ final _patrolTesterConfig = const PatrolTesterConfig(
   visibleTimeout: Duration(seconds: 20),
   settleTimeout: Duration(seconds: 20),
   printLogs: true,
-
 );
 final _nativeAutomatorConfig = const NativeAutomatorConfig(
   findTimeout: Duration(seconds: 20),
@@ -53,6 +52,8 @@ bool isNative() {
   return const String.fromEnvironment('native', defaultValue: 'false') ==
       'true';
 }
+
+Function initOnce = once<void>();
 
 /// Use this function to write tests for integration test
 /// this methods uses custom patrol for mobile version and for desktop it uses patrolWidgetTest that extension of flutter test
@@ -90,6 +91,13 @@ void patrol(
       ($) async {
         if (initApp) {
           await _createApp($);
+          if(skip == false || skip == null) {
+            await initOnce(() async {
+              $.log("ByPassing init flow");
+              await byPassInitFlow($);
+            });
+          }
+
         }
         await callback($);
       },
@@ -122,4 +130,17 @@ Future<void> initDesktopTestServices() async {
 Future<void> _createApp(PatrolTester $) async {
   await app.main(testMode: true);
   await $.pumpAndSettle();
+}
+
+Future<void> byPassInitFlow(PatrolTester pTester) async {
+  final $ = pTester as PatrolIntegrationTester;
+  print("Checking for first time visit");
+  $.log("Checking for first time visit");
+  try {
+    await $(AppKeys.tryFreeLantern)
+        .waitUntilVisible(timeout: const Duration(seconds: 5));
+    await $(AppKeys.tryFreeLantern).tap();
+  } on WaitUntilVisibleTimeoutException catch (e) {
+    $.log("Try free lantern not found");
+  }
 }

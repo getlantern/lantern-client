@@ -1,5 +1,5 @@
+import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/home/home.dart';
-import 'package:lantern/features/vpn/vpn_switch.dart';
 
 import 'utils/test_utils.dart';
 
@@ -27,22 +27,21 @@ import 'utils/test_utils.dart';
 ///Make sure to use custom tear down function
 void main() {
 
+  // patrol(
+  //   "Verify the auth flow",
+  //   ($) async {
+  //
+  //     // final permissionView = await $.native.isPermissionDialogVisible(timeout: const Duration(seconds: 5));
+  //     // if (permissionView) {
+  //     //   await $.native.grantPermissionOnlyThisTime();
+  //     // }
+  //     if (sessionModel.isAuthEnabled.value ?? false) {
+  //       // if auth is enable pass by these screen
+  //       await $(AppKeys.tryFreeLantern).waitUntilVisible();
+  //       await $(AppKeys.tryFreeLantern).tap();
+  //     }
+  //     expect($(HomePage), findsOneWidget);
+  //     expect($(CustomBottomBar), findsOneWidget);
+  //   },
+  // );
 }
-// void main() {
-//   appTearDown(
-//     () async {
-//       await sl.reset();
-//     },
-//   );
-//
-//   patrol(
-//     "app start up sequence",
-//     ($) async {
-//       await $(HomePage).waitUntilVisible();
-//       await $.pumpAndSettle();
-//       await $(AdvancedSwitch).waitUntilVisible();
-//       final bottombar = find.byType(BottomNavigationBar);
-//       expect(bottombar, findsOneWidget);
-//     },
-//   );
-// }

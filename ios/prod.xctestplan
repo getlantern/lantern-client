@@ -1,0 +1,34 @@
+{
+  "configurations" : [
+    {
+      "id" : "2A5D0969-3882-47C5-B82A-00E8DAAF25FA",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "environmentVariableEntries" : [
+      {
+        "key" : "IDEPreferLogStreaming",
+        "value" : "YES"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Runner.xcodeproj",
+      "identifier" : "97C146ED1CF9000F007C117D",
+      "name" : "Runner"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Runner.xcodeproj",
+        "identifier" : "03E34B742D1E8BD100E19584",
+        "name" : "RunnerUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

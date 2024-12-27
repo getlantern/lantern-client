@@ -57,5 +57,8 @@ class AppKeys {
   static const httpProxy = ValueKey('http_proxy');
   static const socksProxy = ValueKey('socks_proxy');
 
+  //Auth
+  static const tryFreeLantern = ValueKey('try_free_lantern');
+
 }
 

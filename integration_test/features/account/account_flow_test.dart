@@ -14,16 +14,13 @@ void main() {
 
   patrol(
     'account page end to end test',
-    ($) async {
-      //Wait until we call all the apis
-
+    (pTester) async {
+      final $ = pTester as PatrolIntegrationTester;
       await $(VPNSwitch).waitUntilVisible();
       await $('Account'.i18n).tap();
       await $.pumpAndSettle();
       await $.pump(const Duration(seconds: 2));
-
       expect($(AppKeys.inviteFriends).visible, equals(true));
-
       if (sessionModel.proUserNotifier.value ?? false) {
         expect($(AppKeys.upgrade_lantern_pro), findsNothing);
         expect($(AppKeys.addDevices).visible, equals(true));
@@ -67,6 +64,10 @@ void main() {
         expect($(PlanCard).at(1).visible, true);
         expect($(FeatureList), findsOneWidget);
         expect($('activation_lantern_pro_code'.i18n).visible, true);
+        if ((sessionModel.isAuthEnabled.value ?? false) &&
+            (sessionModel.proUserNotifier.value = false)) {
+          expect($("restore_purchase".i18n.toUpperCase()).visible, true);
+        }
 
         // go back
         await $(IconButton).tap();

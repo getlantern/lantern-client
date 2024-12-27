@@ -122,7 +122,8 @@ class SessionModel extends Model {
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
-      return subscribedSingleValueBuilder<bool>('prouser', builder: builder,defaultValue: false);
+      return subscribedSingleValueBuilder<bool>('prouser',
+          builder: builder, defaultValue: false);
     }
     return FfiValueBuilder<bool>('prouser', proUserNotifier, builder);
   }
@@ -173,7 +174,7 @@ class SessionModel extends Model {
   Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
-          builder: builder,defaultValue: 0);
+          builder: builder, defaultValue: isTestRunning() ? 1 : 0);
     }
     return configValueBuilder('accepted_terms_version', builder,
         (value) => value?.chat.acceptedTermsVersion ?? 0);
@@ -242,11 +243,8 @@ class SessionModel extends Model {
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
-      return subscribedSingleValueBuilder<String>(
-        'referral',
-        builder: builder,
-        defaultValue: ''
-      );
+      return subscribedSingleValueBuilder<String>('referral',
+          builder: builder, defaultValue: '');
     }
     return FfiValueBuilder<String>('referralCode', referralNotifier, builder);
   }

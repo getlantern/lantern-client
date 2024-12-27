@@ -45,6 +45,7 @@ class AuthLanding extends StatelessWidget {
             const SizedBox(height: 32.0),
             if (!proUser)
               RichText(
+                key: AppKeys.tryFreeLantern,
                 text: TextSpan(
                   text: 'try_lantern_pro'.i18n,
                   style: tsBody1.copyWith(

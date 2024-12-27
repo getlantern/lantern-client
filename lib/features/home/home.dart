@@ -99,6 +99,7 @@ class _HomePageState extends State<HomePage> {
         return;
       }
       final isFirstTime = await sessionModel.isUserFirstTimeVisit();
+      print('isFirstTimeVisit: $isFirstTime');
       if (isFirstTime) {
         context.router.push(const AuthLanding());
         sessionModel.setFirstTimeVisit();
@@ -152,8 +153,8 @@ class _HomePageState extends State<HomePage> {
             bool isPlayVersion =
                 (sessionModel.isTestPlayVersion.value ?? false);
             bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
-            if ((isStoreVersion || isPlayVersion) && version == 0) {
-              // show privacy disclosure if it's a Play build and the terms have
+            if (((isStoreVersion || isPlayVersion) && version == 0)) {
+              // show privacy disclosure if it's a  build and the terms have
               // not already been accepted
               return const PrivacyDisclosure();
             }
