@@ -62,10 +62,10 @@ String future(
     return 'at_date'.i18n.fill([roughTimeString]);
   }
   // event will occur less than one calendar day from now, display "tomorrow"
-  var yesterday = now.add(const Duration(days: 1));
-  if (localDateTime.day == yesterday.day &&
-      localDateTime.month == now.month &&
-      localDateTime.year == now.year) {
+  var tomorrow = DateTime(now.year, now.month, now.day + 1);
+  if (localDateTime.year == tomorrow.year &&
+      localDateTime.month == tomorrow.month &&
+      localDateTime.day == tomorrow.day) {
     return 'tomorrow'.i18n;
   }
   // event will occur less than 4 days from now, display "on Tuesday, at 4:30pm"
