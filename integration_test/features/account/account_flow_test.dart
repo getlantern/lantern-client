@@ -14,8 +14,8 @@ void main() {
 
   patrol(
     'account page end to end test',
-    (pTester) async {
-      final $ = pTester as PatrolIntegrationTester;
+    ($) async {
+
       await $(VPNSwitch).waitUntilVisible();
       await $('Account'.i18n).tap();
       await $.pumpAndSettle();
