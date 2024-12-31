@@ -189,7 +189,7 @@ Plan planFromJson(Map<String, dynamic> item) {
 }
 
 Map<String, PaymentMethod> paymentMethodsFromJson(dynamic json) {
-  if(json == null) {
+  if (json == null) {
     return {};
   }
   List<dynamic> items = json as List<dynamic>;
@@ -214,6 +214,23 @@ Map<String, PaymentMethod> paymentMethodsFromJson(dynamic json) {
 }
 
 bool isTestRunning() {
-  final patrol =  const String.fromEnvironment("PATROL_ANDROID_APP_NAME", defaultValue: "");
-  return patrol!="";
+  final patrol =
+      const String.fromEnvironment("PATROL_ANDROID_APP_NAME", defaultValue: "");
+  return patrol != "";
+}
+
+bool byPassPrivacyPolicy() {
+  final mockTest = sl.isRegistered<MockingTestUtils>();
+  if (mockTest) {
+    return sl<MockingTestUtils>().byPrivacyPolices;
+  }
+  return false;
+}
+
+bool byPassAuth() {
+  final mockTest = sl.isRegistered<MockingTestUtils>();
+  if (mockTest) {
+    return sl<MockingTestUtils>().byPassAuth;
+  }
+  return false;
 }

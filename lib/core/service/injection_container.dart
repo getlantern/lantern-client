@@ -10,13 +10,16 @@ import 'package:lantern/features/vpn/vpn_notifier.dart';
 
 final GetIt sl = GetIt.instance;
 
-void initServices() async {
+void initServices({required bool testMode}) async {
+  if (testMode) {
+    sl.registerLazySingleton(() => MockingTestUtils());
+  }
   //Inject
-
   if (isMobile()) {
     sl.registerLazySingleton(() => AppPurchase());
-     sl<AppPurchase>().init();
+    sl<AppPurchase>().init();
   }
+
   sl.registerLazySingleton(() => AppRouter());
   sl.registerLazySingleton(() => SessionModel());
   sl.registerLazySingleton(() => MessagingModel());
@@ -27,4 +30,9 @@ void initServices() async {
   sl.registerLazySingleton(() => BottomBarChangeNotifier());
   sl.registerLazySingleton(() => VPNChangeNotifier());
   sl.registerLazySingleton(() => InternetStatusProvider());
+}
+
+class MockingTestUtils {
+  bool byPassAuth = true;
+  bool byPrivacyPolices = true;
 }

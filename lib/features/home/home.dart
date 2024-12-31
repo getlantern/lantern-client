@@ -1,4 +1,5 @@
 import 'package:lantern/core/utils/common.dart';
+import 'package:lantern/core/utils/utils.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/account/account_tab.dart';
 import 'package:lantern/features/account/developer_settings.dart';
@@ -153,20 +154,21 @@ class _HomePageState extends State<HomePage> {
             bool isPlayVersion =
                 (sessionModel.isTestPlayVersion.value ?? false);
             bool isStoreVersion = (sessionModel.isStoreVersion.value ?? false);
-            if (((isStoreVersion || isPlayVersion) && version == 0)) {
+            if (((isStoreVersion || isPlayVersion) && version == 0) && !byPassPrivacyPolicy()) {
               // show privacy disclosure if it's a  build and the terms have
               // not already been accepted
               return const PrivacyDisclosure();
             }
 
-            if (sessionModel.isAuthEnabled.value!) {
+            if (sessionModel.isAuthEnabled.value! && !byPassAuth()) {
               userNew(() {
                 _checkForFirstTimeVisit();
               });
             }
-
+          print('isPlayVersion: $isPlayVersion');
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
+              print("tab: $tab");
               return Scaffold(
                 body: buildBody(tab, isOnboarded),
                 bottomNavigationBar: CustomBottomBar(

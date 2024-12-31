@@ -17,5 +17,7 @@
 	<array>
 		<string>group.getlantern.lantern</string>
 	</array>
+	<key>keychain-access-groups</key>
+	<array/>
 </dict>
 </plist>

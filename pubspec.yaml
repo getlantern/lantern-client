@@ -218,7 +218,7 @@ flutter:
 # petrol configuration
 patrol:
   app_name: Lantern
-  flavor: prod
+  flavor: appiumTest
   android:
     package_name: org.getlantern.lantern
   ios:

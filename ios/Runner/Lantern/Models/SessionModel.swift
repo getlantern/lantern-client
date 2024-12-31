@@ -17,14 +17,9 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
   }()
   let emptyCompletion: (MinisqlValue?, Error?) -> Void = { _, _ in }
   private let sessionAsyncHandler = DispatchQueue.global(qos: .background)
-  let isPlayVersion: Bool
+  
 
   init(flutterBinary: FlutterBinaryMessenger) throws {
-    #if DEBUG
-      isPlayVersion = false
-    #else
-      isPlayVersion = true
-    #endif
     logger.log("Initializing SessionModel")
     let opts = InternalsdkSessionModelOpts()
     let device = UIDevice.current
@@ -35,7 +30,7 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
     opts.deviceID = deviceId
     opts.lang = Locale.current.identifier
     opts.developmentMode = false
-    opts.playVersion = isPlayVersion
+    opts.playVersion = true
     opts.configPath = Constants(process: .app).configDirectoryURL.path
     opts.timeZone = TimeZone.current.identifier
     opts.device = modelName

@@ -24,13 +24,17 @@ import 'utils/test_utils.dart';
 // https://stackoverflow.com/questions/61535142/how-to-use-dylibs-from-a-plugin-inside-a-macos-sandboxed-application
 // https://github.com/flutter/flutter/issues/135673
 
+// IOS Related issues
+// https://github.com/leancodepl/patrol/issues/2159
+///https://github.com/leancodepl/patrol/issues/1871
+// https://stackoverflow.com/questions/54875362/firebase-test-lab-ios-app-not-being-installed
 ///Make sure to use custom tear down function
+
 void main() {
 
   // patrol(
   //   "Verify the auth flow",
   //   ($) async {
-  //
   //     // final permissionView = await $.native.isPermissionDialogVisible(timeout: const Duration(seconds: 5));
   //     // if (permissionView) {
   //     //   await $.native.grantPermissionOnlyThisTime();

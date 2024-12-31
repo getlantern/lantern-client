@@ -20,7 +20,7 @@ Future<void> main({bool testMode = false}) async {
     appLogger.e("Error loading .env file: $error");
   }
   // Inject all the services
-  initServices();
+  initServices(testMode: testMode);
   await _desktopService();
   await Localization.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

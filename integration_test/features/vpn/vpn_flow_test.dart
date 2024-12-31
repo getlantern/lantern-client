@@ -36,20 +36,27 @@ void main() {
       }
       expect($(VPNStatus), findsOneWidget);
       expect($(ServerLocationWidget), findsOneWidget);
-      expect($(VPNBandwidth), findsOneWidget);
+      if (sessionModel.proUserNotifier.value == false) {
+        expect($(VPNBandwidth), findsOneWidget);
+      } else {
+        expect($(VPNBandwidth), findsNothing);
+      }
       if (isAndroid()) {
         expect($(SplitTunnelingWidget), findsOneWidget);
       } else {
         expect($(SplitTunnelingWidget), findsNothing);
       }
 
-      await $(ProBanner).tap();
-      await $.pumpAndSettle();
-      await $.pump(const Duration(seconds: 1));
-      expect($(FullScreenDialog), findsOneWidget);
-      await $(IconButton).tap();
-      expect($(FullScreenDialog), findsNothing);
-      await $.pumpAndSettle();
+      if (sessionModel.proUserNotifier.value == false) {
+        await $(ProBanner).tap();
+        await $.pumpAndSettle();
+        await $.pump(const Duration(seconds: 1));
+        expect($(FullScreenDialog), findsOneWidget);
+        await $(IconButton).tap();
+        expect($(FullScreenDialog), findsNothing);
+        await $.pumpAndSettle();
+      }
+
       if (isAndroid()) {
         await $.pump(const Duration(seconds: 1));
         await $('split_tunneling'.i18n).tap();
@@ -81,7 +88,7 @@ void main() {
     },
   );
 
-  if (isMobile()) {
+  if (isAndroid()) {
     patrolTest(
       "VPN end to end",
       skip: isDesktop(),

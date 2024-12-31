@@ -77,7 +77,6 @@ void patrol(
         if (initApp) {
           await _createApp($);
         }
-
         await callback($);
       },
       config: _patrolTesterConfig,
@@ -91,13 +90,6 @@ void patrol(
       ($) async {
         if (initApp) {
           await _createApp($);
-          if(skip == false || skip == null) {
-            await initOnce(() async {
-              $.log("ByPassing init flow");
-              await byPassInitFlow($);
-            });
-          }
-
         }
         await callback($);
       },
