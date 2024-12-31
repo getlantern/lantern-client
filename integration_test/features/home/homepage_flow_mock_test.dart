@@ -15,6 +15,7 @@ import '../../utils/test_utils.dart';
 /// 1. Showing the privacy policy if the user is using the app from the Play Store.
 /// 2. Showing a local plan if the user is using the app from the App Store.
 /// Using mocks, we can test these scenarios effectively.
+
 void main() {
   late MockSessionModel mockSessionModel;
   late MockBuildContext mockBuildContext;
