@@ -145,6 +145,7 @@ jobs:
         run: make ci-android-test
 
       - name: Starting Simulator
+        id: simulator
         if: runner.os == 'macOS'
         uses: futureware-tech/simulator-action@v4
         with:
