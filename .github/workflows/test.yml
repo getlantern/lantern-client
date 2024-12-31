@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest-16-cores, windows-latest,macos-14-large ]
+        os: [ ubuntu-latest-16-cores, windows-latest,macos-15-large ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -139,7 +139,7 @@ jobs:
         run: make widget-tests
 
         # Run firebase test only on one OS runner
-        # Does make sense to run on all OS runners
+        # Does not make sense to run on all OS runners
       - name: Running workflow test for android on Firebase test labs
         if: runner.os == 'linux'
         run: make ci-android-test
@@ -154,7 +154,15 @@ jobs:
       - name: Running workflow test for iOS
         run: patrol test -d ${{ steps.simulator.outputs.udid }}
         if: runner.os == 'macOS'
-        timeout-minutes: 60
+        timeout-minutes: 70
+
+      - name: Upload xc result
+        if: runner.os == 'macOS' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xc-result
+          path: ${{ github.workspace }}/build/ios
+          retention-days: 2
 
       - name: Running workflow test for linux
         uses: coactions/setup-xvfb@v1

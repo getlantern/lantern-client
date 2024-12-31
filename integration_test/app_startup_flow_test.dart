@@ -26,26 +26,11 @@ import 'utils/test_utils.dart';
 
 // IOS Related issues
 // https://github.com/leancodepl/patrol/issues/2159
-///https://github.com/leancodepl/patrol/issues/1871
+// https://github.com/leancodepl/patrol/issues/1871
 // https://stackoverflow.com/questions/54875362/firebase-test-lab-ios-app-not-being-installed
+// https://stackoverflow.com/questions/54450113/how-to-handle-code-signing-for-ios-testing-on-firebase-test-lab-through-ci
 ///Make sure to use custom tear down function
 
 void main() {
 
-  // patrol(
-  //   "Verify the auth flow",
-  //   ($) async {
-  //     // final permissionView = await $.native.isPermissionDialogVisible(timeout: const Duration(seconds: 5));
-  //     // if (permissionView) {
-  //     //   await $.native.grantPermissionOnlyThisTime();
-  //     // }
-  //     if (sessionModel.isAuthEnabled.value ?? false) {
-  //       // if auth is enable pass by these screen
-  //       await $(AppKeys.tryFreeLantern).waitUntilVisible();
-  //       await $(AppKeys.tryFreeLantern).tap();
-  //     }
-  //     expect($(HomePage), findsOneWidget);
-  //     expect($(CustomBottomBar), findsOneWidget);
-  //   },
-  // );
 }
