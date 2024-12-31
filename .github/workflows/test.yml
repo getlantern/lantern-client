@@ -14,10 +14,9 @@ env:
 jobs:
   test-suite:
     runs-on: ${{ matrix.os }}
-    #    runs-on: ubuntu-latest-16-cores
     strategy:
       matrix:
-        os: [ ubuntu-latest-16-cores, windows-latest ]
+        os: [ ubuntu-latest-16-cores, windows-latest,macos-15-large ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -130,6 +129,12 @@ jobs:
           make linux
           make ffigen
 
+      - name: Build for IOS
+        if: runner.os == 'macOS'
+        run: |
+          make ios
+          make ffigen
+
       - name: Running widget tests
         run: make widget-tests
 
@@ -139,8 +144,18 @@ jobs:
         if: runner.os == 'linux'
         run: make ci-android-test
 
-      - name: Running workflow test for macos
-        run: make maOSWorkflowTest
+      - name: Starting Simulator
+        if: runner.os == 'macOS'
+      - uses: actions/checkout@v4
+        os_version: '>=16.0'
+      - uses: futureware-tech/simulator-action@v4
+        wait_for_boot: true
+        with:
+          model: 'iPhone 15 Pro'
+      - run: flutter drive
+
+      - name: Running workflow test for iOS
+        run: patrol test -d ${{ steps.simulator.outputs.udid }}
         if: runner.os == 'macOS'
         timeout-minutes: 60
 
