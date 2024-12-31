@@ -146,14 +146,12 @@ jobs:
 
       - name: Starting Simulator
         if: runner.os == 'macOS'
-      - uses: actions/checkout@v4
         os_version: '>=16.0'
-      - uses: futureware-tech/simulator-action@v4
+        uses: futureware-tech/simulator-action@v4
         wait_for_boot: true
         with:
           model: 'iPhone 15 Pro'
-      - run: flutter drive
-
+      
       - name: Running workflow test for iOS
         run: patrol test -d ${{ steps.simulator.outputs.udid }}
         if: runner.os == 'macOS'
