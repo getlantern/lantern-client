@@ -114,7 +114,7 @@ jobs:
 
           PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
           # apply main provisioning profile
-          echo -n "BUILD_MACOS_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+          echo -n "$BUILD_MACOS_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       - name: Install the Apple certificate and provisioning profile IOS
