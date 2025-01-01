@@ -109,6 +109,9 @@ jobs:
         env:
           BUILD_MACOS_PROVISION_PROFILE_BASE64: ${{ secrets.MACOS_PROVISION_PROFILE_BASE64 }}
         run: |
+          PROVISIONING_PROFILES_DIR=~/Library/MobileDevice/Provisioning\ Profiles
+          mkdir -p "$PROVISIONING_PROFILES_DIR"
+
           PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
           # apply main provisioning profile
           echo -n "BUILD_MACOS_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
