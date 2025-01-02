@@ -1,9 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
+import 'package:lantern/core/utils/utils.dart';
 import 'package:lantern/features/checkout/payment_provider.dart';
 import 'package:lantern/features/checkout/plan_details.dart';
-import 'package:lantern/core/utils/utils.dart';
 import 'package:retry/retry.dart';
 
 @RoutePage(name: 'CheckoutLegacy')
@@ -232,17 +232,20 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     return widgets;
   }
 
-  List<PaymentProvider> paymentProviders(PaymentMethod paymentMethods) {
-    var providers = <PaymentProvider>[];
-
+  List<Widget> paymentProviders(PaymentMethod paymentMethods) {
+    var providers = <Widget>[];
     for (final provider in paymentMethods.providers) {
       providers.add(
-        PaymentProvider(
-          logoPaths: provider.logoUrls,
-          onChanged: () => selectPaymentProvider(provider.name.toPaymentEnum()),
-          selectedPaymentProvider: selectedPaymentProvider!,
-          paymentType: provider.name.toPaymentEnum(),
-          useNetwork: true,
+        Tooltip(
+          message: provider.name,
+          child: PaymentProvider(
+            logoPaths: provider.logoUrls,
+            onChanged: () =>
+                selectPaymentProvider(provider.name.toPaymentEnum()),
+            selectedPaymentProvider: selectedPaymentProvider!,
+            paymentType: provider.name.toPaymentEnum(),
+            useNetwork: true,
+          ),
         ),
       );
     }

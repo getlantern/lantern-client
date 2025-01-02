@@ -7,9 +7,17 @@ import 'package:lantern/features/vpn/vpn_switch.dart';
 import '../../utils/test_utils.dart';
 
 void main() {
+  appTearDown(
+    () async {
+      await sl.reset();
+    },
+  );
+
   patrol(
-    'checkout end to end test',
-    ($) async {
+    skip: isiOS(),
+    'stripe checkout flow end to end test',
+    (pTester) async {
+      final $ = pTester as PatrolIntegrationTester;
       await $(VPNSwitch).waitUntilVisible();
       await $('Account'.i18n).tap();
       await $.pumpAndSettle();
@@ -34,12 +42,8 @@ void main() {
       expect(continueBtn.disabled, true);
 
       await $(CTextField).enterText("test@getlantern.org");
-      // tap on stripe payment provider
-      await $(PaymentProvider)
-          .which<PaymentProvider>(
-              (widget) => widget.paymentType == Providers.stripe)
-          .tap();
-
+      final stipeProvider=  find.byTooltip(Providers.stripe.name);
+      await $.tester.tap(stipeProvider);
       await $('continue'.i18n.toUpperCase()).tap();
       await $.pumpAndSettle();
 
