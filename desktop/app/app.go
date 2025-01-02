@@ -376,7 +376,10 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	ctx := context.Background()
 	go app.fetchOrCreateUser(ctx)
-	go app.proClient.DesktopPaymentMethods(ctx)
+	if app.settings.GetUserID() != 0 {
+		// fetch plan only if user is created
+		go app.proClient.DesktopPaymentMethods(ctx)
+	}
 	go app.fetchDeviceLinkingCode(ctx)
 
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
@@ -667,9 +670,12 @@ func (app *App) ProClient() proclient.ProClient {
 }
 
 // Client session methods
+// this method get call when user is being created first time
 func (app *App) FetchUserData() error {
 	go app.proClient.UserData(context.Background())
 	go app.proClient.FetchPaymentMethodsAndCache(context.Background())
+	//Update UI
+	app.sendConfigOptions()
 	return nil
 }
 

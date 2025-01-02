@@ -569,6 +569,16 @@ class NativeLibrary {
       ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
+  ffi.Pointer<ffi.Char> updatePaymentMethod() {
+    return _updatePaymentMethod();
+  }
+
+  late final _updatePaymentMethodPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'updatePaymentMethod');
+  late final _updatePaymentMethod =
+      _updatePaymentMethodPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
   ffi.Pointer<ffi.Char> checkUpdates() {
     return _checkUpdates();
   }

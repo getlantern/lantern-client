@@ -136,6 +136,7 @@ extern char* deviceLinkingCode();
 extern char* paymentRedirect(char* planID, char* currency, char* provider, char* email, char* deviceName);
 extern void exitApp();
 extern char* reportIssue(char* email, char* issueType, char* description);
+extern char* updatePaymentMethod();
 extern char* checkUpdates();
 
 #ifdef __cplusplus
