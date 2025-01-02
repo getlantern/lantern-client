@@ -4,7 +4,7 @@ import 'package:lantern/features/messaging/messaging_model.dart';
 
 @RoutePage(name: 'Account')
 class AccountMenu extends StatefulWidget {
-  const AccountMenu({Key? key}) : super(key: key);
+  const AccountMenu({super.key});
 
   @override
   State<AccountMenu> createState() => _AccountMenuState();
@@ -92,6 +92,7 @@ class _AccountMenuState extends State<AccountMenu> {
     return [
       if (authEnabled && !hasUserLoggedIn)
         ListItemFactory.settingsItem(
+          key: AppKeys.signIn,
           icon: ImagePaths.signIn,
           content: 'sign_in'.i18n,
           onTap: () => openSignIn(context),
@@ -129,6 +130,7 @@ class _AccountMenuState extends State<AccountMenu> {
         },
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.inviteFriends,
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
         onTap: () {
@@ -136,6 +138,7 @@ class _AccountMenuState extends State<AccountMenu> {
         },
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.devices,
         icon: ImagePaths.devices,
         content: 'Authorize Device for Pro'.i18n,
         onTap: () => authorizeDeviceForPro(context),
@@ -166,6 +169,7 @@ class _AccountMenuState extends State<AccountMenu> {
                 )),
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.inviteFriends,
         icon: ImagePaths.star,
         content: 'Invite Friends'.i18n,
         onTap: () {
@@ -173,6 +177,7 @@ class _AccountMenuState extends State<AccountMenu> {
         },
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.addDevices,
         icon: ImagePaths.devices,
         content: 'add_device'.i18n,
         onTap: () async => await context.pushRoute(ApproveDevice()),
@@ -186,6 +191,7 @@ class _AccountMenuState extends State<AccountMenu> {
     return [
       if (isMobile())
         ListItemFactory.settingsItem(
+          key: AppKeys.desktopVersion,
           icon: ImagePaths.desktop,
           content: 'desktop_version'.i18n,
           onTap: () {
@@ -193,6 +199,7 @@ class _AccountMenuState extends State<AccountMenu> {
           },
         ),
       ListItemFactory.settingsItem(
+        key: AppKeys.followUs,
         icon: ImagePaths.thumbUp,
         content: 'follow_us'.i18n,
         onTap: () {
@@ -208,6 +215,7 @@ class _AccountMenuState extends State<AccountMenu> {
         },
       ),
       ListItemFactory.settingsItem(
+        key: AppKeys.setting,
         icon: ImagePaths.settings,
         content: 'settings'.i18n,
         onTap: () {
@@ -216,6 +224,7 @@ class _AccountMenuState extends State<AccountMenu> {
       ),
       if (authEnabled && hasUserLoggedIn)
         ListItemFactory.settingsItem(
+          key: AppKeys.signOut,
           icon: ImagePaths.signOut,
           content: 'sign_out'.i18n,
           onTap: () => showSingOutDialog(context),
@@ -225,7 +234,6 @@ class _AccountMenuState extends State<AccountMenu> {
 
   @override
   Widget build(BuildContext context) {
-    print("Auth vaule ${sessionModel.isAuthEnabled.value}");
     return BaseScreen(
       title: 'Account'.i18n,
       automaticallyImplyLeading: false,

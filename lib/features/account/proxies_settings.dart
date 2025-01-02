@@ -19,11 +19,13 @@ class ProxiesSetting extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListItemFactory.settingsItem(
+          key: AppKeys.httpProxy,
             header: 'http_proxy'.i18n,
             content: CText(config?.httpProxyAddr ?? '', style: tsBody1),
             trailingArray: [SvgPicture.asset(ImagePaths.copy)],
             onTap: () => copyText(context, config?.httpProxyAddr ?? '')),
         ListItemFactory.settingsItem(
+          key: AppKeys.socksProxy,
           header: 'socks_proxy'.i18n,
           content: CText(config?.socksProxyAddr ?? '', style: tsBody1),
           onTap: () => copyText(context, config?.socksProxyAddr ?? ''),

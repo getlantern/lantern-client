@@ -11,8 +11,8 @@ class CustomBottomBar extends StatelessWidget {
   const CustomBottomBar({
     required this.selectedTab,
     required this.isDevelop,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

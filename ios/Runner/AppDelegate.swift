@@ -84,8 +84,7 @@ import app_links
   // Post start up
   // Init all method needed for user
   func startUpSequency() {
-    // Do not show notification dialog in Appium Env
-    if AppEnvironment.current != AppEnvironment.appiumTest {
+    if isRunningInTestFlightEnvironment() || isRunningFromAppStore() {
       askNotificationPermssion()
     }
   }

@@ -80,7 +80,6 @@ class ConfigOptions {
         plans[id] = planFromJson(item) as Plan;
       }
     }
-    final paymentMethods = paymentMethodsFromJson(parsedJson['paymentMethods']);
 
     return ConfigOptions(
       developmentMode: parsedJson['developmentMode'],
@@ -94,7 +93,7 @@ class ConfigOptions {
       fetchedProxiesConfig: parsedJson['fetchedProxiesConfig'],
       plans: plans,
       chat: _ChatOptions.fromJson(parsedJson['chat']),
-      paymentMethods: paymentMethods,
+      paymentMethods: paymentMethodsFromJson(parsedJson['paymentMethods']),
       devices: _parseDevices(parsedJson),
       replicaAddr: parsedJson['replicaAddr'].toString(),
       deviceId: parsedJson['deviceId'].toString(),

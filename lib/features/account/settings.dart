@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:lantern/core/app/app_loading_dialog.dart';
 import 'package:lantern/core/localization/localization_constants.dart';
 import 'package:lantern/core/utils/common.dart';
+import 'package:lantern/core/widgtes/version_footer.dart';
 import 'package:lantern/features/messaging/messaging_model.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -9,7 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 class Settings extends StatelessWidget {
   Settings({super.key});
 
-  final packageInfo = PackageInfo.fromPlatform();
+
 
   void openInfoProxyAll(BuildContext context) {
     CDialog.showInfo(
@@ -60,8 +61,8 @@ class Settings extends StatelessWidget {
       body: ListView(
         shrinkWrap: true,
         children: [
-          //* Language
           ListItemFactory.settingsItem(
+            key: AppKeys.language,
             header: 'general'.i18n,
             icon: ImagePaths.translate,
             content: 'language'.i18n,
@@ -84,6 +85,7 @@ class Settings extends StatelessWidget {
             ],
           ),
           ListItemFactory.settingsItem(
+            key: AppKeys.checkForUpdates,
             icon: ImagePaths.update,
             content: 'check_for_updates'.i18n,
             trailingArray: [
@@ -91,11 +93,12 @@ class Settings extends StatelessWidget {
             ],
             onTap: () => checkForUpdateTap(context),
           ),
-          //* Blocked
+
           if (!isDesktop())
             messagingModel.getOnBoardingStatus(
               (context, hasBeenOnboarded, child) => hasBeenOnboarded == true
                   ? ListItemFactory.settingsItem(
+                key: AppKeys.chat,
                       header: 'chat'.i18n,
                       icon: ImagePaths.block,
                       content: 'blocked_users'.i18n,
@@ -110,49 +113,53 @@ class Settings extends StatelessWidget {
                   : const SizedBox(),
             ),
           //* Split tunneling
-          if (Platform.isAndroid)
+          if (isAndroid())
             sessionModel.splitTunneling(
-              (BuildContext context, bool value, Widget? child) =>
-                  ListItemFactory.settingsItem(
-                header: 'VPN'.i18n,
-                icon: ImagePaths.split_tunneling,
-                onTap: () {
-                  openSplitTunneling(context);
-                },
-                content: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
+              (BuildContext context, bool value, Widget? child) {
+               return ListItemFactory.settingsItem(
+                  key: AppKeys.splitTunneling,
+                  header: 'VPN'.i18n,
+                  icon: ImagePaths.split_tunneling,
+                  onTap: () {
+                    openSplitTunneling(context);
+                  },
+                  content: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: CText(
+                          'split_tunneling'.i18n,
+                          softWrap: false,
+                          style: tsSubtitle1.short,
+                        ),
+                      ),
+                    ],
+                  ),
+                  trailingArray: [
+                    Padding(
+                      padding:
+                      const EdgeInsetsDirectional.only(start: 16, end: 16),
                       child: CText(
-                        'split_tunneling'.i18n,
-                        softWrap: false,
-                        style: tsSubtitle1.short,
+                        value ? 'ON'.i18n : 'OFF'.i18n,
+                        style: tsSubtitle2.copiedWith(color: pink4),
                       ),
                     ),
+                    mirrorLTR(
+                      context: context,
+                      child: const ContinueArrow(),
+                    )
                   ],
-                ),
-                trailingArray: [
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.only(start: 16, end: 16),
-                    child: CText(
-                      value ? 'ON'.i18n : 'OFF'.i18n,
-                      style: tsSubtitle2.copiedWith(color: pink4),
-                    ),
-                  ),
-                  mirrorLTR(
-                    context: context,
-                    child: const ContinueArrow(),
-                  )
-                ],
-              ),
+                );
+              }
+
             ),
           //* Proxy all
           if (isDesktop())
             sessionModel.proxyAll(
               (BuildContext context, bool proxyAll, Widget? child) =>
                   ListItemFactory.settingsItem(
+                    key: AppKeys.proxyAll,
                 header: 'VPN'.i18n,
                 icon: ImagePaths.split_tunneling,
                 content: CInkWell(
@@ -195,6 +202,7 @@ class Settings extends StatelessWidget {
             ),
           if (isDesktop())
             ListItemFactory.settingsItem(
+              key: AppKeys.proxySetting,
               icon: ImagePaths.proxySetting,
               content: 'proxy_settings'.i18n,
               trailingArray: [
@@ -204,6 +212,7 @@ class Settings extends StatelessWidget {
             ),
 
           ListItemFactory.settingsItem(
+            key: AppKeys.privacyPolicy,
             header: 'about'.i18n,
             content: 'privacy_policy'.i18n,
             onTap: () => openWebView(
@@ -221,6 +230,7 @@ class Settings extends StatelessWidget {
             ],
           ),
           ListItemFactory.settingsItem(
+            key: AppKeys.termsOfServices,
             content: 'terms_of_service'.i18n,
             trailingArray: [
               mirrorLTR(
@@ -236,61 +246,8 @@ class Settings extends StatelessWidget {
             onTap: () =>
                 openWebView(AppSecret.tosV2, context, "terms_of_service".i18n),
           ),
-          //* Build version
-          FutureBuilder<PackageInfo>(
-            future: packageInfo,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              }
-              final packageInfo = snapshot.data;
-              return Padding(
-                padding: const EdgeInsetsDirectional.only(top: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      padding: const EdgeInsetsDirectional.only(
-                        bottom: 8.0,
-                        end: 8.0,
-                      ),
-                      child: CText(
-                        'version_number'
-                            .i18n
-                            .fill([packageInfo?.version ?? '']),
-                        style: tsOverline.copiedWith(color: pink4),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsetsDirectional.only(
-                        bottom: 8.0,
-                        end: 8.0,
-                      ),
-                      child: CText(
-                        'build_number'
-                            .i18n
-                            .fill([packageInfo?.buildNumber ?? '']),
-                        style: tsOverline.copiedWith(color: pink4),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsetsDirectional.only(
-                        bottom: 8.0,
-                        end: 8.0,
-                      ),
-                      child: sessionModel.sdkVersion(
-                        (context, sdkVersion, _) => CText(
-                          'sdk_version'.i18n.fill([sdkVersion]),
-                          style: tsOverline.copiedWith(color: pink4),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+
+          const VersionFooter(),
         ],
       ),
     );

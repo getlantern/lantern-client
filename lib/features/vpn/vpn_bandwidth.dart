@@ -15,6 +15,10 @@ class VPNBandwidth extends StatelessWidget {
         // received any bandwidth updates
         return const SizedBox();
       }
+      // It means we are uncapped
+      if(bandwidth.mibAllowed == Int64(0)) {
+        return const SizedBox();
+      }
       return Column(
         children: [
           Container(

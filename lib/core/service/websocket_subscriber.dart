@@ -105,6 +105,7 @@ class WebsocketSubscriber {
 
           case _WebsocketMessageType.bandwidth:
             _webSocketLogger.i("Websocket message[Bandwidth]: $message");
+            // final bandwidth = message as Map<String, dynamic>;
             sessionModel.bandwidthNotifier.value = Bandwidth.create()
               ..mergeFromProto3Json(message);
           case _WebsocketMessageType.config:
