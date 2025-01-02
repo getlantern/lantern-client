@@ -4,7 +4,7 @@ import 'package:lantern/features/messaging/messaging_model.dart';
 
 @RoutePage(name: 'Account')
 class AccountMenu extends StatefulWidget {
-  const AccountMenu({Key? key}) : super(key: key);
+  const AccountMenu({super.key});
 
   @override
   State<AccountMenu> createState() => _AccountMenuState();
