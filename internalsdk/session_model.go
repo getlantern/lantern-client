@@ -757,11 +757,6 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 			return pathdb.Put(tx, pathIsFirstTime, true, "")
 		})
-
-		// err = m.userCreate(ctx)
-		// if err != nil {
-		// 	log.Error(err)
-		// }
 		go m.proClient.RetryCreateUser(ctx, m, 10*time.Minute)
 	} else {
 		// Get all user details
@@ -769,7 +764,6 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		if err != nil {
 			log.Error(err)
 		}
-
 		go func() {
 			err = m.paymentMethods()
 			if err != nil {
@@ -787,10 +781,7 @@ func (m *SessionModel) checkAvailableFeatures() {
 	// Check for auth feature
 	authEnabled := m.featureEnabled(config.FeatureAuth)
 	m.SetAuthEnabled(authEnabled)
-	platfrom, _ := m.platform()
-	if platfrom == "ios" {
-		m.SetAuthEnabled(true)
-	}
+	m.SetAuthEnabled(true)
 
 	// Check for ads feature
 	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
