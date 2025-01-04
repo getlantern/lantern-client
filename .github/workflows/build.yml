@@ -350,6 +350,22 @@ jobs:
           path: ${{ github.workspace }}/build/ios/ipa/Lantern.ipa
           retention-days: 2
 
+      - name: Upload Debug symbols
+        if: matrix.platform == 'android'
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-symbols.zip
+          path: ${{ github.workspace }}/build/outputs/debug-symbols/debug-symbols.zip
+          retention-days: 2
+
+      - name: Upload Mapping file
+        if: matrix.platform == 'android'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mapping.txt
+          path: ${{ github.workspace }}/build/app/outputs/mapping/prodPlay/mapping.txt
+          retention-days: 2
+
       - uses: actions/upload-artifact@v4
         if: matrix.platform == 'android' && matrix.target == 'apk'
         with:
