@@ -3,8 +3,6 @@ name: Publish releases
 on:
   # Triggers the workflow on push when pushing to a version tag
   push:
-    branches:
-      - jigar/update-android-runner-CI
     tags:
       - '*lantern-*'
   workflow_run:
@@ -225,12 +223,12 @@ jobs:
           shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
           shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
 
-#      - name: Commit
-#        run: |
-#          mv lantern-installer* ./lantern-binaries/
-#          cd lantern-binaries
-#          git config user.email "admin@getlantern.org"
-#          git config user.name "Lantern Bot"
-#          git add .
-#          git commit -m "Lantern binaries for version ${{ env.version }}"
-#          git push origin main
+      - name: Commit
+        run: |
+          mv lantern-installer* ./lantern-binaries/
+          cd lantern-binaries
+          git config user.email "admin@getlantern.org"
+          git config user.name "Lantern Bot"
+          git add .
+          git commit -m "Lantern binaries for version ${{ env.version }}"
+          git push origin main
