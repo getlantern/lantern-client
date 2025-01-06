@@ -1,7 +1,7 @@
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
-import 'package:lantern/features/checkout/payment_provider.dart';
 import 'package:lantern/core/utils/utils.dart';
+import 'package:lantern/features/checkout/payment_provider.dart';
 import 'package:retry/retry.dart';
 
 @RoutePage(name: 'Checkout')
@@ -467,11 +467,11 @@ class _CheckoutState extends State<Checkout>
         /// There is edge case where user is signup with email and password but not pro
         /// this happens when does restore purchase on other device so older device
         /// does not have pro status but have email and password
-        if (sessionModel.hasUserSignedInNotifier.value ?? false) {
+        if ((sessionModel.hasUserSignedInNotifier.value ?? false) &&
+            widget.verificationPin == null) {
           showSuccessDialog(context, widget.isPro);
           return;
         }
-
         context.pushRoute(CreateAccountPassword(
           email: widget.email.validateEmail,
           code: widget.verificationPin!,
