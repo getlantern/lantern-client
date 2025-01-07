@@ -1,114 +1,138 @@
-import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/app/app_loading_dialog.dart';
+import 'package:lantern/core/service/survey_service.dart';
+import 'package:lantern/core/utils/common.dart';
+import 'package:lantern/core/utils/utils.dart';
 import 'package:lantern/features/checkout/feature_list.dart';
 import 'package:lantern/features/checkout/plan_details.dart';
-import 'package:lantern/core/utils/utils.dart';
 
 @RoutePage(name: "PlansPage")
-class PlansPage extends StatelessWidget {
+class PlansPage extends StatefulWidget {
   const PlansPage({super.key});
+
+  @override
+  State<PlansPage> createState() => _PlansPageState();
+}
+
+class _PlansPageState extends State<PlansPage> {
+  final surveyService = sl.get<SurveyService>();
+
+  @override
+  void initState() {
+    surveyService.trackScreen(SurveyScreens.plansScreen);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FullScreenDialog(
-      bgColor: white,
-      widget: sessionModel
-          .proUser((BuildContext context, bool proUser, Widget? child) {
-        return sessionModel.plans(
-          builder: (
-            context,
-            Iterable<PathAndValue<Plan>> plans,
-            Widget? child,
-          ) {
-            if (plans.isEmpty) {
-              // show user option to retry
-              return RetryWidget(onRetryTap: () => onRetryTap(context));
-            }
-            return Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
+    return Scaffold(
+      body: Stack(
+        children: [
+          FullScreenDialog(
+            bgColor: white,
+            widget: sessionModel
+                .proUser((BuildContext context, bool proUser, Widget? child) {
+              return sessionModel.plans(
+                builder: (
+                  context,
+                  Iterable<PathAndValue<Plan>> plans,
+                  Widget? child,
+                ) {
+                  if (plans.isEmpty) {
+                    // show user option to retry
+                    return RetryWidget(onRetryTap: () => onRetryTap(context));
+                  }
+                  return Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      _buildHeader(context),
-                      Container(
-                        color: white,
-                        padding: const EdgeInsetsDirectional.only(
-                          start: 24,
-                          end: 24,
-                        ),
-                        child: Column(
+                      Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
                           children: [
-                            // * Renewal text or upsell
-                            if (plans.last.value.renewalText != '')
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                  bottom: 12.0,
-                                ),
-                                child: CText(
-                                  plans.last.value.renewalText,
-                                  style: tsBody1,
-                                ),
+                            _buildHeader(context),
+                            Container(
+                              color: white,
+                              padding: const EdgeInsetsDirectional.only(
+                                start: 24,
+                                end: 24,
                               ),
-                            const Padding(
-                              padding: EdgeInsetsDirectional.only(
-                                bottom: 8.0,
+                              child: Column(
+                                children: [
+                                  // * Renewal text or upsell
+                                  if (plans.last.value.renewalText != '')
+                                    Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                        bottom: 12.0,
+                                      ),
+                                      child: CText(
+                                        plans.last.value.renewalText,
+                                        style: tsBody1,
+                                      ),
+                                    ),
+                                  const Padding(
+                                    padding: EdgeInsetsDirectional.only(
+                                      bottom: 8.0,
+                                    ),
+                                    child: CDivider(),
+                                  ),
+                                  FeatureList(),
+                                  const CDivider(height: 24),
+                                ],
                               ),
-                              child: CDivider(),
                             ),
-                            FeatureList(),
-                            const CDivider(height: 24),
+                            // * Card
+                            ...plans.toList().reversed.map(
+                                  (plan) => Container(
+                                    color: white,
+                                    padding: const EdgeInsetsDirectional.only(
+                                      start: 32.0,
+                                      end: 32.0,
+                                    ),
+                                    child: PlanCard(
+                                      plan: plan.value,
+                                      isPro: proUser,
+                                    ),
+                                  ),
+                                ),
+                            FutureBuilder<bool>(
+                              future:
+                                  AppMethods.showRestorePurchaseButton(proUser),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData && snapshot.data as bool) {
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            restorePurchases(context),
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: pink5,
+                                        ),
+                                        child: CText(
+                                            "restore_purchase".i18n.toUpperCase(),
+                                            style: tsButton.copiedWith(
+                                              color: pink5,
+                                            )),
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return const SizedBox();
+                              },
+                            ),
                           ],
                         ),
                       ),
-                      // * Card
-                      ...plans.toList().reversed.map(
-                            (plan) => Container(
-                              color: white,
-                              padding: const EdgeInsetsDirectional.only(
-                                start: 32.0,
-                                end: 32.0,
-                              ),
-                              child: PlanCard(
-                                plan: plan.value,
-                                isPro: proUser,
-                              ),
-                            ),
-                          ),
-                      FutureBuilder<bool>(
-                        future: AppMethods.showRestorePurchaseButton(proUser),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData && snapshot.data as bool) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextButton(
-                                  onPressed: () => restorePurchases(context),
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: pink5,
-                                  ),
-                                  child: CText(
-                                      "restore_purchase".i18n.toUpperCase(),
-                                      style: tsButton.copiedWith(
-                                        color: pink5,
-                                      )),
-                                ),
-                              ],
-                            );
-                          }
-                          return const SizedBox();
-                        },
-                      ),
+                      _buildFooter(context, proUser),
                     ],
-                  ),
-                ),
-                _buildFooter(context, proUser),
-              ],
-            );
-          },
-        );
-      }),
+                  );
+                },
+              );
+            }),
+          ),
+          sl.get<SurveyService>().surveyWidget()
+        ],
+      ),
     );
   }
 
@@ -181,7 +205,6 @@ class PlansPage extends StatelessWidget {
   }
 
   // class methods
-
   Future<void> onRetryTap(BuildContext context) async {
     try {
       AppLoadingDialog.showLoadingDialog(context);

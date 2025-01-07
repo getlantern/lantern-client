@@ -1,16 +1,24 @@
 import 'package:surveysparrow_flutter_sdk/surveysparrow.dart';
 
-enum SurveyScreens { homeScreen }
+import '../utils/common.dart';
+
+enum SurveyScreens {
+  homeScreen,
+  plansScreen
+}
 
 //This class use spot check service for survey
 class SurveyService {
-  final SpotCheck spotCheck = SpotCheck(
-    domainName: "<your_domain>",
-    targetToken: "<target_token>",
-    userDetails: {},
-  );
+  final SpotCheck _spotCheck = SpotCheck(
+      domainName: "lantern.surveysparrow.com",
+      targetToken: "tar-87GWRfobkr3uxkKVog9C6V",
+      userDetails: {});
 
   void trackScreen(SurveyScreens screen) {
-    spotCheck.trackScreen(screen.name);
+    _spotCheck.trackScreen(screen.name);
+  }
+
+  Widget surveyWidget() {
+    return _spotCheck;
   }
 }
