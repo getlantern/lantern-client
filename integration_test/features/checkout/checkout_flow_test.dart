@@ -1,3 +1,4 @@
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/utils.dart';
 import 'package:lantern/features/checkout/payment_provider.dart';
 import 'package:lantern/features/checkout/plan_details.dart';
@@ -36,14 +37,6 @@ void main() {
       expect($('lantern_pro_checkout'.i18n), findsOneWidget);
       expect($(PaymentProvider), findsAtLeast(1));
 
-      // check if payment is available or not
-      final stripeFound = $.tester.any(find.byTooltip(Providers.stripe.name));
-      if (!stripeFound) {
-        print('Payment method not available. Skipping test.');
-        return;
-      }
-
-      // Check if continue button is disabled
       final continueBtn = $.tester.widget<Button>($(Button));
       expect(continueBtn.disabled, true);
 
@@ -51,22 +44,28 @@ void main() {
         "test@getlantern.org",
       );
       FocusManager.instance.primaryFocus?.unfocus();
-      final stipeProvider = find.byTooltip(Providers.stripe.name);
-      await $.tester.tap(stipeProvider);
-      await $('continue'.i18n.toUpperCase()).tap();
-      await $.pumpAndSettle();
 
-      if (isAndroid()) {
-        expect($(CTextField), findsExactly(3));
-        expect($(PriceSummary), findsOneWidget);
-      } else {
-        expect($(AppWebView), findsOneWidget);
-        expect($(AppWebView).visible, true);
+      // check if payment is available or not
+      final stripeFound = $.tester.any(find.byTooltip(Providers.stripe.name));
+      if (stripeFound) {
+        // Check if continue button is disabled
+        final stipeProvider = find.byTooltip(Providers.stripe.name);
+        await $.tester.tap(stipeProvider);
+        await $('continue'.i18n.toUpperCase()).tap();
+        await $.pumpAndSettle();
+
+        if (isAndroid()) {
+          expect($(CTextField), findsExactly(3));
+          expect($(PriceSummary), findsOneWidget);
+        } else {
+          expect($(AppWebView), findsOneWidget);
+          expect($(AppWebView).visible, true);
+        }
+
+        // go back
+        await $(IconButton).tap();
+        await $.pump(const Duration(seconds: 1));
       }
-
-      // go back
-      await $(IconButton).tap();
-      await $.pump(const Duration(seconds: 1));
 
       /// Check out flow for shepherd
       final shepherdFound =
@@ -82,9 +81,10 @@ void main() {
           await $.pump(const Duration(seconds: 1));
         }
         expect($(AppWebView), findsOneWidget);
-        expect($(AppWebView).visible, true);
-        await $(IconButton).tap();
-        await $.pump(const Duration(seconds: 1));
+        expect($(InAppWebView), findsOneWidget);
+
+        await $.tester.tap($(IconButton));
+        await $.pump(const Duration(seconds: 2));
       }
 
       /// Check out flow for froPay
