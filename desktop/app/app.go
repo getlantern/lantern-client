@@ -352,6 +352,7 @@ func (app *App) SendMessageToUI(service string, message interface{}) {
 func (app *App) SendUpdateUserDataToUI() {
 	user, found := app.GetUserData(app.Settings().GetUserID())
 	if !found {
+		log.Debugf("User not found")
 		return
 	}
 	if user.UserLevel == "" {
@@ -574,8 +575,17 @@ func (app *App) fetchOrCreateUser(ctx context.Context) {
 		ss.SetUserFirstVisit(true)
 		app.proClient.RetryCreateUser(ctx, app, 5*time.Minute)
 	} else {
-		app.proClient.UpdateUserData(ctx, app)
+		app.FetchOrUpdateUserData(ctx)
 	}
+}
+
+func (app *App) FetchOrUpdateUserData(ctx context.Context) {
+	user, err := app.proClient.UpdateUserData(ctx, app)
+	if err != nil {
+		log.Errorf("Error updating user data: %v", err)
+		return
+	}
+	app.SetUserData(ctx, user.UserId, user)
 }
 
 func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {

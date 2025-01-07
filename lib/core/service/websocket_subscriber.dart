@@ -85,24 +85,39 @@ class WebsocketSubscriber {
             }
           case _WebsocketMessageType.pro:
             _webSocketLogger.i("Websocket message[Pro]: $message");
-            final userStatus = message['userStatus'];
-            final userLevel = message['userLevel'];
-            final deviceLinkingCode = message['deviceLinkingCode'];
-            final isLevelPro = userLevel != null && userLevel == 'pro';
-            final isStatusPro = userStatus != null && userStatus == 'active';
-            sessionModel.proUserNotifier.value = (isLevelPro || isStatusPro);
-            if (deviceLinkingCode != null) {
-              sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
-            }
-            final userSignedIn = message['login'];
-            if (userSignedIn != null) {
-              sessionModel.hasUserSignedInNotifier.value = userSignedIn as bool;
-            }
-            final language = message['language'];
-            if (language != null) {
-              sessionModel.langNotifier.value = language;
+            final proMap = message as Map<String, dynamic>;
+
+            ///Since pro channel has been used many places, we need to check if the key exists
+            /// Sometime is send only one key, sometime multiple keys if don't then values goes back to default
+            if (proMap.containsKey('userStatus') ||
+                proMap.containsKey('userLevel')) {
+              final userStatus = proMap['userStatus'];
+              final userLevel = proMap['userLevel'];
+              final isLevelPro = userLevel != null && userLevel == 'pro';
+              final isStatusPro = userStatus != null && userStatus == 'active';
+              sessionModel.proUserNotifier.value = (isLevelPro || isStatusPro);
             }
 
+            if (proMap.containsKey('deviceLinkingCode')) {
+              final deviceLinkingCode = proMap['deviceLinkingCode'];
+              if (deviceLinkingCode != null) {
+                sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
+              }
+            }
+            if (proMap.containsKey('login')) {
+              final userSignedIn = proMap['login'];
+              if (userSignedIn != null) {
+                sessionModel.hasUserSignedInNotifier.value =
+                    userSignedIn as bool;
+              }
+            }
+
+            if (proMap.containsKey('language')) {
+              final language = proMap['language'];
+              if (language != null) {
+                sessionModel.langNotifier.value = language;
+              }
+            }
           case _WebsocketMessageType.bandwidth:
             _webSocketLogger.i("Websocket message[Bandwidth]: $message");
             sessionModel.bandwidthNotifier.value = Bandwidth.create()

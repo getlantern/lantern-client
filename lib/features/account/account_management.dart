@@ -3,9 +3,8 @@ import 'package:lantern/core/utils/utils.dart';
 
 @RoutePage(name: 'AccountManagement')
 class AccountManagement extends StatefulWidget {
-  const AccountManagement({Key? key, required this.isPro}) : super(key: key);
+  const AccountManagement({super.key, required this.isPro});
   final bool isPro;
-
   @override
   State<AccountManagement> createState() => _AccountManagementState();
 }
@@ -310,6 +309,10 @@ class _AccountManagementState extends State<AccountManagement>
             icon: ImagePaths.email,
             content: emailAddress,
             trailingArray: [],
+            onTap: () => copyText(
+              context,
+              emailAddress,
+            )
           );
         }),
 
