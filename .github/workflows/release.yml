@@ -4,7 +4,7 @@ on:
   # Triggers the workflow on push when pushing to a version tag
   push:
     branches:
-      - jigar/ci-android-fix
+      - ci-android-fix
     tags:
       - '*lantern-*'
   workflow_run:
@@ -52,7 +52,7 @@ jobs:
           fi
 
   set-version:
-    needs: determine-tag
+    needs: determine-platform
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.set-version.outputs.version }}
