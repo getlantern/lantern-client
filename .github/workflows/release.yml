@@ -121,7 +121,7 @@ jobs:
 
   push-binaries:
     runs-on: ubuntu-latest
-    needs: [ set-version ]
+    needs: [ set-platform,set-version ]
     env:
       version: ${{ needs.set-version.outputs.version }}
       prefix: ${{ needs.set-version.outputs.prefix }}
@@ -172,8 +172,10 @@ jobs:
       - name: Debugging
         run: |
           echo "Debugging"
+          echo "The platform is ${{ steps.set-platform.outputs.platform }}"
           echo ${{ needs.set-version.outputs.prefix }} == 'lantern-installer-preview'
           echo ${{ needs.set-platform.outputs.platform }} == 'android' || ${{ needs.set-platform.outputs.platform }} == 'all'
+
 #          echo needs.set-version.outputs.prefix
 #          echo needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
 #          echo needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
@@ -216,31 +218,31 @@ jobs:
 #          track: production
 #          debugSymbols: debug-symbols.zip
 #          mappingFile: mapping.txt
-      - name: Grant private modules access
-        run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
-      - name: Clone binaries repo
-        run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
-
-      - name: Rename builds
-        run: |
-          diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
-          diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
-          mv -f lantern-installer-x64.deb ${{ env.prefix }}-64-bit.deb
-          mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
-          mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
-          diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
-          mv -f Lantern.ipa ${{ env.prefix }}.ipa
-
-      - name: Prepare sha256 sums
-        run: |
-          shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
-          shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
-          shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
-          shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
-          shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
-          shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
-          shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
+#      - name: Grant private modules access
+#        run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+#
+#      - name: Clone binaries repo
+#        run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
+#
+#      - name: Rename builds
+#        run: |
+#          diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
+#          diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
+#          mv -f lantern-installer-x64.deb ${{ env.prefix }}-64-bit.deb
+#          mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
+#          mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
+#          diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
+#          mv -f Lantern.ipa ${{ env.prefix }}.ipa
+#
+#      - name: Prepare sha256 sums
+#        run: |
+#          shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
+#          shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
+#          shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
+#          shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
+#          shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
+#          shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
+#          shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
 
 #      - name: Commit
 #        run: |
