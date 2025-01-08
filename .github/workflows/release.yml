@@ -173,7 +173,7 @@ jobs:
         run: |
           echo "Debugging"
           echo ${{ needs.set-version.outputs.prefix }} == 'lantern-installer-preview'
-          echo ${{ needs.determine-platform.outputs.platform }} == 'android' || ${{ needs.determine-platform.outputs.platform }} == 'all'
+          echo ${{ needs.set-platform.outputs.platform }} == 'android' || ${{ needs.set-platform.outputs.platform }} == 'all'
 #          echo needs.set-version.outputs.prefix
 #          echo needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
 #          echo needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
