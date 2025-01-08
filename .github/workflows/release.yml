@@ -176,9 +176,9 @@ jobs:
           echo "The platform is two ${{ needs.set-platform.outputs.platform }}"
           echo ${{ needs.set-version.outputs.prefix }} == 'lantern-installer-preview'
           echo ${{ needs.set-platform.outputs.platform }} == 'android' || ${{ needs.set-platform.outputs.platform }} == 'all'
-          if [[ ${{ needs.set-version.outputs.prefix }} == 'lantern-installer-preview' && (${{ needs.set-platform.outputs.platform }} == 'android' || ${{ needs.set-platform.outputs.platform }} == 'all') ]]; then
-            echo "Uploading to Play Store beta"
-          fi
+          echo "The platform is ${{ needs.determine-platform.outputs.platform }}"
+          echo "The prefix is ${{ needs.set-version.outputs.prefix }}"
+          echo "The condition (platform is android or all): ${{ needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all' }}"
 
 #          echo needs.set-version.outputs.prefix
 #          echo needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
