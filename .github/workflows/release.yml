@@ -172,10 +172,11 @@ jobs:
       - name: Debugging
         run: |
           echo "Debugging"
-          echo ${{ needs.set-version.outputs.prefix }} == 'lantern-installer-preview' && (${{ needs.determine-platform.outputs.platform }} == 'android' || ${{ needs.determine-platform.outputs.platform }} == 'all')
-          echo needs.set-version.outputs.prefix
-          echo needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-          echo needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+          echo ${{ needs.set-version.outputs.prefix }} == 'lantern-installer-preview'
+          echo ${{ needs.determine-platform.outputs.platform }} == 'android' || ${{ needs.determine-platform.outputs.platform }} == 'all'
+#          echo needs.set-version.outputs.prefix
+#          echo needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+#          echo needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
 
       - name: Upload Android App bundle to Play Store (beta)
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
