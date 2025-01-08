@@ -121,7 +121,7 @@ jobs:
 
   push-binaries:
     runs-on: ubuntu-latest
-    needs: [ set-platform,set-version ]
+    needs: [ determine-platform,set-version ]
     env:
       version: ${{ needs.set-version.outputs.version }}
       prefix: ${{ needs.set-version.outputs.prefix }}
