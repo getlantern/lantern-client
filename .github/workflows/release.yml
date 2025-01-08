@@ -121,53 +121,53 @@ jobs:
 
   push-binaries:
     runs-on: ubuntu-latest
-    needs: [ set-version, build ]
+    needs: [ set-version ]
     env:
       version: ${{ needs.set-version.outputs.version }}
       prefix: ${{ needs.set-version.outputs.prefix }}
     steps:
-      - name: Download the mac build output
-        uses: actions/download-artifact@v4
-        with:
-          name: macos-build
-      - name: Download the linux deb build output
-        uses: actions/download-artifact@v4
-        with:
-          name: linux-rpm-build
-      - name: Download the linux rpm build output
-        uses: actions/download-artifact@v4
-        with:
-          name: linux-deb-build
-
-      - name: Download the windows64 build output
-        uses: actions/download-artifact@v4
-        with:
-          name: windows64-installer-signed
-
-      - name: Download the apk build output
-        uses: actions/download-artifact@v4
-        with:
-          name: android-apk-build
-
-      - name: Download the aab build output
-        uses: actions/download-artifact@v4
-        with:
-          name: android-aab-build
-
-      - name: Download the IPA
-        uses: actions/download-artifact@v4
-        with:
-          name: Lantern.ipa
-
-      - name: Download the Debug Symbols
-        uses: actions/download-artifact@v4
-        with:
-          name: debug-symbols.zip
-
-      - name: Download the mapping file
-        uses: actions/download-artifact@v4
-        with:
-          name: mapping.txt
+#      - name: Download the mac build output
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: macos-build
+#      - name: Download the linux deb build output
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: linux-rpm-build
+#      - name: Download the linux rpm build output
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: linux-deb-build
+#
+#      - name: Download the windows64 build output
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: windows64-installer-signed
+#
+#      - name: Download the apk build output
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: android-apk-build
+#
+#      - name: Download the aab build output
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: android-aab-build
+#
+#      - name: Download the IPA
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: Lantern.ipa
+#
+#      - name: Download the Debug Symbols
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: debug-symbols.zip
+#
+#      - name: Download the mapping file
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: mapping.txt
 
       - name: Debugging
         run: |
