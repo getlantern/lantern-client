@@ -68,7 +68,6 @@ jobs:
             platform: linux
           - os: macos-latest
             platform: ios
-    if: ${{ inputs.platform == 'all' || inputs.platform == matrix.platform }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
