@@ -3,6 +3,8 @@ import 'package:lantern/features/replica/logic/api.dart';
 import 'package:lantern/features/replica/models/replica_link.dart';
 import 'package:lantern/features/replica/ui/utils.dart';
 
+///There is some issue with ListItemFactory class, it is not working as in testcases.
+///Most of time it fail to find item by finder so for now assign key to find item
 class ListItemFactory extends StatelessWidget {
   final Widget Function(BuildContext, ListItemFactory) builder;
 

@@ -447,6 +447,7 @@ class CustomCacheManager {
   }
 
   Future<void> clearCacheIfExceeded() async {
+    if(isDesktop()) return;
     final cacheDir = await getTemporaryDirectory();
     final cacheSize = _calculateCacheSize(cacheDir);
 

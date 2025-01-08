@@ -97,7 +97,8 @@ class Bandwidth extends $pb.GeneratedMessage {
     $fixnum.Int64? percent,
     $fixnum.Int64? mibUsed,
     $fixnum.Int64? mibAllowed,
-    $fixnum.Int64? ttlSeconds,
+    $fixnum.Int64? tTLSeconds,
+    $core.String? asOf,
   }) {
     final $result = create();
     if (percent != null) {
@@ -109,8 +110,11 @@ class Bandwidth extends $pb.GeneratedMessage {
     if (mibAllowed != null) {
       $result.mibAllowed = mibAllowed;
     }
-    if (ttlSeconds != null) {
-      $result.ttlSeconds = ttlSeconds;
+    if (tTLSeconds != null) {
+      $result.tTLSeconds = tTLSeconds;
+    }
+    if (asOf != null) {
+      $result.asOf = asOf;
     }
     return $result;
   }
@@ -122,7 +126,8 @@ class Bandwidth extends $pb.GeneratedMessage {
     ..aInt64(1, _omitFieldNames ? '' : 'percent')
     ..aInt64(2, _omitFieldNames ? '' : 'mibUsed', protoName: 'mibUsed')
     ..aInt64(3, _omitFieldNames ? '' : 'mibAllowed', protoName: 'mibAllowed')
-    ..aInt64(4, _omitFieldNames ? '' : 'ttlSeconds', protoName: 'ttlSeconds')
+    ..aInt64(4, _omitFieldNames ? '' : 'TTLSeconds', protoName: 'TTLSeconds')
+    ..aOS(5, _omitFieldNames ? '' : 'AsOf', protoName: 'AsOf')
     ..hasRequiredFields = false
   ;
 
@@ -175,13 +180,22 @@ class Bandwidth extends $pb.GeneratedMessage {
   void clearMibAllowed() => clearField(3);
 
   @$pb.TagNumber(4)
-  $fixnum.Int64 get ttlSeconds => $_getI64(3);
+  $fixnum.Int64 get tTLSeconds => $_getI64(3);
   @$pb.TagNumber(4)
-  set ttlSeconds($fixnum.Int64 v) { $_setInt64(3, v); }
+  set tTLSeconds($fixnum.Int64 v) { $_setInt64(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasTtlSeconds() => $_has(3);
+  $core.bool hasTTLSeconds() => $_has(3);
   @$pb.TagNumber(4)
-  void clearTtlSeconds() => clearField(4);
+  void clearTTLSeconds() => clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get asOf => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set asOf($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasAsOf() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearAsOf() => clearField(5);
 }
 
 class AppData extends $pb.GeneratedMessage {
