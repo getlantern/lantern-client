@@ -40,9 +40,11 @@ void main() {
       final continueBtn = $.tester.widget<Button>($(Button));
       expect(continueBtn.disabled, true);
 
-      await $(CTextField).enterText("test@getlantern.org");
-
-      // check if payment is available or not
+      await $.tester.enterText($(CTextField), 'test@getlantern.org');
+      await $.pump(const Duration(seconds: 1));
+      FocusManager.instance.primaryFocus?.unfocus();
+      await $.pump(const Duration(seconds: 1));
+      // // check if payment is available or not
       final stripeFound = $.tester.any(find.byTooltip(Providers.stripe.name));
       if (stripeFound) {
         // Check if continue button is disabled
@@ -58,12 +60,13 @@ void main() {
           expect($(AppWebView), findsOneWidget);
           expect($(AppWebView).visible, true);
         }
-
         // go back
-        await $(IconButton).tap();
+        await $.pump(const Duration(seconds: 1));
+        await $.tester.tap($(IconButton));
+        await $.pump(const Duration(seconds: 1));
         await $.pump(const Duration(seconds: 1));
       }
-      FocusManager.instance.primaryFocus?.unfocus();
+      await $.pump(const Duration(seconds: 1));
 
       /// Check out flow for shepherd
       final shepherdFound =
@@ -71,17 +74,17 @@ void main() {
       if (shepherdFound) {
         final shepherdProvider = find.byTooltip(Providers.shepherd.name);
         await $.tester.tap(shepherdProvider);
+        await $.pump(const Duration(seconds: 1));
         await $.tester.tap($(Button));
-        await $.pumpAndTrySettle();
+        await $.pumpAndSettle();
 
-        expect($(AppWebView), findsOneWidget);
         expect($(InAppWebView), findsOneWidget);
 
+        await $.pump(const Duration(seconds: 1));
         await $.tester.tap($(IconButton));
         await $.pump(const Duration(seconds: 1));
+        await $.pump(const Duration(seconds: 1));
       }
-      FocusManager.instance.primaryFocus?.unfocus();
-
       /// Check out flow for froPay
       final froPayFound = $.tester.any(find.byTooltip(Providers.fropay.name));
       if (froPayFound) {
