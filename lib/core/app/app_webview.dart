@@ -104,26 +104,26 @@ class _AppWebViewState extends State<AppWebView> {
             onReceivedError: (controller, request, error) =>
                 showErrorDialog("Failed to load", error.description),
             initialSettings: InAppWebViewSettings(
-              isInspectable: kDebugMode,
-              javaScriptEnabled: true,
-              supportZoom: true,
-              domStorageEnabled: true,
-              allowFileAccess: true,
-              useWideViewPort: !isDesktop(),
-              loadWithOverviewMode: !isDesktop(),
-              clearCache: true,
-              mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
-              builtInZoomControls: Platform.isAndroid,
-              displayZoomControls: false,
-              mediaPlaybackRequiresUserGesture: false,
-              allowsInlineMediaPlayback: false,
-              underPageBackgroundColor: Colors.white,
-              transparentBackground: true,
-              allowFileAccessFromFileURLs: true,
-              preferredContentMode: isMobile()
-                  ? UserPreferredContentMode.MOBILE
-                  : UserPreferredContentMode.RECOMMENDED,
-            ),
+                isInspectable: kDebugMode,
+                javaScriptEnabled: true,
+                supportZoom: true,
+                domStorageEnabled: true,
+                allowFileAccess: true,
+                useWideViewPort: false,
+                loadWithOverviewMode: true,
+                clearCache: true,
+                mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+                builtInZoomControls: Platform.isAndroid,
+                displayZoomControls: false,
+                mediaPlaybackRequiresUserGesture: false,
+                allowsInlineMediaPlayback: false,
+                underPageBackgroundColor: Colors.white,
+                transparentBackground: true,
+                allowFileAccessFromFileURLs: true,
+                //We want to use mobile mode for webview on desktop
+                //  Since we are showign app on mobile size it will be better to use mobile mode
+                // showing recommended mode user has to scroll a lot
+                preferredContentMode: UserPreferredContentMode.MOBILE),
             onProgressChanged: (controller, progress) =>
                 appLogger.i("Loading progress: $progress%"),
           ),

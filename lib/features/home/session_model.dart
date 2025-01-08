@@ -122,7 +122,8 @@ class SessionModel extends Model {
 
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
-      return subscribedSingleValueBuilder<bool>('prouser', builder: builder,defaultValue: false);
+      return subscribedSingleValueBuilder<bool>('prouser',
+          builder: builder, defaultValue: false);
     }
     return FfiValueBuilder<bool>('prouser', proUserNotifier, builder);
   }
@@ -607,6 +608,9 @@ class SessionModel extends Model {
   }
 
   Future<void> updatePaymentPlans() async {
+    if (isDesktop()) {
+      return compute(LanternFFI.updatePaymentPlans, '');
+    }
     return methodChannel.invokeMethod('updatePaymentPlans', '');
   }
 

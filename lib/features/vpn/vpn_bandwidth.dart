@@ -15,6 +15,11 @@ class VPNBandwidth extends StatelessWidget {
         // received any bandwidth updates
         return const SizedBox();
       }
+      // If the user is uncap, don't show the data usage
+      if (bandwidth.mibAllowed == 0) {
+        return const SizedBox();
+      }
+
       return Column(
         children: [
           Container(
