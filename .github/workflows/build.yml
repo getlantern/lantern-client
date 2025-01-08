@@ -30,6 +30,9 @@ on:
       macos_version:
         type: string
         required: true
+      platform:
+        type: string
+        required: true
 
 jobs:
   build:
@@ -52,18 +55,24 @@ jobs:
         include:
           - os: macos-latest
             platform: macos
+            if: (${{ inputs.platform == 'desktop' }} || ${{ inputs.platform == 'all' }})
           - os: windows-latest
             platform: windows
+            if: (${{ inputs.platform == 'desktop' }} || ${{ inputs.platform == 'all' }})
           - os: ubuntu-latest-16-cores
             platform: android
             target: apk
+            if: (${{ inputs.platform == 'android' }} || ${{ inputs.platform == 'all' }})
           - os: ubuntu-latest-16-cores
             platform: android
             target: aab
+            if: (${{ inputs.platform == 'android' }} || ${{ inputs.platform == 'all' }})
           - os: ubuntu-latest
             platform: linux
+            if: (${{ inputs.platform == 'desktop' }} || ${{ inputs.platform == 'all' }})
           - os: macos-latest
             platform: ios
+            if: (${{ inputs.platform == 'ios' }} || ${{ inputs.platform == 'all' }})
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
