@@ -48,7 +48,7 @@ jobs:
            fi
           else
            echo "Not a tag reference, defaulting to all platforms"
-           echo "platform=android" >> "$GITHUB_OUTPUT"
+           echo "platform=all" >> "$GITHUB_OUTPUT"
           fi
 
   set-version:
@@ -93,7 +93,7 @@ jobs:
               vf = 'version-android.txt'
               version = parts[0] if len(parts) > 0 else a
           else:
-            li = 'lantern-installer'
+            li = 'lantern-installer-dev'
             vf = 'version-android-dev.txt'
             version = '9999.99.99-dev'
           
@@ -103,136 +103,129 @@ jobs:
           print(f'::set-output name=version::{version}')
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
-#  build:
-#    uses: ./.github/workflows/build.yml
-#    secrets: inherit
-#    needs: set-version
-#    with:
-#      macos_version: macos-14
-#      xcode_version: latest-stable
-#      version: ${{ needs.set-version.outputs.version }}
-#      version_file: ${{ needs.set-version.outputs.version_file }}
-#      prefix: ${{ needs.set-version.outputs.prefix }}
-#      build-suffix: 64
-#      dist-suffix: x64
-#      installer-suffix: -x64
-#      windows-arch: x64
-#      platform: ${{ needs.determine-platform.outputs.platform }}
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    needs: set-version
+    with:
+      macos_version: macos-14
+      xcode_version: latest-stable
+      version: ${{ needs.set-version.outputs.version }}
+      version_file: ${{ needs.set-version.outputs.version_file }}
+      prefix: ${{ needs.set-version.outputs.prefix }}
+      build-suffix: 64
+      dist-suffix: x64
+      installer-suffix: -x64
+      windows-arch: x64
+      platform: ${{ needs.determine-platform.outputs.platform }}
 
   push-binaries:
     runs-on: ubuntu-latest
-    needs: [ determine-platform,set-version ]
+    needs: [ determine-platform,set-version, build ]
     env:
       version: ${{ needs.set-version.outputs.version }}
       prefix: ${{ needs.set-version.outputs.prefix }}
     steps:
-#      - name: Download the mac build output
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: macos-build
-#      - name: Download the linux deb build output
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: linux-rpm-build
-#      - name: Download the linux rpm build output
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: linux-deb-build
-#
-#      - name: Download the windows64 build output
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: windows64-installer-signed
-#
-#      - name: Download the apk build output
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: android-apk-build
-#
-#      - name: Download the aab build output
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: android-aab-build
-#
-#      - name: Download the IPA
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: Lantern.ipa
-#
-#      - name: Download the Debug Symbols
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: debug-symbols.zip
-#
-#      - name: Download the mapping file
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: mapping.txt
+      - name: Download the mac build output
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-build
+      - name: Download the linux deb build output
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-rpm-build
+      - name: Download the linux rpm build output
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-deb-build
+
+      - name: Download the windows64 build output
+        uses: actions/download-artifact@v4
+        with:
+          name: windows64-installer-signed
+
+      - name: Download the apk build output
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk-build
+
+      - name: Download the aab build output
+        uses: actions/download-artifact@v4
+        with:
+          name: android-aab-build
+
+      - name: Download the IPA
+        uses: actions/download-artifact@v4
+        with:
+          name: Lantern.ipa
+
+      - name: Download the Debug Symbols
+        uses: actions/download-artifact@v4
+        with:
+          name: debug-symbols.zip
+
+      - name: Download the mapping file
+        uses: actions/download-artifact@v4
+        with:
+          name: mapping.txt
+
+
+      - name: Upload Lantern to TestFlight
+        uses: apple-actions/upload-testflight-build@v1
+        if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+        with:
+          app-path: Lantern.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
       - name: Upload Android App bundle to Play Store (beta)
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-        run: echo "Uploading Android App bundle to Play Store (beta)"
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: org.getlantern.lantern
+          releaseFiles: lantern-installer.aab
+          track: beta
+          debugSymbols: debug-symbols.zip
+          mappingFile: mapping.txt
 
       - name: Upload Android App bundle to Play Store (production)
         if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-        run: echo "Uploading Android App bundle to Play Store (production)"
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: org.getlantern.lantern
+          releaseFiles: lantern-installer.aab
+          track: production
+          debugSymbols: debug-symbols.zip
+          mappingFile: mapping.txt
 
-#      - name: Upload Lantern to TestFlight
-#        uses: apple-actions/upload-testflight-build@v1
-#        if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
-#        with:
-#          app-path: Lantern.ipa
-#          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-#          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-#          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
-#
-#      - name: Upload Android App bundle to Play Store (beta)
-#        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-#        uses: r0adkll/upload-google-play@v1
-#        with:
-#          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-#          packageName: org.getlantern.lantern
-#          releaseFiles: lantern-installer.aab
-#          track: beta
-#          debugSymbols: debug-symbols.zip
-#          mappingFile: mapping.txt
-#
-#      - name: Upload Android App bundle to Play Store (production)
-#        if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-#        uses: r0adkll/upload-google-play@v1
-#        with:
-#          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-#          packageName: org.getlantern.lantern
-#          releaseFiles: lantern-installer.aab
-#          track: production
-#          debugSymbols: ${{ github.workspace }}/build/outputs/debug-symbols/debug-symbols.zip
-#          mappingFile: ${{ github.workspace }}/build/app/outputs/mapping/prodPlay/mapping.txt
-#
-#      - name: Grant private modules access
-#        run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-#
-#      - name: Clone binaries repo
-#        run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
-#
-#      - name: Rename builds
-#        run: |
-#          diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
-#          diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
-#          mv -f lantern-installer-x64.deb ${{ env.prefix }}-64-bit.deb
-#          mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
-#          mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
-#          diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
-#          mv -f Lantern.ipa ${{ env.prefix }}.ipa
-#
-#      - name: Prepare sha256 sums
-#        run: |
-#          shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
-#          shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
-#          shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
-#          shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
-#          shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
-#          shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
-#          shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
+      - name: Grant private modules access
+        run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Clone binaries repo
+        run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
+
+      - name: Rename builds
+        run: |
+          diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
+          diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
+          mv -f lantern-installer-x64.deb ${{ env.prefix }}-64-bit.deb
+          mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
+          mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
+          diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
+          mv -f Lantern.ipa ${{ env.prefix }}.ipa
+
+      - name: Prepare sha256 sums
+        run: |
+          shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
+          shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
+          shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
+          shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
+          shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
+          shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
+          shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
 
 #      - name: Commit
 #        run: |
