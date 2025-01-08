@@ -28,7 +28,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     final vpnNotifier = context.watch<VPNChangeNotifier>();
     if (isMobile()) {
       return sessionModel.shouldShowAds((context, provider, child) {
-        if (!isTestRunning()) {
+        if (!isAppiumTest()) {
           adHelper.loadAds(provider: provider);
         }
         return vpnModel.vpnStatus(context,

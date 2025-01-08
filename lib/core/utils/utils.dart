@@ -219,6 +219,13 @@ bool isTestRunning() {
   return patrol != "";
 }
 
+bool isAppiumTest() {
+  const String? appFlavor = String.fromEnvironment('FLUTTER_APP_FLAVOR') != ''
+      ? String.fromEnvironment('FLUTTER_APP_FLAVOR')
+      : null;
+  return (appFlavor == 'appiumTest' || isTestRunning());
+}
+
 bool byPassPrivacyPolicy() {
   final mockTest = sl.isRegistered<MockingTestUtils>();
   if (mockTest) {

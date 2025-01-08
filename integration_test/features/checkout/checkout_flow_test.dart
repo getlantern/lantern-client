@@ -40,10 +40,7 @@ void main() {
       final continueBtn = $.tester.widget<Button>($(Button));
       expect(continueBtn.disabled, true);
 
-      await $(CTextField).enterText(
-        "test@getlantern.org",
-      );
-      FocusManager.instance.primaryFocus?.unfocus();
+      await $(CTextField).enterText("test@getlantern.org");
 
       // check if payment is available or not
       final stripeFound = $.tester.any(find.byTooltip(Providers.stripe.name));
@@ -51,7 +48,7 @@ void main() {
         // Check if continue button is disabled
         final stipeProvider = find.byTooltip(Providers.stripe.name);
         await $.tester.tap(stipeProvider);
-        await $('continue'.i18n.toUpperCase()).tap();
+        await $(Button).tap();
         await $.pumpAndSettle();
 
         if (isAndroid()) {
@@ -66,6 +63,7 @@ void main() {
         await $(IconButton).tap();
         await $.pump(const Duration(seconds: 1));
       }
+      FocusManager.instance.primaryFocus?.unfocus();
 
       /// Check out flow for shepherd
       final shepherdFound =
@@ -73,19 +71,16 @@ void main() {
       if (shepherdFound) {
         final shepherdProvider = find.byTooltip(Providers.shepherd.name);
         await $.tester.tap(shepherdProvider);
-        await $('continue'.i18n.toUpperCase()).tap();
-        await $.pumpAndSettle();
+        await $.tester.tap($(Button));
+        await $.pumpAndTrySettle();
 
-        final loading = $(CircularProgressIndicator).visible;
-        while (loading) {
-          await $.pump(const Duration(seconds: 1));
-        }
         expect($(AppWebView), findsOneWidget);
         expect($(InAppWebView), findsOneWidget);
 
         await $.tester.tap($(IconButton));
-        await $.pump(const Duration(seconds: 2));
+        await $.pump(const Duration(seconds: 1));
       }
+      FocusManager.instance.primaryFocus?.unfocus();
 
       /// Check out flow for froPay
       final froPayFound = $.tester.any(find.byTooltip(Providers.fropay.name));
@@ -93,14 +88,10 @@ void main() {
         final froPayProvider = find.byTooltip(Providers.fropay.name);
         await $.tester.tap(froPayProvider);
         await $('continue'.i18n.toUpperCase()).tap();
-        await $.pumpAndSettle();
 
-        final loading = $(CircularProgressIndicator).visible;
-        while (loading) {
-          await $.pump(const Duration(seconds: 1));
-        }
+        await $.pumpAndTrySettle();
         expect($(AppWebView), findsOneWidget);
-        expect($(AppWebView).visible, true);
+        expect($(InAppWebView), findsOneWidget);
       }
     },
   );
