@@ -4,7 +4,7 @@ on:
   # Triggers the workflow on push when pushing to a version tag
   push:
     branches:
-      - ci-android-fix
+      - jigar/ci-android-fix
     tags:
       - '*lantern-*'
   workflow_run:
