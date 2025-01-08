@@ -103,21 +103,21 @@ jobs:
           print(f'::set-output name=version::{version}')
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
-  build:
-    uses: ./.github/workflows/build.yml
-    secrets: inherit
-    needs: set-version
-    with:
-      macos_version: macos-14
-      xcode_version: latest-stable
-      version: ${{ needs.set-version.outputs.version }}
-      version_file: ${{ needs.set-version.outputs.version_file }}
-      prefix: ${{ needs.set-version.outputs.prefix }}
-      build-suffix: 64
-      dist-suffix: x64
-      installer-suffix: -x64
-      windows-arch: x64
-      platform: ${{ needs.determine-platform.outputs.platform }}
+#  build:
+#    uses: ./.github/workflows/build.yml
+#    secrets: inherit
+#    needs: set-version
+#    with:
+#      macos_version: macos-14
+#      xcode_version: latest-stable
+#      version: ${{ needs.set-version.outputs.version }}
+#      version_file: ${{ needs.set-version.outputs.version_file }}
+#      prefix: ${{ needs.set-version.outputs.prefix }}
+#      build-suffix: 64
+#      dist-suffix: x64
+#      installer-suffix: -x64
+#      windows-arch: x64
+#      platform: ${{ needs.determine-platform.outputs.platform }}
 
   push-binaries:
     runs-on: ubuntu-latest
@@ -172,8 +172,8 @@ jobs:
       - name: Debugging
         run: |
           echo "Debugging"
-          echo : ${{ needs.set-version.outputs.prefix }} == 'lantern-installer-preview' && (${{ needs.determine-platform.outputs.platform }} == 'android' || ${{ needs.determine-platform.outputs.platform }} == 'all')
-          echo : needs.set-version.outputs.prefix
+          echo ${{ needs.set-version.outputs.prefix }} == 'lantern-installer-preview' && (${{ needs.determine-platform.outputs.platform }} == 'android' || ${{ needs.determine-platform.outputs.platform }} == 'all')
+          echo needs.set-version.outputs.prefix
           echo needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
           echo needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
 
