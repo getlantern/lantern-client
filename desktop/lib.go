@@ -431,6 +431,16 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 	return C.CString("true")
 }
 
+//export updatePaymentMethod
+func updatePaymentMethod() *C.char {
+	_, err := a.ProClient().DesktopPaymentMethods(context.Background())
+	if err != nil {
+		return sendError(err)
+	}
+	a.SendConfig()
+	return C.CString("true")
+}
+
 //export checkUpdates
 func checkUpdates() *C.char {
 	log.Debug("Checking for updates")

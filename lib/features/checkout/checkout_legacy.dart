@@ -10,7 +10,6 @@ import 'package:retry/retry.dart';
 class CheckoutLegacy extends StatefulWidget {
   final Plan plan;
   final bool isPro;
-
   const CheckoutLegacy({
     required this.plan,
     required this.isPro,

@@ -606,6 +606,9 @@ class SessionModel extends Model {
   }
 
   Future<void> updatePaymentPlans() async {
+    if (isDesktop()) {
+      return compute(LanternFFI.updatePaymentPlans, '');
+    }
     return methodChannel.invokeMethod('updatePaymentPlans', '');
   }
 

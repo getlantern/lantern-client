@@ -49,6 +49,7 @@ android {
     }
     // Use legacy packaging to helps reduce apk size
     packagingOptions{
+        exclude "DebugProbesKt.bin"
         jniLibs {
             useLegacyPackaging true
         }
@@ -362,8 +363,7 @@ dependencies {
 
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
-//    implementation 'com.github.getlantern:db-android:6c0525eeb9'
-//    implementation 'com.github.getlantern:messaging-android:eabf104396'
+
 
     implementation 'com.github.getlantern:db-android:a137a028d4'
     implementation 'com.github.getlantern:messaging-android:4c346e64ee'
