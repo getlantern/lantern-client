@@ -117,7 +117,6 @@ jobs:
       dist-suffix: x64
       installer-suffix: -x64
       windows-arch: x64
-      platform: ${{ needs.determine-platform.outputs.platform }}
 
   push-binaries:
     runs-on: ubuntu-latest
