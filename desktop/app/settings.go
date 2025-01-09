@@ -168,11 +168,7 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	// old lantern persist settings with all lower case, convert them to camel cased.
 	toCamelCase(set)
 
-	deviceID := deviceid.Get()
-
-	fmt.Printf("Device ID is %s\n", deviceID)
-
-	set[SNDeviceID] = deviceID
+	set[SNDeviceID] = deviceid.Get()
 
 	// SNUserID may be unmarshalled as int, which causes panic when GetUserID().
 	// Make sure to store it as int64.

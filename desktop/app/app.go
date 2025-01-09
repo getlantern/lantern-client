@@ -43,7 +43,7 @@ import (
 )
 
 var (
-	log       = golog.LoggerFor("lantern-desktop.app")
+	log       = golog.LoggerFor("lantern-client")
 	startTime = time.Now()
 )
 
@@ -53,41 +53,36 @@ func init() {
 
 }
 
-// App is the core of the Lantern desktop application, in the form of a library.
+// App is the core of the Lantern desktop application, managing components and configurations.
 type App struct {
-	hasExited            atomic.Bool
-	fetchedGlobalConfig  atomic.Bool
-	fetchedProxiesConfig atomic.Bool
-	hasSucceedingProxy   atomic.Bool
+	hasExited            atomic.Bool // Tracks if the app has exited.
+	fetchedGlobalConfig  atomic.Bool // Indicates if the global configuration was fetched.
+	fetchedProxiesConfig atomic.Bool // Tracks whether the proxy configuration was fetched.
+	hasSucceedingProxy   atomic.Bool // Tracks if a succeeding proxy is available.
 
-	Flags         flashlight.Flags
-	configDir     string
-	exited        eventual.Value
-	settings      *Settings
+	Flags         flashlight.Flags // Command-line flags passed to the app.
+	configDir     string           // Directory for storing configuration files.
+	exited        eventual.Value   // Signals when the app has exited.
+	settings      *Settings        // User settings for the application.
 	configService *configService
 	statsTracker  *statsTracker
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
 
-	translations eventual.Value
+	translations eventual.Value         // Translation files for localization.
+	flashlight   *flashlight.Flashlight // Flashlight library for networking and proxying.
 
-	flashlight *flashlight.Flashlight
+	authClient auth.AuthClient     // Client for managing authentication.
+	proClient  proclient.ProClient // Client for managing interaction with the Pro server.
 
-	authClient auth.AuthClient
-	proClient  proclient.ProClient
-
-	selectedTab Tab
-
-	connectionStatusCallbacks []func(isConnected bool)
-
+	selectedTab               Tab                      // Tracks the currently selected UI tab.
+	connectionStatusCallbacks []func(isConnected bool) // Listeners for connection status changes.
 	// Websocket-related settings
-	websocketAddr string
-	ws            ws.UIChannel
-
-	cachedUserData sync.Map
-
-	onUserData []func(current *protos.User, new *protos.User)
+	websocketAddr  string                                         // Address for WebSocket connections.
+	ws             ws.UIChannel                                   // UI channel for WebSocket communication.
+	cachedUserData sync.Map                                       // Cached user data.
+	onUserData     []func(current *protos.User, new *protos.User) // Listeners for user data changes.
 
 	mu sync.RWMutex
 }
@@ -122,14 +117,16 @@ func NewApp() (*App, error) {
 	return NewAppWithFlags(flags, flags.ConfigDir)
 }
 
-// NewAppWithFlags creates a new instance of App initialized with the given flags and configDir
+// NewAppWithFlags creates a new App instance with the given flags and configuration directory.
 func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 	if configDir == "" {
 		log.Debug("Config directory is empty, using default location")
 		configDir = appdir.General(common.DefaultAppName)
 	}
+	// Load settings and initialize trackers and services.
 	ss := LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
+
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
@@ -143,6 +140,7 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		ws:                        ws.NewUIChannel(),
 	}
 
+	// Start the WebSocket server for UI communication.
 	if err := app.serveWebsocket(); err != nil {
 		log.Error(err)
 	}
@@ -167,7 +165,7 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 	return app, nil
 }
 
-// Run starts the app.
+// Run starts the application and initializes necessary components.
 func (app *App) Run(ctx context.Context) {
 	golog.OnFatal(app.exitOnFatal)
 	go func() {
@@ -177,11 +175,8 @@ func (app *App) Run(ctx context.Context) {
 	}()
 
 	log.Debug(app.Flags)
-	cfg := func() common.UserConfig {
-		return userConfig(app.Settings())
-	}
-	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), cfg)
-	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), cfg)
+	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), app.userConfig)
+	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), app.userConfig)
 
 	app.mu.Lock()
 	app.proClient = proClient
@@ -190,11 +185,12 @@ func (app *App) Run(ctx context.Context) {
 
 	settings := app.Settings()
 
+	// Check and apply the ProxyAll flag.
 	if app.Flags.ProxyAll {
-		// If proxyall flag was supplied, force proxying of all
 		settings.SetProxyAll(true)
 	}
 
+	// Determine the listen address for local HTTP and SOCKS proxies
 	listenAddr := app.Flags.Addr
 	if listenAddr == "" {
 		listenAddr = settings.GetAddr()
@@ -220,9 +216,7 @@ func (app *App) Run(ctx context.Context) {
 		}()
 	}
 	var err error
-
-	flagsAsMap := app.Flags.AsMap()
-	log.Fatalf("Flags are %v", flagsAsMap)
+	// Initialize flashlight
 	app.flashlight, err = flashlight.New(
 		common.DefaultAppName,
 		common.ApplicationVersion,
@@ -233,7 +227,7 @@ func (app *App) Run(ctx context.Context) {
 		settings.GetProxyAll,
 		func() bool { return false }, // on desktop, we do not allow private hosts
 		settings.IsAutoReport,
-		flagsAsMap,
+		app.Flags.AsMap(),
 		settings,
 		app.statsTracker,
 		app.IsPro,
@@ -259,6 +253,7 @@ func (app *App) Run(ctx context.Context) {
 	)
 }
 
+// userConfig returns the current user configuration after applying settings.
 func (app *App) userConfig() common.UserConfig {
 	return userConfig(app.Settings())
 }

@@ -110,10 +110,6 @@ func sendToURL(c *resty.Client, opts *Opts) SendRequest {
 			req.Body = body
 		}
 
-		if opts.BaseURL != "" {
-			path = fmt.Sprintf("%s%s", opts.BaseURL, path)
-		}
-
 		resp, err := req.Execute(method, path)
 		if err != nil {
 			return nil, err
