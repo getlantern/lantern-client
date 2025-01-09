@@ -233,8 +233,7 @@ func (app *App) Run(ctx context.Context) {
 		app.IsPro,
 		settings.GetLanguage,
 		func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-		// Dummy analytics function
-		func(category, action, label string) {},
+		func(category, action, label string) {},                // Dummy analytics function
 		flashlight.WithOnConfig(app.onConfigUpdate),
 		flashlight.WithOnProxies(app.onProxiesUpdate),
 		flashlight.WithOnSucceedingProxy(app.onSucceedingProxy),
