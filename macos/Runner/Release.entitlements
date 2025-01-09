@@ -8,6 +8,6 @@
 		<string>webcredentials:lantern.io</string>
 	</array>
 	<key>com.apple.security.app-sandbox</key>
-	<true/>
+	<false/>
 </dict>
 </plist>
