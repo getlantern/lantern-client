@@ -17,8 +17,8 @@ class BandwidthTracker: NSObject, IosBandwidthTrackerProtocol {
     //Save data coming from server
     let dataDict: [String: Any] = [
       "percent": p1,
-      "remaining": p2,
-      "allowed": p3,
+      "mibUsed": p2,
+      "mibAllowed": p3,
       "ttlSeconds": p4,
     ]
     do {

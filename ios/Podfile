@@ -34,8 +34,6 @@ target 'Runner' do
    use_frameworks! :linkage => :static
   use_modular_headers!
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-#    pod 'SQLite.swift', '~> 0.12.2'
-   pod 'Toast-Swift', '~> 5.0.1'
 end
 
 # target 'LanternTests' do

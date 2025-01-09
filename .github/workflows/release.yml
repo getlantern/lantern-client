@@ -38,7 +38,7 @@ jobs:
              echo "Platform determined: android"
              echo "platform=android" >> "$GITHUB_OUTPUT"
            elif [[ $TAG == desktop-* ]]; then
-             echo "Platform determined: macos"
+             echo "Platform determined: desktop"
              echo "platform=desktop" >> "$GITHUB_OUTPUT"
           else
              echo "Platform determined: all (tag did not match specific platforms)"
@@ -62,103 +62,63 @@ jobs:
         run: |
           import sys, os
           ref = os.environ.get("GITHUB_REF","")
-          if "refs/tags/lantern" not in ref:
+          
+          if "refs/tags" in ref:
+            tag = ref.strip()
+            if tag.startswith('refs/tags/android-lantern-'):
+              a = tag.replace('refs/tags/android-lantern-', '')
+            elif tag.startswith('refs/tags/ios-lantern-'):
+              a = tag.replace('refs/tags/ios-lantern-', '')
+            elif tag.startswith('refs/tags/desktop-lantern-'):
+              a = tag.replace('refs/tags/desktop-lantern-', '')
+            else:
+              a = tag.replace('refs/tags/lantern-', '')
+            parts = a.split('-', 1)
+            suffix = parts[1] if len(parts) > 1 else ''
+            beta = 'beta' in suffix
+            internal = 'internal' in suffix
+          
+            if beta:
+              li = 'lantern-installer-preview'
+              vf = 'version-android-beta.txt'
+              version = parts[0]
+            elif internal:
+              li = 'lantern-installer-internal'
+              vf = 'version-android-internal.txt'
+              version = parts[0]
+            else:
+              li = 'lantern-installer'
+              vf = 'version-android.txt'
+              version = parts[0] if len(parts) > 0 else a
+          else:
             li = 'lantern-installer-dev'
             vf = 'version-android-dev.txt'
             version = '9999.99.99-dev'
-          else:
-            a = ref.strip().replace('refs/tags/lantern-', '')
-            parts = a.split('-',1)
-            suffix = parts[1] if len(parts)>1 else ''
-            beta = 'beta' in suffix
-            internal = 'internal' in suffix
-            if beta:
-                li = 'lantern-installer-preview'
-                vf = 'version-android-beta.txt'
-                version = parts[0]
-            elif internal:
-                li = 'lantern-installer-internal'
-                vf = 'version-android-internal.txt'
-                version = parts[0]
-            else:
-                li = 'lantern-installer'
-                vf = 'version-android.txt'
-                version = a
+          
           print('Setting version to ' + version)
           print('Setting prefix to ' + li)
           print('Setting version file to ' + vf)
           print(f'::set-output name=version::{version}')
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
-
-  build-linux:
-    uses: ./.github/workflows/build-linux.yml
+  build:
+    uses: ./.github/workflows/build.yml
     secrets: inherit
     needs: set-version
     with:
+      macos_version: macos-14
+      xcode_version: latest-stable
       version: ${{ needs.set-version.outputs.version }}
-      prefix: ${{ needs.set-version.outputs.prefix }}
-      dist-suffix: x64
-
-  #    build-windows-x32:
-  #      uses: ./.github/workflows/build-windows.yml
-  #      secrets: inherit
-  #      needs: set-version
-  #      with:
-  #        version: ${{ needs.set-version.outputs.version }}
-  #        prefix: ${{ needs.set-version.outputs.prefix }}
-  #        dist-suffix: 32-bit
-  #        installer-suffix: -x32
-  #        update-suffix: 386
-  #        arch: x32
-
-  build-windows-x64:
-    uses: ./.github/workflows/build-windows.yml
-    secrets: inherit
-    needs: set-version
-    with:
-      version: ${{ needs.set-version.outputs.version }}
+      version_file: ${{ needs.set-version.outputs.version_file }}
       prefix: ${{ needs.set-version.outputs.prefix }}
       build-suffix: 64
-      dist-suffix: 64-bit
-      update-suffix: x64
+      dist-suffix: x64
       installer-suffix: -x64
-      arch: x64
-
-  build-darwin:
-    uses: ./.github/workflows/build-darwin.yml
-    secrets: inherit
-    needs: set-version
-    with:
-      macos_version: macos-14
-      xcode_version: latest-stable
-      version: ${{ needs.set-version.outputs.version }}
-      version_file: ${{ needs.set-version.outputs.version_file }}
-      prefix: ${{ needs.set-version.outputs.prefix }}
-
-  build-ios:
-    uses: ./.github/workflows/build-ios.yml
-    secrets: inherit
-    needs: set-version
-    with:
-      macos_version: macos-14
-      xcode_version: latest-stable
-      version: ${{ needs.set-version.outputs.version }}
-      version_file: ${{ needs.set-version.outputs.version_file }}
-      prefix: ${{ needs.set-version.outputs.prefix }}
-
-  build-android:
-    uses: ./.github/workflows/build-android.yml
-    secrets: inherit
-    needs: set-version
-    with:
-      version: ${{ needs.set-version.outputs.version }}
-      version_file: ${{ needs.set-version.outputs.version_file }}
-      prefix: ${{ needs.set-version.outputs.prefix }}
+      windows-arch: x64
 
   push-binaries:
     runs-on: ubuntu-latest
-    needs: [ set-version, build-android, build-ios, build-darwin, build-linux, build-windows-x64 ]
+    needs: [ determine-platform,set-version, build ]
     env:
       version: ${{ needs.set-version.outputs.version }}
       prefix: ${{ needs.set-version.outputs.prefix }}
@@ -166,7 +126,7 @@ jobs:
       - name: Download the mac build output
         uses: actions/download-artifact@v4
         with:
-          name: osx-build
+          name: macos-build
       - name: Download the linux deb build output
         uses: actions/download-artifact@v4
         with:
@@ -196,6 +156,17 @@ jobs:
         with:
           name: Lantern.ipa
 
+      - name: Download the Debug Symbols
+        uses: actions/download-artifact@v4
+        with:
+          name: debug-symbols.zip
+
+      - name: Download the mapping file
+        uses: actions/download-artifact@v4
+        with:
+          name: mapping.txt
+
+
       - name: Upload Lantern to TestFlight
         uses: apple-actions/upload-testflight-build@v1
         if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
@@ -213,6 +184,8 @@ jobs:
           packageName: org.getlantern.lantern
           releaseFiles: lantern-installer.aab
           track: beta
+          debugSymbols: debug-symbols.zip
+          mappingFile: mapping.txt
 
       - name: Upload Android App bundle to Play Store (production)
         if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
@@ -222,6 +195,8 @@ jobs:
           packageName: org.getlantern.lantern
           releaseFiles: lantern-installer.aab
           track: production
+          debugSymbols: debug-symbols.zip
+          mappingFile: mapping.txt
 
       - name: Grant private modules access
         run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
@@ -233,8 +208,8 @@ jobs:
         run: |
           diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
           diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
-          mv "lantern_${{env.version}}_x64.deb" ${{ env.prefix }}-64-bit.deb
-          mv "lantern_${{env.version}}_x64.rpm" ${{ env.prefix }}.rpm
+          mv -f lantern-installer-x64.deb ${{ env.prefix }}-64-bit.deb
+          mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
           mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
           diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
           mv -f Lantern.ipa ${{ env.prefix }}.ipa

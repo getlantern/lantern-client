@@ -26,6 +26,14 @@ jobs:
       run: |
           git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
+    - name: Setup protoc
+      uses: arduino/setup-protoc@v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Install latest protoc-gen-go
+      run: go install github.com/golang/protobuf/protoc-gen-go@latest
+
     - name: Build
       run: LIB_NAME=liblantern.so make lantern
 
@@ -44,7 +52,7 @@ jobs:
 
       # Upload the original go test log as an artifact for later review.
     - name: Upload test log
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-log

@@ -42,9 +42,3 @@ func (app *App) WebsocketAddr() string {
 	}
 	return app.websocketAddr
 }
-
-func (app *App) setWebsocketServer(server *http.Server) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.websocketServer = server
-}

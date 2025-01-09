@@ -4,9 +4,11 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:lantern/core/router/router.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/messaging/messaging.dart';
+import 'package:lantern/features/tray/tray_container.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
-import 'common/ui/custom/internet_checker.dart';
+import 'package:lantern/features/window/window_container.dart';
 
+import 'common/ui/custom/internet_checker.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 final globalRouter = AppRouter();
@@ -113,6 +115,57 @@ class _LanternAppState extends State<LanternApp>
     }
   }
 
+  Widget _buildMaterialApp(BuildContext context, String lang) {
+    final currentLocal = View.of(context).platformDispatcher.locale;
+    final app = MaterialApp.router(
+      locale: currentLocale(lang),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: false,
+        fontFamily: _getLocaleBasedFont(currentLocal),
+        brightness: Brightness.light,
+        primarySwatch: Colors.grey,
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+        ),
+        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
+      ),
+      themeMode: ThemeMode.system,
+      title: 'app_name'.i18n,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      routerConfig: globalRouter.config(
+        deepLinkBuilder: navigateToDeepLink,
+      ),
+      supportedLocales: const [
+        Locale('ar', 'EG'),
+        Locale('fr', 'FR'),
+        Locale('en', 'US'),
+        Locale('fa', 'IR'),
+        Locale('th', 'TH'),
+        Locale('ms', 'MY'),
+        Locale('ru', 'RU'),
+        Locale('ur', 'IN'),
+        Locale('zh', 'CN'),
+        Locale('zh', 'HK'),
+        Locale('es', 'ES'),
+        Locale('es', 'CU'),
+        Locale('tr', 'TR'),
+        Locale('vi', 'VN'),
+        Locale('my', 'MM'),
+      ],
+    );
+    if (isDesktop()) {
+      return WindowContainer(
+        TrayContainer(app),
+      );
+    }
+    return app;
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentLocal = View.of(context).platformDispatcher.locale;
@@ -121,79 +174,36 @@ class _LanternAppState extends State<LanternApp>
       providers: [
         ChangeNotifierProvider(create: (context) => BottomBarChangeNotifier()),
         ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
-        ChangeNotifierProvider(create: (context) => InternetStatusProvider())
+        ChangeNotifierProvider(create: (context) => InternetStatusProvider()),
       ],
       child: sessionModel.language(
         (context, lang, child) {
           Localization.locale = lang.startsWith('en') ? "en_us" : lang;
           return GlobalLoaderOverlay(
-              useDefaultLoading: false,
-              overlayColor: Colors.black.withOpacity(0.5),
-              overlayWidget: Center(
-                child: AnimatedLoadingBorder(
-                  borderWidth: 5,
-                  borderColor: yellow3,
-                  cornerRadius: 100,
-                  child: SvgPicture.asset(
-                    ImagePaths.lantern_logo,
-                  ),
+            overlayColor: Colors.black.withOpacity(0.5),
+            overlayWidgetBuilder: (_) => Center(
+              child: AnimatedLoadingBorder(
+                borderWidth: 5,
+                borderColor: yellow3,
+                cornerRadius: 100,
+                child: SvgPicture.asset(
+                  ImagePaths.lantern_logo,
                 ),
               ),
-              child: I18n(
-                initialLocale: currentLocale(lang),
-                child: ScaffoldMessenger(
-                  child: MaterialApp.router(
-                    locale: currentLocale(lang),
-                    debugShowCheckedModeBanner: false,
-                    theme: ThemeData(
-                      useMaterial3: false,
-                      fontFamily: _getLocaleBasedFont(currentLocal),
-                      brightness: Brightness.light,
-                      primarySwatch: Colors.grey,
-                      appBarTheme: const AppBarTheme(
-                        systemOverlayStyle: SystemUiOverlayStyle.dark,
-                      ),
-                      colorScheme: ColorScheme.fromSwatch()
-                          .copyWith(secondary: Colors.black),
-                    ),
-                    title: 'app_name'.i18n,
-                    localizationsDelegates: const [
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
-                      GlobalCupertinoLocalizations.delegate,
-                    ],
-                    routerConfig: globalRouter.config(
-                      deepLinkBuilder: navigateToDeepLink,
-                    ),
-                    supportedLocales: const [
-                      Locale('ar', 'EG'),
-                      Locale('fr', 'FR'),
-                      Locale('en', 'US'),
-                      Locale('fa', 'IR'),
-                      Locale('th', 'TH'),
-                      Locale('ms', 'MY'),
-                      Locale('ru', 'RU'),
-                      Locale('ur', 'IN'),
-                      Locale('zh', 'CN'),
-                      Locale('zh', 'HK'),
-                      Locale('es', 'ES'),
-                      Locale('es', 'CU'),
-                      Locale('tr', 'TR'),
-                      Locale('vi', 'VN'),
-                      Locale('my', 'MM'),
-                    ],
-                  ),
-                ),
-              ));
+            ),
+            child: I18n(
+              initialLocale: currentLocale(lang),
+              child: ScaffoldMessenger(
+                child: _buildMaterialApp(context, lang),
+              ),
+            ),
+          );
         },
       ),
     );
   }
 
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {
-    if (!Platform.isAndroid) {
-      return DeepLink.defaultPath;
-    }
     logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
     if (deepLink.path.toLowerCase().startsWith('/report-issue')) {
       logger.d("DeepLink uri: ${deepLink.uri.toString()}");

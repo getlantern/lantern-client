@@ -1,6 +1,7 @@
+import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_windows_webview/flutter_windows_webview.dart';
 import 'package:lantern/core/utils/common.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 @RoutePage(name: 'AppWebview')
@@ -19,150 +20,172 @@ class AppWebView extends StatefulWidget {
 }
 
 class _AppWebViewState extends State<AppWebView> {
-  final InAppWebViewSettings settings = InAppWebViewSettings(
-    isInspectable: kDebugMode,
-    javaScriptEnabled: true,
-    mediaPlaybackRequiresUserGesture: false,
-    allowsInlineMediaPlayback: false,
-    underPageBackgroundColor: Colors.white,
-    allowBackgroundAudioPlaying: false,
-    allowFileAccessFromFileURLs: true,
-    preferredContentMode: UserPreferredContentMode.MOBILE,
-  );
+  late InAppWebViewController webViewController;
+  bool isLoading = true;
 
-  @override
-  Widget build(BuildContext context) {
-    return BaseScreen(
-      title: widget.title,
-      body: InAppWebView(
-        initialUrlRequest: URLRequest(url: WebUri(widget.url)),
-        initialSettings: settings,
-        onProgressChanged: (controller, progress) {
-          appLogger.i("Progress: $progress");
-        },
-      ),
+  void showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: Text('continue'.i18n),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
-}
 
-class AppBrowser extends InAppBrowser {
-  final VoidCallback? onClose;
-
-  static final InAppBrowserClassSettings settings = InAppBrowserClassSettings(
-    browserSettings: InAppBrowserSettings(
-      hideTitleBar: false,
-      hideToolbarBottom: false,
-      hideCloseButton: false,
-      hideUrlBar: true,
-      hidden: false,
-      presentationStyle: ModalPresentationStyle.FULL_SCREEN,
-    ),
-    webViewSettings: InAppWebViewSettings(
-      sharedCookiesEnabled: true,
-      javaScriptEnabled: true,
-      useOnDownloadStart: true,
-      useShouldOverrideUrlLoading: true,
-      isInspectable: kDebugMode,
-    ),
-  );
-
-  AppBrowser({
-    this.onClose,
-  });
-
-  static Future setProxyAddr() async {
-    var proxyAvailable =
-        await WebViewFeature.isFeatureSupported(WebViewFeature.PROXY_OVERRIDE);
-    if (proxyAvailable) {
-      ProxyController proxyController = ProxyController.instance();
-      final proxyAddr = await sessionModel.proxyAddr();
-      await proxyController.clearProxyOverride();
-      await proxyController.setProxyOverride(
-          settings: ProxySettings(
-        proxyRules: [ProxyRule(url: "http://$proxyAddr")],
-        bypassRules: [],
-      ));
+  Future setProxyAddr() async {
+    try {
+      var proxyAvailable = await WebViewFeature.isFeatureSupported(
+          WebViewFeature.PROXY_OVERRIDE);
+      if (proxyAvailable) {
+        final proxyAddr = await sessionModel.proxyAddr();
+        if (proxyAddr.isNotEmpty) {
+          ProxyController.instance()
+            ..clearProxyOverride()
+            ..setProxyOverride(
+                settings: ProxySettings(
+              proxyRules: [ProxyRule(url: "http://$proxyAddr")],
+              bypassRules: [],
+            ));
+          appLogger.i("Proxy set as: http://$proxyAddr");
+        }
+      }
+    } catch (e) {
+      appLogger.e("Error setting proxy address: $e");
     }
   }
 
-  @override
-  Future onBrowserCreated() async {
-    print("Browser created");
-  }
-
-  @override
-  Future onLoadStart(url) async {
-    print("Started displaying $url");
-  }
-
-  @override
-  Future onLoadStop(url) async {
-    print("Stopped displaying $url");
-  }
-
-  @override
-  void onReceivedError(WebResourceRequest request, WebResourceError error) {
-    print("Can't load ${request.url}.. Error: ${error.description}");
-  }
-
-  @override
   Future<NavigationActionPolicy> shouldOverrideUrlLoading(
-      navigationAction) async {
+      InAppWebViewController controller,
+      NavigationAction navigationAction) async {
     final url = navigationAction.request.url!;
     if (url.scheme.startsWith("alipay")) {
-      launchUrl(url, mode: LaunchMode.platformDefault,);
+      launchUrl(
+        url,
+        mode: LaunchMode.platformDefault,
+      );
       return NavigationActionPolicy.CANCEL;
     }
     return NavigationActionPolicy.ALLOW;
   }
 
   @override
-  void onProgressChanged(progress) {
-    print("Progress: $progress");
-  }
-
-  @override
-  Future<void> onExit() async {
-    print("Browser closed");
-    onClose?.call();
-  }
-
-  Future<void> openMacWebview(String url) async {
-    await openUrlRequest(
-            urlRequest: URLRequest(url: WebUri(url)), settings: settings)
-        .then(
-      (value) {
-        print("open mac webview");
-      },
+  Widget build(BuildContext context) {
+    return BaseScreen(
+      title: widget.title,
+      body: Stack(
+        children: [
+          InAppWebView(
+            initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+            onWebViewCreated: (controller) {
+              webViewController = controller;
+              setProxyAddr();
+            },
+            webViewEnvironment: webViewEnvironment,
+            onLoadStart: (controller, url) => setState(() => isLoading = true),
+            onLoadStop: (controller, url) => setState(() => isLoading = false),
+            onReceivedHttpError: (controller, request, response) {
+              appLogger
+                  .i("HTTP error: ${response.statusCode} for ${request.url}");
+              showErrorDialog("HTTP Error",
+                  "Status code: ${response.statusCode}\nDescription: ${response.reasonPhrase ?? ''}");
+            },
+            shouldOverrideUrlLoading: shouldOverrideUrlLoading,
+            onReceivedError: (controller, request, error) =>
+                showErrorDialog("Failed to load", error.description),
+            initialSettings: InAppWebViewSettings(
+                isInspectable: kDebugMode,
+                javaScriptEnabled: true,
+                supportZoom: true,
+                domStorageEnabled: true,
+                allowFileAccess: true,
+                useWideViewPort: false,
+                loadWithOverviewMode: true,
+                clearCache: true,
+                mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+                builtInZoomControls: Platform.isAndroid,
+                displayZoomControls: false,
+                mediaPlaybackRequiresUserGesture: false,
+                allowsInlineMediaPlayback: false,
+                underPageBackgroundColor: Colors.white,
+                transparentBackground: true,
+                allowFileAccessFromFileURLs: true,
+                //We want to use mobile mode for webview on desktop
+                //  Since we are showign app on mobile size it will be better to use mobile mode
+                // showing recommended mode user has to scroll a lot
+                preferredContentMode: UserPreferredContentMode.MOBILE),
+            onProgressChanged: (controller, progress) =>
+                appLogger.i("Loading progress: $progress%"),
+          ),
+          if (isLoading) const Center(child: CircularProgressIndicator()),
+        ],
+      ),
     );
   }
+}
 
-  static Future<void> openWindowsWebview(String url) async {
-    FlutterWindowsWebview().launchWebview(url);
+WebViewEnvironment? webViewEnvironment;
+
+Future<void> initializeWebViewEnvironment() async {
+  if (Platform.isWindows) {
+    final directory = await getApplicationSupportDirectory();
+    final localAppDataPath = directory.path;
+
+    // Ensure WebView2 runtime is available
+    final availableVersion = await WebViewEnvironment.getAvailableVersion();
+    assert(availableVersion != null,
+        'Failed to find WebView2 Runtime or non-stable Microsoft Edge installation.');
+
+    webViewEnvironment = await WebViewEnvironment.create(
+      settings: WebViewEnvironmentSettings(
+        userDataFolder: '$localAppDataPath\\Lantern\\WebView2',
+      ),
+    );
   }
+}
 
-  static Future<void> openWebview(String url) async {
+// openWithSystemBrowser opens a URL in the browser
+Future<void> openWithSystemBrowser(String url) async {
+  switch (Platform.operatingSystem) {
+    case 'linux':
+      final webview = await WebviewWindow.create();
+      webview.launch(url);
+      break;
+    default:
+      await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+  }
+}
+
+Future<void> openWebview(BuildContext context, String url,
+    [String? title]) async {
+  try {
     switch (Platform.operatingSystem) {
-      case 'windows':
-        await openWindowsWebview(url);
-        break;
+      case 'android':
       case 'macos':
-        InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+      case 'windows':
+        await context.pushRoute(AppWebview(url: url, title: title ?? ''));
+        break;
+      case 'linux':
+        final webview = await WebviewWindow.create();
+        webview.launch(url);
+        break;
       case 'ios':
-        InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+        await openWithSystemBrowser(url);
         break;
       default:
-        await setProxyAddr();
-        final instance = AppBrowser();
-        await instance.openUrlRequest(
-          urlRequest: URLRequest(
-            url: WebUri(url),
-            allowsCellularAccess: true
-
-          ),
-          settings: settings,
-        );
-        break;
+        throw UnsupportedError('Platform not supported');
     }
+  } catch (e) {
+    appLogger.e("Failed to open webview", error: e);
   }
 }

@@ -14,13 +14,38 @@ import (
 	"strings"
 	"time"
 
-	"github.com/getlantern/errors"
-	"github.com/getlantern/lantern-client/internalsdk/protos"
-	"github.com/getlantern/pathdb"
 	"golang.org/x/crypto/pbkdf2"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+
+	"github.com/getlantern/errors"
+	"github.com/getlantern/lantern-client/internalsdk/common"
+	"github.com/getlantern/lantern-client/internalsdk/pro"
+	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"github.com/getlantern/pathdb"
 )
+
+// createProClient creates a new instance of ProClient with the given client session information
+func createProClient(session Session, platform string) pro.ProClient {
+	return pro.NewClient(common.ProAPIBaseURL, func() common.UserConfig {
+		internalHeaders := map[string]string{
+			common.PlatformHeader:   platform,
+			common.AppVersionHeader: common.ApplicationVersion,
+		}
+		deviceID, _ := session.GetDeviceID()
+		userID, _ := session.GetUserID()
+		token, _ := session.GetToken()
+		lang, _ := session.Locale()
+		return common.NewUserConfig(
+			common.DefaultAppName,
+			deviceID,
+			userID,
+			token,
+			internalHeaders,
+			lang,
+		)
+	})
+}
 
 func BytesToFloat64LittleEndian(b []byte) (float64, error) {
 	if len(b) != 8 {

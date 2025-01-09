@@ -1,5 +1,4 @@
 import 'package:lantern/core/utils/common.dart';
-import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/account/account_tab.dart';
 import 'package:lantern/features/account/developer_settings.dart';
@@ -10,11 +9,8 @@ import 'package:lantern/features/messaging/protos_flutteronly/messaging.pb.dart'
 import 'package:lantern/features/replica/replica_tab.dart';
 import 'package:lantern/features/vpn/try_lantern_chat.dart';
 import 'package:lantern/features/vpn/vpn.dart';
-import 'package:lantern/features/vpn/vpn_notifier.dart';
 import 'package:lantern/features/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
-import 'package:tray_manager/tray_manager.dart';
-import 'package:window_manager/window_manager.dart';
 
 import '../messaging/messaging_model.dart';
 
@@ -26,16 +22,16 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
+class _HomePageState extends State<HomePage> {
   Function()? _cancelEventSubscription;
   Function userNew = once<void>();
 
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
-    super.initState();
   }
 
   void _startupSequence() {
@@ -43,9 +39,6 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
       channelListener();
       return;
     }
-    // This is a desktop device
-    _setupTrayManager();
-    _initWindowManager();
   }
 
   void channelListener() {
@@ -137,114 +130,10 @@ class _HomePageState extends State<HomePage> with TrayListener, WindowListener {
 
   @override
   void dispose() {
-    if (isDesktop()) {
-      trayManager.removeListener(this);
-      windowManager.removeListener(this);
-    }
     if (_cancelEventSubscription != null) {
       _cancelEventSubscription!();
     }
     super.dispose();
-  }
-
-  ///window manager methods
-
-  void _initWindowManager() async {
-    windowManager.addListener(this);
-    await windowManager.setPreventClose(true);
-    setState(() {});
-  }
-
-  @override
-  void onWindowEvent(String eventName) {
-    print('[WindowManager] onWindowEvent: $eventName');
-  }
-
-  @override
-  void onWindowClose() async {
-    bool isPreventClose = await windowManager.isPreventClose();
-    if (!isPreventClose) return;
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text('confirm_close_window'.i18n),
-          actions: [
-            TextButton(
-              child: Text('No'.i18n),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Yes'.i18n),
-              onPressed: () async {
-                LanternFFI.exit();
-                await trayManager.destroy();
-                await windowManager.destroy();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  /// system tray methods
-  void _setupTrayManager() async {
-    trayManager.addListener(this);
-    final vpnNotifier = context.read<VPNChangeNotifier>();
-    await _updateTrayMenu();
-    vpnNotifier.vpnStatus.addListener(_updateTrayMenu);
-  }
-
-  /// this method updates the tray menu based on the current VPN status
-  Future<void> _updateTrayMenu() async {
-    final vpnNotifier = context.read<VPNChangeNotifier>();
-    final isConnected = vpnNotifier.isConnected();
-    await trayManager.setIcon(getSystemTrayIconPath(isConnected));
-    Menu menu = Menu(
-      items: [
-        MenuItem(
-          key: 'status',
-          disabled: true,
-          label: isConnected ? 'status_on'.i18n : 'status_off'.i18n,
-        ),
-        MenuItem(
-          key: 'status',
-          label: isConnected ? 'disconnect'.i18n : 'connect'.i18n,
-          onClick: (item) => vpnNotifier.toggleConnection(),
-        ),
-        MenuItem.separator(),
-        MenuItem(
-            key: 'show_window',
-            label: 'show'.i18n,
-            onClick: (item) {
-              windowManager.focus();
-              windowManager.setSkipTaskbar(false);
-            }),
-        MenuItem.separator(),
-        MenuItem(
-            key: 'exit',
-            label: 'exit'.i18n,
-            onClick: (item) {
-              windowManager.destroy();
-              LanternFFI.exit();
-            }),
-      ],
-    );
-    await trayManager.setContextMenu(menu);
-  }
-
-  @override
-  Future<void> onTrayIconMouseDown() async {
-    windowManager.show();
-    trayManager.popUpContextMenu();
-  }
-
-  @override
-  void onTrayIconRightMouseDown() {
-    trayManager.popUpContextMenu();
   }
 
   @override

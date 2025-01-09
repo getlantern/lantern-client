@@ -470,7 +470,7 @@ msgid "pro_plan"
 msgstr "Abonnement Pro"
 
 msgid "one_month_plan"
-msgstr ""
+msgstr "Abonnement d’un mois"
 
 msgid "one_year_plan"
 msgstr "Abonnement d’un an"
@@ -1826,7 +1826,7 @@ msgid "recovery_not_found"
 msgstr "L’appareil n’est pas associé à cet utilisateur"
 
 msgid "device_added"
-msgstr ""
+msgstr "L’appareil a été ajouté"
 
 msgid "device_added_message"
 msgstr ""
@@ -1899,16 +1899,16 @@ msgid "follow_us"
 msgstr "Suivez-nous "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "Suivez-nous sur Telegram"
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "Suivez-nous sur Instagram"
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "Suivez-nous sur Facebook"
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "Suivez-nous sur X"
 
 msgid "report_issue_error"
 msgstr "Nous rencontrons des difficultés techniques. Réessayez plus tard. "
@@ -1958,52 +1958,59 @@ msgid "file_size_limit_description"
 msgstr "Les tailles des pièces jointes doivent être inférieures à 100 Mo"
 
 msgid "lantern_pro_one_year"
-msgstr ""
+msgstr "Lantern Pro : abonnement d’un an"
 
 msgid "lantern_pro_two_year"
-msgstr ""
+msgstr "Lantern Pro : abonnement de 2 ans"
 
 msgid "lantern_pro_one_month"
-msgstr ""
+msgstr "Lantern Pro : abonnement d’un mois"
 
 msgid "non_renewing_subscription"
-msgstr ""
+msgstr "Abonnement non renouvelable"
 
 msgid "restore_purchase"
-msgstr ""
+msgstr "Rétablir l’achat"
 
 msgid "skip_for_now"
-msgstr ""
+msgstr "Ignorer pour l’instant"
 
 msgid "purchase_not_found"
-msgstr ""
+msgstr "Aucun achat n’a été trouvé avec l’adresse courriel indiquée"
 
 msgid "no_previous_purchase"
-msgstr ""
+msgstr "Aucun achat antérieur n’a été trouvé"
 
 msgid "warning_restore_purchase"
 msgstr ""
+"Afin de rétablir votre achat, saisissez l’adresse courriel que vous avez "
+"saisie lors de la commande."
 
 msgid "purchase_restored"
-msgstr ""
+msgstr "L’achat a été rétabli"
 
 msgid "purchase_restored_message"
-msgstr ""
+msgstr "Votre achat a été rétabli"
 
 msgid "purchase_restored_error"
 msgstr ""
+"Le rétablissement de l’achat n’a pas fonctionné. Vérifiez avoir saisi la "
+"bonne adresse courriel et le bon code."
 
 msgid "err_while_sending_code"
-msgstr ""
+msgstr "Une erreur est survenue lors de l’envoi du code. Réessayez"
 
 msgid "email_hint"
-msgstr ""
+msgstr "*L’adresse courriel est facultative, mais souhaitable"
 
 msgid "email_hint_pro"
 msgstr ""
+"Ajoutez une adresse courriel pour accéder à vos achats sur tous vos "
+"appareils. Sans adresse courriel, les achats sont liés à cet appareil et "
+"pourraient être perdus."
 
 msgid "continue_without_email"
-msgstr ""
+msgstr "Poursuivre sans adresse courriel"
 
 msgid "no_new_update"
 msgstr "Lantern est à jour."
@@ -2011,3 +2018,29 @@ msgstr "Lantern est à jour."
 msgid "error_referral"
 msgstr ""
 "Une erreur est survenue lors de l’application de votre code de parrainage."
+
+msgid "proxy_error"
+msgstr "Le démarrage de Lantern présente un problème. Réessayez plus tard."
+
+msgid "proxy_settings"
+msgstr "Paramètres du mandataire"
+
+msgid "http_proxy"
+msgstr "Mandataire HTTPS"
+
+msgid "socks_proxy"
+msgstr "Mandataire SOCKS"
+
+msgid "http_proxy_copied"
+msgstr "Le mandataire HTTP a été copié"
+
+msgid "socks_proxy_copied"
+msgstr "Le mandataire SOCK a été copié"
+
+msgid "proxy_everything"
+msgstr "Tout relayer par le mandataire"
+
+msgid "errorSubmittingToGooglePlay"
+msgstr ""
+"Il nous est actuellement impossible de traiter votre demande pour Google "
+"Play. Réessayez plus tard."

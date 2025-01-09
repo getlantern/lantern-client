@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/getlantern/dnsgrab"
-	"github.com/getlantern/flashlight/v7/bandit"
+	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/idletiming"
 	"github.com/getlantern/netx"
 )
@@ -38,7 +38,7 @@ type proxiedTCPHandler struct {
 	mx                    sync.RWMutex
 }
 
-func newProxiedTCPHandler(c *iosClient, dialer *bandit.BanditDialer, grabber dnsgrab.Server) *proxiedTCPHandler {
+func newProxiedTCPHandler(c *iosClient, dialer dialer.Dialer, grabber dnsgrab.Server) *proxiedTCPHandler {
 	result := &proxiedTCPHandler{
 		dialOut:               dialer.DialContext,
 		client:                c,
@@ -66,7 +66,7 @@ func (h *proxiedTCPHandler) handleDial() {
 	runtime.LockOSThread()
 
 	for req := range h.dialRequests {
-		upstream, err := h.dialOut(req.ctx, bandit.NetworkConnect, req.addr)
+		upstream, err := h.dialOut(req.ctx, dialer.NetworkConnect, req.addr)
 		if err == nil {
 			req.upstream <- upstream
 		} else {

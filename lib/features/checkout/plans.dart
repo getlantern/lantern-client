@@ -7,7 +7,6 @@ import 'package:lantern/core/utils/utils.dart';
 @RoutePage(name: "PlansPage")
 class PlansPage extends StatelessWidget {
   const PlansPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return FullScreenDialog(

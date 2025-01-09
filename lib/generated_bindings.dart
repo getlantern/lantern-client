@@ -182,13 +182,15 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('start');
   late final _start = _startPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  void sysProxyOn() {
+  ffi.Pointer<ffi.Char> sysProxyOn() {
     return _sysProxyOn();
   }
 
   late final _sysProxyOnPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('sysProxyOn');
-  late final _sysProxyOn = _sysProxyOnPtr.asFunction<void Function()>();
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'sysProxyOn');
+  late final _sysProxyOn =
+      _sysProxyOnPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   void sysProxyOff() {
     return _sysProxyOff();
@@ -207,35 +209,6 @@ class NativeLibrary {
           'websocketAddr');
   late final _websocketAddr =
       _websocketAddrPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> paymentMethodsV3() {
-    return _paymentMethodsV3();
-  }
-
-  late final _paymentMethodsV3Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'paymentMethodsV3');
-  late final _paymentMethodsV3 =
-      _paymentMethodsV3Ptr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> paymentMethodsV4() {
-    return _paymentMethodsV4();
-  }
-
-  late final _paymentMethodsV4Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'paymentMethodsV4');
-  late final _paymentMethodsV4 =
-      _paymentMethodsV4Ptr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> proxyAll() {
-    return _proxyAll();
-  }
-
-  late final _proxyAllPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('proxyAll');
-  late final _proxyAll =
-      _proxyAllPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   void setProxyAll(
     ffi.Pointer<ffi.Char> value,
@@ -596,6 +569,16 @@ class NativeLibrary {
       ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
+  ffi.Pointer<ffi.Char> updatePaymentMethod() {
+    return _updatePaymentMethod();
+  }
+
+  late final _updatePaymentMethodPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'updatePaymentMethod');
+  late final _updatePaymentMethod =
+      _updatePaymentMethodPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
   ffi.Pointer<ffi.Char> checkUpdates() {
     return _checkUpdates();
   }
@@ -607,6 +590,45 @@ class NativeLibrary {
       _checkUpdatesPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 }
 
+typedef __int8_t = ffi.SignedChar;
+typedef Dart__int8_t = int;
+typedef __uint8_t = ffi.UnsignedChar;
+typedef Dart__uint8_t = int;
+typedef __int16_t = ffi.Short;
+typedef Dart__int16_t = int;
+typedef __uint16_t = ffi.UnsignedShort;
+typedef Dart__uint16_t = int;
+typedef __int32_t = ffi.Int;
+typedef Dart__int32_t = int;
+typedef __uint32_t = ffi.UnsignedInt;
+typedef Dart__uint32_t = int;
+typedef __int64_t = ffi.LongLong;
+typedef Dart__int64_t = int;
+typedef __uint64_t = ffi.UnsignedLongLong;
+typedef Dart__uint64_t = int;
+typedef __darwin_intptr_t = ffi.Long;
+typedef Dart__darwin_intptr_t = int;
+typedef __darwin_natural_t = ffi.UnsignedInt;
+typedef Dart__darwin_natural_t = int;
+
+/// The rune type below is declared to be an ``int'' instead of the more natural
+/// ``unsigned long'' or ``long''.  Two things are happening here.  It is not
+/// unsigned so that EOF (-1) can be naturally assigned to it and used.  Also,
+/// it looks like 10646 will be a 31 bit standard.  This means that if your
+/// ints cannot hold 32 bits, you will be in trouble.  The reason an int was
+/// chosen over a long is that the is*() and to*() routines take ints (says
+/// ANSI C), but they use __darwin_ct_rune_t instead of int.  By changing it
+/// here, you lose a bit of ANSI conformance, but your programs will still
+/// work.
+///
+/// NOTE: rune_t is not covered by ANSI nor other standards, and should not
+/// be instantiated outside of lib/libc/locale.  Use wchar_t.  wchar_t and
+/// rune_t must be the same type.  Also wint_t must be no narrower than
+/// wchar_t, and should also be able to hold all members of the largest
+/// character set plus one extra value (WEOF). wint_t must be at least 16 bits.
+typedef __darwin_ct_rune_t = ffi.Int;
+typedef Dart__darwin_ct_rune_t = int;
+
 /// mbstate_t is an opaque object to keep conversion state, during multibyte
 /// stream conversions.  The content must not be referenced by user programs.
 final class __mbstate_t extends ffi.Union {
@@ -617,6 +639,46 @@ final class __mbstate_t extends ffi.Union {
   @ffi.LongLong()
   external int _mbstateL;
 }
+
+typedef __darwin_mbstate_t = __mbstate_t;
+typedef __darwin_ptrdiff_t = ffi.Long;
+typedef Dart__darwin_ptrdiff_t = int;
+typedef __darwin_size_t = ffi.UnsignedLong;
+typedef Dart__darwin_size_t = int;
+typedef __builtin_va_list = ffi.Pointer<ffi.Char>;
+typedef __darwin_va_list = __builtin_va_list;
+typedef __darwin_wchar_t = ffi.Int;
+typedef Dart__darwin_wchar_t = int;
+typedef __darwin_rune_t = __darwin_wchar_t;
+typedef __darwin_wint_t = ffi.Int;
+typedef Dart__darwin_wint_t = int;
+typedef __darwin_clock_t = ffi.UnsignedLong;
+typedef Dart__darwin_clock_t = int;
+typedef __darwin_socklen_t = __uint32_t;
+typedef __darwin_ssize_t = ffi.Long;
+typedef Dart__darwin_ssize_t = int;
+typedef __darwin_time_t = ffi.Long;
+typedef Dart__darwin_time_t = int;
+typedef __darwin_blkcnt_t = __int64_t;
+typedef __darwin_blksize_t = __int32_t;
+typedef __darwin_dev_t = __int32_t;
+typedef __darwin_fsblkcnt_t = ffi.UnsignedInt;
+typedef Dart__darwin_fsblkcnt_t = int;
+typedef __darwin_fsfilcnt_t = ffi.UnsignedInt;
+typedef Dart__darwin_fsfilcnt_t = int;
+typedef __darwin_gid_t = __uint32_t;
+typedef __darwin_id_t = __uint32_t;
+typedef __darwin_ino64_t = __uint64_t;
+typedef __darwin_ino_t = __darwin_ino64_t;
+typedef __darwin_mach_port_name_t = __darwin_natural_t;
+typedef __darwin_mach_port_t = __darwin_mach_port_name_t;
+typedef __darwin_mode_t = __uint16_t;
+typedef __darwin_off_t = __int64_t;
+typedef __darwin_pid_t = __int32_t;
+typedef __darwin_sigset_t = __uint32_t;
+typedef __darwin_suseconds_t = __int32_t;
+typedef __darwin_uid_t = __uint32_t;
+typedef __darwin_useconds_t = __uint32_t;
 
 final class __darwin_pthread_handler_rec extends ffi.Struct {
   /// Routine to call
@@ -704,6 +766,48 @@ final class _opaque_pthread_t extends ffi.Struct {
   external ffi.Array<ffi.Char> __opaque;
 }
 
+typedef __darwin_pthread_attr_t = _opaque_pthread_attr_t;
+typedef __darwin_pthread_cond_t = _opaque_pthread_cond_t;
+typedef __darwin_pthread_condattr_t = _opaque_pthread_condattr_t;
+typedef __darwin_pthread_key_t = ffi.UnsignedLong;
+typedef Dart__darwin_pthread_key_t = int;
+typedef __darwin_pthread_mutex_t = _opaque_pthread_mutex_t;
+typedef __darwin_pthread_mutexattr_t = _opaque_pthread_mutexattr_t;
+typedef __darwin_pthread_once_t = _opaque_pthread_once_t;
+typedef __darwin_pthread_rwlock_t = _opaque_pthread_rwlock_t;
+typedef __darwin_pthread_rwlockattr_t = _opaque_pthread_rwlockattr_t;
+typedef __darwin_pthread_t = ffi.Pointer<_opaque_pthread_t>;
+typedef __darwin_nl_item = ffi.Int;
+typedef Dart__darwin_nl_item = int;
+typedef __darwin_wctrans_t = ffi.Int;
+typedef Dart__darwin_wctrans_t = int;
+typedef __darwin_wctype_t = __uint32_t;
+typedef u_int8_t = ffi.UnsignedChar;
+typedef Dartu_int8_t = int;
+typedef u_int16_t = ffi.UnsignedShort;
+typedef Dartu_int16_t = int;
+typedef u_int32_t = ffi.UnsignedInt;
+typedef Dartu_int32_t = int;
+typedef u_int64_t = ffi.UnsignedLongLong;
+typedef Dartu_int64_t = int;
+typedef register_t = ffi.Int64;
+typedef Dartregister_t = int;
+typedef user_addr_t = u_int64_t;
+typedef user_size_t = u_int64_t;
+typedef user_ssize_t = ffi.Int64;
+typedef Dartuser_ssize_t = int;
+typedef user_long_t = ffi.Int64;
+typedef Dartuser_long_t = int;
+typedef user_ulong_t = u_int64_t;
+typedef user_time_t = ffi.Int64;
+typedef Dartuser_time_t = int;
+typedef user_off_t = ffi.Int64;
+typedef Dartuser_off_t = int;
+typedef syscall_arg_t = u_int64_t;
+typedef ptrdiff_t = __darwin_ptrdiff_t;
+typedef rsize_t = __darwin_size_t;
+typedef wint_t = __darwin_wint_t;
+
 final class _GoString_ extends ffi.Struct {
   external ffi.Pointer<ffi.Char> p;
 
@@ -711,9 +815,33 @@ final class _GoString_ extends ffi.Struct {
   external int n;
 }
 
-typedef ptrdiff_t = __darwin_ptrdiff_t;
-typedef __darwin_ptrdiff_t = ffi.Long;
-typedef Dart__darwin_ptrdiff_t = int;
+typedef GoInt8 = ffi.SignedChar;
+typedef DartGoInt8 = int;
+typedef GoUint8 = ffi.UnsignedChar;
+typedef DartGoUint8 = int;
+typedef GoInt16 = ffi.Short;
+typedef DartGoInt16 = int;
+typedef GoUint16 = ffi.UnsignedShort;
+typedef DartGoUint16 = int;
+typedef GoInt32 = ffi.Int;
+typedef DartGoInt32 = int;
+typedef GoUint32 = ffi.UnsignedInt;
+typedef DartGoUint32 = int;
+typedef GoInt64 = ffi.LongLong;
+typedef DartGoInt64 = int;
+typedef GoUint64 = ffi.UnsignedLongLong;
+typedef DartGoUint64 = int;
+typedef GoInt = GoInt64;
+typedef GoUint = GoUint64;
+typedef GoUintptr = ffi.Size;
+typedef DartGoUintptr = int;
+typedef GoFloat32 = ffi.Float;
+typedef DartGoFloat32 = double;
+typedef GoFloat64 = ffi.Double;
+typedef DartGoFloat64 = double;
+typedef GoString = _GoString_;
+typedef GoMap = ffi.Pointer<ffi.Void>;
+typedef GoChan = ffi.Pointer<ffi.Void>;
 
 final class GoInterface extends ffi.Struct {
   external ffi.Pointer<ffi.Void> t;
@@ -731,9 +859,33 @@ final class GoSlice extends ffi.Struct {
   external int cap;
 }
 
-typedef GoInt = GoInt64;
-typedef GoInt64 = ffi.LongLong;
-typedef DartGoInt64 = int;
+typedef GoInt81 = ffi.SignedChar;
+typedef DartGoInt81 = int;
+typedef GoUint81 = ffi.UnsignedChar;
+typedef DartGoUint81 = int;
+typedef GoInt161 = ffi.Short;
+typedef DartGoInt161 = int;
+typedef GoUint161 = ffi.UnsignedShort;
+typedef DartGoUint161 = int;
+typedef GoInt321 = ffi.Int;
+typedef DartGoInt321 = int;
+typedef GoUint321 = ffi.UnsignedInt;
+typedef DartGoUint321 = int;
+typedef GoInt641 = ffi.LongLong;
+typedef DartGoInt641 = int;
+typedef GoUint641 = ffi.UnsignedLongLong;
+typedef DartGoUint641 = int;
+typedef GoInt1 = GoInt641;
+typedef GoUint1 = GoUint641;
+typedef GoUintptr1 = ffi.Size;
+typedef DartGoUintptr1 = int;
+typedef GoFloat321 = ffi.Float;
+typedef DartGoFloat321 = double;
+typedef GoFloat641 = ffi.Double;
+typedef DartGoFloat641 = double;
+typedef GoString1 = _GoString_;
+typedef GoMap1 = ffi.Pointer<ffi.Void>;
+typedef GoChan1 = ffi.Pointer<ffi.Void>;
 
 const int __has_safe_buffers = 1;
 

@@ -69,6 +69,11 @@ class WebsocketSubscriber {
               sessionModel.deviceIdNotifier.value = deviceID;
             }
 
+            final proxyAll = message['proxyAll'];
+            if (proxyAll != null) {
+              sessionModel.proxyAllNotifier.value = proxyAll as bool;
+            }
+
           case _WebsocketMessageType.stats:
             if (message['countryCode'] != null) {
               sessionModel.serverInfoNotifier.value = ServerInfo.create()
@@ -79,17 +84,13 @@ class WebsocketSubscriber {
                 });
             }
           case _WebsocketMessageType.pro:
-            _webSocketLogger.i("Websocket message[Pro]: $json");
+            _webSocketLogger.i("Websocket message[Pro]: $message");
             final userStatus = message['userStatus'];
             final userLevel = message['userLevel'];
             final deviceLinkingCode = message['deviceLinkingCode'];
-            if (userLevel != null) {
-              if (userLevel == 'pro' || userStatus == 'active') {
-                sessionModel.proUserNotifier.value = true;
-              } else {
-                sessionModel.proUserNotifier.value = false;
-              }
-            }
+            final isLevelPro = userLevel != null && userLevel == 'pro';
+            final isStatusPro = userStatus != null && userStatus == 'active';
+            sessionModel.proUserNotifier.value = (isLevelPro || isStatusPro);
             if (deviceLinkingCode != null) {
               sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
             }
@@ -103,15 +104,11 @@ class WebsocketSubscriber {
             }
 
           case _WebsocketMessageType.bandwidth:
-            _webSocketLogger.i("Websocket message[Bandwidth]: $json");
-            final Map res = jsonDecode(jsonEncode(message));
+            _webSocketLogger.i("Websocket message[Bandwidth]: $message");
             sessionModel.bandwidthNotifier.value = Bandwidth.create()
-              ..mergeFromProto3Json({
-                'allowed': res['mibAllowed'],
-                'remaining': res['mibUsed'],
-              });
+              ..mergeFromProto3Json(message);
           case _WebsocketMessageType.config:
-            _webSocketLogger.i("Websocket message[config]: $json");
+            _webSocketLogger.i("Websocket message[config]: $message");
             final ConfigOptions config = ConfigOptions.fromJson(message);
 
             sessionModel.isAuthEnabled.value = config.authEnabled;
@@ -135,7 +132,6 @@ class WebsocketSubscriber {
     );
   }
 }
-
 
 /// Method to update plans
 void _updatePlans(Map<String, Plan>? plans) {

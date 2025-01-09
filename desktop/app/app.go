@@ -9,19 +9,19 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/getsentry/sentry-go"
 
+	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
-	"github.com/getlantern/flashlight/v7/bandit"
 	flashlightClient "github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/flashlight/v7/logging"
@@ -32,21 +32,19 @@ import (
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
 
-	"github.com/getlantern/lantern-client/desktop/analytics"
-
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
 	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
+	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	proclient "github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
 var (
-	log                = golog.LoggerFor("lantern-desktop.app")
-	startTime          = time.Now()
-	translationAppName = strings.ToUpper(common.DefaultAppName)
+	log       = golog.LoggerFor("lantern-desktop.app")
+	startTime = time.Now()
 )
 
 func init() {
@@ -62,13 +60,12 @@ type App struct {
 	fetchedProxiesConfig atomic.Bool
 	hasSucceedingProxy   atomic.Bool
 
-	Flags            flashlight.Flags
-	configDir        string
-	exited           eventual.Value
-	analyticsSession analytics.Session
-	settings         *settings.Settings
-	configService    *configService
-	statsTracker     *statsTracker
+	Flags         flashlight.Flags
+	configDir     string
+	exited        eventual.Value
+	settings      *settings.Settings
+	configService *configService
+	statsTracker  *statsTracker
 
 	muExitFuncs sync.RWMutex
 	exitFuncs   []func()
@@ -77,37 +74,47 @@ type App struct {
 
 	flashlight *flashlight.Flashlight
 
-	issueReporter *issueReporter
-	proClient     proclient.ProClient
+	authClient auth.AuthClient
+	proClient  proclient.ProClient
 
 	selectedTab Tab
 
 	connectionStatusCallbacks []func(isConnected bool)
 
 	// Websocket-related settings
-	websocketAddr   string
-	websocketServer *http.Server
-	ws              ws.UIChannel
+	websocketAddr string
+	ws            ws.UIChannel
 
 	cachedUserData sync.Map
-	plansCache     sync.Map
 
 	onUserData []func(current *protos.User, new *protos.User)
 
-	mu sync.Mutex
+	mu sync.RWMutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
-func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProClient, ss *settings.Settings) *App {
-	analyticsSession := newAnalyticsSession(ss)
+func NewApp() (*App, error) {
+	// initialize app config and flags based on environment variables
+	flags, err := initializeAppConfig()
+	if err != nil {
+		return nil, fmt.Errorf("failed to initialize app config: %w", err)
+	}
+	return NewAppWithFlags(flags, flags.ConfigDir)
+}
+
+// NewAppWithFlags creates a new instance of App initialized with the given flags and configDir
+func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
+	if configDir == "" {
+		log.Debug("Config directory is empty, using default location")
+		configDir = appdir.General(common.DefaultAppName)
+	}
+	ss := settings.LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
 		exited:                    eventual.NewValue(),
-		proClient:                 proClient,
 		settings:                  ss,
-		analyticsSession:          analyticsSession,
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
 		configService:             new(configService),
@@ -121,7 +128,6 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 	}
 	golog.OnFatal(app.exitOnFatal)
 
-	app.AddExitFunc("stopping analytics", app.analyticsSession.End)
 	app.onProStatusChange(func(isPro bool) {
 		statsTracker.SetIsPro(isPro)
 	})
@@ -132,101 +138,102 @@ func NewApp(flags flashlight.Flags, configDir string, proClient proclient.ProCli
 
 	log.Debugf("Using configdir: %v", configDir)
 
-	app.issueReporter = newIssueReporter(app)
 	app.translations.Set(os.DirFS("locale/translation"))
 
-	return app
-}
-
-func newAnalyticsSession(settings *settings.Settings) analytics.Session {
-	if settings.IsAutoReport() {
-		session := analytics.Start(settings.GetDeviceID(), common.ApplicationVersion)
-		go func() {
-			session.SetIP(geolookup.GetIP(eventual.Forever))
-		}()
-		return session
-	} else {
-		return analytics.NullSession{}
+	if e := app.configService.StartService(app.ws); e != nil {
+		return nil, fmt.Errorf("unable to register config service: %q", e)
 	}
+
+	return app, nil
 }
 
 // Run starts the app.
 func (app *App) Run(ctx context.Context) {
 	golog.OnFatal(app.exitOnFatal)
-
 	go func() {
 		for <-geolookup.OnRefresh() {
-			app.settings.SetCountry(geolookup.GetCountry(0))
+			app.Settings().SetCountry(geolookup.GetCountry(0))
 		}
 	}()
 
-	// Run below in separate goroutine as config.Init() can potentially block when Lantern runs
-	// for the first time. User can still quit Lantern through systray menu when it happens.
-	go func() {
-		log.Debug(app.Flags)
-		if app.Flags.ProxyAll {
-			// If proxyall flag was supplied, force proxying of all
-			app.settings.SetProxyAll(true)
-		}
+	log.Debug(app.Flags)
+	userConfig := func() common.UserConfig {
+		return settings.UserConfig(app.Settings())
+	}
+	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIBaseURL), userConfig)
+	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.APIBaseURL), userConfig)
 
-		listenAddr := app.Flags.Addr
-		if listenAddr == "" {
-			listenAddr = app.settings.GetAddr()
-		}
-		if listenAddr == "" {
-			listenAddr = defaultHTTPProxyAddress
-		}
+	app.mu.Lock()
+	app.proClient = proClient
+	app.authClient = authClient
+	app.mu.Unlock()
 
-		socksAddr := app.Flags.SocksAddr
-		if socksAddr == "" {
-			socksAddr = app.settings.GetSOCKSAddr()
-		}
-		if socksAddr == "" {
-			socksAddr = defaultSOCKSProxyAddress
-		}
+	settings := app.Settings()
 
-		if app.Flags.Timeout > 0 {
-			go func() {
-				time.AfterFunc(app.Flags.Timeout, func() {
-					app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
-						app.Flags.Timeout, app.fetchedGlobalConfig.Load(), app.fetchedProxiesConfig.Load()))
-				})
-			}()
-		}
-		var err error
-		app.flashlight, err = flashlight.New(
-			common.DefaultAppName,
-			common.ApplicationVersion,
-			common.RevisionDate,
-			app.configDir,
-			app.Flags.VPN,
-			func() bool { return app.settings.GetDisconnected() }, // check whether we're disconnected
-			app.settings.GetProxyAll,
-			func() bool { return false }, // on desktop, we do not allow private hosts
-			app.settings.IsAutoReport,
-			app.Flags.AsMap(),
-			app.settings,
-			app.statsTracker,
-			app.IsPro,
-			app.settings.GetLanguage,
-			func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-			app.analyticsSession.EventWithLabel,
-			flashlight.WithOnConfig(app.onConfigUpdate),
-			flashlight.WithOnProxies(app.onProxiesUpdate),
-		)
-		if err != nil {
-			app.Exit(err)
-			return
-		}
-		app.beforeStart(ctx, listenAddr)
+	if app.Flags.ProxyAll {
+		// If proxyall flag was supplied, force proxying of all
+		settings.SetProxyAll(true)
+	}
 
-		app.flashlight.Run(
-			listenAddr,
-			socksAddr,
-			app.afterStart,
-			func(err error) { _ = app.Exit(err) },
-		)
-	}()
+	listenAddr := app.Flags.Addr
+	if listenAddr == "" {
+		listenAddr = settings.GetAddr()
+	}
+	if listenAddr == "" {
+		listenAddr = defaultHTTPProxyAddress
+	}
+
+	socksAddr := app.Flags.SocksAddr
+	if socksAddr == "" {
+		socksAddr = settings.GetSOCKSAddr()
+	}
+	if socksAddr == "" {
+		socksAddr = defaultSOCKSProxyAddress
+	}
+
+	if app.Flags.Timeout > 0 {
+		go func() {
+			time.AfterFunc(app.Flags.Timeout, func() {
+				app.Exit(errors.New("No succeeding proxy got after running for %v, global config fetched: %v, proxies fetched: %v",
+					app.Flags.Timeout, app.fetchedGlobalConfig.Load(), app.fetchedProxiesConfig.Load()))
+			})
+		}()
+	}
+	var err error
+	app.flashlight, err = flashlight.New(
+		common.DefaultAppName,
+		common.ApplicationVersion,
+		common.RevisionDate,
+		app.configDir,
+		app.Flags.VPN,
+		func() bool { return settings.GetDisconnected() }, // check whether we're disconnected
+		settings.GetProxyAll,
+		func() bool { return false }, // on desktop, we do not allow private hosts
+		settings.IsAutoReport,
+		app.Flags.AsMap(),
+		settings,
+		app.statsTracker,
+		app.IsPro,
+		settings.GetLanguage,
+		func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
+		// Dummy analytics function
+		func(category, action, label string) {},
+		flashlight.WithOnConfig(app.onConfigUpdate),
+		flashlight.WithOnProxies(app.onProxiesUpdate),
+		flashlight.WithOnSucceedingProxy(app.onSucceedingProxy),
+	)
+	if err != nil {
+		app.Exit(err)
+		return
+	}
+	app.beforeStart(ctx, listenAddr)
+
+	app.flashlight.Run(
+		listenAddr,
+		socksAddr,
+		app.afterStart,
+		func(err error) { _ = app.Exit(err) },
+	)
 }
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
@@ -268,11 +275,6 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 		os.Exit(0)
 	}
 
-	if e := app.configService.StartService(app.ws); e != nil {
-		app.Exit(fmt.Errorf("unable to register config service: %q", e))
-		return
-	}
-
 	if e := app.settings.StartService(app.ws); e != nil {
 		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
 		return
@@ -304,14 +306,12 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 
 // Connect turns on proxying
 func (app *App) Connect() {
-	app.analyticsSession.Event("systray-menu", "connect")
 	ops.Begin("connect").End()
 	app.settings.SetDisconnected(false)
 }
 
 // Disconnect turns off proxying
 func (app *App) Disconnect() {
-	app.analyticsSession.Event("systray-menu", "disconnect")
 	ops.Begin("disconnect").End()
 	app.settings.SetDisconnected(true)
 }
@@ -376,7 +376,10 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	ctx := context.Background()
 	go app.fetchOrCreateUser(ctx)
-	go app.GetPaymentMethods(ctx)
+	if app.settings.GetUserID() != 0 {
+		// fetch plan only if user is created
+		go app.proClient.DesktopPaymentMethods(ctx)
+	}
 	go app.fetchDeviceLinkingCode(ctx)
 
 	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
@@ -425,16 +428,16 @@ func (app *App) onConfigUpdate(cfg *config.Global, src config.Source) {
 	email.SetDefaultRecipient(cfg.ReportIssueEmail)
 }
 
-func (app *App) onProxiesUpdate(proxies []bandit.Dialer, src config.Source) {
+func (app *App) onProxiesUpdate(proxies []dialer.ProxyDialer, src config.Source) {
 	log.Debugf("[Startup Desktop] Got proxies update from %v", src)
 	app.fetchedProxiesConfig.Store(true)
 	app.hasSucceedingProxy.Store(true)
 	app.sendConfigOptions()
 }
 
-func (app *App) onSucceedingProxy(succeeding bool) {
-	app.hasSucceedingProxy.Store(succeeding)
-	log.Debugf("[Startup Desktop] onSucceedingProxy %v", succeeding)
+func (app *App) onSucceedingProxy() {
+	app.hasSucceedingProxy.Store(true)
+	log.Debugf("[Startup Desktop] onSucceedingProxy")
 }
 
 // HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
@@ -563,17 +566,18 @@ func (app *App) IsPro() bool {
 	return isPro
 }
 
-func (app *App) fetchOrCreateUser(ctx context.Context) (*protos.User, error) {
-	settings := app.Settings()
-	lang := settings.GetLanguage()
+func (app *App) fetchOrCreateUser(ctx context.Context) {
+	ss := app.Settings()
+	lang := ss.GetLanguage()
 	if lang == "" {
 		// set default language
-		settings.SetLanguage("en_us")
+		ss.SetLanguage("en_us")
 	}
-	if userID := settings.GetUserID(); userID == 0 {
-		return app.CreateUser(ctx)
+	if userID := ss.GetUserID(); userID == 0 {
+		ss.SetUserFirstVisit(true)
+		app.proClient.RetryCreateUser(ctx, app, 5*time.Minute)
 	} else {
-		return app.UserData(ctx)
+		app.proClient.UpdateUserData(ctx, app)
 	}
 }
 
@@ -591,144 +595,6 @@ func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
 		"deviceLinkingCode": resp.Code,
 	})
 	return resp.Code, nil
-}
-
-// CreateUser is used when Lantern is run for the first time and creates a new user with the pro server
-func (app *App) CreateUser(ctx context.Context) (*protos.User, error) {
-	log.Debug("New user, calling user create")
-	settings := app.Settings()
-	settings.SetUserFirstVisit(true)
-	resp, err := app.proClient.UserCreate(ctx)
-	if err != nil {
-		return nil, errors.New("Could not create new Pro user: %v", err)
-	}
-	user := resp.User
-	log.Debugf("DEBUG: User created: %v", user)
-	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
-		return nil, errors.New("Could not create new Pro user: %v", err)
-	}
-	app.SetUserData(ctx, user.UserId, user)
-	settings.SetReferralCode(user.Referral)
-	settings.SetUserIDAndToken(user.UserId, user.Token)
-	go app.UserData(ctx)
-	return resp.User, nil
-}
-
-// Plans returns the plans available to a user
-func (app *App) Plans(ctx context.Context) ([]protos.Plan, error) {
-	if v, ok := app.plansCache.Load("plans"); ok {
-		resp := v.([]protos.Plan)
-		log.Debugf("Returning plans from cache %s", v)
-		return resp, nil
-	}
-	resp, err := app.FetchPaymentMethods(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return resp.Plans, nil
-}
-
-// GetPaymentMethods returns the plans and payment from cache if available
-// if not then call FetchPaymentMethods
-func (app *App) GetPaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
-	if v, ok := app.plansCache.Load("paymentMethods"); ok {
-		resp := v.([]protos.PaymentMethod)
-		log.Debugf("Returning payment methods from cache %s", v)
-		return resp, nil
-	}
-	resp, err := app.FetchPaymentMethods(ctx)
-	if err != nil {
-		return nil, err
-	}
-	desktopProviders, ok := resp.Providers["desktop"]
-	if !ok {
-		return nil, errors.New("No desktop payment providers found")
-	}
-	return desktopProviders, nil
-}
-
-// FetchPaymentMethods returns the plans and payment plans available to a user
-func (app *App) FetchPaymentMethods(ctx context.Context) (*proclient.PaymentMethodsResponse, error) {
-	resp, err := app.proClient.PaymentMethodsV4(context.Background())
-	if err != nil {
-		return nil, errors.New("Could not get payment methods: %v", err)
-	}
-	desktopPaymentMethods, ok := resp.Providers["desktop"]
-	if !ok {
-		return nil, errors.New("No desktop payment providers found")
-	}
-	for _, paymentMethod := range desktopPaymentMethods {
-		for i, provider := range paymentMethod.Providers {
-			if resp.Logo[provider.Name] != nil {
-				logos := resp.Logo[provider.Name].([]interface{})
-				for _, logo := range logos {
-					paymentMethod.Providers[i].LogoUrls = append(paymentMethod.Providers[i].LogoUrls, logo.(string))
-				}
-			}
-		}
-	}
-	//clear previous store cache
-	app.plansCache.Delete("plans")
-	app.plansCache.Delete("paymentMethods")
-	log.Debugf("DEBUG: Payment methods plans: %+v", resp.Plans)
-	log.Debugf("DEBUG: Payment methods providers: %+v", desktopPaymentMethods)
-	app.plansCache.Store("plans", resp.Plans)
-	app.plansCache.Store("paymentMethods", desktopPaymentMethods)
-	app.sendConfigOptions()
-	return resp, nil
-}
-
-// UserData looks up user data that is associated with the given UserConfig
-func (app *App) UserData(ctx context.Context) (*protos.User, error) {
-	log.Debug("Refreshing user data")
-	resp, err := app.proClient.UserData(context.Background())
-	if err != nil {
-		return nil, errors.New("error fetching user data: %v", err)
-	} else if resp.User == nil {
-		return nil, errors.New("error fetching user data")
-	}
-	userDetail := resp.User
-	settings := app.Settings()
-
-	setProUser := func(isPro bool) {
-		app.Settings().SetProUser(isPro)
-	}
-
-	currentDevice := app.Settings().GetDeviceID()
-
-	// Check if device id is connect to same device if not create new user
-	// this is for the case when user removed device from other device
-	deviceFound := false
-	if userDetail.Devices != nil {
-		for _, device := range userDetail.Devices {
-			if device.Id == currentDevice {
-				deviceFound = true
-				break
-			}
-		}
-	}
-
-	/// Check if user has installed app first time
-	firstTime := settings.GetUserFirstVisit()
-	log.Debugf("First time visit %v", firstTime)
-	if userDetail.UserLevel == "pro" && firstTime {
-		log.Debugf("User is pro and first time")
-		setProUser(true)
-	} else if userDetail.UserLevel == "pro" && !firstTime && deviceFound {
-		log.Debugf("User is pro and not first time")
-		setProUser(true)
-	} else {
-		log.Debugf("User is not pro")
-		setProUser(false)
-	}
-	settings.SetUserIDAndToken(userDetail.UserId, userDetail.Token)
-	settings.SetExpiration(userDetail.Expiration)
-	settings.SetReferralCode(resp.User.Referral)
-	log.Debugf("User caching successful: %+v", userDetail)
-	// Save data in userData cache
-	app.SetUserData(ctx, userDetail.UserId, userDetail)
-	app.SendUpdateUserDataToUI()
-	return resp.User, nil
 }
 
 func (app *App) devices() protos.Devices {
@@ -786,5 +652,57 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 }
 
 func (app *App) Settings() *settings.Settings {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
 	return app.settings
+}
+
+func (app *App) AuthClient() auth.AuthClient {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.authClient
+}
+
+func (app *App) ProClient() proclient.ProClient {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.proClient
+}
+
+// Client session methods
+// this method get call when user is being created first time
+func (app *App) FetchUserData() error {
+	go app.proClient.UserData(context.Background())
+	go app.proClient.FetchPaymentMethodsAndCache(context.Background())
+	//Update UI
+	app.sendConfigOptions()
+	return nil
+}
+
+func (app *App) GetDeviceID() (string, error) {
+	return app.Settings().GetDeviceID(), nil
+}
+
+func (app *App) GetUserFirstVisit() (bool, error) {
+	return app.Settings().GetUserFirstVisit(), nil
+}
+
+func (app *App) SetUserIDAndToken(id int64, token string) error {
+	app.Settings().SetUserIDAndToken(id, token)
+	return nil
+}
+
+func (app *App) SetProUser(pro bool) error {
+	app.Settings().SetProUser(pro)
+	return nil
+}
+
+func (app *App) SetReferralCode(referral string) error {
+	app.Settings().SetReferralCode(referral)
+	return nil
+}
+
+func (app *App) SetExpiration(exp int64) error {
+	app.Settings().SetExpiration(exp)
+	return nil
 }

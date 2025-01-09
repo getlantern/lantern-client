@@ -12,11 +12,11 @@ import (
 	"github.com/getlantern/dnsgrab"
 	"github.com/getlantern/dnsgrab/persistentcache"
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/bandit"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/chained"
+	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/stats"
-	"github.com/getlantern/ipproxy"
+
 	"github.com/getlantern/lantern-client/internalsdk/common"
 )
 
@@ -24,8 +24,6 @@ const (
 	maxDNSGrabAge = 1 * time.Hour // this doesn't need to be long because our fake DNS records have a TTL of only 1 second. We use a smaller value than on Android to be conservative with memory usag.
 
 	quotaSaveInterval            = 1 * time.Minute
-	shortFrontedAvailableTimeout = 30 * time.Second
-	longFrontedAvailableTimeout  = 5 * time.Minute
 
 	logMemoryInterval = 5 * time.Second
 	forceGCInterval   = 250 * time.Millisecond
@@ -113,12 +111,10 @@ type BandwidthTracker interface {
 }
 
 type cw struct {
-	ipStack        io.WriteCloser
-	client         *iosClient
-	dialer         *bandit.BanditDialer
-	ipp            ipproxy.Proxy
-	quotaTextPath  string
-	lastSavedQuota time.Time
+	ipStack       io.WriteCloser
+	client        *iosClient
+	dialer        dialer.Dialer
+	quotaTextPath string
 }
 
 func (c *cw) Write(b []byte) (int, error) {
@@ -136,7 +132,7 @@ func (c *cw) Reconfigure() {
 		panic(log.Errorf("Unable to load dialers on reconfigure: %v", err))
 	}
 
-	c.dialer, err = bandit.New(bandit.Options{
+	c.dialer = dialer.New(&dialer.Options{
 		Dialers: dialers,
 	})
 	if err != nil {
@@ -157,7 +153,6 @@ type iosClient struct {
 
 	memChecker      MemChecker
 	configDir       string
-	ipp             ipproxy.Proxy
 	mtu             int
 	capturedDNSHost string
 	realDNSHost     string
@@ -215,23 +210,27 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, errors.New("No dialers found")
 	}
 	tracker := stats.NewTracker()
-	dialer, err := bandit.New(bandit.Options{
-		Dialers:      dialers,
-		StatsTracker: tracker,
+	dialer := dialer.New(&dialer.Options{
+		Dialers: dialers,
+		OnSuccess: func(pd dialer.ProxyDialer) {
+			tracker.SetHasSucceedingProxy(true)
+			countryCode, country, city := pd.Location()
+			previousStats := tracker.Latest()
+			if previousStats.CountryCode == "" || previousStats.CountryCode != countryCode {
+				tracker.SetActiveProxyLocation(
+					city,
+					country,
+					countryCode,
+				)
+			}
+		},
 	})
 	if err != nil {
 		return nil, err
 	}
-	go func() {
-		tracker.AddListener(func(st stats.Stats) {
-			if st.City != "" && st.Country != "" && st.CountryCode != "" {
-				start := time.Now()
-				log.Debugf("Stats update at %v", start)
-				c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
-			}
-		})
-	}()
 
+	// get stats updates
+	go c.statsTrackerUpdates(tracker)
 	// get bandwidth updates
 	go bandwidthUpdates(c.bandwidthTracker)
 
@@ -274,13 +273,28 @@ func (c *iosClient) start() (ClientWriter, error) {
 
 func bandwidthUpdates(bt BandwidthTracker) {
 	go func() {
+
+		quota, _ := bandwidth.GetQuota()
+		if quota == nil {
+			// quota is nil, so then we are uncapped
+			bt.BandwidthUpdate("", 0, 0, 0, 0)
+			return
+		}
+
 		for quota := range bandwidth.Updates {
 			percent, remaining, allowed := getBandwidth(quota)
 			bt.BandwidthUpdate("", percent, remaining, allowed, int(quota.TTLSeconds))
 		}
 	}()
 }
-
+func (c *iosClient) statsTrackerUpdates(tracker stats.Tracker) {
+	tracker.AddListener(func(st stats.Stats) {
+		if st.City != "" && st.Country != "" && st.CountryCode != "" {
+			log.Debug("updating stats")
+			c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
+		}
+	})
+}
 func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
 	remaining := 0
 	percent := 100
@@ -313,7 +327,7 @@ func (c *iosClient) loadUserConfig() error {
 	return nil
 }
 
-func (c *iosClient) loadDialers() ([]bandit.Dialer, error) {
+func (c *iosClient) loadDialers() ([]dialer.ProxyDialer, error) {
 	cf := &configurer{configFolderPath: c.configDir}
 	chained.PersistSessionStates(c.configDir)
 
@@ -326,10 +340,6 @@ func (c *iosClient) loadDialers() ([]bandit.Dialer, error) {
 	dialers := chained.CreateDialers(c.configDir, proxies, c.uc)
 	chained.TrackStatsFor(dialers, c.configDir)
 	return dialers, nil
-}
-
-func partialUserConfigFor(deviceID string) *UserConfig {
-	return userConfigFor(0, "", deviceID)
 }
 
 func userConfigFor(userID int, proToken, deviceID string) *UserConfig {

@@ -35,7 +35,7 @@ class _AddViaChatNumberState extends State<AddViaChatNumber> {
         chatNumber.number = controller.text.numbersOnly;
       } else {
         try {
-          context.loaderOverlay.show(widget: spinner);
+          context.loaderOverlay.show();
           chatNumber = await model
               .findChatNumberByShortNumber(controller.text.numbersOnly);
 

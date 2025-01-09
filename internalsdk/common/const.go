@@ -50,7 +50,7 @@ var (
 	// fronting.
 	APIBaseURL = "df.iantem.io/api/v1"
 
-	log = golog.LoggerFor("flashlight.common")
+	log = golog.LoggerFor("internalsdk.common")
 
 	forceAds bool
 )

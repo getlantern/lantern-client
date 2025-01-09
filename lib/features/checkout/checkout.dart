@@ -277,6 +277,9 @@ class _CheckoutState extends State<Checkout>
     );
   }
 
+  Future<void> _openWebview(String url) async =>
+      await openWebview(context, url, 'lantern_pro_checkout'.i18n);
+
   void _proceedWithBTCPay() async {
     try {
       context.loaderOverlay.show();
@@ -287,7 +290,7 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
-      await AppBrowser.openWebview(btcPayURL);
+      await _openWebview(btcPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -305,7 +308,7 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       final froPayURL = value;
-      await AppBrowser.openWebview(froPayURL);
+      await _openWebview(froPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -340,7 +343,7 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       final shepherdURL = value;
-      await AppBrowser.openWebview(shepherdURL);
+      await _openWebview(shepherdURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);
@@ -380,11 +383,7 @@ class _CheckoutState extends State<Checkout>
         provider,
       );
       context.loaderOverlay.hide();
-      openDesktopPaymentWebview(
-          context: context,
-          provider: provider,
-          redirectUrl: redirectUrl,
-          onClose: checkProUser);
+      openWebview(context, redirectUrl);
       // as soon user click we should start polling userData
       Future.delayed(const Duration(seconds: 2), hasPlansUpdateOrBuy);
     } catch (error, stackTrace) {
@@ -403,7 +402,7 @@ class _CheckoutState extends State<Checkout>
 
       context.loaderOverlay.hide();
       final btcPayURL = value;
-      await AppBrowser.openWebview(btcPayURL);
+      await _openWebview(btcPayURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
       showError(context, error: error, stackTrace: stackTrace);

@@ -1,5 +1,4 @@
-
-
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/app/app_webview.dart';
 
 import '../../core/utils/common.dart';
@@ -98,7 +97,7 @@ class Support extends StatelessWidget {
 
   Future<void> faqTap(BuildContext context) async {
     try {
-      await AppBrowser.openWebview(faqUrl);
+      await openWithSystemBrowser(faqUrl);
     } catch (e) {
       showSnackbar(context: context, content: 'Fail to open link ');
     }
@@ -106,7 +105,7 @@ class Support extends StatelessWidget {
 
   Future<void> forumTap(BuildContext context) async {
     try {
-      await AppBrowser.openWebview(forumsUrl);
+      await openWithSystemBrowser(forumsUrl);
     } catch (e) {
       showSnackbar(context: context, content: 'Fail to open link ');
     }

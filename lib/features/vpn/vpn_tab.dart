@@ -1,9 +1,10 @@
-import 'package:lantern/features/account/split_tunneling.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
+import 'package:lantern/features/account/split_tunneling.dart';
 import 'package:lantern/features/messaging/messaging.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
 import 'package:shimmer/shimmer.dart';
+
 import 'vpn_bandwidth.dart';
 import 'vpn_pro_banner.dart';
 import 'vpn_server_location.dart';
@@ -86,12 +87,12 @@ class VPNTab extends StatelessWidget {
                           children: [
                             VPNStatus(),
                             const CDivider(height: 32.0),
-                            ServerLocationWidget(),
+                            const ServerLocationWidget(),
                             if (Platform.isAndroid) ...{
                               const CDivider(height: 32.0),
                               SplitTunnelingWidget(),
                             },
-                            if (!proUser) const VPNBandwidth(),
+                            if (!proUser) VPNBandwidth(isProUser: proUser),
                           ],
                         ),
                       ),
