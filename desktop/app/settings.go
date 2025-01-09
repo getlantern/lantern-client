@@ -1,11 +1,10 @@
-package settings
+package app
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -90,7 +89,7 @@ var settingMeta = map[SettingName]struct {
 	SNCountry:        {stString, true, true},
 	SNLocalHTTPToken: {stString, true, true},
 
-	// SNDeviceID: intentionally omit, to avoid setting it from UI
+	SNDeviceID:                  {stString, true, true},
 	SNEmailAddress:              {stString, true, true},
 	SNUserID:                    {stNumber, true, true},
 	SNUserToken:                 {stString, true, true},
@@ -138,8 +137,8 @@ func LoadSettings(configDir string) *Settings {
 	return settings
 }
 
-// UserConfig creates a new user config from the given settings
-func UserConfig(settings *Settings) sdkcommon.UserConfig {
+// userConfig creates a new user config from the given settings
+func userConfig(settings *Settings) sdkcommon.UserConfig {
 	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
 	return sdkcommon.NewUserConfig(
 		common.DefaultAppName,
@@ -169,7 +168,11 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	// old lantern persist settings with all lower case, convert them to camel cased.
 	toCamelCase(set)
 
-	set[SNDeviceID] = deviceid.Get()
+	deviceID := deviceid.Get()
+
+	fmt.Printf("Device ID is %s\n", deviceID)
+
+	set[SNDeviceID] = deviceID
 
 	// SNUserID may be unmarshalled as int, which causes panic when GetUserID().
 	// Make sure to store it as int64.
@@ -808,7 +811,7 @@ func (s *Settings) IsUserLoggedIn() bool {
 	return s.getBool(SNUserLoggedIn)
 }
 func (s *Settings) SetUserLoggedIn(value bool) {
-	log.Println("Setting user logged in to ", value)
+	log.Debugf("Setting user logged in to ", value)
 	s.setVal(SNUserLoggedIn, value)
 }
 

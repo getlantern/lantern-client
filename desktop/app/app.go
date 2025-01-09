@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"path/filepath"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -34,7 +35,6 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
-	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -63,7 +63,7 @@ type App struct {
 	Flags         flashlight.Flags
 	configDir     string
 	exited        eventual.Value
-	settings      *settings.Settings
+	settings      *Settings
 	configService *configService
 	statsTracker  *statsTracker
 
@@ -94,11 +94,31 @@ type App struct {
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
 func NewApp() (*App, error) {
-	// initialize app config and flags based on environment variables
-	flags, err := initializeAppConfig()
-	if err != nil {
-		return nil, fmt.Errorf("failed to initialize app config: %w", err)
+	flags := flashlight.ParseFlags()
+	if flags.Pprof {
+		go startPprof("localhost:6060")
 	}
+
+	// helper to resolve CONFIG_DIR to an absolute path
+	resolveConfigDir := func(dir string) string {
+		if filepath.IsAbs(dir) {
+			return dir
+		}
+		absPath, err := filepath.Abs(dir)
+		if err != nil {
+			return dir
+		}
+		return absPath
+	}
+
+	configDir := resolveConfigDir(flags.ConfigDir)
+
+	if err := createDirIfNotExists(configDir, defaultConfigDirPerm); err != nil {
+		return nil, fmt.Errorf("unable to create config directory %s: %v", configDir, err)
+	}
+	flags.ConfigDir = configDir
+
+	log.Debugf("Config directory %s sticky %v readable %v", configDir, flags.StickyConfig, flags.ReadableConfig)
 	return NewAppWithFlags(flags, flags.ConfigDir)
 }
 
@@ -108,7 +128,7 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		log.Debug("Config directory is empty, using default location")
 		configDir = appdir.General(common.DefaultAppName)
 	}
-	ss := settings.LoadSettings(configDir)
+	ss := LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
 	app := &App{
 		Flags:                     flags,
@@ -157,11 +177,11 @@ func (app *App) Run(ctx context.Context) {
 	}()
 
 	log.Debug(app.Flags)
-	userConfig := func() common.UserConfig {
-		return settings.UserConfig(app.Settings())
+	cfg := func() common.UserConfig {
+		return userConfig(app.Settings())
 	}
-	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), userConfig)
-	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
+	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), cfg)
+	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), cfg)
 
 	app.mu.Lock()
 	app.proClient = proClient
@@ -200,6 +220,9 @@ func (app *App) Run(ctx context.Context) {
 		}()
 	}
 	var err error
+
+	flagsAsMap := app.Flags.AsMap()
+	log.Fatalf("Flags are %v", flagsAsMap)
 	app.flashlight, err = flashlight.New(
 		common.DefaultAppName,
 		common.ApplicationVersion,
@@ -210,7 +233,7 @@ func (app *App) Run(ctx context.Context) {
 		settings.GetProxyAll,
 		func() bool { return false }, // on desktop, we do not allow private hosts
 		settings.IsAutoReport,
-		app.Flags.AsMap(),
+		flagsAsMap,
 		settings,
 		app.statsTracker,
 		app.IsPro,
@@ -234,6 +257,10 @@ func (app *App) Run(ctx context.Context) {
 		app.afterStart,
 		func(err error) { _ = app.Exit(err) },
 	)
+}
+
+func (app *App) userConfig() common.UserConfig {
+	return userConfig(app.Settings())
 }
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
@@ -281,7 +308,7 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	}
 
 	isProUser := func() (bool, bool) {
-		return app.IsProUser(context.Background(), settings.UserConfig(app.Settings()))
+		return app.IsProUser(context.Background(), app.userConfig())
 	}
 
 	if err := app.statsTracker.StartService(app.ws); err != nil {
@@ -364,7 +391,7 @@ func (app *App) SendUpdateUserDataToUI() {
 
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
-func (app *App) OnSettingChange(attr settings.SettingName, cb func(interface{})) {
+func (app *App) OnSettingChange(attr SettingName, cb func(interface{})) {
 	app.settings.OnChange(attr, cb)
 }
 
@@ -382,7 +409,7 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	}
 	go app.fetchDeviceLinkingCode(ctx)
 
-	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
+	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
 		if enable {
 			app.SysproxyOn()
@@ -562,7 +589,7 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.IsProUserFast(settings.UserConfig(app.Settings()))
+	isPro, _ := app.IsProUserFast(userConfig(app.Settings()))
 	return isPro
 }
 
@@ -651,7 +678,7 @@ func (app *App) GetTranslations(filename string) ([]byte, error) {
 	return io.ReadAll(f)
 }
 
-func (app *App) Settings() *settings.Settings {
+func (app *App) Settings() *Settings {
 	app.mu.RLock()
 	defer app.mu.RUnlock()
 	return app.settings

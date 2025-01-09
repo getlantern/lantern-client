@@ -49,7 +49,7 @@ func (c *proClient) RetryCreateUser(ctx context.Context, ss ClientSession, maxEl
 	log.Debug("Starting retry handler for user creation")
 	expBackoff := backoff.NewExponentialBackOff()
 	expBackoff.Multiplier = 2.0
-	expBackoff.InitialInterval = 3 * time.Second
+	expBackoff.InitialInterval = 10 * time.Second
 	expBackoff.MaxInterval = 1 * time.Minute
 	expBackoff.MaxElapsedTime = maxElapsedTime
 	expBackoff.RandomizationFactor = 0.5
