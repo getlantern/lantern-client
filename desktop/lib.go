@@ -116,7 +116,7 @@ func websocketAddr() *C.char {
 	return C.CString(a.WebsocketAddr())
 }
 func cachedUserData() (*protos.User, bool) {
-	uc := app.UserConfig()
+	uc := a.UserConfig()
 	return a.GetUserData(uc.GetUserID())
 }
 
