@@ -89,7 +89,7 @@ var settingMeta = map[SettingName]struct {
 	SNCountry:        {stString, true, true},
 	SNLocalHTTPToken: {stString, true, true},
 
-	SNDeviceID:                  {stString, true, true},
+	// SNDeviceID: intentionally omit, to avoid setting it from UI
 	SNEmailAddress:              {stString, true, true},
 	SNUserID:                    {stNumber, true, true},
 	SNUserToken:                 {stString, true, true},
