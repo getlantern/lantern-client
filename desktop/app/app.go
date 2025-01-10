@@ -43,7 +43,7 @@ import (
 )
 
 var (
-	log       = golog.LoggerFor("lantern-client")
+	log       = golog.LoggerFor("lantern-client.app")
 	startTime = time.Now()
 )
 
@@ -175,8 +175,8 @@ func (app *App) Run(ctx context.Context) {
 	}()
 
 	log.Debug(app.Flags)
-	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), app.userConfig)
-	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), app.userConfig)
+	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), app.UserConfig)
+	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), app.UserConfig)
 
 	app.mu.Lock()
 	app.proClient = proClient
@@ -252,8 +252,8 @@ func (app *App) Run(ctx context.Context) {
 	)
 }
 
-// userConfig returns the current user configuration after applying settings.
-func (app *App) userConfig() common.UserConfig {
+// UserConfig returns the current user configuration after applying settings.
+func (app *App) UserConfig() common.UserConfig {
 	return userConfig(app.Settings())
 }
 

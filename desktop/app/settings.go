@@ -190,8 +190,8 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	return sett
 }
 
-// EmptySettings returns a new settings instance without loading any file from disk.
-func EmptySettings() *Settings {
+// emptySettings returns a new settings instance without loading any file from disk.
+func emptySettings() *Settings {
 	return LoadSettingsFrom("version", "revisionDate", "buildDate", "")
 }
 
