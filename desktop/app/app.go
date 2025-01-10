@@ -302,7 +302,7 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	}
 
 	isProUser := func() (bool, bool) {
-		return app.IsProUser(context.Background(), app.userConfig())
+		return app.IsProUser(context.Background(), app.UserConfig())
 	}
 
 	if err := app.statsTracker.StartService(app.ws); err != nil {

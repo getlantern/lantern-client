@@ -77,10 +77,11 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
 			Timeout:   30 * time.Second,
 		}
 	} else {
-		//rt, _ := proxied.ChainedNonPersistent("")
+		rt, _ := proxied.ChainedNonPersistent("")
 		httpClient = &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   30 * time.Second,
+			Transport: rt,
+			//Transport: proxied.ParallelForIdempotent(),
+			Timeout: 30 * time.Second,
 		}
 	}
 	return &proClient{
