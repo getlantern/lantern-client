@@ -14,7 +14,6 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/loconf"
 	"github.com/getlantern/lantern-client/desktop/notifier"
-	"github.com/getlantern/lantern-client/desktop/settings"
 )
 
 // LoconfScanner starts a goroutine to periodically check for new loconf files.
@@ -28,7 +27,7 @@ import (
 // show the announcement or not).
 //
 // Returns a function to stop the loop.
-func LoconfScanner(settings *settings.Settings, configDir string, interval time.Duration, proChecker func() (bool, bool), iconURL func() string) (stop func()) {
+func LoconfScanner(settings *Settings, configDir string, interval time.Duration, proChecker func() (bool, bool), iconURL func() string) (stop func()) {
 	loc := &loconfer{
 		log:       golog.LoggerFor("loconfer"),
 		configDir: configDir,
@@ -87,7 +86,7 @@ type loconfer struct {
 	configDir string
 	r         *rand.Rand
 	iconURL   func() string
-	settings  *settings.Settings
+	settings  *Settings
 }
 
 func (loc *loconfer) onLoconf(lc *loconf.LoConf, isPro bool) {

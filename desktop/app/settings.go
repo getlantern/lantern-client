@@ -1,11 +1,10 @@
-package settings
+package app
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -138,19 +137,6 @@ func LoadSettings(configDir string) *Settings {
 	return settings
 }
 
-// UserConfig creates a new user config from the given settings
-func UserConfig(settings *Settings) sdkcommon.UserConfig {
-	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	return sdkcommon.NewUserConfig(
-		common.DefaultAppName,
-		deviceID,
-		userID,
-		token,
-		nil,
-		settings.GetLanguage(),
-	)
-}
-
 func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	// Create default settings that may or may not be overridden from an existing file
 	// on disk.
@@ -191,8 +177,8 @@ func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	return sett
 }
 
-// EmptySettings returns a new settings instance without loading any file from disk.
-func EmptySettings() *Settings {
+// emptySettings returns a new settings instance without loading any file from disk.
+func emptySettings() *Settings {
 	return LoadSettingsFrom("version", "revisionDate", "buildDate", "")
 }
 
@@ -808,7 +794,7 @@ func (s *Settings) IsUserLoggedIn() bool {
 	return s.getBool(SNUserLoggedIn)
 }
 func (s *Settings) SetUserLoggedIn(value bool) {
-	log.Println("Setting user logged in to ", value)
+	log.Debugf("Setting user logged in to ", value)
 	s.setVal(SNUserLoggedIn, value)
 }
 

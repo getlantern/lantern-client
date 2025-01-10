@@ -27,7 +27,6 @@ import (
 	"github.com/getlantern/flashlight/v7/integrationtest"
 	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/lantern-client/desktop/doh"
-	"github.com/getlantern/lantern-client/desktop/settings"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -189,7 +188,7 @@ func startApp(t *testing.T, helper *integrationtest.Helper) (*App, error) {
 		UIAddr:             "127.0.0.1:16823",
 		Timeout:            time.Duration(0),
 	}
-	ss := settings.EmptySettings()
+	ss := emptySettings()
 	a, err := NewAppWithFlags(flags, helper.ConfigDir)
 	require.NoError(t, err)
 	id := ss.GetUserID()

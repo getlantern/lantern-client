@@ -4,9 +4,9 @@
 package deviceid
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/getlantern/appdir"
 	"github.com/google/uuid"
@@ -24,7 +24,7 @@ func Get() string {
 	}
 
 	filename := filepath.Join(path, ".deviceid")
-	existing, err := ioutil.ReadFile(filename)
+	existing, err := os.ReadFile(filename)
 	if err != nil {
 		log.Debug("Storing new deviceID")
 		_deviceID, err := uuid.NewRandom()
@@ -33,13 +33,13 @@ func Get() string {
 			return OldStyleDeviceID()
 		}
 		deviceID := _deviceID.String()
-		err = ioutil.WriteFile(filename, []byte(deviceID), 0644)
+		err = os.WriteFile(filename, []byte(deviceID), 0644)
 		if err != nil {
 			log.Errorf("Error storing new deviceID, defaulting to old-style device ID: %v", err)
 			return OldStyleDeviceID()
 		}
 		return deviceID
 	} else {
-		return string(existing)
+		return strings.TrimSpace(string(existing))
 	}
 }
