@@ -39,8 +39,7 @@ Future<void> main() async {
   } else {
     await _initGoogleMobileAds();
     // Inject all the services
-    init();
-    sl<AppPurchase>().init();
+    initServices();
     // Due to replica we are using lot of cache
     // clear if goes to above limit
     CustomCacheManager().clearCacheIfExceeded();
