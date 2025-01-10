@@ -55,27 +55,22 @@ func init() {
 
 // App is the core of the Lantern desktop application, managing components and configurations.
 type App struct {
-	hasExited            atomic.Bool // Tracks if the app has exited.
-	fetchedGlobalConfig  atomic.Bool // Indicates if the global configuration was fetched.
-	fetchedProxiesConfig atomic.Bool // Tracks whether the proxy configuration was fetched.
-	hasSucceedingProxy   atomic.Bool // Tracks if a succeeding proxy is available.
-
-	Flags         flashlight.Flags // Command-line flags passed to the app.
-	configDir     string           // Directory for storing configuration files.
-	exited        eventual.Value   // Signals when the app has exited.
-	settings      *Settings        // User settings for the application.
-	configService *configService
-	statsTracker  *statsTracker
-
-	muExitFuncs sync.RWMutex
-	exitFuncs   []func()
-
-	translations eventual.Value         // Translation files for localization.
-	flashlight   *flashlight.Flashlight // Flashlight library for networking and proxying.
-
-	authClient auth.AuthClient     // Client for managing authentication.
-	proClient  proclient.ProClient // Client for managing interaction with the Pro server.
-
+	hasExited                 atomic.Bool      // Tracks if the app has exited.
+	fetchedGlobalConfig       atomic.Bool      // Indicates if the global configuration was fetched.
+	fetchedProxiesConfig      atomic.Bool      // Tracks whether the proxy configuration was fetched.
+	hasSucceedingProxy        atomic.Bool      // Tracks if a succeeding proxy is available.
+	Flags                     flashlight.Flags // Command-line flags passed to the app.
+	configDir                 string           // Directory for storing configuration files.
+	exited                    eventual.Value   // Signals when the app has exited.
+	settings                  *Settings        // User settings for the application.
+	configService             *configService
+	statsTracker              *statsTracker
+	muExitFuncs               sync.RWMutex
+	exitFuncs                 []func()
+	translations              eventual.Value           // Translation files for localization.
+	flashlight                *flashlight.Flashlight   // Flashlight library for networking and proxying.
+	authClient                auth.AuthClient          // Client for managing authentication.
+	proClient                 proclient.ProClient      // Client for managing interaction with the Pro server.
 	selectedTab               Tab                      // Tracks the currently selected UI tab.
 	connectionStatusCallbacks []func(isConnected bool) // Listeners for connection status changes.
 	// Websocket-related settings
@@ -94,7 +89,7 @@ func NewApp() (*App, error) {
 		go startPprof("localhost:6060")
 	}
 
-	// helper to resolve CONFIG_DIR to an absolute path
+	// helper to resolve the configuration directory to an absolute path
 	resolveConfigDir := func(dir string) string {
 		if filepath.IsAbs(dir) {
 			return dir
