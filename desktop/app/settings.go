@@ -137,19 +137,6 @@ func LoadSettings(configDir string) *Settings {
 	return settings
 }
 
-// userConfig creates a new user config from the given settings
-func userConfig(settings *Settings) sdkcommon.UserConfig {
-	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	return sdkcommon.NewUserConfig(
-		common.DefaultAppName,
-		deviceID,
-		userID,
-		token,
-		nil,
-		settings.GetLanguage(),
-	)
-}
-
 func LoadSettingsFrom(version, revisionDate, buildDate, path string) *Settings {
 	// Create default settings that may or may not be overridden from an existing file
 	// on disk.

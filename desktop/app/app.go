@@ -254,7 +254,16 @@ func (app *App) Run(ctx context.Context) {
 
 // UserConfig returns the current user configuration after applying settings.
 func (app *App) UserConfig() common.UserConfig {
-	return userConfig(app.Settings())
+	settings := app.Settings()
+	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
+	return common.NewUserConfig(
+		common.DefaultAppName,
+		deviceID,
+		userID,
+		token,
+		nil,
+		settings.GetLanguage(),
+	)
 }
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
@@ -583,7 +592,7 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.IsProUserFast(userConfig(app.Settings()))
+	isPro, _ := app.IsProUserFast(app.UserConfig())
 	return isPro
 }
 
