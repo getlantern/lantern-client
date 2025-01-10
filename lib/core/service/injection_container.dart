@@ -3,7 +3,8 @@ import 'package:lantern/core/service/app_purchase.dart';
 
 final GetIt sl = GetIt.instance;
 
-void init() {
+void initServices() {
   //Inject
   sl.registerLazySingleton(() => AppPurchase());
+  sl<AppPurchase>().init();
 }
