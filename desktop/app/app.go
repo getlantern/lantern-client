@@ -160,8 +160,8 @@ func (app *App) Run(ctx context.Context) {
 	userConfig := func() common.UserConfig {
 		return settings.UserConfig(app.Settings())
 	}
-	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), userConfig)
-	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
+	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIBaseURL), userConfig)
+	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.APIBaseURL), userConfig)
 
 	app.mu.Lock()
 	app.proClient = proClient

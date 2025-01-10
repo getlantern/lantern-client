@@ -2,10 +2,10 @@ package auth
 
 import (
 	"context"
+	"time"
 
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
@@ -53,7 +53,7 @@ type AuthClient interface {
 func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
 	var httpClient *http.Client
 
-	if strings.HasSuffix(baseURL, common.APIBaseUrl) {
+	if strings.HasSuffix(baseURL, common.APIBaseURL) {
 		log.Debugf("Using Fronted proxy for auth client")
 		// iOS
 		// There is no use of chnained proxy in iOS since all requests will fail
