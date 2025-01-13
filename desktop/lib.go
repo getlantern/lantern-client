@@ -255,6 +255,7 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 	if err != nil {
 		return sendError(err)
 	}
+	go a.FetchOrUpdateUserData(ctx)
 	return C.CString("true")
 }
 
