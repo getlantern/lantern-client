@@ -12,6 +12,7 @@ import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_tab.dart';
 import 'package:logger/logger.dart';
 
+import '../../core/service/survey_service.dart';
 import '../messaging/messaging_model.dart';
 
 @RoutePage(name: 'Home')
@@ -19,18 +20,20 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   Function()? _cancelEventSubscription;
   Function userNew = once<void>();
+  final surveyService = sl.get<SurveyService>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
+      surveyService.trackScreen(SurveyScreens.homeScreen);
     });
   }
 
@@ -164,14 +167,23 @@ class _HomePageState extends State<HomePage> {
                 _checkForFirstTimeVisit();
               });
             }
-
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
               return Scaffold(
-                body: buildBody(tab, isOnboarded),
-                bottomNavigationBar: CustomBottomBar(
-                  selectedTab: tab,
-                  isDevelop: developmentMode,
+                backgroundColor: Colors.transparent,
+                body: Stack(
+                  children: [
+                    Scaffold(
+                      body: buildBody(tab, isOnboarded),
+                      bottomNavigationBar: CustomBottomBar(
+                        selectedTab: tab,
+                        isDevelop: developmentMode,
+                      ),
+                    ),
+                    // Wrap the survey widget in a scaffold to ensure it's
+                    // always on top of the bottom bar.
+                    surveyService.surveyWidget(),
+                  ],
                 ),
               );
             });
@@ -196,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                 ? Chats()
                 : Welcome();
       case TAB_VPN:
-        return const VPNTab();
+        return VPNTab();
       case TAB_REPLICA:
         return ReplicaTab();
       case TAB_ACCOUNT:

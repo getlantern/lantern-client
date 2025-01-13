@@ -18,7 +18,6 @@ class _PlansPageState extends State<PlansPage> {
 
   @override
   void initState() {
-    surveyService.trackScreen(SurveyScreens.plansScreen);
     super.initState();
   }
 
