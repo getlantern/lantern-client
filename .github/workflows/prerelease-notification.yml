@@ -4,11 +4,8 @@ on:
   workflow_run:
     workflows: [ "release" ]
     types:
-      - completed
+      - success
   workflow_dispatch:
-  push:
-    tags:
-      - '*lantern-*'
 
 jobs:
   create-release:
