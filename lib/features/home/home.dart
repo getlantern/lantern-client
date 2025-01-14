@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
-      surveyService.trackScreen(SurveyScreens.homeScreen);
     });
   }
 
@@ -41,6 +40,13 @@ class _HomePageState extends State<HomePage> {
     if (isMobile()) {
       channelListener();
       return;
+    }
+    checkIfSurveyIsAvailable();
+  }
+
+  Future<void> checkIfSurveyIsAvailable() async {
+    if (await surveyService.surveyAvailable()) {
+      surveyService.trackScreen(SurveyScreens.homeScreen);
     }
   }
 

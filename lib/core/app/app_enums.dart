@@ -23,3 +23,10 @@ extension AuthFlowExtension on AuthFlow {
   bool get isUpdateAccount => this == AuthFlow.updateAccount;
   bool get isRestoreAccount => this == AuthFlow.restoreAccount;
 }
+
+enum VpnStatus{
+  connected,
+  disconnected,
+  connecting,
+  disconnecting
+}
