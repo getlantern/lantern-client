@@ -7,6 +7,8 @@ enum SurveyScreens { homeScreen }
 
 //This class use spot check service for survey
 class SurveyService {
+  // Need to have spot check for each region
+  // Russia, Belarus, Ukraine, China, Iran, UAE, Myanmar
   final SpotCheck _spotCheck = SpotCheck(
     domainName: "lantern.surveysparrow.com",
     targetToken: "tar-avDLqWvShqjDf3fydPDpbQ",
@@ -22,7 +24,31 @@ class SurveyService {
   }
 
   Widget surveyWidget() {
-    return _spotCheck;
+    switch (sessionModel.country.value?.toLowerCase()) {
+      case 'ru':
+        //Russia
+        return _spotCheck;
+      case 'ir':
+        //Iran
+        return _spotCheck;
+      case 'by':
+        //Belarus
+        return _spotCheck;
+      case 'ua':
+        //Ukraine
+        return _spotCheck;
+      case 'cn':
+        //China
+        return _spotCheck;
+      case 'mm':
+        //Myanmar
+        return _spotCheck;
+      case 'uae':
+        //UAE
+        return _spotCheck;
+      default:
+        return const SizedBox.shrink();
+    }
   }
 
   Future<String> get _surveyConfigPath async {
