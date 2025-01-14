@@ -15,7 +15,6 @@ class VPNSwitch extends StatefulWidget {
   @override
   State<VPNSwitch> createState() => _VPNSwitchState();
 }
-
 //implement this switch with loading implementation
 //https://pub.dev/packages/animated_toggle_switch
 class _VPNSwitchState extends State<VPNSwitch> {
@@ -38,9 +37,9 @@ class _VPNSwitchState extends State<VPNSwitch> {
             disabledOpacity: 1,
             enabled: (internetStatusProvider.isConnected &&
                 !vpnNotifier.isFlashlightInitializedFailed),
-            initialValue: vpnStatus == 'connected' ||
-                vpnStatus == 'disconnecting' ||
-                vpnStatus == 'connecting',
+            initialValue: vpnStatus == VpnStatus.connected.name ||
+                vpnStatus == VpnStatus.disconnecting.name ||
+                vpnStatus == VpnStatus.connecting.name,
             activeColor: onSwitchColor,
             inactiveColor: (internetStatusProvider.isConnected &&
                     !vpnNotifier.isFlashlightInitializedFailed)
@@ -54,7 +53,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     } else {
       return CustomAnimatedToggleSwitch<String>(
         current: vpnNotifier.vpnStatus.value,
-        values: const ['disconnected', 'connected'],
+        values: [VpnStatus.disconnected.name, VpnStatus.connected.name],
         iconBuilder: (context, local, global) => const SizedBox(),
         height: 72,
         spacing: 28.0,
@@ -90,10 +89,10 @@ class _VPNSwitchState extends State<VPNSwitch> {
         },
         onChanged: (newValue) {},
         onTap: (props) {
-          if (vpnNotifier.vpnStatus.value == 'connected') {
-            vpnProcessForDesktop('disconnected');
+          if (vpnNotifier.vpnStatus.value == VpnStatus.connected.name) {
+            vpnProcessForDesktop(VpnStatus.disconnected.name);
           } else {
-            vpnProcessForDesktop('connected');
+            vpnProcessForDesktop(VpnStatus.connected.name);
           }
         },
       );
@@ -112,7 +111,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
   }
 
   bool isIdle(String vpnStatus) =>
-      vpnStatus != 'connecting' && vpnStatus != 'disconnecting';
+      vpnStatus != VpnStatus.connecting.name &&
+      vpnStatus != VpnStatus.disconnecting.name;
 
   Future<void> vpnProcessForMobile(
       bool newValue, String vpnStatus, bool userHasPermission) async {
@@ -120,7 +120,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     //if ads is not ready then wait for at least 5 seconds and then show ads
     //if ads is ready then show ads immediately
 
-    if (vpnStatus != 'connected' && userHasPermission) {
+    if (vpnStatus != VpnStatus.connected.name && userHasPermission) {
       if (!await adHelper.isAdsReadyToShow()) {
         await vpnModel.connectingDelay(newValue);
         await Future.delayed(const Duration(seconds: 5));
@@ -130,7 +130,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
     await vpnModel.switchVPN(newValue);
 
     //add delayed to avoid flickering
-    if (vpnStatus != 'connected') {
+    if (vpnStatus != VpnStatus.connected.name) {
       Future.delayed(
         const Duration(seconds: 1),
         () async {
@@ -150,8 +150,12 @@ class _VPNSwitchState extends State<VPNSwitch> {
     try {
       await LanternFFI.sendVpnStatus(vpnStatus);
       vpnNotifier.updateVpnStatus(vpnStatus);
+      if (vpnStatus == VpnStatus.disconnected.name) {
+        // Update survey count
+        sl.get<SurveyService>().incrementVpnConnectCount();
+      }
     } catch (e) {
-      await vpnNotifier.updateVpnStatus('disconnected');
+      await vpnNotifier.updateVpnStatus(VpnStatus.disconnected.name);
       showSnackbar(context: context, content: e.localizedDescription);
       mainLogger.e("Error while sending vpn status: $e");
     }
