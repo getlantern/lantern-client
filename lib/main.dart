@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
-import 'package:lantern/core/service/ad_helper.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/replica/ui/utils.dart';
@@ -44,7 +43,6 @@ Future<void> main() async {
     // Due to replica we are using lot of cache
     // clear if goes to above limit
     appLogger.i("app opens ${DateTime.now().toIso8601String()}");
-    AdsService().loadAds(provider: 'google');
     CustomCacheManager().clearCacheIfExceeded();
   }
   await Localization.ensureInitialized();

@@ -6,9 +6,7 @@ import 'package:lantern/features/replica/common.dart';
 enum _AdsFormat { interstitial, appOpen }
 
 class AdsService {
-  AdsService._internal();
-  factory AdsService() => _instance;
-  static final AdsService _instance = AdsService._internal();
+
   final interstitialAdsService = InterstitialAdProvider();
   final appOpenAdsService = AppOpenAdsProvider();
 
