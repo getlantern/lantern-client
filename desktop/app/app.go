@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"io/fs"
 	"net"
 	"net/http"
 	"os"
@@ -637,20 +635,6 @@ func recordStopped() {
 // ShouldReportToSentry determines if we should report errors/panics to Sentry
 func ShouldReportToSentry() bool {
 	return !common.IsDevEnvironment()
-}
-
-// GetTranslations accesses translations with the given filename
-func (app *App) GetTranslations(filename string) ([]byte, error) {
-	log.Tracef("Accessing translations %v", filename)
-	tr, ok := app.translations.Get(30 * time.Second)
-	if !ok || tr == nil {
-		return nil, fmt.Errorf("could not get traslation for file name: %v", filename)
-	}
-	f, err := tr.(fs.FS).Open(filename)
-	if err != nil {
-		return nil, fmt.Errorf("could not get traslation for file name: %v, %w", filename, err)
-	}
-	return io.ReadAll(f)
 }
 
 func (app *App) Settings() *Settings {
