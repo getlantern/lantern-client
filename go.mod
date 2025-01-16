@@ -1,8 +1,6 @@
 module github.com/getlantern/lantern-client
 
-go 1.22.7
-
-toolchain go1.22.10
+go 1.22.4
 
 // replace github.com/getlantern/flashlight/v7 => ../flashlight
 
@@ -39,7 +37,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.175
+	github.com/getlantern/flashlight/v7 v7.6.178
 	github.com/getlantern/fronted v0.0.0-20250104035820-b06365fddbbf
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
@@ -76,7 +74,7 @@ require (
 	github.com/shopspring/decimal v1.4.0
 	github.com/stretchr/testify v1.10.0
 	golang.org/x/crypto v0.32.0
-	golang.org/x/mobile v0.0.0-20241016134751-7ff83004ec2c
+	golang.org/x/mobile v0.0.0-20250106192035-c31d5b91ecc3
 	golang.org/x/net v0.34.0
 	golang.org/x/sys v0.29.0
 	google.golang.org/protobuf v1.36.2
