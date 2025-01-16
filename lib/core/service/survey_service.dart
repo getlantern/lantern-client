@@ -9,48 +9,125 @@ enum SurveyScreens { homeScreen }
 class SurveyService {
   // Need to have spot check for each region
   // Russia, Belarus, Ukraine, China, Iran, UAE, Myanmar
-  final SpotCheck _spotCheck = SpotCheck(
+
+  final int _VPNCONNECTED_COUNT = 10;
+
+  final SpotCheck _testingSpotCheck = SpotCheck(
     domainName: "lantern.surveysparrow.com",
-    targetToken: "tar-9ewB7CH6jtNvtk3MyUQM3i",
+    targetToken: AppSecret.testingSpotCheckTargetToken,
     userDetails: {},
     sparrowLang: Localization.locale.split('_').first,
   );
+
+  final SpotCheck _russiaSpotCheck = SpotCheck(
+      domainName: "lantern.surveysparrow.com",
+      targetToken: AppSecret.russiaSpotCheckTargetToken,
+      // Should Not Pass userDetails as const
+      userDetails: {});
+
+  final SpotCheck _iranSpotCheck = SpotCheck(
+      domainName: "lantern.surveysparrow.com",
+      targetToken: AppSecret.iranSpotCheckTargetToken,
+      // Should Not Pass userDetails as const
+      userDetails: {});
+
+  final SpotCheck _ukraineSpotCheck = SpotCheck(
+      domainName: "lantern.surveysparrow.com",
+      targetToken: AppSecret.ukraineSpotCheckTargetToken,
+      // Should Not Pass userDetails as const
+      userDetails: {});
+  final SpotCheck _belarusSpotCheck = SpotCheck(
+      domainName: "lantern.surveysparrow.com",
+      targetToken: AppSecret.belarusSpotCheckTargetToken,
+      // Should Not Pass userDetails as const
+      userDetails: {});
+
+  final SpotCheck _chinaSpotCheck = SpotCheck(
+      domainName: "lantern.surveysparrow.com",
+      targetToken: AppSecret.chinaSpotCheckTargetToken,
+      // Should Not Pass userDetails as const
+      userDetails: {});
+
+  final SpotCheck _UAEspotCheck = SpotCheck(
+      domainName: "lantern.surveysparrow.com",
+      targetToken: AppSecret.UAEspotCheckTargetToken,
+      // Should Not Pass userDetails as const
+      userDetails: {});
+
+  final SpotCheck _myanmarSpotCheck = SpotCheck(
+      domainName: "lantern.surveysparrow.com",
+      targetToken: AppSecret.myanmarSpotCheckTargetToken,
+      // Should Not Pass userDetails as const
+      userDetails: {});
 
   SurveyService() {
     _createConfigIfNeeded();
   }
 
   void trackScreen(SurveyScreens screen) {
-    _spotCheck.trackScreen(screen.name);
+    switch (sessionModel.country.value?.toLowerCase()) {
+      case 'ru':
+        //Russia
+        _russiaSpotCheck.trackScreen(screen.name);
+        break;
+      case 'ir':
+        //Iran
+        return _iranSpotCheck.trackScreen(screen.name);
+        break;
+      case 'by':
+        //Belarus
+        _belarusSpotCheck.trackScreen(screen.name);
+        break;
+      case 'ua':
+        //Ukraine
+        _ukraineSpotCheck.trackScreen(screen.name);
+        break;
+      case 'cn':
+        //China
+        _chinaSpotCheck.trackScreen(screen.name);
+        break;
+      case 'mm':
+        //Myanmar
+        _myanmarSpotCheck.trackScreen(screen.name);
+        break;
+      case 'uae':
+        //UAE
+        _UAEspotCheck.trackScreen(screen.name);
+        break;
+      // This is just for testing
+      case 'in':
+        _testingSpotCheck.trackScreen(screen.name);
+        break;
+    }
   }
 
   Widget surveyWidget() {
     switch (sessionModel.country.value?.toLowerCase()) {
       case 'ru':
         //Russia
-        return _spotCheck;
+        return _russiaSpotCheck;
       case 'ir':
         //Iran
-        return _spotCheck;
+        return _iranSpotCheck;
       case 'by':
         //Belarus
-        return _spotCheck;
+        return _belarusSpotCheck;
       case 'ua':
         //Ukraine
-        return _spotCheck;
+        return _ukraineSpotCheck;
       case 'cn':
         //China
-        return _spotCheck;
+        return _chinaSpotCheck;
       case 'mm':
         //Myanmar
-        return _spotCheck;
+        return _myanmarSpotCheck;
       case 'uae':
         //UAE
-        return _spotCheck;
+        return _UAEspotCheck;
       // This is just for testing
       case 'in':
         //UAE
-        return _spotCheck;
+        return _testingSpotCheck;
       default:
         return const SizedBox.shrink();
     }
@@ -69,7 +146,7 @@ class SurveyService {
       if (!await file.exists()) {
         await file.create(recursive: true);
 
-        const surveyConfig = {"lastSurveyDate": "", "vpnConnectCount": 0};
+        const surveyConfig = {"vpnConnectCount": 0};
         final jsonString = jsonEncode(surveyConfig);
         await file.writeAsString(jsonString);
         appLogger.d("Write init config done $filePath");
@@ -109,8 +186,12 @@ class SurveyService {
         final Map<String, dynamic> surveyConfig = jsonDecode(content);
         final vpnConnectCount = surveyConfig['vpnConnectCount'] ?? 0;
         appLogger.d('Survey config. ${surveyConfig.toString()}');
-        if (vpnConnectCount >= 2) {}
-        return vpnConnectCount >= 2;
+        if (vpnConnectCount >= _VPNCONNECTED_COUNT) {
+          appLogger.d('Survey is available.');
+          return true;
+        }
+        appLogger.d('Survey is not available.');
+        return false;
       } else {
         appLogger.d('Survey config file does not exist.');
         return false;

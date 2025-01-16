@@ -37,8 +37,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _startupSequence() {
-    checkIfSurveyIsAvailable();
     if (isMobile()) {
+      checkIfSurveyIsAvailable();
       channelListener();
       return;
     }

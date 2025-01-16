@@ -5,12 +5,21 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AppSecret {
   static String androidAdsAppId = dotenv.get('Android_interstitialAd');
   static String iOSAdsAppId = dotenv.get('IOS_interstitialAd');
+  static String testingSpotCheckTargetToken = dotenv.get('TESTING_SPOTCHECK_TARGET_TOKEN');
+  static String iranSpotCheckTargetToken = dotenv.get('IRAN_SPOTCHECK_TARGET_TOKEN');
+  static String russiaSpotCheckTargetToken = dotenv.get('RUSSIA_SPOTCHECK_TARGET_TOKEN');
+  static String ukraineSpotCheckTargetToken = dotenv.get('UKRAINE_SPOTCHECK_TARGET_TOKEN');
+  static String belarusSpotCheckTargetToken = dotenv.get('BELARUS_SPOTCHECK_TARGET_TOKEN');
+  static String chinaSpotCheckTargetToken = dotenv.get('CHINA_SPOTCHECK_TARGET_TOKEN');
+  static String UAEspotCheckTargetToken = dotenv.get('UAE_SPOTCHECK_TARGET_TOKEN');
+  static String myanmarSpotCheckTargetToken = dotenv.get('MYANMAR_SPOTCHECK_TARGET_TOKEN');
+
+
+
   static String tos = 'https://s3.amazonaws.com/lantern/Lantern-TOS.pdf';
   static String privacyPolicy = 'https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf';
   static String privacyPolicyV2 = 'https://lantern.io/privacy';
   static String tosV2 = 'https://lantern.io/terms';
-  static String videoInterstitialZoneId = dotenv.get('VideoInterstitialZoneId');
-  static String interstitialZoneId =dotenv.get('InterstitialZoneId');
 
 
   static  String dnsConfig() {
