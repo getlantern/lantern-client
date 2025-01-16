@@ -28,7 +28,7 @@ Future<void> main() async {
   } catch (error) {
     appLogger.e("Error loading .env file: $error");
   }
-  init();
+  initServices();
   if (isDesktop()) {
     if (Platform.isWindows) await initializeWebViewEnvironment();
     await windowManager.ensureInitialized();
