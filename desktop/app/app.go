@@ -9,14 +9,12 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"path/filepath"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/getsentry/sentry-go"
 
-	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
@@ -89,35 +87,17 @@ func NewApp() (*App, error) {
 		go startPprof("localhost:6060")
 	}
 
-	// helper to resolve the configuration directory to an absolute path
-	resolveConfigDir := func(dir string) string {
-		if filepath.IsAbs(dir) {
-			return dir
-		}
-		absPath, err := filepath.Abs(dir)
-		if err != nil {
-			return dir
-		}
-		return absPath
+	cdir, err := configDir(flags)
+	if err != nil {
+		return nil, err
 	}
 
-	configDir := resolveConfigDir(flags.ConfigDir)
-
-	if err := createDirIfNotExists(configDir, defaultConfigDirPerm); err != nil {
-		return nil, fmt.Errorf("unable to create config directory %s: %v", configDir, err)
-	}
-	flags.ConfigDir = configDir
-
-	log.Debugf("Config directory %s sticky %v readable %v", configDir, flags.StickyConfig, flags.ReadableConfig)
-	return NewAppWithFlags(flags, flags.ConfigDir)
+	return NewAppWithFlags(flags, cdir)
 }
 
 // NewAppWithFlags creates a new App instance with the given flags and configuration directory.
 func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
-	if configDir == "" {
-		log.Debug("Config directory is empty, using default location")
-		configDir = appdir.General(common.DefaultAppName)
-	}
+	log.Debugf("Config directory %s sticky %v readable %v", configDir, flags.StickyConfig, flags.ReadableConfig)
 	// Load settings and initialize trackers and services.
 	ss := LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
