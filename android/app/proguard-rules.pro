@@ -219,4 +219,3 @@
 ##---------------Begin: proguard configuration for Signal  ----------
 -keep class org.whispersystems.** { *; }
 ##---------------End: proguard configuration for Signal  ----------
-#

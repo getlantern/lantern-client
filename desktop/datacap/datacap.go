@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/common"
@@ -28,13 +27,6 @@ var (
 	log                = golog.LoggerFor("lantern-desktop.datacap")
 
 	translationAppName = strings.ToUpper(common.DefaultAppName)
-
-	uncapped = &bandwidth.Quota{
-		MiBAllowed: 0,
-		MiBUsed:    0,
-		AsOf:       time.Now(),
-		TTLSeconds: 0,
-	}
 )
 
 type dataCap struct {
@@ -49,10 +41,14 @@ func ServeDataCap(channel ws.UIChannel, iconURL func() string, clickURL func() s
 		q, _ := bandwidth.GetQuota()
 		if q == nil {
 			// On client first connecting, if we don't have a datacap, assume we're uncapped
-			q = uncapped
+			uncapped := map[string]interface{}{
+				"percent":    0,
+				"mibUsed":    0,
+				"mibAllowed": 0,
+			}
+			log.Debugf("Sending current bandwidth quota to new client: %v", q)
+			write(uncapped)
 		}
-		log.Debugf("Sending current bandwidth quota to new client: %v", q)
-		write(q)
 	}
 	bservice, err := channel.Register("bandwidth", helloFn)
 	if err != nil {

@@ -5,7 +5,7 @@ import 'package:lantern/core/utils/common.dart';
 
 final GetIt sl = GetIt.instance;
 
-void init() {
+void initServices() {
   //Inject
   if (isMobile()) {
     sl.registerLazySingleton(() => AppPurchase());
