@@ -61,16 +61,16 @@ type App struct {
 	configDir                 string           // Directory for storing configuration files.
 	exited                    eventual.Value   // Signals when the app has exited.
 	settings                  *Settings        // User settings for the application.
-	configService             *configService
-	statsTracker              *statsTracker
+	configService             *configService   // Config service used by the applicaiton.
+	statsTracker              *statsTracker    // Tracks stats for service usage by the client.
 	muExitFuncs               sync.RWMutex
 	exitFuncs                 []func()
-	translations              eventual.Value           // Translation files for localization.
 	flashlight                *flashlight.Flashlight   // Flashlight library for networking and proxying.
 	authClient                auth.AuthClient          // Client for managing authentication.
 	proClient                 proclient.ProClient      // Client for managing interaction with the Pro server.
 	selectedTab               Tab                      // Tracks the currently selected UI tab.
 	connectionStatusCallbacks []func(isConnected bool) // Listeners for connection status changes.
+
 	// Websocket-related settings
 	websocketAddr  string                                         // Address for WebSocket connections.
 	ws             ws.UIChannel                                   // UI channel for WebSocket communication.
@@ -111,7 +111,6 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		selectedTab:               VPNTab,
 		configService:             new(configService),
 		statsTracker:              statsTracker,
-		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
 
@@ -130,8 +129,6 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 	})
 
 	log.Debugf("Using configdir: %v", configDir)
-
-	app.translations.Set(os.DirFS("locale/translation"))
 
 	if e := app.configService.StartService(app.ws); e != nil {
 		return nil, fmt.Errorf("unable to register config service: %q", e)
