@@ -92,7 +92,7 @@ func (app *App) sendConfigOptions() {
 		ReplicaAddr:          "",
 		HttpProxyAddr:        app.settings.GetAddr(),
 		SocksProxyAddr:       app.settings.GetSOCKSAddr(),
-		AuthEnabled:          authEnabled(app),
+		AuthEnabled:          true,
 		ChatEnabled:          false,
 		SplitTunneling:       false,
 		HasSucceedingProxy:   app.HasSucceedingProxy(),
