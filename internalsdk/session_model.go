@@ -2373,7 +2373,9 @@ func (session *SessionModel) appsAllowedAccess() (string, error) {
 	}
 	strSlice := make([]string, len(installedApps))
 	for i, v := range installedApps {
-		strSlice[i] = fmt.Sprint(v.Value.PackageName)
+		if v.Value.AllowedAccess {
+			strSlice[i] = fmt.Sprint(v.Value.PackageName)
+		}
 	}
 	return strings.Join(strSlice, ","), nil
 
