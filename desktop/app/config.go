@@ -3,14 +3,8 @@ package app
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"os"
-	"path/filepath"
-	"strconv"
 	"sync"
 
-	"github.com/getlantern/appdir"
-	"github.com/getlantern/flashlight/v7"
 	fcommon "github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -74,14 +68,6 @@ func (s *configService) AddListener(f func(ConfigOptions)) {
 }
 
 func (app *App) sendConfigOptions() {
-	// authEnabled := func(a *App) bool {
-	// 	authEnabled := a.IsFeatureEnabled(config.FeatureAuth)
-	// 	if ok, err := strconv.ParseBool(os.Getenv("ENABLE_AUTH_FEATURE")); err == nil && ok {
-	// 		authEnabled = true
-	// 	}
-	// 	log.Debugf("DEBUG: Auth enabled: %v", authEnabled)
-	// 	return authEnabled
-	// }
 	ctx := context.Background()
 	plans, _ := app.proClient.Plans(ctx)
 	paymentMethods, _ := app.proClient.DesktopPaymentMethods(ctx)
@@ -113,53 +99,4 @@ func (app *App) sendConfigOptions() {
 			OnBoardingStatus:     false,
 		},
 	})
-}
-
-// initializeAppConfig initializes application configuration and flags based on environment variables
-func initializeAppConfig() (flashlight.Flags, error) {
-	flags := flashlight.ParseFlags()
-	if flags.Pprof {
-		go startPprof("localhost:6060")
-	}
-	parseBoolEnv := func(key string, defaultValue bool) bool {
-		val := os.Getenv(key)
-		parsedValue, err := strconv.ParseBool(val)
-		if err != nil {
-			return defaultValue
-		}
-		return parsedValue
-	}
-
-	// helper to resolve CONFIG_DIR to an absolute path
-	resolveConfigDir := func(dir string) string {
-		if filepath.IsAbs(dir) {
-			return dir
-		}
-		absPath, err := filepath.Abs(dir)
-		if err != nil {
-			return dir
-		}
-		return absPath
-	}
-
-	// Parse environment-based flags
-	stickyConfig := parseBoolEnv("STICKY_CONFIG", false)
-	readableConfig := parseBoolEnv("READABLE_CONFIG", true)
-	configDir := os.Getenv("CONFIG_DIR")
-	if configDir == "" {
-		configDir = appdir.General(common.DefaultAppName)
-		log.Debugf("CONFIG_DIR not set. Using default: %s", configDir)
-	} else {
-		configDir = resolveConfigDir(configDir)
-	}
-	if err := createDirIfNotExists(configDir, defaultConfigDirPerm); err != nil {
-		return flags, fmt.Errorf("unable to create config directory %s: %v", configDir, err)
-	}
-	flags.StickyConfig = stickyConfig
-	flags.ReadableConfig = readableConfig
-	flags.ConfigDir = configDir
-
-	log.Debugf("Config options: directory %v sticky %v readable %v", configDir,
-		stickyConfig, readableConfig)
-	return flags, nil
 }

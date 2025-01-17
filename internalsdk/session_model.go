@@ -226,6 +226,7 @@ func (m *SessionModel) setupIosConfigure(configPath string, userId int, token st
 				}
 				m.iosConfigurer = global
 				log.Debug("Found global config IOS configure done")
+				m.checkAvailableFeatures()
 				return // Exit the loop after success
 			}
 			log.Debugf("global config not available, retrying...")
@@ -786,6 +787,9 @@ func (m *SessionModel) checkAvailableFeatures() {
 	// Check for ads feature
 	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
 	m.SetShowGoogleAds(googleAdsEnabled)
+	if googleAdsEnabled {
+		checkAdsEnabled(m)
+	}
 }
 
 // check if feature is enabled or not
@@ -805,9 +809,8 @@ func (m *SessionModel) featureEnabled(feature string) bool {
 		log.Errorf("Error while getting user id %v", err)
 		return false
 	}
-	log.Debugf("Feature country code %s", countryCode)
 	featureEnabled := m.iosConfigurer.FeatureEnabled(feature, common.Platform, common.DefaultAppName, common.ApplicationVersion, userId, isPro, countryCode)
-	log.Debugf("Feature enabled  %s %v", feature, featureEnabled)
+	log.Debugf("Feature enabled  %s %v with country %s", feature, featureEnabled, countryCode)
 	return featureEnabled
 }
 

@@ -18,7 +18,6 @@ import (
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/sentry"
-	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
@@ -117,7 +116,7 @@ func websocketAddr() *C.char {
 	return C.CString(a.WebsocketAddr())
 }
 func cachedUserData() (*protos.User, bool) {
-	uc := settings.UserConfig(a.Settings())
+	uc := a.UserConfig()
 	return a.GetUserData(uc.GetUserID())
 }
 
@@ -344,7 +343,7 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
-	if isProUser, ok := a.IsProUserFast(settings.UserConfig(a.Settings())); isProUser && ok {
+	if isProUser, ok := a.IsProUserFast(a.UserConfig()); isProUser && ok {
 		return C.CString("true")
 	}
 	return C.CString("false")
@@ -398,7 +397,7 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 		log.Errorf("Error converting issue type to int: %v", err)
 		return sendError(err)
 	}
-	uc := settings.UserConfig(a.Settings())
+	uc := a.UserConfig()
 
 	subscriptionLevel := "free"
 	if isProUser, ok := a.IsProUserFast(uc); ok && isProUser {
@@ -431,10 +430,20 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 	return C.CString("true")
 }
 
+//export updatePaymentMethod
+func updatePaymentMethod() *C.char {
+	_, err := a.ProClient().DesktopPaymentMethods(context.Background())
+	if err != nil {
+		return sendError(err)
+	}
+	a.SendConfig()
+	return C.CString("true")
+}
+
 //export checkUpdates
 func checkUpdates() *C.char {
 	log.Debug("Checking for updates")
-	ss := settings.LoadSettings("")
+	ss := app.LoadSettings("")
 	userID := ss.GetUserID()
 	deviceID := ss.GetDeviceID()
 	op := ops.Begin("check_update").
