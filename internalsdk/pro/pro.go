@@ -77,6 +77,7 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
 			Timeout:   30 * time.Second,
 		}
 	} else {
+		//rt, _ := proxied.ChainedNonPersistent("")
 		httpClient = &http.Client{
 			Transport: proxied.ParallelForIdempotent(),
 			Timeout:   30 * time.Second,
@@ -86,20 +87,20 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
 		userConfig:    userConfig,
 		backoffRunner: &backoffRunner{},
 		RESTClient: webclient.NewRESTClient(&webclient.Opts{
+			BaseURL: fmt.Sprintf("https://%s", common.ProAPIHost),
 			// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
 			// attempts to send requests through both chained and direct fronted routes in parallel
 			// for HEAD and GET requests and ChainedThenFronted for all others.
 			HttpClient: httpClient,
 			OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
-				prepareProRequest(req, common.ProAPIHost, userConfig())
-				return nil
+				return prepareProRequest(req, common.ProAPIHost, userConfig())
 			},
 		}),
 	}
 }
 
 // prepareProRequest normalizes requests to the pro server with device ID, user ID, etc set.
-func prepareProRequest(r *http.Request, proAPIHost string, userConfig common.UserConfig) {
+func prepareProRequest(r *http.Request, proAPIHost string, userConfig common.UserConfig) error {
 	if r.URL.Scheme == "" {
 		r.URL.Scheme = "http"
 	}
@@ -111,6 +112,7 @@ func prepareProRequest(r *http.Request, proAPIHost string, userConfig common.Use
 		common.UserIdHeader,
 	}, ", "))
 	common.AddCommonHeadersWithOptions(userConfig, r, false)
+	return nil
 }
 
 func (c *proClient) defaultParams() map[string]interface{} {

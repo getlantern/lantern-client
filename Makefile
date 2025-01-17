@@ -125,6 +125,7 @@ DEBUG_VERSION ?= $(GIT_REVISION)
 
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/archive/Runner.xcarchive/dSYMs/
 INFO_PLIST := ios/Runner/Info.plist
+ENTITLEMENTS := macos/Runner/Release.entitlements
 
 DESKTOP_LIB_NAME ?= liblantern
 DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
@@ -243,7 +244,7 @@ tag: require-version
 	git push
 
 define osxcodesign
-	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Brave New Software Project, Inc (ACZRKC3LQ9)" -v $(1)
+	codesign --options runtime --strict --timestamp --force --entitlements $(ENTITLEMENTS) --deep -s "Developer ID Application: Brave New Software Project, Inc (ACZRKC3LQ9)" -v $(1)
 endef
 
 guard-%:
@@ -346,7 +347,7 @@ release: require-version require-s3cmd require-wget require-lantern-binaries req
 
 $(ANDROID_LIB): $(GO_SOURCES)
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	go install golang.org/x/mobile/cmd/gomobile && \
+	go install golang.org/x/mobile/cmd/gomobile@latest && \
 	gomobile init && \
 	gomobile bind \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \

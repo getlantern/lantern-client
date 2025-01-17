@@ -85,8 +85,9 @@ func sendToURL(c *resty.Client, opts *Opts) SendRequest {
 	if opts.OnAfterResponse != nil {
 		c.OnAfterResponse(opts.OnAfterResponse)
 	}
-	c.SetBaseURL(opts.BaseURL)
-
+	if opts.BaseURL != "" {
+		c.SetBaseURL(opts.BaseURL)
+	}
 	return func(ctx context.Context, method string, path string, reqParams any, body []byte) ([]byte, error) {
 		req := c.R().SetContext(ctx)
 		if reqParams != nil {
