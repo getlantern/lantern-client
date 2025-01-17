@@ -3,9 +3,12 @@ package app
 import (
 	"context"
 	"encoding/json"
+	"os"
+	"strconv"
 	"sync"
 
 	fcommon "github.com/getlantern/flashlight/v7/common"
+	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -68,6 +71,14 @@ func (s *configService) AddListener(f func(ConfigOptions)) {
 }
 
 func (app *App) sendConfigOptions() {
+	authEnabled := func(a *App) bool {
+		authEnabled := a.IsFeatureEnabled(config.FeatureAuth)
+		if ok, err := strconv.ParseBool(os.Getenv("ENABLE_AUTH_FEATURE")); err == nil && ok {
+			authEnabled = true
+		}
+		log.Debugf("DEBUG: Auth enabled: %v", authEnabled)
+		return authEnabled
+	}
 	ctx := context.Background()
 	plans, _ := app.proClient.Plans(ctx)
 	paymentMethods, _ := app.proClient.DesktopPaymentMethods(ctx)
@@ -81,7 +92,7 @@ func (app *App) sendConfigOptions() {
 		ReplicaAddr:          "",
 		HttpProxyAddr:        app.settings.GetAddr(),
 		SocksProxyAddr:       app.settings.GetSOCKSAddr(),
-		AuthEnabled:          true,
+		AuthEnabled:          authEnabled(app),
 		ChatEnabled:          false,
 		SplitTunneling:       false,
 		HasSucceedingProxy:   app.HasSucceedingProxy(),
