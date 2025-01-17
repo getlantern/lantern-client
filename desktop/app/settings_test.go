@@ -1,4 +1,4 @@
-package settings
+package app
 
 import (
 	"encoding/json"
