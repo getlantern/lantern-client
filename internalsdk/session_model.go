@@ -2371,14 +2371,13 @@ func (session *SessionModel) appsAllowedAccess() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	strSlice := make([]string, len(installedApps))
-	for i, v := range installedApps {
+	var allowedAccess []string
+	for _, v := range installedApps {
 		if v.Value.AllowedAccess {
-			strSlice[i] = fmt.Sprint(v.Value.PackageName)
+			allowedAccess = append(allowedAccess, v.Value.PackageName)
 		}
 	}
-	return strings.Join(strSlice, ","), nil
-
+	return strings.Join(allowedAccess, ","), nil
 }
 
 // Define the struct to match the JSON structure
