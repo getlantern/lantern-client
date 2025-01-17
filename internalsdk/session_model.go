@@ -89,9 +89,10 @@ const (
 	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
 	pathPrefVPN                = "pref_vpn"
 
-	pathShouldShowGoogleAds = "shouldShowGoogleAds"
-	currentTermsVersion     = 1
-	pathUserSalt            = "user_salt"
+	pathShouldShowInterstitialAds = "shouldShowGoogleAds"
+	pathShouldShowAppOpenAds      = "shouldShowAppOpenAds"
+	currentTermsVersion           = 1
+	pathUserSalt                  = "user_salt"
 
 	pathPlans          = "/plans/"
 	pathPaymentMethods = "/paymentMethods/"
@@ -790,7 +791,7 @@ func (m *SessionModel) checkAvailableFeatures() {
 
 	// Check for ads feature
 	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
-	m.SetShowGoogleAds(googleAdsEnabled)
+	m.SetShowInterstitialAds(googleAdsEnabled)
 	if googleAdsEnabled {
 		checkAdsEnabled(m)
 	}
@@ -1286,12 +1287,24 @@ func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 	return pathdb.Get[bool](m.db, pathSplitTunneling)
 }
 
-func (m *SessionModel) SetShowGoogleAds(adsEnable bool) {
-	log.Debugf("SetShowGoogleAds %v", adsEnable)
+func (m *SessionModel) SetShowInterstitialAds(adsEnable bool) {
+	log.Debugf("SetShowInterstitialAds %v", adsEnable)
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathShouldShowGoogleAds, adsEnable, "")
+		return pathdb.Put(tx, pathShouldShowInterstitialAds, adsEnable, "")
 	}))
-	checkAdsEnabled(m)
+	if common.Platform == "android" {
+		checkAdsEnabled(m)
+	}
+}
+
+func (m *SessionModel) SetShowAppOpenAds(adsEnable bool) {
+	log.Debugf("SetShowAppOpenAds %v", adsEnable)
+	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathShouldShowAppOpenAds, adsEnable, "")
+	}))
+	if common.Platform == "android" {
+		checkAdsEnabled(m)
+	}
 }
 
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
@@ -1584,14 +1597,25 @@ func checkAdsEnabled(session *SessionModel) error {
 		})
 	}
 	// If the user has all permissions but is not a pro user, enable ads:
-	googleAdsEnable, err := pathdb.Get[bool](session.db, pathShouldShowGoogleAds)
+	interstitialAdsEnable, err := pathdb.Get[bool](session.db, pathShouldShowInterstitialAds)
 	if err != nil {
 		return err
 	}
-	if googleAdsEnable {
-		log.Debug("Google Ads is enabled")
+	if interstitialAdsEnable {
+		log.Debug("interstitialAdsEnable Ads is enabled")
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put[string](tx, pathShowAds, "google", "")
+			return pathdb.Put[string](tx, pathShowAds, "interstitial", "")
+		})
+	}
+	// If the user has all permissions but is not a pro user, enable ads:
+	appOpenAdsEnable, err := pathdb.Get[bool](session.db, pathShouldShowAppOpenAds)
+	if err != nil {
+		return err
+	}
+	if appOpenAdsEnable {
+		log.Debug("appOpenAdsEnable Ads is enabled")
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put[string](tx, pathShowAds, "appOpen", "")
 		})
 	}
 	return nil

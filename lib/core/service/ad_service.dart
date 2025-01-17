@@ -19,11 +19,12 @@ class AdsService {
       logger.i("[Ads Manager] Provider is empty do not show ads");
       return;
     }
+
     if (provider == _AdsFormat.interstitial.name) {
-      logger.i("[Ads Manager] Loading Google Ads");
+      logger.i("[Ads Manager] Loading interstitial Ads");
       await interstitialAdsService.loadAd(showAds);
     } else if (provider == _AdsFormat.appOpen.name) {
-      logger.i("[Ads Manager] Loading Google Ads");
+      logger.i("[Ads Manager] Loading appOpen Ads");
       await appOpenAdsService.loadAd(showAds);
     }
   }

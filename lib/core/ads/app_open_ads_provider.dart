@@ -16,7 +16,7 @@ class AppOpenAdsProvider implements AdsProvider {
         "appOpenAdUnitId should not be null or empty");
 
     if (isAdsShown) {
-      adsLogger.i("[Ads Manager] Google ad is already shown");
+      adsLogger.i("[Ads Manager] App open ad is already shown");
       return;
     }
     if (_appOpenAd == null && _failedLoadAttempts < _maxFailAttempts) {
@@ -46,6 +46,7 @@ class AppOpenAdsProvider implements AdsProvider {
             );
             _appOpenAd = ad;
             adsLogger.i('[Ads Manager] Ad loaded $ad');
+            adLoadedCallback();
           },
           onAdFailedToLoad: (error) {
             _failedLoadAttempts++;

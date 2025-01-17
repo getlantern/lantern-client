@@ -20,7 +20,7 @@ class InterstitialAdProvider implements AdsProvider {
     "interstitialAdUnitId should not be null or empty");
 
     if (isAdsShown) {
-      adsLogger.i("[Ads Manager] Google ad is already shown");
+      adsLogger.i("[Ads Manager] Interstitial ad is already shown");
       return;
     }
     if (_interstitialAd == null && _failedLoadAttempts < _maxFailAttempts) {

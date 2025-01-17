@@ -81,7 +81,8 @@ func (c testSession) SetExpiration(expiration int64) error               { retur
 func (c testSession) SetProUser(proUser bool) error                      { return nil }
 func (c testSession) SetReferralCode(referralCode string) error          { return nil }
 func (c testSession) IsPlayVersion() (bool, error)                       { return false, nil }
-func (c testSession) SetShowGoogleAds(enabled bool)                      {}
+func (c testSession) SetShowInterstitialAds(enabled bool)                {}
+func (c testSession) SetShowAppOpenAds(enabled bool)                     {}
 func (c testSession) SetHasConfigFetched(enabled bool)                   {}
 func (c testSession) SetHasProxyFetched(enabled bool)                    {}
 func (c testSession) ChatEnable() bool                                   { return false }

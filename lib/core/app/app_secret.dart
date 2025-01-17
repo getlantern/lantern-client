@@ -6,8 +6,8 @@ class AppSecret {
   static String androidInterstitialAd = dotenv.get('Android_interstitialAd');
   static String iOSInterstitialAd = dotenv.get('IOS_interstitialAd');
 
-  static String androidAppOpenAd = dotenv.get('Android_interstitialAd');
-  static String iOSAppOpenAd = dotenv.get('IOS_interstitialAd');
+  static String androidAppOpenAd = dotenv.get('ANDROID_APP_OPEN_AD');
+  static String iOSAppOpenAd = dotenv.get('IOS_APP_OPEN_AD');
   static String tos = 'https://s3.amazonaws.com/lantern/Lantern-TOS.pdf';
   static String privacyPolicy = 'https://s3.amazonaws.com/lantern/LanternPrivacyPolicy.pdf';
   static String privacyPolicyV2 = 'https://lantern.io/privacy';

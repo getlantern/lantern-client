@@ -42,7 +42,6 @@ Future<void> main() async {
     initServices();
     // Due to replica we are using lot of cache
     // clear if goes to above limit
-    appLogger.i("app opens ${DateTime.now().toIso8601String()}");
     CustomCacheManager().clearCacheIfExceeded();
   }
   await Localization.ensureInitialized();
