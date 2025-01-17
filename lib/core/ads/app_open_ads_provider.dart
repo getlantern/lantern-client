@@ -52,9 +52,9 @@ class AppOpenAdsProvider implements AdsProvider {
             _failedLoadAttempts++;
             adsLogger.i('[Ads Manager] failed to load $error');
             Future.delayed(
-              const Duration(milliseconds: 500),
-              () {
-                loadAd(adLoadedCallback);
+              const Duration(seconds: 2),
+              () async {
+                await loadAd(adLoadedCallback);
               },
             );
           },

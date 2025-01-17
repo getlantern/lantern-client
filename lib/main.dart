@@ -29,7 +29,8 @@ Future<void> main() async {
   } catch (error) {
     appLogger.e("Error loading .env file: $error");
   }
-
+  // Inject all the services
+  initServices();
   if (isDesktop()) {
     if (Platform.isWindows) await initializeWebViewEnvironment();
     await windowManager.ensureInitialized();
@@ -38,8 +39,7 @@ Future<void> main() async {
     await WebsocketSubscriber().connect();
   } else {
     await _initGoogleMobileAds();
-    // Inject all the services
-    initServices();
+
     // Due to replica we are using lot of cache
     // clear if goes to above limit
     CustomCacheManager().clearCacheIfExceeded();

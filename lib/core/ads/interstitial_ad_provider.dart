@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'dart:ui';
 
@@ -17,7 +16,7 @@ class InterstitialAdProvider implements AdsProvider {
   @override
   Future<void> loadAd(VoidCallback adLoadedCallback) async {
     assert(interstitialAdUnitId.isNotEmpty,
-    "interstitialAdUnitId should not be null or empty");
+        "interstitialAdUnitId should not be null or empty");
 
     if (isAdsShown) {
       adsLogger.i("[Ads Manager] Interstitial ad is already shown");
@@ -57,9 +56,9 @@ class InterstitialAdProvider implements AdsProvider {
             _failedLoadAttempts++;
             adsLogger.i('[Ads Manager] failed to load $err');
             Future.delayed(
-              const Duration(seconds: 1),
-                  () {
-                loadAd(adLoadedCallback);
+              const Duration(seconds: 2),
+              () async {
+                await loadAd(adLoadedCallback);
               },
             );
           },
