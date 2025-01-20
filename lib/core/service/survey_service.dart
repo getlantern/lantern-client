@@ -72,7 +72,7 @@ class SurveyService {
         break;
       case 'ir':
         //Iran
-        return _iranSpotCheck.trackScreen(screen.name);
+         _iranSpotCheck.trackScreen(screen.name);
         break;
       case 'by':
         //Belarus

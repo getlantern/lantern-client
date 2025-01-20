@@ -38,10 +38,10 @@ class _HomePageState extends State<HomePage> {
 
   void _startupSequence() {
     if (isMobile()) {
-      checkIfSurveyIsAvailable();
       channelListener();
       return;
     }
+    checkIfSurveyIsAvailable();
   }
 
   Future<void> checkIfSurveyIsAvailable() async {
