@@ -4,12 +4,6 @@ on:
   push:
     branches:
       - atavism/pr-summary
-  workflow_run:
-    workflows:
-      - Publish releases
-    types:
-      - completed
-  workflow_dispatch:
 
 jobs:
   create-release:
@@ -17,12 +11,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Generate PR Summary
         id: pr-summary
         run: |
           REPO_URL="https://github.com/getlantern/lantern-client"
-          git fetch origin
           PR_SUMMARY=$(git log --since="1 week ago" --pretty=format:"%h %s" | grep -E "#[0-9]+" | sed -E 's|#([0-9]+)|[#\1]('"${REPO_URL}"'/pull/\1)|')
           echo -e "PR SUMMARY: $PR_SUMMARY"
           echo "::set-output name=summary::$PR_SUMMARY"
