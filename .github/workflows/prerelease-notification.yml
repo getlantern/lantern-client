@@ -27,7 +27,7 @@ jobs:
 
       - name: Send Slack Notification
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_RELEASES_WEBHOOK }}
         run: |
           SLACK_MESSAGE="TEST: *A new release is available!* 🚀\n\n:${{ steps.pr-summary.outputs.summary }}"
           curl -X POST -H 'Content-type: application/json' \
