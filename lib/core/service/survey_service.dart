@@ -72,7 +72,7 @@ class SurveyService {
         break;
       case 'ir':
         //Iran
-         _iranSpotCheck.trackScreen(screen.name);
+        _iranSpotCheck.trackScreen(screen.name);
         break;
       case 'by':
         //Belarus
@@ -95,7 +95,7 @@ class SurveyService {
         _UAEspotCheck.trackScreen(screen.name);
         break;
       // This is just for testing
-      case 'in':
+      default:
         _testingSpotCheck.trackScreen(screen.name);
         break;
     }
@@ -125,11 +125,8 @@ class SurveyService {
         //UAE
         return _UAEspotCheck;
       // This is just for testing
-      case 'in':
-        //UAE
-        return _testingSpotCheck;
       default:
-        return const SizedBox.shrink();
+        return _testingSpotCheck;
     }
   }
 
