@@ -30,7 +30,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.LANTERN_APP_SLACK_RELEASES_WEBHOOK }}
         run: |
-          SLACK_PAYLOAD=$(jq -n --arg text "*A new release is available!* 🚀\n\n$PR_SUMMARY" '{"text": $text}')
-          echo -e "$SLACK_PAYLOAD"
+          SLACK_PAYLOAD=$(jq -n --arg text "*A new release is available!* 🚀\n\n${{ steps.pr-summary.outputs.summary }}" '{"text": $text}')
+          echo "Slack Payload Debug: $SLACK_PAYLOAD"
           # curl -X POST -H 'Content-type: application/json' \
           # --data "{\"text\":\"${SLACK_MESSAGE}\"}" $SLACK_WEBHOOK_URL
