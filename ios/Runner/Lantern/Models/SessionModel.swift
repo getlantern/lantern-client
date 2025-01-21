@@ -139,15 +139,6 @@ class SessionModel: BaseModel<InternalsdkSessionModel> {
         logger.debug("Bandwidth message coming from tunnel")
         updateBandwidth(bandwidth: bandwidthData)
       }
-    case Constants.configupdate:
-      if let config = change![.newKey] as? Bool {
-        if config {
-          logger.debug("upcomming message from vpn config")
-          checkForAvaliabelFeature()
-        }
-
-      }
-
     default:
       logger.debug("Unknown message \(keyPath)")
     }

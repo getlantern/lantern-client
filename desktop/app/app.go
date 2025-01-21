@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"io/fs"
 	"net"
 	"net/http"
 	"os"
@@ -15,7 +13,6 @@ import (
 
 	"github.com/getsentry/sentry-go"
 
-	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
@@ -34,7 +31,6 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
-	"github.com/getlantern/lantern-client/desktop/settings"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -43,7 +39,7 @@ import (
 )
 
 var (
-	log       = golog.LoggerFor("lantern-desktop.app")
+	log       = golog.LoggerFor("lantern-client.app")
 	startTime = time.Now()
 )
 
@@ -53,63 +49,57 @@ func init() {
 
 }
 
-// App is the core of the Lantern desktop application, in the form of a library.
+// App is the core of the Lantern desktop application, managing components and configurations.
 type App struct {
-	hasExited            atomic.Bool
-	fetchedGlobalConfig  atomic.Bool
-	fetchedProxiesConfig atomic.Bool
-	hasSucceedingProxy   atomic.Bool
-
-	Flags         flashlight.Flags
-	configDir     string
-	exited        eventual.Value
-	settings      *settings.Settings
-	configService *configService
-	statsTracker  *statsTracker
-
-	muExitFuncs sync.RWMutex
-	exitFuncs   []func()
-
-	translations eventual.Value
-
-	flashlight *flashlight.Flashlight
-
-	authClient auth.AuthClient
-	proClient  proclient.ProClient
-
-	selectedTab Tab
-
-	connectionStatusCallbacks []func(isConnected bool)
+	hasExited                 atomic.Bool      // Tracks if the app has exited.
+	fetchedGlobalConfig       atomic.Bool      // Indicates if the global configuration was fetched.
+	fetchedProxiesConfig      atomic.Bool      // Tracks whether the proxy configuration was fetched.
+	hasSucceedingProxy        atomic.Bool      // Tracks if a succeeding proxy is available.
+	Flags                     flashlight.Flags // Command-line flags passed to the app.
+	configDir                 string           // Directory for storing configuration files.
+	exited                    eventual.Value   // Signals when the app has exited.
+	settings                  *Settings        // User settings for the application.
+	configService             *configService   // Config service used by the applicaiton.
+	statsTracker              *statsTracker    // Tracks stats for service usage by the client.
+	muExitFuncs               sync.RWMutex
+	exitFuncs                 []func()
+	flashlight                *flashlight.Flashlight   // Flashlight library for networking and proxying.
+	authClient                auth.AuthClient          // Client for managing authentication.
+	proClient                 proclient.ProClient      // Client for managing interaction with the Pro server.
+	selectedTab               Tab                      // Tracks the currently selected UI tab.
+	connectionStatusCallbacks []func(isConnected bool) // Listeners for connection status changes.
 
 	// Websocket-related settings
-	websocketAddr string
-	ws            ws.UIChannel
-
-	cachedUserData sync.Map
-
-	onUserData []func(current *protos.User, new *protos.User)
+	websocketAddr  string                                         // Address for WebSocket connections.
+	ws             ws.UIChannel                                   // UI channel for WebSocket communication.
+	cachedUserData sync.Map                                       // Cached user data.
+	onUserData     []func(current *protos.User, new *protos.User) // Listeners for user data changes.
 
 	mu sync.RWMutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
 func NewApp() (*App, error) {
-	// initialize app config and flags based on environment variables
-	flags, err := initializeAppConfig()
-	if err != nil {
-		return nil, fmt.Errorf("failed to initialize app config: %w", err)
+	flags := flashlight.ParseFlags()
+	if flags.Pprof {
+		go startPprof("localhost:6060")
 	}
-	return NewAppWithFlags(flags, flags.ConfigDir)
+
+	cdir, err := configDir(flags)
+	if err != nil {
+		return nil, err
+	}
+
+	return NewAppWithFlags(flags, cdir)
 }
 
-// NewAppWithFlags creates a new instance of App initialized with the given flags and configDir
+// NewAppWithFlags creates a new App instance with the given flags and configuration directory.
 func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
-	if configDir == "" {
-		log.Debug("Config directory is empty, using default location")
-		configDir = appdir.General(common.DefaultAppName)
-	}
-	ss := settings.LoadSettings(configDir)
+	log.Debugf("Config directory %s sticky %v readable %v", configDir, flags.StickyConfig, flags.ReadableConfig)
+	// Load settings and initialize trackers and services.
+	ss := LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
+
 	app := &App{
 		Flags:                     flags,
 		configDir:                 configDir,
@@ -119,10 +109,10 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		selectedTab:               VPNTab,
 		configService:             new(configService),
 		statsTracker:              statsTracker,
-		translations:              eventual.NewValue(),
 		ws:                        ws.NewUIChannel(),
 	}
 
+	// Start the WebSocket server for UI communication.
 	if err := app.serveWebsocket(); err != nil {
 		log.Error(err)
 	}
@@ -138,8 +128,6 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 
 	log.Debugf("Using configdir: %v", configDir)
 
-	app.translations.Set(os.DirFS("locale/translation"))
-
 	if e := app.configService.StartService(app.ws); e != nil {
 		return nil, fmt.Errorf("unable to register config service: %q", e)
 	}
@@ -147,7 +135,7 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 	return app, nil
 }
 
-// Run starts the app.
+// Run starts the application and initializes necessary components.
 func (app *App) Run(ctx context.Context) {
 	golog.OnFatal(app.exitOnFatal)
 	go func() {
@@ -157,11 +145,8 @@ func (app *App) Run(ctx context.Context) {
 	}()
 
 	log.Debug(app.Flags)
-	userConfig := func() common.UserConfig {
-		return settings.UserConfig(app.Settings())
-	}
-	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), userConfig)
-	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig)
+	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), app.UserConfig)
+	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), app.UserConfig)
 
 	app.mu.Lock()
 	app.proClient = proClient
@@ -170,11 +155,12 @@ func (app *App) Run(ctx context.Context) {
 
 	settings := app.Settings()
 
+	// Check and apply the ProxyAll flag.
 	if app.Flags.ProxyAll {
-		// If proxyall flag was supplied, force proxying of all
 		settings.SetProxyAll(true)
 	}
 
+	// Determine the listen address for local HTTP and SOCKS proxies
 	listenAddr := app.Flags.Addr
 	if listenAddr == "" {
 		listenAddr = settings.GetAddr()
@@ -200,6 +186,7 @@ func (app *App) Run(ctx context.Context) {
 		}()
 	}
 	var err error
+	// Initialize flashlight
 	app.flashlight, err = flashlight.New(
 		common.DefaultAppName,
 		common.ApplicationVersion,
@@ -216,8 +203,7 @@ func (app *App) Run(ctx context.Context) {
 		app.IsPro,
 		settings.GetLanguage,
 		func(addr string) (string, error) { return addr, nil }, // no dnsgrab reverse lookups on desktop
-		// Dummy analytics function
-		func(category, action, label string) {},
+		func(category, action, label string) {},                // Dummy analytics function
 		flashlight.WithOnConfig(app.onConfigUpdate),
 		flashlight.WithOnProxies(app.onProxiesUpdate),
 		flashlight.WithOnSucceedingProxy(app.onSucceedingProxy),
@@ -233,6 +219,20 @@ func (app *App) Run(ctx context.Context) {
 		socksAddr,
 		app.afterStart,
 		func(err error) { _ = app.Exit(err) },
+	)
+}
+
+// UserConfig returns the current user configuration after applying settings.
+func (app *App) UserConfig() common.UserConfig {
+	settings := app.Settings()
+	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
+	return common.NewUserConfig(
+		common.DefaultAppName,
+		deviceID,
+		userID,
+		token,
+		nil,
+		settings.GetLanguage(),
 	)
 }
 
@@ -281,7 +281,7 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	}
 
 	isProUser := func() (bool, bool) {
-		return app.IsProUser(context.Background(), settings.UserConfig(app.Settings()))
+		return app.IsProUser(context.Background(), app.UserConfig())
 	}
 
 	if err := app.statsTracker.StartService(app.ws); err != nil {
@@ -364,7 +364,7 @@ func (app *App) SendUpdateUserDataToUI() {
 
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
-func (app *App) OnSettingChange(attr settings.SettingName, cb func(interface{})) {
+func (app *App) OnSettingChange(attr SettingName, cb func(interface{})) {
 	app.settings.OnChange(attr, cb)
 }
 
@@ -382,7 +382,7 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	}
 	go app.fetchDeviceLinkingCode(ctx)
 
-	app.OnSettingChange(settings.SNSystemProxy, func(val interface{}) {
+	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
 		if enable {
 			app.SysproxyOn()
@@ -562,7 +562,7 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.IsProUserFast(settings.UserConfig(app.Settings()))
+	isPro, _ := app.IsProUserFast(app.UserConfig())
 	return isPro
 }
 
@@ -637,21 +637,7 @@ func ShouldReportToSentry() bool {
 	return !common.IsDevEnvironment()
 }
 
-// GetTranslations accesses translations with the given filename
-func (app *App) GetTranslations(filename string) ([]byte, error) {
-	log.Tracef("Accessing translations %v", filename)
-	tr, ok := app.translations.Get(30 * time.Second)
-	if !ok || tr == nil {
-		return nil, fmt.Errorf("could not get traslation for file name: %v", filename)
-	}
-	f, err := tr.(fs.FS).Open(filename)
-	if err != nil {
-		return nil, fmt.Errorf("could not get traslation for file name: %v, %w", filename, err)
-	}
-	return io.ReadAll(f)
-}
-
-func (app *App) Settings() *settings.Settings {
+func (app *App) Settings() *Settings {
 	app.mu.RLock()
 	defer app.mu.RUnlock()
 	return app.settings
