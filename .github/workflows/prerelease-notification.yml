@@ -20,9 +20,9 @@ jobs:
         run: |
           REPO_URL="https://github.com/getlantern/lantern-client"
           PR_SUMMARY=$(git log --since="1 week ago" --pretty=format:"%h %s" | grep -E "#[0-9]+" | sed -E 's|#([0-9]+)|[#\1]('"${REPO_URL}"'/pull/\1)|')
-          SLACK_PAYLOAD=$(jq -n --arg text "*A new release is available!* 🚀\n\n$PR_SUMMARY" '{"text": $text}')
-          echo "Slack Payload Debug: $SLACK_PAYLOAD"
-          curl -X POST -H 'Content-type: application/json' --data "$SLACK_PAYLOAD" $SLACK_WEBHOOK_URL
+          SLACK_MESSAGE="*A new release is available!* 🚀\n\n${PR_SUMMARY}"
+          echo "Slack Payload Debug: $SLACK_MESSAGE"
+          # curl -X POST -H 'Content-type: application/json' --data "$SLACK_PAYLOAD" $SLACK_WEBHOOK_URL
 
       # - name: Send Slack Notification
       #   env:
