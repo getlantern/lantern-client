@@ -23,7 +23,7 @@ jobs:
         run: |
           REPO_URL="https://github.com/getlantern/lantern-client"
           git fetch origin
-          PR_SUMMARY=$(git log lantern-8.0.0...HEAD --pretty=format:"%h %s" | grep -E "#[0-9]+" | sed -E 's|#([0-9]+)|[#\1]('"$REPO_URL"'/pull/\1)|')
+          PR_SUMMARY=$(git log e1cb900cc14d8c34b3ef742d622e2a2862f7fe33...HEAD --pretty=format:"%h %s" | grep -E "#[0-9]+" | sed -E 's|#([0-9]+)|[#\1]('"$REPO_URL"'/pull/\1)|')
           echo "::set-output name=summary::$PR_SUMMARY"
 
       - name: Send Slack Notification
