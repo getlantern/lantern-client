@@ -22,7 +22,7 @@ jobs:
         id: pr-summary
         run: |
           REPO_URL="https://github.com/getlantern/lantern-client"
-          git fetch --depth=100 origin
+          git fetch origin
           PR_SUMMARY=$(git log atavism/android-7.9.10...HEAD --pretty=format:"%h %s" | grep -E "#[0-9]+" | sed -E 's|#([0-9]+)|[#\1]('"$REPO_URL"'/pull/\1)|')
           echo "::set-output name=summary::${PR_SUMMARY}"
 
