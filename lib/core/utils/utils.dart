@@ -213,17 +213,17 @@ Map<String, PaymentMethod> paymentMethodsFromJson(dynamic json) {
   return paymentMethods;
 }
 
-bool isTestRunning() {
+bool isPatrolRunning() {
   final patrol =
       const String.fromEnvironment("PATROL_ANDROID_APP_NAME", defaultValue: "");
   return patrol != "";
 }
 
-bool isAppiumTest() {
+bool isTestRunning() {
   const String? appFlavor = String.fromEnvironment('FLUTTER_APP_FLAVOR') != ''
       ? String.fromEnvironment('FLUTTER_APP_FLAVOR')
       : null;
-  return (appFlavor == 'appiumTest' || isTestRunning());
+  return (appFlavor == 'appiumTest' || isPatrolRunning());
 }
 
 bool byPassPrivacyPolicy() {

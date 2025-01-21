@@ -98,15 +98,15 @@ class _AppWebViewState extends State<AppWebView> {
             onReceivedHttpError: (controller, request, response) {
               appLogger
                   .i("HTTP error: ${response.statusCode} for ${request.url}");
-              if (!isAppiumTest()) {
+              if (!isTestRunning()) {
                 showErrorDialog("HTTP Error",
                     "Status code: ${response.statusCode}\nDescription: ${response.reasonPhrase ?? ''}");
               }
             },
             shouldOverrideUrlLoading:
-                isAppiumTest() ? null : shouldOverrideUrlLoading,
+                isTestRunning() ? null : shouldOverrideUrlLoading,
             onReceivedError: (controller, request, error) {
-              if (!isAppiumTest()) {
+              if (!isTestRunning()) {
                 showErrorDialog("Failed to load", error.description);
               }
             },

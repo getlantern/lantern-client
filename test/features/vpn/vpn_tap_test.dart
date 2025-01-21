@@ -160,7 +160,7 @@ void main() {
   );
 
   group(
-    "render common widgets properly for al platforms",
+    "render common widgets properly for all platforms",
     () {
       testWidgets(
         'render VPN tap skeleton ',
