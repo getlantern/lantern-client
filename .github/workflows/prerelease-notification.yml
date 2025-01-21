@@ -1,6 +1,9 @@
 name: Prerelease Notification
 
 on:
+  push:
+    branches:
+      - atavism/pr-summary
   workflow_run:
     workflows:
       - Publish releases
@@ -12,26 +15,25 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if release already exists
-        id: exists
+      - name: Get Last Tag
+        id: last-tag
+        run: |
+          LAST_TAG=$(git log lantern-7.9.10-beta..HEAD --pretty=format:"- %h %s" | grep -E "#[0-9]+")
+          echo "Last tag: $LAST_TAG"
+          echo "::set-output name=last_tag::$LAST_TAG"
+
+      - name: Generate PR Summary
+        id: pr-summary
+        run: |
+          REPO_URL="https://github.com/getlantern/lantern-client"
+          LAST_TAG=${{ steps.last-tag.outputs.last_tag }}
+          PR_SUMMARY=$(git log lantern-7.9.10-beta...HEAD --pretty=format:"%h %s" | grep -E "#[0-9]+" | sed -E 's|#([0-9]+)|[#\1]('"$REPO_URL"'/pull/\1)|')
+          echo "::set-output name=summary::${PR_SUMMARY}"
+
+      - name: Send Slack Notification
         env:
-          GH_TOKEN: ${{ github.token }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          echo EXISTING=$(gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/${{ github.repository }}/releases \
-            | jq -r '.[].tag_name' | grep -c "${{ github.ref_name }}") >> "$GITHUB_OUTPUT"
-
-      - name: Strip repository name of owner
-        if: ${{ steps.exists.outputs.EXISTING < 1 }}
-        id: repo
-        run: |
-          echo "REPO_NAME=$(echo ${{ github.repository }} | sed s/'${{ github.repository_owner }}\/'//g)" >> "$GITHUB_OUTPUT"
-
-      - name: Send Slack message to Releases channel
-        if: ${{ steps.exists.outputs.EXISTING < 1 }}
-        run: |
+          SLACK_MESSAGE="TEST: *A new release is available!* 🚀\n\n:${{ steps.pr-summary.outputs.summary }}"
           curl -X POST -H 'Content-type: application/json' \
-            --data "{\"platform\": \"${{ steps.repo.outputs.REPO_NAME }}\", \"version\": \"${{ github.ref_name }}\"}" \
-            ${{ secrets.SLACK_RELEASES_WEBHOOK }}
+          --data "{\"text\":\"${SLACK_MESSAGE}\"}" $SLACK_WEBHOOK_URL
