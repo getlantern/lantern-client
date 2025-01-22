@@ -5,13 +5,13 @@ package sdk
 import "C"
 
 import (
-	"context"
 	"errors"
 	"fmt"
+	"net"
+	"strconv"
 	"sync"
 	"time"
 
-	"github.com/getlantern/eventual/v2"
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/client"
 	"github.com/getlantern/flashlight/v7/stats"
@@ -24,18 +24,19 @@ const startTimeout = 5 * time.Second
 var (
 	log = golog.LoggerFor("lantern")
 
-	clEventual = eventual.NewValue()
+	once sync.Once
 
-	startOnce  sync.Once
-	cl         *client.Client
-	clientMu   sync.Mutex
-	ss         *settings
-	settingsMu sync.Mutex
+	cl       *lanternClient
+	clientMu sync.Mutex
 )
 
-type settings struct {
+type lanternClient struct {
+	*client.Client
+
+	appName   string
 	configDir string
-	locale    string
+
+	mu sync.Mutex
 }
 
 // StartResult provides information about the started Lantern
@@ -43,28 +44,40 @@ type StartResult struct {
 	Addr string
 }
 
-func Setup(apiKey, configDir, locale string) {
-	settingsMu.Lock()
-	defer settingsMu.Unlock()
-	ss = &settings{
+// Setup is used to initially configure the Lantern SDK and specifies the config directory and app name to use
+// - appName: unique identifier for the current application (used for assigning proxies and tracking usage)
+// - configDir: application directory to place Lantern configure files
+func Setup(appName, configDir string) {
+	clientMu.Lock()
+	defer clientMu.Unlock()
+	cl = &lanternClient{
+		appName:   appName,
 		configDir: configDir,
-		locale:    locale,
 	}
 }
 
-// StartHTTPProxy starts an HTTP proxy at the requested address. It blocks up
+// Start starts Lantern and sets it as the system proxy at the requested address. It blocks up
 // til the given timeout and returns the address the proxy is listening. If the proxy doesn't
 // start within the given timeout, this method returns an error.
-func StartHTTPProxy(httpProxyAddr string) (*StartResult, error) {
-	settingsMu.Lock()
-	settings := ss
-	settingsMu.Unlock()
-	if settings == nil {
+// - appName: unique identifier for the current application (used for assigning proxies and tracking usage)
+// - proxyAll: if true, traffic to all domains will be proxied. If false, only domains on Lantern's whitelist, or domains detected as blocked, will be proxied.
+// - startTimeoutMillis: how long to wait for Lantern to start before throwing an exception
+// It returns the address at which the Lantern HTTP proxy is listening for connections.
+func Start(
+	httpProxyAddr string,
+	proxyAll bool,
+	startTimeoutMillis time.Duration,
+) (*StartResult, error) {
+	clientMu.Lock()
+	client := cl
+	clientMu.Unlock()
+	if client == nil {
 		return nil, errors.New("Missing setup call")
 	}
-	startOnce.Do(func() {
-		go runFlashlight(settings, httpProxyAddr)
+	once.Do(func() {
+		go runLantern(client, httpProxyAddr, proxyAll, startTimeoutMillis)
 	})
+
 	addr, ok := client.Addr(startTimeout)
 	if !ok {
 		return nil, fmt.Errorf("HTTP Proxy didn't start within %v timeout", startTimeout)
@@ -72,34 +85,58 @@ func StartHTTPProxy(httpProxyAddr string) (*StartResult, error) {
 	return &StartResult{addr.(string)}, nil
 }
 
-func setClient(c *client.Client) {
+func setClient(c *lanternClient) {
 	clientMu.Lock()
 	defer clientMu.Unlock()
 	cl = c
 }
 
-func getClient(ctx context.Context) *client.Client {
-	_cl, _ := clEventual.Get(ctx)
-	if _cl == nil {
-		return nil
-	}
-	return _cl.(*client.Client)
+func getClient() *lanternClient {
+	clientMu.Lock()
+	c := cl
+	clientMu.Unlock()
+	return c
 }
 
-func runFlashlight(ss *settings, httpProxyAddr string) {
-	configDir, locale := ss.configDir, ss.locale
-	log.Debugf("Starting lantern: configDir %s locale %s", configDir, locale)
+// Stops circumventing with Lantern. Lantern will actually continue running in the background
+// in order to keep its configuration up-to-date. Subsequent calls to start() will reuse the
+// running Lantern and complete quickly.
+func Stop() error {
+	cl := getClient()
+	if cl == nil {
+		return errors.New("flashlight is not running")
+	}
+	if err := cl.Stop(); err != nil {
+		return err
+	}
+	return nil
+}
+
+// HTTPProxyPort returns the port the HTTP proxy is listening on
+func HTTPProxyPort() (int, error) {
+	result, isValid := client.Addr(5 * time.Second)
+	if !isValid {
+		return 0, errors.New("flashlight is not running")
+	}
+	_, portStr, _ := net.SplitHostPort(result.(string))
+	port, _ := strconv.Atoi(portStr)
+	return port, nil
+}
+
+func runLantern(cl *lanternClient, httpProxyAddr string, proxyAll bool, startTimeoutMillis time.Duration) *flashlight.Flashlight {
+	appName, configDir := cl.appName, cl.configDir
+	log.Debugf("Starting lantern: configDir %s", configDir)
 
 	userConfig := common.NewUserConfig("", "a34113", 3456344, "tok123", map[string]string{}, "")
 
 	runner, err := flashlight.New(
-		common.DefaultAppName,
+		appName,
 		common.ApplicationVersion,
 		common.RevisionDate,
 		configDir,                    // place to store lantern configuration
 		false,                        // don't enable vpn mode for Android (VPN is handled in Java layer)
 		func() bool { return false }, // always connected
-		func() bool { return true },
+		func() bool { return proxyAll },
 		func() bool { return false }, // do not proxy private hosts on Android
 		func() bool { return true },  // auto report
 		map[string]interface{}{},
@@ -114,18 +151,14 @@ func runFlashlight(ss *settings, httpProxyAddr string) {
 		log.Fatalf("failed to start flashlight: %v", err)
 	}
 	go func() {
-		defer func() {
-			if err := recover(); err != nil {
-				log.Error(err)
-			}
-		}()
 		runner.Run(
 			httpProxyAddr, // listen for HTTP on provided address
 			"127.0.0.1:0", // listen for SOCKS on random address
 			func(c *client.Client) {
-				setClient(c)
+				setClient(cl)
 			},
 			nil, // onError
 		)
 	}()
+	return runner
 }
