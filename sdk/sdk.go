@@ -67,14 +67,6 @@ func Start(
 	httpProxyAddr string,
 	proxyAll bool,
 ) (*StartResult, error) {
-	return start(httpProxyAddr, proxyAll, 10*time.Second)
-}
-
-func start(
-	httpProxyAddr string,
-	proxyAll bool,
-	startTimeoutMillis time.Duration,
-) (*StartResult, error) {
 	clientMu.Lock()
 	client := cl
 	clientMu.Unlock()
@@ -82,7 +74,7 @@ func start(
 		return nil, errors.New("Missing setup call")
 	}
 	once.Do(func() {
-		go runLantern(client, httpProxyAddr, proxyAll, startTimeoutMillis)
+		go runLantern(client, httpProxyAddr, proxyAll, startTimeout)
 	})
 
 	addr, ok := client.Addr(startTimeout)
