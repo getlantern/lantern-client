@@ -166,15 +166,14 @@ jobs:
         with:
           name: mapping.txt
 
-
-      - name: Upload Lantern to TestFlight
-        uses: apple-actions/upload-testflight-build@v1
-        if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
-        with:
-          app-path: Lantern.ipa
-          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      # - name: Upload Lantern to TestFlight
+      #   uses: apple-actions/upload-testflight-build@v1
+      #   if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+      #   with:
+      #     app-path: Lantern.ipa
+      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
       - name: Upload Android App bundle to Play Store (beta)
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
