@@ -5,9 +5,8 @@ import (
 
 	"net/http"
 	"strings"
-	"time"
 
-	"github.com/getlantern/flashlight/v7/proxied"
+	fcommon "github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
 
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -51,22 +50,7 @@ type AuthClient interface {
 
 // NewClient creates a new instance of AuthClient
 func NewClient(baseURL string, userConfig func() common.UserConfig) AuthClient {
-	var httpClient *http.Client
-
-	if strings.HasSuffix(baseURL, common.APIBaseUrl) {
-		log.Debugf("Using Fronted proxy for auth client")
-		// iOS
-		// There is no use of chnained proxy in iOS since all requests will fail
-		httpClient = &http.Client{
-			Transport: proxied.Fronted("authClient-ios"),
-			Timeout:   30 * time.Second,
-		}
-	} else {
-		httpClient = &http.Client{
-			Transport: proxied.ChainedThenFronted(),
-			Timeout:   30 * time.Second,
-		}
-	}
+	var httpClient = fcommon.GetHTTPClient()
 	rc := webclient.NewRESTClient(&webclient.Opts{
 		BaseURL: baseURL,
 		OnBeforeRequest: func(client *resty.Client, req *http.Request) error {

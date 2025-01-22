@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/proxied"
+	fcommon "github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -69,20 +69,7 @@ type ProClient interface {
 
 // NewClient creates a new instance of ProClient
 func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
-	var httpClient *http.Client
-	if common.Platform == "ios" {
-		//For iOS use fronted proxy chined proxy does not work with iOS at the moment
-		httpClient = &http.Client{
-			Transport: proxied.Fronted("proclient-ios"),
-			Timeout:   30 * time.Second,
-		}
-	} else {
-		//rt, _ := proxied.ChainedNonPersistent("")
-		httpClient = &http.Client{
-			Transport: proxied.ParallelForIdempotent(),
-			Timeout:   30 * time.Second,
-		}
-	}
+	var httpClient = fcommon.GetHTTPClient()
 	return &proClient{
 		userConfig:    userConfig,
 		backoffRunner: &backoffRunner{},

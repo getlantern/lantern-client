@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/flashlight/v7/util"
 	"github.com/getlantern/golog"
 )
@@ -85,7 +84,7 @@ func (ga googleAnalytics) GetSessionValues(version, clientID, execHash string) u
 
 // Start starts the analytics session with the given data.
 func Start(deviceID, version string) *session {
-	s := newSession(deviceID, version, keepaliveInterval, proxied.ChainedThenFronted())
+	s := newSession(deviceID, version, keepaliveInterval, common.GetHTTPClient().Transport)
 	go s.keepalive()
 	return s
 }
