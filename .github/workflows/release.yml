@@ -117,7 +117,7 @@ jobs:
       windows-arch: x64
 
   push-binaries:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: [ determine-platform,set-version, build ]
     env:
       version: ${{ needs.set-version.outputs.version }}
