@@ -31,7 +31,7 @@ class _ChatNumberRecoveryState extends State<ChatNumberRecovery> {
     if (_formKey.currentState?.validate() == true) {
       if (controller.text.withoutWhitespace.length == 52) {
         try {
-          context.loaderOverlay.show(widget: spinner);
+          context.loaderOverlay.show();
           await model.recover(controller.text.withoutWhitespace);
           await model.markIsOnboarded();
           await model.markCopiedRecoveryKey();

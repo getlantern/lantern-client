@@ -1,6 +1,5 @@
 import 'dart:isolate';
 
-import 'package:ffi/ffi.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -342,6 +341,13 @@ class LanternFFI {
     checkAuthAPIError(result);
     return Future.value(result.toBool());
   }
+
+  static FutureOr<bool> updatePaymentPlans(dynamic context) {
+    final result =
+        _lanternFFI.updatePaymentMethod().cast<Utf8>().toDartString();
+    checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
+    return Future.value(result.toBool());
+  }
 }
 
 // checkAPIError throws a PlatformException if the API response contains an error
@@ -375,5 +381,3 @@ void checkAuthAPIError(result) {
     return;
   }
 }
-
-// final lanternFFI = LanternFFI;

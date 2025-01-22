@@ -14,7 +14,6 @@ bool isProdPlay() {
   return false;
 }
 
-
 String getPlanDisplayName(String plan) {
   if (Platform.isIOS) {
     if (plan == '1y') {
@@ -155,21 +154,6 @@ extension PlansExtension on Plan {
   }
 }
 
-Future<void> openDesktopPaymentWebview(
-    {required BuildContext context,
-    required String redirectUrl,
-    required Providers provider,
-    VoidCallback? onClose}) async {
-  switch (Platform.operatingSystem) {
-    case 'macos':
-    case 'windows':
-      await AppBrowser.navigateWebview(context, redirectUrl);
-      break;
-    default:
-      await AppBrowser.openWebview(context, redirectUrl);
-  }
-}
-
 List<PathAndValue<PaymentMethod>> sortProviders(
   Iterable<PathAndValue<PaymentMethod>> paymentMethods,
 ) =>
@@ -204,7 +188,11 @@ Plan planFromJson(Map<String, dynamic> item) {
   return plan;
 }
 
-Map<String, PaymentMethod> paymentMethodsFromJson(List<dynamic> items) {
+Map<String, PaymentMethod> paymentMethodsFromJson(dynamic json) {
+  if(json == null) {
+    return {};
+  }
+  List<dynamic> items = json as List<dynamic>;
   final paymentMethods = Map<String, PaymentMethod>();
   items.forEach((value) {
     final json = jsonDecode(jsonEncode(value));

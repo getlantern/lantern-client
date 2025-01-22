@@ -33,17 +33,17 @@ const Bandwidth$json = {
   '1': 'Bandwidth',
   '2': [
     {'1': 'percent', '3': 1, '4': 1, '5': 3, '10': 'percent'},
-    {'1': 'remaining', '3': 2, '4': 1, '5': 3, '10': 'remaining'},
-    {'1': 'allowed', '3': 3, '4': 1, '5': 3, '10': 'allowed'},
+    {'1': 'mibUsed', '3': 2, '4': 1, '5': 3, '10': 'mibUsed'},
+    {'1': 'mibAllowed', '3': 3, '4': 1, '5': 3, '10': 'mibAllowed'},
     {'1': 'ttlSeconds', '3': 4, '4': 1, '5': 3, '10': 'ttlSeconds'},
   ],
 };
 
 /// Descriptor for `Bandwidth`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List bandwidthDescriptor = $convert.base64Decode(
-    'CglCYW5kd2lkdGgSGAoHcGVyY2VudBgBIAEoA1IHcGVyY2VudBIcCglyZW1haW5pbmcYAiABKA'
-    'NSCXJlbWFpbmluZxIYCgdhbGxvd2VkGAMgASgDUgdhbGxvd2VkEh4KCnR0bFNlY29uZHMYBCAB'
-    'KANSCnR0bFNlY29uZHM=');
+    'CglCYW5kd2lkdGgSGAoHcGVyY2VudBgBIAEoA1IHcGVyY2VudBIYCgdtaWJVc2VkGAIgASgDUg'
+    'dtaWJVc2VkEh4KCm1pYkFsbG93ZWQYAyABKANSCm1pYkFsbG93ZWQSHgoKdHRsU2Vjb25kcxgE'
+    'IAEoA1IKdHRsU2Vjb25kcw==');
 
 @$core.Deprecated('Use appDataDescriptor instead')
 const AppData$json = {
@@ -61,6 +61,18 @@ final $typed_data.Uint8List appDataDescriptor = $convert.base64Decode(
     'CgdBcHBEYXRhEiAKC3BhY2thZ2VOYW1lGAEgASgJUgtwYWNrYWdlTmFtZRISCgRuYW1lGAIgAS'
     'gJUgRuYW1lEhIKBGljb24YAyABKAxSBGljb24SJAoNYWxsb3dlZEFjY2VzcxgEIAEoCFINYWxs'
     'b3dlZEFjY2Vzcw==');
+
+@$core.Deprecated('Use appsDataDescriptor instead')
+const AppsData$json = {
+  '1': 'AppsData',
+  '2': [
+    {'1': 'appsList', '3': 1, '4': 3, '5': 11, '6': '.AppData', '10': 'appsList'},
+  ],
+};
+
+/// Descriptor for `AppsData`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List appsDataDescriptor = $convert.base64Decode(
+    'CghBcHBzRGF0YRIkCghhcHBzTGlzdBgBIAMoCzIILkFwcERhdGFSCGFwcHNMaXN0');
 
 @$core.Deprecated('Use deviceDescriptor instead')
 const Device$json = {

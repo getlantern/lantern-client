@@ -10,12 +10,11 @@ import 'package:retry/retry.dart';
 class CheckoutLegacy extends StatefulWidget {
   final Plan plan;
   final bool isPro;
-
   const CheckoutLegacy({
     required this.plan,
     required this.isPro,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<CheckoutLegacy> createState() => _CheckoutLegacyState();
@@ -284,14 +283,6 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     }
   }
 
-  void checkProUser() async {
-    final res = sessionModel.proUserNotifier.value ?? false;
-    if (!widget.isPro && res) {
-      // show success dialog if user becomes Pro during browser session
-      showSuccessDialog(context, widget.isPro);
-    }
-  }
-
   Future<void> resolvePaymentMethod() async {
     final provider = selectedPaymentProvider!;
     if (isDesktop() && provider != Providers.test) {
@@ -334,7 +325,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
   }
 
   Future<void> _openWebview(String url) async =>
-      await AppBrowser.openWebview(context, url);
+      await openWebview(context, url, 'lantern_pro_checkout'.i18n);
 
   void _proceedWithBTCPay() async {
     try {
@@ -422,11 +413,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
         provider,
       );
       context.loaderOverlay.hide();
-      openDesktopPaymentWebview(
-          context: context,
-          provider: provider,
-          redirectUrl: redirectUrl,
-          onClose: checkProUser);
+      openWebview(context, redirectUrl);
       // as soon user click we should start polling userData
       Future.delayed(const Duration(seconds: 2), hasPlansUpdateOrBuy);
     } catch (error, stackTrace) {

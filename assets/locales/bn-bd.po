@@ -458,7 +458,7 @@ msgid "pro_plan"
 msgstr "প্রো প্ল্যান"
 
 msgid "one_month_plan"
-msgstr ""
+msgstr "১ মাসের প্লান"
 
 msgid "one_year_plan"
 msgstr "1-বছরর প্ল্যান"
@@ -1782,7 +1782,7 @@ msgid "recovery_not_found"
 msgstr "ডিভাইসটি এই ব্যবহারকারী সাথে যুক্ত না"
 
 msgid "device_added"
-msgstr ""
+msgstr "ডিভাইস যোগ করা হয়েছে"
 
 msgid "device_added_message"
 msgstr ""

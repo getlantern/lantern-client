@@ -18,7 +18,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
-	"github.com/getlantern/lantern-client/internalsdk/webclient"
 	"github.com/getlantern/pathdb"
 	"golang.org/x/crypto/pbkdf2"
 	"google.golang.org/protobuf/proto"
@@ -26,33 +25,25 @@ import (
 )
 
 // createProClient creates a new instance of ProClient with the given client session information
-func createProClient(session ClientSession, platform string) pro.ProClient {
-	dialTimeout := 30 * time.Second
-	if platform == "ios" {
-		dialTimeout = 20 * time.Second
-	}
-	webclientOpts := &webclient.Opts{
-		Timeout: dialTimeout,
-		UserConfig: func() common.UserConfig {
-			internalHeaders := map[string]string{
-				common.PlatformHeader:   platform,
-				common.AppVersionHeader: common.ApplicationVersion,
-			}
-			deviceID, _ := session.GetDeviceID()
-			userID, _ := session.GetUserID()
-			token, _ := session.GetToken()
-			lang, _ := session.Locale()
-			return common.NewUserConfig(
-				common.DefaultAppName,
-				deviceID,
-				userID,
-				token,
-				internalHeaders,
-				lang,
-			)
-		},
-	}
-	return pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), webclientOpts)
+func createProClient(session Session, platform string) pro.ProClient {
+	return pro.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), func() common.UserConfig {
+		internalHeaders := map[string]string{
+			common.PlatformHeader:   platform,
+			common.AppVersionHeader: common.ApplicationVersion,
+		}
+		deviceID, _ := session.GetDeviceID()
+		userID, _ := session.GetUserID()
+		token, _ := session.GetToken()
+		lang, _ := session.Locale()
+		return common.NewUserConfig(
+			common.DefaultAppName,
+			deviceID,
+			userID,
+			token,
+			internalHeaders,
+			lang,
+		)
+	})
 }
 
 func BytesToFloat64LittleEndian(b []byte) (float64, error) {

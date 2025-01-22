@@ -17,8 +17,8 @@ protos: lib/features/vpn internalsdk/protos/vpn.pb.go
 lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging.proto
 	@protoc --dart_out=./lib/messaging --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_flutteronly/messaging.proto
 
-lib/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
-	@protoc --dart_out=./lib/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
+lib/features/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
+	@protoc --dart_out=./lib/features/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
 
 internalsdk/protos/%.pb.go: protos_shared/%.proto
 	@echo "Generating Go protobuf for $<"
@@ -125,6 +125,7 @@ DEBUG_VERSION ?= $(GIT_REVISION)
 
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/archive/Runner.xcarchive/dSYMs/
 INFO_PLIST := ios/Runner/Info.plist
+ENTITLEMENTS := macos/Runner/Release.entitlements
 
 DESKTOP_LIB_NAME ?= liblantern
 DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
@@ -243,7 +244,7 @@ tag: require-version
 	git push
 
 define osxcodesign
-	codesign --options runtime --strict --timestamp --force --deep -s "Developer ID Application: Brave New Software Project, Inc (ACZRKC3LQ9)" -v $(1)
+	codesign --options runtime --strict --timestamp --force --entitlements $(ENTITLEMENTS) --deep -s "Developer ID Application: Brave New Software Project, Inc (ACZRKC3LQ9)" -v $(1)
 endef
 
 guard-%:
@@ -346,13 +347,13 @@ release: require-version require-s3cmd require-wget require-lantern-binaries req
 
 $(ANDROID_LIB): $(GO_SOURCES)
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	go install golang.org/x/mobile/cmd/gomobile && \
+	go install golang.org/x/mobile/cmd/gomobile@latest && \
 	gomobile init && \
 	gomobile bind \
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
-		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
+		-ldflags="-s -w $(LDFLAGS) $(EXTRA_LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
@@ -448,6 +449,10 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 
 android-debug: $(MOBILE_DEBUG_APK)
 
+debug-symbols:
+	@echo "Generating debug symbols for Android..."
+	cd android && ./gradlew zipDebugSymbols
+
 set-version:
 	@echo "Setting the CFBundleShortVersionString to $(VERSION)"
 	@cd ios && agvtool new-marketing-version $(VERSION)
@@ -456,14 +461,12 @@ set-version:
 	NEXT_BUILD=$$(($$CURRENT_BUILD + 1)); \
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
 
-ios: macos build-framework ffigen
+#ios: macos build-framework ffigen
 
-ios-release: set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS pubget
-	@echo "Flutter Clean"
+ios-release:require-version set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS
 	flutter clean
-	@echo "Flutter pub get"
 	flutter pub get
-	@echo "Creating the Flutter iOS build..."
+	@echo "Creating the Flutter iOS build.set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS.."
 	flutter build ipa --flavor prod --release --export-options-plist ./ExportOptions.plist
 	@echo "Uploading debug symbols to Sentry..."
 	export SENTRY_LOG_LEVEL=info
@@ -601,6 +604,7 @@ macos: macos-arm64
 		${DESKTOP_LIB_NAME}_amd64.dylib \
 		-output ${DARWIN_LIB_NAME}
 	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" ${DARWIN_LIB_NAME}
+	rm -Rf ${DESKTOP_LIB_NAME}_arm64.dylib ${DESKTOP_LIB_NAME}_amd64.dylib
 
 $(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
 	@echo "Generating distribution package for darwin/amd64..." && \
@@ -702,20 +706,21 @@ sourcedump: require-version
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
-build-framework: assert-go-version install-gomobile
+ios: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
-	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
-	@echo "generating Ios.xcFramework"
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	@rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
+	@echo "Generating Ios.xcFramework"
+	@go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
     		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
     		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
-	@echo "moving framework"
-	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
-	mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+	@echo "Moving framework"
+	@mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
+	@mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
+	@echo "Framework generated"
 
 build-release-framework: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
@@ -742,7 +747,7 @@ assert-go-version:
 
 .PHONY: swift-format
 swift-format:
-	swift-format --in-place --recursive DBModule ios/Runner ios/Tunnel ios/LanternTests
+	swift-format --in-place --recursive DBModule ios/Runner ios/Tunnel ios/LanternTests macos/Runner
 
 clean:
 	rm -f liblantern*.aar && \

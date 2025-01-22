@@ -221,7 +221,7 @@ class ConversationState extends State<Conversation>
       return;
     }
 
-    context.loaderOverlay.show(widget: spinner);
+    context.loaderOverlay.show();
     try {
       // stopWatchTimer.onExecute.add(StopWatchExecute.stop);
       stopWatchTimer.onStopTimer();
@@ -239,7 +239,7 @@ class ConversationState extends State<Conversation>
   }
 
   Future<void> selectFilesToShare() async {
-   try {
+    try {
       var result = await FilePicker.platform
           .pickFiles(type: FileType.any, allowMultiple: true);
       if (result == null || result.files.isEmpty) {
@@ -254,7 +254,7 @@ class ConversationState extends State<Conversation>
           totalSizeBytes / (1024 * 1024); // Convert bytes to megabytes
 
       if (totalSizeMB > 100) {
-        if(!mounted){
+        if (!mounted) {
           return;
         }
         CDialog.showInfo(
@@ -265,7 +265,7 @@ class ConversationState extends State<Conversation>
         return;
       }
 
-      context.loaderOverlay.show(widget: spinner);
+      context.loaderOverlay.show();
       for (var i = 0; i < result.files.length; i++) {
         final el = result.files[i];
         final fileExtension =
@@ -341,7 +341,7 @@ class ConversationState extends State<Conversation>
     String? replyToId,
   }) async {
     if (attachments?.isNotEmpty == true) {
-      context.loaderOverlay.show(widget: spinner);
+      context.loaderOverlay.show();
     }
     try {
       await messagingModel.sendToDirectContact(
@@ -351,7 +351,8 @@ class ConversationState extends State<Conversation>
         replyToId: replyToId,
         replyToSenderId: replyToSenderId,
       );
-      await sessionModel.trackUserAction('User sent message via Lantern Chat', '/message');
+      await sessionModel.trackUserAction(
+          'User sent message via Lantern Chat', '/message');
       newMessage.clear();
       setState(() {
         recording = null;

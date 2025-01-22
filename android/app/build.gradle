@@ -6,7 +6,7 @@ plugins {
     id 'org.jlleitschuh.gradle.ktlint'
     id 'kotlin-parcelize'
     id 'com.google.protobuf'
-    id "io.sentry.android.gradle" version "4.11.0"
+    id "io.sentry.android.gradle" version "4.13.0"
 }
 
 android {
@@ -49,6 +49,7 @@ android {
     }
     // Use legacy packaging to helps reduce apk size
     packagingOptions{
+        exclude "DebugProbesKt.bin"
         jniLibs {
             useLegacyPackaging true
         }
@@ -79,9 +80,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
-    kotlin {
-        jvmToolchain(17)
-    }
+//    kotlin {
+//        jvmToolchain(17)
+//    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -194,6 +195,25 @@ android {
     }
     namespace 'org.getlantern.lantern'
 }
+
+tasks.register('zipDebugSymbols') {
+    description "Generates a ZIP file containing debug symbols for the app"
+    doLast {
+        def flutterRootDir = rootDir.parentFile
+        def debugSymbolsDir = file("${flutterRootDir}/build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib")
+        def outputDir = file("${flutterRootDir}/build/outputs/debug-symbols")
+        outputDir.mkdirs()
+        copy {
+            from debugSymbolsDir
+            into outputDir
+        }
+        ant.zip(destfile: "${outputDir}/debug-symbols.zip") {
+            fileset(dir: debugSymbolsDir)
+        }
+        println "Debug symbols ZIP created at: ${outputDir}/debug-symbols.zip"
+    }
+}
+
 
 def androidArch() {
     def value = project.getProperties().get("androidArch")
@@ -337,8 +357,7 @@ dependencies {
 
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
-//    implementation 'com.github.getlantern:db-android:6c0525eeb9'
-//    implementation 'com.github.getlantern:messaging-android:eabf104396'
+
 
     implementation 'com.github.getlantern:db-android:a137a028d4'
     implementation 'com.github.getlantern:messaging-android:4c346e64ee'

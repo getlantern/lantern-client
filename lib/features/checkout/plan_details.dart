@@ -1,5 +1,5 @@
-import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/service/app_purchase.dart';
+import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/utils.dart';
 
 class PlanCard extends StatefulWidget {
@@ -9,16 +9,14 @@ class PlanCard extends StatefulWidget {
   const PlanCard({
     required this.plan,
     required this.isPro,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<PlanCard> createState() => _PlanCardState();
 }
 
 class _PlanCardState extends State<PlanCard> {
-
-
   @override
   Widget build(BuildContext context) {
     final planName = widget.plan.id.split('-')[0];
@@ -160,16 +158,17 @@ class _PlanCardState extends State<PlanCard> {
       }
     } else {
       return CText(
-          '${widget.plan.totalCost} ${'billed_one_time'.i18n}',
+        '${widget.plan.totalCost} ${'billed_one_time'.i18n}',
         style: tsBody2.copiedWith(color: grey5),
       );
     }
   }
 
-
-
   String getPrice(String totalCost, {bool perMonthCost = false}) {
     final appPurchase = sl<AppPurchase>();
+    if (widget.plan.id == '') {
+      return totalCost;
+    }
     final appStorePrice = appPurchase.getPriceFromPlanId(widget.plan.id,
         perMonthCost: perMonthCost);
     return appStorePrice == '' ? totalCost : appStorePrice;
@@ -201,6 +200,7 @@ class _PlanCardState extends State<PlanCard> {
         _storeFlow();
         break;
       default:
+
         ///Support for legacy purchase flow
         if (!sessionModel.isAuthEnabled.value!) {
           _processLegacyCheckOut(context);
@@ -261,7 +261,6 @@ class _PlanCardState extends State<PlanCard> {
       CheckoutLegacy(
         plan: widget.plan,
         isPro: widget.isPro,
-
       ),
     );
   }

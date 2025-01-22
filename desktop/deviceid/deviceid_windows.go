@@ -4,6 +4,8 @@
 package deviceid
 
 import (
+	"strings"
+
 	"github.com/google/uuid"
 	"golang.org/x/sys/windows/registry"
 )
@@ -16,6 +18,10 @@ const (
 // at HKEY_CURRENT_USERS\Software\Lantern\deviceid. If unable to read/write to the registry, this defaults to the
 // old-style device ID derived from MAC address.
 func Get() string {
+	return get(keyPath)
+}
+
+func get(keyPath string) string {
 	key, _, err := registry.CreateKey(registry.CURRENT_USER, keyPath, registry.QUERY_VALUE|registry.SET_VALUE|registry.WRITE)
 	if err != nil {
 		log.Errorf("Unable to create registry entry to store deviceID, defaulting to old-style device ID: %v", err)
@@ -43,5 +49,5 @@ func Get() string {
 		return deviceID
 	}
 
-	return existing
+	return strings.TrimSpace(existing)
 }

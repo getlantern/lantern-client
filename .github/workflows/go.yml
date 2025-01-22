@@ -35,8 +35,6 @@ jobs:
       run: go install github.com/golang/protobuf/protoc-gen-go@latest
 
     - name: Build
-      env:
-        GIT_LFS_SKIP_SMUDGE: 1
       run: LIB_NAME=liblantern.so make lantern
 
     # Install gotestfmt on the VM running the action.
@@ -54,7 +52,7 @@ jobs:
 
       # Upload the original go test log as an artifact for later review.
     - name: Upload test log
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-log

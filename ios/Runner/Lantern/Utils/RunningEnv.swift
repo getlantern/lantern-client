@@ -30,7 +30,7 @@ func isRunningInTestFlightEnvironment() -> Bool {
 }
 
 private func hasEmbeddedMobileProvision() -> Bool {
-  if let _ = Bundle.main.path(forResource: "embedded", ofType: "mobileprovision") {
+  if Bundle.main.path(forResource: "embedded", ofType: "mobileprovision") != nil {
     return true
   }
   return false

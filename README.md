@@ -50,17 +50,20 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
   * [libayatana-appindicator](https://github.com/AyatanaIndicators/libayatana-appindicator) (required by [tray_manager](https://github.com/leanflutter/tray_manager#linux-requirements))
   * [gstreamer](https://gstreamer.freedesktop.org/documentation/installing/on-linux.html) (required by [flutter plugin audioplayers](https://pub.dev/packages/audioplayers_linux))
   * [libclang-dev](https://apt.llvm.org) (required by [ffigen](https://pub.dev/packages/ffigen))
+* Windows
+  * Install [Visual Studio](https://visualstudio.microsoft.com/downloads/) with desktop development with c++ (including all of its default components)
+  * Install LLVM [LLVM](https://releases.llvm.org/download.html) (required by [flutter plugin ffigen](https://pub.dev/packages/audioplayers_linux))
+  * Install Nuget [Nuget](https://www.nuget.org/downloads) (required by [flutter_inappwebview ](https://pub.dev/packages/flutter_inappwebview))
 
 ### 🚀 Setup Project:
 
 * Install all prerequisites
-* Run `git submodule update --init --recursive`
 * Run `git lfs install && git pull`.
 * Put the [app.env](https://my.1password.com/app#/everything/AllItems/whdjlkyj7ku6pumtyc7nh5vg4yadqasjh2hspgjgvgfllyekhcrq) file (Frontend vault) from 1Password in the repo root.
-* Go to the **SDK MANAGER**
+* Go to the **SDK MANAGER** (Tools->SDK Manager in Android Studio)
 * Select **Android SDK**
 * Check the SDK from android 5.0(LOLLIPOP) up to the Latest Version at the moment.
-* Go to **SDK Tools** and check the option **Show Package Details**
+* Go to the **SDK Tools** tab in the same window and check the option **Show Package Details**
 * On the Android SDK Build-Tools, check from: SDK 30 up to the latest at the moment. (is optional if you wish to add more SDK alternatives such as 27.0, 28 or 29).
 * On the NDK(Side by side) check the latest version of 22.x (not anything newer)
 * Make sure that you have the latest **Android SDK Command-line Tools**
@@ -75,17 +78,17 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
 * Click on Apply and accept the Terms and Conditions.
 * Open Xcode first time open Xcode and install necessary components
 * Download Certificate and provisioning profile from 1Pass [Search [IOS Certificates and profiles](https://my.1password.com/vaults/all/allitems)]
-* Lastly `Flutter Doctor` to confirm that your setup is correct and ready!
+* Lastly `flutter doctor` to confirm that your setup is correct and ready!
 
 ### 🤖 Running the project on Android
 
-* `make android-lib ANDROID_ARCH` (you need to generated liblantern-all.aar containing the Go backend code in order for the project to compile.)
 * `flutter pub get`
+* `make android` (you need to generated liblantern-all.aar containing the Go backend code in order for the project to compile.)
 * `flutter run --flavor prod`
 
 ### 🍏 Running the project on iOS
 
-* `make build-framework` (you need to generated Internalsdk.xcframework. containing the Go backend code in order for the project to compile.)
+* `make ios` (you need to generated Internalsdk.xcframework. containing the Go backend code in order for the project to compile.)
 * `flutter pub get`
 * `flutter run --flavor prod`
 
@@ -107,6 +110,17 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
 * `make ffigen`
 * `flutter pub get`
 * `flutter run --flavor prod` or if you are using android studio use desktop configuration
+
+#### As a Command-Line Application
+
+A command-line implementation of Lantern is defined in the `cli` directory.
+
+* `go build -o lantern-cli ./cli`
+* `./lantern-cli <arguments>` (run with `-h` or `--help` to see available arguments)
+
+You will likely want to specify the `-addr` argument (e.g. `-addr localhost:8080`) to define where the local proxy should be available.
+
+If you want to point at a specific remote proxy, consult `hit_proxy.bash` for an example on how to set up a config directory with specific proxy config.
 
 ### Running on emulators
 

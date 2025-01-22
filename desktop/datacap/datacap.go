@@ -4,7 +4,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"time"
 
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/common"
@@ -28,13 +27,6 @@ var (
 	log                = golog.LoggerFor("lantern-desktop.datacap")
 
 	translationAppName = strings.ToUpper(common.DefaultAppName)
-
-	uncapped = &bandwidth.Quota{
-		MiBAllowed: 0,
-		MiBUsed:    0,
-		AsOf:       time.Now(),
-		TTLSeconds: 0,
-	}
 )
 
 type dataCap struct {
@@ -49,27 +41,38 @@ func ServeDataCap(channel ws.UIChannel, iconURL func() string, clickURL func() s
 		q, _ := bandwidth.GetQuota()
 		if q == nil {
 			// On client first connecting, if we don't have a datacap, assume we're uncapped
-			q = uncapped
+			uncapped := map[string]interface{}{
+				"percent":    0,
+				"mibUsed":    0,
+				"mibAllowed": 0,
+			}
+			log.Debugf("Sending current bandwidth quota to new client: %v", q)
+			write(uncapped)
 		}
-		log.Debugf("Sending current bandwidth quota to new client: %v", q)
-		write(q)
 	}
 	bservice, err := channel.Register("bandwidth", helloFn)
 	if err != nil {
 		log.Errorf("Error registering with UI? %v", err)
 		return err
 	}
-	// dc := &dataCap{iconURL: iconURL, clickURL: clickURL, isPro: isPro}
 	go func() {
 		for quota := range bandwidth.Updates {
-			percent, remaining, allowed := getBandwidth(quota)
-			bandwidthMap := map[string]interface{}{
-				"percent":   percent,
-				"remaining": remaining,
-				"allowed":   allowed,
+			mibAllowed, mibUsed, percent := 0, 0, 0
+			if quota != nil {
+				mibUsed = int(quota.MiBUsed)
+				mibAllowed = int(quota.MiBAllowed)
+				if quota.MiBUsed >= quota.MiBAllowed {
+					percent = 100
+				} else {
+					percent = int(100 * (float64(quota.MiBUsed) / float64(quota.MiBAllowed)))
+				}
 			}
-			bservice.Out <- bandwidthMap
-			// dc.processQuota(bservice.Out, quota)
+
+			bservice.Out <- map[string]interface{}{
+				"percent":    percent,
+				"mibUsed":    mibUsed,
+				"mibAllowed": mibAllowed,
+			}
 		}
 	}()
 	return nil
@@ -98,27 +101,6 @@ func (dc *dataCap) processQuota(out chan<- interface{}, quota *bandwidth.Quota) 
 			go dc.notifyFifty()
 		})
 	}
-}
-func getBandwidth(quota *bandwidth.Quota) (int, int, int) {
-	remaining := 0
-	percent := 100
-	if quota == nil {
-		return 0, 0, 0
-	}
-
-	allowed := quota.MiBAllowed
-	if allowed > 50000000 {
-		return 0, 0, 0
-	}
-
-	if quota.MiBUsed >= quota.MiBAllowed {
-		percent = 100
-		remaining = 0
-	} else {
-		percent = int(100 * (float64(quota.MiBUsed) / float64(quota.MiBAllowed)))
-		remaining = int(quota.MiBAllowed - quota.MiBUsed)
-	}
-	return percent, remaining, int(quota.MiBAllowed)
 }
 
 // AddDataCapListener adds a listener for any updates to the data cap.
