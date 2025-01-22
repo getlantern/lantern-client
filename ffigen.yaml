@@ -4,7 +4,6 @@ description: Bindings to `liblantern.h`.
 output: 'lib/generated_bindings.dart'
 headers:
   entry-points:
-    - 'liblantern.h'
     - 'liblantern_amd64.h'
     - 'liblantern_arm64.h'
 preamble: |
