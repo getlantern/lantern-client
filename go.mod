@@ -37,7 +37,6 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.179
 	github.com/getlantern/fronted v0.0.0-20250104035820-b06365fddbbf
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
@@ -54,7 +53,6 @@ require (
 	github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
-	github.com/getlantern/replica v0.14.4
 	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627
 	github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
@@ -89,7 +87,9 @@ require (
 	github.com/cloudflare/circl v1.5.0 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
 	github.com/containerd/console v1.0.3 // indirect
+	github.com/getlantern/flashlight/v7 v7.6.179 // indirect
 	github.com/getlantern/lantern-water v0.0.0-20241218135103-60224336cf1d // indirect
+	github.com/getlantern/replica v0.14.4 // indirect
 	github.com/getlantern/sing-vmess v0.0.0-20241209111030-0f2c02b4eb9a // indirect
 	github.com/gofrs/uuid/v5 v5.3.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect

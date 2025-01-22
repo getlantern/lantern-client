@@ -359,6 +359,7 @@ github.com/getlantern/hex v0.0.0-20220104173244-ad7e4b9194dc/go.mod h1:D9RWpXy/E
 github.com/getlantern/hidden v0.0.0-20190325191715-f02dbb02be55/go.mod h1:6mmzY2kW1TOOrVy+r41Za2MxXM+hhqTtY3oBKd2AgFA=
 github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770 h1:cSrD9ryDfTV2yaur9Qk3rHYD414j3Q1rl7+L0AylxrE=
 github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770/go.mod h1:GOQsoDnEHl6ZmNIL+5uVo+JWRFWozMEp18Izcb++H+A=
+github.com/getlantern/http-proxy-lantern/v2 v2.10.0/go.mod h1:bY0Uxqvojq1Uj6R7DwyqGh+YxNeZ4vF/N+TtwXVjALg=
 github.com/getlantern/http-proxy-lantern/v2 v2.10.1 h1:KzsIrWiK8FLc+PDLCaYaYETZGerfuuobCY0wxi7Mv9M=
 github.com/getlantern/http-proxy-lantern/v2 v2.10.1/go.mod h1:b8uUKHs0yO4e/e+H/j2T7Z6ht96RoCDbqZ81asggEB0=
 github.com/getlantern/httpseverywhere v0.0.0-20201210200013-19ae11fc4eca h1:Of3VwFEfKbVnK5/VGy05XUbi6QvTs5Y2eLDfPv3O50E=
@@ -916,6 +917,8 @@ github.com/quic-go/quic-go v0.48.2/go.mod h1:yBgs3rWBOADpga7F+jJsb6Ybg1LSYiQvwWl
 github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a/go.mod h1:bCqnVzQkZxMG4s8nGwiZ5l3QUCyqpo9Y+/ZMZ9VjZe4=
 github.com/refraction-networking/utls v1.6.7 h1:zVJ7sP1dJx/WtVuITug3qYUq034cDq9B2MR1K67ULZM=
 github.com/refraction-networking/utls v1.6.7/go.mod h1:BC3O4vQzye5hqpmDTWUqi4P5DDhzJfkV1tdqtawQIH0=
+github.com/refraction-networking/water v0.6.4 h1:7E0nFdSyVXMZ5bz7GPHz1ALBQDUiyHbiBfPZ4eSBmIM=
+github.com/refraction-networking/water v0.6.4/go.mod h1:UDjvBH4nYp0UkrJm9GJ1G96cpELH31/BIjoTiWkYoME=
 github.com/refraction-networking/water v0.7.0-alpha h1:yLMAvIi0lHHD2mvwx63GLnptpjvnmBCWFvTHTWLykLk=
 github.com/refraction-networking/water v0.7.0-alpha/go.mod h1:VPQENA6E5+2V5RlX/yaBlTCKeFQ25j49DUc/pmmwkXE=
 github.com/refraction-networking/wazero v1.7.1-w h1:z7Ty5PsMkJEDBCsn3ELUjceQGBT0FMVGldOSpDK3giQ=
