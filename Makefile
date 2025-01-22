@@ -357,6 +357,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
+android-sdk: export EXTRA_LDFLAGS += -checklinkname=0
 android-sdk:
 	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	go install golang.org/x/mobile/cmd/gomobile && \
