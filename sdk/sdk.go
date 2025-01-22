@@ -56,7 +56,7 @@ func Setup(appName, configDir string) {
 	}
 }
 
-// Start starts Lantern and sets it as the system proxy at the requested address. It blocks up
+// start starts Lantern and sets it as the system proxy at the requested address. It blocks up
 // til the given timeout and returns the address the proxy is listening. If the proxy doesn't
 // start within the given timeout, this method returns an error.
 // - appName: unique identifier for the current application (used for assigning proxies and tracking usage)
@@ -64,6 +64,13 @@ func Setup(appName, configDir string) {
 // - startTimeoutMillis: how long to wait for Lantern to start before throwing an exception
 // It returns the address at which the Lantern HTTP proxy is listening for connections.
 func Start(
+	httpProxyAddr string,
+	proxyAll bool,
+) (*StartResult, error) {
+	return start(httpProxyAddr, proxyAll, 10*time.Second)
+}
+
+func start(
 	httpProxyAddr string,
 	proxyAll bool,
 	startTimeoutMillis time.Duration,
