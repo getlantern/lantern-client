@@ -256,3 +256,11 @@ jobs:
           git add .
           git commit -m "Lantern binaries for version ${{ env.version }}"
           git push origin main
+
+  create-release:
+    uses: ./.github/workflows/prerelease-notification.yml
+    secrets: inherit
+    needs: [ determine-platform,set-version, build, push-binaries ]
+    with:
+      version: ${{ needs.set-version.outputs.prefix }}-${{ needs.set-version.outputs.version }}
+      platform: ${{ needs.determine-platform.outputs.platform }}

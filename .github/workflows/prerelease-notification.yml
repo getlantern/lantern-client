@@ -1,41 +1,22 @@
 name: Prerelease Notification
 
 on:
-  workflow_run:
-    workflows:
-      - Publish releases
-    types:
-      - completed
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      platform:
+        type: string
+        required: true
 
 jobs:
   create-release:
+    env:
+      version: ${{ inputs.version }}
+      platform: ${{ inputs.platform }}
     runs-on: ubuntu-latest
     steps:
-      - name: Determine Platform
-        id: set-platform
-        run: |
-          echo "GITHUB_REF is: $GITHUB_REF"
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-           TAG=${GITHUB_REF#refs/tags/}
-           echo "Tag is: $TAG"
-           if [[ $TAG == ios-* ]]; then
-             echo "Platform determined: ios"
-             echo "platform=ios" >> "$GITHUB_OUTPUT"
-           elif [[ $TAG == android-* ]]; then
-             echo "Platform determined: android"
-             echo "platform=android" >> "$GITHUB_OUTPUT"
-           elif [[ $TAG == desktop-* ]]; then
-             echo "Platform determined: desktop"
-             echo "platform=desktop" >> "$GITHUB_OUTPUT"
-          else
-             echo "Platform determined: all (tag did not match specific platforms)"
-             echo "platform=all" >> "$GITHUB_OUTPUT"
-           fi
-          else
-           echo "Not a tag reference, defaulting to all platforms"
-           echo "platform=all" >> "$GITHUB_OUTPUT"
-          fi
       - name: Check if release already exists
         id: exists
         env:
@@ -54,10 +35,8 @@ jobs:
           echo "REPO_NAME=$(echo ${{ github.repository }} | sed s/'${{ github.repository_owner }}\/'//g)" >> "$GITHUB_OUTPUT"
 
       - name: Send Slack message to Releases channel
-        env:
-          platform: ${{ steps.set-platform.outputs.platform }}
         if: ${{ steps.exists.outputs.EXISTING < 1 }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
-            --data "{\"repo\": \"${{ steps.repo.outputs.REPO_NAME }}\",\"platform\": \"${{ env.platform }}\", \"version\": \"${{ github.ref_name }}\"}" \
+            --data "{\"repo\": \"${{ steps.repo.outputs.REPO_NAME }}\",\"platform\": \"${{ env.platform }}\", \"version\": \"${{ env.version }}\"}" \
             ${{ secrets.SLACK_RELEASES_WEBHOOK }}
