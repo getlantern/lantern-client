@@ -543,7 +543,7 @@ class SessionModel extends Model {
   Future<String> getReplicaAddr() async {
     try {
       final replicaAddr =
-          await methodChannel.invokeMethod('get', 'replicaAddr');
+          await methodChannel.invokeMethod('replicaAddr','');
       if (replicaAddr == null || replicaAddr == '') {
         logger.e('Replica not enabled');
       }
