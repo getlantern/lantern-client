@@ -44,7 +44,7 @@ jobs:
            fi
           else
            echo "Not a tag reference, defaulting to all platforms"
-           echo "platform=android" >> "$GITHUB_OUTPUT"
+           echo "platform=ios" >> "$GITHUB_OUTPUT"
           fi
 
   set-version:
