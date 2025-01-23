@@ -9,9 +9,11 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <!--    this permission can not be used anymore unless your app core feature is photo 7 Video
+            Migrate to system picker -->
+    <!--    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />-->
+    <!--    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />-->
+    <!--    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />-->
 
     <!-- Re-enable for Chat!
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
