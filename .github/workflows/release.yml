@@ -3,6 +3,8 @@ name: Publish releases
 on:
   # Triggers the workflow on push when pushing to a version tag
   push:
+    branches:
+      - jigar/release-ci-fix
     tags:
       - '*lantern-*'
   workflow_dispatch:
@@ -42,7 +44,7 @@ jobs:
            fi
           else
            echo "Not a tag reference, defaulting to all platforms"
-           echo "platform=all" >> "$GITHUB_OUTPUT"
+           echo "platform=desktop" >> "$GITHUB_OUTPUT"
           fi
 
   set-version:
@@ -97,24 +99,24 @@ jobs:
           print(f'::set-output name=version::{version}')
           print(f'::set-output name=prefix::{li}')
           print(f'::set-output name=version_file::{vf}')
-  build:
-    uses: ./.github/workflows/build.yml
-    secrets: inherit
-    needs: set-version
-    with:
-      macos_version: macos-14
-      xcode_version: latest-stable
-      version: ${{ needs.set-version.outputs.version }}
-      version_file: ${{ needs.set-version.outputs.version_file }}
-      prefix: ${{ needs.set-version.outputs.prefix }}
-      build-suffix: 64
-      dist-suffix: x64
-      installer-suffix: -x64
-      windows-arch: x64
+#  build:
+#    uses: ./.github/workflows/build.yml
+#    secrets: inherit
+#    needs: set-version
+#    with:
+#      macos_version: macos-14
+#      xcode_version: latest-stable
+#      version: ${{ needs.set-version.outputs.version }}
+#      version_file: ${{ needs.set-version.outputs.version_file }}
+#      prefix: ${{ needs.set-version.outputs.prefix }}
+#      build-suffix: 64
+#      dist-suffix: x64
+#      installer-suffix: -x64
+#      windows-arch: x64
 
   push-binaries:
     runs-on: macos-latest
-    needs: [ determine-platform,set-version, build ]
+    needs: [ determine-platform,set-version ]
     env:
       version: ${{ needs.set-version.outputs.version }}
       prefix: ${{ needs.set-version.outputs.prefix }}
@@ -253,5 +255,6 @@ jobs:
           git config user.email "admin@getlantern.org"
           git config user.name "Lantern Bot"
           git add .
-          git commit -m "Lantern binaries for version ${{ env.version }}"
-          git push origin main
+          git status
+#          git commit -m "Lantern binaries for version ${{ env.version }}"
+#          git push origin main
