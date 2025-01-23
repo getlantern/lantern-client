@@ -2,10 +2,10 @@ name: Prerelease Notification
 
 on:
   workflow_run:
-    workflows:
-      - Publish releases
-    types:
-      - completed
+#    workflows:
+#      - Publish releases
+#    types:
+#      - completed
   workflow_dispatch:
 
 jobs:
