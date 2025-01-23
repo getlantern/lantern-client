@@ -1,3 +1,5 @@
+import 'package:lantern/core/widgtes/split_tunnel_widget.dart';
+import 'package:lantern/features/account/split_tunneling.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/features/account/split_tunneling.dart';
 import 'package:lantern/features/messaging/messaging.dart';
@@ -12,7 +14,7 @@ import 'vpn_status.dart';
 import 'vpn_switch.dart';
 
 class VPNTab extends StatelessWidget {
-  const VPNTab({Key? key}) : super(key: key);
+  const VPNTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +90,7 @@ class VPNTab extends StatelessWidget {
                             VPNStatus(),
                             const CDivider(height: 32.0),
                             const ServerLocationWidget(),
-                            if (Platform.isAndroid) ...{
+                           if (isAndroid()) ...{
                               const CDivider(height: 32.0),
                               SplitTunnelingWidget(),
                             },

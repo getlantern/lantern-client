@@ -1,6 +1,7 @@
 import 'package:desktop_webview_window/desktop_webview_window.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:lantern/core/utils/common.dart';
+import 'package:lantern/core/utils/utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -97,12 +98,18 @@ class _AppWebViewState extends State<AppWebView> {
             onReceivedHttpError: (controller, request, response) {
               appLogger
                   .i("HTTP error: ${response.statusCode} for ${request.url}");
-              showErrorDialog("HTTP Error",
-                  "Status code: ${response.statusCode}\nDescription: ${response.reasonPhrase ?? ''}");
+              if (!isTestRunning()) {
+                showErrorDialog("HTTP Error",
+                    "Status code: ${response.statusCode}\nDescription: ${response.reasonPhrase ?? ''}");
+              }
             },
-            shouldOverrideUrlLoading: shouldOverrideUrlLoading,
-            onReceivedError: (controller, request, error) =>
-                showErrorDialog("Failed to load", error.description),
+            shouldOverrideUrlLoading:
+                isTestRunning() ? null : shouldOverrideUrlLoading,
+            onReceivedError: (controller, request, error) {
+              if (!isTestRunning()) {
+                showErrorDialog("Failed to load", error.description);
+              }
+            },
             initialSettings: InAppWebViewSettings(
                 isInspectable: kDebugMode,
                 javaScriptEnabled: true,

@@ -173,7 +173,7 @@ class PlansPage extends StatelessWidget {
       child: GestureDetector(
         onTap: () => _onPromoCodeTap(context, proUser),
         child: Text(
-          'Have a Lantern Pro activation code? Click here.',
+          'activation_lantern_pro_code'.i18n,
           style: tsBody1.copiedWith(color: grey5),
         ),
       ), // Translations

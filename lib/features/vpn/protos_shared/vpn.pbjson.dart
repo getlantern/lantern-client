@@ -35,15 +35,16 @@ const Bandwidth$json = {
     {'1': 'percent', '3': 1, '4': 1, '5': 3, '10': 'percent'},
     {'1': 'mibUsed', '3': 2, '4': 1, '5': 3, '10': 'mibUsed'},
     {'1': 'mibAllowed', '3': 3, '4': 1, '5': 3, '10': 'mibAllowed'},
-    {'1': 'ttlSeconds', '3': 4, '4': 1, '5': 3, '10': 'ttlSeconds'},
+    {'1': 'TTLSeconds', '3': 4, '4': 1, '5': 3, '10': 'TTLSeconds'},
+    {'1': 'AsOf', '3': 5, '4': 1, '5': 9, '10': 'AsOf'},
   ],
 };
 
 /// Descriptor for `Bandwidth`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List bandwidthDescriptor = $convert.base64Decode(
     'CglCYW5kd2lkdGgSGAoHcGVyY2VudBgBIAEoA1IHcGVyY2VudBIYCgdtaWJVc2VkGAIgASgDUg'
-    'dtaWJVc2VkEh4KCm1pYkFsbG93ZWQYAyABKANSCm1pYkFsbG93ZWQSHgoKdHRsU2Vjb25kcxgE'
-    'IAEoA1IKdHRsU2Vjb25kcw==');
+    'dtaWJVc2VkEh4KCm1pYkFsbG93ZWQYAyABKANSCm1pYkFsbG93ZWQSHgoKVFRMU2Vjb25kcxgE'
+    'IAEoA1IKVFRMU2Vjb25kcxISCgRBc09mGAUgASgJUgRBc09m');
 
 @$core.Deprecated('Use appDataDescriptor instead')
 const AppData$json = {

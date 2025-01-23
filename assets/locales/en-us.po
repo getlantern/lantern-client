@@ -1629,7 +1629,7 @@ msgid "try_lantern_pro"
 msgstr "Try Lantern for free! "
 
 msgid "continue_for_free"
-msgstr "Continue for Free "
+msgstr "Continue for Free"
 
 msgid "recovery_not_found"
 msgstr "Device not associated to this user"
@@ -1832,6 +1832,10 @@ msgstr "Socks Proxy copied"
 
 msgid "proxy_everything"
 msgstr "Proxy Everything"
+
+msgid "activation_lantern_pro_code"
+msgstr "Have a Lantern Pro activation code? Click here."
+
 
 msgid "errorSubmittingToGooglePlay"
 msgstr "We are currently experiencing difficulties processing your request for Google Play. Please try again later."

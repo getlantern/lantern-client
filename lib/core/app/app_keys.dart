@@ -11,6 +11,15 @@ class AppKeys {
 
   //Account Widget
   static const upgrade_lantern_pro = ValueKey('upgrade_lantern_pro');
+  static const inviteFriends = ValueKey('invite_friends');
+  static const devices = ValueKey('devices');
+  static const addDevices = ValueKey('add_devices');
+  static const signIn = ValueKey('sign_in');
+  static const desktopVersion = ValueKey('desktop_version');
+  static const followUs = ValueKey('follow_us');
+  static const setting = ValueKey('setting');
+  static const signOut = ValueKey('sign_out');
+
   static const account_management = ValueKey('account_management');
   static const account_renew = ValueKey('account_renew');
   static const support = ValueKey('support');
@@ -29,7 +38,27 @@ class AppKeys {
 
   //Support
   static const reportIssue = ValueKey('report_issue');
+  static const userForum = ValueKey('lantern_user_forum');
+  static const faq = ValueKey('faq');
   static const reportDescription = 'report_description';
   static const sendReport = 'send_report';
+
+  //Settings
+  static const language = ValueKey('language');
+  static const checkForUpdates = ValueKey('check_for_updates');
+  static const splitTunneling = ValueKey('split_tunnel');
+  static const privacyPolicy = ValueKey('privacy_policy');
+  static const termsOfServices = ValueKey('terms_of_services');
+  static const proxyAll = ValueKey('proxy_all');
+  static const proxySetting = ValueKey('proxy_setting');
+  static const chat = ValueKey('chat');
+
+  // Proxies setting
+  static const httpProxy = ValueKey('http_proxy');
+  static const socksProxy = ValueKey('socks_proxy');
+
+  //Auth
+  static const tryFreeLantern = ValueKey('try_free_lantern');
+
 }
 

@@ -107,7 +107,7 @@ func (m *VPNModel) UpdateBandwidth(percent int64, mibUsed int64, mibAllowed int6
 			Percent:    percent,
 			MibUsed:    mibUsed,
 			MibAllowed: mibAllowed,
-			TtlSeconds: ttlSeconds,
+			TTLSeconds: ttlSeconds,
 		}
 		return pathdb.Put(tx, pathBandwidth, bandwidth, "")
 	})

@@ -148,13 +148,17 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   mockito: ^5.4.4
   auto_route_generator: ^9.0.0
+
+  analyzer: ^6.7.0
+  golden_toolkit: ^0.15.0
+#  Testing
+  patrol: ^3.13.2
   build_runner: ^2.4.13
   msix: ^3.16.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-dependency_overrides:
 
 # The following section is specific to Flutter.
 flutter:
@@ -210,6 +214,17 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 
+
+# petrol configuration
+patrol:
+  app_name: Lantern
+  flavor: appiumTest
+  android:
+    package_name: org.getlantern.lantern
+  ios:
+    bundle_id: org.getlantern.lantern
+  macos:
+    bundle_id: org.getlantern.lantern
 #  Windows related setup
 msix_config:
   display_name: Lantern

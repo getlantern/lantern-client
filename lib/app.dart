@@ -11,7 +11,7 @@ import 'package:lantern/features/window/window_container.dart';
 import 'common/ui/custom/internet_checker.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
-final globalRouter = AppRouter();
+final globalRouter = sl<AppRouter>();
 final networkWarningBarHeightRatio = ValueNotifier(0.0);
 var showConnectivityWarning = false;
 
@@ -27,7 +27,7 @@ enum AppFontFamily {
 }
 
 class LanternApp extends StatefulWidget {
-  const LanternApp({Key? key}) : super(key: key);
+  const LanternApp({super.key});
 
   @override
   State<LanternApp> createState() => _LanternAppState();
@@ -49,8 +49,7 @@ class _LanternAppState extends State<LanternApp>
 
   void _animateNetworkWarning() {
     if (isMobile()) {
-      sessionModel.proxyAvailable
-          .addListener(toggleConnectivityWarningIfNecessary);
+      // sessionModel.proxyAvailable.addListener(toggleConnectivityWarningIfNecessary);
       networkWarningAnimationController = AnimationController(
         duration: shortAnimationDuration,
         vsync: this,
@@ -108,15 +107,15 @@ class _LanternAppState extends State<LanternApp>
       if (showConnectivityWarning) {
         networkWarningAnimationController.forward();
       } else {
-        print("networkWarningAnimationController reverse");
+
         networkWarningAnimationController.reverse();
       }
       // Update the state after running the animations.
     }
   }
 
-  Widget _buildMaterialApp(BuildContext context, String lang) {
-    final currentLocal = View.of(context).platformDispatcher.locale;
+  Widget _buildMaterialApp(
+      BuildContext context, String lang, Locale currentLocal) {
     final app = MaterialApp.router(
       locale: currentLocale(lang),
       debugShowCheckedModeBanner: false,
@@ -169,12 +168,12 @@ class _LanternAppState extends State<LanternApp>
   @override
   Widget build(BuildContext context) {
     final currentLocal = View.of(context).platformDispatcher.locale;
-    print('selected local: ${currentLocal.languageCode}');
+
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => BottomBarChangeNotifier()),
-        ChangeNotifierProvider(create: (context) => VPNChangeNotifier()),
-        ChangeNotifierProvider(create: (context) => InternetStatusProvider()),
+        ChangeNotifierProvider(create: (context) => sl<BottomBarChangeNotifier>()),
+        ChangeNotifierProvider(create: (context) => sl<VPNChangeNotifier>()),
+        ChangeNotifierProvider(create: (context) => sl<InternetStatusProvider>()),
       ],
       child: sessionModel.language(
         (context, lang, child) {
@@ -193,9 +192,7 @@ class _LanternAppState extends State<LanternApp>
             ),
             child: I18n(
               initialLocale: currentLocale(lang),
-              child: ScaffoldMessenger(
-                child: _buildMaterialApp(context, lang),
-              ),
+              child: _buildMaterialApp(context, lang, currentLocal),
             ),
           );
         },
@@ -206,7 +203,7 @@ class _LanternAppState extends State<LanternApp>
   DeepLink navigateToDeepLink(PlatformDeepLink deepLink) {
     logger.d("DeepLink configuration: ${deepLink.configuration.toString()}");
     if (deepLink.path.toLowerCase().startsWith('/report-issue')) {
-      logger.d("DeepLink uri: ${deepLink.uri.toString()}");
+      appLogger.d("DeepLink uri: ${deepLink.uri.toString()}");
       final pathUrl = deepLink.uri.toString();
       final segment = pathUrl.split('#');
       //If deeplink doesn't have data it should send to report issue with empty description'

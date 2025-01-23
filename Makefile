@@ -44,7 +44,7 @@ test:
 TEST ?= *_test
 
 # integration-test:
-# 	@flutter drive --driver test_driver/integration_driver.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
+# 	@flutter drive --driver test_driver/integration_test.dart --debug --flavor prod --target `ls integration_test/$(TEST).dart`
 
 APP ?= lantern
 CAPITALIZED_APP := Lantern
@@ -88,6 +88,7 @@ ADB       := $(call get-command,adb)
 OPENSSL   := $(call get-command,openssl)
 GMSAAS    := $(call get-command,gmsaas)
 SENTRY    := $(call get-command,sentry-cli)
+PATROL    := $(call get-command,patrol)
 BASE64    := $(call get-command,base64)
 
 GIT_REVISION_SHORTCODE := $(shell git rev-parse --short HEAD)
@@ -746,3 +747,86 @@ clean:
 	rm -f `which gomobile` && \
 	rm -f `which gobind`
 	rm -Rf "$(FLASHLIGHT_FRAMEWORK_PATH)" "$(INTERMEDIATE_FLASHLIGHT_FRAMEWORK_PATH)"
+
+
+# Test environment scripts and other utilities
+
+require-patrol:
+	@if [[ -z "$(PATROL)" ]]; then echo 'patrol-cli is not installed. Please install it with dart pub global activate patrol_cli'; exit 1; fi
+
+
+# Build android apk for test
+test-build-android:
+	@echo "Building apk for test..."
+	@patrol build android
+
+# Application test cases
+
+# Run all native tests
+nativeTest: require-patrol
+	@echo "Running native tests..."
+	patrol test --target integration_test/features/vpn/vpn_flow_test.dart --dart-define native=true --flavor=prod --verbose
+
+# Run specific native tests
+
+runNativeTest: require-patrol
+	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
+	echo "Running  patrol native tests on: $$ARGUMENTS" && \
+	patrol test --target $$ARGUMENTS --flavor=prod
+
+
+#Runs all integration tests
+appWorkflowTest:
+	@echo "Running all integration tests..."
+	patrol test
+
+
+# Run specific integration tests
+# Usage: make run-specific-integration-tests integration_test/app_startup_flow_test.dart
+runTest:
+	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
+	echo "Running tests on: $$ARGUMENTS" && \
+	patrol test --target $$ARGUMENTS
+
+
+#------- Desktop test and utils ------------
+
+# Run all workflow tests on desktop
+maOSWorkflowTest:
+	@echo "Running all integration tests..."
+	sh $(CURDIR)/integration_test/run_macos_test.sh
+
+linuxDesktopTest:
+	@echo "Running all integration tests..."
+	sh $(CURDIR)/integration_test/run_linux_test.sh
+
+windowsDesktopTest:
+	@echo "Running all integration tests..."
+	sh $(CURDIR)/integration_test/run_windows_test.sh
+
+# Run specific tests on desktop
+#you can pass DEVICE=<platform> (e.g., macOS, linux, windows)
+runDesktopTest:
+	@ARGUMENTS=$(filter-out $@,$(MAKECMDGOALS)); \
+	DEVICE=$(DEVICE); \
+	if [ -z "$$DEVICE" ]; then \
+		echo "Error: DEVICE is not specified. Use DEVICE=<platform> (e.g., macOS, linux, android)"; \
+		exit 1; \
+	fi; \
+	echo "Running tests on: $$ARGUMENTS" && \
+	flutter test $$ARGUMENTS -d $$DEVICE -r expanded
+
+
+# Run all android test on Firebase test lab
+ci-android-test:test-build-android
+	@echo "Running tests on Firebase test labs..."
+	sh $(CURDIR)/integration_test/run_android_testlabs.sh
+
+
+#Runs widget tets
+widget-tests:
+	@echo "Running widget tests..."
+	flutter test test/
+
+
+

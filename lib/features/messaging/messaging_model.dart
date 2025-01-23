@@ -3,7 +3,7 @@ import 'package:lantern/core/utils/common_desktop.dart';
 
 import 'messaging.dart';
 
-final messagingModel = MessagingModel();
+final messagingModel = sl<MessagingModel>();
 
 class MessagingModel extends Model {
   late LRUCache<StoredAttachment, Uint8List> _thumbnailCache;

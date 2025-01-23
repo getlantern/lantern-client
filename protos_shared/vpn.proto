@@ -12,7 +12,8 @@ message Bandwidth {
   int64 percent = 1; // [0, 100]
   int64 mibUsed = 2; // in MB
   int64 mibAllowed = 3; // in MB
-  int64 ttlSeconds = 4; // number of seconds left before data reset
+  int64 TTLSeconds = 4; // number of seconds left before data reset
+  string  AsOf =5;
 }
 
 message AppData {

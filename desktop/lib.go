@@ -53,8 +53,8 @@ func start() *C.char {
 	// Since Go 1.6, panic prints only the stack trace of current goroutine by
 	// default, which may not reveal the root cause. Switch to all goroutines.
 	debug.SetTraceback("all")
-
 	// Load application configuration from .env file
+	log.Debug("Loading .env file")
 	err := godotenv.Load()
 	if err != nil {
 		log.Errorf("Error loading .env file: %v", err)
@@ -62,6 +62,7 @@ func start() *C.char {
 		log.Debug("Successfully loaded .env file")
 	}
 
+	log.Debug("Logs directory: ")
 	_, err = logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 	if err != nil {
 		log.Error(err)

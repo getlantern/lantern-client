@@ -45,6 +45,7 @@ class AuthLanding extends StatelessWidget {
             const SizedBox(height: 32.0),
             if (!proUser)
               RichText(
+                key: AppKeys.tryFreeLantern,
                 text: TextSpan(
                   text: 'try_lantern_pro'.i18n,
                   style: tsBody1.copyWith(
@@ -72,17 +73,17 @@ class AuthLanding extends StatelessWidget {
 
   void openSignIn(BuildContext context, bool proUser) {
     if (proUser) {
-      context.router.popAndPush(SignIn(authFlow: AuthFlow.updateAccount));
+      appRouter.popAndPush(SignIn(authFlow: AuthFlow.updateAccount));
     } else {
-      context.router.popAndPush(SignIn(authFlow: AuthFlow.signIn));
+      appRouter.popAndPush(SignIn(authFlow: AuthFlow.signIn));
     }
   }
 
   void openPlans(BuildContext context, bool proUser) {
     if (proUser) {
-      context.router.popAndPush(SignIn(authFlow: AuthFlow.signIn));
+      appRouter.popAndPush(SignIn(authFlow: AuthFlow.signIn));
     } else {
-      context.router.popAndPush(const PlansPage());
+      appRouter.popAndPush(const PlansPage());
     }
   }
 }

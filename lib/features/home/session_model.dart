@@ -6,7 +6,7 @@ import 'package:lantern/features/replica/common.dart';
 import '../../core/utils/common.dart';
 import '../../core/utils/common_desktop.dart';
 
-final sessionModel = SessionModel();
+final sessionModel = sl<SessionModel>();
 
 const TAB_CHATS = 'chats';
 const TAB_VPN = 'vpn';
@@ -16,7 +16,8 @@ const TAB_ACCOUNT = 'account';
 const TAB_DEVELOPER = 'developer';
 
 class SessionModel extends Model {
-  late final EventManager eventManager;
+  final EventManager eventManager = EventManager('lantern_event_channel');
+
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   late ValueNotifier<bool?> isTestPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
@@ -40,7 +41,6 @@ class SessionModel extends Model {
 
   SessionModel() : super('session') {
     if (isMobile()) {
-      eventManager = EventManager('lantern_event_channel');
       isStoreVersion = singleValueNotifier(
         'storeVersion',
         false,
@@ -174,7 +174,7 @@ class SessionModel extends Model {
   Widget acceptedTermsVersion(ValueWidgetBuilder<int> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
-          builder: builder, defaultValue: 0);
+          builder: builder, defaultValue: isPatrolRunning() ? 1 : 0);
     }
     return configValueBuilder('accepted_terms_version', builder,
         (value) => value?.chat.acceptedTermsVersion ?? 0);
@@ -243,10 +243,8 @@ class SessionModel extends Model {
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
-      return subscribedSingleValueBuilder<String>(
-        'referral',
-        builder: builder,
-      );
+      return subscribedSingleValueBuilder<String>('referral',
+          builder: builder, defaultValue: '');
     }
     return FfiValueBuilder<String>('referralCode', referralNotifier, builder);
   }

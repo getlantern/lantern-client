@@ -973,7 +973,7 @@ func (m *SessionModel) BandwidthUpdate(p1 int, p2 int, p3 int, p4 int) error {
 		Percent:    int64(p1),
 		MibUsed:    int64(p2),
 		MibAllowed: int64(p3),
-		TtlSeconds: int64(p4),
+		TTLSeconds: int64(p4),
 	}
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathBandwidth, bandwidth, "")
@@ -1437,6 +1437,13 @@ func (session *SessionModel) userCreate(ctx context.Context) error {
 }
 
 func (session *SessionModel) userDetail(ctx context.Context) error {
+	userID, err := session.GetUserID()
+	if err != nil {
+		return log.Errorf("Error while getting user id %v", err)
+	}
+	if userID == 0 {
+		return log.Error("User id is 0")
+	}
 	resp, err := session.proClient.UserData(ctx)
 	if err != nil {
 		return nil
