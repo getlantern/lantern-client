@@ -40,7 +40,7 @@ jobs:
              echo "platform=desktop" >> "$GITHUB_OUTPUT"
           else
              echo "Platform determined: all (tag did not match specific platforms)"
-             echo "platform=all" >> "$GITHUB_OUTPUT"
+             echo "platform=android" >> "$GITHUB_OUTPUT"
            fi
           else
            echo "Not a tag reference, defaulting to all platforms"
