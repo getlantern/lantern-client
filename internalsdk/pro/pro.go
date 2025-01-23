@@ -74,10 +74,7 @@ func NewClient(baseURL string, userConfig func() common.UserConfig) ProClient {
 		userConfig:    userConfig,
 		backoffRunner: &backoffRunner{},
 		RESTClient: webclient.NewRESTClient(&webclient.Opts{
-			BaseURL: fmt.Sprintf("https://%s", common.ProAPIHost),
-			// The default http.RoundTripper used by the ProClient is ParallelForIdempotent which
-			// attempts to send requests through both chained and direct fronted routes in parallel
-			// for HEAD and GET requests and ChainedThenFronted for all others.
+			BaseURL:    fmt.Sprintf("https://%s", common.ProAPIHost),
 			HttpClient: httpClient,
 			OnBeforeRequest: func(client *resty.Client, req *http.Request) error {
 				return prepareProRequest(req, common.ProAPIHost, userConfig())
