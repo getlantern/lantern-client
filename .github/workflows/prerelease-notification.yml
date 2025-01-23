@@ -2,10 +2,10 @@ name: Prerelease Notification
 
 on:
   workflow_run:
-#    workflows:
-#      - Publish releases
-#    types:
-#      - completed
+    workflows:
+      - Publish releases
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
@@ -53,11 +53,11 @@ jobs:
         run: |
           echo "REPO_NAME=$(echo ${{ github.repository }} | sed s/'${{ github.repository_owner }}\/'//g)" >> "$GITHUB_OUTPUT"
 
-#      - name: Send Slack message to Releases channel
-#        env:
-#          platform: ${{ steps.set-platform.outputs.platform }}
-#        if: ${{ steps.exists.outputs.EXISTING < 1 }}
-#        run: |
-#          curl -X POST -H 'Content-type: application/json' \
-#            --data "{\"repo\": \"${{ steps.repo.outputs.REPO_NAME }}\",\"platform\": \"${{ env.platform }}\", \"version\": \"${{ github.ref_name }}\"}" \
-#            ${{ secrets.SLACK_RELEASES_WEBHOOK }}
+      - name: Send Slack message to Releases channel
+        env:
+          platform: ${{ steps.set-platform.outputs.platform }}
+        if: ${{ steps.exists.outputs.EXISTING < 1 }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data "{\"repo\": \"${{ steps.repo.outputs.REPO_NAME }}\",\"platform\": \"${{ env.platform }}\", \"version\": \"${{ github.ref_name }}\"}" \
+            ${{ secrets.SLACK_RELEASES_WEBHOOK }}
