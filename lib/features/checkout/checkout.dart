@@ -1,6 +1,7 @@
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/core/utils/utils.dart';
+import 'package:lantern/core/widgtes/tos.dart';
 import 'package:lantern/features/checkout/payment_provider.dart';
 import 'package:retry/retry.dart';
 
@@ -139,6 +140,8 @@ class _CheckoutState extends State<Checkout>
                     ),
                   ),
                 const Spacer(),
+                const TOS(),
+                const SizedBox(height: 20),
                 Tooltip(
                   message: AppKeys.continueCheckout,
                   child: SizedBox(

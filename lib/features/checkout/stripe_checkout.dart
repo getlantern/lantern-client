@@ -188,7 +188,6 @@ class _StripeCheckoutState extends State<StripeCheckout> {
                     refCode: widget.refCode,
                     isPro: widget.isPro,
                   ),
-                  const TOS(),
                   const SizedBox(height: 16),
                   checkoutButton(),
                 ],
