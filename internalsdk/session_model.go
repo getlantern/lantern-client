@@ -682,6 +682,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		m.checkAvailableFeatures()
 		return true, nil
 
+	case "replicaAddr":
+		return m.getReplicaAddr(), nil
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -1251,6 +1253,13 @@ func (m *SessionModel) SetReplicaAddr(replicaAddr string) {
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathReplicaAddr, replicaAddr, "")
 	}))
+}
+func (m *SessionModel) getReplicaAddr() string {
+	address, err := pathdb.Get[string](m.db, pathReplicaAddr)
+	if err != nil {
+		return ""
+	}
+	return address
 }
 
 func (m *SessionModel) ForceReplica() bool {
@@ -2367,12 +2376,13 @@ func (session *SessionModel) appsAllowedAccess() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	strSlice := make([]string, len(installedApps))
-	for i, v := range installedApps {
-		strSlice[i] = fmt.Sprint(v.Value.PackageName)
+	var allowedAccess []string
+	for _, v := range installedApps {
+		if v.Value.AllowedAccess {
+			allowedAccess = append(allowedAccess, v.Value.PackageName)
+		}
 	}
-	return strings.Join(strSlice, ","), nil
-
+	return strings.Join(allowedAccess, ","), nil
 }
 
 // Define the struct to match the JSON structure

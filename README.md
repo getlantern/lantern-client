@@ -92,6 +92,8 @@ All these dependencies must be in your PATH. Some of this is Android specific, s
 * `flutter pub get`
 * `flutter run --flavor prod`
 
+**Note**: To get Go logs on iOS, run `xcrun simctl get_app_container booted org.getlantern.lantern group.getlantern.lantern` and look in the `app` subdirectory
+
 **Note**: If you're using an M1 or M2 chip, navigate to the ios folder and run `arch -x86_64 pod install`
 
 ### 💻 Running the Project on Desktop
