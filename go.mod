@@ -2,12 +2,12 @@ module github.com/getlantern/lantern-client
 
 go 1.22.4
 
-replace github.com/getlantern/flashlight/v7 => ../flashlight
+//replace github.com/getlantern/flashlight/v7 => ../flashlight
 
 // replace github.com/getlantern/ipproxy => ../ipproxy
-replace github.com/getlantern/kindling => ../kindling
+//replace github.com/getlantern/kindling => ../kindling
 
-replace github.com/getlantern/fronted => ../fronted
+//replace github.com/getlantern/fronted => ../fronted
 
 // replace github.com/getlantern/pathdb => ../pathDb/pathDb
 
