@@ -29,6 +29,9 @@ class SurveyService {
   final int _VPNCONNECTED_COUNT = 10;
 
   SurveyService() {
+    if (Platform.isWindows || Platform.isLinux) {
+      return;
+    }
     _createConfigIfNeeded();
     countryListener();
   }
@@ -104,6 +107,9 @@ class SurveyService {
   }
 
   Widget surveyWidget() {
+    if (Platform.isWindows || Platform.isLinux) {
+      return const SizedBox();
+    }
     return spotCheck!;
   }
 

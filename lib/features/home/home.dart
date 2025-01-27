@@ -45,6 +45,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> checkIfSurveyIsAvailable() async {
+    if (Platform.isWindows || Platform.isLinux) {
+      //Survey sparrow does not support windows and linux
+      return;
+    }
     if (await surveyService.surveyAvailable()) {
       surveyService.trackScreen(SurveyScreens.homeScreen);
     }
