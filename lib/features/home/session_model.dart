@@ -55,7 +55,7 @@ class SessionModel extends Model {
       * So show banner only if proxyAvailable is false
       */
       proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
-      country = singleValueNotifier('geo_country_code', 'US');
+      country = singleValueNotifier('geo_country_code', '');
 
       /// This warning is not needed for the Non pro user
       /// This flow is not needed anymore

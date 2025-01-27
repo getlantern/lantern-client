@@ -5,129 +5,106 @@ import '../utils/common.dart';
 
 enum SurveyScreens { homeScreen }
 
+enum SurveyCountry {
+  russia('ru'),
+  belarus('by'),
+  ukraine('ua'),
+  china('cn'),
+  iran('ir'),
+  uae('uae'),
+  myanmar('mm'),
+  testing('testing');
+
+  const SurveyCountry(this.countryCode);
+
+  final String countryCode;
+}
+
 //This class use spot check service for survey
 class SurveyService {
   // Need to have spot check for each region
   // Russia, Belarus, Ukraine, China, Iran, UAE, Myanmar
 
+  SpotCheck? spotCheck;
   final int _VPNCONNECTED_COUNT = 10;
-
-  final SpotCheck _testingSpotCheck = SpotCheck(
-    domainName: "lantern.surveysparrow.com",
-    targetToken: AppSecret.testingSpotCheckTargetToken,
-    userDetails: {},
-    sparrowLang: Localization.locale.split('_').first,
-  );
-
-  final SpotCheck _russiaSpotCheck = SpotCheck(
-      domainName: "lantern.surveysparrow.com",
-      targetToken: AppSecret.russiaSpotCheckTargetToken,
-      // Should Not Pass userDetails as const
-      userDetails: {});
-
-  final SpotCheck _iranSpotCheck = SpotCheck(
-      domainName: "lantern.surveysparrow.com",
-      targetToken: AppSecret.iranSpotCheckTargetToken,
-      // Should Not Pass userDetails as const
-      userDetails: {});
-
-  final SpotCheck _ukraineSpotCheck = SpotCheck(
-      domainName: "lantern.surveysparrow.com",
-      targetToken: AppSecret.ukraineSpotCheckTargetToken,
-      // Should Not Pass userDetails as const
-      userDetails: {});
-  final SpotCheck _belarusSpotCheck = SpotCheck(
-      domainName: "lantern.surveysparrow.com",
-      targetToken: AppSecret.belarusSpotCheckTargetToken,
-      // Should Not Pass userDetails as const
-      userDetails: {});
-
-  final SpotCheck _chinaSpotCheck = SpotCheck(
-      domainName: "lantern.surveysparrow.com",
-      targetToken: AppSecret.chinaSpotCheckTargetToken,
-      // Should Not Pass userDetails as const
-      userDetails: {});
-
-  final SpotCheck _UAEspotCheck = SpotCheck(
-      domainName: "lantern.surveysparrow.com",
-      targetToken: AppSecret.UAEspotCheckTargetToken,
-      // Should Not Pass userDetails as const
-      userDetails: {});
-
-  final SpotCheck _myanmarSpotCheck = SpotCheck(
-      domainName: "lantern.surveysparrow.com",
-      targetToken: AppSecret.myanmarSpotCheckTargetToken,
-      // Should Not Pass userDetails as const
-      userDetails: {});
 
   SurveyService() {
     _createConfigIfNeeded();
+    countryListener();
+  }
+
+  void countryListener() {
+    if (sessionModel.country.value!.isNotEmpty) {
+      createSpotCheckByCountry(sessionModel.country.value!.toLowerCase());
+      return;
+    }
+    sessionModel.country.addListener(() {
+      final country = sessionModel.country.value;
+      appLogger.d('Country listener $country');
+      if (country != null && country.isNotEmpty) {
+        appLogger.d('Country found  $country');
+        createSpotCheckByCountry(country.toLowerCase());
+        sessionModel.country
+            .removeListener(() {}); // Remove listener after getting value
+      }
+    });
+  }
+
+  //Create method to create spot check by country
+  //argument by string and use enum for country
+  //make sure when create country should not be null or empty
+  SpotCheck createSpotCheckByCountry(String country) {
+    appLogger.d('Create spot check for country $country');
+    if (spotCheck != null) {
+      return spotCheck!;
+    }
+    final surveyCountry = SurveyCountry.values.firstWhere(
+      (e) => e.countryCode == country,
+      orElse: () => SurveyCountry.testing,
+    );
+    String targetToken;
+    switch (surveyCountry) {
+      case SurveyCountry.russia:
+        targetToken = AppSecret.russiaSpotCheckTargetToken;
+        break;
+      case SurveyCountry.belarus:
+        targetToken = AppSecret.belarusSpotCheckTargetToken;
+        break;
+      case SurveyCountry.ukraine:
+        targetToken = AppSecret.ukraineSpotCheckTargetToken;
+        break;
+      case SurveyCountry.china:
+        targetToken = AppSecret.chinaSpotCheckTargetToken;
+        break;
+      case SurveyCountry.iran:
+        targetToken = AppSecret.iranSpotCheckTargetToken;
+        break;
+      case SurveyCountry.uae:
+        targetToken = AppSecret.UAEspotCheckTargetToken;
+        break;
+      case SurveyCountry.myanmar:
+        targetToken = AppSecret.myanmarSpotCheckTargetToken;
+        break;
+      case SurveyCountry.testing:
+      default:
+        targetToken = AppSecret.testingSpotCheckTargetToken;
+        appLogger.d('${country.toUpperCase()} not found, using testing token');
+        break;
+    }
+    spotCheck = SpotCheck(
+        domainName: "lantern.surveysparrow.com",
+        targetToken: targetToken,
+        userDetails: {});
+    return spotCheck!;
   }
 
   void trackScreen(SurveyScreens screen) {
-    switch (sessionModel.country.value?.toLowerCase()) {
-      case 'ru':
-        //Russia
-        _russiaSpotCheck.trackScreen(screen.name);
-        break;
-      case 'ir':
-        //Iran
-        _iranSpotCheck.trackScreen(screen.name);
-        break;
-      case 'by':
-        //Belarus
-        _belarusSpotCheck.trackScreen(screen.name);
-        break;
-      case 'ua':
-        //Ukraine
-        _ukraineSpotCheck.trackScreen(screen.name);
-        break;
-      case 'cn':
-        //China
-        _chinaSpotCheck.trackScreen(screen.name);
-        break;
-      case 'mm':
-        //Myanmar
-        _myanmarSpotCheck.trackScreen(screen.name);
-        break;
-      case 'uae':
-        //UAE
-        _UAEspotCheck.trackScreen(screen.name);
-        break;
-      // This is just for testing
-      default:
-        _testingSpotCheck.trackScreen(screen.name);
-        break;
-    }
+    appLogger.d('Track screen $screen');
+    spotCheck?.trackScreen(screen.name);
   }
 
   Widget surveyWidget() {
-    switch (sessionModel.country.value?.toLowerCase()) {
-      case 'ru':
-        //Russia
-        return _russiaSpotCheck;
-      case 'ir':
-        //Iran
-        return _iranSpotCheck;
-      case 'by':
-        //Belarus
-        return _belarusSpotCheck;
-      case 'ua':
-        //Ukraine
-        return _ukraineSpotCheck;
-      case 'cn':
-        //China
-        return _chinaSpotCheck;
-      case 'mm':
-        //Myanmar
-        return _myanmarSpotCheck;
-      case 'uae':
-        //UAE
-        return _UAEspotCheck;
-      // This is just for testing
-      default:
-        return _testingSpotCheck;
-    }
+    return spotCheck!;
   }
 
   Future<String> get _surveyConfigPath async {
@@ -165,12 +142,12 @@ class SurveyService {
             (surveyConfig['vpnConnectCount'] ?? 0) + 1;
         final updatedJsonString = jsonEncode(surveyConfig);
         await file.writeAsString(updatedJsonString);
-        appLogger.d('vpnConnectCount updated successfully.');
+        appLogger.i('vpnConnectCount updated successfully.');
       } else {
-        appLogger.d('File does not exist. No changes were made.');
+        appLogger.i('File does not exist. No changes were made.');
       }
     } catch (e) {
-      appLogger.d('Failed to update vpnConnectCount: $e');
+      appLogger.i('Failed to update vpnConnectCount: $e');
     }
   }
 
@@ -182,15 +159,15 @@ class SurveyService {
         final content = await file.readAsString();
         final Map<String, dynamic> surveyConfig = jsonDecode(content);
         final vpnConnectCount = surveyConfig['vpnConnectCount'] ?? 0;
-        appLogger.d('Survey config. ${surveyConfig.toString()}');
+        appLogger.i('Survey config. ${surveyConfig.toString()}');
         if (vpnConnectCount >= _VPNCONNECTED_COUNT) {
           appLogger.d('Survey is available.');
           return true;
         }
-        appLogger.d('Survey is not available.');
+        appLogger.i('Survey is not available.');
         return false;
       } else {
-        appLogger.d('Survey config file does not exist.');
+        appLogger.i('Survey config file does not exist.');
         return false;
       }
     } catch (e) {

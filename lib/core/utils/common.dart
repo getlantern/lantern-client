@@ -128,6 +128,7 @@ final appLogger = Logger(
     errorMethodCount: 5,
     colors: true,
     printEmojis: true,
+
   ),
   level: Level.debug,
 );
