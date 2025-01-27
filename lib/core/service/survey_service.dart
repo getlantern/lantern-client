@@ -119,7 +119,6 @@ class SurveyService {
     try {
       if (!await file.exists()) {
         await file.create(recursive: true);
-
         const surveyConfig = {"vpnConnectCount": 0};
         final jsonString = jsonEncode(surveyConfig);
         await file.writeAsString(jsonString);
@@ -132,20 +131,14 @@ class SurveyService {
 
   Future<void> incrementVpnConnectCount() async {
     try {
-      final filePath = await _surveyConfigPath;
-      final file = File(filePath);
-      if (await file.exists()) {
-        final content = await file.readAsString();
-        final surveyConfig = jsonDecode(content) as Map<String, dynamic>;
-        // Increment the vpnConnectCount field
-        surveyConfig['vpnConnectCount'] =
-            (surveyConfig['vpnConnectCount'] ?? 0) + 1;
-        final updatedJsonString = jsonEncode(surveyConfig);
-        await file.writeAsString(updatedJsonString);
-        appLogger.i('vpnConnectCount updated successfully.');
-      } else {
-        appLogger.i('File does not exist. No changes were made.');
-      }
+      final content = await readSurveyConfig();
+      final surveyConfig = jsonDecode(content.$2) as Map<String, dynamic>;
+      // Increment the vpnConnectCount field
+      surveyConfig['vpnConnectCount'] =
+          (surveyConfig['vpnConnectCount'] ?? 0) + 1;
+      final updatedJsonString = jsonEncode(surveyConfig);
+      await content.$1.writeAsString(updatedJsonString);
+      appLogger.i('vpnConnectCount updated successfully.');
     } catch (e) {
       appLogger.i('Failed to update vpnConnectCount: $e');
     }
@@ -153,26 +146,27 @@ class SurveyService {
 
   Future<bool> surveyAvailable() async {
     try {
-      final filePath = await _surveyConfigPath;
-      final file = File(filePath);
-      if (await file.exists()) {
-        final content = await file.readAsString();
-        final Map<String, dynamic> surveyConfig = jsonDecode(content);
-        final vpnConnectCount = surveyConfig['vpnConnectCount'] ?? 0;
-        appLogger.i('Survey config. ${surveyConfig.toString()}');
-        if (vpnConnectCount >= _VPNCONNECTED_COUNT) {
-          appLogger.d('Survey is available.');
-          return true;
-        }
-        appLogger.i('Survey is not available.');
-        return false;
-      } else {
-        appLogger.i('Survey config file does not exist.');
-        return false;
+      final content = await readSurveyConfig();
+      final Map<String, dynamic> surveyConfig = jsonDecode(content.$2);
+      final vpnConnectCount = surveyConfig['vpnConnectCount'] ?? 0;
+      appLogger.i('Survey config. ${surveyConfig.toString()}');
+      if (vpnConnectCount >= _VPNCONNECTED_COUNT) {
+        appLogger.d('Survey is available.');
+        return true;
       }
+      appLogger.i('Survey is not available.');
+      return false;
     } catch (e) {
       appLogger.e('Failed to check survey availability: $e');
       return false;
     }
+  }
+
+  //this read survey config method will return file and string
+  Future<(File, String)> readSurveyConfig() async {
+    final filePath = await _surveyConfigPath;
+    final file = File(filePath);
+    final content = await file.readAsString();
+    return (file, content);
   }
 }
