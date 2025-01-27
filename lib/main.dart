@@ -4,10 +4,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
-import 'package:lantern/core/service/app_purchase.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/replica/ui/utils.dart';
+import 'package:lantern/features/window/windows_protocol_registry.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -31,7 +31,11 @@ Future<void> main() async {
   }
 
   if (isDesktop()) {
-    if (Platform.isWindows) await initializeWebViewEnvironment();
+    if (Platform.isWindows){
+      await initializeWebViewEnvironment();
+      ProtocolRegistrar.instance.register('lantern');
+      ProtocolRegistrar.instance.register('Lantern');
+    }
     await windowManager.ensureInitialized();
     await windowManager.setSize(const ui.Size(360, 712));
     LanternFFI.startDesktopService();
