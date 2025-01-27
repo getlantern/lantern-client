@@ -42,6 +42,7 @@ class AppOpenAdsProvider implements AdsProvider {
               onAdDismissedFullScreenContent: (ad) {
                 isAdsShown = true;
                 adsLogger.i('[Ads Manager] fullScreenContentCallback callback');
+                dispose();
               },
             );
             _appOpenAd = ad;
@@ -74,7 +75,9 @@ class AppOpenAdsProvider implements AdsProvider {
 
   @override
   Future<void> dispose() async {
+    adsLogger.i("[Ads Manager] Disposing app open ad");
     await _appOpenAd?.dispose();
+    _appOpenAd = null;
   }
 
   String appOpenAdUnitId =

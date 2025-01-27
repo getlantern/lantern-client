@@ -46,6 +46,7 @@ class InterstitialAdProvider implements AdsProvider {
               onAdDismissedFullScreenContent: (ad) {
                 isAdsShown = true;
                 adsLogger.i('[Ads Manager] fullScreenContentCallback callback');
+                dispose();
               },
             );
             _interstitialAd = ad;
@@ -78,7 +79,9 @@ class InterstitialAdProvider implements AdsProvider {
 
   @override
   Future<void> dispose() async {
+    adsLogger.i("[Ads Manager] Disposing app open ad");
     await _interstitialAd?.dispose();
+    _interstitialAd = null;
   }
 
   String get interstitialAdUnitId {
