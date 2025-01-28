@@ -128,10 +128,9 @@ final appLogger = Logger(
     errorMethodCount: 5,
     colors: true,
     printEmojis: true,
-    printTime: true,
+
   ),
-  filter: ProductionFilter(),
-  output: ConsoleOutput(),
+  level: Level.debug,
 );
 
 bool isMobile() {

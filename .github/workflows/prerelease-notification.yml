@@ -1,15 +1,20 @@
 name: Prerelease Notification
 
 on:
-  workflow_run:
-    workflows:
-      - Publish releases
-    types:
-      - completed
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      platform:
+        type: string
+        required: true
 
 jobs:
   create-release:
+    env:
+      version: ${{ inputs.version }}
+      platform: ${{ inputs.platform }}
     runs-on: ubuntu-latest
     steps:
       - name: Check if release already exists
@@ -33,5 +38,5 @@ jobs:
         if: ${{ steps.exists.outputs.EXISTING < 1 }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
-            --data "{\"platform\": \"${{ steps.repo.outputs.REPO_NAME }}\", \"version\": \"${{ github.ref_name }}\"}" \
+            --data "{\"repo\": \"${{ steps.repo.outputs.REPO_NAME }}\",\"platform\": \"${{ env.platform }}\", \"version\": \"${{ env.version }}\"}" \
             ${{ secrets.SLACK_RELEASES_WEBHOOK }}

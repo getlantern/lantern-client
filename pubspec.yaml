@@ -124,7 +124,11 @@ dependencies:
   in_app_purchase: ^3.2.0
 
   # Ads
-  google_mobile_ads: ^5.2.0
+  google_mobile_ads:
+    git:
+      url: https://github.com/googleads/googleads-mobile-flutter
+      ref: 6aa897e3dcc2b2d97f4df61192b015388ce876d6
+      path: packages/google_mobile_ads
 
   retry: ^3.1.2
   # Generate bindings to native libraries
@@ -136,6 +140,8 @@ dependencies:
   #Loading
   animated_loading_border: ^0.0.2
   shimmer: ^3.0.0
+  # Survey sdk
+  surveysparrow_flutter_sdk: ^1.2.1
 
 dev_dependencies:
   integration_test:
@@ -144,7 +150,7 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  ffigen: ^16.0.0
+  ffigen: ^16.1.0
   flutter_lints: ^5.0.0
   mockito: ^5.4.4
   auto_route_generator: ^9.0.0

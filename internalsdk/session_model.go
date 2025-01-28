@@ -683,6 +683,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		m.checkAvailableFeatures()
 		return true, nil
 
+	case "replicaAddr":
+		return m.getReplicaAddr(), nil
 	default:
 		return m.methodNotImplemented(method)
 	}
@@ -1256,6 +1258,13 @@ func (m *SessionModel) SetReplicaAddr(replicaAddr string) {
 	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathReplicaAddr, replicaAddr, "")
 	}))
+}
+func (m *SessionModel) getReplicaAddr() string {
+	address, err := pathdb.Get[string](m.db, pathReplicaAddr)
+	if err != nil {
+		return ""
+	}
+	return address
 }
 
 func (m *SessionModel) ForceReplica() bool {
