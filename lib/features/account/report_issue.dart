@@ -7,7 +7,7 @@ import 'package:lantern/core/utils/common.dart';
 class ReportIssue extends StatefulWidget {
   final String? description;
 
-  const ReportIssue({Key? key, this.description}) : super(key: key);
+  const ReportIssue({super.key, this.description});
 
   @override
   State<ReportIssue> createState() => _ReportIssueState();

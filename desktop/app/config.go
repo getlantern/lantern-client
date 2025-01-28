@@ -50,6 +50,7 @@ type ConfigOptions struct {
 	ExpirationDate       string                 `json:"expirationDate"`
 	Chat                 ChatOptions            `json:"chat"`
 	ProxyAll             bool                   `json:"proxyAll"`
+	Country              string                 `json:"country"`
 }
 
 func (s *configService) StartService(channel ws.UIChannel) (err error) {
@@ -105,6 +106,7 @@ func (app *App) sendConfigOptions() {
 		ExpirationDate:       app.settings.GetExpirationDate(),
 		Devices:              app.devices(),
 		ProxyAll:             app.settings.GetProxyAll(),
+		Country:              app.settings.GetCountry(),
 		Chat: ChatOptions{
 			AcceptedTermsVersion: 0,
 			OnBoardingStatus:     false,
