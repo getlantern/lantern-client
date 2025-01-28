@@ -3,7 +3,6 @@ import 'dart:ui' as ui;
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/core/service/ad_service.dart';
-import 'package:lantern/core/helpers/ad_helper.dart';
 import 'package:lantern/core/service/survey_service.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';

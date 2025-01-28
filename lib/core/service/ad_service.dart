@@ -2,16 +2,17 @@ import 'package:lantern/core/ads/ads_provider.dart';
 import 'package:lantern/core/ads/app_open_ads_provider.dart';
 import 'package:lantern/core/ads/interstitial_ad_provider.dart';
 import 'package:lantern/core/utils/common.dart';
-import 'package:lantern/features/replica/common.dart';
 
 enum _AdsFormat { interstitial, appOpen }
 
 class AdsService {
-
   final interstitialAdsService = InterstitialAdProvider();
   final appOpenAdsService = AppOpenAdsProvider();
 
-  Future<bool> isAdsReadyToShow() async {
+  bool isAdsReadyToShow()  {
+    if (appOpenAdsService.isAdReady()) {
+      return true;
+    }
     return interstitialAdsService.isAdReady();
   }
 
