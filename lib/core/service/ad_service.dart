@@ -21,14 +21,16 @@ class AdsService {
       adsLogger.i("[Ads Manager] Provider is empty do not show ads");
       return;
     }
+    /// This is just for testing purpose
+    await appOpenAdsService.loadAd(showAds);
 
-    if (provider == _AdsFormat.interstitial.name) {
-      adsLogger.i("[Ads Manager] Loading interstitial Ads");
-      await interstitialAdsService.loadAd(showAds);
-    } else if (provider == _AdsFormat.appOpen.name) {
-      adsLogger.i("[Ads Manager] Loading appOpen Ads");
-      await appOpenAdsService.loadAd(showAds);
-    }
+    // if (provider == _AdsFormat.interstitial.name) {
+    //   adsLogger.i("[Ads Manager] Loading interstitial Ads");
+    //   await interstitialAdsService.loadAd(showAds);
+    // } else if (provider == _AdsFormat.appOpen.name) {
+    //   adsLogger.i("[Ads Manager] Loading appOpen Ads");
+    //   await appOpenAdsService.loadAd(showAds);
+    // }
   }
 
   Future<void> showAds() async {
