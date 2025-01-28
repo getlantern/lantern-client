@@ -33,17 +33,16 @@ class SurveyService {
       return;
     }
     _createConfigIfNeeded();
-    countryListener();
+    _countryListener();
   }
 
-  void countryListener() {
+  void _countryListener() {
     if (sessionModel.country.value!.isNotEmpty) {
       createSpotCheckByCountry(sessionModel.country.value!.toLowerCase());
       return;
     }
     sessionModel.country.addListener(() {
       final country = sessionModel.country.value;
-      appLogger.d('Country listener $country');
       if (country != null && country.isNotEmpty) {
         appLogger.d('Country found  $country');
         createSpotCheckByCountry(country.toLowerCase());
