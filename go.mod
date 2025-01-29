@@ -40,8 +40,8 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.180-0.20250129183022-85657592ddf6
-	github.com/getlantern/fronted v0.0.0-20250129182918-a9a66b5c05e8
+	github.com/getlantern/flashlight/v7 v7.6.180-0.20250129184939-e6d230be1238
+	github.com/getlantern/fronted v0.0.0-20250129184840-abcec12f754e
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
@@ -93,7 +93,7 @@ require (
 	github.com/cloudflare/circl v1.5.0 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
 	github.com/containerd/console v1.0.3 // indirect
-	github.com/getlantern/kindling v0.0.0-20250129182957-709a57974be9 // indirect
+	github.com/getlantern/kindling v0.0.0-20250129184912-6fb98583d540 // indirect
 	github.com/getlantern/lantern-water v0.0.0-20241218135103-60224336cf1d // indirect
 	github.com/getlantern/sing-vmess v0.0.0-20241209111030-0f2c02b4eb9a // indirect
 	github.com/goccy/go-yaml v1.15.13 // indirect
