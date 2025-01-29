@@ -208,14 +208,12 @@ jobs:
           debugSymbols: debug-symbols.zip
           mappingFile: mapping.txt
 
-      - name: Push binaries to S3
+      - name: Upload binaries to S3
         if: env.platform == 'desktop' || env.platform == 'all'
         env:
           macos_dist: "${{ env.prefix }}-${{ env.version }}.dmg"
           windows_dist: "${{env.prefix}}-${{env.version}}-${{env.dist-suffix}}.exe"
           windows_dist_versionless: "${{env.prefix}}-${{env.dist-suffix}}.exe"
-          windows_update: "lantern_update_windows_${{env.dist-suffix}}-${{env.version}}.bz2"
-          linux_dist_source: "${{env.prefix}}-${{env.dist-suffix}}.deb"
           linux_dist: "${{env.prefix}}-${{env.version}}-64-bit.deb"
           linux_dist_versionless: "${{env.prefix}}-64-bit.deb"
         run: |
@@ -223,9 +221,9 @@ jobs:
           mv lantern-installer.dmg ${{ env.macos_dist }}
           cp ${{ env.macos_dist }} ${{ env.prefix }}.dmg
           echo ${{ env.version }} > ${{ env.version_file }}
-          shasum -a 256 "$DMG" | cut -d " " -f 1 > "$DMG".sha256
-          cp "$DMG".sha256 ${{ env.prefix }}.dmg.sha256
-          s3cmd put --acl-public "$DMG" ${{ env.version_file }} "$DMG".sha256 ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
+          shasum -a 256 ${{ env.macos_dist }} | cut -d " " -f 1 > ${{ env.macos_dist }}.sha256
+          cp ${{ env.macos_dist }}.sha256 ${{ env.prefix }}.dmg.sha256
+          s3cmd put --acl-public ${{ env.macos_dist }} ${{ env.version_file }} ${{ env.macos_dist }}.sha256 ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
 
           # Windows
           mv lantern-installer-x64.exe ${{ env.windows_dist }}
@@ -237,8 +235,8 @@ jobs:
           s3cmd put --acl-public ${{ env.windows_dist }} ${{ env.windows_dist }}.sha256 ${{ env.windows_dist_versionless }}.sha256 ${{ env.windows_dist_versionless }} "s3://lantern"
 
           # Linux
-          mv ${{ env.linux_dist_source }} ${{ env.linux_dist }}
-          mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
+          mv lantern-installer-x64.deb ${{ env.linux_dist }}
+          mv lantern-installer-x64.rpm ${{ env.prefix }}.rpm
           cp ${{ env.linux_dist }} ${{ env.linux_dist_versionless }}
 
           shasum -a 256 ${{ env.linux_dist }} | cut -d " " -f 1 > ${{ env.linux_dist }}.sha256
