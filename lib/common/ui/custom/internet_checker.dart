@@ -1,3 +1,4 @@
+import 'package:dart_ping/dart_ping.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../../../core/utils/common.dart';
@@ -43,24 +44,9 @@ class InternetStatusProvider extends ChangeNotifier {
   bool _isConnected = true;
   late StreamSubscription<InternetStatus> _connectionSubscription;
   bool _isDisconnected = false;
-  final List<InternetCheckOption> _defaultCheckOptions = [
-    InternetCheckOption(
-      uri: Uri.parse('https://icanhazip.com/'),
-      timeout: const Duration(seconds: 5),
-    ),
-    InternetCheckOption(
-      uri: Uri.parse('https://jsonplaceholder.typicode.com/todos/1'),
-      timeout: const Duration(seconds: 5),
-    ),
-    InternetCheckOption(
-      uri: Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=1'),
-      timeout: const Duration(seconds: 5),
-    ),
-    InternetCheckOption(
-      uri: Uri.parse('https://reqres.in/api/users/1'),
-      timeout: const Duration(seconds: 5),
-    ),
-  ];
+
+  /// All website are working in Russia
+  /// confirmed by oxylabs proxies
 
   /// Using debounce to avoid flickering when the connection is unstable
   final _debounceDuration = Duration(seconds: Platform.isIOS ? 4 : 2);
@@ -69,20 +55,43 @@ class InternetStatusProvider extends ChangeNotifier {
   InternetStatusProvider() {
     // Listen for connection status changes
     _connectionSubscription = InternetConnection.createInstance(
-            checkInterval: const Duration(seconds: 10),
-            useDefaultOptions: false,
-            customCheckOptions: _defaultCheckOptions)
-        .onStatusChange
-        .listen((status) {
+      checkInterval: const Duration(seconds: 5),
+      useDefaultOptions: false,
+      customCheckOptions: getRegionSpecificCheckOptions(),
+    ).onStatusChange.listen((status) async {
       if (status == InternetStatus.connected) {
         _handleConnected();
       } else {
+        // Check from different ping servers
+        // to make sure internet is working or not
+        if ((await pingServers())) {
+          _handleConnected();
+          return;
+        }
         _handleDisconnected();
       }
     });
   }
 
   bool get isConnected => _isConnected;
+
+  ///Another check on top of internet connection checker
+  ///to ping some of the popular websites
+  Future<bool> pingServers() async {
+    final List<String> pingAddresses = [
+      '8.8.8.8',
+      '1.1.1.1',
+      '114.114.114.114'
+    ]; // Google, Cloudflare, China DNS
+    for (String address in pingAddresses) {
+      final ping = Ping(address, count: 2);
+      final result = await ping.stream.toList();
+      if (result.any((res) => res.response != null)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   Future<void> checkInternetConnection() async {
     // Check the internet connection status
@@ -123,5 +132,45 @@ class InternetStatusProvider extends ChangeNotifier {
     _connectionSubscription.cancel();
     _cancelDebounceTimer();
     super.dispose();
+  }
+
+  List<InternetCheckOption> getRegionSpecificCheckOptions() {
+    if (sessionModel.country.value!.isRussia()) {
+      return [
+        InternetCheckOption(
+          uri: Uri.parse('https://yandex.ru'),
+          timeout: const Duration(seconds: 5),
+        ),
+        InternetCheckOption(
+          uri: Uri.parse('https://one.one.one.one'),
+          timeout: const Duration(seconds: 5),
+        ),
+      ];
+    } else if (sessionModel.country.value!.isChina()) {
+      return [
+        InternetCheckOption(
+          uri: Uri.parse('https://one.one.one.one'),
+          timeout: const Duration(seconds: 5),
+        ),
+        InternetCheckOption(
+          uri: Uri.parse('https://baidu.com'), //China
+          timeout: const Duration(seconds: 5),
+        ),
+      ];
+    }
+    return [
+      InternetCheckOption(
+        uri: Uri.parse('https://one.one.one.one'),
+        timeout: const Duration(seconds: 5),
+      ),
+      InternetCheckOption(
+        uri: Uri.parse('https://google.com'),
+        timeout: const Duration(seconds: 5),
+      ),
+      InternetCheckOption(
+        uri: Uri.parse('https://ipapi.co/ip'),
+        timeout: const Duration(seconds: 5),
+      ),
+    ];
   }
 }
