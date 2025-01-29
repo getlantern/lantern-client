@@ -12,6 +12,5 @@ void initServices() {
     sl<AppPurchase>().init();
   }
 
-
   sl.registerLazySingleton(() => SurveyService());
 }
