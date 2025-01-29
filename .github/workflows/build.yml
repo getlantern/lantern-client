@@ -238,12 +238,18 @@ jobs:
           encodedString: ${{ secrets.KEYSTORE }}
 
       - name: Decode APP_ENV
-        env:
-          APP_ENV: ${{ secrets.APP_ENV }}
-        run: |
-          APP_ENV_PATH=$GITHUB_WORKSPACE/app.env
-          echo "$APP_ENV" | base64 --decode > "$APP_ENV_PATH"
-          echo "File 'app.env' created."
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'app.env'
+          fileDir: ${{ github.workspace }}
+          encodedString: ${{ secrets.APP_ENV }}
+#      - name: Decode APP_ENV
+#        env:
+#          APP_ENV: ${{ secrets.APP_ENV }}
+#        run: |
+#          APP_ENV_PATH=$GITHUB_WORKSPACE/app.env
+#          echo "$APP_ENV" | base64 --decode > "$APP_ENV_PATH"
+#          echo "File 'app.env' created."
 
       - name: Extract app version from pubspec.yaml
         id: extract_version
