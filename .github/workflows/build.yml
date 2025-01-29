@@ -294,7 +294,7 @@ jobs:
           New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
           flutter_distributor package --platform windows --targets exe --skip-clean
         env:
-          VERSION: ${{ [env].version }}
+          VERSION: ${{ env.version }}
 
       - name: Build Flutter app (Android)
         if: matrix.platform == 'android'
