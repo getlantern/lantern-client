@@ -78,6 +78,9 @@ jobs:
       - name: Granting private modules access
         run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
+      - name: Enable Long Path Support
+        run: git config --system core.longpaths true
+
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
         with:
@@ -243,13 +246,6 @@ jobs:
           fileName: 'app.env'
           fileDir: ${{ github.workspace }}
           encodedString: ${{ secrets.APP_ENV }}
-#      - name: Decode APP_ENV
-#        env:
-#          APP_ENV: ${{ secrets.APP_ENV }}
-#        run: |
-#          APP_ENV_PATH=$GITHUB_WORKSPACE/app.env
-#          echo "$APP_ENV" | base64 --decode > "$APP_ENV_PATH"
-#          echo "File 'app.env' created."
 
       - name: Extract app version from pubspec.yaml
         id: extract_version
@@ -298,7 +294,7 @@ jobs:
           New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
           flutter_distributor package --platform windows --targets exe --skip-clean
         env:
-          VERSION: ${{ env.version }}
+          VERSION: ${{ [env].version }}
 
       - name: Build Flutter app (Android)
         if: matrix.platform == 'android'
