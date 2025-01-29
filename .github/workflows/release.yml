@@ -257,7 +257,7 @@ jobs:
             diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
             diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
           fi
-          
+
           if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
             mv -f Lantern.ipa ${{ env.prefix }}.ipa
           fi
@@ -268,7 +268,7 @@ jobs:
             shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
             shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
           fi
-          
+
           if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
             shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
           fi

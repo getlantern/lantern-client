@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
-import 'package:lantern/core/helpers/ad_helper.dart';
+import 'package:lantern/core/service/ad_service.dart';
 import 'package:lantern/core/service/survey_service.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
@@ -15,10 +15,11 @@ class VPNSwitch extends StatefulWidget {
   @override
   State<VPNSwitch> createState() => _VPNSwitchState();
 }
+
 //implement this switch with loading implementation
 //https://pub.dev/packages/animated_toggle_switch
 class _VPNSwitchState extends State<VPNSwitch> {
-  final adHelper = AdHelper();
+  final adHelper = sl.get<AdsService>();
 
   @override
   Widget build(BuildContext context) {

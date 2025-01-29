@@ -14,6 +14,7 @@ import 'package:window_manager/window_manager.dart';
 // https://github.com/flutter/flutter/issues/133465
 Future<void> main() async {
 // CI will be true only when running appium test
+  appLogger.i("Start app ${DateTime.now().toIso8601String()}");
   const String flavor = String.fromEnvironment('app.flavor');
 
   print("Running Flavor $flavor");
