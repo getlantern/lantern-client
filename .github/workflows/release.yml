@@ -238,6 +238,7 @@ jobs:
 
           # Linux
           mv ${{ env.linux_dist_source }} ${{ env.linux_dist }}
+          mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
           cp ${{ env.linux_dist }} ${{ env.linux_dist_versionless }}
 
           shasum -a 256 ${{ env.linux_dist }} | cut -d " " -f 1 > ${{ env.linux_dist }}.sha256
