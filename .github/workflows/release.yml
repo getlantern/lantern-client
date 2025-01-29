@@ -209,7 +209,7 @@ jobs:
           mappingFile: mapping.txt
 
       - name: Push binaries to S3
-        if: needs.determine-platform.outputs.platform == 'desktop' || needs.determine-platform.outputs.platform == 'all'
+        if: env.platform == 'desktop' || env.platform == 'all'
         env:
           macos_dist: "${{ env.prefix }}-${{ env.version }}.dmg"
           windows_dist: "${{env.prefix}}-${{env.version}}-${{env.dist-suffix}}.exe"
@@ -262,13 +262,7 @@ jobs:
           if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
             mv -f Lantern.ipa ${{ env.prefix }}.ipa
           fi
-          
-          if [[ "${{ env.platform }}" == "desktop" || "${{ env.platform }}" == "all" ]]; then
-            mv -f lantern-installer-x64.deb ${{ env.prefix }}-64-bit.deb
-            mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
-            mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
-            diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
-          fi
+
       - name: Prepare sha256 sums
         run: |
           if [[ "${{ env.platform }}" == "android" || "${{ env.platform }}" == "all" ]]; then
