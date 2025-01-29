@@ -79,7 +79,7 @@ jobs:
         run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
       - name: Enable Long Path Support
-        run: git config --system core.longpaths true
+        run: git config --global core.longpaths true
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
