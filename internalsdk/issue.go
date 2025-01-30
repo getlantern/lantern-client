@@ -20,6 +20,7 @@ var issueMap = map[string]string{
 	"Cannot link device":          "5",
 	"Application crashes":         "6",
 	"Other":                       "9",
+	"Update Fail":                 "10", // TODO connect this
 }
 
 func SendIssueReport(
