@@ -62,8 +62,8 @@ class InternetStatusProvider extends ChangeNotifier {
       if (status == InternetStatus.connected) {
         _handleConnected();
       } else {
-        // Check from different ping servers
-        // to make sure internet is working or not
+        /// Check from different ping servers
+        /// to make sure internet is working or not
         if ((await pingServers())) {
           _handleConnected();
           return;
@@ -78,6 +78,7 @@ class InternetStatusProvider extends ChangeNotifier {
   ///Another check on top of internet connection checker
   ///to ping some of the popular websites
   Future<bool> pingServers() async {
+    appLogger.d('Pinging servers to check internet connection');
     final List<String> pingAddresses = [
       '8.8.8.8',
       '1.1.1.1',
@@ -89,7 +90,9 @@ class InternetStatusProvider extends ChangeNotifier {
       if (result.any((res) => res.response != null)) {
         return true;
       }
+      appLogger.d('Server ping found');
     }
+    appLogger.d('Server ping failed');
     return false;
   }
 
