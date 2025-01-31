@@ -15,6 +15,7 @@ import 'package:window_manager/window_manager.dart';
 // https://github.com/flutter/flutter/issues/133465
 Future<void> main() async {
 // CI will be true only when running appium test
+  appLogger.i("Start app ${DateTime.now().toIso8601String()}");
   const String flavor = String.fromEnvironment('app.flavor');
 
   print("Running Flavor $flavor");
@@ -29,7 +30,7 @@ Future<void> main() async {
   } catch (error) {
     appLogger.e("Error loading .env file: $error");
   }
-
+  initServices();
   if (isDesktop()) {
     if (Platform.isWindows){
       await initializeWebViewEnvironment();
@@ -43,7 +44,6 @@ Future<void> main() async {
   } else {
     await _initGoogleMobileAds();
     // Inject all the services
-    initServices();
     // Due to replica we are using lot of cache
     // clear if goes to above limit
     CustomCacheManager().clearCacheIfExceeded();

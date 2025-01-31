@@ -47,6 +47,7 @@ class ConfigOptions {
 
   final Map<String, PaymentMethod>? paymentMethods;
   final _ChatOptions chat;
+  final String country;
 
   ConfigOptions({
     this.developmentMode = false,
@@ -62,10 +63,11 @@ class ConfigOptions {
     this.httpProxyAddr = '',
     this.socksProxyAddr = '',
     this.deviceId = '',
-    this.plans = null,
-    this.paymentMethods = null,
+    this.plans,
+    this.paymentMethods,
     required this.devices,
     this.chat = const _ChatOptions(),
+    required this.country,
   });
 
   bool get startupReady =>
@@ -83,24 +85,24 @@ class ConfigOptions {
     final paymentMethods = paymentMethodsFromJson(parsedJson['paymentMethods']);
 
     return ConfigOptions(
-      developmentMode: parsedJson['developmentMode'],
-      authEnabled: parsedJson['authEnabled'],
-      chatEnabled: parsedJson['chatEnabled'],
-      httpProxyAddr: parsedJson['httpProxyAddr'],
-      socksProxyAddr: parsedJson['socksProxyAddr'],
-      splitTunneling: parsedJson['splitTunneling'],
-      hasSucceedingProxy: parsedJson['hasSucceedingProxy'],
-      fetchedGlobalConfig: parsedJson['fetchedGlobalConfig'],
-      fetchedProxiesConfig: parsedJson['fetchedProxiesConfig'],
-      plans: plans,
-      chat: _ChatOptions.fromJson(parsedJson['chat']),
-      paymentMethods: paymentMethods,
-      devices: _parseDevices(parsedJson),
-      replicaAddr: parsedJson['replicaAddr'].toString(),
-      deviceId: parsedJson['deviceId'].toString(),
-      expirationDate: parsedJson['expirationDate'].toString(),
-      sdkVersion: parsedJson['sdkVersion'].toString(),
-    );
+        developmentMode: parsedJson['developmentMode'],
+        authEnabled: parsedJson['authEnabled'],
+        chatEnabled: parsedJson['chatEnabled'],
+        httpProxyAddr: parsedJson['httpProxyAddr'],
+        socksProxyAddr: parsedJson['socksProxyAddr'],
+        splitTunneling: parsedJson['splitTunneling'],
+        hasSucceedingProxy: parsedJson['hasSucceedingProxy'],
+        fetchedGlobalConfig: parsedJson['fetchedGlobalConfig'],
+        fetchedProxiesConfig: parsedJson['fetchedProxiesConfig'],
+        plans: plans,
+        chat: _ChatOptions.fromJson(parsedJson['chat']),
+        paymentMethods: paymentMethods,
+        devices: _parseDevices(parsedJson),
+        replicaAddr: parsedJson['replicaAddr'].toString(),
+        deviceId: parsedJson['deviceId'].toString(),
+        expirationDate: parsedJson['expirationDate'].toString(),
+        sdkVersion: parsedJson['sdkVersion'].toString(),
+        country: parsedJson['country'] ?? "");
   }
 
   static Devices _parseDevices(Map json) {

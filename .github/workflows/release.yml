@@ -118,8 +118,10 @@ jobs:
     needs: [ determine-platform,set-version, build ]
     env:
       version: ${{ needs.set-version.outputs.version }}
+      version_file: ${{ needs.set-version.outputs.version_file }}
       prefix: ${{ needs.set-version.outputs.prefix }}
       platform: ${{ needs.determine-platform.outputs.platform }}
+      dist-suffix: x64
     steps:
       - name: Download the mac build output
         uses: actions/download-artifact@v4
@@ -175,14 +177,14 @@ jobs:
         with:
           name: Lantern.ipa
 
-      - name: Upload Lantern to TestFlight
-        uses: apple-actions/upload-testflight-build@v1
-        if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
-        with:
-          app-path: Lantern.ipa
-          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      # - name: Upload Lantern to TestFlight
+      #   uses: apple-actions/upload-testflight-build@v1
+      #   if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+      #   with:
+      #     app-path: Lantern.ipa
+      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
       - name: Upload Android App bundle to Play Store (beta)
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
@@ -206,6 +208,43 @@ jobs:
           debugSymbols: debug-symbols.zip
           mappingFile: mapping.txt
 
+      - name: Upload binaries to S3
+        if: env.platform == 'desktop' || env.platform == 'all'
+        env:
+          macos_dist: "${{ env.prefix }}-${{ env.version }}.dmg"
+          windows_dist: "${{env.prefix}}-${{env.version}}-${{env.dist-suffix}}.exe"
+          windows_dist_versionless: "${{env.prefix}}-${{env.dist-suffix}}.exe"
+          linux_dist: "${{env.prefix}}-${{env.version}}-64-bit.deb"
+          linux_dist_versionless: "${{env.prefix}}-64-bit.deb"
+        run: |
+          # macOS
+          mv lantern-installer.dmg ${{ env.macos_dist }}
+          cp ${{ env.macos_dist }} ${{ env.prefix }}.dmg
+          echo ${{ env.version }} > ${{ env.version_file }}
+          shasum -a 256 ${{ env.macos_dist }} | cut -d " " -f 1 > ${{ env.macos_dist }}.sha256
+          cp ${{ env.macos_dist }}.sha256 ${{ env.prefix }}.dmg.sha256
+          s3cmd put --acl-public ${{ env.macos_dist }} ${{ env.version_file }} ${{ env.macos_dist }}.sha256 ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
+
+          # Windows
+          mv lantern-installer-x64.exe ${{ env.windows_dist }}
+          cp ${{ env.windows_dist }} ${{ env.windows_dist_versionless }}
+
+          shasum -a 256 ${{ env.windows_dist }} | cut -d " " -f 1 > ${{ env.windows_dist }}.sha256
+          cp ${{ env.windows_dist }}.sha256 ${{ env.windows_dist_versionless }}.sha256
+
+          s3cmd put --acl-public ${{ env.windows_dist }} ${{ env.windows_dist }}.sha256 ${{ env.windows_dist_versionless }}.sha256 ${{ env.windows_dist_versionless }} "s3://lantern"
+
+          # Linux
+          mv lantern-installer-x64.deb ${{ env.linux_dist }}
+          mv lantern-installer-x64.rpm ${{ env.prefix }}.rpm
+          cp ${{ env.linux_dist }} ${{ env.linux_dist_versionless }}
+
+          shasum -a 256 ${{ env.linux_dist }} | cut -d " " -f 1 > ${{ env.linux_dist }}.sha256
+          cp ${{ env.linux_dist }}.sha256 ${{ env.linux_dist_versionless }}.sha256
+          ls -l
+
+          s3cmd put --acl-public ${{ env.linux_dist }} ${{ env.linux_dist }}.sha256 ${{ env.linux_dist_versionless }}.sha256 ${{ env.linux_dist_versionless }} "s3://lantern"
+
       - name: Grant private modules access
         run: git config --global url."https://${{ secrets.CI_PRIVATE_REPOS_GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
 
@@ -218,33 +257,20 @@ jobs:
             diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
             diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
           fi
-          
+
           if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
             mv -f Lantern.ipa ${{ env.prefix }}.ipa
           fi
-          
-          if [[ "${{ env.platform }}" == "desktop" || "${{ env.platform }}" == "all" ]]; then
-            mv -f lantern-installer-x64.deb ${{ env.prefix }}-64-bit.deb
-            mv -f lantern-installer-x64.rpm ${{ env.prefix }}.rpm
-            mv -f lantern-installer.dmg ${{ env.prefix }}.dmg
-            diff lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe || mv -f lantern-installer-x64.exe ${{ env.prefix }}-64-bit.exe
-          fi
+
       - name: Prepare sha256 sums
         run: |
           if [[ "${{ env.platform }}" == "android" || "${{ env.platform }}" == "all" ]]; then
             shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
             shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
           fi
-          
+
           if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
             shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
-          fi
-          
-          if [[ "${{ env.platform }}" == "desktop" || "${{ env.platform }}" == "all" ]]; then
-            shasum -a 256 ${{ env.prefix }}-mac.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac.dmg.sha256
-            shasum -a 256 ${{ env.prefix }}-mac_arm.dmg | cut -d " " -f 1 > ${{ env.prefix }}-mac_arm.dmg.sha256
-            shasum -a 256 ${{ env.prefix }}-x64.exe | cut -d " " -f 1 > ${{ env.prefix }}-x64.exe.sha256
-            shasum -a 256 ${{ env.prefix }}-64-bit.deb | cut -d " " -f 1 > ${{ env.prefix }}-64-bit.deb.sha256
           fi
 
       - name: Commit
