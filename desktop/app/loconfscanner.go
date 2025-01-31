@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/geolookup"
 	"github.com/getlantern/golog"
 	notify "github.com/getlantern/notifier"
@@ -41,9 +40,8 @@ func LoconfScanner(settings *Settings, configDir string, interval time.Duration,
 func (loc *loconfer) scan(interval time.Duration, proChecker func() (bool, bool), onLoconf func(*loconf.LoConf, bool)) (stop func()) {
 	chStop := make(chan bool)
 	t := time.NewTicker(interval)
-	isStaging := common.Staging
 	checker := func() {
-		lc, err := loconf.Get(http.DefaultClient, isStaging)
+		lc, err := loconf.Get(http.DefaultClient)
 		if err != nil {
 			loc.log.Error(err)
 			return

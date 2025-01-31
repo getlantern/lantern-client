@@ -4,8 +4,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
-	fcommon "github.com/getlantern/flashlight/v7/common"
 )
 
 // Environment represents different environments Lantern may be running in
@@ -62,9 +60,4 @@ func (e Environment) IsStaging() bool {
 // IsDevEnvironment checks if flashlight is currently being run in development mode
 func IsDevEnvironment() bool {
 	return DisablePort && env.IsDevelopment()
-}
-
-// IsDevEnvironment checks if flashlight is currently being run in staging mode
-func IsStagingEnvironment() bool {
-	return fcommon.Staging || env.IsStaging()
 }

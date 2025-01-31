@@ -61,11 +61,6 @@ func ForceStaging() {
 }
 
 func initInternal() {
-	isStaging := IsStagingEnvironment()
-	log.Debugf("****************************** stagingMode: %v", isStaging)
-	if isStaging {
-		ProAPIHost = "api-staging.getiantem.org"
-	}
 	forceAds, _ = strconv.ParseBool(os.Getenv("FORCEADS"))
 }
 
