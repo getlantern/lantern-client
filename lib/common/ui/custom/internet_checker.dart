@@ -8,35 +8,41 @@ class InternetChecker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        CDialog.showInternetUnavailableDialog(context);
-      },
-      child: Container(
-        padding: const EdgeInsets.only(top: 5, bottom: 8),
-        alignment: Alignment.center,
-        decoration: ShapeDecoration(
-          color: const Color(0xFFFFF9DB),
-          shape: RoundedRectangleBorder(
-            side: BorderSide(width: 1, color: yellow4),
-            borderRadius: BorderRadius.circular(8),
+    return vpnModel.vpnStatus(context, (context, vpnStatus, child) {
+      return GestureDetector(
+        onTap: () {
+          CDialog.showInternetUnavailableDialog(context);
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          alignment: Alignment.center,
+          decoration: ShapeDecoration(
+            color: const Color(0xFFFFF9DB),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 1, color: yellow4),
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SvgPicture.asset(ImagePaths.cloudOff, height: 25),
+              const SizedBox(width: 10),
+              Expanded(
+                child: CText(
+                  vpnStatus == VpnStatus.connected.name
+                      ? 'domain_fronting_error'.i18n
+                      : 'no_internet_connection'.i18n,
+                  textAlign: TextAlign.center,
+                  style: tsBody1.copiedWith(color: yellow5),
+                ),
+              )
+            ],
           ),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(ImagePaths.cloudOff, height: 25),
-            const SizedBox(width: 10),
-            CText(
-              "No internet connection detected",
-              textAlign: TextAlign.center,
-              style: tsBody1.copiedWith(color: yellow5),
-            )
-          ],
-        ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -44,9 +50,6 @@ class InternetStatusProvider extends ChangeNotifier {
   bool _isConnected = true;
   late StreamSubscription<InternetStatus> _connectionSubscription;
   bool _isDisconnected = false;
-
-  /// All website are working in Russia
-  /// confirmed by oxylabs proxies
 
   /// Using debounce to avoid flickering when the connection is unstable
   final _debounceDuration = Duration(seconds: Platform.isIOS ? 4 : 2);
@@ -85,14 +88,26 @@ class InternetStatusProvider extends ChangeNotifier {
       '114.114.114.114'
     ]; // Google, Cloudflare, China DNS
     for (String address in pingAddresses) {
-      final ping = Ping(address, count: 2);
-      final result = await ping.stream.toList();
-      if (result.any((res) => res.response != null)) {
-        return true;
+      try {
+        final ping = Ping(address, count: 2);
+        final result = await ping.stream.toList();
+        final pinData = result.first;
+        if (pinData.error != null) {
+          appLogger.d('Server ping not found');
+          ping.stop();
+          return false;
+        }
+        if (pinData.response != null) {
+          appLogger.d('Server ping found');
+          ping.stop();
+          return true;
+        }
+      } catch (e) {
+        appLogger.d('Server ping failed');
+        return false;
       }
-      appLogger.d('Server ping found');
     }
-    appLogger.d('Server ping failed');
+
     return false;
   }
 
@@ -139,6 +154,8 @@ class InternetStatusProvider extends ChangeNotifier {
 
   List<InternetCheckOption> getRegionSpecificCheckOptions() {
     if (sessionModel.country.value!.isRussia()) {
+      /// All website are working in Russia
+      /// confirmed by oxylabs proxies
       return [
         InternetCheckOption(
           uri: Uri.parse('https://yandex.ru'),
