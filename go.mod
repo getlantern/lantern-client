@@ -7,7 +7,7 @@ go 1.22.4
 // replace github.com/getlantern/ipproxy => ../ipproxy
 //replace github.com/getlantern/kindling => ../kindling
 
-//replace github.com/getlantern/fronted => ../fronted
+// replace github.com/getlantern/fronted => ../fronted
 
 // replace github.com/getlantern/pathdb => ../pathDb/pathDb
 
@@ -93,7 +93,7 @@ require (
 	github.com/cloudflare/circl v1.5.0 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
 	github.com/containerd/console v1.0.3 // indirect
-	github.com/getlantern/kindling v0.0.0-20250129184912-6fb98583d540 // indirect
+	github.com/getlantern/kindling v0.0.0-20250131224031-b92afbdcc7e0 // indirect
 	github.com/getlantern/lantern-water v0.0.0-20241218135103-60224336cf1d // indirect
 	github.com/getlantern/sing-vmess v0.0.0-20241209111030-0f2c02b4eb9a // indirect
 	github.com/goccy/go-yaml v1.15.13 // indirect

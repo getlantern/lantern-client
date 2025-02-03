@@ -68,7 +68,6 @@ type Configurer interface {
 // a proxies.yaml configuration that overrides whatever we fetch from the cloud.
 func Configure(configFolderPath string, userID int, proToken, deviceID string, refreshProxies bool, hardcodedProxies string) (*ConfigResult, error) {
 	log.Debugf("Configuring client for device '%v' at config path '%v' userid '%v' token '%v'", deviceID, configFolderPath, userID, proToken)
-	defer log.Debug("Finished configuring client")
 	cf := NewConfigurer(configFolderPath, userID, proToken, deviceID, hardcodedProxies)
 	return cf.configure(refreshProxies)
 }
@@ -146,9 +145,10 @@ func (cf *configurer) configure(refreshProxies bool) (*ConfigResult, error) {
 	log.Debugf("Updated global config: %v", globalUpdated)
 	log.Debugf("Global config update completed in %v seconds", time.Since(globalStart).Seconds())
 	if refreshProxies {
+		proxiesStart := time.Now()
 		log.Debug("Refreshing proxies")
 		proxies, proxiesUpdated = cf.updateProxies(proxies, proxiesEtag)
-		log.Debug("Refreshed proxies")
+		log.Debugf("Proxies updated: %v", time.Since(proxiesStart).Seconds())
 	}
 
 	result.VPNNeedsReconfiguring = result.VPNNeedsReconfiguring || globalUpdated || proxiesUpdated
