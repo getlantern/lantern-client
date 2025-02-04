@@ -52,8 +52,29 @@ class InternetStatusProvider extends ChangeNotifier {
   bool _isDisconnected = false;
 
   /// Using debounce to avoid flickering when the connection is unstable
-  final _debounceDuration = Duration(seconds: Platform.isIOS ? 4 : 2);
+  final _debounceDuration = const Duration(seconds: 2);
   Timer? _debounceTimer;
+
+  final _regionCheckUrls = {
+    'RU': const [
+      'https://yandex.ru',
+      'https://alibaba.com',
+      'https://google.com',
+      'https://microsoft.com'
+    ],
+    'CN': ['https://baidu.com', 'https://microsoft.com', 'https://alibaba.com'],
+    'DEFAULT': [
+      'https://google.com',
+      'https://ipapi.co/ip',
+      'https://microsoft.com'
+    ]
+  };
+  /// With help of https://dnschecker.org/public-dns/
+  final _pingAddress = {
+    'RU': ['8.8.8.8', '77.88.8.1','1.1.1.1', ''],
+    'CN': ['180.76.76.76', '223.6.6.41', '8.8.8.8', '114.114.114.114'],
+    'DEFAULT': ['8.8.8.8', '1.1.1.1'],
+  };
 
   InternetStatusProvider() {
     // Listen for connection status changes
@@ -82,11 +103,8 @@ class InternetStatusProvider extends ChangeNotifier {
   ///to ping some of the popular websites
   Future<bool> pingServers() async {
     appLogger.d('Pinging servers to check internet connection');
-    final List<String> pingAddresses = [
-      '8.8.8.8',
-      '1.1.1.1',
-      '114.114.114.114'
-    ]; // Google, Cloudflare, China DNS
+    final countryCode = sessionModel.country.value ?? 'DEFAULT';
+    final pingAddresses = (_pingAddress[countryCode] ?? _pingAddress['DEFAULT'])!;
     for (String address in pingAddresses) {
       try {
         final ping = Ping(address, count: 2);
@@ -153,44 +171,14 @@ class InternetStatusProvider extends ChangeNotifier {
   }
 
   List<InternetCheckOption> getRegionSpecificCheckOptions() {
-    if (sessionModel.country.value!.isRussia()) {
-      /// All website are working in Russia
-      /// confirmed by oxylabs proxies
-      return [
-        InternetCheckOption(
-          uri: Uri.parse('https://yandex.ru'),
-          timeout: const Duration(seconds: 5),
-        ),
-        InternetCheckOption(
-          uri: Uri.parse('https://one.one.one.one'),
-          timeout: const Duration(seconds: 5),
-        ),
-      ];
-    } else if (sessionModel.country.value!.isChina()) {
-      return [
-        InternetCheckOption(
-          uri: Uri.parse('https://one.one.one.one'),
-          timeout: const Duration(seconds: 5),
-        ),
-        InternetCheckOption(
-          uri: Uri.parse('https://baidu.com'), //China
-          timeout: const Duration(seconds: 5),
-        ),
-      ];
-    }
-    return [
-      InternetCheckOption(
-        uri: Uri.parse('https://one.one.one.one'),
-        timeout: const Duration(seconds: 5),
-      ),
-      InternetCheckOption(
-        uri: Uri.parse('https://google.com'),
-        timeout: const Duration(seconds: 5),
-      ),
-      InternetCheckOption(
-        uri: Uri.parse('https://ipapi.co/ip'),
-        timeout: const Duration(seconds: 5),
-      ),
-    ];
+    final countryCode = sessionModel.country.value ?? 'DEFAULT';
+    final urls =
+        (_regionCheckUrls[countryCode] ?? _regionCheckUrls['DEFAULT'])!;
+    return urls
+        .map((url) => InternetCheckOption(
+              uri: Uri.parse(url),
+              timeout: const Duration(seconds: 5),
+            ))
+        .toList();
   }
 }
