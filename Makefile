@@ -622,6 +622,7 @@ require-bundler:
 .PHONY: macos-release
 macos-release: require-appdmg pubget
 	flutter_distributor package --platform macos --targets dmg --skip-clean
+	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-macos.dmg lantern-installer.dmg
 
 android-bundle: $(MOBILE_BUNDLE)
 
