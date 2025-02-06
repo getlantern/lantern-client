@@ -32,7 +32,7 @@ Future<void> main() async {
   }
   initServices();
   if (isDesktop()) {
-    if (Platform.isWindows){
+    if (Platform.isWindows) {
       await initializeWebViewEnvironment();
       ProtocolRegistrar.instance.register('lantern');
       ProtocolRegistrar.instance.register('Lantern');
@@ -62,10 +62,11 @@ Future<void> main() async {
     options.dsn = kReleaseMode ? AppSecret.dnsConfig() : "";
     options.enableNativeCrashHandling = true;
     options.attachStacktrace = true;
+    options.enableAutoNativeBreadcrumbs = true;
+    options.enableNdkScopeSync = true;
   }, appRunner: () => runApp(const LanternApp()));
 }
 
 Future<void> _initGoogleMobileAds() async {
   await MobileAds.instance.initialize();
-  // await MobileAds.instance.setAppMuted(true);
 }

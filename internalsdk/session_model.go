@@ -1255,9 +1255,13 @@ func (m *SessionModel) SetReferralCode(referralCode string) error {
 
 func (m *SessionModel) SetReplicaAddr(replicaAddr string) {
 	log.Debugf("Setting replica address %v", replicaAddr)
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathReplicaAddr, replicaAddr, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting replica address %v", err)
+		return
+	}
 }
 func (m *SessionModel) getReplicaAddr() string {
 	address, err := pathdb.Get[string](m.db, pathReplicaAddr)
@@ -1273,15 +1277,21 @@ func (m *SessionModel) ForceReplica() bool {
 }
 
 func (m *SessionModel) SetAuthEnabled(authEnabled bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathAuthEnabled, authEnabled, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting auth enabled %v", err)
+	}
 }
 
 func (m *SessionModel) SetChatEnabled(chatEnabled bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathChatEnabled, chatEnabled, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting chat enabled %v", err)
+	}
 }
 
 func (m *SessionModel) ChatEnable() bool {
@@ -1298,9 +1308,12 @@ func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 
 func (m *SessionModel) SetShowInterstitialAds(adsEnable bool) {
 	log.Debugf("SetShowInterstitialAds %v", adsEnable)
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathShouldShowInterstitialAds, adsEnable, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting show interstitial ads %v", err)
+	}
 	if common.Platform == "android" {
 		checkAdsEnabled(m)
 	}
@@ -1308,9 +1321,12 @@ func (m *SessionModel) SetShowInterstitialAds(adsEnable bool) {
 
 func (m *SessionModel) SetShowAppOpenAds(adsEnable bool) {
 	log.Debugf("SetShowAppOpenAds %v", adsEnable)
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathShouldShowAppOpenAds, adsEnable, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting show app open ads %v", err)
+	}
 	if common.Platform == "android" {
 		checkAdsEnabled(m)
 	}
@@ -1334,20 +1350,29 @@ func saveUserSalt(m *baseModel, salt []byte) error {
 	})
 }
 func (m *SessionModel) SetHasConfigFetched(fetached bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathHasConfig, fetached, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting has config fetched %v", err)
+	}
 }
 
 func (m *SessionModel) SetHasProxyFetched(fetached bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathHasProxy, fetached, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting has proxy fetched %v", err)
+	}
 }
 func (m *SessionModel) SetOnSuccess(fetached bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathHasonSuccess, fetached, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting has on success %v", err)
+	}
 }
 
 func acceptTerms(m *baseModel) error {
