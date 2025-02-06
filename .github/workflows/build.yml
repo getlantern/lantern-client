@@ -47,6 +47,7 @@ jobs:
       SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
       SENTRY_ORG: getlantern
       SENTRY_PROJECT_IOS: lantern-ios
+      SENTRY_PROJECT_ANDROID: android
     strategy:
       matrix:
         include:
@@ -77,6 +78,9 @@ jobs:
 
       - name: Granting private modules access
         run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Enable Long Path Support
+        run: git config --global core.longpaths true
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
@@ -237,12 +241,12 @@ jobs:
           fileDir: './android/app'
           encodedString: ${{ secrets.KEYSTORE }}
 
-
-      - name: Decode APP_ENV and write to app.env
-        run: |
-          echo "${{ secrets.APP_ENV }}" | base64 --decode > app.env
-          echo "File 'app.env' created."
-          ls -lh app.env
+      - name: Decode APP_ENV
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'app.env'
+          fileDir: ${{ github.workspace }}
+          encodedString: ${{ secrets.APP_ENV }}
 
       - name: Extract app version from pubspec.yaml
         id: extract_version

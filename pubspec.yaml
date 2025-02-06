@@ -141,6 +141,8 @@ dependencies:
   #Loading
   animated_loading_border: ^0.0.2
   shimmer: ^3.0.0
+  # windows related
+  win32_registry: ^1.1.5
   # Survey sdk
   surveysparrow_flutter_sdk: ^1.2.1
 

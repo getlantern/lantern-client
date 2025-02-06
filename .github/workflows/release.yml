@@ -177,14 +177,14 @@ jobs:
         with:
           name: Lantern.ipa
 
-      # - name: Upload Lantern to TestFlight
-      #   uses: apple-actions/upload-testflight-build@v1
-      #   if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
-      #   with:
-      #     app-path: Lantern.ipa
-      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      - name: Upload Lantern to TestFlight
+        uses: apple-actions/upload-testflight-build@v1
+        if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+        with:
+          app-path: Lantern.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
       - name: Upload Android App bundle to Play Store (beta)
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
@@ -257,7 +257,7 @@ jobs:
             diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
             diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
           fi
-          
+
           if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
             mv -f Lantern.ipa ${{ env.prefix }}.ipa
           fi
@@ -268,7 +268,7 @@ jobs:
             shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
             shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
           fi
-          
+
           if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
             shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
           fi
