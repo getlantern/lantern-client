@@ -28,6 +28,7 @@ export 'package:lantern/core/router/router.gr.dart';
 // Services
 export 'package:lantern/core/service/injection_container.dart';
 export 'package:lantern/core/extension/event_extension.dart';
+export 'package:lantern/core/extension/string_extension.dart';
 export 'package:lantern/core/service/event_manager.dart';
 export 'package:lantern/core/localization/i18n.dart';
 export 'package:lantern/features/vpn/protos_shared/vpn.pb.dart';
@@ -132,6 +133,7 @@ final appLogger = Logger(
   ),
   level: Level.debug,
 );
+
 
 bool isMobile() {
   return Platform.isAndroid || Platform.isIOS;

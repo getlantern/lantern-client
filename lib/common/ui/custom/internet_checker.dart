@@ -1,3 +1,4 @@
+import 'package:dart_ping/dart_ping.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../../../core/utils/common.dart';
@@ -7,35 +8,41 @@ class InternetChecker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        CDialog.showInternetUnavailableDialog(context);
-      },
-      child: Container(
-        padding: const EdgeInsets.only(top: 5, bottom: 8),
-        alignment: Alignment.center,
-        decoration: ShapeDecoration(
-          color: const Color(0xFFFFF9DB),
-          shape: RoundedRectangleBorder(
-            side: BorderSide(width: 1, color: yellow4),
-            borderRadius: BorderRadius.circular(8),
+    return vpnModel.vpnStatus(context, (context, vpnStatus, child) {
+      return GestureDetector(
+        onTap: () {
+          CDialog.showInternetUnavailableDialog(context);
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          alignment: Alignment.center,
+          decoration: ShapeDecoration(
+            color: const Color(0xFFFFF9DB),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(width: 1, color: yellow4),
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SvgPicture.asset(ImagePaths.cloudOff, height: 25),
+              const SizedBox(width: 10),
+              Expanded(
+                child: CText(
+                  vpnStatus == VpnStatus.connected.name
+                      ? 'domain_fronting_error'.i18n
+                      : 'no_internet_connection'.i18n,
+                  textAlign: TextAlign.center,
+                  style: tsBody1.copiedWith(color: yellow5),
+                ),
+              )
+            ],
           ),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(ImagePaths.cloudOff, height: 25),
-            const SizedBox(width: 10),
-            CText(
-              "No internet connection detected",
-              textAlign: TextAlign.center,
-              style: tsBody1.copiedWith(color: yellow5),
-            )
-          ],
-        ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -43,46 +50,84 @@ class InternetStatusProvider extends ChangeNotifier {
   bool _isConnected = true;
   late StreamSubscription<InternetStatus> _connectionSubscription;
   bool _isDisconnected = false;
-  final List<InternetCheckOption> _defaultCheckOptions = [
-    InternetCheckOption(
-      uri: Uri.parse('https://icanhazip.com/'),
-      timeout: const Duration(seconds: 5),
-    ),
-    InternetCheckOption(
-      uri: Uri.parse('https://jsonplaceholder.typicode.com/todos/1'),
-      timeout: const Duration(seconds: 5),
-    ),
-    InternetCheckOption(
-      uri: Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=1'),
-      timeout: const Duration(seconds: 5),
-    ),
-    InternetCheckOption(
-      uri: Uri.parse('https://reqres.in/api/users/1'),
-      timeout: const Duration(seconds: 5),
-    ),
-  ];
 
   /// Using debounce to avoid flickering when the connection is unstable
-  final _debounceDuration = Duration(seconds: Platform.isIOS ? 4 : 2);
+  final _debounceDuration = const Duration(seconds: 2);
   Timer? _debounceTimer;
+
+  final _regionCheckUrls = {
+    'RU': const [
+      'https://yandex.ru',
+      'https://alibaba.com',
+      'https://google.com',
+      'https://microsoft.com'
+    ],
+    'CN': ['https://baidu.com', 'https://microsoft.com', 'https://alibaba.com'],
+    'DEFAULT': [
+      'https://google.com',
+      'https://ipapi.co/ip',
+      'https://microsoft.com'
+    ]
+  };
+  /// With help of https://dnschecker.org/public-dns/
+  final _pingAddress = {
+    'RU': ['8.8.8.8', '77.88.8.1','1.1.1.1'],
+    'CN': ['180.76.76.76', '223.6.6.41', '8.8.8.8'],
+    'DEFAULT': ['8.8.8.8', '1.1.1.1'],
+  };
 
   InternetStatusProvider() {
     // Listen for connection status changes
     _connectionSubscription = InternetConnection.createInstance(
-            checkInterval: const Duration(seconds: 10),
-            useDefaultOptions: false,
-            customCheckOptions: _defaultCheckOptions)
-        .onStatusChange
-        .listen((status) {
+      checkInterval: const Duration(seconds: 5),
+      useDefaultOptions: false,
+      customCheckOptions: getRegionSpecificCheckOptions(),
+    ).onStatusChange.listen((status) async {
       if (status == InternetStatus.connected) {
         _handleConnected();
       } else {
+        /// Check from different ping servers
+        /// to make sure internet is working or not
+        if ((await pingServers())) {
+          _handleConnected();
+          return;
+        }
         _handleDisconnected();
       }
     });
   }
 
   bool get isConnected => _isConnected;
+
+  ///Another check on top of internet connection checker
+  ///to ping some of the popular websites
+  Future<bool> pingServers() async {
+    appLogger.d('Pinging servers to check internet connection');
+    final countryCode = sessionModel.country.value ?? 'DEFAULT';
+    final pingAddresses = (_pingAddress[countryCode] ?? _pingAddress['DEFAULT'])!;
+    for (String address in pingAddresses) {
+      try {
+        final ping = Ping(address, count: 2);
+        final result = await ping.stream.toList();
+        final pinData = result.first;
+        if (pinData.error != null) {
+          appLogger.d('Server ping not found');
+          ping.stop();
+          return false;
+        }
+        if (pinData.response != null) {
+          appLogger.d('Server ping found');
+          ping.stop();
+          return true;
+        }
+      } catch (e) {
+        appLogger.d('Server ping failed');
+        return false;
+      }
+    }
+
+    return false;
+  }
 
   Future<void> checkInternetConnection() async {
     // Check the internet connection status
@@ -123,5 +168,17 @@ class InternetStatusProvider extends ChangeNotifier {
     _connectionSubscription.cancel();
     _cancelDebounceTimer();
     super.dispose();
+  }
+
+  List<InternetCheckOption> getRegionSpecificCheckOptions() {
+    final countryCode = sessionModel.country.value ?? 'DEFAULT';
+    final urls =
+        (_regionCheckUrls[countryCode] ?? _regionCheckUrls['DEFAULT'])!;
+    return urls
+        .map((url) => InternetCheckOption(
+              uri: Uri.parse(url),
+              timeout: const Duration(seconds: 5),
+            ))
+        .toList();
   }
 }

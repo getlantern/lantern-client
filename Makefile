@@ -113,7 +113,6 @@ LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDa
 # -s omits the symbol table and debug info
 # LD_STRIP_FLAGS := -s -w
 # DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
-GOMOBILE_EXTRA_BUILD_FLAGS :=
 
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
@@ -452,7 +451,6 @@ set-version:
 	NEXT_BUILD=$$(($$CURRENT_BUILD + 1)); \
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
 
-#ios: macos build-framework ffigen
 
 ios-release:require-version set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS
 	flutter clean
@@ -698,15 +696,14 @@ sourcedump: require-version
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
 ios: assert-go-version install-gomobile
-	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
-	@rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
-	@echo "Generating Ios.xcFramework"
-	@go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
+	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
+	echo "Generating Ios.xcFramework"
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
-	-ldflags="$(LDFLAGS)"  \
-    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+	-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
     		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
 	@echo "Moving framework"
 	@mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
@@ -722,7 +719,6 @@ build-release-framework: assert-go-version install-gomobile
 	gomobile bind -target=ios \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
-    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
     		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
 	@echo "moving framework"
 	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)

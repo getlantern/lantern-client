@@ -162,14 +162,12 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 		globalStart := time.Now()
 		log.Debug("Updating global config")
 		global, globalUpdated = cf.updateGlobal(cf.rt, global, globalEtag, "https://globalconfig.flashlightproxy.com/global.yaml.gz")
-		log.Debug("Updated global config")
 		log.Debugf("Global config update completed in %v seconds", time.Since(globalStart).Seconds())
 		if refreshProxies {
-			log.Debug("Refreshing proxies")
+			proxyStart := time.Now()
 			proxies, proxiesUpdated = cf.updateProxies(proxies, proxiesEtag)
-			log.Debug("Refreshed proxies")
+			log.Debugf("Proxies update completed in %v seconds", time.Since(proxyStart).Seconds())
 		}
-
 		result.VPNNeedsReconfiguring = result.VPNNeedsReconfiguring || globalUpdated || proxiesUpdated
 	}
 
@@ -195,9 +193,7 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 			log.Debugf("Added %v", host)
 		}
 	}
-
 	email.SetDefaultRecipient(global.ReportIssueEmail)
-
 	return result, nil
 }
 

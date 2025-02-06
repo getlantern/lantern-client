@@ -148,13 +148,13 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	} else {
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
-		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(3000, &protos.Plan{})
 		base.db.RegisterType(4000, &protos.Plans{})
-		base.db.RegisterType(5000, &protos.AppData{})
+		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(6000, &protos.PaymentProviders{})
 		base.db.RegisterType(7000, &protos.PaymentMethod{})
 		base.db.RegisterType(8000, &protos.Bandwidth{})
+		base.db.RegisterType(9000, &protos.AppData{})
 
 	}
 
@@ -188,7 +188,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
-		go m.iosInit(opts.ConfigPath, int(userID), token, deviceID)
+		m.iosInit(opts.ConfigPath, int(userID), token, deviceID)
 	}
 	log.Debugf("SessionModel initialized")
 	go m.initSessionModel(context.Background(), opts)
@@ -198,8 +198,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 // this method initializes the ios configuration for the session model
 // also this method check for geoLookup
 func (m *SessionModel) iosInit(configPath string, userId int, token string, deviceId string) error {
-	go m.setupIosConfigure(configPath, userId, token, deviceId)
-	// go iosGeoLookup.Refresh()
+	m.setupIosConfigure(configPath, userId, token, deviceId)
 	go func() {
 		if <-iosGeoLookup.OnRefresh() {
 			country := iosGeoLookup.GetCountry(5 * time.Second)
@@ -706,8 +705,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	if err != nil {
 		return err
 	}
-	log.Debugf("my device id %v", opts.DeviceID)
-	log.Debugf("Store version %v", opts.PlayVersion)
+	log.Debugf("my device id %v store version %v", opts.DeviceID, opts.PlayVersion)
 	err = pathdb.PutAll(tx, map[string]interface{}{
 		pathDevelopmentMode: opts.DevelopmentMode,
 		pathDeviceID:        opts.DeviceID,
@@ -777,7 +775,9 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 			}
 		}()
 	}
-	go checkSplitTunneling(m)
+	if opts.Platform == "android" {
+		go checkSplitTunneling(m)
+	}
 	m.surveyModel, _ = NewSurveyModel(*m)
 	return nil
 }
