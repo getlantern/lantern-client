@@ -71,8 +71,8 @@ class InternetStatusProvider extends ChangeNotifier {
   };
   /// With help of https://dnschecker.org/public-dns/
   final _pingAddress = {
-    'RU': ['8.8.8.8', '77.88.8.1','1.1.1.1', ''],
-    'CN': ['180.76.76.76', '223.6.6.41', '8.8.8.8', '114.114.114.114'],
+    'RU': ['8.8.8.8', '77.88.8.1','1.1.1.1'],
+    'CN': ['180.76.76.76', '223.6.6.41', '8.8.8.8'],
     'DEFAULT': ['8.8.8.8', '1.1.1.1'],
   };
 
