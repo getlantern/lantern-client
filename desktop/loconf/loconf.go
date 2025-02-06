@@ -66,16 +66,13 @@ type Announcement struct {
 }
 
 // Get gets announcement via the HTTP client, based on the locale and staging flags.
-func Get(hc *http.Client, isStaging bool) (*LoConf, error) {
-	return get(hc, isStaging, loConfURL, stagingLoConfURL)
+func Get(hc *http.Client) (*LoConf, error) {
+	return get(hc, loConfURL)
 }
 
 // get gets announcement via the HTTP client, based on the locale and staging flags.
-func get(hc *http.Client, isStaging bool, prodURL, stagingURL string) (*LoConf, error) {
+func get(hc *http.Client, prodURL string) (*LoConf, error) {
 	u := prodURL
-	if isStaging {
-		u = stagingURL
-	}
 	b, efetch := fetch(hc, bustCache(u))
 	if efetch != nil {
 		return nil, errors.Wrap(efetch)

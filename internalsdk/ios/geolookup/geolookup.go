@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
-	"net/http"
 	"os"
 	"sync"
 	"time"
@@ -14,8 +13,8 @@ import (
 	geo "github.com/getlantern/geolookup"
 	"github.com/getlantern/golog"
 
+	"github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/ops"
-	"github.com/getlantern/flashlight/v7/proxied"
 )
 
 var (
@@ -26,7 +25,6 @@ var (
 	watchers       []chan bool
 	persistToFile  string
 	mx             sync.Mutex
-	roundTripper   http.RoundTripper
 )
 
 const (
@@ -39,10 +37,6 @@ type GeoInfo struct {
 	IP       string
 	City     *geo.City
 	FromDisk bool
-}
-
-func init() {
-	SetDefaultRoundTripper()
 }
 
 // GetIP gets the IP. If the IP hasn't been determined yet, waits up to the
@@ -244,7 +238,7 @@ func lookup() *GeoInfo {
 func doLookup() (*GeoInfo, error) {
 	op := ops.Begin("geolookup")
 	defer op.End()
-	city, ip, err := geo.LookupIP("", roundTripper)
+	city, ip, err := geo.LookupIP("", common.GetHTTPClient().Transport)
 
 	if err != nil {
 		log.Errorf("Could not lookup IP %v", err)
@@ -255,8 +249,4 @@ func doLookup() (*GeoInfo, error) {
 			City:     city,
 			FromDisk: false},
 		nil
-}
-
-func SetDefaultRoundTripper() {
-	roundTripper = proxied.ParallelPreferChained()
 }

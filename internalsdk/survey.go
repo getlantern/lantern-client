@@ -4,21 +4,13 @@ import (
 	"encoding/json"
 	"io"
 	"math/rand"
-	"net/http"
 	"strings"
-	"time"
 
 	"github.com/getlantern/errors"
-	"github.com/getlantern/flashlight/v7/proxied"
+	"github.com/getlantern/flashlight/v7/common"
 )
 
 var (
-	dialTimeout = 15 * time.Second
-	httpClient  = &http.Client{
-		Transport: proxied.ParallelPreferChained(),
-		Timeout:   dialTimeout,
-	}
-
 	surveyUrl     = "https://raw.githubusercontent.com/getlantern/loconf/master/messages.json"
 	noSurveyError = errors.New("Survey is not available for the user")
 )
@@ -53,6 +45,7 @@ func NewSurveyModel(session SessionModel) (*SurveyModel, error) {
 }
 
 func (s *SurveyModel) fetchSurvey() error {
+	httpClient := common.GetHTTPClient()
 	resp, err := httpClient.Get(surveyUrl)
 	if err != nil {
 		log.Debugf("Failed to fetch survey response %v", err)

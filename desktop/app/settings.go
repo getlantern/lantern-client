@@ -131,9 +131,6 @@ type Settings struct {
 func LoadSettings(configDir string) *Settings {
 	path := filepath.Join(configDir, "settings.yaml")
 	settings := LoadSettingsFrom(sdkcommon.ApplicationVersion, sdkcommon.RevisionDate, sdkcommon.BuildDate, path)
-	if sdkcommon.IsStagingEnvironment() {
-		settings.SetUserIDAndToken(9007199254740992, "OyzvkVvXk7OgOQcx-aZpK5uXx6gQl5i8BnOuUkc0fKpEZW6tc8uUvA")
-	}
 	return settings
 }
 

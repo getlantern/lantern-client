@@ -2,7 +2,6 @@ package geolookup
 
 import (
 	"net"
-	"net/http"
 	"os"
 	"testing"
 	"time"
@@ -109,11 +108,6 @@ const initialInfo = `
 
 func TestGetIP(t *testing.T) {
 	currentGeoInfo = eventual.NewValue()
-	roundTripper = &http.Transport{
-		Dial: (&net.Dialer{
-			Timeout: 10 * time.Second,
-		}).Dial,
-	}
 	ip := GetIP(0)
 	require.Equal(t, "", ip)
 	go Refresh()
@@ -124,11 +118,6 @@ func TestGetIP(t *testing.T) {
 
 func TestGetCountry(t *testing.T) {
 	currentGeoInfo = eventual.NewValue()
-	roundTripper = &http.Transport{
-		Dial: (&net.Dialer{
-			Timeout: 10 * time.Second,
-		}).Dial,
-	}
 
 	country := GetCountry(0)
 	require.Equal(t, "", country)

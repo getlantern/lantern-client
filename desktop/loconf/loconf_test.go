@@ -11,20 +11,19 @@ import (
 )
 
 func TestRoundTrip(t *testing.T) {
-	lc, err := Get(http.DefaultClient, false)
+	lc, err := Get(http.DefaultClient)
 	_ = assert.NoError(t, err) && assert.True(t, len(lc.Surveys) > 0)
 
-	lc, err = Get(http.DefaultClient, true)
+	lc, err = Get(http.DefaultClient)
 	_ = assert.NoError(t, err) && assert.True(t, len(lc.Surveys) > 0)
 
-	lc, err = get(http.DefaultClient, false, "badurl", "badurl")
+	lc, err = get(http.DefaultClient, "badurl")
 	assert.Error(t, err)
 
-	lc, err = get(http.DefaultClient, true, "badurl", "badurl")
+	lc, err = get(http.DefaultClient, "badurl")
 	assert.Error(t, err)
 
-	lc, err = get(http.DefaultClient, false,
-		"https://raw.githubusercontent.com/getlantern/loconf/master/DOESNOTEXIST.json",
+	lc, err = get(http.DefaultClient,
 		"https://raw.githubusercontent.com/getlantern/loconf/master/DOESNOTEXIST.json")
 	assert.Error(t, err)
 }
