@@ -117,11 +117,8 @@ func (cf *configurer) configure(refreshProxies bool) (*ConfigResult, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	result.VPNNeedsReconfiguring = globalInitialized || proxiesInitialized
-
 	var globalUpdated, proxiesUpdated bool
-
 	go func() {
 		go geolookup.Refresh()
 		cf.uc.Country = geolookup.GetCountry(1 * time.Minute)
@@ -150,9 +147,7 @@ func (cf *configurer) configure(refreshProxies bool) (*ConfigResult, error) {
 		proxies, proxiesUpdated = cf.updateProxies(proxies, proxiesEtag)
 		log.Debugf("Proxies updated: %v", time.Since(proxiesStart).Seconds())
 	}
-
 	result.VPNNeedsReconfiguring = result.VPNNeedsReconfiguring || globalUpdated || proxiesUpdated
-
 	for _, provider := range global.Client.Fronted.Providers {
 		for _, masquerade := range provider.Masquerades {
 			if result.IPSToExcludeFromVPN == "" {
@@ -175,9 +170,7 @@ func (cf *configurer) configure(refreshProxies bool) (*ConfigResult, error) {
 			log.Debugf("Added %v", host)
 		}
 	}
-
 	email.SetDefaultRecipient(global.ReportIssueEmail)
-
 	return result, nil
 }
 

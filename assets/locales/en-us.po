@@ -1836,5 +1836,11 @@ msgstr "Proxy Everything"
 msgid "errorSubmittingToGooglePlay"
 msgstr "We are currently experiencing difficulties processing your request for Google Play. Please try again later."
 
+msgid "no_internet_connection"
+msgstr "No internet connection detected"
+
+msgid "domain_fronting_error"
+msgstr "We're having trouble connecting to our servers. Please wait a moment or try turning it off and on."
+
 
 

@@ -40,7 +40,8 @@ var surveysResponse *SurveyResponse
 // SurveyModel is a custom model derived from the baseModel.
 func NewSurveyModel(session SessionModel) (*SurveyModel, error) {
 	model := &SurveyModel{SessionModel: &session}
-	return model, model.fetchSurvey()
+	go model.fetchSurvey()
+	return model, nil
 }
 
 func (s *SurveyModel) fetchSurvey() error {

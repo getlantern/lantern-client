@@ -113,7 +113,6 @@ LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDa
 # -s omits the symbol table and debug info
 # LD_STRIP_FLAGS := -s -w
 # DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
-GOMOBILE_EXTRA_BUILD_FLAGS :=
 
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
@@ -124,6 +123,9 @@ FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
 
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/archive/Runner.xcarchive/dSYMs/
+ANDROID_DEBUG_PLAY_SYMBOL=/build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib
+ANDROID_DEBUG_SIDE_LOAD_SYMBOL=/build/app/intermediates/merged_native_libs/prodSideload/mergeProdSideloadNativeLibs/out/lib
+
 INFO_PLIST := ios/Runner/Info.plist
 ENTITLEMENTS := macos/Runner/Release.entitlements
 
@@ -353,7 +355,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
-		-ldflags="-s -w $(LDFLAGS) $(EXTRA_LDFLAGS)" \
+		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
@@ -402,7 +404,7 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) ffigen require-sentry require-sentry-auth-token
+$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) ffigen require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -416,12 +418,12 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) ffi
 	-PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle assembleProdSideload && \
-	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodSideload/out/lib && \
+	sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_ANDROID) $(ANDROID_DEBUG_SIDE_LOAD_SYMBOL)
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
 
-$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
+$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
 	@mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
@@ -432,7 +434,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" \
 	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle bundlePlay && \
-	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodPlay/out/lib && \
+	sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_ANDROID) $(ANDROID_DEBUG_PLAY_SYMBOL)
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
 android-debug: $(MOBILE_DEBUG_APK)
@@ -449,7 +451,6 @@ set-version:
 	NEXT_BUILD=$$(($$CURRENT_BUILD + 1)); \
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
 
-#ios: macos build-framework ffigen
 
 ios-release:require-version set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS
 	flutter clean
@@ -695,15 +696,14 @@ sourcedump: require-version
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
 ios: assert-go-version install-gomobile
-	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
-	@rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
-	@echo "Generating Ios.xcFramework"
-	@go env -w 'GOPRIVATE=github.com/getlantern/*' && \
+	echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
+	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
+	echo "Generating Ios.xcFramework"
+	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
-	-ldflags="$(LDFLAGS)"  \
-    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+	-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
     		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
 	@echo "Moving framework"
 	@mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
@@ -719,7 +719,6 @@ build-release-framework: assert-go-version install-gomobile
 	gomobile bind -target=ios \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
-    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
     		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
 	@echo "moving framework"
 	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
