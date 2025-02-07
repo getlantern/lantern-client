@@ -259,6 +259,7 @@ abstract class BaseModel(
         db.unsubscribe(subscriberID)
         activeSubscribers.remove(subscriberID)
 
+        // No more active subscribers, we can safely clean up.
         if (activeSubscribers.isEmpty()) {
             destroy()
         }
@@ -268,7 +269,7 @@ abstract class BaseModel(
         activeSubscribers.forEach {
             db.unsubscribe(it)
         }
-        // Quit the async handler thread
+        // Quit the async handler thread.
         asyncHandlerThread.quitSafely()
     }
 }
