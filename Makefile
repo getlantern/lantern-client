@@ -622,7 +622,17 @@ require-bundler:
 
 .PHONY: macos-release
 macos-release: require-appdmg pubget
+	flutter build macos --release
+
+	# Sign liblantern.dylib
+	$(call osxcodesign,build/macos/Build/Products/Release/Lantern.app/Contents/Frameworks/liblantern.dylib)
+	# Sign main app binary
+	$(call osxcodesign,build/macos/Build/Products/Release/Lantern.app/Contents/MacOS/Lantern)
+	# Sign app bundle
+	$(call osxcodesign,build/macos/Build/Products/Release/Lantern.app)
+
 	flutter_distributor package --platform macos --targets dmg --skip-clean
+
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-macos.dmg $(INSTALLER_NAME).dmg
 	make notarize-darwin
 
