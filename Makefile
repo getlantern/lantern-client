@@ -208,7 +208,7 @@ PROTO_SOURCES = $(shell find . -name '*.proto' -not -path './vendor/*')
 GENERATED_PROTO_SOURCES = $(shell echo "$(PROTO_SOURCES)" | sed 's/\.proto/\.pb\.go/g')
 GO_SOURCES := $(GENERATED_PROTO_SOURCES) go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
-
+BUILD_DIR ?= build
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
@@ -591,35 +591,9 @@ macos: macos-arm64
 		-create \
 		${DESKTOP_LIB_NAME}_arm64.dylib \
 		${DESKTOP_LIB_NAME}_amd64.dylib \
-		-output ${DARWIN_LIB_NAME}
-	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" ${DARWIN_LIB_NAME}
+		-output "${BUILD_DIR}/${DARWIN_LIB_NAME}"
+	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${BUILD_DIR}/${DARWIN_LIB_NAME}"
 	rm -Rf ${DESKTOP_LIB_NAME}_arm64.dylib ${DESKTOP_LIB_NAME}_amd64.dylib
-
-$(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
-	@echo "Generating distribution package for darwin/amd64..." && \
-	if [[ "$$(uname -s)" == "Darwin" ]]; then \
-		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
-		cp $(DARWIN_LIB_NAME) $(DARWIN_OUT)/Contents/Frameworks && \
-		$(call osxcodesign,$(DARWIN_OUT)/Contents/Frameworks/liblantern.dylib) && \
-		$(call osxcodesign,$(DARWIN_OUT)/Contents/MacOS/Lantern) && \
-		$(call osxcodesign,$(DARWIN_OUT)) && \
-		cat $(DARWIN_OUT)/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin.bz2 && \
-		ls -l $(APP)_update_darwin.bz2 && \
-		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
-		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
-		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
-		rm -rf $(INSTALLER_NAME).dmg && \
-		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
-		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
-		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
-		$(call osxcodesign,$(INSTALLER_NAME).dmg) && \
-		rm $(CAPITALIZED_APP).dmg.zlib; \
-	else \
-		echo "-> Skipped: Can not generate a package on a non-OSX host."; \
-	fi;
-
-.PHONY: darwin-installer
-darwin-installer: $(INSTALLER_NAME).dmg
 
 .PHONY: notarize-darwin
 notarize-darwin: require-ac-username require-ac-password
@@ -648,8 +622,9 @@ require-bundler:
 
 .PHONY: macos-release
 macos-release: require-appdmg pubget
-	flutter build macos --release
-	make darwin-installer notarize-darwin
+	flutter_distributor package --platform macos --targets dmg --skip-clean
+	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-macos.dmg $(INSTALLER_NAME).dmg
+	make notarize-darwin
 
 android-bundle: $(MOBILE_BUNDLE)
 
