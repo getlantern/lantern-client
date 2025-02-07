@@ -2044,3 +2044,9 @@ msgid "errorSubmittingToGooglePlay"
 msgstr ""
 "Il nous est actuellement impossible de traiter votre demande pour Google "
 "Play. Réessayez plus tard."
+
+msgid "no_internet_connection"
+msgstr ""
+
+msgid "domain_fronting_error"
+msgstr ""
