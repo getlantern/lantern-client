@@ -36,8 +36,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
             height: 70,
             borderRadius: BorderRadius.circular(40),
             disabledOpacity: 1,
-            enabled: (internetStatusProvider.isConnected &&
-                !vpnNotifier.isFlashlightInitializedFailed),
+            enabled:
+                isSwitchEnabled(vpnStatus, vpnNotifier, internetStatusProvider),
             initialValue: vpnStatus == VpnStatus.connected.name ||
                 vpnStatus == VpnStatus.disconnecting.name ||
                 vpnStatus == VpnStatus.connecting.name,
@@ -58,8 +58,8 @@ class _VPNSwitchState extends State<VPNSwitch> {
         iconBuilder: (context, local, global) => const SizedBox(),
         height: 72,
         spacing: 28.0,
-        active: (internetStatusProvider.isConnected &&
-            !vpnNotifier.isFlashlightInitializedFailed),
+        active: isSwitchEnabled(
+            vpnNotifier.vpnStatus.value, vpnNotifier, internetStatusProvider),
         padding: const EdgeInsets.symmetric(horizontal: 5),
         indicatorSize: const ui.Size(60, 60),
         animationDuration: const Duration(milliseconds: 350),
@@ -100,10 +100,13 @@ class _VPNSwitchState extends State<VPNSwitch> {
     }
   }
 
-  Color getWrapperColor(bool vpnStatus, bool internetConnected,
+  Color getWrapperColor(bool vpnConnected, bool internetConnected,
       bool isFlashlightInitializedFailed) {
+    if (vpnConnected) {
+      return onSwitchColor;
+    }
     if (internetConnected && !isFlashlightInitializedFailed) {
-      if (vpnStatus) {
+      if (vpnConnected) {
         return onSwitchColor;
       }
       return offSwitchColor;
@@ -111,9 +114,14 @@ class _VPNSwitchState extends State<VPNSwitch> {
     return grey3;
   }
 
-  bool isIdle(String vpnStatus) =>
-      vpnStatus != VpnStatus.connecting.name &&
-      vpnStatus != VpnStatus.disconnecting.name;
+  bool isSwitchEnabled(String vpnStatus, VPNChangeNotifier vpnNotifier,
+      InternetStatusProvider internetStatusProvider) {
+    if (vpnStatus == VpnStatus.connected.name) {
+      return true;
+    }
+    return internetStatusProvider.isConnected &&
+        !vpnNotifier.isFlashlightInitializedFailed;
+  }
 
   Future<void> vpnProcessForMobile(
       bool newValue, String vpnStatus, bool userHasPermission) async {

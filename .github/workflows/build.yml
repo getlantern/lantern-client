@@ -47,6 +47,7 @@ jobs:
       SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
       SENTRY_ORG: getlantern
       SENTRY_PROJECT_IOS: lantern-ios
+      SENTRY_PROJECT_ANDROID: android
     strategy:
       matrix:
         include:

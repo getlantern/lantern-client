@@ -14,7 +14,8 @@ final navigatorKey = GlobalKey<NavigatorState>();
 final globalRouter = AppRouter();
 final networkWarningBarHeightRatio = ValueNotifier(0.0);
 var showConnectivityWarning = false;
-
+// Windows setup
+// https://learn.microsoft.com/en-us/windows/uwp/launch-resume/web-to-app-linking#associate-your-app-and-website-with-a-json-file
 // This enum is used to manage the font families used in the application
 enum AppFontFamily {
   semim('Samim'),

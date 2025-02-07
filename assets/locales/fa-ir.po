@@ -1977,3 +1977,9 @@ msgstr ""
 
 msgid "errorSubmittingToGooglePlay"
 msgstr ""
+
+msgid "no_internet_connection"
+msgstr ""
+
+msgid "domain_fronting_error"
+msgstr ""

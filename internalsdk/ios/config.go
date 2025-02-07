@@ -18,10 +18,10 @@ import (
 	"github.com/getlantern/yaml"
 
 	commonconfig "github.com/getlantern/common/config"
+	fcommon "github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/email"
 	"github.com/getlantern/flashlight/v7/embeddedconfig"
-	"github.com/getlantern/flashlight/v7/proxied"
 
 	"github.com/getlantern/lantern-client/internalsdk/ios/geolookup"
 
@@ -55,7 +55,7 @@ type configurer struct {
 }
 
 type Configurer interface {
-	Configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error)
+	configure(refreshProxies bool) (*ConfigResult, error)
 	OpenGlobal() (*config.Global, string, bool, error)
 	HasGlobalConfig() bool
 }
@@ -68,23 +68,18 @@ type Configurer interface {
 // a proxies.yaml configuration that overrides whatever we fetch from the cloud.
 func Configure(configFolderPath string, userID int, proToken, deviceID string, refreshProxies bool, hardcodedProxies string) (*ConfigResult, error) {
 	log.Debugf("Configuring client for device '%v' at config path '%v' userid '%v' token '%v'", deviceID, configFolderPath, userID, proToken)
-	defer log.Debug("Finished configuring client")
-	uc := userConfigFor(userID, proToken, deviceID)
-	cf := &configurer{
-		configFolderPath: configFolderPath,
-		hardcodedProxies: hardcodedProxies,
-		uc:               uc,
-		rt:               proxied.Fronted("ios-configure"),
-	}
-	return cf.Configure(userID, proToken, refreshProxies)
+	cf := NewConfigurer(configFolderPath, userID, proToken, deviceID, hardcodedProxies)
+	return cf.configure(refreshProxies)
 }
 
 // NewConfigurer returns a new instance of Configurer
 func NewConfigurer(configFolderPath string, userID int, proToken, deviceID, hardcodedProxies string) Configurer {
+	log.Debugf("Creating configurer for device '%v' at config path '%v' userid '%v' token '%v'", deviceID, configFolderPath, userID, proToken)
 	return &configurer{
 		configFolderPath: configFolderPath,
 		hardcodedProxies: hardcodedProxies,
 		uc:               userConfigFor(userID, proToken, deviceID),
+		rt:               fcommon.GetHTTPClient().Transport,
 	}
 }
 
@@ -103,10 +98,10 @@ type UserConfig struct {
 // config.go:176 Configured completed in 3.700574125s
 
 // TODO: Implement a timeout mechanism to handle prolonged execution times and potentially execute this method in the background to maintain smooth UI startup performance.
-func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool) (*ConfigResult, error) {
+func (cf *configurer) configure(refreshProxies bool) (*ConfigResult, error) {
 	// Log the full method run time.
 	defer func(start time.Time) {
-		log.Debugf("Configured completed in %v seconds", time.Since(start).Seconds())
+		log.Debugf("Configure completed in %v seconds", time.Since(start).Seconds())
 	}(time.Now())
 	result := &ConfigResult{}
 	if err := cf.writeUserConfig(); err != nil {
@@ -122,60 +117,40 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 	if err != nil {
 		return nil, err
 	}
-
 	result.VPNNeedsReconfiguring = globalInitialized || proxiesInitialized
-
 	var globalUpdated, proxiesUpdated bool
-
-	setupFronting := func() error {
-		start := time.Now()
-		log.Debug("Setting up fronting")
-		defer log.Debugf("Setting up fronting completed in %v", time.Since(start).Seconds())
-		if frontingErr := cf.configureFronting(global); frontingErr != nil {
-			log.Errorf("Unable to configure fronting on first try, update global config directly from GitHub and try again: %v", frontingErr)
-			global, globalUpdated = cf.updateGlobal(http.DefaultTransport, global, globalEtag, "https://raw.githubusercontent.com/getlantern/lantern-binaries/main/cloud.yaml.gz")
-			return cf.configureFronting(global)
+	go func() {
+		go geolookup.Refresh()
+		cf.uc.Country = geolookup.GetCountry(1 * time.Minute)
+		log.Debugf("Successful geolookup: country %s", cf.uc.Country)
+		cf.uc.AllowProbes = global.FeatureEnabled(
+			config.FeatureProbeProxies,
+			common.Platform,
+			cf.uc.AppName,
+			"",
+			cf.uc.UserID,
+			cf.uc.Token != "",
+			cf.uc.Country)
+		log.Debugf("Allow probes?: %v", cf.uc.AllowProbes)
+		if err := cf.writeUserConfig(); err != nil {
+			log.Errorf("Unable to save updated UserConfig with country and allow probes: %v", err)
 		}
-		return nil
+	}()
+	globalStart := time.Now()
+	log.Debug("Updating global config")
+	global, globalUpdated = cf.updateGlobal(cf.rt, global, globalEtag, "https://raw.githubusercontent.com/getlantern/lantern-binaries/refs/heads/main/cloud.yaml.gz")
+	log.Debugf("Updated global config: %v", globalUpdated)
+	log.Debugf("Global config update completed in %v seconds", time.Since(globalStart).Seconds())
+	if refreshProxies {
+		proxiesStart := time.Now()
+		log.Debug("Refreshing proxies")
+		proxies, proxiesUpdated = cf.updateProxies(proxies, proxiesEtag)
+		log.Debugf("Proxies updated: %v", time.Since(proxiesStart).Seconds())
 	}
-
-	if frontingErr := setupFronting(); frontingErr != nil {
-		log.Errorf("Unable to configure fronting, sticking with embedded configuration: %v", err)
-	} else {
-		go func() {
-			go geolookup.Refresh()
-			cf.uc.Country = geolookup.GetCountry(1 * time.Minute)
-			log.Debugf("Successful geolookup: country %s", cf.uc.Country)
-			cf.uc.AllowProbes = global.FeatureEnabled(
-				config.FeatureProbeProxies,
-				common.Platform,
-				cf.uc.AppName,
-				"",
-				int64(cf.uc.UserID),
-				cf.uc.Token != "",
-				cf.uc.Country)
-			log.Debugf("Allow probes?: %v", cf.uc.AllowProbes)
-			if err := cf.writeUserConfig(); err != nil {
-				log.Errorf("Unable to save updated UserConfig with country and allow probes: %v", err)
-			}
-		}()
-		globalStart := time.Now()
-		log.Debug("Updating global config")
-		global, globalUpdated = cf.updateGlobal(cf.rt, global, globalEtag, "https://globalconfig.flashlightproxy.com/global.yaml.gz")
-		log.Debug("Updated global config")
-		log.Debugf("Global config update completed in %v seconds", time.Since(globalStart).Seconds())
-		if refreshProxies {
-			log.Debug("Refreshing proxies")
-			proxies, proxiesUpdated = cf.updateProxies(proxies, proxiesEtag)
-			log.Debug("Refreshed proxies")
-		}
-
-		result.VPNNeedsReconfiguring = result.VPNNeedsReconfiguring || globalUpdated || proxiesUpdated
-	}
-
+	result.VPNNeedsReconfiguring = result.VPNNeedsReconfiguring || globalUpdated || proxiesUpdated
 	for _, provider := range global.Client.Fronted.Providers {
 		for _, masquerade := range provider.Masquerades {
-			if len(result.IPSToExcludeFromVPN) == 0 {
+			if result.IPSToExcludeFromVPN == "" {
 				result.IPSToExcludeFromVPN = masquerade.IpAddress
 			} else {
 				result.IPSToExcludeFromVPN = fmt.Sprintf("%v,%v", result.IPSToExcludeFromVPN, masquerade.IpAddress)
@@ -195,9 +170,7 @@ func (cf *configurer) Configure(userID int, proToken string, refreshProxies bool
 			log.Debugf("Added %v", host)
 		}
 	}
-
 	email.SetDefaultRecipient(global.ReportIssueEmail)
-
 	return result, nil
 }
 
@@ -274,7 +247,7 @@ func (cf *configurer) openConfig(name string, cfg interface{}, embedded []byte) 
 	return string(etagBytes), initialized, nil
 }
 
-func (cf *configurer) updateGlobal(rt http.RoundTripper, cfg *config.Global, etag string, url string) (*config.Global, bool) {
+func (cf *configurer) updateGlobal(rt http.RoundTripper, cfg *config.Global, etag, url string) (*config.Global, bool) {
 	updated := &config.Global{}
 	didFetch, err := cf.updateFromWeb(rt, globalYaml, etag, updated, url)
 	if err != nil {
@@ -288,7 +261,7 @@ func (cf *configurer) updateGlobal(rt http.RoundTripper, cfg *config.Global, eta
 
 func (cf *configurer) updateProxies(cfg map[string]*commonconfig.ProxyConfig, etag string) (map[string]*commonconfig.ProxyConfig, bool) {
 	updated := make(map[string]*commonconfig.ProxyConfig)
-	didFetch, err := cf.updateFromWeb(cf.rt, proxiesYaml, etag, updated, "http://config.getiantem.org/proxies.yaml.gz")
+	didFetch, err := cf.updateFromWeb(cf.rt, proxiesYaml, etag, updated, "https://config.getiantem.org/proxies.yaml.gz")
 	if err != nil {
 		log.Error(err)
 	}
@@ -302,7 +275,7 @@ func (cf *configurer) updateProxies(cfg map[string]*commonconfig.ProxyConfig, et
 	return cfg, didFetch
 }
 
-func (cf *configurer) updateFromWeb(rt http.RoundTripper, name string, etag string, cfg interface{}, url string) (bool, error) {
+func (cf *configurer) updateFromWeb(rt http.RoundTripper, name, etag string, cfg interface{}, url string) (bool, error) {
 	var bytes []byte
 	var newETag string
 	var err error
@@ -333,10 +306,10 @@ func (cf *configurer) updateFromWeb(rt http.RoundTripper, name string, etag stri
 	return newETag != etag, nil
 }
 
-func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name string, etag string, cfg interface{}, url string) ([]byte, string, error) {
+func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name, etag string, cfg interface{}, url string) ([]byte, string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 40*time.Second)
 	defer cancel()
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return nil, "", errors.New("Unable to construct request to fetch %v from %v: %v", name, url, err)
 	}
@@ -354,10 +327,12 @@ func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name string, etag st
 	// successive requests
 	req.Close = true
 
+	log.Debugf("Fetching %v from %v with RoundTripper %v", name, url, rt)
 	resp, err := rt.RoundTrip(req)
 	if err != nil {
 		return nil, "", errors.New("Unable to fetch cloud config at %s: %s", url, err)
 	}
+	log.Debugf("Fetched config with URL: %v", url)
 	dump, dumperr := httputil.DumpResponse(resp, false)
 	if dumperr != nil {
 		log.Errorf("Could not dump response: %v", dumperr)
@@ -411,19 +386,6 @@ func (cf *configurer) doUpdateFromWeb(rt http.RoundTripper, name string, etag st
 	return bytes, newEtag, nil
 }
 
-func (cf *configurer) configureFronting(global *config.Global) error {
-	log.Debug("Configuring fronting")
-	certs, err := global.TrustedCACerts()
-	if err != nil {
-		return errors.New("Unable to read trusted CAs from global config, can't configure domain fronting: %v", err)
-	}
-
-	proxied.OnNewFronts(certs, global.Client.FrontedProviders())
-
-	log.Debug("Configured fronting")
-	return nil
-}
-
 func (cf *configurer) saveConfig(name string, bytes []byte) {
 	err := os.WriteFile(cf.fullPathTo(name), bytes, 0644)
 	if err != nil {
@@ -431,7 +393,7 @@ func (cf *configurer) saveConfig(name string, bytes []byte) {
 	}
 }
 
-func (cf *configurer) saveEtag(name string, etag string) {
+func (cf *configurer) saveEtag(name, etag string) {
 	err := os.WriteFile(cf.fullPathTo(name+".etag"), []byte(etag), 0644)
 	if err != nil {
 		log.Errorf("Unable to save etag for %v: %v", name, err)

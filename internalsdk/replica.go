@@ -12,8 +12,8 @@ import (
 
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/client"
+	fcommon "github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
-	"github.com/getlantern/flashlight/v7/proxied"
 	replicaConfig "github.com/getlantern/replica/config"
 	replicaServer "github.com/getlantern/replica/server"
 	replicaService "github.com/getlantern/replica/service"
@@ -146,20 +146,8 @@ func (s *ReplicaServer) newHandler() (*replicaServer.HttpHandler, error) {
 		common.AddCommonNonUserHeaders(s.UserConfig, r)
 	}
 	input.GlobalConfig = optsFunc
-	input.HttpClient.Transport = proxied.ParallelForIdempotent()
+	input.HttpClient = fcommon.GetHTTPClient()
 	input.ProcessCORSHeaders = common.ProcessCORS
-	input.HttpClient = &http.Client{
-		Transport: proxied.AsRoundTripper(
-			func(req *http.Request) (*http.Response, error) {
-				log.Tracef("Replica HTTP client processing request to: %v (%v)", req.Host, req.URL.Host)
-				chained, err := proxied.ChainedNonPersistent("")
-				if err != nil {
-					return nil, log.Errorf("connecting to proxy: %w", err)
-				}
-				return chained.RoundTrip(req)
-			},
-		),
-	}
 	input.TorrentClientHTTPProxy = func(req *http.Request) (*url.URL, error) {
 		log.Tracef("Proxying Replica request [%v] through Flashlight...", req.URL.String())
 		proxyAddr, ok := client.Addr(40 * time.Second)
