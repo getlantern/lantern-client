@@ -61,7 +61,7 @@ func (cs *ChangeSet) PopUpdate() (*Update, error) {
 		return &Update{Path: path, Value: minisql.NewValue(vb)}, nil
 	}
 
-	return nil, nil
+	return nil, errors.New("no updates available")
 }
 
 func (cs *ChangeSet) HasDelete() bool {
@@ -113,7 +113,13 @@ func (m *baseModel) methodNotImplemented(method string) (interface{}, error) {
 
 // Subscribe subscribes to database changes based on the provided request.
 func (m *baseModel) Subscribe(req *SubscriptionRequest) error {
+	if req.Updater == nil {
+		log.Error("UpdaterModel is nil in SubscriptionRequest")
+		return errors.New("UpdaterModel cannot be nil")
+	}
 	pathPrefixesSlice := req.getPathPrefixes()
+	log.Debugf("Subscribing with ID: %s, PathPrefixes: %v", req.ID, pathPrefixesSlice)
+
 	sub := &pathdb.Subscription[interface{}]{
 		ID:             req.ID,
 		PathPrefixes:   pathPrefixesSlice,

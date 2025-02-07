@@ -829,15 +829,11 @@ func checkSplitTunneling(m *SessionModel) error {
 	tunneling, err := pathdb.Get[bool](m.db, pathSplitTunneling)
 	if err != nil {
 		log.Errorf("Error while getting split tunneling value %v", err)
-		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathSplitTunneling, false, "")
-		})
+		m.setSplitTunneling(false)
+		return err
 	}
 	if !tunneling {
-		log.Debugf("Split Tunneling value is %v", tunneling)
-		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathSplitTunneling, false, "")
-		})
+		log.Debugf("Split Tunneling already false: %v", tunneling)
 	}
 	return nil
 }
