@@ -56,11 +56,11 @@ class InternetStatusProvider extends ChangeNotifier {
   Timer? _debounceTimer;
 
   final _regionCheckUrls = {
-    'RU': const ['https://yandex.ru', 'https://alibaba.com', 'https://google.com', 'https://microsoft.com'],
-    'AE': const ['https://google.com', 'https://microsoft.com','https://amazon.ae'],
-    'IR': const['https://aparat.com', 'https://digikala.com', 'https://google.com'],
+    'RU': const ['https://yandex.ru', 'https://alibaba.com', 'https://dzen.ru', 'https://vk.com'],
+    'AE': const ['https://espncricinfo.com', 'https://microsoft.com','https://amazon.ae'],
+    'IR': const['https://aparat.com', 'https://digikala.com', 'https://divar.ir'],
     'CN': const['https://baidu.com', 'https://microsoft.com', 'https://alibaba.com'],
-    'DEFAULT':const ['https://google.com', 'https://ipapi.co/ip', 'https://microsoft.com'],
+    'DEFAULT':const ['https://alibaba.com', 'https://emirates.com', 'https://microsoft.com'],
   };
   /// With help of https://dnschecker.org/public-dns/
   /// pinged by https://ping.pe
@@ -96,7 +96,8 @@ class InternetStatusProvider extends ChangeNotifier {
   bool get isConnected => _isConnected;
 
   ///Another check on top of internet connection checker
-  ///to ping some of the popular websites
+  ///to ping some of the popular websites.
+  ///Note that I don't think this works on iOS at all.
   Future<bool> pingServers() async {
     appLogger.d('Pinging servers to check internet connection');
     final countryCode = sessionModel.country.value ?? 'DEFAULT';
@@ -104,12 +105,11 @@ class InternetStatusProvider extends ChangeNotifier {
     for (String address in pingAddresses) {
       try {
         final ping = Ping(address, count: 2);
-        final result = await ping.stream.toList();
-        final pinData = result.first;
+        final pinData = await ping.stream.first;
         if (pinData.error != null) {
           appLogger.d('Server ping not found');
           ping.stop();
-          return false;
+          continue;
         }
         if (pinData.response != null) {
           appLogger.d('Server ping found');
@@ -118,7 +118,7 @@ class InternetStatusProvider extends ChangeNotifier {
         }
       } catch (e) {
         appLogger.d('Server ping failed');
-        return false;
+        continue;
       }
     }
 
