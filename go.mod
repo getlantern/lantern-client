@@ -49,7 +49,6 @@ require (
 	github.com/getlantern/idletiming v0.0.0-20231030193830-6767b09f86db
 	github.com/getlantern/ipproxy v0.0.0-20240923151842-ff95aca6e3dc
 	github.com/getlantern/jibber_jabber v0.0.0-20210901195950-68955124cc42
-	github.com/getlantern/kindling v0.0.0-20250206162439-a9bc03fb5d84
 	github.com/getlantern/launcher v0.0.0-20230622120034-fe87f9bff286
 	github.com/getlantern/mtime v0.0.0-20200417132445-23682092d1f7
 	github.com/getlantern/netx v0.0.0-20240830183145-c257516187f0
@@ -94,6 +93,7 @@ require (
 	github.com/cloudflare/circl v1.5.0 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
 	github.com/containerd/console v1.0.3 // indirect
+	github.com/getlantern/kindling v0.0.0-20250206162439-a9bc03fb5d84 // indirect
 	github.com/getlantern/lantern-water v0.0.0-20241218135103-60224336cf1d // indirect
 	github.com/getlantern/sing-vmess v0.0.0-20241209111030-0f2c02b4eb9a // indirect
 	github.com/goccy/go-yaml v1.15.13 // indirect

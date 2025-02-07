@@ -56,21 +56,17 @@ class InternetStatusProvider extends ChangeNotifier {
   Timer? _debounceTimer;
 
   final _regionCheckUrls = {
-    'RU': const [
-      'https://yandex.ru',
-      'https://alibaba.com',
-      'https://google.com',
-      'https://microsoft.com'
-    ],
+    'RU': const ['https://yandex.ru', 'https://alibaba.com', 'https://google.com', 'https://microsoft.com'],
+    'AE': const ['https://google.com', 'https://microsoft.com','https://amazon.ae'],
+    'IR': ['https://aparat.com', 'https://digikala.com', 'https://google.com'],
     'CN': ['https://baidu.com', 'https://microsoft.com', 'https://alibaba.com'],
-    'DEFAULT': [
-      'https://google.com',
-      'https://ipapi.co/ip',
-      'https://microsoft.com'
-    ]
+    'DEFAULT': ['https://google.com', 'https://ipapi.co/ip', 'https://microsoft.com'],
   };
   /// With help of https://dnschecker.org/public-dns/
+  /// pinged by https://ping.pe
   final _pingAddress = {
+    'IR': ['194.225.152.10', '81.163.3.2','217.218.155.155','1.1.1.1'],
+    'AE': ['8.8.8.8', '1.1.1.1'],
     'RU': ['8.8.8.8', '77.88.8.1','1.1.1.1'],
     'CN': ['180.76.76.76', '223.6.6.41', '8.8.8.8'],
     'DEFAULT': ['8.8.8.8', '1.1.1.1'],
@@ -132,7 +128,6 @@ class InternetStatusProvider extends ChangeNotifier {
   Future<void> checkInternetConnection() async {
     // Check the internet connection status
     _isConnected = await InternetConnection().hasInternetAccess;
-
     // Notify listeners of the change
     notifyListeners();
   }

@@ -148,6 +148,7 @@ func (cf *configurer) configure(refreshProxies bool) (*ConfigResult, error) {
 		log.Debugf("Proxies updated: %v", time.Since(proxiesStart).Seconds())
 	}
 	result.VPNNeedsReconfiguring = result.VPNNeedsReconfiguring || globalUpdated || proxiesUpdated
+	providerStart := time.Now()
 	for _, provider := range global.Client.Fronted.Providers {
 		for _, masquerade := range provider.Masquerades {
 			if result.IPSToExcludeFromVPN == "" {
@@ -157,7 +158,9 @@ func (cf *configurer) configure(refreshProxies bool) (*ConfigResult, error) {
 			}
 		}
 	}
+	log.Debugf("Provider config update completed in %v seconds", time.Since(providerStart).Seconds())
 
+	proxyLoopStart := time.Now()
 	for _, proxy := range proxies {
 		if proxy.Addr != "" {
 			host, _, _ := net.SplitHostPort(proxy.Addr)
@@ -170,6 +173,7 @@ func (cf *configurer) configure(refreshProxies bool) (*ConfigResult, error) {
 			log.Debugf("Added %v", host)
 		}
 	}
+	log.Debugf("Proxies loop completed in %v seconds", time.Since(proxyLoopStart).Seconds())
 	email.SetDefaultRecipient(global.ReportIssueEmail)
 	return result, nil
 }
