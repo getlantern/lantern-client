@@ -66,7 +66,7 @@ dependencies:
   # Networking
   cached_network_image: ^3.4.1
   dio: ^5.7.0
-  internet_connection_checker_plus: ^2.5.2
+  internet_connection_checker_plus: ^2.7.0
   dart_ping: ^9.0.1
 
   # caching
