@@ -632,8 +632,10 @@ macos-release: require-appdmg pubget
 	$(call osxcodesign,build/macos/Build/Products/Release/Lantern.app)
 
 	flutter_distributor package --platform macos --targets dmg --skip-clean
-
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-macos.dmg $(INSTALLER_NAME).dmg
+
+	# Sign the DMG
+	$(call osxcodesign,$(INSTALLER_NAME).dmg)
 	make notarize-darwin
 
 android-bundle: $(MOBILE_BUNDLE)
