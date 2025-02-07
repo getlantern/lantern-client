@@ -621,7 +621,7 @@ require-bundler:
 	fi
 
 .PHONY: macos-release
-macos-release: require-appdmg require-ac-username require-ac-password pubget
+macos-release: require-appdmg pubget
 	flutter build macos --release
 
 	# Sign liblantern.dylib
