@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -80,6 +81,17 @@ type App struct {
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
 func NewApp() (*App, error) {
+	// Filter out macOS system arguments
+	filteredArgs := []string{os.Args[0]}
+	for _, arg := range os.Args[1:] {
+		if !strings.HasPrefix(arg, "-NS") { // Ignore macOS arguments like -NSDocumentRevisionsDebugMode
+			filteredArgs = append(filteredArgs, arg)
+		}
+	}
+
+	// Replace os.Args with the filtered arguments
+	os.Args = filteredArgs
+
 	flags := flashlight.ParseFlags()
 	if flags.Pprof {
 		go startPprof("localhost:6060")
