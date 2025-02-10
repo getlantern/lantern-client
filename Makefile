@@ -586,7 +586,8 @@ $(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -buildmode=c-shared
 $(DARWIN_LIB_ARM64): desktop-lib
 
 .PHONY: macos
-macos: clean macos-arm64 macos-amd64
+macos: clean macos-arm64
+	make macos-amd64
 	echo "Nuking $(DARWIN_FRAMEWORK_DIR)"
 	rm -Rf $(DARWIN_FRAMEWORK_DIR)/*
 	mkdir -p $(DARWIN_FRAMEWORK_DIR)
