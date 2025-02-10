@@ -586,14 +586,15 @@ $(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -buildmode=c-shared
 $(DARWIN_LIB_ARM64): desktop-lib
 
 .PHONY: macos
-macos: macos-arm64 macos-amd64
+macos:
 	echo "Nuking $(DARWIN_FRAMEWORK_DIR)"
 	rm -Rf $(DARWIN_FRAMEWORK_DIR)/*
 	mkdir -p $(DARWIN_FRAMEWORK_DIR)
+	make macos-arm64 macos-amd64
 	lipo \
 		-create \
-		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_arm64.dylib \
-		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_amd64.dylib \
+		$(BUILD_DIR)/$(DARWIN_LIB_ARM64) \
+		$(BUILD_DIR)/$(DARWIN_LIB_AMD64) \
 		-output "$(DARWIN_FRAMEWORK_DIR)/$(DARWIN_LIB_NAME)"
 	install_name_tool -id "@rpath/$(DARWIN_LIB_NAME)" "$(DARWIN_FRAMEWORK_DIR)/$(DARWIN_LIB_NAME)"
 	rm $(BUILD_DIR)/$(DESKTOP_LIB_NAME)_arm64.dylib
