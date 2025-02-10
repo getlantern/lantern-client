@@ -247,7 +247,7 @@ tag: require-version
 	git push
 
 define osxcodesign
-	codesign --options runtime --strict --timestamp --force --entitlements $(ENTITLEMENTS) --deep -s "Developer ID Application: Brave New Software Project, Inc (ACZRKC3LQ9)" -v $(1)
+	codesign --options runtime --strict --timestamp --force --entitlements $(ENTITLEMENTS) --deep -s "Apple Distribution: Brave New Software Project, Inc (ACZRKC3LQ9)" -v $(1)
 endef
 
 guard-%:
