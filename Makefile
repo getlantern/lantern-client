@@ -586,11 +586,10 @@ $(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -buildmode=c-shared
 $(DARWIN_LIB_ARM64): desktop-lib
 
 .PHONY: macos
-macos:
+macos: clean macos-arm64 macos-amd64
 	echo "Nuking $(DARWIN_FRAMEWORK_DIR)"
 	rm -Rf $(DARWIN_FRAMEWORK_DIR)/*
 	mkdir -p $(DARWIN_FRAMEWORK_DIR)
-	make macos-arm64 macos-amd64
 	lipo \
 		-create \
 		$(BUILD_DIR)/$(DARWIN_LIB_ARM64) \
@@ -727,6 +726,7 @@ swift-format:
 	swift-format --in-place --recursive DBModule ios/Runner ios/Tunnel ios/LanternTests macos/Runner
 
 clean:
+	rm -rf $(BUILD_DIR)/liblantern* && \
 	rm -f liblantern*.aar && \
 	rm -f $(MOBILE_LIBS)/liblantern-* && \
 	rm -Rf android/app/build && \
