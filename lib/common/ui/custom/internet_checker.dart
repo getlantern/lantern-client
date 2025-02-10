@@ -52,24 +52,46 @@ class InternetStatusProvider extends ChangeNotifier {
   bool _isDisconnected = false;
 
   /// Using debounce to avoid flickering when the connection is unstable
-  final _debounceDuration = const Duration(seconds: 2);
+  final _debounceDuration = Duration(seconds: Platform.isIOS ? 5 : 2);
   Timer? _debounceTimer;
 
   final _regionCheckUrls = {
-    'RU': const ['https://yandex.ru', 'https://alibaba.com', 'https://dzen.ru', 'https://vk.com'],
-    'AE': const ['https://espncricinfo.com', 'https://microsoft.com','https://amazon.ae'],
-    'IR': const['https://aparat.com', 'https://digikala.com', 'https://divar.ir'],
-    'CN': const['https://baidu.com', 'https://microsoft.com', 'https://alibaba.com'],
-    'DEFAULT':const ['https://alibaba.com', 'https://emirates.com', 'https://microsoft.com'],
+    'RU': const [
+      'https://yandex.ru',
+      'https://alibaba.com',
+      'https://dzen.ru',
+      'https://vk.com'
+    ],
+    'AE': const [
+      'https://espncricinfo.com',
+      'https://microsoft.com',
+      'https://amazon.ae'
+    ],
+    'IR': const [
+      'https://aparat.com',
+      'https://digikala.com',
+      'https://divar.ir'
+    ],
+    'CN': const [
+      'https://baidu.com',
+      'https://microsoft.com',
+      'https://alibaba.com'
+    ],
+    'DEFAULT': const [
+      'https://alibaba.com',
+      'https://emirates.com',
+      'https://microsoft.com'
+    ],
   };
+
   /// With help of https://dnschecker.org/public-dns/
   /// pinged by https://ping.pe
   final _pingAddress = {
-    'IR': const['194.225.152.10', '81.163.3.2','217.218.155.155','1.1.1.1'],
-    'AE': const['180.76.76.76', '223.6.6.41', '140.117.167.174'],
-    'RU': const['92.124.144.189', '77.88.8.1','94.51.83.154'],
-    'CN': const['180.76.76.76', '223.6.6.41', '140.117.167.174'],
-    'DEFAULT': const['180.76.76.76', '223.6.6.41', '140.117.167.174'],
+    'IR': const ['194.225.152.10', '81.163.3.2', '217.218.155.155', '1.1.1.1'],
+    'AE': const ['180.76.76.76', '223.6.6.41', '140.117.167.174'],
+    'RU': const ['92.124.144.189', '77.88.8.1', '94.51.83.154'],
+    'CN': const ['180.76.76.76', '223.6.6.41', '140.117.167.174'],
+    'DEFAULT': const ['180.76.76.76', '223.6.6.41', '140.117.167.174'],
   };
 
   InternetStatusProvider() {
@@ -101,10 +123,11 @@ class InternetStatusProvider extends ChangeNotifier {
   Future<bool> pingServers() async {
     appLogger.d('Pinging servers to check internet connection');
     final countryCode = sessionModel.country.value ?? 'DEFAULT';
-    final pingAddresses = (_pingAddress[countryCode] ?? _pingAddress['DEFAULT'])!;
+    final pingAddresses =
+        (_pingAddress[countryCode] ?? _pingAddress['DEFAULT'])!;
     for (String address in pingAddresses) {
       try {
-        final ping = Ping(address, count: 2);
+        final ping = Ping(address, count: 3);
         final pinData = await ping.stream.first;
         if (pinData.error != null) {
           appLogger.d('Server ping not found');
