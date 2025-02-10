@@ -194,7 +194,7 @@ class MainActivity :
 
     override fun onResume() {
         super.onResume()
-        checkVPNStatus();
+        checkVPNStatus()
     }
 
     override fun onDestroy() {
