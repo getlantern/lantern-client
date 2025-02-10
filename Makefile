@@ -129,10 +129,8 @@ ANDROID_DEBUG_SIDE_LOAD_SYMBOL=/build/app/intermediates/merged_native_libs/prodS
 INFO_PLIST := ios/Runner/Info.plist
 ENTITLEMENTS := macos/Runner/Release.entitlements
 
+BUILD_DIR ?= build
 DESKTOP_LIB_NAME ?= liblantern
-DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
-DARWIN_LIB_AMD64 ?= $(DESKTOP_LIB_NAME)_amd64.dylib
-DARWIN_LIB_ARM64 ?= $(DESKTOP_LIB_NAME)_arm64.dylib
 DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
 INSTALLER_RESOURCES ?= installer-resources-$(APP)
 INSTALLER_NAME ?= $(APP)-installer
@@ -146,6 +144,10 @@ APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
 PACKAGED_YAML := .packaged-$(APP_YAML)
 DARWIN_OUT := build/macos/Build/Products/Release/Lantern.app
+DARWIN_FRAMEWORK_DIR := macos/Frameworks
+DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
+DARWIN_LIB_AMD64 ?= $(DESKTOP_LIB_NAME)_amd64.dylib
+DARWIN_LIB_ARM64 ?= $(DESKTOP_LIB_NAME)_arm64.dylib
 
 ANDROID_ARCH ?= all
 
@@ -208,7 +210,6 @@ PROTO_SOURCES = $(shell find . -name '*.proto' -not -path './vendor/*')
 GENERATED_PROTO_SOURCES = $(shell echo "$(PROTO_SOURCES)" | sed 's/\.proto/\.pb\.go/g')
 GO_SOURCES := $(GENERATED_PROTO_SOURCES) go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
-BUILD_DIR ?= build
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
@@ -570,7 +571,7 @@ windows-release: ffigen
 ## Darwin
 .PHONY: macos-amd64
 macos-amd64: $(DARWIN_LIB_AMD64)
-$(DARWIN_LIB_AMD64): export LIB_NAME = $(DARWIN_LIB_AMD64)
+$(DARWIN_LIB_AMD64): export LIB_NAME = $(BUILD_DIR)/$(DARWIN_LIB_AMD64)
 $(DARWIN_LIB_AMD64): export GOOS = darwin
 $(DARWIN_LIB_AMD64): export GOARCH = amd64
 $(DARWIN_LIB_AMD64): export GO_BUILD_FLAGS += -buildmode=c-shared
@@ -578,22 +579,25 @@ $(DARWIN_LIB_AMD64): desktop-lib
 
 .PHONY: macos-arm64
 macos-arm64: $(DARWIN_LIB_ARM64)
-$(DARWIN_LIB_ARM64): export LIB_NAME = $(DARWIN_LIB_ARM64)
+$(DARWIN_LIB_ARM64): export LIB_NAME = $(BUILD_DIR)/$(DARWIN_LIB_ARM64)
 $(DARWIN_LIB_ARM64): export GOOS = darwin
 $(DARWIN_LIB_ARM64): export GOARCH = arm64
 $(DARWIN_LIB_ARM64): export GO_BUILD_FLAGS += -buildmode=c-shared
 $(DARWIN_LIB_ARM64): desktop-lib
 
 .PHONY: macos
-macos: macos-arm64
-	make macos-amd64
+macos: macos-arm64 macos-amd64
+	echo "Nuking $(DARWIN_FRAMEWORK_DIR)"
+	rm -Rf $(DARWIN_FRAMEWORK_DIR)/*
+	mkdir -p $(DARWIN_FRAMEWORK_DIR)
 	lipo \
 		-create \
-		${DESKTOP_LIB_NAME}_arm64.dylib \
-		${DESKTOP_LIB_NAME}_amd64.dylib \
-		-output "${BUILD_DIR}/${DARWIN_LIB_NAME}"
-	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${BUILD_DIR}/${DARWIN_LIB_NAME}"
-	rm -Rf ${DESKTOP_LIB_NAME}_arm64.dylib ${DESKTOP_LIB_NAME}_amd64.dylib
+		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_arm64.dylib \
+		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_amd64.dylib \
+		-output "$(DARWIN_FRAMEWORK_DIR)/$(DARWIN_LIB_NAME)"
+	install_name_tool -id "@rpath/$(DARWIN_LIB_NAME)" "$(DARWIN_FRAMEWORK_DIR)/$(DARWIN_LIB_NAME)"
+	rm $(BUILD_DIR)/$(DESKTOP_LIB_NAME)_arm64.dylib
+	rm $(BUILD_DIR)/$(DESKTOP_LIB_NAME)_amd64.dylib
 
 .PHONY: notarize-darwin
 notarize-darwin: require-ac-username require-ac-password
