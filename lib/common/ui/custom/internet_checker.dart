@@ -75,7 +75,7 @@ class InternetStatusProvider extends ChangeNotifier {
   InternetStatusProvider() {
     // Listen for connection status changes
     _connectionSubscription = InternetConnection.createInstance(
-      checkInterval: const Duration(seconds: 5),
+      checkInterval: const Duration(seconds: 4),
       useDefaultOptions: false,
       customCheckOptions: getRegionSpecificCheckOptions(),
     ).onStatusChange.listen((status) async {
