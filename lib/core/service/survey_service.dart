@@ -11,7 +11,7 @@ enum SurveyCountry {
   ukraine('ua'),
   china('cn'),
   iran('ir'),
-  uae('uae'),
+  uae('ae'),
   myanmar('mm'),
   testing('testing');
 
