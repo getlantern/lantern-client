@@ -141,20 +141,20 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if opts.Platform == "ios" {
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
-		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(3000, &protos.Plan{})
+		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(4000, &protos.Plans{})
-		base.db.RegisterType(5000, &protos.Bandwidth{})
+		base.db.RegisterType(6000, &protos.Bandwidth{})
 	} else {
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
 		base.db.RegisterType(3000, &protos.Plan{})
 		base.db.RegisterType(4000, &protos.Plans{})
-		base.db.RegisterType(5000, &protos.Device{})
+		base.db.RegisterType(5000, &protos.AppData{})
 		base.db.RegisterType(6000, &protos.PaymentProviders{})
 		base.db.RegisterType(7000, &protos.PaymentMethod{})
 		base.db.RegisterType(8000, &protos.Bandwidth{})
-		base.db.RegisterType(9000, &protos.AppData{})
+		base.db.RegisterType(9000, &protos.Device{})
 
 	}
 
@@ -829,15 +829,11 @@ func checkSplitTunneling(m *SessionModel) error {
 	tunneling, err := pathdb.Get[bool](m.db, pathSplitTunneling)
 	if err != nil {
 		log.Errorf("Error while getting split tunneling value %v", err)
-		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathSplitTunneling, false, "")
-		})
+		m.setSplitTunneling(false)
+		return err
 	}
 	if !tunneling {
-		log.Debugf("Split Tunneling value is %v", tunneling)
-		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathSplitTunneling, false, "")
-		})
+		log.Debugf("Split Tunneling already false: %v", tunneling)
 	}
 	return nil
 }

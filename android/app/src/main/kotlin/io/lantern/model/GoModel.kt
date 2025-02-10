@@ -29,36 +29,37 @@ open class GoModel<M : internalsdk.Model>(
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         activeSink.set(events)
         val args = arguments as Map<String, Any>
-        val subscriberID = args["subscriberID"] as String
-        val path = args["path"] as String
-        val details = args["details"]?.let { it as Boolean } ?: false
+        val subscriberID = args["subscriberID"] as? String ?: return  // Exit early if null
+        val path = args["path"] as? String ?: return
+        val details = args["details"] as? Boolean ?: false
         activeSubscribers.add(subscriberID)
 
-        val req = SubscriptionRequest()
-        req.receiveInitial = true
-        req.id = subscriberID
-        req.joinDetails = details
-        req.pathPrefixes = path
-        req.updater = UpdaterModel {
-            val updates = HashMap<String, Any>()
-            val deletions = ArrayList<String>()
-            while (it.hasUpdate()) {
-                val update = it.popUpdate()
-                updates[update.path] = update.value.toJava()
-            }
-            while (it.hasDelete()) {
-                deletions.add(it.popDelete())
-            }
-            Logger.debug("GoModel", "notifying $activeSink.get() on path $path updates: $updates")
-            mainHandler.post {
-                synchronized(this@GoModel) {
-                    activeSink.get()?.success(
-                        mapOf(
-                            "s" to subscriberID,
-                            "u" to updates,
-                            "d" to deletions,
+        val req = SubscriptionRequest().apply {
+            receiveInitial = true
+            id = subscriberID
+            joinDetails = details
+            pathPrefixes = path
+            updater = UpdaterModel {
+                val updates = HashMap<String, Any>()
+                val deletions = ArrayList<String>()
+                while (it.hasUpdate()) {
+                    val update = it.popUpdate()
+                    updates[update.path] = update.value.toJava()
+                }
+                while (it.hasDelete()) {
+                    deletions.add(it.popDelete())
+                }
+                Logger.debug("GoModel", "notifying $activeSink.get() on path $path updates: $updates")
+                mainHandler.post {
+                    synchronized(this@GoModel) {
+                        activeSink.get()?.success(
+                            mapOf(
+                                "s" to subscriberID,
+                                "u" to updates,
+                                "d" to deletions,
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
