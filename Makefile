@@ -347,11 +347,9 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB): $(GO_SOURCES)
-	go install golang.org/x/mobile/cmd/gomobile@latest && \
-	gomobile init && \
+$(ANDROID_LIB): $(GO_SOURCES) install-gomobile
 	gomobile bind \
-	    -target=$(ANDROID_ARCH_GOMOBILE) \
+		-target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
 		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
@@ -685,7 +683,6 @@ ios: assert-go-version install-gomobile
 	echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	echo "Generating Ios.xcFramework"
-	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
@@ -699,7 +696,6 @@ build-release-framework: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	@echo "generating Ios.xcFramework"
-	gomobile init && \
 	gomobile bind -target=ios \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
@@ -710,8 +706,11 @@ build-release-framework: assert-go-version install-gomobile
 
 
 install-gomobile:
-	@echo "installing gomobile" && \
+	# With Go 1.24, use -tool to freeze the gomobile version.
+	@echo "installing gomobile"
 	go install golang.org/x/mobile/cmd/gomobile@latest
+	gomobile init
+
 
 assert-go-version:
 	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi
