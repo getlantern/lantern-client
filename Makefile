@@ -348,7 +348,6 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
 $(ANDROID_LIB): $(GO_SOURCES)
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	go install golang.org/x/mobile/cmd/gomobile@latest && \
 	gomobile init && \
 	gomobile bind \
@@ -486,9 +485,11 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 	@if [[ "$$CC" ]]; then echo "CC: $(CC)"; fi
 	@if [[ "$$CXX" ]]; then echo "CXX: $(CXX)"; fi
 
+# Don't clobber the user's settings with go env -w.
+export GOPRIVATE += ,github.com/getlantern/*
+
 .PHONY: desktop-lib ffigen
 
-desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: $(GO_SOURCES) echo-build-tags
 	CGO_ENABLED=1 go build -v -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
@@ -684,7 +685,6 @@ ios: assert-go-version install-gomobile
 	echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	echo "Generating Ios.xcFramework"
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
@@ -699,7 +699,6 @@ build-release-framework: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	@echo "generating Ios.xcFramework"
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
 	gomobile init && \
 	gomobile bind -target=ios \
 	-tags='headless lantern ios netgo' \
