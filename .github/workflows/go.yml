@@ -2,9 +2,6 @@ name: Go Build and Test
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -58,10 +55,3 @@ jobs:
         name: test-log
         path: /tmp/gotest.log
         if-no-files-found: error
-
-    - name: Install goveralls
-      run: go install github.com/mattn/goveralls@latest
-    - name: Send coverage
-      env:
-        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: goveralls -coverprofile=profile.cov -service=github

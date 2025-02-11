@@ -156,7 +156,7 @@ The core Lantern functionality is written in Go and lives in `./internalsdk`.
 It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to appropriate formats for each platform.
 
 #### Android
-* To generate AAR run `make android-lib ANDROID_ARCH=all`
+* To generate AAR run `make android ANDROID_ARCH=all`
 
 * For compiled code lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
 
@@ -174,7 +174,7 @@ The desktop app lives under `desktop` .. To build the Go shared library on macOS
 [//]: # (#### Testing against Lantern's staging servers)
 
 [//]: # ()
-[//]: # (Package the AAR with `make android-lib ANDROID_ARCH=all STAGING=true`)
+[//]: # (Package the AAR with `make android ANDROID_ARCH=all STAGING=true`)
 
 ### Making Android debug builds (Not yet implemented on IOS)
 
