@@ -355,7 +355,7 @@ $(ANDROID_LIB): $(GO_SOURCES)
 	    -target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
-		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
+		-ldflags="-checklinkname=0 $(LDFLAGS) $(EXTRA_LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
