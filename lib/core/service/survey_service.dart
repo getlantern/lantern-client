@@ -114,7 +114,7 @@ class SurveyService {
     if (Platform.isWindows || Platform.isLinux) {
       return const SizedBox();
     }
-    return spotCheck!;
+    return spotCheck?? SizedBox();
   }
 
   Future<String> get _surveyConfigPath async {
