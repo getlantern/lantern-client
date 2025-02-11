@@ -6,8 +6,7 @@ extension Localization on String {
   static String defaultLocale = 'en_us';
   static String locale = defaultLocale;
 
-  static Translations translations =
-      Translations.byLocale(defaultLocale);
+  static Translations translations = Translations.byLocale(defaultLocale);
 
   static Future<Translations> Function(
     Future<Translations> Function(),
@@ -26,10 +25,10 @@ extension Localization on String {
 
   static String get localeShort => locale.split('_')[0];
 
-  String doLocalize() => localize(this, translations, locale: locale);
+  String doLocalize() => localize(this, translations, languageTag: locale);
 
-  String get i18n => localize(this, translations, locale: locale.replaceFirst('_', '-').toLowerCase());
-
+  String get i18n => localize(this, translations,
+      languageTag: locale.replaceFirst('_', '-').toLowerCase());
 
   String fill(List<Object> params) => localizeFill(this, params);
 }
