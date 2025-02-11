@@ -1,3 +1,6 @@
+# Use of [[ below, errors on CI.
+SHELL := /bin/bash
+
 #1 Disable implicit rules
 .SUFFIXES:
 
