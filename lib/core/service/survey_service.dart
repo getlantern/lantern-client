@@ -37,6 +37,12 @@ class SurveyService {
   }
 
   void _countryListener() {
+    if (isDesktop()) {
+      if (sessionModel.configNotifier.value != null) {
+        createSpotCheckByCountry(sessionModel.configNotifier.value!.country.toLowerCase());
+        return;
+      }
+    }
     if (sessionModel.country.value!.isNotEmpty) {
       createSpotCheckByCountry(sessionModel.country.value!.toLowerCase());
       return;
@@ -87,7 +93,6 @@ class SurveyService {
       case SurveyCountry.myanmar:
         targetToken = AppSecret.myanmarSpotCheckTargetToken;
         break;
-      case SurveyCountry.testing:
       default:
         targetToken = AppSecret.testingSpotCheckTargetToken;
         appLogger.d('${country.toUpperCase()} not found, using testing token');
