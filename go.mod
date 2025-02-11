@@ -23,8 +23,6 @@ replace github.com/eycorsican/go-tun2socks => github.com/getlantern/go-tun2socks
 
 replace github.com/tetratelabs/wazero => github.com/refraction-networking/wazero v1.7.1-w
 
-replace github.com/getlantern/replica => github.com/getlantern/replica v0.14.5-0.20240909174421-21691d4b40f8
-
 require (
 	github.com/1Password/srp v0.2.0
 	github.com/blang/semver v3.5.1+incompatible
@@ -57,7 +55,7 @@ require (
 	github.com/getlantern/osversion v0.0.0-20240418205916-2e84a4a4e175
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
-	github.com/getlantern/replica v0.14.5-0.20240909174421-21691d4b40f8
+	github.com/getlantern/replica v0.15.0
 	github.com/getlantern/safechannels v0.0.0-20201218194342-b4e5383e9627
 	github.com/getlantern/sysproxy v0.0.0-20240711003440-384834c7b4cb
 	github.com/getlantern/timezone v0.0.0-20210901200113-3f9de9d360c9
@@ -101,7 +99,15 @@ require (
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/lithammer/fuzzysearch v1.1.8 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
+	github.com/pion/dtls/v3 v3.0.3 // indirect
+	github.com/pion/ice/v4 v4.0.2 // indirect
+	github.com/pion/mdns/v2 v2.0.7 // indirect
+	github.com/pion/srtp/v3 v3.0.4 // indirect
+	github.com/pion/stun/v3 v3.0.0 // indirect
 	github.com/pion/transport/v3 v3.0.7 // indirect
+	github.com/pion/turn/v4 v4.0.0 // indirect
+	github.com/pion/webrtc/v4 v4.0.0 // indirect
+	github.com/protolambda/ctxlock v0.1.0 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/sagernet/sing v0.6.0-beta.11 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
@@ -128,7 +134,7 @@ require (
 	github.com/alecthomas/atomic v0.1.0-alpha2 // indirect
 	github.com/alextanhongpin/go-bandit v0.0.0-20191125130111-30de60d69bae // indirect
 	github.com/anacrolix/chansync v0.6.0 // indirect
-	github.com/anacrolix/confluence v1.15.0 // indirect
+	github.com/anacrolix/confluence v1.16.0 // indirect
 	github.com/anacrolix/dht/v2 v2.22.0 // indirect
 	github.com/anacrolix/envpprof v1.4.0 // indirect
 	github.com/anacrolix/generics v0.0.3-0.20240902042256-7fb2702ef0ca // indirect
@@ -142,7 +148,7 @@ require (
 	github.com/anacrolix/squirrel v0.6.4 // indirect
 	github.com/anacrolix/stm v0.5.0 // indirect
 	github.com/anacrolix/sync v0.5.3 // indirect
-	github.com/anacrolix/torrent v1.56.1 // indirect
+	github.com/anacrolix/torrent v1.58.0 // indirect
 	github.com/anacrolix/upnp v0.1.4 // indirect
 	github.com/anacrolix/utp v0.2.0 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
@@ -180,7 +186,6 @@ require (
 	github.com/getlantern/cmuxprivate v0.0.0-20231025143958-503c5330c30b // indirect
 	github.com/getlantern/context v0.0.0-20220418194847-3d5e7a086201 // indirect
 	github.com/getlantern/detour v0.0.0-20230503144615-d3106a68f79e // indirect
-	github.com/getlantern/dhtup v0.0.0-20240217002836-8587da02c55c // indirect
 	github.com/getlantern/dns v0.0.0-20240124035051-0d45dd3cfe54 // indirect
 	github.com/getlantern/domains v0.0.0-20220311111720-94f59a903271 // indirect
 	github.com/getlantern/elevate v0.0.0-20220903142053-479ab992b264 // indirect
