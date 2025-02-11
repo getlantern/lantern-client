@@ -508,6 +508,7 @@ func (s *Settings) GetReferralCode() string {
 
 // SetCountry sets the user's country.
 func (s *Settings) SetCountry(country string) {
+	log.Debugf("Setting country to %v", country)
 	s.setVal(SNCountry, country)
 }
 
