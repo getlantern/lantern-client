@@ -6,8 +6,10 @@
 INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
 INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 
-%.pb.go: %.proto
-	go build -o build/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
+build/protoc-gen-go:
+	go build -o $@ google.golang.org/protobuf/cmd/protoc-gen-go
+
+%.pb.go: %.proto build/protoc-gen-go ;
 
 codegen: protos routes
 
