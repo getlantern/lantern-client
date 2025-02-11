@@ -1,3 +1,6 @@
+# Use of [[ below, errors on CI.
+SHELL := /bin/bash
+
 #1 Disable implicit rules
 .SUFFIXES:
 
@@ -6,8 +9,10 @@
 INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
 INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 
-%.pb.go: %.proto
-	go build -o build/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
+build/protoc-gen-go:
+	go build -o $@ google.golang.org/protobuf/cmd/protoc-gen-go
+
+%.pb.go: %.proto build/protoc-gen-go ;
 
 codegen: protos routes
 
@@ -347,12 +352,9 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB): $(GO_SOURCES)
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	go install golang.org/x/mobile/cmd/gomobile@latest && \
-	gomobile init && \
+$(ANDROID_LIB): $(GO_SOURCES) install-gomobile
 	gomobile bind \
-	    -target=$(ANDROID_ARCH_GOMOBILE) \
+		-target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
 		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
@@ -486,9 +488,11 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 	@if [[ "$$CC" ]]; then echo "CC: $(CC)"; fi
 	@if [[ "$$CXX" ]]; then echo "CXX: $(CXX)"; fi
 
+# Don't clobber the user's settings with go env -w.
+export GOPRIVATE += ,github.com/getlantern/*
+
 .PHONY: desktop-lib ffigen
 
-desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: $(GO_SOURCES) echo-build-tags
 	CGO_ENABLED=1 go build -v -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
@@ -684,8 +688,6 @@ ios: assert-go-version install-gomobile
 	echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	echo "Generating Ios.xcFramework"
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
@@ -699,8 +701,6 @@ build-release-framework: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	@echo "generating Ios.xcFramework"
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	gomobile init && \
 	gomobile bind -target=ios \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
@@ -711,8 +711,11 @@ build-release-framework: assert-go-version install-gomobile
 
 
 install-gomobile:
-	@echo "installing gomobile" && \
+	# With Go 1.24, use -tool to freeze the gomobile version.
+	@echo "installing gomobile"
 	go install golang.org/x/mobile/cmd/gomobile@latest
+	gomobile init
+
 
 assert-go-version:
 	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi
