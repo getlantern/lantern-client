@@ -139,6 +139,7 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 func (app *App) Run(ctx context.Context) {
 	golog.OnFatal(app.exitOnFatal)
 	go func() {
+		app.Settings().SetCountry(geolookup.GetCountry(0))
 		for <-geolookup.OnRefresh() {
 			app.Settings().SetCountry(geolookup.GetCountry(0))
 		}

@@ -128,6 +128,7 @@ class WebsocketSubscriber {
 
             sessionModel.isAuthEnabled.value = config.authEnabled;
             sessionModel.configNotifier.value = config;
+            sessionModel.country.value = config.country;
             _updatePlans(config.plans);
             _updatePaymentMethods(config.paymentMethods);
             break;

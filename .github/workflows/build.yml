@@ -47,6 +47,7 @@ jobs:
       SENTRY_AUTH_TOKEN: "${{ secrets.SENTRY_AUTH_TOKEN }}"
       SENTRY_ORG: getlantern
       SENTRY_PROJECT_IOS: lantern-ios
+      SENTRY_PROJECT_ANDROID: android
     strategy:
       matrix:
         include:
@@ -77,6 +78,9 @@ jobs:
 
       - name: Granting private modules access
         run: git config --global url."https://${{ secrets.GH_TOKEN }}:x-oauth-basic@github.com/".insteadOf "https://github.com/"
+
+      - name: Enable Long Path Support
+        run: git config --global core.longpaths true
 
       - name: Setup protoc
         uses: arduino/setup-protoc@v2
@@ -237,18 +241,12 @@ jobs:
           fileDir: './android/app'
           encodedString: ${{ secrets.KEYSTORE }}
 
-      - name: Generate app.env
-        env:
-          ANDROID_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID }}
-          IOS_INTERSTITIAL_AD_ID: ${{ secrets.INTERSTITIAL_AD_UNIT_ID_IOS }}
-          TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID: ${{ secrets.TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID }}
-          TAPSELL_INTERSTITIAL_ZONE_ID: ${{ secrets.TAPSELL_INTERSTITIAL_ZONE_ID }}
-        run: |
-          touch app.env
-          echo "Android_interstitialAd=$ANDROID_INTERSTITIAL_AD_ID" > app.env
-          echo "IOS_interstitialAd=$IOS_INTERSTITIAL_AD_ID" >> app.env
-          echo "VideoInterstitialZoneId=$TAPSELL_VIDEO_INTERSTITIAL_ZONE_ID" >> app.env
-          echo "InterstitialZoneId=$TAPSELL_INTERSTITIAL_ZONE_ID" >> app.env
+      - name: Decode APP_ENV
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'app.env'
+          fileDir: ${{ github.workspace }}
+          encodedString: ${{ secrets.APP_ENV }}
 
       - name: Extract app version from pubspec.yaml
         id: extract_version

@@ -1,17 +1,13 @@
 package autoupdate
 
 import (
-	"errors"
 	"fmt"
-	"net/http"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"time"
 
 	"github.com/getlantern/autoupdate"
 	"github.com/getlantern/flashlight/v7/common"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/i18n"
 	notify "github.com/getlantern/notifier"
@@ -28,7 +24,6 @@ var (
 
 	cfgMutex           sync.RWMutex
 	watchForUpdateOnce sync.Once
-	httpClient         atomic.Value
 	fnIconURL          func() string
 )
 
@@ -36,10 +31,6 @@ var (
 func Configure(updateURL, updateCA string, iconURL func() string) {
 	setUpdateURL(updateURL)
 	fnIconURL = iconURL
-	httpClient.Store(
-		&http.Client{
-			Transport: proxied.ChainedThenFrontedWith(updateCA),
-		})
 	enableAutoupdate()
 }
 
@@ -65,14 +56,10 @@ func enableAutoupdate() {
 }
 
 func CheckUpdates() (string, error) {
-	hc := httpClient.Load()
-	if hc == nil {
-		return "", errors.New("autoupdate not configured")
-	}
 	return autoupdate.CheckMobileUpdate(&autoupdate.Config{
 		CurrentVersion: Version,
 		URL:            getUpdateURL(),
-		HTTPClient:     hc.(*http.Client),
+		HTTPClient:     common.GetHTTPClient(),
 		PublicKey:      PublicKey,
 	})
 }
@@ -85,7 +72,7 @@ func watchForUpdate() {
 			CheckInterval:  4 * time.Hour,
 			URL:            getUpdateURL(),
 			PublicKey:      PublicKey,
-			HTTPClient:     httpClient.Load().(*http.Client),
+			HTTPClient:     common.GetHTTPClient(),
 		})
 		if err == nil {
 			notifyUser(newVersion)

@@ -1,3 +1,6 @@
+# Use of [[ below, errors on CI.
+SHELL := /bin/bash
+
 #1 Disable implicit rules
 .SUFFIXES:
 
@@ -6,8 +9,10 @@
 INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
 INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 
-%.pb.go: %.proto
-	go build -o build/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
+build/protoc-gen-go:
+	go build -o $@ google.golang.org/protobuf/cmd/protoc-gen-go
+
+%.pb.go: %.proto build/protoc-gen-go ;
 
 codegen: protos routes
 
@@ -113,7 +118,6 @@ LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDa
 # -s omits the symbol table and debug info
 # LD_STRIP_FLAGS := -s -w
 # DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
-GOMOBILE_EXTRA_BUILD_FLAGS :=
 
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
@@ -124,6 +128,9 @@ FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
 
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/archive/Runner.xcarchive/dSYMs/
+ANDROID_DEBUG_PLAY_SYMBOL=build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib
+ANDROID_DEBUG_SIDE_LOAD_SYMBOL=build/app/intermediates/merged_native_libs/prodSideload/mergeProdSideloadNativeLibs/out/lib
+
 INFO_PLIST := ios/Runner/Info.plist
 ENTITLEMENTS := macos/Runner/Release.entitlements
 
@@ -206,7 +213,7 @@ PROTO_SOURCES = $(shell find . -name '*.proto' -not -path './vendor/*')
 GENERATED_PROTO_SOURCES = $(shell echo "$(PROTO_SOURCES)" | sed 's/\.proto/\.pb\.go/g')
 GO_SOURCES := $(GENERATED_PROTO_SOURCES) go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
-
+BUILD_DIR ?= build
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
@@ -345,15 +352,12 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB): $(GO_SOURCES)
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	go install golang.org/x/mobile/cmd/gomobile@latest && \
-	gomobile init && \
+$(ANDROID_LIB): $(GO_SOURCES) install-gomobile
 	gomobile bind \
-	    -target=$(ANDROID_ARCH_GOMOBILE) \
+		-target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
-		-ldflags="-s -w $(LDFLAGS) $(EXTRA_LDFLAGS)" \
+		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
 		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
@@ -402,7 +406,7 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) ffigen require-sentry require-sentry-auth-token
+$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) ffigen require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -416,12 +420,12 @@ $(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) ffi
 	-PandroidArchJava="$(ANDROID_ARCH_JAVA)" -PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=$(FORCE_PLAY_VERSION) -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) \
 	-PversionCode=$(VERSION_CODE) -PdevelopmentMode=$(DEVELOPMENT_MODE) -b $(MOBILE_DIR)/app/build.gradle assembleProdSideload && \
-	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodSideload/out/lib && \
+	sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_ANDROID) $(ANDROID_DEBUG_SIDE_LOAD_SYMBOL)
 	cp $(MOBILE_ANDROID_RELEASE) $(MOBILE_RELEASE_APK) && \
 	cat $(MOBILE_RELEASE_APK) | bzip2 > lantern_update_android_arm.bz2
 
 
-$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry
+$(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
 	@mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	COUNTRY="$$COUNTRY" && \
@@ -432,7 +436,7 @@ $(MOBILE_BUNDLE): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-
 	$(GRADLE) -PlanternVersion=$$VERSION -PlanternRevisionDate=$(REVISION_DATE) -PandroidArch=$(ANDROID_ARCH) -PandroidArchJava="$(ANDROID_ARCH_JAVA)" \
 	-PproServerUrl=$(PRO_SERVER_URL) -PpaymentProvider=$(PAYMENT_PROVIDER) \
 	-Pcountry=$(COUNTRY) -PplayVersion=true -PuseStaging=$(STAGING) -PstickyConfig=$(STICKY_CONFIG) -b $(MOBILE_DIR)/app/build.gradle bundlePlay && \
-	sentry-cli upload-dif --wait -o getlantern -p android build/app/intermediates/merged_native_libs/prodPlay/out/lib && \
+	sentry-cli --auth-token $(SENTRY_AUTH_TOKEN) upload-dif --include-sources --org $(SENTRY_ORG) --project $(SENTRY_PROJECT_ANDROID) $(ANDROID_DEBUG_PLAY_SYMBOL)
 	cp $(MOBILE_ANDROID_BUNDLE) $(MOBILE_BUNDLE)
 
 android-debug: $(MOBILE_DEBUG_APK)
@@ -449,7 +453,6 @@ set-version:
 	NEXT_BUILD=$$(($$CURRENT_BUILD + 1)); \
 	/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $$NEXT_BUILD" $(INFO_PLIST)
 
-#ios: macos build-framework ffigen
 
 ios-release:require-version set-version guard-SENTRY_AUTH_TOKEN guard-SENTRY_ORG guard-SENTRY_PROJECT_IOS
 	flutter clean
@@ -485,9 +488,11 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 	@if [[ "$$CC" ]]; then echo "CC: $(CC)"; fi
 	@if [[ "$$CXX" ]]; then echo "CXX: $(CXX)"; fi
 
+# Don't clobber the user's settings with go env -w.
+export GOPRIVATE += ,github.com/getlantern/*
+
 .PHONY: desktop-lib ffigen
 
-desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: $(GO_SOURCES) echo-build-tags
 	CGO_ENABLED=1 go build -v -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
@@ -590,35 +595,9 @@ macos: macos-arm64
 		-create \
 		${DESKTOP_LIB_NAME}_arm64.dylib \
 		${DESKTOP_LIB_NAME}_amd64.dylib \
-		-output ${DARWIN_LIB_NAME}
-	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" ${DARWIN_LIB_NAME}
+		-output "${BUILD_DIR}/${DARWIN_LIB_NAME}"
+	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${BUILD_DIR}/${DARWIN_LIB_NAME}"
 	rm -Rf ${DESKTOP_LIB_NAME}_arm64.dylib ${DESKTOP_LIB_NAME}_amd64.dylib
-
-$(INSTALLER_NAME).dmg: require-version require-appdmg require-retry require-magick
-	@echo "Generating distribution package for darwin/amd64..." && \
-	if [[ "$$(uname -s)" == "Darwin" ]]; then \
-		INSTALLER_RESOURCES="$(INSTALLER_RESOURCES)/darwin" && \
-		cp $(DARWIN_LIB_NAME) $(DARWIN_OUT)/Contents/Frameworks && \
-		$(call osxcodesign,$(DARWIN_OUT)/Contents/Frameworks/liblantern.dylib) && \
-		$(call osxcodesign,$(DARWIN_OUT)/Contents/MacOS/Lantern) && \
-		$(call osxcodesign,$(DARWIN_OUT)) && \
-		cat $(DARWIN_OUT)/Contents/MacOS/Lantern | bzip2 > $(APP)_update_darwin.bz2 && \
-		ls -l $(APP)_update_darwin.bz2 && \
-		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/dmgbackground.svg > $$INSTALLER_RESOURCES/dmgbackground_versioned.svg && \
-		$(MAGICK) -size 600x400 $$INSTALLER_RESOURCES/dmgbackground_versioned.svg $$INSTALLER_RESOURCES/dmgbackground.png && \
-		sed "s/__VERSION__/$$VERSION/g" $$INSTALLER_RESOURCES/$(APP).dmg.json > $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json && \
-		rm -rf $(INSTALLER_NAME).dmg && \
-		retry -attempts 5 $(APPDMG) --quiet $$INSTALLER_RESOURCES/$(APP)_versioned.dmg.json $(INSTALLER_NAME).dmg && \
-		mv $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
-		hdiutil convert -quiet -format UDBZ -o $(INSTALLER_NAME).dmg $(CAPITALIZED_APP).dmg.zlib && \
-		$(call osxcodesign,$(INSTALLER_NAME).dmg) && \
-		rm $(CAPITALIZED_APP).dmg.zlib; \
-	else \
-		echo "-> Skipped: Can not generate a package on a non-OSX host."; \
-	fi;
-
-.PHONY: darwin-installer
-darwin-installer: $(INSTALLER_NAME).dmg
 
 .PHONY: notarize-darwin
 notarize-darwin: require-ac-username require-ac-password
@@ -648,7 +627,18 @@ require-bundler:
 .PHONY: macos-release
 macos-release: require-appdmg pubget
 	flutter build macos --release
-	make darwin-installer notarize-darwin
+
+	# Sign liblantern.dylib
+	$(call osxcodesign,build/macos/Build/Products/Release/Lantern.app/Contents/Frameworks/liblantern.dylib)
+	# Sign main app binary
+	$(call osxcodesign,build/macos/Build/Products/Release/Lantern.app/Contents/MacOS/Lantern)
+	# Sign app bundle
+	$(call osxcodesign,build/macos/Build/Products/Release/Lantern.app)
+
+	appdmg appdmg.json $(INSTALLER_NAME).dmg
+	$(call osxcodesign,$(INSTALLER_NAME).dmg)
+
+	make notarize-darwin
 
 android-bundle: $(MOBILE_BUNDLE)
 
@@ -695,15 +685,12 @@ sourcedump: require-version
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
 ios: assert-go-version install-gomobile
-	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
-	@rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
-	@echo "Generating Ios.xcFramework"
-	@go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	gomobile init && \
+	echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
+	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
+	echo "Generating Ios.xcFramework"
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
-	-ldflags="$(LDFLAGS)"  \
-    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
+	-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
     		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
 	@echo "Moving framework"
 	@mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
@@ -714,12 +701,9 @@ build-release-framework: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	@echo "generating Ios.xcFramework"
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	gomobile init && \
 	gomobile bind -target=ios \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
-    		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
     		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql github.com/getlantern/lantern-client/internalsdk/ios
 	@echo "moving framework"
 	mkdir -p $(INTERNALSDK_FRAMEWORK_DIR)
@@ -727,8 +711,11 @@ build-release-framework: assert-go-version install-gomobile
 
 
 install-gomobile:
-	@echo "installing gomobile" && \
+	# With Go 1.24, use -tool to freeze the gomobile version.
+	@echo "installing gomobile"
 	go install golang.org/x/mobile/cmd/gomobile@latest
+	gomobile init
+
 
 assert-go-version:
 	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi

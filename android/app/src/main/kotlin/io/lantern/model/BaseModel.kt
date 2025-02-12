@@ -258,11 +258,18 @@ abstract class BaseModel(
         val subscriberID = args["subscriberID"] as String
         db.unsubscribe(subscriberID)
         activeSubscribers.remove(subscriberID)
+
+        // No more active subscribers, we can safely clean up.
+        if (activeSubscribers.isEmpty()) {
+            destroy()
+        }
     }
 
     fun destroy() {
         activeSubscribers.forEach {
             db.unsubscribe(it)
         }
+        // Quit the async handler thread.
+        asyncHandlerThread.quitSafely()
     }
 }

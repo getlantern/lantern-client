@@ -2,10 +2,13 @@ module github.com/getlantern/lantern-client
 
 go 1.22.4
 
-// replace github.com/getlantern/flashlight/v7 => ../flashlight
+//replace github.com/getlantern/flashlight/v7 => ../flashlight
 
 // replace github.com/getlantern/ipproxy => ../ipproxy
+//replace github.com/getlantern/kindling => ../kindling
+
 // replace github.com/getlantern/fronted => ../fronted
+
 // replace github.com/getlantern/pathdb => ../pathDb/pathDb
 
 replace github.com/elazarl/goproxy => github.com/getlantern/goproxy v0.0.0-20220805074304-4a43a9ed4ec6
@@ -37,8 +40,8 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.178
-	github.com/getlantern/fronted v0.0.0-20250104035820-b06365fddbbf
+	github.com/getlantern/flashlight/v7 v7.6.189
+	github.com/getlantern/fronted v0.0.0-20250205182429-f8aa4896e1e5
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
 	github.com/getlantern/hidden v0.0.0-20220104173330-f221c5a24770
@@ -85,12 +88,15 @@ require (
 	atomicgo.dev/cursor v0.2.0 // indirect
 	atomicgo.dev/keyboard v0.2.9 // indirect
 	atomicgo.dev/schedule v0.1.0 // indirect
+	github.com/Jigsaw-Code/outline-sdk/x v0.0.0-20250113162209-efa808309e1e // indirect
 	github.com/alitto/pond/v2 v2.1.6 // indirect
 	github.com/cloudflare/circl v1.5.0 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
 	github.com/containerd/console v1.0.3 // indirect
+	github.com/getlantern/kindling v0.0.0-20250210193738-66bf81b94856 // indirect
 	github.com/getlantern/lantern-water v0.0.0-20241218135103-60224336cf1d // indirect
 	github.com/getlantern/sing-vmess v0.0.0-20241209111030-0f2c02b4eb9a // indirect
+	github.com/goccy/go-yaml v1.15.13 // indirect
 	github.com/gofrs/uuid/v5 v5.3.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/lithammer/fuzzysearch v1.1.8 // indirect
@@ -106,7 +112,7 @@ require (
 require (
 	filippo.io/edwards25519 v1.0.0 // indirect
 	git.torproject.org/pluggable-transports/goptlib.git v1.2.0 // indirect
-	github.com/Jigsaw-Code/outline-sdk v0.0.17 // indirect
+	github.com/Jigsaw-Code/outline-sdk v0.0.18-0.20241106233708-faffebb12629 // indirect
 	github.com/Jigsaw-Code/outline-ss-server v1.5.0 // indirect
 	github.com/OneOfOne/xxhash v1.2.8 // indirect
 	github.com/OperatorFoundation/Replicant-go/Replicant/v3 v3.0.23 // indirect
@@ -196,7 +202,7 @@ require (
 	github.com/getlantern/iptool v0.0.0-20230112135223-c00e863b2696 // indirect
 	github.com/getlantern/kcp-go/v5 v5.0.0-20220503142114-f0c1cd6e1b54 // indirect
 	github.com/getlantern/kcpwrapper v0.0.0-20230327091313-c12d7c17c6de // indirect
-	github.com/getlantern/keepcurrent v0.0.0-20221014183517-fcee77376b89 // indirect
+	github.com/getlantern/keepcurrent v0.0.0-20240126172110-2e0264ca385d // indirect
 	github.com/getlantern/keyman v0.0.0-20230503155501-4e864ca2175b // indirect
 	github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a // indirect
 	github.com/getlantern/lantern-algeneva v0.0.0-20240930181006-6d3c00db1d5d // indirect

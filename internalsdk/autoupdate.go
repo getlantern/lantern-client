@@ -2,18 +2,12 @@ package internalsdk
 
 import (
 	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/getlantern/autoupdate"
+	fcommon "github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/ops"
-	"github.com/getlantern/flashlight/v7/proxied"
 	"github.com/getlantern/lantern-client/internalsdk/common"
-)
-
-var (
-	// XXX mobile does not respect the autoupdate global config
-	updateClient = &http.Client{Transport: proxied.ChainedThenFrontedWith("")}
 )
 
 // DeviceInfo provides information about a device for sending with ops when
@@ -58,7 +52,7 @@ func deviceOps(name string, deviceInfo DeviceInfo) *ops.Op {
 func DownloadUpdate(deviceInfo DeviceInfo, url, apkPath string, updater Updater) bool {
 	op := deviceOps("autoupdate_download", deviceInfo)
 	defer op.End()
-	err := autoupdate.UpdateMobile(url, apkPath, updater, updateClient)
+	err := autoupdate.UpdateMobile(url, apkPath, updater, fcommon.GetHTTPClient())
 	if err != nil {
 		op.FailIf(log.Errorf("Error downloading update: %v", err))
 		return false
@@ -78,7 +72,7 @@ func buildUpdateCfg() *autoupdate.Config {
 	return &autoupdate.Config{
 		CurrentVersion: common.ApplicationVersion,
 		URL:            fmt.Sprintf("%s/update/%s", common.UpdateServerURL, strings.ToLower(common.DefaultAppName)),
-		HTTPClient:     updateClient,
+		HTTPClient:     fcommon.GetHTTPClient(),
 		PublicKey:      []byte(autoupdate.PackagePublicKey),
 	}
 }

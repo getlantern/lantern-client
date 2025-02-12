@@ -70,11 +70,11 @@ PODS:
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
-  - Google-Mobile-Ads-SDK (11.10.0):
+  - Google-Mobile-Ads-SDK (11.13.0):
     - GoogleUserMessagingPlatform (>= 1.1)
-  - google_mobile_ads (5.2.0):
+  - google_mobile_ads (5.3.1):
     - Flutter
-    - Google-Mobile-Ads-SDK (~> 11.10.0)
+    - Google-Mobile-Ads-SDK (~> 11.13.0)
     - webview_flutter_wkwebview
   - GoogleUserMessagingPlatform (2.7.0)
   - in_app_purchase_storekit (0.0.1):
@@ -268,8 +268,8 @@ SPEC CHECKSUMS:
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   flutter_uploader: 2b07c4d41cf1218f25e6d5b8bcfa2d913838e27c
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
-  Google-Mobile-Ads-SDK: 13e6e98edfd78ad8d8a791edb927658cc260a56f
-  google_mobile_ads: 2a538d8e42b1813809782792e48f8cf4374c2180
+  Google-Mobile-Ads-SDK: 14f57f2dc33532a24db288897e26494640810407
+  google_mobile_ads: fe0e2c1764ad95323dd0e3081d0bb2d58411f957
   GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
   in_app_purchase_storekit: 8c3b0b3eb1b0f04efbff401c3de6266d4258d433
   integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573

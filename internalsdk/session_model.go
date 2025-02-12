@@ -89,9 +89,10 @@ const (
 	pathHasAllNetworkPermssion = "/hasAllNetworkPermssion"
 	pathPrefVPN                = "pref_vpn"
 
-	pathShouldShowGoogleAds = "shouldShowGoogleAds"
-	currentTermsVersion     = 1
-	pathUserSalt            = "user_salt"
+	pathShouldShowInterstitialAds = "shouldShowGoogleAds"
+	pathShouldShowAppOpenAds      = "shouldShowAppOpenAds"
+	currentTermsVersion           = 1
+	pathUserSalt                  = "user_salt"
 
 	pathPlans          = "/plans/"
 	pathPaymentMethods = "/paymentMethods/"
@@ -140,20 +141,20 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 	if opts.Platform == "ios" {
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
-		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(3000, &protos.Plan{})
+		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(4000, &protos.Plans{})
-		base.db.RegisterType(5000, &protos.Bandwidth{})
+		base.db.RegisterType(6000, &protos.Bandwidth{})
 	} else {
 		base.db.RegisterType(1000, &protos.ServerInfo{})
 		base.db.RegisterType(2000, &protos.Devices{})
-		base.db.RegisterType(5000, &protos.Device{})
 		base.db.RegisterType(3000, &protos.Plan{})
 		base.db.RegisterType(4000, &protos.Plans{})
 		base.db.RegisterType(5000, &protos.AppData{})
 		base.db.RegisterType(6000, &protos.PaymentProviders{})
 		base.db.RegisterType(7000, &protos.PaymentMethod{})
 		base.db.RegisterType(8000, &protos.Bandwidth{})
+		base.db.RegisterType(9000, &protos.Device{})
 
 	}
 
@@ -187,7 +188,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 
 	m.baseModel.doInvokeMethod = m.doInvokeMethod
 	if opts.Platform == "ios" {
-		go m.iosInit(opts.ConfigPath, int(userID), token, deviceID)
+		m.iosInit(opts.ConfigPath, int(userID), token, deviceID)
 	}
 	log.Debugf("SessionModel initialized")
 	go m.initSessionModel(context.Background(), opts)
@@ -198,7 +199,6 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 // also this method check for geoLookup
 func (m *SessionModel) iosInit(configPath string, userId int, token string, deviceId string) error {
 	go m.setupIosConfigure(configPath, userId, token, deviceId)
-	// go iosGeoLookup.Refresh()
 	go func() {
 		if <-iosGeoLookup.OnRefresh() {
 			country := iosGeoLookup.GetCountry(5 * time.Second)
@@ -213,25 +213,24 @@ func (m *SessionModel) iosInit(configPath string, userId int, token string, devi
 // setupIosConfigure sets up the iOS configuration for the session model.
 // It continuously checks if the global configuration is available and retries every second if not.
 func (m *SessionModel) setupIosConfigure(configPath string, userId int, token string, deviceId string) {
-	go func() {
-		cf := ios.NewConfigurer(configPath, userId, token, deviceId, "")
-		ticker := time.NewTicker(1 * time.Second)
-		defer ticker.Stop()
-		for range ticker.C {
-			if cf.HasGlobalConfig() {
-				global, _, _, err := cf.OpenGlobal()
-				if err != nil {
-					log.Errorf("Error while opening global %v", err)
-					return
-				}
-				m.iosConfigurer = global
-				log.Debug("Found global config IOS configure done")
-				m.checkAvailableFeatures()
-				return // Exit the loop after success
+	cf := ios.NewConfigurer(configPath, userId, token, deviceId, "")
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+	for range ticker.C {
+		if cf.HasGlobalConfig() {
+			global, _, _, err := cf.OpenGlobal()
+			if err != nil {
+				log.Errorf("Error while opening global %v", err)
+				return
 			}
-			log.Debugf("global config not available, retrying...")
+			m.iosConfigurer = global
+			log.Debug("Found global config IOS configure done")
+			go m.checkAvailableFeatures()
+			return // Exit the loop after success
 		}
-	}()
+		log.Debugf("global config not available, retrying...")
+	}
+
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -705,8 +704,7 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 	if err != nil {
 		return err
 	}
-	log.Debugf("my device id %v", opts.DeviceID)
-	log.Debugf("Store version %v", opts.PlayVersion)
+	log.Debugf("my device id %v store version %v", opts.DeviceID, opts.PlayVersion)
 	err = pathdb.PutAll(tx, map[string]interface{}{
 		pathDevelopmentMode: opts.DevelopmentMode,
 		pathDeviceID:        opts.DeviceID,
@@ -762,12 +760,12 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		})
 		go m.proClient.RetryCreateUser(ctx, m, 10*time.Minute)
 	} else {
-		// Get all user details
-		err = m.userDetail(ctx)
-		if err != nil {
-			log.Error(err)
-		}
 		go func() {
+			// Get all user details
+			err = m.userDetail(ctx)
+			if err != nil {
+				log.Error(err)
+			}
 			err = m.paymentMethods()
 			if err != nil {
 				log.Debugf("Plans V3 error: %v", err)
@@ -775,7 +773,9 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 			}
 		}()
 	}
-	go checkSplitTunneling(m)
+	if opts.Platform == "android" {
+		go checkSplitTunneling(m)
+	}
 	m.surveyModel, _ = NewSurveyModel(*m)
 	return nil
 }
@@ -788,7 +788,7 @@ func (m *SessionModel) checkAvailableFeatures() {
 
 	// Check for ads feature
 	googleAdsEnabled := m.featureEnabled(config.FeatureInterstitialAds)
-	m.SetShowGoogleAds(googleAdsEnabled)
+	m.SetShowInterstitialAds(googleAdsEnabled)
 	if googleAdsEnabled {
 		checkAdsEnabled(m)
 	}
@@ -824,15 +824,11 @@ func checkSplitTunneling(m *SessionModel) error {
 	tunneling, err := pathdb.Get[bool](m.db, pathSplitTunneling)
 	if err != nil {
 		log.Errorf("Error while getting split tunneling value %v", err)
-		pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathSplitTunneling, false, "")
-		})
+		m.setSplitTunneling(false)
+		return err
 	}
 	if !tunneling {
-		log.Debugf("Split Tunneling value is %v", tunneling)
-		return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-			return pathdb.Put(tx, pathSplitTunneling, false, "")
-		})
+		log.Debugf("Split Tunneling already false: %v", tunneling)
 	}
 	return nil
 }
@@ -1250,9 +1246,13 @@ func (m *SessionModel) SetReferralCode(referralCode string) error {
 
 func (m *SessionModel) SetReplicaAddr(replicaAddr string) {
 	log.Debugf("Setting replica address %v", replicaAddr)
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathReplicaAddr, replicaAddr, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting replica address %v", err)
+		return
+	}
 }
 func (m *SessionModel) getReplicaAddr() string {
 	address, err := pathdb.Get[string](m.db, pathReplicaAddr)
@@ -1268,15 +1268,21 @@ func (m *SessionModel) ForceReplica() bool {
 }
 
 func (m *SessionModel) SetAuthEnabled(authEnabled bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathAuthEnabled, authEnabled, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting auth enabled %v", err)
+	}
 }
 
 func (m *SessionModel) SetChatEnabled(chatEnabled bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathChatEnabled, chatEnabled, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting chat enabled %v", err)
+	}
 }
 
 func (m *SessionModel) ChatEnable() bool {
@@ -1291,12 +1297,30 @@ func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 	return pathdb.Get[bool](m.db, pathSplitTunneling)
 }
 
-func (m *SessionModel) SetShowGoogleAds(adsEnable bool) {
-	log.Debugf("SetShowGoogleAds %v", adsEnable)
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
-		return pathdb.Put(tx, pathShouldShowGoogleAds, adsEnable, "")
-	}))
-	checkAdsEnabled(m)
+func (m *SessionModel) SetShowInterstitialAds(adsEnable bool) {
+	log.Debugf("SetShowInterstitialAds %v", adsEnable)
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathShouldShowInterstitialAds, adsEnable, "")
+	})
+	if err != nil {
+		log.Errorf("Error while setting show interstitial ads %v", err)
+	}
+	if common.Platform == "android" {
+		checkAdsEnabled(m)
+	}
+}
+
+func (m *SessionModel) SetShowAppOpenAds(adsEnable bool) {
+	log.Debugf("SetShowAppOpenAds %v", adsEnable)
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathShouldShowAppOpenAds, adsEnable, "")
+	})
+	if err != nil {
+		log.Errorf("Error while setting show app open ads %v", err)
+	}
+	if common.Platform == "android" {
+		checkAdsEnabled(m)
+	}
 }
 
 func (m *SessionModel) SerializedInternalHeaders() (string, error) {
@@ -1317,20 +1341,29 @@ func saveUserSalt(m *baseModel, salt []byte) error {
 	})
 }
 func (m *SessionModel) SetHasConfigFetched(fetached bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathHasConfig, fetached, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting has config fetched %v", err)
+	}
 }
 
 func (m *SessionModel) SetHasProxyFetched(fetached bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathHasProxy, fetached, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting has proxy fetched %v", err)
+	}
 }
 func (m *SessionModel) SetOnSuccess(fetached bool) {
-	panicIfNecessary(pathdb.Mutate(m.db, func(tx pathdb.TX) error {
+	err := pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathHasonSuccess, fetached, "")
-	}))
+	})
+	if err != nil {
+		log.Errorf("Error while setting has on success %v", err)
+	}
 }
 
 func acceptTerms(m *baseModel) error {
@@ -1589,14 +1622,25 @@ func checkAdsEnabled(session *SessionModel) error {
 		})
 	}
 	// If the user has all permissions but is not a pro user, enable ads:
-	googleAdsEnable, err := pathdb.Get[bool](session.db, pathShouldShowGoogleAds)
+	interstitialAdsEnable, err := pathdb.Get[bool](session.db, pathShouldShowInterstitialAds)
 	if err != nil {
 		return err
 	}
-	if googleAdsEnable {
-		log.Debug("Google Ads is enabled")
+	if interstitialAdsEnable {
+		log.Debug("interstitialAdsEnable Ads is enabled")
 		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
-			return pathdb.Put[string](tx, pathShowAds, "google", "")
+			return pathdb.Put[string](tx, pathShowAds, "interstitial", "")
+		})
+	}
+	// If the user has all permissions but is not a pro user, enable ads:
+	appOpenAdsEnable, err := pathdb.Get[bool](session.db, pathShouldShowAppOpenAds)
+	if err != nil {
+		return err
+	}
+	if appOpenAdsEnable {
+		log.Debug("appOpenAdsEnable Ads is enabled")
+		return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+			return pathdb.Put[string](tx, pathShowAds, "appOpen", "")
 		})
 	}
 	return nil

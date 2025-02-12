@@ -108,7 +108,8 @@ type Session interface {
 	SetAuthEnabled(bool)
 	SetChatEnabled(bool)
 	SplitTunnelingEnabled() (bool, error)
-	SetShowGoogleAds(bool)
+	SetShowInterstitialAds(bool)
+	SetShowAppOpenAds(bool)
 	SetHasConfigFetched(bool)
 	SetHasProxyFetched(bool)
 	SetUserIDAndToken(int64, string) error
@@ -146,7 +147,8 @@ type PanickingSession interface {
 	SetChatEnabled(bool)
 	SetIP(string)
 	SplitTunnelingEnabled() bool
-	SetShowGoogleAds(bool)
+	SetShowInterstitialAds(bool)
+	SetShowAppOpenAds(bool)
 	// workaround for lack of any sequence types in gomobile bind... ;_;
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
@@ -324,8 +326,12 @@ func (s *panickingSessionImpl) SetAuthEnabled(enabled bool) {
 	s.wrapped.SetAuthEnabled(enabled)
 }
 
-func (s *panickingSessionImpl) SetShowGoogleAds(enabled bool) {
-	s.wrapped.SetShowGoogleAds(enabled)
+func (s *panickingSessionImpl) SetShowInterstitialAds(enabled bool) {
+	s.wrapped.SetShowInterstitialAds(enabled)
+}
+
+func (s *panickingSessionImpl) SetShowAppOpenAds(enabled bool) {
+	s.wrapped.SetShowAppOpenAds(enabled)
 }
 
 func (s *panickingSessionImpl) SetUserIDAndToken(userID int64, token string) {
@@ -608,10 +614,15 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 		if !session.IsProUser() {
 			showAdsEnabled := runner.FeatureEnabled(config.FeatureInterstitialAds, common.ApplicationVersion)
 			log.Debugf("Feature: Show ads enabled? %v", showAdsEnabled)
-			session.SetShowGoogleAds(showAdsEnabled)
+			session.SetShowInterstitialAds(showAdsEnabled)
+
+			showAppOpenAds := runner.FeatureEnabled("show-app-open-ads", common.ApplicationVersion)
+			log.Debugf("Feature: Show ads enabled? %v", showAdsEnabled)
+			session.SetShowAppOpenAds(showAppOpenAds)
 		} else {
 			// Explicitly disable ads for Pro users.
-			session.SetShowGoogleAds(false)
+			session.SetShowInterstitialAds(false)
+			session.SetShowAppOpenAds(false)
 		}
 	}
 
