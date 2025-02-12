@@ -1,5 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_uploader/flutter_uploader.dart';
+import 'package:lantern/core/uploader/upload_task_response.dart';
 import 'package:lantern/features/messaging/messaging.dart';
 import 'package:logger/logger.dart';
 
@@ -66,19 +66,19 @@ class Notifications {
       onDidReceiveNotificationResponse: (payloadString) async {
         var payload = Payload.fromJson(payloadString.payload!);
         switch (payload.type) {
-        // case PayloadType.Ringing:
-        //   Map<String, dynamic> data = payload.data;
-        //   messagingModel.signaling
-        //       .onMessage(data['peerId'], data['messageJson'], false);
-        //   break;
-        // TODO <16-12-2021> soltzen: This code does not work as of today:
-        // The notification click events are not being processed. This'll be
-        // addressed here: https://github.com/getlantern/lantern-internal/issues/5133
-        // TODO <08-10-22, kalli> Building on above comment:
-        // While we are technically close to being able to share replica links, there are big pieces missing from how this can meaningfully and safely be put in production. Some concerns involve handling cases where someone doesn't know or use Lantern, as well as sharing increasing censor attack exposure area. More context: https://github.com/getlantern/lantern-internal/issues/3577
+          // case PayloadType.Ringing:
+          //   Map<String, dynamic> data = payload.data;
+          //   messagingModel.signaling
+          //       .onMessage(data['peerId'], data['messageJson'], false);
+          //   break;
+          // TODO <16-12-2021> soltzen: This code does not work as of today:
+          // The notification click events are not being processed. This'll be
+          // addressed here: https://github.com/getlantern/lantern-internal/issues/5133
+          // TODO <08-10-22, kalli> Building on above comment:
+          // While we are technically close to being able to share replica links, there are big pieces missing from how this can meaningfully and safely be put in production. Some concerns involve handling cases where someone doesn't know or use Lantern, as well as sharing increasing censor attack exposure area. More context: https://github.com/getlantern/lantern-internal/issues/3577
           case PayloadType.Upload:
-          // The payload here is a possible JSON response body
-          // See ReplicaUploader for more info on this payload type
+            // The payload here is a possible JSON response body
+            // See ReplicaUploader for more info on this payload type
             try {
               Map<String, dynamic> resp = jsonDecode(payload.data);
               if (!resp.containsKey('replicaLink')) {
@@ -114,9 +114,7 @@ enum PayloadType { Ringing, Upload }
 
 extension ToShortString on PayloadType {
   String toShortString() {
-    return toString()
-        .split('.')
-        .last;
+    return toString().split('.').last;
   }
 }
 

@@ -31,8 +31,6 @@ class _ReplicaUploadReviewState extends State<ReplicaUploadReview> {
 
   @override
   void initState() {
-    ReplicaUploader.inst.init();
-
     getUploadThumbnailFromFileFuture = getUploadThumbnailFromFile(
       file: widget.fileToUpload,
       width: thumbnailWidth,

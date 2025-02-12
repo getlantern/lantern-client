@@ -119,6 +119,8 @@ LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDa
 # LD_STRIP_FLAGS := -s -w
 # DISABLE_OPTIMIZATION_FLAGS := -gcflags="all=-N -l"
 
+GOMOBILE_EXTRA_BUILD_FLAGS := -checklinkname=0
+
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
@@ -353,13 +355,13 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
+$(ANDROID_LIB): export EXTRA_LDFLAGS += $(GOMOBILE_EXTRA_BUILD_FLAGS)
 $(ANDROID_LIB): $(GO_SOURCES) install-gomobile
 	gomobile bind \
 		-target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
 		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
-		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
