@@ -88,7 +88,7 @@ class ReplicaUploader {
     final task = UploadTask(
         url: uploadUrl,
         filename: fileName,
-        fields: {'title': 'fileTitle'}, // Additional metadata
+        fields: {'title': fileTitle}, // Additional metadata
         fileField: file.path,
         updates:
             Updates.statusAndProgress // request status and progress updates
