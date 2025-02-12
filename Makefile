@@ -352,7 +352,6 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB): export EXTRA_LDFLAGS += -checklinkname=0
 $(ANDROID_LIB): $(GO_SOURCES) install-gomobile
 	gomobile bind \
 		-target=$(ANDROID_ARCH_GOMOBILE) \
