@@ -589,13 +589,9 @@
 				DEVELOPMENT_TEAM = ACZRKC3LQ9;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lantern;
-				LIBRARY_SEARCH_PATHS = (
+				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
-					/usr/lib/swift,
-					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)/",
-					"$(SDKROOT)/usr/lib/swift",
-					"$(PROJECT_DIR)/../build",
+					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -722,13 +718,9 @@
 				DEVELOPMENT_TEAM = ACZRKC3LQ9;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lantern;
-				LIBRARY_SEARCH_PATHS = (
+				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
-					/usr/lib/swift,
-					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)/",
-					"$(SDKROOT)/usr/lib/swift",
-					"$(PROJECT_DIR)/../build",
+					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -752,13 +744,9 @@
 				"DEVELOPMENT_TEAM[sdk=macosx*]" = ACZRKC3LQ9;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Lantern;
-				LIBRARY_SEARCH_PATHS = (
+				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
-					/usr/lib/swift,
-					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)/",
-					"$(SDKROOT)/usr/lib/swift",
-					"$(PROJECT_DIR)/../build",
+					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PROVISIONING_PROFILE_SPECIFIER = "";
