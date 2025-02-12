@@ -1,3 +1,4 @@
+import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lantern/core/uploader/upload_task_response.dart';
 import 'package:lantern/features/messaging/messaging.dart';
@@ -26,7 +27,7 @@ class Notifications {
     ),
   );
 
-  NotificationDetails getUploadCompleteChannel(UploadTaskResponse resp) {
+  NotificationDetails getUploadCompleteChannel(TaskStatus status) {
     return NotificationDetails(
       android: AndroidNotificationDetails(
         '10004',

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:background_downloader/background_downloader.dart';
 import 'package:http/http.dart' as http;
 import 'package:lantern/core/utils/common.dart';
@@ -22,6 +21,47 @@ class ReplicaUploader {
 
   // Singleton instance to access the class
   static final ReplicaUploader inst = ReplicaUploader._private();
+
+  void init() {
+    // Listen for updates
+    FileDownloader().updates.listen((update) async {
+      if (update is TaskProgressUpdate && update.task is UploadTask) {
+        await notifications.flutterLocalNotificationsPlugin.show(
+          update.task.taskId.hashCode,
+          'uploader'.i18n,
+          'upload_in_progress'.i18n,
+          notifications.getUploadProgressChannel(update.progress.toInt()),
+        );
+      } else if (update is TaskStatusUpdate && update.task is UploadTask) {
+        final task = update.task as UploadTask;
+
+        notifications.flutterLocalNotificationsPlugin
+            .cancel(task.taskId.hashCode);
+
+        var title = 'upload_complete'.i18n;
+        if (update.status == TaskStatus.failed) {
+          title = 'upload_failed'.i18n;
+        } else if (update.status == TaskStatus.canceled) {
+          title = 'upload_cancelled'.i18n;
+        }
+
+        // Show completion notification
+        await notifications.flutterLocalNotificationsPlugin.show(
+          task.taskId.hashCode,
+          'uploader'.i18n,
+          title,
+          notifications.getUploadCompleteChannel(update.status),
+          payload: Payload(
+            type: PayloadType.Upload,
+            data: task.metaData,
+          ).toJson(),
+        );
+
+        // Remove completed task from queue
+        FileDownloader().cancelTaskWithId(task.taskId);
+      }
+    });
+  }
 
   /// fileTitle: no extension
   /// fileName: has extension
@@ -53,6 +93,7 @@ class ReplicaUploader {
         updates:
             Updates.statusAndProgress // request status and progress updates
         );
+
     FileDownloader().enqueue(task);
 
     sessionModel.trackUserAction(
