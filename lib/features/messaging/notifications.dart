@@ -1,6 +1,5 @@
 import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:lantern/core/uploader/upload_task_response.dart';
 import 'package:lantern/features/messaging/messaging.dart';
 import 'package:logger/logger.dart';
 
