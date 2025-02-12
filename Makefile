@@ -128,8 +128,8 @@ FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
 
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/archive/Runner.xcarchive/dSYMs/
-ANDROID_DEBUG_PLAY_SYMBOL=/build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib
-ANDROID_DEBUG_SIDE_LOAD_SYMBOL=/build/app/intermediates/merged_native_libs/prodSideload/mergeProdSideloadNativeLibs/out/lib
+ANDROID_DEBUG_PLAY_SYMBOL=build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib
+ANDROID_DEBUG_SIDE_LOAD_SYMBOL=build/app/intermediates/merged_native_libs/prodSideload/mergeProdSideloadNativeLibs/out/lib
 
 INFO_PLIST := ios/Runner/Info.plist
 ENTITLEMENTS := macos/Runner/Release.entitlements
