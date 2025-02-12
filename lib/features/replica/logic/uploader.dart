@@ -3,26 +3,19 @@ import 'package:http/http.dart' as http;
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/features/messaging/notifications.dart';
 
-/// ReplicaUploader is a singleton class. Use it like this:
-/// - Initialize ReplicaUploader by calling ReplicaUploader.inst.init()
-///   - Ideally in an initState() of a top-level widget
-///   - Calling it multiple times is safe
-/// - Upload files with ReplicaUploader.inst.uploadFile()
-///     to schedule a background upload
-///
-/// There are two notifications here:
-/// - One (Flutter side) to track the upload's progress, handled in review.dart
-/// - One (native) when the upload is done.
-///   - If it succeeded (i.e., not failed or got cancelled), a native notification shows up
-///   - ** NOT YET IMPLEMENTED ** the user can click it and be prompted with a Share dialog to share the Replica link
 class ReplicaUploader {
-  // Private, named constructor to avoid instantiations
-  ReplicaUploader._private();
+  ReplicaUploader._private() {
+    _init();
+  }
 
-  // Singleton instance to access the class
-  static final ReplicaUploader inst = ReplicaUploader._private();
+  factory ReplicaUploader() {
+    return _instance;
+  }
 
-  void init() {
+  // Singleton instance
+  static final ReplicaUploader _instance = ReplicaUploader._private();
+
+  void _init() {
     // Listen for updates
     FileDownloader().updates.listen((update) async {
       if (update is TaskProgressUpdate && update.task is UploadTask) {
