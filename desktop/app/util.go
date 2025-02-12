@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/getlantern/appdir"
 	"github.com/getlantern/flashlight/v7"
@@ -19,6 +20,19 @@ func createDirIfNotExists(dir string, perm os.FileMode) error {
 		return err
 	}
 	return nil
+}
+
+// filterSystemArgs filters out macOS system arguments
+func filterSystemArgs() {
+	filteredArgs := []string{os.Args[0]}
+	for _, arg := range os.Args[1:] {
+		if !strings.HasPrefix(arg, "-NS") { // Ignore macOS arguments like -NSDocumentRevisionsDebugMode
+			filteredArgs = append(filteredArgs, arg)
+		}
+	}
+
+	// Replace os.Args with the filtered arguments
+	os.Args = filteredArgs
 }
 
 // configDir sets the config directory from flashlight Flags or default application directory

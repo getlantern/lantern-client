@@ -46,7 +46,7 @@ dependencies:
   badges: ^3.1.2
   dotted_border: ^2.1.0
   styled_text: ^8.1.0
-  emoji_picker_flutter: ^3.0.0
+  emoji_picker_flutter: ^4.3.0
   pin_code_text_field: ^1.8.0
   scrollable_positioned_list: ^0.3.8
   infinite_scroll_pagination: ^4.0.0
@@ -78,7 +78,7 @@ dependencies:
 
   # Navigation & Localization
   auto_route: ^9.3.0+1
-  i18n_extension: ^13.0.2
+  i18n_extension: ^15.0.4
   i18n_extension_importer: ^0.0.6
   intl: ^0.19.0
 

@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
   desktop_webview_window
   emoji_picker_flutter
+  file_selector_windows
   flutter_inappwebview_windows
   permission_handler_windows
   screen_retriever_windows

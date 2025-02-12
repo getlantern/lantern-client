@@ -134,11 +134,13 @@ ANDROID_DEBUG_SIDE_LOAD_SYMBOL=build/app/intermediates/merged_native_libs/prodSi
 INFO_PLIST := ios/Runner/Info.plist
 ENTITLEMENTS := macos/Runner/Release.entitlements
 
+BUILD_DIR ?= build
 DESKTOP_LIB_NAME ?= liblantern
 DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
-DARWIN_LIB_AMD64 ?= $(DESKTOP_LIB_NAME)_amd64.dylib
-DARWIN_LIB_ARM64 ?= $(DESKTOP_LIB_NAME)_arm64.dylib
+DARWIN_LIB_AMD64 ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME)_amd64.dylib
+DARWIN_LIB_ARM64 ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME)_arm64.dylib
 DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
+DARWIN_FRAMEWORK_DIR ?= macos/Frameworks
 INSTALLER_RESOURCES ?= installer-resources-$(APP)
 INSTALLER_NAME ?= $(APP)-installer
 WINDOWS_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
@@ -213,7 +215,6 @@ PROTO_SOURCES = $(shell find . -name '*.proto' -not -path './vendor/*')
 GENERATED_PROTO_SOURCES = $(shell echo "$(PROTO_SOURCES)" | sed 's/\.proto/\.pb\.go/g')
 GO_SOURCES := $(GENERATED_PROTO_SOURCES) go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
-BUILD_DIR ?= build
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
@@ -591,13 +592,15 @@ $(DARWIN_LIB_ARM64): desktop-lib
 .PHONY: macos
 macos: macos-arm64
 	make macos-amd64
+	echo "Nuking $(DARWIN_FRAMEWORK_DIR)"
+	rm -Rf $(DARWIN_FRAMEWORK_DIR)/*
+	mkdir -p $(DARWIN_FRAMEWORK_DIR)
 	lipo \
 		-create \
-		${DESKTOP_LIB_NAME}_arm64.dylib \
-		${DESKTOP_LIB_NAME}_amd64.dylib \
-		-output "${BUILD_DIR}/${DARWIN_LIB_NAME}"
-	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${BUILD_DIR}/${DARWIN_LIB_NAME}"
-	rm -Rf ${DESKTOP_LIB_NAME}_arm64.dylib ${DESKTOP_LIB_NAME}_amd64.dylib
+		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_arm64.dylib \
+		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_amd64.dylib \
+		-output "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
+	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
 
 .PHONY: notarize-darwin
 notarize-darwin: require-ac-username require-ac-password

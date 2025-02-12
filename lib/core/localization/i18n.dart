@@ -3,11 +3,10 @@ import 'package:i18n_extension_importer/src/io/import.dart';
 import 'package:lantern/core/utils/common.dart';
 
 extension Localization on String {
-  static String defaultLocale = 'en_us';
+  static String defaultLocale = 'en-US';
   static String locale = defaultLocale;
 
-  static Translations translations =
-      Translations.byLocale(defaultLocale);
+  static Translations translations = Translations.byLocale(defaultLocale);
 
   static Future<Translations> Function(
     Future<Translations> Function(),
@@ -24,12 +23,17 @@ extension Localization on String {
     });
   }
 
+  String normalizeLocale(String locale) {
+    return locale.replaceAll('_', '-').toLowerCase();
+  }
+
   static String get localeShort => locale.split('_')[0];
 
-  String doLocalize() => localize(this, translations, locale: locale);
+  String doLocalize() =>
+      localize(this, translations, languageTag: normalizeLocale(locale));
 
-  String get i18n => localize(this, translations, locale: locale.replaceFirst('_', '-').toLowerCase());
-
+  String get i18n =>
+      localize(this, translations, languageTag: normalizeLocale(locale));
 
   String fill(List<Object> params) => localizeFill(this, params);
 }
