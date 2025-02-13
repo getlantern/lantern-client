@@ -599,6 +599,7 @@ macos: macos-arm64
 		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_amd64.dylib \
 		-output "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
 	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
+	cp $(BUILD_DIR)/$(DESKTOP_LIB_NAME)*.h $(DARWIN_FRAMEWORK_DIR)/  # Copy headers
 
 .PHONY: notarize-darwin
 notarize-darwin: require-ac-username require-ac-password
