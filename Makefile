@@ -385,7 +385,7 @@ dart-defines-debug:
 	@DART_DEFINES="$(CIBASE)"; \
 	printf "$$DART_DEFINES"
 
-do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB) ffigen
+do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-debug` && \
 	echo "Value of DART_DEFINES is: $$DART_DEFINES" && \
@@ -405,7 +405,7 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) ffigen require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
+$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -529,7 +529,7 @@ linux-arm64: desktop-lib ## Build lantern for linux-arm64
 linux: linux-amd64
 
 .PHONY: linux-release
-linux-release: pubget ffigen
+linux-release: pubget
 	flutter build linux --release
 	cp $(LINUX_LIB_NAME) build/linux/x64/release/bundle
 	flutter_distributor package --platform linux --targets "deb,rpm" --skip-clean
@@ -566,7 +566,7 @@ $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
 .PHONY: windows-release
-windows-release: ffigen
+windows-release:
 	flutter_distributor package --flutter-build-args=verbose --platform windows --targets "msix,exe"
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
 
@@ -627,7 +627,7 @@ require-bundler:
 	fi
 
 .PHONY: macos-release
-macos-release: require-appdmg pubget ffigen
+macos-release: require-appdmg pubget
 	flutter build macos --release
 
 	# Sign liblantern.dylib
