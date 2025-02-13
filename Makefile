@@ -133,7 +133,7 @@ ANDROID_DEBUG_SIDE_LOAD_SYMBOL=build/app/intermediates/merged_native_libs/prodSi
 INFO_PLIST := ios/Runner/Info.plist
 ENTITLEMENTS := macos/Runner/Release.entitlements
 
-BUILD_DIR ?= build
+BUILD_DIR ?= ./
 DESKTOP_LIB_NAME ?= liblantern
 DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
 DARWIN_LIB_AMD64 ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME)_amd64.dylib
@@ -590,15 +590,17 @@ $(DARWIN_LIB_ARM64): desktop-lib
 .PHONY: macos
 macos: macos-arm64
 	make macos-amd64
+	lipo \
+		-create \
+		${DESKTOP_LIB_NAME}_arm64.dylib \
+		${DESKTOP_LIB_NAME}_amd64.dylib \
+		-output "${BUILD_DIR}/${DARWIN_LIB_NAME}"
+	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${BUILD_DIR}/${DARWIN_LIB_NAME}"
+	rm -Rf ${DESKTOP_LIB_NAME}_arm64.dylib ${DESKTOP_LIB_NAME}_amd64.dylib
 	echo "Nuking $(DARWIN_FRAMEWORK_DIR)"
 	rm -Rf $(DARWIN_FRAMEWORK_DIR)/*
 	mkdir -p $(DARWIN_FRAMEWORK_DIR)
-	lipo \
-		-create \
-		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_arm64.dylib \
-		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_amd64.dylib \
-		-output "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
-	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
+	mv $(BUILD_DIR)/$(DARWIN_LIB_NAME) $(DARWIN_FRAMEWORK_DIR)/$(DARWIN_LIB_NAME)
 
 .PHONY: notarize-darwin
 notarize-darwin: require-ac-username require-ac-password
