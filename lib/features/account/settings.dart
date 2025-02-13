@@ -284,6 +284,7 @@ class Settings extends StatelessWidget {
                           (context, sdkVersion, _) => CText(
                             'sdk_version'.i18n.fill([sdkVersion]),
                             style: tsOverline.copiedWith(color: pink4),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),

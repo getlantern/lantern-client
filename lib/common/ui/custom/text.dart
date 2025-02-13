@@ -140,7 +140,6 @@ class CTextStyle extends TextStyle {
           wordSpacing: wordSpacing,
           textBaseline: textBaseline,
           height: lineHeight / fontSize,
-          overflow: TextOverflow.ellipsis,
           leadingDistribution: leadingDistribution,
           locale: locale,
           foreground: foreground,
