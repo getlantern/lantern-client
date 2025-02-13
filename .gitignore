@@ -81,7 +81,7 @@ liblantern.h
 *.dylib
 *.so
 *.dmg
-lib/generated_bindings.dart
+macos/Frameworks
 
 *.env
 ExportOptions.plist

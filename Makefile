@@ -142,11 +142,11 @@ DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
 DARWIN_FRAMEWORK_DIR ?= macos/Frameworks
 INSTALLER_RESOURCES ?= installer-resources-$(APP)
 INSTALLER_NAME ?= $(APP)-installer
-WINDOWS_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
+WINDOWS_LIB_NAME ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME).dll
 WINDOWS_APP_NAME ?= $(APP).exe
-WINDOWS64_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
+WINDOWS64_LIB_NAME ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME).dll
 WINDOWS64_APP_NAME ?= $(APP)_x64.exe
-LINUX_LIB_NAME ?= $(DESKTOP_LIB_NAME).so
+LINUX_LIB_NAME ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME).so
 
 APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
@@ -385,7 +385,7 @@ dart-defines-debug:
 	@DART_DEFINES="$(CIBASE)"; \
 	printf "$$DART_DEFINES"
 
-do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB) ffigen
+do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-debug` && \
 	echo "Value of DART_DEFINES is: $$DART_DEFINES" && \
@@ -405,7 +405,7 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) ffigen require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
+$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -531,7 +531,7 @@ linux: linux-amd64
 .PHONY: linux-release
 linux-release: pubget
 	flutter build linux --release
-	cp liblantern.so build/linux/x64/release/bundle
+	cp $(LINUX_LIB_NAME) build/linux/x64/release/bundle
 	flutter_distributor package --platform linux --targets "deb,rpm" --skip-clean
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-linux.rpm lantern-installer-x64.rpm
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-linux.deb lantern-installer-x64.deb
@@ -566,7 +566,7 @@ $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
 .PHONY: windows-release
-windows-release: ffigen
+windows-release:
 	flutter_distributor package --flutter-build-args=verbose --platform windows --targets "msix,exe"
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
 
@@ -599,6 +599,7 @@ macos: macos-arm64
 		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_amd64.dylib \
 		-output "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
 	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
+	cp $(BUILD_DIR)/$(DESKTOP_LIB_NAME)*.h $(DARWIN_FRAMEWORK_DIR)/  # Copy headers
 
 .PHONY: notarize-darwin
 notarize-darwin: require-ac-username require-ac-password
