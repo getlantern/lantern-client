@@ -12,16 +12,16 @@
 # Tina T, 2024
 # sayanvd <sayanvd@yandex.ru>, 2024
 # IvanLykov <chabib@list.ru>, 2024
-# Derek F <derek@getlantern.org>, 2024
 # tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2024
 # e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2024
 # Deanna D, 2024
 # Николай Кочкин <urfiner@gmail.com>, 2024
 # e2f <projects@e2f.com>, 2024
+# Derek F <derek@getlantern.org>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f <projects@e2f.com>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
@@ -138,7 +138,7 @@ msgid "new"
 msgstr "Создать"
 
 msgid "Daily Data Usage"
-msgstr "Ежедневное использование данных"
+msgstr "Дневные данные"
 
 msgid "is"
 msgstr "это"
@@ -182,12 +182,10 @@ msgid "Go Pro Title"
 msgstr "Перейдите на версию Pro!"
 
 msgid "Go Pro Description"
-msgstr ""
-"Разблокируйте более высокие скорости, просмотр без рекламы и неограниченное "
-"количество данных! "
+msgstr "Разблокируйте высокие скорости, без рекламы и безлимитные данные!"
 
 msgid "Server Location"
-msgstr "Местоположение сервера"
+msgstr "Локация сервера"
 
 msgid "Server Location Info"
 msgstr ""
@@ -465,7 +463,7 @@ msgid "pro_plan"
 msgstr "Подписка Pro "
 
 msgid "one_month_plan"
-msgstr ""
+msgstr "Тариф на 1 месяц"
 
 msgid "one_year_plan"
 msgstr "Подписка на 1 год "
@@ -861,7 +859,7 @@ msgstr ""
 "только выбранные ниже приложения будут маршрутизироваться через Lantern."
 
 msgid "split_tunneling"
-msgstr "Раздельное туннелирование"
+msgstr "Сплит-туннель"
 
 msgid "split_tunneling_info"
 msgstr ""
@@ -1787,7 +1785,7 @@ msgid "recovery_not_found"
 msgstr "Устройство не связано с этим пользователем"
 
 msgid "device_added"
-msgstr ""
+msgstr "Устройство добавлено"
 
 msgid "device_added_message"
 msgstr ""
@@ -1858,16 +1856,16 @@ msgid "follow_us"
 msgstr "Подпишитесь на нас "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "Следуйте за нами в Telegram"
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "Следуйте за нами в Instagram"
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "Следуйте за нами в Facebook"
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "Подписывайтесь на X"
 
 msgid "report_issue_error"
 msgstr "Мы испытываем технические трудности. Попробуйте позже. "
@@ -1917,52 +1915,59 @@ msgid "file_size_limit_description"
 msgstr "Размер вложений должен быть менее 100 МБ"
 
 msgid "lantern_pro_one_year"
-msgstr ""
+msgstr "Тарифный план Lantern Pro: на один год"
 
 msgid "lantern_pro_two_year"
-msgstr ""
+msgstr "Тариф Lantern Pro: Двухлетний план"
 
 msgid "lantern_pro_one_month"
-msgstr ""
+msgstr "Тариф Lantern Pro: Один месяц"
 
 msgid "non_renewing_subscription"
-msgstr ""
+msgstr "Подписка без автоматического продления"
 
 msgid "restore_purchase"
-msgstr ""
+msgstr "Восстановить покупку"
 
 msgid "skip_for_now"
-msgstr ""
+msgstr "Пропустить пока"
 
 msgid "purchase_not_found"
-msgstr ""
+msgstr "Покупка с указанным адресом электронной почты не найдена"
 
 msgid "no_previous_purchase"
-msgstr ""
+msgstr "Предыдущие покупки не найдены"
 
 msgid "warning_restore_purchase"
 msgstr ""
+"Введите адрес электронной почты, который вы указали при оформлении заказа, "
+"чтобы восстановить покупку."
 
 msgid "purchase_restored"
-msgstr ""
+msgstr "Покупка восстановлена"
 
 msgid "purchase_restored_message"
-msgstr ""
+msgstr "Ваша покупка успешно восстановлена"
 
 msgid "purchase_restored_error"
 msgstr ""
+"Похоже, что-то пошло не так с восстановлением покупки. Пожалуйста, "
+"проверьте, что вы ввели правильный адрес электронной почты или код."
 
 msgid "err_while_sending_code"
-msgstr ""
+msgstr "Что-то пошло не так при отправке кода, пожалуйста, попробуйте еще раз"
 
 msgid "email_hint"
-msgstr ""
+msgstr "*Электронная почта не обязательна, но рекомендуется"
 
 msgid "email_hint_pro"
 msgstr ""
+"Добавьте адрес электронной почты, чтобы получить доступ к вашим покупкам на "
+"любом устройстве. Без электронной почты покупки привязаны к этому устройству"
+" и могут быть утеряны."
 
 msgid "continue_without_email"
-msgstr ""
+msgstr "Продолжить без электронной почты"
 
 msgid "no_new_update"
 msgstr "Нет новых обновлений!"
@@ -1972,30 +1977,35 @@ msgstr "Что-то пошло не так, попробуйте ещё раз. 
 
 msgid "proxy_error"
 msgstr ""
+"У нас возникла проблема с запуском Lantern. Пожалуйста, попробуйте позже."
 
 msgid "proxy_settings"
-msgstr ""
+msgstr "Настройки прокси"
 
 msgid "http_proxy"
-msgstr ""
+msgstr "HTTPS прокси"
 
 msgid "socks_proxy"
-msgstr ""
+msgstr "Прокси Socks"
 
 msgid "http_proxy_copied"
-msgstr ""
+msgstr "HTTP Proxy скопирован"
 
 msgid "socks_proxy_copied"
-msgstr ""
+msgstr "Прокси Socks скопирован"
 
 msgid "proxy_everything"
-msgstr ""
+msgstr "Проксировать весь трафик"
 
 msgid "errorSubmittingToGooglePlay"
 msgstr ""
+"В настоящее время мы испытываем трудности с обработкой вашего запроса для "
+"Google Play. Пожалуйста, попробуйте позже."
 
 msgid "no_internet_connection"
-msgstr ""
+msgstr "Обнаружено отсутствие подключения к интернету"
 
 msgid "domain_fronting_error"
 msgstr ""
+"У нас возникли проблемы с подключением к нашим серверам. Пожалуйста, "
+"подождите немного или попробуйте выключить и включить снова."

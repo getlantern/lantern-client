@@ -17,15 +17,15 @@
 # Mokah <unfilternet@getlantern.org>, 2024
 # Chip Stehr <chip@getlantern.org>, 2024
 # e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2024
-# Derek F <derek@getlantern.org>, 2024
 # AHMAD MASOUD BARAKZAI, 2024
 # Mersen M, 2024
 # Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024
 # zar24 <zarghamjan@yahoo.com>, 2024
+# Derek F <derek@getlantern.org>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: zar24 <zarghamjan@yahoo.com>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -466,7 +466,7 @@ msgid "pro_plan"
 msgstr "طرح حرفه‌ای"
 
 msgid "one_month_plan"
-msgstr ""
+msgstr "طرح 1 ماهه"
 
 msgid "one_year_plan"
 msgstr "طرح یک ساله"
@@ -1774,7 +1774,7 @@ msgid "recovery_not_found"
 msgstr "دستگاه به این کاربر وابسته نیست"
 
 msgid "device_added"
-msgstr ""
+msgstr "دستگاه اضافه شد"
 
 msgid "device_added_message"
 msgstr ""
@@ -1844,16 +1844,16 @@ msgid "follow_us"
 msgstr "ما را دنبال کنید "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "ما را در Telegram دنبال کنید"
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "ما را در اینستاگرام دنبال کنید"
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "ما را در Facebook دنبال کنید"
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "ما را در ایکس دنبال کنید"
 
 msgid "report_issue_error"
 msgstr "ما با مشکلات فنی مواجه هستیم. لطفاً بعداً دوباره تلاش کنید. "
@@ -1901,52 +1901,58 @@ msgid "file_size_limit_description"
 msgstr "اندازه پیوست‌ها باید کمتر از 100 مگابایت باشد"
 
 msgid "lantern_pro_one_year"
-msgstr ""
+msgstr "طرح یک‌ساله: Lantern Pro"
 
 msgid "lantern_pro_two_year"
-msgstr ""
+msgstr "طرح دو ساله: Lantern Pro"
 
 msgid "lantern_pro_one_month"
-msgstr ""
+msgstr "طرح یک‌ماهه: Lantern Pro"
 
 msgid "non_renewing_subscription"
-msgstr ""
+msgstr "اشتراک غیرقابل تمدید"
 
 msgid "restore_purchase"
-msgstr ""
+msgstr "بازیابی خرید"
 
 msgid "skip_for_now"
-msgstr ""
+msgstr "فعلاً رد کردن"
 
 msgid "purchase_not_found"
-msgstr ""
+msgstr "هیچ خریدی با ایمیل ارائه شده یافت نشد"
 
 msgid "no_previous_purchase"
-msgstr ""
+msgstr "هیچ خرید قبلی یافت نشد"
 
 msgid "warning_restore_purchase"
 msgstr ""
+"ایمیلی را که هنگام پرداخت وارد کرده‌اید، وارد کنید تا خرید خود را بازیابی "
+"کنید."
 
 msgid "purchase_restored"
-msgstr ""
+msgstr "خرید بازیابی شد"
 
 msgid "purchase_restored_message"
-msgstr ""
+msgstr "خرید شما با موفقیت بازیابی شد"
 
 msgid "purchase_restored_error"
 msgstr ""
+"به نظر می‌رسد مشکلی در بازیابی خرید پیش آمده است. لطفاً بررسی کنید که ایمیل "
+"یا کد صحیح را وارد کرده‌اید."
 
 msgid "err_while_sending_code"
-msgstr ""
+msgstr "مشکلی در ارسال کد پیش آمد، لطفاً دوباره تلاش کنید"
 
 msgid "email_hint"
-msgstr ""
+msgstr "*ایمیل اختیاری است اما توصیه می‌شود*"
 
 msgid "email_hint_pro"
 msgstr ""
+"برای دسترسی به خریدهای خود در هر دستگاهی، یک ایمیل اضافه کنید. بدون ایمیل، "
+"خریدها به این دستگاه متصل می‌شوند و ممکن است از دست بروند."
 
 msgid "continue_without_email"
-msgstr ""
+msgstr "ادامه بدون ایمیل"
 
 msgid "no_new_update"
 msgstr "شما به روز هستید!"
@@ -1955,31 +1961,35 @@ msgid "error_referral"
 msgstr "هنگام اعمال کد معرف خطا دریافت شد"
 
 msgid "proxy_error"
-msgstr ""
+msgstr "ما در راه‌اندازی لنترن مشکل داریم. لطفاً بعداً دوباره تلاش کنید."
 
 msgid "proxy_settings"
-msgstr ""
+msgstr "تنظیمات پروکسی"
 
 msgid "http_proxy"
-msgstr ""
+msgstr "پراکسی اچ تی تی پی اس"
 
 msgid "socks_proxy"
-msgstr ""
+msgstr "پراکسی ساکس"
 
 msgid "http_proxy_copied"
-msgstr ""
+msgstr "پراکسی HTTP کپی شد"
 
 msgid "socks_proxy_copied"
-msgstr ""
+msgstr "پراکسی Socks کپی شد"
 
 msgid "proxy_everything"
-msgstr ""
+msgstr "پراکسی کردن همه چیز"
 
 msgid "errorSubmittingToGooglePlay"
 msgstr ""
+"در حال حاضر با پردازش درخواست شما برای گوگل پلی با مشکل مواجه هستیم. لطفاً "
+"بعداً دوباره تلاش کنید."
 
 msgid "no_internet_connection"
-msgstr ""
+msgstr "اتصال به اینترنت شناسایی نشد"
 
 msgid "domain_fronting_error"
 msgstr ""
+"در اتصال به سرورهای ما مشکلی پیش آمده است. لطفاً کمی صبر کنید یا دستگاه را "
+"خاموش و روشن کنید."

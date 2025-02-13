@@ -5,12 +5,12 @@
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2024
 # tx_e2f_bu r2 <tx_e2f_bu_r2@ate2f.com>, 2024
 # Tun Tun Aung <tuntunaung@codingclassroom.org>, 2024
-# Derek F <derek@getlantern.org>, 2024
 # e2f <projects@e2f.com>, 2024
+# Derek F <derek@getlantern.org>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f <projects@e2f.com>, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
 "Language-Team: Burmese (https://app.transifex.com/lantern-1/teams/94371/my/)\n"
 "Language: my\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1886,16 +1886,16 @@ msgid "follow_us"
 msgstr "ကျွန်ုပ်တို့ကိုလိုက်နာပါ "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "ကျွန်ုပ်တို့ကို Telegram ပေါ်တွင်လိုက်နာပါ"
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "ကျွန်ုပ်တို့ကို Instagram ပေါ်တွင်လိုက်နာပါ"
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "ကျွန်ုပ်တို့ကို Facebook ပေါ်တွင်လိုက်နာပါ"
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "ကျွန်ုပ်တို့ကို X တွင်လိုက်နာပါ"
 
 msgid "report_issue_error"
 msgstr ""
@@ -1949,52 +1949,60 @@ msgid "file_size_limit_description"
 msgstr "ပူးတွဲထားသောဖိုင်အရွယ်အစားသည် 100 MB ထက်ငယ်သင့်သည်"
 
 msgid "lantern_pro_one_year"
-msgstr ""
+msgstr "လန်တန် ပရို - တစ်နှစ်စာအစီအစဉ်"
 
 msgid "lantern_pro_two_year"
-msgstr ""
+msgstr "လန်တန် ပရို - နှစ်နှစ်စာအစီအစဉ်"
 
 msgid "lantern_pro_one_month"
-msgstr ""
+msgstr "လန်တန် ပရို: တစ်လ စီမံကိန်း"
 
 msgid "non_renewing_subscription"
-msgstr ""
+msgstr "စာရင်းသွင်းမှုကို ပြန်မသက်တမ်းတိုးခြင်း"
 
 msgid "restore_purchase"
-msgstr ""
+msgstr "ဝယ်ယူမှုကိုပြန်လည်ထူထောင်ပါ"
 
 msgid "skip_for_now"
-msgstr ""
+msgstr "အခုတော့ မလုပ်ပါနဲ့"
 
 msgid "purchase_not_found"
-msgstr ""
+msgstr "ပေးထားသော အီးမေးလ်ဖြင့် ဝယ်ယူမှု မတွေ့ပါ။"
 
 msgid "no_previous_purchase"
-msgstr ""
+msgstr "ယခင်ဝယ်ယူမှုမတွေ့ရှိပါ။"
 
 msgid "warning_restore_purchase"
 msgstr ""
+"စျေးဝယ်ပြီးချိန်တွင် ထည့်သွင်းခဲ့သော အီးမေးလ်ကို ထည့်သွင်းပြီး "
+"သင့်ဝယ်ယူမှုကို ပြန်လည်ရယူပါ။."
 
 msgid "purchase_restored"
-msgstr ""
+msgstr "ဝယ်ယူမှု ပြန်လည်ရရှိပါပြီ"
 
 msgid "purchase_restored_message"
-msgstr ""
+msgstr "သင့်ဝယ်ယူမှုကို အောင်မြင်စွာ ပြန်လည်ရရှိပါပြီ။"
 
 msgid "purchase_restored_error"
 msgstr ""
+"ပြန်လည်ဝယ်ယူမှုတွင် တစ်စုံတစ်ရာမှားယွင်းနေသလိုဖြစ်နေသည်။ သင်မှန်ကန်သော "
+"အီးမေးလ် သို့မဟုတ် ကုဒ်ကို ထည့်သွင်းထားကြောင်း ထပ်မံစစ်ဆေးပါ။."
 
 msgid "err_while_sending_code"
 msgstr ""
+"ကုဒ်ကို ပို့နေစဉ် တစ်ခုခုမှားယွင်းသွားပါသည်၊ ကျေးဇူးပြု၍ ထပ်မံကြိုးစားပါ။"
 
 msgid "email_hint"
-msgstr ""
+msgstr "အီးမေးလ်ထည့်ရန် မလိုအပ်ပါဘူး၊ သို့သော် ထည့်သွင်းရန် အကြံပြုပါသည်။"
 
 msgid "email_hint_pro"
 msgstr ""
+"သင်၏ဝယ်ယူမှုများကို မည်သည့်စက်ပစ္စည်းတွင်မဆို ဝင်ရောက်အသုံးပြုနိုင်ရန် "
+"အီးမေးလ်ထည့်ပါ။ အီးမေးလ်မပါဘဲ ဝယ်ယူမှုများသည် ဤစက်ပစ္စည်းနှင့်သာ "
+"ဆက်စပ်နေပြီး ပျောက်ဆုံးနိုင်ပါသည်။. "
 
 msgid "continue_without_email"
-msgstr ""
+msgstr "အီးမေးလ်မလိုဘဲ ဆက်လက်လုပ်ဆောင်ပါ"
 
 msgid "no_new_update"
 msgstr "သင်နောက်ဆုံးပေါ်အဆင့်ရောက်နေပါပြီ"
@@ -2004,30 +2012,35 @@ msgstr "သင့်ရဲ့ရည်ညွှန်းကုဒ်ကိုအ
 
 msgid "proxy_error"
 msgstr ""
+"လန်တန်ကို စတင်ရန် ပြဿနာရှိနေပါသည်။ ကျေးဇူးပြု၍ နောက်မှ ထပ်ကြိုးစားပါ။."
 
 msgid "proxy_settings"
-msgstr ""
+msgstr "ပရော့စီဆက်တင်များ"
 
 msgid "http_proxy"
-msgstr ""
+msgstr "HTTPS proxy"
 
 msgid "socks_proxy"
-msgstr ""
+msgstr "Socks ပရောက်ဆီ"
 
 msgid "http_proxy_copied"
-msgstr ""
+msgstr "HTTP Proxy ကိုကူးယူပြီးပါပြီ"
 
 msgid "socks_proxy_copied"
-msgstr ""
+msgstr "Socks Proxy ကိုကူးယူပြီးပါပြီ"
 
 msgid "proxy_everything"
-msgstr ""
+msgstr "အရာအားလုံး ကိုယ်စား"
 
 msgid "errorSubmittingToGooglePlay"
 msgstr ""
+"Google Play အတွက် သင့်တောင်းဆိုမှုကို ဆောင်ရွက်ရာတွင် လက်ရှိ အခက်အခဲများ "
+"ကြုံတွေ့နေပါသည်။ ကျေးဇူးပြု၍ နောက်မှ ထပ်မံကြိုးစားပါ။."
 
 msgid "no_internet_connection"
-msgstr ""
+msgstr "အင်တာနက် ချိတ်ဆက်မှု မတွေ့ရှိပါ။"
 
 msgid "domain_fronting_error"
 msgstr ""
+"ကျွန်ုပ်တို့၏ server များနှင့် ချိတ်ဆက်ရာတွင် အခက်အခဲရှိနေပါသည်။ ခဏစောင့်ပါ "
+"သို့မဟုတ် အပိတ်နှင့် ဖွင့်ကြည့်ပါ။."
