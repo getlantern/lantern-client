@@ -287,7 +287,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p "build/windows/${{inputs.windows-arch}}/runner/Release"
-          mv liblantern.dll "build/windows/${{inputs.windows-arch}}/runner/Release"
+          mv build/liblantern.dll "build/windows/${{inputs.windows-arch}}/runner/Release"
 
       - name: Build Flutter app (Windows)
         if: matrix.platform == 'windows'
