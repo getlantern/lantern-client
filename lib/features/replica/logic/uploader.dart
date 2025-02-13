@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/features/messaging/notifications.dart';
 
+const uploadGroup = 'upload_group';
+
 class ReplicaUploader {
   ReplicaUploader._private() {
     _init();
@@ -17,43 +19,50 @@ class ReplicaUploader {
 
   void _init() {
     // Listen for updates
-    FileDownloader().updates.listen((update) async {
-      if (update is TaskProgressUpdate && update.task is UploadTask) {
-        await notifications.flutterLocalNotificationsPlugin.show(
-          update.task.taskId.hashCode,
-          'uploader'.i18n,
-          'upload_in_progress'.i18n,
-          notifications.getUploadProgressChannel(update.progress.toInt()),
-        );
-      } else if (update is TaskStatusUpdate && update.task is UploadTask) {
-        final task = update.task as UploadTask;
+    FileDownloader().registerCallbacks(
+      group: uploadGroup,
+      taskStatusCallback: (update) async {
+        if (update.task is UploadTask) {
+          final task = update.task as UploadTask;
 
-        notifications.flutterLocalNotificationsPlugin
-            .cancel(task.taskId.hashCode);
+          // Remove progress notification
+          notifications.flutterLocalNotificationsPlugin
+              .cancel(task.taskId.hashCode);
 
-        var title = 'upload_complete'.i18n;
-        if (update.status == TaskStatus.failed) {
-          title = 'upload_failed'.i18n;
-        } else if (update.status == TaskStatus.canceled) {
-          title = 'upload_cancelled'.i18n;
+          var title = 'upload_complete'.i18n;
+          if (update.status == TaskStatus.failed) {
+            title = 'upload_failed'.i18n;
+          } else if (update.status == TaskStatus.canceled) {
+            title = 'upload_cancelled'.i18n;
+          }
+
+          // Show completion notification
+          await notifications.flutterLocalNotificationsPlugin.show(
+            task.taskId.hashCode,
+            'uploader'.i18n,
+            title,
+            notifications.getUploadCompleteChannel(update.status),
+            payload: Payload(
+              type: PayloadType.Upload,
+              data: task.metaData,
+            ).toJson(),
+          );
+
+          // Remove completed task from queue
+          FileDownloader().cancelTaskWithId(task.taskId);
         }
-
-        // Show completion notification
-        await notifications.flutterLocalNotificationsPlugin.show(
-          task.taskId.hashCode,
-          'uploader'.i18n,
-          title,
-          notifications.getUploadCompleteChannel(update.status),
-          payload: Payload(
-            type: PayloadType.Upload,
-            data: task.metaData,
-          ).toJson(),
-        );
-
-        // Remove completed task from queue
-        FileDownloader().cancelTaskWithId(task.taskId);
-      }
-    });
+      },
+      taskProgressCallback: (update) async {
+        if (update.task is UploadTask) {
+          await notifications.flutterLocalNotificationsPlugin.show(
+            update.task.taskId.hashCode,
+            'uploader'.i18n,
+            'upload_in_progress'.i18n,
+            notifications.getUploadProgressChannel(update.progress.toInt()),
+          );
+        }
+      },
+    );
   }
 
   /// fileTitle: no extension
@@ -86,8 +95,7 @@ class ReplicaUploader {
         updates:
             Updates.statusAndProgress // request status and progress updates
         );
-
-    FileDownloader().enqueue(task);
+    await FileDownloader().enqueue(task);
 
     sessionModel.trackUserAction(
         'User uploaded Replica content', uploadUrl, fileTitle);
