@@ -18,7 +18,6 @@ class ReplicaUploader {
   static final ReplicaUploader _instance = ReplicaUploader._private();
 
   void _init() {
-    // Listen for updates
     FileDownloader().registerCallbacks(
       group: uploadGroup,
       taskStatusCallback: (update) async {
@@ -44,7 +43,7 @@ class ReplicaUploader {
             notifications.getUploadCompleteChannel(update.status),
             payload: Payload(
               type: PayloadType.Upload,
-              data: task.metaData,
+              data: update.responseBody,
             ).toJson(),
           );
 
