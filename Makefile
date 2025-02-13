@@ -122,7 +122,6 @@ LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDa
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
-
 S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
@@ -359,7 +358,6 @@ $(ANDROID_LIB): $(GO_SOURCES) install-gomobile
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
 		-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
-		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)

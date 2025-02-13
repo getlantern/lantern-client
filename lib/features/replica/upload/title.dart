@@ -32,7 +32,6 @@ class _ReplicaUploadTitleState extends State<ReplicaUploadTitle> {
   void initState() {
     fileTitle = path.withoutExtension(path.basename(widget.fileToUpload.path));
     textEditingController.text = widget.fileTitle ?? fileTitle;
-    ReplicaUploader.inst.init();
     super.initState();
   }
 

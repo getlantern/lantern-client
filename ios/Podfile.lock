@@ -1,8 +1,9 @@
 PODS:
-  - Alamofire (5.2.2)
   - app_links (0.0.2):
     - Flutter
   - audioplayers_darwin (0.0.1):
+    - Flutter
+  - background_downloader (0.0.1):
     - Flutter
   - connectivity_plus (0.0.1):
     - Flutter
@@ -62,9 +63,6 @@ PODS:
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_pdfview (1.0.2):
-    - Flutter
-  - flutter_uploader (1.2.0):
-    - Alamofire (= 5.2.2)
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
@@ -144,6 +142,7 @@ PODS:
 DEPENDENCIES:
   - app_links (from `.symlinks/plugins/app_links/ios`)
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
+  - background_downloader (from `.symlinks/plugins/background_downloader/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
@@ -154,7 +153,6 @@ DEPENDENCIES:
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
-  - flutter_uploader (from `.symlinks/plugins/flutter_uploader/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
@@ -175,7 +173,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - Alamofire
     - DKImagePickerController
     - DKPhotoGallery
     - Google-Mobile-Ads-SDK
@@ -194,6 +191,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/app_links/ios"
   audioplayers_darwin:
     :path: ".symlinks/plugins/audioplayers_darwin/ios"
+  background_downloader:
+    :path: ".symlinks/plugins/background_downloader/ios"
   connectivity_plus:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   device_info_plus:
@@ -214,8 +213,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_pdfview:
     :path: ".symlinks/plugins/flutter_pdfview/ios"
-  flutter_uploader:
-    :path: ".symlinks/plugins/flutter_uploader/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   google_mobile_ads:
@@ -252,9 +249,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  Alamofire: 814429acc853c6c54ff123fc3d2ef66803823ce0
   app_links: e7a6750a915a9e161c58d91bc610e8cd1d4d0ad0
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
+  background_downloader: 3ca0e156ad83a9fc1c8300f5f7c38e94e2d0bf51
   connectivity_plus: 2a701ffec2c0ae28a48cf7540e279787e77c447d
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
@@ -267,7 +264,6 @@ SPEC CHECKSUMS:
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_local_notifications: df98d66e515e1ca797af436137b4459b160ad8c9
   flutter_pdfview: 2e4d13ffb774858562ffbdfdb61b40744b191adc
-  flutter_uploader: 2b07c4d41cf1218f25e6d5b8bcfa2d913838e27c
   fluttertoast: 21eecd6935e7064cc1fcb733a4c5a428f3f24f0f
   Google-Mobile-Ads-SDK: 14f57f2dc33532a24db288897e26494640810407
   google_mobile_ads: fe0e2c1764ad95323dd0e3081d0bb2d58411f957
