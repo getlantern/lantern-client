@@ -529,7 +529,7 @@ linux-arm64: desktop-lib ## Build lantern for linux-arm64
 linux: linux-amd64
 
 .PHONY: linux-release
-linux-release: pubget
+linux-release: pubget ffigen
 	flutter build linux --release
 	cp liblantern.so build/linux/x64/release/bundle
 	flutter_distributor package --platform linux --targets "deb,rpm" --skip-clean
@@ -627,7 +627,7 @@ require-bundler:
 	fi
 
 .PHONY: macos-release
-macos-release: require-appdmg pubget
+macos-release: require-appdmg pubget ffigen
 	flutter build macos --release
 
 	# Sign liblantern.dylib
