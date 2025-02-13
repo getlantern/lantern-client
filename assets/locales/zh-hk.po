@@ -5,7 +5,6 @@
 # Po-Chun Huang <aphroteus@gmail.com>, 2024
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
 # tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2024
-# Derek F <derek@getlantern.org>, 2024
 # Rockman Lau <im@rockman.us>, 2024
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
 # YFdyh000 <yfdyh000@gmail.com>, 2024
@@ -14,10 +13,11 @@
 # Aki, 2024
 # Ox Cart <ox@getlantern.org>, 2024
 # Lantern, 2024
+# Derek F <derek@getlantern.org>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2024\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/lantern-1/teams/94371/zh_HK/)\n"
 "Language: zh_HK\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -427,7 +427,7 @@ msgid "pro_plan"
 msgstr "专业版计划"
 
 msgid "one_month_plan"
-msgstr ""
+msgstr "1个月计划"
 
 msgid "one_year_plan"
 msgstr "1 年专业版"
@@ -1672,7 +1672,7 @@ msgid "recovery_not_found"
 msgstr "设备未与此用户关联"
 
 msgid "device_added"
-msgstr ""
+msgstr "设备已授权"
 
 msgid "device_added_message"
 msgstr "您的设备已成功添加。如果您没有看到设备连接，请重新启动两个设备上的应用程序 "
@@ -1738,16 +1738,16 @@ msgid "follow_us"
 msgstr "关注我们 "
 
 msgid "follow_us_telegram"
-msgstr ""
+msgstr "在Telegram上關注我們"
 
 msgid "follow_us_instagram"
-msgstr ""
+msgstr "請在 Instagram 上關注我們"
 
 msgid "follow_us_facebook"
-msgstr ""
+msgstr "在Facebook上關注我們"
 
 msgid "follow_us_x"
-msgstr ""
+msgstr "請在 X 上關注我們"
 
 msgid "report_issue_error"
 msgstr "我们遇到了技术问题。请稍后再试。 "
@@ -1799,52 +1799,52 @@ msgstr ""
 " "
 
 msgid "lantern_pro_one_year"
-msgstr ""
+msgstr "Lantern專業版：一年計劃"
 
 msgid "lantern_pro_two_year"
-msgstr ""
+msgstr "Lantern專業版：兩年計劃"
 
 msgid "lantern_pro_one_month"
-msgstr ""
+msgstr "Lantern專業版：一個月計劃"
 
 msgid "non_renewing_subscription"
-msgstr ""
+msgstr "不續訂訂閱"
 
 msgid "restore_purchase"
-msgstr ""
+msgstr "恢復購買"
 
 msgid "skip_for_now"
-msgstr ""
+msgstr "暫時跳過"
 
 msgid "purchase_not_found"
-msgstr ""
+msgstr "找不到與提供的電子郵件相關的購買記錄"
 
 msgid "no_previous_purchase"
-msgstr ""
+msgstr "未找到先前的購買記錄"
 
 msgid "warning_restore_purchase"
-msgstr ""
+msgstr "輸入您在結帳時輸入的電子郵件以恢復您的購買。"
 
 msgid "purchase_restored"
-msgstr ""
+msgstr "購買已恢復"
 
 msgid "purchase_restored_message"
-msgstr ""
+msgstr "您的購買已成功恢復"
 
 msgid "purchase_restored_error"
-msgstr ""
+msgstr "看起來恢復購買時出了問題。請仔細檢查您輸入的電子郵件或代碼是否正確。"
 
 msgid "err_while_sending_code"
-msgstr ""
+msgstr "發送代碼時出錯，請再試一次。"
 
 msgid "email_hint"
-msgstr ""
+msgstr "電子郵件是可選的，但建議提供"
 
 msgid "email_hint_pro"
-msgstr ""
+msgstr "添加電子郵件以便在任何設備上訪問您的購買內容。沒有電子郵件，購買內容將綁定到此設備，可能會丟失。"
 
 msgid "continue_without_email"
-msgstr ""
+msgstr "繼續使用不含電子郵件"
 
 msgid "no_new_update"
 msgstr "已更新為最新狀態！"
@@ -1853,31 +1853,31 @@ msgid "error_referral"
 msgstr "使用您的推荐码时报错"
 
 msgid "proxy_error"
-msgstr ""
+msgstr "我們在啟動 Lantern 時遇到問題，請稍後再試。"
 
 msgid "proxy_settings"
-msgstr ""
+msgstr "代理設定"
 
 msgid "http_proxy"
-msgstr ""
+msgstr "HTTPS 代理"
 
 msgid "socks_proxy"
-msgstr ""
+msgstr "已複製 Socks 代理"
 
 msgid "http_proxy_copied"
-msgstr ""
+msgstr "已複製 HTTP 代理"
 
 msgid "socks_proxy_copied"
-msgstr ""
+msgstr "已複製 Socks 代理"
 
 msgid "proxy_everything"
-msgstr ""
+msgstr "代理所有內容"
 
 msgid "errorSubmittingToGooglePlay"
-msgstr ""
+msgstr "我們目前處理您的 Google Play 請求時遇到困難，請稍後再試。"
 
 msgid "no_internet_connection"
-msgstr ""
+msgstr "未偵測到網際網路連線"
 
 msgid "domain_fronting_error"
-msgstr ""
+msgstr "我們無法連接到伺服器，請稍候或嘗試關閉再開啟。"

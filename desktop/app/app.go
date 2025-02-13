@@ -80,6 +80,9 @@ type App struct {
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
 func NewApp() (*App, error) {
+	// filter macOS system arguments
+	filterSystemArgs()
+
 	flags := flashlight.ParseFlags()
 	if flags.Pprof {
 		go startPprof("localhost:6060")

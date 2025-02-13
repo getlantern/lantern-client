@@ -409,7 +409,7 @@ class MessagingHolder {
         } else if (contact.displayName.length == 1) {
             initials = contact.displayName // display name is one char long
         }
-        canvas.drawText(initials.toUpperCase(), initialsX, 250.toFloat(), paintAv)
+        canvas.drawText(initials.uppercase(), initialsX, 250.toFloat(), paintAv)
         // update customNotification
         customNotification.setImageViewBitmap(R.id.avatar, bitmap)
     }

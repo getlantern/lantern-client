@@ -51,7 +51,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-latest
+          - os: macos-15
             platform: macos
           - os: windows-latest
             platform: windows
@@ -180,7 +180,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y file build-essential pkg-config
-          sudo apt-get install -y libwebkit2gtk-4.1-dev
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libcurl4-openssl-dev
           sudo apt-get install -y libunwind-dev libstdc++-12-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-d cmake
           sudo apt-get install -y libgtk-3-0 libblkid1 liblzma5
           sudo apt-get install -y libpcap-dev libgtk-3-dev libayatana-appindicator3-dev ruby ruby-dev && sudo gem install bundler -v 2.2.26
