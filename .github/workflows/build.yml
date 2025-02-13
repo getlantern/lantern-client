@@ -277,7 +277,7 @@ jobs:
           code-signing-account-name: code-signing
           certificate-profile-name: Lantern
           files-folder: ${{ github.workspace }}\build
-          files-folder-filter: liblantern.dll
+          files-folder-filter: dll
           file-digest: SHA256
           timestamp-rfc3161: http://timestamp.acs.microsoft.com
           timestamp-digest: SHA256
