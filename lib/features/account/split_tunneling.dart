@@ -308,6 +308,8 @@ class _SplitTunnelingAppsListState extends State<SplitTunnelingAppsList> {
 
 // SplitTunnelingWidget is the split tunneling widget that appears on the main VPN screen
 class SplitTunnelingWidget extends StatelessWidget {
+  const SplitTunnelingWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return sessionModel.splitTunneling(
