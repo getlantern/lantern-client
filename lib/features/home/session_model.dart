@@ -881,6 +881,7 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<bool>(
         '/splitTunneling',
         builder: builder,
+        defaultValue: false
       );
     }
     return configValueBuilder(

@@ -38,7 +38,7 @@ func SendIssueReport(
 	}
 	var country string
 	if common.Platform == "ios" {
-		country = geolookup.GetCountry(5 * time.Second)
+		country = geolookup.GetCountry(1 * time.Second)
 		log.Debugf("Country For report issue %v", country)
 	}
 	return issue.SendReport(

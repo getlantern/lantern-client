@@ -115,16 +115,26 @@ class AppPurchase {
           purchaseDetails.verificationData.serverVerificationData,
         );
         _onSuccess?.call();
+
+
       } catch (e) {
         logger.e("purchase error", error: e);
         Sentry.captureException(e);
         _onError?.call(e);
       }
     }
-
-    if (purchaseDetails.pendingCompletePurchase) {
-      await _inAppPurchase.completePurchase(purchaseDetails);
+    ///This is something we can do later as well
+    /// So catch the error do not crash app
+    /// and it wil handle it on next time
+    try {
+      if (purchaseDetails.pendingCompletePurchase) {
+        await _inAppPurchase.completePurchase(purchaseDetails);
+      }
+    } catch (e) {
+      logger.e("purchase error", error: e);
+      Sentry.captureException(e);
     }
+
   }
 
   void _updateStreamOnDone() {
@@ -144,7 +154,6 @@ class AppPurchase {
 
   String getPriceFromPlanId(String planId, {bool perMonthCost = false}) {
     try {
-
       final plan = _normalizePlan(planId);
       for (var sku in plansSku) {
         if (sku.id.toLowerCase() == plan.id.toLowerCase()) {
@@ -155,8 +164,6 @@ class AppPurchase {
         }
       }
     } catch (e, stacktrace) {
-      Sentry.captureException(e,
-          stackTrace: stacktrace, hint: Hint.withMap({'planId': planId}));
       mainLogger.e('Failed to get price from plan');
     }
     return "";

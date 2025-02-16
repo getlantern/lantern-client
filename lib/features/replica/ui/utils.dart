@@ -168,7 +168,7 @@ Future<void> handleUploadConfirm({
   String? fileDescription,
 }) async {
   try {
-    await ReplicaUploader.inst.uploadFile(
+    await ReplicaUploader().uploadFile(
       file: fileToUpload,
       fileName: '$fileTitle${path.extension(fileToUpload.path)}',
       fileDescription: fileDescription,

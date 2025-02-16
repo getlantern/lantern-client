@@ -1,3 +1,6 @@
+# Use of [[ below, errors on CI.
+SHELL := /bin/bash
+
 #1 Disable implicit rules
 .SUFFIXES:
 
@@ -6,8 +9,10 @@
 INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
 INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
 
-%.pb.go: %.proto
-	go build -o build/protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go
+build/protoc-gen-go:
+	go build -o $@ google.golang.org/protobuf/cmd/protoc-gen-go
+
+%.pb.go: %.proto build/protoc-gen-go ;
 
 codegen: protos routes
 
@@ -117,30 +122,31 @@ LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDa
 BETA_BASE_NAME ?= $(INSTALLER_NAME)-preview
 PROD_BASE_NAME ?= $(INSTALLER_NAME)
 
-
 S3_BUCKET ?= lantern
 FORCE_PLAY_VERSION ?= false
 DEBUG_VERSION ?= $(GIT_REVISION)
 
 DWARF_DSYM_FOLDER_PATH=$(shell pwd)/build/ios/archive/Runner.xcarchive/dSYMs/
-ANDROID_DEBUG_PLAY_SYMBOL=/build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib
-ANDROID_DEBUG_SIDE_LOAD_SYMBOL=/build/app/intermediates/merged_native_libs/prodSideload/mergeProdSideloadNativeLibs/out/lib
+ANDROID_DEBUG_PLAY_SYMBOL=build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib
+ANDROID_DEBUG_SIDE_LOAD_SYMBOL=build/app/intermediates/merged_native_libs/prodSideload/mergeProdSideloadNativeLibs/out/lib
 
 INFO_PLIST := ios/Runner/Info.plist
 ENTITLEMENTS := macos/Runner/Release.entitlements
 
+BUILD_DIR ?= build
 DESKTOP_LIB_NAME ?= liblantern
 DARWIN_LIB_NAME ?= $(DESKTOP_LIB_NAME).dylib
-DARWIN_LIB_AMD64 ?= $(DESKTOP_LIB_NAME)_amd64.dylib
-DARWIN_LIB_ARM64 ?= $(DESKTOP_LIB_NAME)_arm64.dylib
+DARWIN_LIB_AMD64 ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME)_amd64.dylib
+DARWIN_LIB_ARM64 ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME)_arm64.dylib
 DARWIN_APP_NAME ?= $(CAPITALIZED_APP).app
+DARWIN_FRAMEWORK_DIR ?= macos/Frameworks
 INSTALLER_RESOURCES ?= installer-resources-$(APP)
 INSTALLER_NAME ?= $(APP)-installer
-WINDOWS_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
+WINDOWS_LIB_NAME ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME).dll
 WINDOWS_APP_NAME ?= $(APP).exe
-WINDOWS64_LIB_NAME ?= $(DESKTOP_LIB_NAME).dll
+WINDOWS64_LIB_NAME ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME).dll
 WINDOWS64_APP_NAME ?= $(APP)_x64.exe
-LINUX_LIB_NAME ?= $(DESKTOP_LIB_NAME).so
+LINUX_LIB_NAME ?= $(BUILD_DIR)/$(DESKTOP_LIB_NAME).so
 
 APP_YAML := lantern.yaml
 APP_YAML_PATH := installer-resources-lantern/$(APP_YAML)
@@ -208,7 +214,6 @@ PROTO_SOURCES = $(shell find . -name '*.proto' -not -path './vendor/*')
 GENERATED_PROTO_SOURCES = $(shell echo "$(PROTO_SOURCES)" | sed 's/\.proto/\.pb\.go/g')
 GO_SOURCES := $(GENERATED_PROTO_SOURCES) go.mod go.sum $(shell find internalsdk -type f -name "*.go")
 MOBILE_SOURCES := $(shell find Makefile android assets go.mod go.sum lib protos* -type f -not -path "*/libs/$(ANDROID_LIB_BASE)*" -not -iname "router.gr.dart")
-BUILD_DIR ?= build
 
 .PHONY: dumpvars packages vendor android-debug do-android-release android-release do-android-bundle android-bundle android-debug-install android-release-install android-test android-cloud-test package-android
 
@@ -347,16 +352,12 @@ auto-updates: require-version require-s3cmd require-gh-token require-ruby
 
 release: require-version require-s3cmd require-wget require-lantern-binaries require-release-track release-prod copy-beta-installers-to-mirrors invalidate-getlantern-dot-org upload-aab-to-play
 
-$(ANDROID_LIB): $(GO_SOURCES)
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	go install golang.org/x/mobile/cmd/gomobile@latest && \
-	gomobile init && \
+$(ANDROID_LIB): $(GO_SOURCES) install-gomobile
 	gomobile bind \
-	    -target=$(ANDROID_ARCH_GOMOBILE) \
+		-target=$(ANDROID_ARCH_GOMOBILE) \
 		-tags='headless lantern' -o=$(ANDROID_LIB) \
 		-androidapi=23 \
 		-ldflags="-checklinkname=0 $(LDFLAGS) $(EXTRA_LDFLAGS)" \
-		$(GOMOBILE_EXTRA_BUILD_FLAGS) \
 		github.com/getlantern/lantern-client/internalsdk github.com/getlantern/pathdb/testsupport github.com/getlantern/pathdb/minisql
 
 $(MOBILE_ANDROID_LIB): $(ANDROID_LIB)
@@ -384,7 +385,7 @@ dart-defines-debug:
 	@DART_DEFINES="$(CIBASE)"; \
 	printf "$$DART_DEFINES"
 
-do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB) ffigen
+do-android-debug: $(MOBILE_SOURCES) $(MOBILE_ANDROID_LIB)
 	@ln -fs $(MOBILE_DIR)/gradle.properties . && \
 	DART_DEFINES=`make dart-defines-debug` && \
 	echo "Value of DART_DEFINES is: $$DART_DEFINES" && \
@@ -404,7 +405,7 @@ $(MOBILE_DEBUG_APK): $(MOBILE_SOURCES) $(GO_SOURCES)
 	make do-android-debug && \
 	cp $(MOBILE_ANDROID_DEBUG) $(MOBILE_DEBUG_APK)
 
-$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) ffigen require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
+$(MOBILE_RELEASE_APK): $(MOBILE_SOURCES) $(GO_SOURCES) $(MOBILE_ANDROID_LIB) require-sentry guard-SENTRY_PROJECT_ANDROID guard-SENTRY_AUTH_TOKEN
 	echo $(MOBILE_ANDROID_LIB) && \
 	mkdir -p ~/.gradle && \
 	ln -fs $(MOBILE_DIR)/gradle.properties . && \
@@ -486,9 +487,11 @@ echo-build-tags: ## Prints build tags and extra ldflags. Run this with `REPLICA=
 	@if [[ "$$CC" ]]; then echo "CC: $(CC)"; fi
 	@if [[ "$$CXX" ]]; then echo "CXX: $(CXX)"; fi
 
+# Don't clobber the user's settings with go env -w.
+export GOPRIVATE += ,github.com/getlantern/*
+
 .PHONY: desktop-lib ffigen
 
-desktop-lib: export GOPRIVATE = github.com/getlantern
 desktop-lib: $(GO_SOURCES) echo-build-tags
 	CGO_ENABLED=1 go build -v -trimpath $(GO_BUILD_FLAGS) -o "$(LIB_NAME)" -tags="$(BUILD_TAGS)" -ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" desktop/*.go
 
@@ -528,7 +531,7 @@ linux: linux-amd64
 .PHONY: linux-release
 linux-release: pubget
 	flutter build linux --release
-	cp liblantern.so build/linux/x64/release/bundle
+	cp $(LINUX_LIB_NAME) build/linux/x64/release/bundle
 	flutter_distributor package --platform linux --targets "deb,rpm" --skip-clean
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-linux.rpm lantern-installer-x64.rpm
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION)-linux.deb lantern-installer-x64.deb
@@ -563,7 +566,7 @@ $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
 
 .PHONY: windows-release
-windows-release: ffigen
+windows-release:
 	flutter_distributor package --flutter-build-args=verbose --platform windows --targets "msix,exe"
 	mv dist/$(APP_VERSION)/lantern-$(APP_VERSION).exe lantern-installer-x64.exe
 
@@ -587,13 +590,16 @@ $(DARWIN_LIB_ARM64): desktop-lib
 .PHONY: macos
 macos: macos-arm64
 	make macos-amd64
+	echo "Nuking $(DARWIN_FRAMEWORK_DIR)"
+	rm -Rf $(DARWIN_FRAMEWORK_DIR)/*
+	mkdir -p $(DARWIN_FRAMEWORK_DIR)
 	lipo \
 		-create \
-		${DESKTOP_LIB_NAME}_arm64.dylib \
-		${DESKTOP_LIB_NAME}_amd64.dylib \
-		-output "${BUILD_DIR}/${DARWIN_LIB_NAME}"
-	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${BUILD_DIR}/${DARWIN_LIB_NAME}"
-	rm -Rf ${DESKTOP_LIB_NAME}_arm64.dylib ${DESKTOP_LIB_NAME}_amd64.dylib
+		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_arm64.dylib \
+		$(BUILD_DIR)/${DESKTOP_LIB_NAME}_amd64.dylib \
+		-output "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
+	install_name_tool -id "@rpath/${DARWIN_LIB_NAME}" "${DARWIN_FRAMEWORK_DIR}/${DARWIN_LIB_NAME}"
+	cp $(BUILD_DIR)/$(DESKTOP_LIB_NAME)*.h $(DARWIN_FRAMEWORK_DIR)/  # Copy headers
 
 .PHONY: notarize-darwin
 notarize-darwin: require-ac-username require-ac-password
@@ -684,8 +690,6 @@ ios: assert-go-version install-gomobile
 	echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	echo "Generating Ios.xcFramework"
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	gomobile init && \
 	gomobile bind -target=ios,iossimulator \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS) $(EXTRA_LDFLAGS)" \
@@ -699,8 +703,6 @@ build-release-framework: assert-go-version install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	@echo "generating Ios.xcFramework"
-	go env -w 'GOPRIVATE=github.com/getlantern/*' && \
-	gomobile init && \
 	gomobile bind -target=ios \
 	-tags='headless lantern ios netgo' \
 	-ldflags="$(LDFLAGS)"  \
@@ -711,8 +713,11 @@ build-release-framework: assert-go-version install-gomobile
 
 
 install-gomobile:
-	@echo "installing gomobile" && \
+	# With Go 1.24, use -tool to freeze the gomobile version.
+	@echo "installing gomobile"
 	go install golang.org/x/mobile/cmd/gomobile@latest
+	gomobile init
+
 
 assert-go-version:
 	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi

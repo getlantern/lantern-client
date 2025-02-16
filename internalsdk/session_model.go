@@ -198,7 +198,7 @@ func NewSessionModel(mdb minisql.DB, opts *SessionModelOpts) (*SessionModel, err
 // this method initializes the ios configuration for the session model
 // also this method check for geoLookup
 func (m *SessionModel) iosInit(configPath string, userId int, token string, deviceId string) error {
-	m.setupIosConfigure(configPath, userId, token, deviceId)
+	go m.setupIosConfigure(configPath, userId, token, deviceId)
 	go func() {
 		if <-iosGeoLookup.OnRefresh() {
 			country := iosGeoLookup.GetCountry(5 * time.Second)
@@ -213,25 +213,24 @@ func (m *SessionModel) iosInit(configPath string, userId int, token string, devi
 // setupIosConfigure sets up the iOS configuration for the session model.
 // It continuously checks if the global configuration is available and retries every second if not.
 func (m *SessionModel) setupIosConfigure(configPath string, userId int, token string, deviceId string) {
-	go func() {
-		cf := ios.NewConfigurer(configPath, userId, token, deviceId, "")
-		ticker := time.NewTicker(1 * time.Second)
-		defer ticker.Stop()
-		for range ticker.C {
-			if cf.HasGlobalConfig() {
-				global, _, _, err := cf.OpenGlobal()
-				if err != nil {
-					log.Errorf("Error while opening global %v", err)
-					return
-				}
-				m.iosConfigurer = global
-				log.Debug("Found global config IOS configure done")
-				m.checkAvailableFeatures()
-				return // Exit the loop after success
+	cf := ios.NewConfigurer(configPath, userId, token, deviceId, "")
+	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
+	for range ticker.C {
+		if cf.HasGlobalConfig() {
+			global, _, _, err := cf.OpenGlobal()
+			if err != nil {
+				log.Errorf("Error while opening global %v", err)
+				return
 			}
-			log.Debugf("global config not available, retrying...")
+			m.iosConfigurer = global
+			log.Debug("Found global config IOS configure done")
+			go m.checkAvailableFeatures()
+			return // Exit the loop after success
 		}
-	}()
+		log.Debugf("global config not available, retrying...")
+	}
+
 }
 
 func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (interface{}, error) {
@@ -761,13 +760,12 @@ func (m *SessionModel) initSessionModel(ctx context.Context, opts *SessionModelO
 		})
 		go m.proClient.RetryCreateUser(ctx, m, 10*time.Minute)
 	} else {
-		// Get all user details
-		err = m.userDetail(ctx)
-		if err != nil {
-			log.Error(err)
-		}
-
 		go func() {
+			// Get all user details
+			err = m.userDetail(ctx)
+			if err != nil {
+				log.Error(err)
+			}
 			err = m.paymentMethods()
 			if err != nil {
 				log.Debugf("Plans V3 error: %v", err)

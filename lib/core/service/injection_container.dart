@@ -10,11 +10,11 @@ final GetIt sl = GetIt.instance;
 
 void initServices() {
   //Inject
+  sl.registerLazySingleton(() => AdsService());
+  sl.registerLazySingleton(() => SurveyService());
   if (isMobile()) {
     sl.registerLazySingleton(() => AppPurchase());
     sl<AppPurchase>().init();
   }
-  sl.registerLazySingleton(() => AdsService());
 
-  sl.registerLazySingleton(() => SurveyService());
 }

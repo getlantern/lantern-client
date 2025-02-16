@@ -52,34 +52,52 @@ class InternetStatusProvider extends ChangeNotifier {
   bool _isDisconnected = false;
 
   /// Using debounce to avoid flickering when the connection is unstable
-  final _debounceDuration = const Duration(seconds: 2);
+  final _debounceDuration = Duration(seconds: Platform.isIOS ? 5 : 2);
   Timer? _debounceTimer;
 
   final _regionCheckUrls = {
     'RU': const [
       'https://yandex.ru',
       'https://alibaba.com',
-      'https://google.com',
+      'https://dzen.ru',
+      'https://vk.com'
+    ],
+    'AE': const [
+      'https://espncricinfo.com',
+      'https://microsoft.com',
+      'https://amazon.ae'
+    ],
+    'IR': const [
+      'https://aparat.com',
+      'https://digikala.com',
+      'https://divar.ir'
+    ],
+    'CN': const [
+      'https://baidu.com',
+      'https://microsoft.com',
+      'https://alibaba.com'
+    ],
+    'DEFAULT': const [
+      'https://alibaba.com',
+      'https://emirates.com',
       'https://microsoft.com'
     ],
-    'CN': ['https://baidu.com', 'https://microsoft.com', 'https://alibaba.com'],
-    'DEFAULT': [
-      'https://google.com',
-      'https://ipapi.co/ip',
-      'https://microsoft.com'
-    ]
   };
+
   /// With help of https://dnschecker.org/public-dns/
+  /// pinged by https://ping.pe
   final _pingAddress = {
-    'RU': ['8.8.8.8', '77.88.8.1','1.1.1.1'],
-    'CN': ['180.76.76.76', '223.6.6.41', '8.8.8.8'],
-    'DEFAULT': ['8.8.8.8', '1.1.1.1'],
+    'IR': const ['194.225.152.10', '81.163.3.2', '217.218.155.155', '1.1.1.1'],
+    'AE': const ['180.76.76.76', '223.6.6.41', '58.210.11.218'],
+    'RU': const ['92.124.144.189', '77.88.8.1', '94.51.83.154'],
+    'CN': const ['180.76.76.76', '223.6.6.41', '58.210.11.218'],
+    'DEFAULT': const ['180.76.76.76', '223.6.6.41', '58.210.11.218'],
   };
 
   InternetStatusProvider() {
     // Listen for connection status changes
     _connectionSubscription = InternetConnection.createInstance(
-      checkInterval: const Duration(seconds: 5),
+      checkInterval: const Duration(seconds: 4),
       useDefaultOptions: false,
       customCheckOptions: getRegionSpecificCheckOptions(),
     ).onStatusChange.listen((status) async {
@@ -100,20 +118,21 @@ class InternetStatusProvider extends ChangeNotifier {
   bool get isConnected => _isConnected;
 
   ///Another check on top of internet connection checker
-  ///to ping some of the popular websites
+  ///to ping some of the popular websites.
+  ///Note that I don't think this works on iOS at all.
   Future<bool> pingServers() async {
     appLogger.d('Pinging servers to check internet connection');
     final countryCode = sessionModel.country.value ?? 'DEFAULT';
-    final pingAddresses = (_pingAddress[countryCode] ?? _pingAddress['DEFAULT'])!;
+    final pingAddresses =
+        (_pingAddress[countryCode] ?? _pingAddress['DEFAULT'])!;
     for (String address in pingAddresses) {
       try {
-        final ping = Ping(address, count: 2);
-        final result = await ping.stream.toList();
-        final pinData = result.first;
+        final ping = Ping(address, count: 3);
+        final pinData = await ping.stream.first;
         if (pinData.error != null) {
           appLogger.d('Server ping not found');
           ping.stop();
-          return false;
+          continue;
         }
         if (pinData.response != null) {
           appLogger.d('Server ping found');
@@ -122,7 +141,7 @@ class InternetStatusProvider extends ChangeNotifier {
         }
       } catch (e) {
         appLogger.d('Server ping failed');
-        return false;
+        continue;
       }
     }
 
@@ -132,7 +151,6 @@ class InternetStatusProvider extends ChangeNotifier {
   Future<void> checkInternetConnection() async {
     // Check the internet connection status
     _isConnected = await InternetConnection().hasInternetAccess;
-
     // Notify listeners of the change
     notifyListeners();
   }
