@@ -71,6 +71,7 @@ func signup(email *C.char, password *C.char) *C.char {
 	setting.SetEmailAddress(C.GoString(email))
 	a.SetUserLoggedIn(true)
 	a.ProClient().FetchPaymentMethodsAndCache(context.Background())
+	a.SendConfig()
 	return C.CString("true")
 }
 
@@ -129,9 +130,19 @@ func logout() *C.char {
 
 	clearLocalUserData()
 	// Create new user
-	if _, err := a.ProClient().UserCreate(ctx); err != nil {
+	userData, err := a.ProClient().UserCreate(ctx)
+	if err != nil {
 		return sendError(err)
 	}
+	//Update new user data to UI
+	user := userData.User
+	if user.UserStatus == "" {
+		user.UserStatus = "free"
+	}
+	setting := a.Settings()
+	setting.SetUserIDAndToken(user.UserId, user.Token)
+	setting.SetReferralCode(user.Referral)
+	a.SetUserData(context.Background(), user.UserId, userData.User)
 	return C.CString("true")
 }
 
@@ -207,6 +218,9 @@ func completeRecoveryByEmail(email *C.char, code *C.char, password *C.char) *C.c
 	//Save new salt
 	saveUserSalt(newsalt)
 	log.Debugf("CompleteRecoveryByEmail response %v", recovery)
+	a.SendConfig()
+	a.SendUpdateUserDataToUI()
+
 	return C.CString("true")
 }
 
