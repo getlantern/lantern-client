@@ -62,12 +62,7 @@ func start() *C.char {
 		log.Debug("Successfully loaded .env file")
 	}
 
-	_, err = logging.RotatedLogsUnder(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
-	if err != nil {
-		log.Error(err)
-		// Nothing we can do if fails to create log files, leave logFile nil so
-		// the child process writes to standard outputs as usual.
-	}
+	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 
 	// This init needs to be called before the panicwrapper fork so that it has been
 	// defined in the parent process
