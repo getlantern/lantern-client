@@ -174,13 +174,6 @@ class _PlanCardState extends State<PlanCard> {
     return appStorePrice == '' ? totalCost : appStorePrice;
   }
 
-// paymentProvidersFromMethods returns a list of payment providers that correspond with payment methods available to a user
-  List<PaymentProviders> paymentProvidersFromMethods(
-      Iterable<PaymentMethod> paymentMethods) {
-    var providers = <PaymentProviders>[];
-    paymentMethods.forEach((value) => providers.addAll(value.providers));
-    return providers;
-  }
 
   Future<void> onPlanTap(BuildContext context) async {
     switch (Platform.operatingSystem) {
