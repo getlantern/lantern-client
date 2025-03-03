@@ -257,6 +257,7 @@ jobs:
           NEW_VERSION="${VERSION}+${RUN_NUMBER}"
           echo "Updating pubspec.yaml to version: $NEW_VERSION"
           sed -i.bak -E "s/^version: .*/version: $NEW_VERSION/" pubspec.yaml
+          cat pubspec.yaml
 
       - name: Build Lantern Library
         shell: bash
