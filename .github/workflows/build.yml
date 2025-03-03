@@ -258,6 +258,8 @@ jobs:
           echo "Updating pubspec.yaml to version: $NEW_VERSION"
           sed -i.bak -E "s/^version: .*/version: $NEW_VERSION/" pubspec.yaml
           cat pubspec.yaml
+          APP_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
       - name: Build Lantern Library
         shell: bash
@@ -296,7 +298,7 @@ jobs:
       - name: Build Flutter app (Windows)
         if: matrix.platform == 'windows'
         run: |
-          New-Item -Path "./dist/${{ env.version }}" -ItemType Directory -Force
+          New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
           flutter_distributor package --platform windows --targets exe --skip-clean
         env:
           VERSION: ${{ env.version }}
