@@ -251,7 +251,7 @@ jobs:
       - name: Update app version in pubspec.yaml
         shell: bash
         env:
-          VERSION: ${{ env.version }}
+          VERSION: ${{ inputs.version }}
           RUN_NUMBER: ${{ github.run_number }}
         run: |
           NEW_VERSION="${VERSION}+${RUN_NUMBER}"
