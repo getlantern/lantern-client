@@ -252,8 +252,9 @@ jobs:
         shell: bash
         env:
           VERSION: ${{ env.version }}
+          RUN_NUMBER: ${{ github.run_number }}
         run: |
-          NEW_VERSION="${VERSION}"
+          NEW_VERSION="${VERSION}+${RUN_NUMBER}"
           echo "Updating pubspec.yaml to version: $NEW_VERSION"
           sed -i.bak -E "s/^version: .*/version: $NEW_VERSION/" pubspec.yaml
 
