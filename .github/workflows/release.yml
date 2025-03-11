@@ -109,8 +109,6 @@ jobs:
       version_file: ${{ needs.set-version.outputs.version_file }}
       prefix: ${{ needs.set-version.outputs.prefix }}
       build-suffix: 64
-      dist-suffix: x64
-      installer-suffix: -x64
       windows-arch: x64
 
   push-binaries:
@@ -121,7 +119,6 @@ jobs:
       version_file: ${{ needs.set-version.outputs.version_file }}
       prefix: ${{ needs.set-version.outputs.prefix }}
       platform: ${{ needs.determine-platform.outputs.platform }}
-      dist-suffix: x64
     steps:
       - name: Download the mac build output
         uses: actions/download-artifact@v4
@@ -224,21 +221,24 @@ jobs:
         if: env.platform == 'desktop' || env.platform == 'all'
         env:
           macos_dist: "${{ env.prefix }}-${{ env.version }}.dmg"
-          windows_dist: "${{env.prefix}}-${{env.version}}-${{env.dist-suffix}}.exe"
-          windows_dist_versionless: "${{env.prefix}}-${{env.dist-suffix}}.exe"
+          macos_dist_versionless: "${{ env.prefix }}.dmg"
+          windows_dist: "${{env.prefix}}-${{env.version}}.exe"
+          windows_dist_versionless: "${{env.prefix}}.exe"
           linux_dist: "${{env.prefix}}-${{env.version}}-64-bit.deb"
           linux_dist_versionless: "${{env.prefix}}-64-bit.deb"
         run: |
           # macOS
           mv lantern-installer.dmg ${{ env.macos_dist }}
-          cp ${{ env.macos_dist }} ${{ env.prefix }}.dmg
+          cp ${{ env.macos_dist }} ${{ env.macos_dist_versionless }}
+
           echo ${{ env.version }} > ${{ env.version_file }}
           shasum -a 256 ${{ env.macos_dist }} | cut -d " " -f 1 > ${{ env.macos_dist }}.sha256
-          cp ${{ env.macos_dist }}.sha256 ${{ env.prefix }}.dmg.sha256
-          s3cmd put --acl-public ${{ env.macos_dist }} ${{ env.version_file }} ${{ env.macos_dist }}.sha256 ${{ env.prefix }}.dmg.sha256 ${{ env.prefix }}.dmg "s3://lantern"
+          cp ${{ env.macos_dist }}.sha256 $${{ env.macos_dist_versionless }}.sha256
+
+          s3cmd put --acl-public ${{ env.macos_dist }} ${{ env.macos_dist }}.sha256 ${{ env.macos_dist_versionless }} ${{ env.macos_dist_versionless}}.sha256 ${{ env.version_file }} "s3://lantern"
 
           # Windows
-          mv lantern-installer-x64.exe ${{ env.windows_dist }}
+          mv lantern-installer.exe ${{ env.windows_dist }}
           cp ${{ env.windows_dist }} ${{ env.windows_dist_versionless }}
 
           shasum -a 256 ${{ env.windows_dist }} | cut -d " " -f 1 > ${{ env.windows_dist }}.sha256
