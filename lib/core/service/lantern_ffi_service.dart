@@ -151,11 +151,11 @@ class LanternFFI {
 
   static Future<String> authorizeEmail(String email) async {
     final json = await _lanternFFI
-        .approveDevice(email.toPointerChar())
+        .userLinkCodeRequest(email.toPointerChar())
         .cast<Utf8>()
         .toDartString();
-    final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
-    return json;
+    // final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
+    return 'json';
   }
 
   static Future<String> userLinkValidate(String code) async {

@@ -114,10 +114,10 @@ func sendToURL(c *resty.Client, opts *Opts) SendRequest {
 		if err != nil {
 			return nil, err
 		}
-		if common.IsDevEnvironment() {
-			command, _ := http2curl.GetCurlCommand(req.RawRequest)
-			log.Debugf("curl command: %v", command)
-		}
+		// if common.IsDevEnvironment() {
+		command, _ := http2curl.GetCurlCommand(req.RawRequest)
+		log.Debugf("curl command: %v", command)
+		// }
 		responseBody := resp.Body()
 		// on some cases, we are getting non-printable characters in the response body
 		cleanedResponseBody := sanitizeResponseBody(responseBody)
@@ -205,4 +205,8 @@ func unmarshalJSON(path string, b []byte, target any) error {
 		log.Errorf("Error unmarshalling JSON from %v: %v\n\n", path, err, string(b))
 	}
 	return err
+}
+
+func main(){
+	
 }

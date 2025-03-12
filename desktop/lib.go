@@ -199,6 +199,17 @@ func userLinkValidate(code *C.char) *C.char {
 	return C.CString("true")
 }
 
+//export userLinkCodeRequest
+func userLinkCodeRequest(email *C.char) *C.char {
+	deviceId := getDeviceID()
+	_, err := a.ProClient().UserLinkCodeRequest(context.Background(), deviceId, C.GoString(email))
+	if err != nil {
+		log.Error(err)
+		return sendError(err)
+	}
+	return C.CString("true")
+}
+
 //export expiryDate
 func expiryDate() *C.char {
 	log.Debug("expiryDate")

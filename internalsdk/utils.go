@@ -6,6 +6,7 @@ import (
 	cryptoRand "crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
+	"encoding/json"
 	"fmt"
 	"math"
 	"math/big"
@@ -273,13 +274,38 @@ func convertLogoToMapStringSlice(logo map[string]interface{}) (map[string][]stri
 	return convertedLogo, nil
 }
 
-// create binary data from proto
-func CreateBinaryFile(name string, data protoreflect.ProtoMessage) error {
-	b, err := proto.Marshal(data)
+// // create binary data from proto
+// func CreateBinaryFile(name string, data protoreflect.ProtoMessage) error {
+// 	b, err := proto.Marshal(data)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	fileName := fmt.Sprintf("%s.bin", name)
+// 	if err := os.WriteFile(fileName, b, 0644); err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
+
+// CreateBinaryFile serializes a Protobuf message OR a map and writes it to a binary file
+func CreateBinaryFile(name string, data interface{}) error {
+	var b []byte
+	var err error
+
+	// Handle Protobuf Messages
+	if protoMsg, ok := data.(protoreflect.ProtoMessage); ok {
+		b, err = proto.Marshal(protoMsg)
+	} else {
+		// Handle Generic Map (Convert to JSON then store as binary)
+		b, err = json.Marshal(data)
+	}
+
 	if err != nil {
 		return err
 	}
 
+	// Save to binary file
 	fileName := fmt.Sprintf("%s.bin", name)
 	if err := os.WriteFile(fileName, b, 0644); err != nil {
 		return err

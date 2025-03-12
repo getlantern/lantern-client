@@ -303,6 +303,21 @@ class NativeLibrary {
   late final _userLinkValidate = _userLinkValidatePtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
+  ffi.Pointer<ffi.Char> userLinkCodeRequest(
+    ffi.Pointer<ffi.Char> email,
+  ) {
+    return _userLinkCodeRequest(
+      email,
+    );
+  }
+
+  late final _userLinkCodeRequestPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('userLinkCodeRequest');
+  late final _userLinkCodeRequest = _userLinkCodeRequestPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
+
   ffi.Pointer<ffi.Char> expiryDate() {
     return _expiryDate();
   }

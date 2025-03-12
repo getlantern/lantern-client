@@ -89,6 +89,7 @@ require (
 	atomicgo.dev/keyboard v0.2.9 // indirect
 	atomicgo.dev/schedule v0.1.0 // indirect
 	github.com/Jigsaw-Code/outline-sdk/x v0.0.0-20250113162209-efa808309e1e // indirect
+	github.com/alecthomas/repr v0.2.0 // indirect
 	github.com/alitto/pond/v2 v2.1.6 // indirect
 	github.com/cloudflare/circl v1.5.0 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
@@ -99,6 +100,7 @@ require (
 	github.com/goccy/go-yaml v1.15.13 // indirect
 	github.com/gofrs/uuid/v5 v5.3.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
+	github.com/hexops/gotextdiff v1.0.3 // indirect
 	github.com/lithammer/fuzzysearch v1.1.8 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/pion/dtls/v3 v3.0.3 // indirect
@@ -132,7 +134,7 @@ require (
 	github.com/Yawning/chacha20 v0.0.0-20170904085104-e3b1f968fc63 // indirect
 	github.com/aead/ecdh v0.2.0 // indirect
 	github.com/ajwerner/btree v0.0.0-20211221152037-f427b3e689c0 // indirect
-	github.com/alecthomas/assert/v2 v2.3.0 // indirect
+	github.com/alecthomas/assert/v2 v2.3.0
 	github.com/alecthomas/atomic v0.1.0-alpha2 // indirect
 	github.com/alextanhongpin/go-bandit v0.0.0-20191125130111-30de60d69bae // indirect
 	github.com/anacrolix/chansync v0.6.0 // indirect
