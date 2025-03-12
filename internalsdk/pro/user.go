@@ -11,13 +11,13 @@ import (
 )
 
 type ClientSession interface {
-	SetExpiration(int64)
-	SetEmailAddress(string)
-	SetProUser(bool)
-	SetReferralCode(string)
-	SetUserIDAndToken(int64, string)
-	GetDeviceID() string
-	GetUserFirstVisit() bool
+	SetExpiration(int64) error
+	SetProUser(bool) error
+	SetReferralCode(string) error
+	SetUserIDAndToken(int64, string) error
+	GetDeviceID() (string, error)
+	GetUserFirstVisit() (bool, error)
+	SetEmailAddress(string) error
 }
 
 type backoffRunner struct {
@@ -68,7 +68,10 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 		return nil, errors.New("error fetching user data")
 	}
 	user := resp.User
-	currentDevice := ss.GetDeviceID()
+	currentDevice, err := ss.GetDeviceID()
+	if err != nil {
+		return nil, log.Errorf("error fetching device id: %v", err)
+	}
 
 	// Check if device id is connect to same device if not create new user
 	// this is for the case when user removed device from other device
@@ -82,7 +85,10 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 		}
 	}
 	/// Check if user has installed app first time
-	firstTime := ss.GetUserFirstVisit()
+	firstTime, err := ss.GetUserFirstVisit()
+	if err != nil {
+		return nil, log.Errorf("error fetching user first visit: %v", err)
+	}
 	log.Debugf("First time visit %v", firstTime)
 	if user.UserLevel == "pro" && firstTime {
 		log.Debugf("User is pro and first time")

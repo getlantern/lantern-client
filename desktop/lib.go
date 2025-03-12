@@ -127,7 +127,7 @@ func setProxyAll(value *C.char) {
 func hasPlanUpdatedOrBuy() *C.char {
 	ctx := context.Background()
 	proClient := a.ProClient()
-	go proClient.PollUserData(ctx, a.Settings(), 10*time.Minute, proClient)
+	go proClient.PollUserData(ctx, a, 10*time.Minute, proClient)
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	cacheUserData, isOldFound := cachedUserData()
