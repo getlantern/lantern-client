@@ -327,7 +327,7 @@ jobs:
         if: matrix.platform == 'windows'
         shell: bash
         run: |
-          mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer${{inputs.installer-suffix}}.exe
+          mv "dist/${{ env.APP_VERSION }}/lantern-${{ env.APP_VERSION }}-windows-setup.exe" lantern-installer.exe
 
       - name: Sign EXE with Azure Code Signing
         if: matrix.platform == 'windows'
@@ -396,7 +396,7 @@ jobs:
         with:
           name: windows${{inputs.build-suffix}}-installer-signed
           path: |
-            lantern-installer${{inputs.installer-suffix}}.exe
+            lantern-installer.exe
 
       - uses: actions/upload-artifact@v4
         if: matrix.platform == 'linux'
