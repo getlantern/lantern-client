@@ -273,6 +273,21 @@ class NativeLibrary {
   late final _approveDevice = _approveDevicePtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
+  ffi.Pointer<ffi.Char> userLinkCode(
+    ffi.Pointer<ffi.Char> email,
+  ) {
+    return _userLinkCode(
+      email,
+    );
+  }
+
+  late final _userLinkCodePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>)>>('userLinkCode');
+  late final _userLinkCode = _userLinkCodePtr
+      .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
+
   ffi.Pointer<ffi.Char> removeDevice(
     ffi.Pointer<ffi.Char> deviceId,
   ) {

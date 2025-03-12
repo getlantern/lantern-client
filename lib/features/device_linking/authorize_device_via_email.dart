@@ -12,7 +12,7 @@ class AuthorizeDeviceViaEmail extends StatelessWidget {
     formKey: formKey,
     validator: (value) => EmailValidator.validate(value ?? '')
         ? null
-        : 'Please enter a valid email address'.i18n,
+        : 'please_enter_a_valid_email_address'.i18n,
   );
 
   @override

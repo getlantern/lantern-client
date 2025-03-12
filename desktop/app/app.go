@@ -579,9 +579,9 @@ func (app *App) fetchOrCreateUser(ctx context.Context) {
 	}
 	if userID := ss.GetUserID(); userID == 0 {
 		ss.SetUserFirstVisit(true)
-		app.proClient.RetryCreateUser(ctx, app, 5*time.Minute)
+		app.proClient.RetryCreateUser(ctx, ss, 5*time.Minute)
 	} else {
-		app.proClient.UpdateUserData(ctx, app)
+		app.proClient.UpdateUserData(ctx, ss)
 	}
 }
 

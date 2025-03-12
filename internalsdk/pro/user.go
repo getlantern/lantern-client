@@ -11,13 +11,14 @@ import (
 )
 
 type ClientSession interface {
-	SetExpiration(int64) error
-	SetProUser(bool) error
-	SetReferralCode(string) error
-	SetUserIDAndToken(int64, string) error
-	FetchUserData() error
-	GetDeviceID() (string, error)
-	GetUserFirstVisit() (bool, error)
+	SetExpiration(int64)
+	SetEmailAddress(string)
+	SetProUser(bool)
+	SetReferralCode(string)
+	SetUserIDAndToken(int64, string)
+	//FetchUserData() error
+	GetDeviceID() string
+	GetUserFirstVisit() bool
 }
 
 type backoffRunner struct {
@@ -40,7 +41,6 @@ func (c *proClient) createUser(ctx context.Context, session ClientSession) error
 	log.Debugf("Successfully created new user with id %d", user.UserId)
 	session.SetReferralCode(user.Referral)
 	session.SetUserIDAndToken(user.UserId, user.Token)
-	session.FetchUserData()
 	return nil
 }
 
@@ -69,10 +69,7 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 		return nil, errors.New("error fetching user data")
 	}
 	user := resp.User
-	currentDevice, err := ss.GetDeviceID()
-	if err != nil {
-		return nil, log.Errorf("error fetching device id: %v", err)
-	}
+	currentDevice := ss.GetDeviceID()
 
 	// Check if device id is connect to same device if not create new user
 	// this is for the case when user removed device from other device
@@ -86,11 +83,7 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 		}
 	}
 	/// Check if user has installed app first time
-	firstTime, err := ss.GetUserFirstVisit()
-	if err != nil {
-		return nil, log.Errorf("error fetching user first visit: %v", err)
-	}
-
+	firstTime := ss.GetUserFirstVisit()
 	log.Debugf("First time visit %v", firstTime)
 	if user.UserLevel == "pro" && firstTime {
 		log.Debugf("User is pro and first time")
@@ -105,6 +98,9 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 	ss.SetUserIDAndToken(user.UserId, user.Token)
 	ss.SetExpiration(user.Expiration)
 	ss.SetReferralCode(user.Referral)
+	if user.Email != "" {
+		ss.SetEmailAddress(user.Email)
+	}
 	return user, nil
 }
 

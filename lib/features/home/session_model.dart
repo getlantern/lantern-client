@@ -542,8 +542,7 @@ class SessionModel extends Model {
 
   Future<String> getReplicaAddr() async {
     try {
-      final replicaAddr =
-          await methodChannel.invokeMethod('replicaAddr','');
+      final replicaAddr = await methodChannel.invokeMethod('replicaAddr', '');
       if (replicaAddr == null || replicaAddr == '') {
         logger.e('Replica not enabled');
       }
@@ -878,11 +877,8 @@ class SessionModel extends Model {
 
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
-      return subscribedSingleValueBuilder<bool>(
-        '/splitTunneling',
-        builder: builder,
-        defaultValue: false
-      );
+      return subscribedSingleValueBuilder<bool>('/splitTunneling',
+          builder: builder, defaultValue: false);
     }
     return configValueBuilder(
         'splitTunneling', builder, (value) => value?.splitTunneling ?? false);

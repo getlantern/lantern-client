@@ -127,7 +127,7 @@ func setProxyAll(value *C.char) {
 func hasPlanUpdatedOrBuy() *C.char {
 	ctx := context.Background()
 	proClient := a.ProClient()
-	go proClient.PollUserData(ctx, a, 10*time.Minute, proClient)
+	go proClient.PollUserData(ctx, a.Settings(), 10*time.Minute, proClient)
 	//Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
 	cacheUserData, isOldFound := cachedUserData()
@@ -173,6 +173,15 @@ func devices() *C.char {
 //export approveDevice
 func approveDevice(code *C.char) *C.char {
 	resp, err := a.ProClient().LinkCodeApprove(context.Background(), C.GoString(code))
+	if err != nil {
+		return sendError(err)
+	}
+	return sendJson(resp)
+}
+
+//export userLinkCode
+func userLinkCode(email *C.char) *C.char {
+	resp, err := a.ProClient().UserLinkCodeRequest(context.Background(), C.GoString(email))
 	if err != nil {
 		return sendError(err)
 	}
