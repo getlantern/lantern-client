@@ -16,7 +16,6 @@ type ClientSession interface {
 	SetProUser(bool)
 	SetReferralCode(string)
 	SetUserIDAndToken(int64, string)
-	//FetchUserData() error
 	GetDeviceID() string
 	GetUserFirstVisit() bool
 }
