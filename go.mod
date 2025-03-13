@@ -1,7 +1,6 @@
 module github.com/getlantern/lantern-client
 
 go 1.23
-
 toolchain go1.23.3
 
 //replace github.com/getlantern/flashlight/v7 => ../flashlight
@@ -76,10 +75,10 @@ require (
 	github.com/pterm/pterm v0.12.80
 	github.com/shopspring/decimal v1.4.0
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/crypto v0.32.0
+	golang.org/x/crypto v0.35.0
 	golang.org/x/mobile v0.0.0-20250106192035-c31d5b91ecc3
-	golang.org/x/net v0.34.0
-	golang.org/x/sys v0.29.0
+	golang.org/x/net v0.36.0
+	golang.org/x/sys v0.30.0
 	google.golang.org/protobuf v1.36.2
 	nhooyr.io/websocket v1.8.17
 )
@@ -114,7 +113,7 @@ require (
 	github.com/sagernet/sing v0.6.0-beta.11 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
-	golang.org/x/term v0.28.0 // indirect
+	golang.org/x/term v0.29.0 // indirect
 )
 
 require (
@@ -362,8 +361,8 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8 // indirect
 	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	golang.org/x/time v0.9.0 // indirect
 	golang.org/x/tools v0.29.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250106144421-5f5ef82da422 // indirect
