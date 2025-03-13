@@ -3,6 +3,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:lantern/common/ui/password_criteria.dart';
 import 'package:lantern/core/utils/utils.dart';
+import 'package:lantern/core/widgtes/tos.dart';
 import '../../core/utils/common.dart';
 
 @RoutePage(name: 'CreateAccountPassword')
@@ -62,6 +63,8 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
                 textEditingController: _passwordController,
               ),
               const SizedBox(height: 24),
+              const TOS(),
+              const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: Button(
@@ -71,29 +74,7 @@ class _CreateAccountPasswordState extends State<CreateAccountPassword> {
                 ),
               ),
               const SizedBox(height: 24),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'by_creating_an_account'.i18n,
-                      style: tsFloatingLabel,
-                    ),
-                    const TextSpan(
-                      text: ' ',
-                    ),
-                    TextSpan(
-                      text: 'terms_of_service'.i18n,
-                      style: tsFloatingLabel!.copiedWith(
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = openTermsOfService,
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
+
             ],
           ),
         ),

@@ -3,6 +3,8 @@ name: Publish releases
 on:
   # Triggers the workflow on push when pushing to a version tag
   push:
+    branches:
+      - jigar/auth-enable
     tags:
       - '*lantern-*'
   workflow_dispatch:
@@ -285,20 +287,20 @@ jobs:
             shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
           fi
 
-      - name: Commit
-        run: |
-          mv lantern-installer* ./lantern-binaries/
-          cd lantern-binaries
-          git config user.email "admin@getlantern.org"
-          git config user.name "Lantern Bot"
-          git add .
-          git commit -m "Lantern binaries for version ${{ env.version }}"
-          git push origin main
-
-  create-release:
-    uses: ./.github/workflows/prerelease-notification.yml
-    secrets: inherit
-    needs: [ determine-platform,set-version, build, push-binaries ]
-    with:
-      version: ${{ needs.set-version.outputs.prefix }}-${{ needs.set-version.outputs.version }}
-      platform: ${{ needs.determine-platform.outputs.platform }}
+#      - name: Commit
+#        run: |
+#          mv lantern-installer* ./lantern-binaries/
+#          cd lantern-binaries
+#          git config user.email "admin@getlantern.org"
+#          git config user.name "Lantern Bot"
+#          git add .
+#          git commit -m "Lantern binaries for version ${{ env.version }}"
+#          git push origin main
+#
+#  create-release:
+#    uses: ./.github/workflows/prerelease-notification.yml
+#    secrets: inherit
+#    needs: [ determine-platform,set-version, build, push-binaries ]
+#    with:
+#      version: ${{ needs.set-version.outputs.prefix }}-${{ needs.set-version.outputs.version }}
+#      platform: ${{ needs.determine-platform.outputs.platform }}
