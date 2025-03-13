@@ -75,8 +75,9 @@ class WebsocketSubscriber {
             }
 
             final userPro = message['userPro'];
-            sessionModel.proUserNotifier.value =
-                userPro != null && userPro.toString() == 'true';
+            if (userPro != null) {
+              sessionModel.proUserNotifier.value = userPro.toString() == 'true';
+            }
 
           case _WebsocketMessageType.stats:
             if (message['countryCode'] != null) {
