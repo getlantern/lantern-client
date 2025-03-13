@@ -74,6 +74,11 @@ class WebsocketSubscriber {
               sessionModel.proxyAllNotifier.value = proxyAll as bool;
             }
 
+            final userPro = message['userPro'];
+            if (userPro != null) {
+              sessionModel.proUserNotifier.value = userPro.toString() == 'true';
+            }
+
           case _WebsocketMessageType.stats:
             if (message['countryCode'] != null) {
               sessionModel.serverInfoNotifier.value = ServerInfo.create()
@@ -85,12 +90,8 @@ class WebsocketSubscriber {
             }
           case _WebsocketMessageType.pro:
             _webSocketLogger.i("Websocket message[Pro]: $message");
-            final userStatus = message['userStatus'];
-            final userLevel = message['userLevel'];
             final deviceLinkingCode = message['deviceLinkingCode'];
-            final isLevelPro = userLevel != null && userLevel == 'pro';
-            final isStatusPro = userStatus != null && userStatus == 'active';
-            sessionModel.proUserNotifier.value = (isLevelPro || isStatusPro);
+
             if (deviceLinkingCode != null) {
               sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
             }
