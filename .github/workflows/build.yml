@@ -15,9 +15,6 @@ on:
       build-suffix: # "64" or ""
         type: string
         required: false
-      dist-suffix: # "64-bit" or "32-bit"
-        type: string
-        required: true
       windows-arch:
         type: string
         required: true
