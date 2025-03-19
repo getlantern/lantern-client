@@ -87,6 +87,9 @@ msgstr "Create Password"
 msgid "by_creating_an_account"
 msgstr "By Creating an Account, you agree to our"
 
+msgid "by_clicking_continue"
+msgstr "By clicking Continue, you agree to our"
+
 msgid "confirm_email"
 msgstr "Confirm Email"
 

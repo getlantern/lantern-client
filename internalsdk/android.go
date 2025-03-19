@@ -608,7 +608,8 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 
 		authEnabled := runner.FeatureEnabled(config.FeatureAuth, common.ApplicationVersion)
 		log.Debugf("Feature: Auth enabled? %v", authEnabled)
-		session.SetAuthEnabled(authEnabled)
+		// Make auth enable for all
+		session.SetAuthEnabled(true)
 		// Check if ads feature is enabled or not
 		if !session.IsProUser() {
 			showAdsEnabled := runner.FeatureEnabled(config.FeatureInterstitialAds, common.ApplicationVersion)

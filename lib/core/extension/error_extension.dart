@@ -7,6 +7,7 @@ extension ErrorX on Object {
       if (this is PlatformException) {
         // Extract the message from the PlatformException
         String description = (this as PlatformException).message ?? '';
+        print("description $description");
         if (description.contains("proxy_error")) {
           return "proxy_error".i18n;
         }
@@ -21,7 +22,8 @@ extension ErrorX on Object {
           return "recovery_not_found".i18n;
         }
 
-        if (description.contains("wrong-link-code")) {
+        if (description.contains("wrong-link-code") ||
+            description.contains("wrong_device_linking_code")) {
           return "wrong_link_code".i18n;
         }
         if (description
