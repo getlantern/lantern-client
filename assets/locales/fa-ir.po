@@ -1,31 +1,31 @@
 # 
 # Translators:
-# b0b47d46632b78a09a40de799fda9a65, 2022
-# Amir Moezzi <amirreza.mz@yahoo.com>, 2022
-# Jigar, 2023
-# 6d974eae263d7aab17b09900ac13d6de_bb09837, 2023
-# Sina <sina@asl19.org>, 2023
-# Pedram Azizallahi <pedram672004@yahoo.com>, 2023
-# Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2023
-# ali jafarizadeh <ebrahimigv@gmail.com>, 2024
-# Evan <alireza.firoozi68@gmail.com>, 2024
-# Mary Sol <salar.adlparvar@gmail.com>, 2024
-# NoProfile, 2024
-# Lantern, 2024
-# Vaseto Nora <n.nouri67@gmail.com>, 2024
 # 🤖Nariman نریمان, 2024
-# Mokah <unfilternet@getlantern.org>, 2024
-# Chip Stehr <chip@getlantern.org>, 2024
-# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2024
-# AHMAD MASOUD BARAKZAI, 2024
-# Mersen M, 2024
-# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2024
-# zar24 <zarghamjan@yahoo.com>, 2024
+# Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2025
+# b0b47d46632b78a09a40de799fda9a65, 2025
+# 6d974eae263d7aab17b09900ac13d6de_bb09837, 2025
+# Jigar, 2025
+# Sina <sina@asl19.org>, 2025
+# Pedram Azizallahi <pedram672004@yahoo.com>, 2025
+# NoProfile, 2025
+# AHMAD MASOUD BARAKZAI, 2025
+# Amir Moezzi <amirreza.mz@yahoo.com>, 2025
+# Mary Sol <salar.adlparvar@gmail.com>, 2025
+# Chip Stehr <chip@getlantern.org>, 2025
+# Evan <alireza.firoozi68@gmail.com>, 2025
+# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2025
+# Vaseto Nora <n.nouri67@gmail.com>, 2025
+# Lantern, 2025
+# Mokah <unfilternet@getlantern.org>, 2025
+# zar24 <zarghamjan@yahoo.com>, 2025
+# ali jafarizadeh <ebrahimigv@gmail.com>, 2025
+# Mersen M, 2025
 # Derek F <derek@getlantern.org>, 2025
+# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
+"Last-Translator: e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2025\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -466,7 +466,7 @@ msgid "pro_plan"
 msgstr "طرح حرفه‌ای"
 
 msgid "one_month_plan"
-msgstr "طرح 1 ماهه"
+msgstr ""
 
 msgid "one_year_plan"
 msgstr "طرح یک ساله"
@@ -1071,7 +1071,7 @@ msgid "error_delete_contact"
 msgstr "در حین حذف این مخاطب، مشکلی پیش آمد."
 
 msgid "unnamed_contact"
-msgstr "مخاطب بدون نام"
+msgstr "مخاطب بی‌نام"
 
 msgid "me"
 msgstr "من"
@@ -1306,7 +1306,7 @@ msgid "add_via_username"
 msgstr "افزودن از طریق نام کاربری"
 
 msgid "username"
-msgstr " نام کاربر"
+msgstr "نام کاربر"
 
 msgid "enter_a_username_to_start_a_conversation"
 msgstr "برای شروع مکالمه از طریق پیام، یک نام کاربری وارد کنید"
@@ -1774,7 +1774,7 @@ msgid "recovery_not_found"
 msgstr "دستگاه به این کاربر وابسته نیست"
 
 msgid "device_added"
-msgstr "دستگاه اضافه شد"
+msgstr ""
 
 msgid "device_added_message"
 msgstr ""
@@ -1844,16 +1844,16 @@ msgid "follow_us"
 msgstr "ما را دنبال کنید "
 
 msgid "follow_us_telegram"
-msgstr "ما را در Telegram دنبال کنید"
+msgstr ""
 
 msgid "follow_us_instagram"
-msgstr "ما را در اینستاگرام دنبال کنید"
+msgstr ""
 
 msgid "follow_us_facebook"
-msgstr "ما را در Facebook دنبال کنید"
+msgstr ""
 
 msgid "follow_us_x"
-msgstr "ما را در ایکس دنبال کنید"
+msgstr ""
 
 msgid "report_issue_error"
 msgstr "ما با مشکلات فنی مواجه هستیم. لطفاً بعداً دوباره تلاش کنید. "
@@ -1901,58 +1901,52 @@ msgid "file_size_limit_description"
 msgstr "اندازه پیوست‌ها باید کمتر از 100 مگابایت باشد"
 
 msgid "lantern_pro_one_year"
-msgstr "طرح یک‌ساله: Lantern Pro"
+msgstr ""
 
 msgid "lantern_pro_two_year"
-msgstr "طرح دو ساله: Lantern Pro"
+msgstr ""
 
 msgid "lantern_pro_one_month"
-msgstr "طرح یک‌ماهه: Lantern Pro"
+msgstr ""
 
 msgid "non_renewing_subscription"
-msgstr "اشتراک غیرقابل تمدید"
+msgstr ""
 
 msgid "restore_purchase"
-msgstr "بازیابی خرید"
+msgstr ""
 
 msgid "skip_for_now"
-msgstr "فعلاً رد کردن"
+msgstr ""
 
 msgid "purchase_not_found"
-msgstr "هیچ خریدی با ایمیل ارائه شده یافت نشد"
+msgstr ""
 
 msgid "no_previous_purchase"
-msgstr "هیچ خرید قبلی یافت نشد"
+msgstr ""
 
 msgid "warning_restore_purchase"
 msgstr ""
-"ایمیلی را که هنگام پرداخت وارد کرده‌اید، وارد کنید تا خرید خود را بازیابی "
-"کنید."
 
 msgid "purchase_restored"
-msgstr "خرید بازیابی شد"
+msgstr ""
 
 msgid "purchase_restored_message"
-msgstr "خرید شما با موفقیت بازیابی شد"
+msgstr ""
 
 msgid "purchase_restored_error"
 msgstr ""
-"به نظر می‌رسد مشکلی در بازیابی خرید پیش آمده است. لطفاً بررسی کنید که ایمیل "
-"یا کد صحیح را وارد کرده‌اید."
 
 msgid "err_while_sending_code"
-msgstr "مشکلی در ارسال کد پیش آمد، لطفاً دوباره تلاش کنید"
+msgstr ""
 
 msgid "email_hint"
-msgstr "*ایمیل اختیاری است اما توصیه می‌شود*"
+msgstr ""
 
 msgid "email_hint_pro"
 msgstr ""
-"برای دسترسی به خریدهای خود در هر دستگاهی، یک ایمیل اضافه کنید. بدون ایمیل، "
-"خریدها به این دستگاه متصل می‌شوند و ممکن است از دست بروند."
 
 msgid "continue_without_email"
-msgstr "ادامه بدون ایمیل"
+msgstr ""
 
 msgid "no_new_update"
 msgstr "شما به روز هستید!"
@@ -1961,35 +1955,31 @@ msgid "error_referral"
 msgstr "هنگام اعمال کد معرف خطا دریافت شد"
 
 msgid "proxy_error"
-msgstr "ما در راه‌اندازی لنترن مشکل داریم. لطفاً بعداً دوباره تلاش کنید."
+msgstr ""
 
 msgid "proxy_settings"
-msgstr "تنظیمات پروکسی"
+msgstr ""
 
 msgid "http_proxy"
-msgstr "پراکسی اچ تی تی پی اس"
+msgstr ""
 
 msgid "socks_proxy"
-msgstr "پراکسی ساکس"
+msgstr ""
 
 msgid "http_proxy_copied"
-msgstr "پراکسی HTTP کپی شد"
+msgstr ""
 
 msgid "socks_proxy_copied"
-msgstr "پراکسی Socks کپی شد"
+msgstr ""
 
 msgid "proxy_everything"
-msgstr "پراکسی کردن همه چیز"
+msgstr ""
 
 msgid "errorSubmittingToGooglePlay"
 msgstr ""
-"در حال حاضر با پردازش درخواست شما برای گوگل پلی با مشکل مواجه هستیم. لطفاً "
-"بعداً دوباره تلاش کنید."
 
 msgid "no_internet_connection"
-msgstr "اتصال به اینترنت شناسایی نشد"
+msgstr ""
 
 msgid "domain_fronting_error"
 msgstr ""
-"در اتصال به سرورهای ما مشکلی پیش آمده است. لطفاً کمی صبر کنید یا دستگاه را "
-"خاموش و روشن کنید."

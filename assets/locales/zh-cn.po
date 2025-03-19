@@ -1,34 +1,33 @@
 # 
 # Translators:
 # Tony T <tony@tonytan.io>, 2021
-# 77b9f6bcdc842b5b17effe4ccdba1839, 2022
-# Tony Lin, 2022
-# Ox Cart <ox@getlantern.org>, 2022
-# Li Ma <i@sagiri.pw>, 2022
-# e2f <projects@e2f.com>, 2023
-# Chi-Hsun Tsai, 2023
-# 刘位, 2023
-# e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
-# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
 # Mingye Wang <arthur200126@gmail.com>, 2024
-# todd <todd@getlantern.org>, 2024
-# Lafrenze Laurant, 2024
-# fffw <fffw@getlantern.org>, 2024
-# 474874f569f96a33809d02f1de71479e_77020aa, 2024
-# Rockman Lau <im@rockman.us>, 2024
-# 苏培 喻 <ysp90@hotmail.com>, 2024
-# 5ffb0e30c16f79bca37af5baff50ee52_58bd05a <18e9486319e95596cee4e2007f6eede0_4750>, 2024
-# Lantern, 2024
-# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
-# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
-# Aki, 2024
-# YFdyh000 <yfdyh000@gmail.com>, 2024
-# wwj402 <wwj402@gmail.com>, 2024
+# e2f <projects@e2f.com>, 2025
+# 刘位, 2025
+# 77b9f6bcdc842b5b17effe4ccdba1839, 2025
+# Tony Lin, 2025
+# Li Ma <i@sagiri.pw>, 2025
+# 474874f569f96a33809d02f1de71479e_77020aa, 2025
+# fffw <fffw@getlantern.org>, 2025
+# 5ffb0e30c16f79bca37af5baff50ee52_58bd05a <18e9486319e95596cee4e2007f6eede0_4750>, 2025
+# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2025
+# Lafrenze Laurant, 2025
+# Chi-Hsun Tsai, 2025
+# YFdyh000 <yfdyh000@gmail.com>, 2025
+# 苏培 喻 <ysp90@hotmail.com>, 2025
+# Rockman Lau <im@rockman.us>, 2025
+# todd <todd@getlantern.org>, 2025
+# wwj402 <wwj402@gmail.com>, 2025
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2025
+# Lantern, 2025
+# Aki, 2025
+# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2025
 # Derek F <derek@getlantern.org>, 2025
+# e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
+"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/lantern-1/teams/94371/zh_CN/)\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1125,7 +1124,7 @@ msgid "message"
 msgstr "訊息"
 
 msgid "messages"
-msgstr "私信"
+msgstr "訊息"
 
 msgid "chats"
 msgstr "交談"
@@ -1281,7 +1280,7 @@ msgid "audio"
 msgstr "音频"
 
 msgid "image"
-msgstr "图像"
+msgstr "圖像"
 
 msgid "images"
 msgstr "图片"

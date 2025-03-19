@@ -1,14 +1,14 @@
 # 
 # Translators:
-# Lantern, 2023
-# Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2024
-# Derek F <derek@getlantern.org>, 2024
-# tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2024
-# code smite <codesmite@gmail.com>, 2024
+# Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2025
+# Lantern, 2025
+# code smite <codesmite@gmail.com>, 2025
+# Derek F <derek@getlantern.org>, 2025
+# tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: code smite <codesmite@gmail.com>, 2024\n"
+"Last-Translator: tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2025\n"
 "Language-Team: Bengali (https://app.transifex.com/lantern-1/teams/94371/bn/)\n"
 "Language: bn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1300,7 +1300,7 @@ msgid "copy_recovery_key"
 msgstr "পুনরুদ্ধার কী কপি করুন"
 
 msgid "search"
-msgstr "অনুসন্ধান করুন"
+msgstr "Search"
 
 msgid "account_management"
 msgstr "একাউন্ট ব্যবস্থাপনা"
@@ -1571,7 +1571,7 @@ msgid "awaiting_result"
 msgstr "ফলাফলের অপেক্ষায়..."
 
 msgid "discover"
-msgstr "আবিষ্কার করুন"
+msgstr "খুঁজে দেখুন"
 
 msgid "replica_search_intro"
 msgstr ""

@@ -1,23 +1,24 @@
 # 
 # Translators:
-# e2f <projects@e2f.com>, 2023
-# 474874f569f96a33809d02f1de71479e_77020aa, 2024
-# Po-Chun Huang <aphroteus@gmail.com>, 2024
-# e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2024
-# tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2024
-# Rockman Lau <im@rockman.us>, 2024
-# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2024
-# YFdyh000 <yfdyh000@gmail.com>, 2024
-# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2024
-# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2024
-# Aki, 2024
-# Ox Cart <ox@getlantern.org>, 2024
-# Lantern, 2024
+# Li Ma <i@sagiri.pw>, 2025
+# Po-Chun Huang <aphroteus@gmail.com>, 2025
+# 474874f569f96a33809d02f1de71479e_77020aa, 2025
+# tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2025
+# YFdyh000 <yfdyh000@gmail.com>, 2025
+# Rockman Lau <im@rockman.us>, 2025
+# Ox Cart <ox@getlantern.org>, 2025
+# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2025
+# e2f <projects@e2f.com>, 2025
+# Lantern, 2025
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2025
+# Aki, 2025
+# TW C2 <tx_e2f_tw_c2@ate2f.com>, 2025
 # Derek F <derek@getlantern.org>, 2025
+# e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
+"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2025\n"
 "Language-Team: Chinese (Hong Kong) (https://app.transifex.com/lantern-1/teams/94371/zh_HK/)\n"
 "Language: zh_HK\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -146,7 +147,7 @@ msgid "Disconnecting"
 msgstr "斷線中..."
 
 msgid "Connecting"
-msgstr "正在連線..."
+msgstr "连接中…"
 
 msgid "no_network_connection"
 msgstr "無網路連線"
@@ -230,7 +231,7 @@ msgid "settings"
 msgstr "設定"
 
 msgid "general"
-msgstr "一般事項"
+msgstr "通用"
 
 msgid "about"
 msgstr "關於"
@@ -589,7 +590,7 @@ msgid "approve_device_step_2"
 msgstr "請輸入您在步驟 1 取得的連結碼 "
 
 msgid "Pro Account Expiration"
-msgstr "專業版帳戶到期"
+msgstr "专业版到期日"
 
 msgid "Renew"
 msgstr "續訂"
@@ -810,7 +811,7 @@ msgid "view_contact_info"
 msgstr "查看聯絡資訊"
 
 msgid "off"
-msgstr "關閉"
+msgstr "没有联网"
 
 msgid "on"
 msgstr "已連線"
@@ -1060,7 +1061,7 @@ msgid "longform_weeks"
 msgstr "%s 週"
 
 msgid "unknown"
-msgstr "Unknown"
+msgstr "未知"
 
 msgid "banner_source_qr"
 msgstr "QR 碼"
@@ -1198,7 +1199,7 @@ msgid "empty_chats_text"
 msgstr "您可在此分享交談號碼或新增聯絡人！"
 
 msgid "next"
-msgstr "下一步"
+msgstr "下一个"
 
 msgid "automated_backup"
 msgstr "自動化備份"
@@ -1225,7 +1226,7 @@ msgid "add_via_username"
 msgstr "透過使用者名稱新增"
 
 msgid "username"
-msgstr "Username"
+msgstr "用户名"
 
 msgid "enter_a_username_to_start_a_conversation"
 msgstr "輸入使用者名稱即可透過訊息展開對話"
@@ -1405,7 +1406,7 @@ msgid "replica_upload_confirmation_body"
 msgstr "上传到 Lantern Network 的文件可供所有人公开访问。任何人都无法删除它。请勿在您的文件内容或文件名中加入个人或识别信息。"
 
 msgid "replica_upload_confirmation_agree"
-msgstr "繼續上傳"
+msgstr "继续上传"
 
 msgid "dont_show_me_this_again"
 msgstr "別再顯示"
@@ -1480,7 +1481,7 @@ msgid "awaiting_result"
 msgstr "等候結果中..."
 
 msgid "discover"
-msgstr "探索"
+msgstr "发现"
 
 msgid "replica_search_intro"
 msgstr "在蓝灯网络上搜索用户上传的内容，或自行上传以供他人发现。"
@@ -1525,7 +1526,7 @@ msgid "name_your_file"
 msgstr "File Name (required)"
 
 msgid "upload"
-msgstr "上傳"
+msgstr "上传"
 
 msgid "review"
 msgstr "審閱"
