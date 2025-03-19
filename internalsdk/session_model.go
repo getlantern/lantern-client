@@ -1205,6 +1205,10 @@ func (m *SessionModel) Email() (string, error) {
 	return pathdb.Get[string](m.db, pathEmailAddress)
 }
 
+func (m *SessionModel) SetEmailAddress(email string) error {
+	return setEmail(m.baseModel, email)
+}
+
 func setEmail(m *baseModel, email string) error {
 	return pathdb.Mutate(m.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathEmailAddress, email, "")
@@ -2375,13 +2379,7 @@ func userEmailRequest(session *SessionModel, email string) error {
 
 // Add device for LINK WITH EMAIL method
 func requestRecoveryEmail(session *SessionModel, email string) error {
-	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
-	if err != nil {
-		log.Errorf("Error while getting deviceId %v", err)
-		return err
-	}
-
-	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), deviceId, email)
+	linkResponse, err := session.proClient.UserLinkCodeRequest(context.Background(), email)
 	if err != nil {
 		return err
 	}
