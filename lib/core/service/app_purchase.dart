@@ -19,11 +19,14 @@ class AppPurchase {
 
   void init() {
     final purchaseUpdated = _inAppPurchase.purchaseStream;
-    _subscription = purchaseUpdated.listen(
-      _onPurchaseUpdate,
-      onDone: _updateStreamOnDone,
-      onError: _updateStreamOnError,
-    );
+    if (Platform.isIOS) {
+      _subscription = purchaseUpdated.listen(
+        _onPurchaseUpdate,
+        onDone: _updateStreamOnDone,
+        onError: _updateStreamOnError,
+      );
+    }
+
     getAvailablePlans();
   }
 
@@ -99,6 +102,9 @@ class AppPurchase {
 
   Future<void> _handlePurchase(PurchaseDetails purchaseDetails) async {
     logger.d("purchase data  $purchaseDetails");
+    if (Platform.isAndroid) {
+      return;
+    }
     if (purchaseDetails.status == PurchaseStatus.canceled) {
       /// if user cancels purchase and then try to purchase again it will get penning transaction errr
       /// To avoid edge case complete purchase
@@ -115,14 +121,13 @@ class AppPurchase {
           purchaseDetails.verificationData.serverVerificationData,
         );
         _onSuccess?.call();
-
-
       } catch (e) {
         logger.e("purchase error", error: e);
         Sentry.captureException(e);
         _onError?.call(e);
       }
     }
+
     ///This is something we can do later as well
     /// So catch the error do not crash app
     /// and it wil handle it on next time
@@ -134,7 +139,6 @@ class AppPurchase {
       logger.e("purchase error", error: e);
       Sentry.captureException(e);
     }
-
   }
 
   void _updateStreamOnDone() {
