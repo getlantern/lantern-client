@@ -1842,5 +1842,8 @@ msgstr "No internet connection detected"
 msgid "domain_fronting_error"
 msgstr "We're having trouble connecting to our servers. Please wait a moment or try turning it off and on."
 
+msgid "by_clicking_continue"
+msgstr "By clicking Continue, you agree to let Lantern store your Device ID and email"
+
 
 
