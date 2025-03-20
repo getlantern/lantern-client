@@ -86,6 +86,13 @@ class _StoreCheckoutState extends State<StoreCheckout>
                   ),
                 ),
                 const SizedBox(height: 16.0),
+                CText(
+                  'by_clicking_continue'.i18n,
+                  textAlign: TextAlign.center,
+                  style:
+                  tsBody1.copiedWith(fontWeight: FontWeight.w400, color: grey5),
+                ),
+                const SizedBox(height: 16.0),
                 Center(
                   child: TextButton(
                       onPressed: () {

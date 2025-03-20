@@ -81,6 +81,13 @@ class _SignInState extends State<SignIn> {
                   onPressed: onTapResolved),
             ),
             const SizedBox(height: 24),
+            CText(
+              'by_clicking_continue'.i18n,
+              textAlign: TextAlign.center,
+              style:
+                  tsBody1.copiedWith(fontWeight: FontWeight.w400, color: grey5),
+            ),
+            const SizedBox(height: 24),
             if (widget.authFlow.isSignIn &&
                 sessionModel.hasUserSignedInNotifier.value == false)
               RichText(
