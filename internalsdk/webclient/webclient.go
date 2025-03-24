@@ -80,53 +80,38 @@ func NewRESTClient(opts *Opts) RESTClient {
 		opts.HttpClient = &http.Client{}
 	}
 	c := resty.NewWithClient(opts.HttpClient)
+
+	if opts.OnBeforeRequest != nil {
+		c.SetPreRequestHook(opts.OnBeforeRequest)
+	}
+	if opts.OnAfterResponse != nil {
+		c.OnAfterResponse(opts.OnAfterResponse)
+	}
+	if opts.BaseURL != "" {
+		c.SetBaseURL(opts.BaseURL)
+	}
+
 	rc := &restClient{
 		Client: c,
 		// sendToURL is a function that sends requests to the given URL, optionally sending them through a proxy, optionally processing requests
 		// with the given beforeRequest middleware and/or responses with the given afterResponse middleware.
 		send: func(ctx context.Context, method string, path string, reqParams any, body []byte, headers map[string]string) ([]byte, error) {
-			if opts.OnBeforeRequest != nil {
-				c.SetPreRequestHook(opts.OnBeforeRequest)
-			}
-			if opts.OnAfterResponse != nil {
-				c.OnAfterResponse(opts.OnAfterResponse)
-			}
-			if opts.BaseURL != "" {
-				c.SetBaseURL(opts.BaseURL)
-			}
 
 			req := c.R().SetContext(ctx)
 
-			// Set provided headers (if any)
-			if headers != nil {
-				for key, value := range headers {
-					req.SetHeader(key, value)
-				}
-			} else if body != nil {
-				req.SetHeader(ContentType, ContentTypeJSON)
-			} else if method == http.MethodPost && reqParams != nil {
-				req.SetHeader(ContentType, ContentTypeFormURLEncoded)
+			// Default headers
+			if headers == nil {
+				headers = map[string]string{}
+			}
+			if _, exists := headers[ContentType]; !exists {
+				headers[ContentType] = ContentTypeJSON
+			}
+			for key, value := range headers {
+				req.SetHeader(key, value)
 			}
 
-			// Process request params
-			if reqParams != nil {
-				switch p := reqParams.(type) {
-				case map[string]any:
-					stringParams := make(map[string]string, len(p))
-					for key, value := range p {
-						stringParams[key] = fmt.Sprint(value)
-					}
-					if method == http.MethodGet {
-						req.SetQueryParams(stringParams)
-					} else {
-						req.SetFormData(stringParams)
-					}
-				default:
-					req.SetBody(reqParams)
-				}
-			} else if body != nil {
-				req.Body = body
-			}
+			// Process request parameters
+			processParams(req, method, reqParams)
 
 			resp, err := req.Execute(method, path)
 			if err != nil {
@@ -136,20 +121,40 @@ func NewRESTClient(opts *Opts) RESTClient {
 				command, _ := http2curl.GetCurlCommand(req.RawRequest)
 				log.Debugf("curl command: %v", command)
 			}
-			responseBody := resp.Body()
+			responseBody := sanitizeResponseBody(resp.Body())
 			// on some cases, we are getting non-printable characters in the response body
 			cleanedResponseBody := sanitizeResponseBody(responseBody)
 
-			log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
+			log.Debugf("response body: %v status code %v", string(cleanedResponseBody), resp.StatusCode())
 
 			if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
 				return nil, errors.New("%s status code %d", string(cleanedResponseBody), resp.StatusCode())
 			}
 			return responseBody, nil
-
 		},
 	}
 	return rc
+}
+
+func processParams(req *resty.Request, method string, params any) {
+	if params == nil {
+		return
+	}
+
+	switch p := params.(type) {
+	case map[string]any:
+		stringParams := make(map[string]string, len(p))
+		for key, value := range p {
+			stringParams[key] = fmt.Sprint(value)
+		}
+		if method == http.MethodGet {
+			req.SetQueryParams(stringParams)
+		} else {
+			req.SetFormData(stringParams)
+		}
+	default:
+		req.SetBody(params)
+	}
 }
 
 func sanitizeResponseBody(data []byte) []byte {
@@ -170,7 +175,7 @@ func (c *restClient) GetJSON(ctx context.Context, path string, params, target an
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error {
+func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, target proto.Message) error {
 	body, err := c.send(ctx, http.MethodGet, path, params, nil, map[string]string{
 		ContentType: ContentTypeProtobuf,
 	})
@@ -208,7 +213,7 @@ func (c *restClient) PostJSONReadingJSON(ctx context.Context, path string, param
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) PostPROTOC(ctx context.Context, path string, params any, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error {
+func (c *restClient) PostPROTOC(ctx context.Context, path string, params any, body proto.Message, target proto.Message) error {
 	bodyBytes, err := proto.Marshal(body)
 	if err != nil {
 		return err
