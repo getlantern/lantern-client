@@ -15,9 +15,9 @@ type ClientSession interface {
 	SetProUser(bool) error
 	SetReferralCode(string) error
 	SetUserIDAndToken(int64, string) error
-	FetchUserData() error
 	GetDeviceID() (string, error)
 	GetUserFirstVisit() (bool, error)
+	SetEmailAddress(string) error
 }
 
 type backoffRunner struct {
@@ -40,7 +40,6 @@ func (c *proClient) createUser(ctx context.Context, session ClientSession) error
 	log.Debugf("Successfully created new user with id %d", user.UserId)
 	session.SetReferralCode(user.Referral)
 	session.SetUserIDAndToken(user.UserId, user.Token)
-	session.FetchUserData()
 	return nil
 }
 
@@ -90,7 +89,6 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 	if err != nil {
 		return nil, log.Errorf("error fetching user first visit: %v", err)
 	}
-
 	log.Debugf("First time visit %v", firstTime)
 	if user.UserLevel == "pro" && firstTime {
 		log.Debugf("User is pro and first time")
@@ -105,6 +103,9 @@ func (c *proClient) UpdateUserData(ctx context.Context, ss ClientSession) (*prot
 	ss.SetUserIDAndToken(user.UserId, user.Token)
 	ss.SetExpiration(user.Expiration)
 	ss.SetReferralCode(user.Referral)
+	if user.Email != "" {
+		ss.SetEmailAddress(user.Email)
+	}
 	return user, nil
 }
 

@@ -687,6 +687,11 @@ func (app *App) SetProUser(pro bool) error {
 	return nil
 }
 
+func (app *App) SetEmailAddress(email string) error {
+	app.Settings().SetEmailAddress(email)
+	return nil
+}
+
 func (app *App) SetReferralCode(referral string) error {
 	app.Settings().SetReferralCode(referral)
 	return nil

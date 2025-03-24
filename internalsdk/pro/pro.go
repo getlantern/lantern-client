@@ -61,7 +61,7 @@ type ProClient interface {
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
 	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
 	LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error)
-	UserLinkCodeRequest(ctx context.Context, deviceId string, email string) (bool, error)
+	UserLinkCodeRequest(ctx context.Context, email string) (bool, error)
 	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
 	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
 	DeviceAdd(ctx context.Context, deviceName string) (bool, error)
@@ -307,15 +307,12 @@ func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, devic
 	return &resp, nil
 }
 
-// UserLinkCodeRequest returns a code to email register pro account email that can be used to link device to an existing Pro account
-func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string, email string) (bool, error) {
-	if deviceId == "" {
-		return false, errMissingDeviceName
-	}
+// UserLinkCodeRequest requests an account recovery email for linking to an existing pro account
+func (c *proClient) UserLinkCodeRequest(ctx context.Context, email string) (bool, error) {
 	var resp LinkCodeResponse
 	uc := c.userConfig()
 	err := c.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
-		"deviceName": deviceId,
+		"deviceName": uc.GetDeviceID(),
 		"email":      email,
 		"locale":     uc.GetLanguage(),
 	}, nil, &resp)
@@ -328,7 +325,7 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, deviceId string, em
 	return true, nil
 }
 
-// UserLinkCodeRequest returns a code to email register pro account email that can be used to link device to an existing Pro account
+// UserLinkValidate validates the given recovery code and finishes linking the device, returning the user_id and pro_token for the account.
 func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error) {
 	var resp UserRecovery
 	uc := c.userConfig()

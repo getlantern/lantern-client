@@ -179,6 +179,15 @@ func approveDevice(code *C.char) *C.char {
 	return sendJson(resp)
 }
 
+//export userLinkCode
+func userLinkCode(email *C.char) *C.char {
+	resp, err := a.ProClient().UserLinkCodeRequest(context.Background(), C.GoString(email))
+	if err != nil {
+		return sendError(err)
+	}
+	return sendJson(resp)
+}
+
 //export removeDevice
 func removeDevice(deviceId *C.char) *C.char {
 	resp, err := a.ProClient().DeviceRemove(context.Background(), C.GoString(deviceId))
@@ -191,11 +200,14 @@ func removeDevice(deviceId *C.char) *C.char {
 
 //export userLinkValidate
 func userLinkValidate(code *C.char) *C.char {
-	_, err := a.ProClient().UserLinkValidate(context.Background(), C.GoString(code))
+	ctx := context.Background()
+	_, err := a.ProClient().UserLinkValidate(ctx, C.GoString(code))
 	if err != nil {
 		log.Error(err)
 		return sendError(err)
 	}
+	// refresh user data
+	go a.ProClient().UpdateUserData(ctx, a)
 	return C.CString("true")
 }
 
