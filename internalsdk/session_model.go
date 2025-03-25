@@ -2389,13 +2389,7 @@ func requestRecoveryEmail(session *SessionModel, email string) error {
 
 // Validate code for LINK WITH EMAIL method
 func validateDeviceRecoveryCode(session *SessionModel, code string) error {
-	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
-	if err != nil {
-		log.Errorf("Error while getting deviceId %v", err)
-		return err
-	}
-
-	linkResponse, err := session.proClient.UserLinkValidate(context.Background(), deviceId)
+	linkResponse, err := session.proClient.UserLinkValidate(context.Background(), code)
 	if err != nil {
 		return err
 	}
