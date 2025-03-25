@@ -414,7 +414,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-	case "validateRecoveryCode":
+	case "validateRecoveryByEmail":
 		email := arguments.Get("email").String()
 		code := arguments.Get("code").String()
 		err := validateRecoveryByEmail(m, email, code)
@@ -2389,13 +2389,7 @@ func requestRecoveryEmail(session *SessionModel, email string) error {
 
 // Validate code for LINK WITH EMAIL method
 func validateDeviceRecoveryCode(session *SessionModel, code string) error {
-	deviceId, err := pathdb.Get[string](session.db, pathDeviceID)
-	if err != nil {
-		log.Errorf("Error while getting deviceId %v", err)
-		return err
-	}
-
-	linkResponse, err := session.proClient.UserLinkValidate(context.Background(), deviceId)
+	linkResponse, err := session.proClient.UserLinkValidate(context.Background(), code)
 	if err != nil {
 		return err
 	}

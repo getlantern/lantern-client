@@ -201,9 +201,13 @@ func removeDevice(deviceId *C.char) *C.char {
 //export userLinkValidate
 func userLinkValidate(code *C.char) *C.char {
 	ctx := context.Background()
-	_, err := a.ProClient().UserLinkValidate(ctx, C.GoString(code))
+	resp, err := a.ProClient().UserLinkValidate(ctx, C.GoString(code))
 	if err != nil {
 		log.Error(err)
+		return sendError(err)
+	}
+	err = a.SetUserIDAndToken(resp.UserID, resp.Token)
+	if err != nil {
 		return sendError(err)
 	}
 	// refresh user data

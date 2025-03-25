@@ -469,12 +469,11 @@ class SessionModel extends Model {
     return await compute(LanternFFI.authorizeEmail, emailAddress);
   }
 
-  Future<void> validateDeviceRecoveryCode(String code, String email) async {
+  Future<void> validateDeviceRecoveryCode(String code) async {
     if (isMobile()) {
       return await methodChannel
-          .invokeMethod('validateRecoveryCode', <String, dynamic>{
+          .invokeMethod('validateDeviceRecoveryCode', <String, dynamic>{
         'code': code,
-        'email': email,
       }).then((value) => value.toString());
     }
     return await compute(LanternFFI.userLinkValidate, code);

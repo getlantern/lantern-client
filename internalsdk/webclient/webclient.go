@@ -16,11 +16,17 @@ import (
 
 	"github.com/moul/http2curl"
 	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 var (
 	log = golog.LoggerFor("webclient")
+)
+
+const (
+	ContentType               = "Content-Type"
+	ContentTypeJSON           = "application/json"
+	ContentTypeProtobuf       = "application/x-protobuf"
+	ContentTypeFormURLEncoded = "application/x-www-form-urlencoded"
 )
 
 // Opts are common options that RESTClient may be configured with
@@ -50,17 +56,17 @@ type RESTClient interface {
 	PostJSONReadingJSON(ctx context.Context, path string, params, body, target any) error
 
 	// Get data from server and parse to protoc file
-	GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error
+	GetPROTOC(ctx context.Context, path string, params any, target proto.Message) error
 
 	// PostPROTOC sends a POST request with protoc file and parse the response to protoc file
-	PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error
+	PostPROTOC(ctx context.Context, path string, params any, body proto.Message, target proto.Message) error
 }
 
 // A function that can send RESTful requests and receive response bodies.
 // If specified, params should be encoded as query params for GET requests and as form data for POST and PUT requests.
 // If specified, the body bytes should be sent as the body for POST and PUT requests.
 // Returns the response body as bytes.
-type SendRequest func(ctx context.Context, method string, path string, params any, body []byte) ([]byte, error)
+type SendRequest func(ctx context.Context, method string, path string, params any, body []byte, headers map[string]string) ([]byte, error)
 
 type restClient struct {
 	*resty.Client
@@ -73,12 +79,7 @@ func NewRESTClient(opts *Opts) RESTClient {
 		opts.HttpClient = &http.Client{}
 	}
 	c := resty.NewWithClient(opts.HttpClient)
-	return &restClient{c, sendToURL(c, opts)}
-}
 
-// sendToURL is a function that sends requests to the given URL, optionally sending them through a proxy, optionally processing requests
-// with the given beforeRequest middleware and/or responses with the given afterResponse middleware.
-func sendToURL(c *resty.Client, opts *Opts) SendRequest {
 	if opts.OnBeforeRequest != nil {
 		c.SetPreRequestHook(opts.OnBeforeRequest)
 	}
@@ -88,46 +89,70 @@ func sendToURL(c *resty.Client, opts *Opts) SendRequest {
 	if opts.BaseURL != "" {
 		c.SetBaseURL(opts.BaseURL)
 	}
-	return func(ctx context.Context, method string, path string, reqParams any, body []byte) ([]byte, error) {
-		req := c.R().SetContext(ctx)
-		if reqParams != nil {
-			switch reqParams.(type) {
-			case map[string]interface{}:
-				params := reqParams.(map[string]interface{})
-				stringParams := make(map[string]string, len(params))
-				for key, value := range params {
-					stringParams[key] = fmt.Sprint(value)
-				}
-				if method == http.MethodGet {
-					req.SetQueryParams(stringParams)
-				} else {
-					req.SetFormData(stringParams)
-				}
-			default:
-				req.SetBody(reqParams)
+
+	rc := &restClient{
+		Client: c,
+		// send executes an HTTP request with the specified method, path, parameters, and body
+		// It applies any configured middleware (OnBeforeRequest) and response middleware (OnAfterResponse)
+		send: func(ctx context.Context, method string, path string, reqParams any, body []byte, headers map[string]string) ([]byte, error) {
+
+			req := c.R().SetContext(ctx)
+
+			// Default headers
+			if headers == nil {
+				headers = map[string]string{}
 			}
-		} else if body != nil {
-			req.Body = body
-		}
+			if _, exists := headers[ContentType]; !exists {
+				headers[ContentType] = ContentTypeJSON
+			}
+			for key, value := range headers {
+				req.SetHeader(key, value)
+			}
 
-		resp, err := req.Execute(method, path)
-		if err != nil {
-			return nil, err
-		}
-		if common.IsDevEnvironment() {
-			command, _ := http2curl.GetCurlCommand(req.RawRequest)
-			log.Debugf("curl command: %v", command)
-		}
-		responseBody := resp.Body()
-		// on some cases, we are getting non-printable characters in the response body
-		cleanedResponseBody := sanitizeResponseBody(responseBody)
+			// Process request parameters
+			processParams(req, method, reqParams)
 
-		log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
+			resp, err := req.Execute(method, path)
+			if err != nil {
+				return nil, err
+			}
+			if common.IsDevEnvironment() {
+				command, _ := http2curl.GetCurlCommand(req.RawRequest)
+				log.Debugf("curl command: %v", command)
+			}
+			responseBody := sanitizeResponseBody(resp.Body())
+			// on some cases, we are getting non-printable characters in the response body
+			cleanedResponseBody := sanitizeResponseBody(responseBody)
 
-		if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
-			return nil, errors.New("%s status code %d", string(cleanedResponseBody), resp.StatusCode())
+			log.Debugf("response body: %v status code %v", string(cleanedResponseBody), resp.StatusCode())
+
+			if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
+				return nil, errors.New("%s status code %d", string(cleanedResponseBody), resp.StatusCode())
+			}
+			return responseBody, nil
+		},
+	}
+	return rc
+}
+
+func processParams(req *resty.Request, method string, params any) {
+	if params == nil {
+		return
+	}
+
+	switch p := params.(type) {
+	case map[string]any:
+		stringParams := make(map[string]string, len(p))
+		for key, value := range p {
+			stringParams[key] = fmt.Sprint(value)
 		}
-		return responseBody, nil
+		if method == http.MethodGet {
+			req.SetQueryParams(stringParams)
+		} else {
+			req.SetFormData(stringParams)
+		}
+	default:
+		req.SetBody(params)
 	}
 }
 
@@ -142,15 +167,17 @@ func sanitizeResponseBody(data []byte) []byte {
 }
 
 func (c *restClient) GetJSON(ctx context.Context, path string, params, target any) error {
-	b, err := c.send(ctx, http.MethodGet, path, params, nil)
+	b, err := c.send(ctx, http.MethodGet, path, params, nil, nil)
 	if err != nil {
 		return err
 	}
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error {
-	body, err := c.send(ctx, http.MethodGet, path, params, nil)
+func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, target proto.Message) error {
+	body, err := c.send(ctx, http.MethodGet, path, params, nil, map[string]string{
+		ContentType: ContentTypeProtobuf,
+	})
 	if err != nil {
 		return err
 	}
@@ -159,11 +186,12 @@ func (c *restClient) GetPROTOC(ctx context.Context, path string, params any, tar
 		return err1
 	}
 	return nil
-
 }
 
 func (c *restClient) PostFormReadingJSON(ctx context.Context, path string, params, target any) error {
-	b, err := c.send(ctx, http.MethodPost, path, params, nil)
+	b, err := c.send(ctx, http.MethodPost, path, params, nil, map[string]string{
+		ContentType: ContentTypeFormURLEncoded,
+	})
 	if err != nil {
 		return err
 	}
@@ -175,28 +203,29 @@ func (c *restClient) PostJSONReadingJSON(ctx context.Context, path string, param
 	if err != nil {
 		return err
 	}
-	b, err := c.send(ctx, http.MethodPost, path, params, bodyBytes)
+	b, err := c.send(ctx, http.MethodPost, path, params, bodyBytes, map[string]string{
+		ContentType: ContentTypeJSON,
+	})
 	if err != nil {
 		return err
 	}
 	return unmarshalJSON(path, b, target)
 }
 
-func (c *restClient) PostPROTOC(ctx context.Context, path string, params, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error {
+func (c *restClient) PostPROTOC(ctx context.Context, path string, params any, body proto.Message, target proto.Message) error {
 	bodyBytes, err := proto.Marshal(body)
 	if err != nil {
 		return err
 	}
-	bo, err := c.send(ctx, http.MethodPost, path, params, bodyBytes)
+
+	bo, err := c.send(ctx, http.MethodPost, path, params, bodyBytes, map[string]string{
+		ContentType: ContentTypeProtobuf,
+	})
 	if err != nil {
-		// log.Debugf("Error in sending request: %v", err)
 		return err
 	}
-	err1 := proto.Unmarshal(bo, target)
-	if err1 != nil {
-		return err1
-	}
-	return nil
+
+	return proto.Unmarshal(bo, target)
 }
 
 func unmarshalJSON(path string, b []byte, target any) error {
