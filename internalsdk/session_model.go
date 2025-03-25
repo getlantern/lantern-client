@@ -414,7 +414,7 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
-	case "validateRecoveryCode":
+	case "validateRecoveryByEmail":
 		email := arguments.Get("email").String()
 		code := arguments.Get("code").String()
 		err := validateRecoveryByEmail(m, email, code)
