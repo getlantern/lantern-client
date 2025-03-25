@@ -78,10 +78,7 @@ class AddDevice extends StatelessWidget {
       appLogger.e("Error while approving device", error: e);
       context.loaderOverlay.hide();
       pinCodeController.clear();
-      CDialog.showError(
-        context,
-        description: e.localizedDescription,
-      );
+      showError(context, description: e.localizedDescription);
     }
   }
 }

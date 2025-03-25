@@ -21,7 +21,7 @@ extension ErrorX on Object {
           return "recovery_not_found".i18n;
         }
 
-        if (description.contains("wrong-link-code")) {
+        if (description.contains("wrong-link-code") || description.contains("wrong_device_linking_code")) {
           return "wrong_link_code".i18n;
         }
         if (description
