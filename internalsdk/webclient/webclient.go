@@ -16,7 +16,6 @@ import (
 
 	"github.com/moul/http2curl"
 	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 var (
@@ -57,10 +56,10 @@ type RESTClient interface {
 	PostJSONReadingJSON(ctx context.Context, path string, params, body, target any) error
 
 	// Get data from server and parse to protoc file
-	GetPROTOC(ctx context.Context, path string, params any, target protoreflect.ProtoMessage) error
+	GetPROTOC(ctx context.Context, path string, params any, target proto.Message) error
 
 	// PostPROTOC sends a POST request with protoc file and parse the response to protoc file
-	PostPROTOC(ctx context.Context, path string, params any, body protoreflect.ProtoMessage, target protoreflect.ProtoMessage) error
+	PostPROTOC(ctx context.Context, path string, params any, body proto.Message, target proto.Message) error
 }
 
 // A function that can send RESTful requests and receive response bodies.
