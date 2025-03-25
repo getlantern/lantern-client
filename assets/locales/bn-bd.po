@@ -1,8 +1,8 @@
 # 
 # Translators:
 # Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2025
-# Lantern, 2025
 # code smite <codesmite@gmail.com>, 2025
+# Lantern, 2025
 # Derek F <derek@getlantern.org>, 2025
 # tx_e2f_bn c3 <tx_e2f_bn_c3@ate2f.com>, 2025
 # 

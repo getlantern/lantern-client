@@ -1,18 +1,18 @@
 # 
 # Translators:
-# Li Ma <i@sagiri.pw>, 2025
 # Po-Chun Huang <aphroteus@gmail.com>, 2025
-# 474874f569f96a33809d02f1de71479e_77020aa, 2025
-# tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2025
+# e2f <projects@e2f.com>, 2025
 # YFdyh000 <yfdyh000@gmail.com>, 2025
 # Rockman Lau <im@rockman.us>, 2025
+# Li Ma <i@sagiri.pw>, 2025
 # Ox Cart <ox@getlantern.org>, 2025
-# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2025
-# e2f <projects@e2f.com>, 2025
-# Lantern, 2025
-# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2025
+# 474874f569f96a33809d02f1de71479e_77020aa, 2025
+# tx_e2f_hk c2 <tx_e2f_hk_c2@ate2f.com>, 2025
 # Aki, 2025
+# CN R10 <tx_e2f_cn_r10@ate2f.com>, 2025
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2025
+# e2f_cn c3 <tx_e2f_cn_c3@ate2f.com>, 2025
+# Lantern, 2025
 # Derek F <derek@getlantern.org>, 2025
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2025
 # 
