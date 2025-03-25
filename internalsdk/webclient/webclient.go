@@ -93,8 +93,8 @@ func NewRESTClient(opts *Opts) RESTClient {
 
 	rc := &restClient{
 		Client: c,
-		// sendToURL is a function that sends requests to the given URL, optionally sending them through a proxy, optionally processing requests
-		// with the given beforeRequest middleware and/or responses with the given afterResponse middleware.
+		// send executes an HTTP request with the specified method, path, parameters, and body
+		// It applies any configured middleware (OnBeforeRequest) and response middleware (OnAfterResponse)
 		send: func(ctx context.Context, method string, path string, reqParams any, body []byte, headers map[string]string) ([]byte, error) {
 
 			req := c.R().SetContext(ctx)
