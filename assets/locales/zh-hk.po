@@ -1882,3 +1882,6 @@ msgstr "未偵測到網際網路連線"
 
 msgid "domain_fronting_error"
 msgstr "我們無法連接到伺服器，請稍候或嘗試關閉再開啟。"
+
+msgid "by_clicking_continue"
+msgstr ""
