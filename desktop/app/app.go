@@ -237,77 +237,11 @@ func (app *App) Run(ctx context.Context) error {
 	go flashlight.Run(
 		listenAddr,
 		socksAddr,
-		func(cl *flashlightClient.Client) {
-			app.sendConfigOptions()
-			app.setFlashlightRunning(true)
-			ctx := context.Background()
-			go app.fetchOrCreateUser(ctx)
-			if app.Settings().GetUserID() != 0 {
-				// fetch plan only if user is created
-				go app.proClient.DesktopPaymentMethods(ctx)
-			}
-			go app.fetchDeviceLinkingCode(ctx)
-
-			app.OnSettingChange(SNSystemProxy, func(val interface{}) {
-				enable := val.(bool)
-				if enable {
-					app.SysproxyOn()
-				} else {
-					app.SysProxyOff()
-				}
-			})
-
-			app.AddExitFunc("turning off system proxy", func() {
-				app.SysProxyOff()
-			})
-			app.AddExitFunc("flushing to opentelemetry", otel.Stop)
-			if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
-				app.Settings().SetAddr(addr.(string))
-			} else {
-				log.Errorf("Couldn't retrieve HTTP proxy addr in time")
-			}
-			if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
-				app.Settings().SetSOCKSAddr(socksAddr.(string))
-			} else {
-				log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
-			}
-		},
+		app.afterStart,
 		func(err error) { _ = app.Exit(err) },
 	)
 
 	return nil
-}
-
-func (app *App) setFlashlightRunning(isRunning bool) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.isFlashlightRunning = isRunning
-}
-
-func (app *App) setSysProxyOn(isOn bool) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.sysProxyOn = isOn
-}
-
-func (app *App) IsRunning() bool {
-	app.mu.RLock()
-	defer app.mu.RUnlock()
-	return app.isFlashlightRunning
-}
-
-func (app *App) SysProxyEnabled() bool {
-	app.mu.RLock()
-	defer app.mu.RUnlock()
-	return app.sysProxyOn
-}
-
-// IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
-func (app *App) IsFeatureEnabled(feature string) bool {
-	if app.flashlight == nil {
-		return false
-	}
-	return app.flashlight.EnabledFeatures()[feature]
 }
 
 func (app *App) beforeStart(ctx context.Context, listenAddr string) error {
@@ -372,6 +306,74 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) error {
 	}))
 
 	return nil
+}
+
+func (app *App) afterStart(cl *flashlightClient.Client) {
+	app.sendConfigOptions()
+	app.setFlashlightRunning(true)
+	ctx := context.Background()
+	go app.fetchOrCreateUser(ctx)
+	if app.Settings().GetUserID() != 0 {
+		// fetch plan only if user is created
+		go app.proClient.DesktopPaymentMethods(ctx)
+	}
+	go app.fetchDeviceLinkingCode(ctx)
+
+	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
+		enable := val.(bool)
+		if enable {
+			app.SysproxyOn()
+		} else {
+			app.SysProxyOff()
+		}
+	})
+
+	app.AddExitFunc("turning off system proxy", func() {
+		app.SysProxyOff()
+	})
+	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
+	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
+		app.Settings().SetAddr(addr.(string))
+	} else {
+		log.Errorf("Couldn't retrieve HTTP proxy addr in time")
+	}
+	if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
+		app.Settings().SetSOCKSAddr(socksAddr.(string))
+	} else {
+		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
+	}
+}
+
+func (app *App) setFlashlightRunning(isRunning bool) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.isFlashlightRunning = isRunning
+}
+
+func (app *App) setSysProxyOn(isOn bool) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.sysProxyOn = isOn
+}
+
+func (app *App) IsRunning() bool {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.isFlashlightRunning
+}
+
+func (app *App) SysProxyEnabled() bool {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.sysProxyOn
+}
+
+// IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
+func (app *App) IsFeatureEnabled(feature string) bool {
+	if app.flashlight == nil {
+		return false
+	}
+	return app.flashlight.EnabledFeatures()[feature]
 }
 
 // Connect turns on proxying
@@ -454,7 +456,6 @@ func (app *App) onProxiesUpdate(proxies []dialer.ProxyDialer, src config.Source)
 func (app *App) onSucceedingProxy() {
 	app.hasSucceedingProxy.Store(true)
 	log.Debugf("[Startup Desktop] onSucceedingProxy")
-	app.sendConfigOptions()
 }
 
 // HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
