@@ -10,6 +10,10 @@ import (
 )
 
 func (app *App) UserConfig() common.UserConfig {
+	settings := app.Settings()
+	if settings == nil {
+		return common.NewUserConfig(common.DefaultAppName, "", 0, "", nil, "")
+	}
 	return userConfigFromSettings(app.Settings())()
 }
 
@@ -21,11 +25,8 @@ func (app *App) userID() int64 {
 // userConfigFromSettings returns the user configuration based on the latest settings.
 func userConfigFromSettings(settings *Settings) func() common.UserConfig {
 	return func() common.UserConfig {
-		var deviceID, token, lang string
-		var userID int64
-		if settings != nil {
-			userID, deviceID, token, lang = settings.GetUserID(), settings.GetDeviceID(), settings.GetToken(), settings.GetLanguage()
-		}
+		userID, deviceID := settings.GetUserID(), settings.GetDeviceID()
+		token, lang := settings.GetToken(), settings.GetLanguage()
 		return common.NewUserConfig(
 			common.DefaultAppName,
 			deviceID,

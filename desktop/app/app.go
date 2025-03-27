@@ -10,7 +10,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
@@ -74,7 +73,8 @@ type App struct {
 	// Websocket-related settings
 	websocketAddr  string       // Address for WebSocket connections.
 	ws             ws.UIChannel // UI channel for WebSocket communication.
-	cachedUserData sync.Map     // Cached user data.
+	wsServer       *http.Server
+	cachedUserData sync.Map // Cached user data.
 
 	mu sync.RWMutex
 }
@@ -110,7 +110,7 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		log.Debug("Successfully loaded .env file")
 	}
 
-	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+	//logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 
 	if shouldReportToSentry() {
 		sentry.InitSentry(sentry.Opts{
@@ -141,7 +141,7 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 
 	// Start the WebSocket server for UI communication.
 	if err := app.serveWebsocket(); err != nil {
-		log.Error(err)
+		return nil, err
 	}
 	golog.OnFatal(app.exitOnFatal)
 
@@ -158,14 +158,8 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 	return app, nil
 }
 
-// Run starts the application and initializes necessary components.
-func (app *App) Start(ctx context.Context) error {
-	app.mu.Lock()
-	isRunning := app.isFlashlightRunning
-	app.mu.Unlock()
-	if isRunning {
-		return errors.New("flashlight is already running")
-	}
+// Run creates a new instance of App, initializes necessary components, and starts running the application.
+func (app *App) Run(ctx context.Context) error {
 	go func() {
 		app.Settings().SetCountry(geolookup.GetCountry(0))
 		for <-geolookup.OnRefresh() {
@@ -207,9 +201,8 @@ func (app *App) Start(ctx context.Context) error {
 			})
 		}()
 	}
-	var err error
 	// Initialize flashlight
-	app.flashlight, err = flashlight.New(
+	flashlight, err := flashlight.New(
 		common.DefaultAppName,
 		common.ApplicationVersion,
 		common.RevisionDate,
@@ -233,12 +226,51 @@ func (app *App) Start(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	app.beforeStart(ctx, listenAddr)
+	app.mu.Lock()
+	app.flashlight = flashlight
+	app.mu.Unlock()
+	if err := app.beforeStart(ctx, listenAddr); err != nil {
+		return err
+	}
 
-	app.flashlight.Run(
+	go flashlight.Run(
 		listenAddr,
 		socksAddr,
-		app.afterStart,
+		func(cl *flashlightClient.Client) {
+			app.sendConfigOptions()
+			app.setFlashlightRunning(true)
+			ctx := context.Background()
+			go app.fetchOrCreateUser(ctx)
+			if app.Settings().GetUserID() != 0 {
+				// fetch plan only if user is created
+				go app.proClient.DesktopPaymentMethods(ctx)
+			}
+			go app.fetchDeviceLinkingCode(ctx)
+
+			app.OnSettingChange(SNSystemProxy, func(val interface{}) {
+				enable := val.(bool)
+				if enable {
+					app.SysproxyOn()
+				} else {
+					app.SysProxyOff()
+				}
+			})
+
+			app.AddExitFunc("turning off system proxy", func() {
+				app.SysProxyOff()
+			})
+			app.AddExitFunc("flushing to opentelemetry", otel.Stop)
+			if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
+				app.Settings().SetAddr(addr.(string))
+			} else {
+				log.Errorf("Couldn't retrieve HTTP proxy addr in time")
+			}
+			if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
+				app.Settings().SetSOCKSAddr(socksAddr.(string))
+			} else {
+				log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
+			}
+		},
 		func(err error) { _ = app.Exit(err) },
 	)
 
@@ -277,7 +309,7 @@ func (app *App) IsFeatureEnabled(feature string) bool {
 	return app.flashlight.EnabledFeatures()[feature]
 }
 
-func (app *App) beforeStart(ctx context.Context, listenAddr string) {
+func (app *App) beforeStart(ctx context.Context, listenAddr string) error {
 	log.Debug("Got first config")
 
 	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
@@ -287,7 +319,7 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	}
 
 	if err := setUpSysproxyTool(); err != nil {
-		app.Exit(err)
+		return err
 	}
 
 	if app.Flags.ClearProxySettings {
@@ -308,9 +340,8 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 		os.Exit(0)
 	}
 
-	if e := app.settings.StartService(app.ws); e != nil {
-		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
-		return
+	if e := app.Settings().StartService(app.ws); e != nil {
+		return fmt.Errorf("unable to register settings service: %q", e)
 	}
 
 	isProUser := func() (bool, bool) {
@@ -334,29 +365,30 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
 	}))
-	//app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
+
+	return nil
 }
 
 // Connect turns on proxying
 func (app *App) Connect() {
 	ops.Begin("connect").End()
-	app.settings.SetDisconnected(false)
+	app.Settings().SetDisconnected(false)
 }
 
 // Disconnect turns off proxying
 func (app *App) Disconnect() {
 	ops.Begin("disconnect").End()
-	app.settings.SetDisconnected(true)
+	app.Settings().SetDisconnected(true)
 }
 
 // GetLanguage returns the user language
 func (app *App) GetLanguage() string {
-	return app.settings.GetLanguage()
+	return app.Settings().GetLanguage()
 }
 
 // SetLanguage sets the user language
 func (app *App) SetLanguage(lang string) {
-	app.settings.SetLanguage(lang)
+	app.Settings().SetLanguage(lang)
 	log.Debugf("Setting language to %v", lang)
 	app.SendMessageToUI("pro", map[string]interface{}{
 		"language": lang,
@@ -364,7 +396,7 @@ func (app *App) SetLanguage(lang string) {
 }
 
 func (app *App) SetUserLoggedIn(value bool) {
-	app.settings.SetUserLoggedIn(value)
+	app.Settings().SetUserLoggedIn(value)
 	app.SendMessageToUI("pro", map[string]interface{}{
 		"login": value,
 	})
@@ -385,47 +417,12 @@ func (app *App) SendMessageToUI(service string, message interface{}) {
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
 func (app *App) OnSettingChange(attr SettingName, cb func(interface{})) {
-	app.settings.OnChange(attr, cb)
+	app.Settings().OnChange(attr, cb)
 }
 
 // OnStatsChange adds a listener for Stats changes.
 func (app *App) OnStatsChange(fn func(stats.Stats)) {
 	app.statsTracker.AddListener(fn)
-}
-
-func (app *App) afterStart(cl *flashlightClient.Client) {
-	app.setFlashlightRunning(true)
-	ctx := context.Background()
-	go app.fetchOrCreateUser(ctx)
-	if app.settings.GetUserID() != 0 {
-		// fetch plan only if user is created
-		go app.proClient.DesktopPaymentMethods(ctx)
-	}
-	go app.fetchDeviceLinkingCode(ctx)
-
-	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
-		enable := val.(bool)
-		if enable {
-			app.SysproxyOn()
-		} else {
-			app.SysProxyOff()
-		}
-	})
-
-	app.AddExitFunc("turning off system proxy", func() {
-		app.SysProxyOff()
-	})
-	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
-	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
-		app.settings.SetAddr(addr.(string))
-	} else {
-		log.Errorf("Couldn't retrieve HTTP proxy addr in time")
-	}
-	if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
-		app.settings.SetSOCKSAddr(socksAddr.(string))
-	} else {
-		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
-	}
 }
 
 func (app *App) SendConfig() {
@@ -452,6 +449,7 @@ func (app *App) onProxiesUpdate(proxies []dialer.ProxyDialer, src config.Source)
 func (app *App) onSucceedingProxy() {
 	app.hasSucceedingProxy.Store(true)
 	log.Debugf("[Startup Desktop] onSucceedingProxy")
+	app.sendConfigOptions()
 }
 
 // HasSucceedingProxy returns whether or not the app is currently configured with any succeeding proxies
@@ -496,6 +494,7 @@ func (app *App) Exit(err error) bool {
 func (app *App) doExit(err error) {
 	app.setFlashlightRunning(false)
 	app.setSysProxyOn(false)
+
 	if err != nil {
 		log.Errorf("Exiting app %d(%d) because of %v", os.Getpid(), os.Getppid(), err)
 		if shouldReportToSentry() {
@@ -613,7 +612,7 @@ func (app *App) devices() protos.Devices {
 // ProxyAddrReachable checks if Lantern's HTTP proxy responds with the correct status
 // within the deadline.
 func (app *App) ProxyAddrReachable(ctx context.Context) error {
-	req, err := http.NewRequest("GET", "http://"+app.settings.GetAddr(), nil)
+	req, err := http.NewRequest("GET", "http://"+app.Settings().GetAddr(), nil)
 	if err != nil {
 		return err
 	}

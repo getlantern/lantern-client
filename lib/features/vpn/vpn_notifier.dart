@@ -52,9 +52,10 @@ class VPNChangeNotifier with ChangeNotifier {
         notifyListeners();
       }
       updateStatus(
-          configNotifier.fetchedProxiesConfig,
-          configNotifier.fetchedGlobalConfig,
-          configNotifier.hasSucceedingProxy);
+        configNotifier.fetchedProxiesConfig,
+        configNotifier.fetchedGlobalConfig,
+        configNotifier.hasSucceedingProxy,
+      );
     });
   }
 
@@ -112,7 +113,7 @@ class VPNChangeNotifier with ChangeNotifier {
     }
     notifyListeners();
 
-    if (proxy && proxy && success) {
+    if (proxy && proxy) {
       // everything is initialized
       isFlashlightInitialized = true;
       isFlashlightInitializedFailed = false;

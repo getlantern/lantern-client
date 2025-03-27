@@ -27,7 +27,8 @@ const (
 )
 
 var (
-	log        = golog.LoggerFor("lantern-client.main")
+	log = golog.LoggerFor("lantern-client.main")
+
 	lanternApp *app.App
 	mu         sync.RWMutex
 	setupOnce  sync.Once
@@ -54,36 +55,41 @@ func getApp() *app.App {
 
 //export setup
 func setup() {
+	mu.Lock()
+	defer mu.Unlock()
+	a := lanternApp
+	if a != nil {
+		return
+	}
 	setupOnce.Do(func() {
-		go func() {
-			a, err := app.NewApp()
-			if err != nil {
-				log.Fatal(err)
-			}
-			mu.Lock()
-			lanternApp = a
-			mu.Unlock()
-			a.Start(context.Background())
-		}()
+		a, err := app.NewApp()
+		if err != nil {
+			log.Fatal(err)
+		}
+		lanternApp = a
+
+		go a.Run(context.Background())
 	})
 }
 
 //export start
 func start() *C.char {
-	appInstance := getApp()
-	if appInstance == nil {
+	a := getApp()
+	if a == nil {
 		return C.CString("app not initialized")
+	} else if a.IsRunning() {
+		return C.CString("app already running")
 	}
-	if !appInstance.IsRunning() {
-		go appInstance.Start(context.Background())
-	}
-
+	go a.Run(context.Background())
 	return C.CString("")
 }
 
 //export sysProxyOff
 func sysProxyOff() {
 	a := getApp()
+	if a == nil {
+		return
+	}
 	if !a.SysProxyEnabled() {
 		log.Error("system proxy is not currently enabled")
 		return
@@ -118,7 +124,12 @@ func saveUserSalt(salt []byte) {
 
 //export websocketAddr
 func websocketAddr() *C.char {
-	return C.CString(getApp().WebsocketAddr())
+	a := getApp()
+	if a == nil {
+		log.Error("cannot get websocket address: app not initialized")
+		return C.CString("")
+	}
+	return C.CString(a.WebsocketAddr())
 }
 
 //export setProxyAll
@@ -245,6 +256,9 @@ func userData() *C.char {
 	}
 
 	b, _ := json.Marshal(user)
+
+	log.Debugf("Got user data %s", string(b))
+
 	return C.CString(string(b))
 }
 

@@ -13,7 +13,8 @@ abstract class Model {
   Event? event;
   final Map<String, FfiListNotifier> _ffiListNotifierCache = HashMap();
 
-  late ValueNotifier<ConfigOptions?> configNotifier;
+  final ValueNotifier<ConfigOptions?> configNotifier =
+      ValueNotifier<ConfigOptions?>(null);
 
   Model(String name) {
     if (isMobile()) {

@@ -45,7 +45,7 @@ class LanternFFI {
   static SendPort? _proxySendPort;
   static final Completer<void> _isolateInitialized = Completer<void>();
 
-  static setup() => _lanternFFI.setup();
+  static void setup() => _lanternFFI.setup();
 
   static void sysProxyOn() {
     final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();
@@ -116,8 +116,9 @@ class LanternFFI {
     });
   }
 
-  static Future<User> ffiUserData() async {
+  static Future<User?> ffiUserData() async {
     final res = await _lanternFFI.userData().cast<Utf8>().toDartString();
+    if (res == "") return null;
     // it's necessary to use mergeFromProto3Json here instead of fromJson; otherwise, a FormatException with
     // message Invalid radix-10 number is thrown.In addition, all possible JSON fields have to be defined on
     // the User protobuf message or JSON decoding fails because of an "unknown field name" error:

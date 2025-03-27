@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _refreshUserData() async {
     try {
       final userData = await LanternFFI.ffiUserData();
-      if (mounted) {
+      if (mounted && userData != null) {
         context.read<UserProvider>().updateUser(userData);
       }
     } catch (e) {
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _startupSequence() {
-    checkIfSurveyIsAvailable();
+    //checkIfSurveyIsAvailable();
     if (isMobile()) {
       channelListener();
       return;
@@ -191,11 +191,11 @@ class _HomePageState extends State<HomePage> {
               return const PrivacyDisclosure();
             }
 
-            if (sessionModel.isAuthEnabled.value!) {
-              userNew(() {
-                _checkForFirstTimeVisit();
-              });
-            }
+            // if (sessionModel.isAuthEnabled.value!) {
+            //   userNew(() {
+            //     _checkForFirstTimeVisit();
+            //   });
+            // }
             return messagingModel.getOnBoardingStatus((_, isOnboarded, child) {
               final tab = tabModel.currentIndex;
               return Scaffold(

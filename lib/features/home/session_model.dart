@@ -18,11 +18,19 @@ const TAB_DEVELOPER = 'developer';
 class SessionModel extends Model {
   late final EventManager eventManager;
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  ValueNotifier<bool> devMode = ValueNotifier(false);
+  ValueNotifier<int> acceptedTerms = ValueNotifier(0);
+  ValueNotifier<String> replicaAddrNotifier = ValueNotifier('');
+  ValueNotifier<Devices> devicesNotifier = ValueNotifier(Devices.create());
+  ValueNotifier<String> expNotifier = ValueNotifier('');
+  ValueNotifier<bool> chatNotifier = ValueNotifier(false);
+  ValueNotifier<String> sdkNotifier = ValueNotifier('');
+  ValueNotifier<bool> splitTunnelingEnabled = ValueNotifier(false);
+
   late ValueNotifier<bool?> isTestPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<bool?> proUserNotifier;
-  late ValueNotifier<ConfigOptions?> configNotifier;
   late ValueNotifier<String?> country;
   late ValueNotifier<String?> referralNotifier;
   late ValueNotifier<String?> deviceIdNotifier;
@@ -31,7 +39,6 @@ class SessionModel extends Model {
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<String?> linkingCodeNotifier;
-  late ValueNotifier<Devices?> devicesNotifier;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
   late ValueNotifier<bool?> isAuthEnabled;
   late FfiListNotifier<Plan> plansNotifier;
@@ -72,7 +79,6 @@ class SessionModel extends Model {
       );
     } else {
       bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
-      configNotifier = ValueNotifier<ConfigOptions?>(null);
       country = ValueNotifier('US');
       linkingCodeNotifier = ValueNotifier('');
       proxyAvailable = ValueNotifier(false);
@@ -105,21 +111,6 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('updateUserDetail', {});
   }
 
-  Widget configValueBuilder<T>(
-    String path,
-    ValueWidgetBuilder<T> builder,
-    T Function(ConfigOptions? options) onConfigUpdate,
-  ) {
-    return SubscribedSingleValueBuilder<ConfigOptions?>(
-      path,
-      configNotifier,
-      (BuildContext context, ConfigOptions? value, Widget? child) =>
-          value == null
-              ? const SizedBox()
-              : builder(context, onConfigUpdate(value), child),
-    );
-  }
-
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('prouser',
@@ -148,8 +139,11 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'developmentMode', builder, (value) => value?.developmentMode ?? false);
+    return FfiValueBuilder<bool>(
+      'developmentMode',
+      devMode,
+      builder,
+    );
   }
 
   Widget paymentTestMode(ValueWidgetBuilder<bool> builder) {
@@ -176,8 +170,11 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
           builder: builder, defaultValue: 0);
     }
-    return configValueBuilder('accepted_terms_version', builder,
-        (value) => value?.chat.acceptedTermsVersion ?? 0);
+    return FfiValueBuilder<int>(
+      'acceptedTermsVersion',
+      acceptedTerms,
+      builder,
+    );
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -237,8 +234,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'expirydatestr', builder, (value) => value?.expirationDate ?? '');
+    return FfiValueBuilder<String>('expirydatestr', expNotifier, builder);
   }
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
@@ -269,8 +265,11 @@ class SessionModel extends Model {
       );
     }
     // update the logic of devices
-    return configValueBuilder(
-        'devices', builder, (options) => options!.devices);
+    return FfiValueBuilder<Devices>(
+      'devices',
+      devicesNotifier,
+      builder,
+    );
   }
 
   /// This only supports desktop fo now
@@ -297,8 +296,11 @@ class SessionModel extends Model {
       return FfiValueBuilder<bool>(
           'isUserLoggedIn', hasUserSignedInNotifier, builder);
     }
-    return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
-        builder: builder, defaultValue: false);
+    return subscribedSingleValueBuilder<bool>(
+      'IsUserLoggedIn',
+      builder: builder,
+      defaultValue: false,
+    );
   }
 
   /// Auth Method channel
@@ -524,8 +526,11 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'replicaAddr', builder, (value) => value?.replicaAddr ?? '');
+    return FfiValueBuilder<String>(
+      'replicaAddr',
+      replicaAddrNotifier,
+      builder,
+    );
   }
 
   Widget countryCode(ValueWidgetBuilder<String> builder) {
@@ -560,8 +565,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'chatEnabled', builder, (value) => value?.chatEnabled ?? false);
+    return FfiValueBuilder<bool>('chatEnabled', chatNotifier, builder);
   }
 
   Widget sdkVersion(ValueWidgetBuilder<String> builder) {
@@ -572,8 +576,7 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'sdkVersion', builder, (value) => value?.sdkVersion ?? "");
+    return FfiValueBuilder<String>('sdkVersion', sdkNotifier, builder);
   }
 
   Future<bool> getChatEnabled() async {
@@ -879,8 +882,11 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<bool>('/splitTunneling',
           builder: builder, defaultValue: false);
     }
-    return configValueBuilder(
-        'splitTunneling', builder, (value) => value?.splitTunneling ?? false);
+    return FfiValueBuilder<bool>(
+      'splitTunneling',
+      splitTunnelingEnabled,
+      builder,
+    );
   }
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {

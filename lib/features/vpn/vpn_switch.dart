@@ -155,7 +155,7 @@ class _VPNSwitchState extends State<VPNSwitch> {
   }
 
   Future<void> vpnProcessForDesktop(String vpnStatus) async {
-    final vpnNotifier = Provider.of<VPNChangeNotifier>(context, listen: false);
+    final vpnNotifier = context.watch<VPNChangeNotifier>();
     try {
       await LanternFFI.sendVpnStatus(vpnStatus);
       vpnNotifier.updateVpnStatus(vpnStatus);
