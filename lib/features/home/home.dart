@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _refreshUserData();
+    //_refreshUserData();
   }
 
   Future<void> _refreshUserData() async {
