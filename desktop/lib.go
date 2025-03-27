@@ -99,6 +99,7 @@ func sysProxyOff() {
 
 //export sysProxyOn
 func sysProxyOn() *C.char {
+	log.Debug("sysProxyOn")
 	a := getApp()
 	if a == nil {
 		return C.CString("app not initialized")

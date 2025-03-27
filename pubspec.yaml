@@ -63,6 +63,8 @@ dependencies:
   flutter_image_compress: ^2.3.0
   fluttertoast: ^8.2.8
 
+  flutter_screenutil: ^5.9.3
+
   # Networking
   cached_network_image: ^3.4.1
   dio: ^5.7.0

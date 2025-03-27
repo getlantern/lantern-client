@@ -1,7 +1,10 @@
 import 'package:animated_loading_border/animated_loading_border.dart';
 import 'package:app_links/app_links.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:lantern/core/app/app_dimens.dart';
 import 'package:lantern/core/router/router.dart';
+import 'package:lantern/core/utils/common.dart' as PlatformUtils;
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/messaging/messaging.dart';
 import 'package:lantern/features/tray/tray_container.dart';
@@ -187,10 +190,15 @@ class _LanternAppState extends State<LanternApp>
               ),
             ),
           ),
-          child: I18n(
-            initialLocale: currentLocale(lang),
-            child: ScaffoldMessenger(
-              child: _buildMaterialApp(context, lang),
+          child: ScreenUtilInit(
+            designSize:
+                PlatformUtils.isDesktop() ? desktopWindowSize : mobileSize,
+            minTextAdapt: true,
+            child: I18n(
+              initialLocale: currentLocale(lang),
+              child: ScaffoldMessenger(
+                child: _buildMaterialApp(context, lang),
+              ),
             ),
           ),
         );

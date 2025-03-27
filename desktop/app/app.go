@@ -10,6 +10,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
@@ -110,7 +111,7 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		log.Debug("Successfully loaded .env file")
 	}
 
-	//logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 
 	if shouldReportToSentry() {
 		sentry.InitSentry(sentry.Opts{
