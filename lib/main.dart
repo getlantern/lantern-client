@@ -26,6 +26,9 @@ Future<void> main() async {
   }
   initServices();
   if (isDesktop()) {
+    LanternFFI.setup();
+    await WebsocketSubscriber().connect();
+
     if (Platform.isWindows) {
       await initializeWebViewEnvironment();
       ProtocolRegistrar.instance.register('lantern');
@@ -33,8 +36,6 @@ Future<void> main() async {
     }
     await windowManager.ensureInitialized();
     await windowManager.setSize(const ui.Size(360, 712));
-    await LanternFFI.setup();
-    await WebsocketSubscriber().connect();
   } else {
     await _initGoogleMobileAds();
     // Inject all the services
