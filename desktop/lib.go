@@ -18,6 +18,7 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 import "C"
@@ -256,7 +257,7 @@ func userData() *C.char {
 		return C.CString("")
 	}
 
-	b, _ := json.Marshal(user)
+	b, _ := protojson.Marshal(user)
 
 	log.Debugf("Got user data %s", string(b))
 

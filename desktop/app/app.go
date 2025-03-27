@@ -363,6 +363,10 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) error {
 		log.Errorf("Unable to serve connection status: %v", err)
 	}
 
+	if err := app.servePro(app.ws); err != nil {
+		log.Errorf("Unable to serve pro data to UI: %v", err)
+	}
+
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
 	}))

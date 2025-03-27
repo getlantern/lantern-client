@@ -4,6 +4,7 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -82,7 +83,7 @@ func (app *App) RefreshUserData() (*protos.User, error) {
 		if err != nil {
 			return nil, err
 		}
-		app.cachedUserData.Store(userID, user)
+		app.cachedUserData.Store(userID, res.User)
 		return res.User, nil
 	}
 	return user, nil
@@ -104,7 +105,7 @@ func (app *App) fetchUserData(ctx context.Context, uc common.UserConfig) (*pro.U
 	userID := uc.GetUserID()
 	log.Debugf("Fetching user status with device ID '%v', user ID '%v' and proToken %v",
 		uc.GetDeviceID(), userID, uc.GetToken())
-	resp, err := app.proClient.UserData(ctx)
+	resp, err := app.ProClient().UserData(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -130,4 +131,12 @@ func (app *App) IsProUserFast() (isPro bool, statusKnown bool) {
 		return false, false
 	}
 	return isProUser(user), found
+}
+
+// servePro fetches user data or creates new user when the application starts up
+// It loops forever in 10 seconds interval until the user is fetched or
+// created, as it's fundamental for the UI to work.
+func (app *App) servePro(channel ws.UIChannel) error {
+	_, err := channel.Register("pro", nil)
+	return err
 }
