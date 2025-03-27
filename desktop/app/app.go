@@ -26,6 +26,7 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
+	"github.com/joho/godotenv"
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
@@ -67,6 +68,8 @@ type App struct {
 	proClient                 proclient.ProClient      // Client for managing interaction with the Pro server.
 	selectedTab               Tab                      // Tracks the currently selected UI tab.
 	connectionStatusCallbacks []func(isConnected bool) // Listeners for connection status changes.
+	isFlashlightRunning       bool                     // tracks whether or not Flashlight started.
+	sysProxyOn                bool                     // tracks whether or not the system proxy is enabled.
 
 	// Websocket-related settings
 	websocketAddr  string       // Address for WebSocket connections.
@@ -96,7 +99,16 @@ func NewApp() (*App, error) {
 
 // NewAppWithFlags creates a new App instance with the given flags and configuration directory.
 func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
+
 	log.Debugf("Config directory %s sticky %v readable %v", configDir, flags.StickyConfig, flags.ReadableConfig)
+
+	// Load application configuration from .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Errorf("Error loading .env file: %v", err)
+	} else {
+		log.Debug("Successfully loaded .env file")
+	}
 
 	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
 
@@ -147,8 +159,13 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 }
 
 // Run starts the application and initializes necessary components.
-func (app *App) Run(ctx context.Context) {
-	golog.OnFatal(app.exitOnFatal)
+func (app *App) Start(ctx context.Context) error {
+	app.mu.Lock()
+	isRunning := app.isFlashlightRunning
+	app.mu.Unlock()
+	if isRunning {
+		return errors.New("flashlight is already running")
+	}
 	go func() {
 		app.Settings().SetCountry(geolookup.GetCountry(0))
 		for <-geolookup.OnRefresh() {
@@ -214,8 +231,7 @@ func (app *App) Run(ctx context.Context) {
 		flashlight.WithOnSucceedingProxy(app.onSucceedingProxy),
 	)
 	if err != nil {
-		app.Exit(err)
-		return
+		return err
 	}
 	app.beforeStart(ctx, listenAddr)
 
@@ -225,6 +241,26 @@ func (app *App) Run(ctx context.Context) {
 		app.afterStart,
 		func(err error) { _ = app.Exit(err) },
 	)
+
+	return nil
+}
+
+func (app *App) setIsFlashlightRunning(isRunning bool) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.isFlashlightRunning = isRunning
+}
+
+func (app *App) setSysProxyOn(isOn bool) {
+	app.mu.Lock()
+	defer app.mu.Unlock()
+	app.sysProxyOn = isOn
+}
+
+func (app *App) IsRunning() bool {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.isFlashlightRunning
 }
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
@@ -352,6 +388,7 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
+	app.setIsFlashlightRunning(true)
 	ctx := context.Background()
 	go app.fetchOrCreateUser(ctx)
 	if app.settings.GetUserID() != 0 {
@@ -451,6 +488,8 @@ func (app *App) Exit(err error) bool {
 }
 
 func (app *App) doExit(err error) {
+	app.setIsFlashlightRunning(false)
+	app.setSysProxyOn(false)
 	if err != nil {
 		log.Errorf("Exiting app %d(%d) because of %v", os.Getpid(), os.Getppid(), err)
 		if shouldReportToSentry() {

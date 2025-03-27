@@ -16,19 +16,19 @@ import (
 
 //export isUserFirstTime
 func isUserFirstTime() *C.char {
-	firstVist := a.Settings().GetUserFirstVisit()
+	firstVist := getApp().Settings().GetUserFirstVisit()
 	stringValue := fmt.Sprintf("%t", firstVist)
 	return C.CString(stringValue)
 }
 
 //export setFirstTimeVisit
 func setFirstTimeVisit() {
-	a.Settings().SetUserFirstVisit(false)
+	getApp().Settings().SetUserFirstVisit(false)
 }
 
 //export isUserLoggedIn
 func isUserLoggedIn() *C.char {
-	loggedIn := a.IsUserLoggedIn()
+	loggedIn := getApp().IsUserLoggedIn()
 	stringValue := fmt.Sprintf("%t", loggedIn)
 	log.Debugf("User logged in %v", stringValue)
 	return C.CString(stringValue)
@@ -36,6 +36,7 @@ func isUserLoggedIn() *C.char {
 
 func getUserSalt(email string) ([]byte, error) {
 	lowerCaseEmail := strings.ToLower(email)
+	a := getApp()
 	salt := a.Settings().GetSalt()
 	if len(salt) == 16 {
 		log.Debugf("salt return from cache %v", salt)
@@ -59,6 +60,7 @@ func getUserSalt(email string) ([]byte, error) {
 
 //export signup
 func signup(email *C.char, password *C.char) *C.char {
+	a := getApp()
 	lowerCaseEmail := strings.ToLower(C.GoString(email))
 
 	salt, err := a.AuthClient().SignUp(lowerCaseEmail, C.GoString(password))
@@ -76,6 +78,7 @@ func signup(email *C.char, password *C.char) *C.char {
 
 //export login
 func login(email *C.char, password *C.char) *C.char {
+	a := getApp()
 	lowerCaseEmail := strings.ToLower(C.GoString(email))
 	user, salt, err := a.AuthClient().Login(lowerCaseEmail, C.GoString(password), getDeviceID())
 	if err != nil {
@@ -107,6 +110,7 @@ func login(email *C.char, password *C.char) *C.char {
 //export logout
 func logout() *C.char {
 	ctx := context.Background()
+	a := getApp()
 	email := a.Settings().GetEmailAddress()
 	deviceId := getDeviceID()
 	token := a.Settings().GetToken()
@@ -154,7 +158,7 @@ func deviceLimitFlow(login *protos.LoginResponse) error {
 		Devices: protoDevices,
 	}
 
-	a.SetUserData(context.Background(), login.LegacyID, user)
+	getApp().SetUserData(context.Background(), login.LegacyID, user)
 	return nil
 }
 
@@ -167,7 +171,7 @@ func startRecoveryByEmail(email *C.char) *C.char {
 	prepareRequestBody := &protos.StartRecoveryByEmailRequest{
 		Email: lowerCaseEmail,
 	}
-	recovery, err := a.AuthClient().StartRecoveryByEmail(context.Background(), prepareRequestBody)
+	recovery, err := getApp().AuthClient().StartRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -199,7 +203,7 @@ func completeRecoveryByEmail(email *C.char, code *C.char, password *C.char) *C.c
 	}
 
 	log.Debugf("new Verifier %v and salt %v", verifierKey.Bytes(), newsalt)
-	recovery, err := a.AuthClient().CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
+	recovery, err := getApp().AuthClient().CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -219,7 +223,7 @@ func validateRecoveryByEmail(email *C.char, code *C.char) *C.char {
 		Email: lowerCaseEmail,
 		Code:  C.GoString(code),
 	}
-	recovery, err := a.AuthClient().ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
+	recovery, err := getApp().AuthClient().ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -235,6 +239,8 @@ func validateRecoveryByEmail(email *C.char, code *C.char) *C.char {
 //export deleteAccount
 func deleteAccount(password *C.char) *C.char {
 	ctx := context.Background()
+	a := getApp()
+	authClient := a.AuthClient()
 	email := a.Settings().GetEmailAddress()
 	lowerCaseEmail := strings.ToLower(email)
 	// Get the salt
@@ -253,7 +259,7 @@ func deleteAccount(password *C.char) *C.char {
 		A:     A.Bytes(),
 	}
 	log.Debugf("Delete Account request email %v A %v", lowerCaseEmail, A.Bytes())
-	srpB, err := a.AuthClient().LoginPrepare(ctx, prepareRequestBody)
+	srpB, err := authClient.LoginPrepare(ctx, prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -295,7 +301,7 @@ func deleteAccount(password *C.char) *C.char {
 	}
 
 	log.Debugf("Delete Account request email %v prooof %v deviceId %v", lowerCaseEmail, clientProof, deviceId)
-	isAccountDeleted, err := a.AuthClient().DeleteAccount(context.Background(), changeEmailRequestBody)
+	isAccountDeleted, err := authClient.DeleteAccount(context.Background(), changeEmailRequestBody)
 	if err != nil {
 		return sendError(err)
 	}

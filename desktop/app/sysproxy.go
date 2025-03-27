@@ -70,6 +70,7 @@ func (app *App) SysProxyOff() error {
 		return err
 	}
 	app.sendConnectionStatus(false)
+	app.setSysProxyOn(false)
 	return nil
 }
 
@@ -91,6 +92,7 @@ func (app *App) SysproxyOn() error {
 	}
 	log.Debug("Finished setting lantern as system proxy")
 	app.sendConnectionStatus(true)
+	app.setSysProxyOn(true)
 	return nil
 }
 
