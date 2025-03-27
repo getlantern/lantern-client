@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net"
 	"net/http"
@@ -11,8 +10,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/getsentry/sentry-go"
-
+	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
@@ -31,6 +29,7 @@ import (
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
+	"github.com/getlantern/lantern-client/desktop/sentry"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -70,10 +69,9 @@ type App struct {
 	connectionStatusCallbacks []func(isConnected bool) // Listeners for connection status changes.
 
 	// Websocket-related settings
-	websocketAddr  string                                         // Address for WebSocket connections.
-	ws             ws.UIChannel                                   // UI channel for WebSocket communication.
-	cachedUserData sync.Map                                       // Cached user data.
-	onUserData     []func(current *protos.User, new *protos.User) // Listeners for user data changes.
+	websocketAddr  string       // Address for WebSocket connections.
+	ws             ws.UIChannel // UI channel for WebSocket communication.
+	cachedUserData sync.Map     // Cached user data.
 
 	mu sync.RWMutex
 }
@@ -99,9 +97,21 @@ func NewApp() (*App, error) {
 // NewAppWithFlags creates a new App instance with the given flags and configuration directory.
 func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 	log.Debugf("Config directory %s sticky %v readable %v", configDir, flags.StickyConfig, flags.ReadableConfig)
+
+	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+
+	if shouldReportToSentry() {
+		sentry.InitSentry(sentry.Opts{
+			DSN:             common.SentryDSN,
+			MaxMessageChars: common.SentryMaxMessageChars,
+		})
+	}
+	golog.SetPrepender(logging.Timestamped)
+
 	// Load settings and initialize trackers and services.
 	ss := LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
+	userConfig := userConfigFromSettings(ss)
 
 	app := &App{
 		Flags:                     flags,
@@ -111,6 +121,8 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		connectionStatusCallbacks: make([]func(isConnected bool), 0),
 		selectedTab:               VPNTab,
 		configService:             new(configService),
+		authClient:                auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig),
+		proClient:                 proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), userConfig),
 		statsTracker:              statsTracker,
 		ws:                        ws.NewUIChannel(),
 	}
@@ -120,10 +132,6 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		log.Error(err)
 	}
 	golog.OnFatal(app.exitOnFatal)
-
-	app.onProStatusChange(func(isPro bool) {
-		statsTracker.SetIsPro(isPro)
-	})
 
 	datacap.AddDataCapListener(func(hitDataCap bool) {
 		statsTracker.SetHitDataCap(hitDataCap)
@@ -149,13 +157,6 @@ func (app *App) Run(ctx context.Context) {
 	}()
 
 	log.Debug(app.Flags)
-	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), app.UserConfig)
-	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), app.UserConfig)
-
-	app.mu.Lock()
-	app.proClient = proClient
-	app.authClient = authClient
-	app.mu.Unlock()
 
 	settings := app.Settings()
 
@@ -223,20 +224,6 @@ func (app *App) Run(ctx context.Context) {
 		socksAddr,
 		app.afterStart,
 		func(err error) { _ = app.Exit(err) },
-	)
-}
-
-// UserConfig returns the current user configuration after applying settings.
-func (app *App) UserConfig() common.UserConfig {
-	settings := app.Settings()
-	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	return common.NewUserConfig(
-		common.DefaultAppName,
-		deviceID,
-		userID,
-		token,
-		nil,
-		settings.GetLanguage(),
 	)
 }
 
@@ -353,19 +340,6 @@ func (app *App) SendMessageToUI(service string, message interface{}) {
 	}
 }
 
-func (app *App) SendUpdateUserDataToUI() {
-	user, found := app.GetUserData(app.Settings().GetUserID())
-	if !found {
-		return
-	}
-	if user.UserLevel == "" {
-		user.UserLevel = "free"
-	}
-	b, _ := json.Marshal(user)
-	log.Debugf("SendUpdateUserDataToUI: %s", string(b))
-	app.ws.SendMessage("pro", user)
-}
-
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
 func (app *App) OnSettingChange(attr SettingName, cb func(interface{})) {
@@ -409,13 +383,6 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
-	if err := app.servePro(app.ws); err != nil {
-		log.Errorf("Unable to serve pro data to UI: %v", err)
-	}
-	// send configs to UI
-	app.SendMessageToUI("pro", map[string]interface{}{
-		"login": app.settings.IsUserLoggedIn(),
-	})
 }
 
 func (app *App) SendConfig() {
@@ -486,15 +453,8 @@ func (app *App) Exit(err error) bool {
 func (app *App) doExit(err error) {
 	if err != nil {
 		log.Errorf("Exiting app %d(%d) because of %v", os.Getpid(), os.Getppid(), err)
-		if ShouldReportToSentry() {
-			sentry.ConfigureScope(func(scope *sentry.Scope) {
-				scope.SetLevel(sentry.LevelFatal)
-			})
-
-			sentry.CaptureException(err)
-			if result := sentry.Flush(common.SentryTimeout); !result {
-				log.Error("Flushing to Sentry timed out")
-			}
+		if shouldReportToSentry() {
+			sentry.OnExit(err)
 		}
 	} else {
 		log.Debugf("Exiting app %d(%d)", os.Getpid(), os.Getppid())
@@ -549,14 +509,7 @@ func (app *App) WaitForExit() error {
 
 // is only used in the panicwrap parent process.
 func (app *App) LogPanicAndExit(msg string) {
-	sentry.ConfigureScope(func(scope *sentry.Scope) {
-		scope.SetLevel(sentry.LevelFatal)
-	})
-
-	sentry.CaptureMessage(msg)
-	if result := sentry.Flush(common.SentryTimeout); !result {
-		log.Error("Flushing to Sentry timed out")
-	}
+	sentry.LogPanic(msg)
 }
 
 func (app *App) exitOnFatal(err error) {
@@ -566,7 +519,7 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.IsProUserFast(app.UserConfig())
+	isPro, _ := app.IsProUserFast()
 	return isPro
 }
 
@@ -602,9 +555,8 @@ func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
 }
 
 func (app *App) devices() protos.Devices {
-	user, found := app.GetUserData(app.Settings().GetUserID())
-
-	if !found && user == nil {
+	user, found := app.UserData()
+	if !found || user == nil {
 		return protos.Devices{}
 	}
 	log.Debugf("Devices: %v", user.Devices)
@@ -636,8 +588,8 @@ func recordStopped() {
 		End()
 }
 
-// ShouldReportToSentry determines if we should report errors/panics to Sentry
-func ShouldReportToSentry() bool {
+// shouldReportToSentry determines if we should report errors/panics to Sentry
+func shouldReportToSentry() bool {
 	return !common.IsDevEnvironment()
 }
 

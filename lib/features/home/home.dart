@@ -1,3 +1,5 @@
+import 'package:lantern/core/providers/user.dart';
+import 'package:lantern/core/service/lantern_ffi_service.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/account/account_tab.dart';
@@ -34,6 +36,23 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _startupSequence();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _refreshUserData();
+  }
+
+  Future<void> _refreshUserData() async {
+    try {
+      final userData = await LanternFFI.ffiUserData();
+      if (mounted) {
+        context.read<UserProvider>().updateUser(userData);
+      }
+    } catch (e) {
+      debugPrint("Error fetching user data: $e");
+    }
   }
 
   void _startupSequence() {

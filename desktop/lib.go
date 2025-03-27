@@ -4,20 +4,17 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"runtime/debug"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
-	"github.com/getlantern/appdir"
 	"github.com/getlantern/flashlight/v7/issue"
-	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/jibber_jabber"
 	"github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
-	"github.com/getlantern/lantern-client/desktop/sentry"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 	"github.com/getlantern/osversion"
@@ -33,6 +30,7 @@ const (
 var (
 	log = golog.LoggerFor("lantern-client.main")
 	a   *app.App
+	mu  sync.Mutex
 )
 
 var issueMap = map[string]string{
@@ -50,9 +48,12 @@ var issueMap = map[string]string{
 
 //export start
 func start() *C.char {
-	// Since Go 1.6, panic prints only the stack trace of current goroutine by
-	// default, which may not reveal the root cause. Switch to all goroutines.
-	debug.SetTraceback("all")
+	mu.Lock()
+	defer mu.Unlock()
+	if a != nil {
+		// app already running
+		return C.CString("")
+	}
 
 	// Load application configuration from .env file
 	err := godotenv.Load()
@@ -61,18 +62,6 @@ func start() *C.char {
 	} else {
 		log.Debug("Successfully loaded .env file")
 	}
-
-	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
-
-	// This init needs to be called before the panicwrapper fork so that it has been
-	// defined in the parent process
-	if app.ShouldReportToSentry() {
-		sentry.InitSentry(sentry.Opts{
-			DSN:             common.SentryDSN,
-			MaxMessageChars: common.SentryMaxMessageChars,
-		})
-	}
-	golog.SetPrepender(logging.Timestamped)
 
 	a, err = app.NewApp()
 	if err != nil {
@@ -110,10 +99,6 @@ func sysProxyOff() {
 func websocketAddr() *C.char {
 	return C.CString(a.WebsocketAddr())
 }
-func cachedUserData() (*protos.User, bool) {
-	uc := a.UserConfig()
-	return a.GetUserData(uc.GetUserID())
-}
 
 //export setProxyAll
 func setProxyAll(value *C.char) {
@@ -125,19 +110,15 @@ func setProxyAll(value *C.char) {
 //
 //export hasPlanUpdatedOrBuy
 func hasPlanUpdatedOrBuy() *C.char {
-	ctx := context.Background()
-	proClient := a.ProClient()
-	go proClient.PollUserData(ctx, a, 10*time.Minute, proClient)
-	//Get the cached user data
+	// Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
-	cacheUserData, isOldFound := cachedUserData()
-	//Get latest user data
-	resp, err := a.ProClient().UserData(ctx)
-	if err != nil {
-		return sendError(err)
-	}
+	cacheUserData, isOldFound := a.UserData()
 	if isOldFound {
-		user := resp.User
+		user, err := a.ProClient().UserData(context.Background())
+		if err != nil {
+			log.Errorf("Error fetching user data: %v", err)
+			return C.CString("true")
+		}
 		if cacheUserData.Expiration < user.Expiration {
 			// New data has a later expiration
 			// if foud then update the cache
@@ -160,7 +141,7 @@ func applyRef(referralCode *C.char) *C.char {
 //export devices
 func devices() *C.char {
 	log.Debug("devices")
-	user, found := cachedUserData()
+	user, found := a.UserData()
 	if !found {
 		// for now just return empty array
 		b, _ := json.Marshal("[]")
@@ -218,7 +199,7 @@ func userLinkValidate(code *C.char) *C.char {
 //export expiryDate
 func expiryDate() *C.char {
 	log.Debug("expiryDate")
-	user, found := cachedUserData()
+	user, found := a.UserData()
 	if !found {
 		return sendError(log.Errorf("User data not found"))
 	}
@@ -229,8 +210,9 @@ func expiryDate() *C.char {
 
 //export userData
 func userData() *C.char {
-	user, ok := a.GetUserData(a.Settings().GetUserID())
-	if !ok {
+	user, err := a.RefreshUserData()
+	if err != nil {
+		log.Errorf("Unable to update user data: %v", err)
 		return C.CString("")
 	}
 
@@ -295,7 +277,7 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 
 //export referral
 func referral() *C.char {
-	if user, ok := a.GetUserData(a.Settings().GetUserID()); ok {
+	if user, ok := a.UserData(); ok {
 		return C.CString(user.Referral)
 	}
 	referralCode := a.Settings().GetReferralCode()
@@ -353,7 +335,7 @@ func acceptedTermsVersion() *C.char {
 
 //export proUser
 func proUser() *C.char {
-	if isProUser, ok := a.IsProUserFast(a.UserConfig()); isProUser && ok {
+	if isProUser, ok := a.IsProUserFast(); isProUser && ok {
 		return C.CString("true")
 	}
 	return C.CString("false")
@@ -401,16 +383,16 @@ func exitApp() {
 func reportIssue(email, issueType, description *C.char) *C.char {
 	issueTypeStr := C.GoString(issueType)
 	deviceID := a.Settings().GetDeviceID()
+	uc := a.UserConfig()
 	issueIndex := issueMap[issueTypeStr]
 	issueTypeInt, err := strconv.Atoi(issueIndex)
 	if err != nil {
 		log.Errorf("Error converting issue type to int: %v", err)
 		return sendError(err)
 	}
-	uc := a.UserConfig()
 
 	subscriptionLevel := "free"
-	if isProUser, ok := a.IsProUserFast(uc); ok && isProUser {
+	if isProUser, ok := a.IsProUserFast(); ok && isProUser {
 		subscriptionLevel = "pro"
 	}
 
