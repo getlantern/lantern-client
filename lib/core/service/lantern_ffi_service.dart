@@ -45,7 +45,7 @@ class LanternFFI {
   static SendPort? _proxySendPort;
   static final Completer<void> _isolateInitialized = Completer<void>();
 
-  static startDesktopService() => _lanternFFI.start();
+  static setup() => _lanternFFI.setup();
 
   static void sysProxyOn() {
     final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();

@@ -21,14 +21,18 @@ func (app *App) userID() int64 {
 // userConfigFromSettings returns the user configuration based on the latest settings.
 func userConfigFromSettings(settings *Settings) func() common.UserConfig {
 	return func() common.UserConfig {
-		userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
+		var deviceID, token, lang string
+		var userID int64
+		if settings != nil {
+			userID, deviceID, token, lang = settings.GetUserID(), settings.GetDeviceID(), settings.GetToken(), settings.GetLanguage()
+		}
 		return common.NewUserConfig(
 			common.DefaultAppName,
 			deviceID,
 			userID,
 			token,
 			nil,
-			settings.GetLanguage(),
+			lang,
 		)
 	}
 }
@@ -77,6 +81,7 @@ func (app *App) RefreshUserData() (*protos.User, error) {
 		if err != nil {
 			return nil, err
 		}
+		app.cachedUserData.Store(userID, user)
 		return res.User, nil
 	}
 	return user, nil

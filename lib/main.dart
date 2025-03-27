@@ -33,7 +33,7 @@ Future<void> main() async {
     }
     await windowManager.ensureInitialized();
     await windowManager.setSize(const ui.Size(360, 712));
-    LanternFFI.startDesktopService();
+    LanternFFI.setup();
     await WebsocketSubscriber().connect();
   } else {
     await _initGoogleMobileAds();

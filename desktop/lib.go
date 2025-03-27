@@ -30,15 +30,8 @@ var (
 	log        = golog.LoggerFor("lantern-client.main")
 	lanternApp *app.App
 	mu         sync.RWMutex
+	setupOnce  sync.Once
 )
-
-func init() {
-	a, err := app.NewApp()
-	if err != nil {
-		log.Fatal(err)
-	}
-	lanternApp = a
-}
 
 var issueMap = map[string]string{
 	"Cannot access blocked sites": "3",
@@ -59,11 +52,29 @@ func getApp() *app.App {
 	return lanternApp
 }
 
+//export setup
+func setup() {
+	setupOnce.Do(func() {
+		go func() {
+			a, err := app.NewApp()
+			if err != nil {
+				log.Fatal(err)
+			}
+			mu.Lock()
+			lanternApp = a
+			mu.Unlock()
+			a.Start(context.Background())
+		}()
+	})
+}
+
 //export start
 func start() *C.char {
 	appInstance := getApp()
-
-	if appInstance != nil && !appInstance.IsRunning() {
+	if appInstance == nil {
+		return C.CString("app not initialized")
+	}
+	if !appInstance.IsRunning() {
 		go appInstance.Start(context.Background())
 	}
 
@@ -83,6 +94,9 @@ func sysProxyOff() {
 //export sysProxyOn
 func sysProxyOn() *C.char {
 	a := getApp()
+	if a == nil {
+		return C.CString("app not initialized")
+	}
 	if a.SysProxyEnabled() {
 		log.Error("system proxy is already enabled")
 		return C.CString("false")
@@ -220,7 +234,11 @@ func expiryDate() *C.char {
 
 //export userData
 func userData() *C.char {
-	user, err := getApp().RefreshUserData()
+	a := getApp()
+	if a == nil {
+		return C.CString("")
+	}
+	user, err := a.RefreshUserData()
 	if err != nil {
 		log.Errorf("Unable to update user data: %v", err)
 		return C.CString("")

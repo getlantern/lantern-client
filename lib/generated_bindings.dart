@@ -174,6 +174,14 @@ class NativeLibrary {
   late final _deleteAccount = _deleteAccountPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
+  void setup() {
+    return _setup();
+  }
+
+  late final _setupPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('setup');
+  late final _setup = _setupPtr.asFunction<void Function()>();
+
   ffi.Pointer<ffi.Char> start() {
     return _start();
   }
@@ -181,6 +189,14 @@ class NativeLibrary {
   late final _startPtr =
       _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('start');
   late final _start = _startPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+
+  void sysProxyOff() {
+    return _sysProxyOff();
+  }
+
+  late final _sysProxyOffPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('sysProxyOff');
+  late final _sysProxyOff = _sysProxyOffPtr.asFunction<void Function()>();
 
   ffi.Pointer<ffi.Char> sysProxyOn() {
     return _sysProxyOn();
@@ -191,14 +207,6 @@ class NativeLibrary {
           'sysProxyOn');
   late final _sysProxyOn =
       _sysProxyOnPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  void sysProxyOff() {
-    return _sysProxyOff();
-  }
-
-  late final _sysProxyOffPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('sysProxyOff');
-  late final _sysProxyOff = _sysProxyOffPtr.asFunction<void Function()>();
 
   ffi.Pointer<ffi.Char> websocketAddr() {
     return _websocketAddr();
