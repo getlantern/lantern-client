@@ -245,7 +245,7 @@ func (app *App) Start(ctx context.Context) error {
 	return nil
 }
 
-func (app *App) setIsFlashlightRunning(isRunning bool) {
+func (app *App) setFlashlightRunning(isRunning bool) {
 	app.mu.Lock()
 	defer app.mu.Unlock()
 	app.isFlashlightRunning = isRunning
@@ -261,6 +261,12 @@ func (app *App) IsRunning() bool {
 	app.mu.RLock()
 	defer app.mu.RUnlock()
 	return app.isFlashlightRunning
+}
+
+func (app *App) SysProxyEnabled() bool {
+	app.mu.RLock()
+	defer app.mu.RUnlock()
+	return app.sysProxyOn
 }
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
@@ -388,7 +394,7 @@ func (app *App) OnStatsChange(fn func(stats.Stats)) {
 }
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
-	app.setIsFlashlightRunning(true)
+	app.setFlashlightRunning(true)
 	ctx := context.Background()
 	go app.fetchOrCreateUser(ctx)
 	if app.settings.GetUserID() != 0 {
@@ -488,7 +494,7 @@ func (app *App) Exit(err error) bool {
 }
 
 func (app *App) doExit(err error) {
-	app.setIsFlashlightRunning(false)
+	app.setFlashlightRunning(false)
 	app.setSysProxyOn(false)
 	if err != nil {
 		log.Errorf("Exiting app %d(%d) because of %v", os.Getpid(), os.Getppid(), err)

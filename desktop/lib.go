@@ -53,7 +53,7 @@ var issueMap = map[string]string{
 	"Other":                       "9",
 }
 
-func getApp() *service {
+func getApp() *app.App {
 	mu.RLock()
 	defer mu.RUnlock()
 	return lanternApp
@@ -61,19 +61,37 @@ func getApp() *service {
 
 //export start
 func start() *C.char {
-	mu.Lock()
-	defer mu.Unlock()
-
 	appInstance := getApp()
 
-	if appInstance != nil && appInstance.IsRunning() {
-		// app already running
-		return C.CString("")
+	if appInstance != nil && !appInstance.IsRunning() {
+		go appInstance.Start(context.Background())
 	}
 
-	go appInstance.Start(context.Background())
-
 	return C.CString("")
+}
+
+//export sysProxyOff
+func sysProxyOff() {
+	a := getApp()
+	if !a.SysProxyEnabled() {
+		log.Error("system proxy is not currently enabled")
+		return
+	}
+	go a.SysProxyOff()
+}
+
+//export sysProxyOn
+func sysProxyOn() *C.char {
+	a := getApp()
+	if a.SysProxyEnabled() {
+		log.Error("system proxy is already enabled")
+		return C.CString("false")
+	}
+	if err := a.SysproxyOn(); err != nil {
+		log.Error(err)
+		return sendError(err)
+	}
+	return C.CString("true")
 }
 
 func getDeviceID() string {
@@ -82,21 +100,6 @@ func getDeviceID() string {
 
 func saveUserSalt(salt []byte) {
 	getApp().Settings().SaveSalt(salt)
-}
-
-//export sysProxyOn
-func sysProxyOn() *C.char {
-	err := getApp().SysproxyOn()
-	if err != nil {
-		log.Error(err)
-		return sendError(err)
-	}
-	return C.CString("true")
-}
-
-//export sysProxyOff
-func sysProxyOff() {
-	go getApp().SysProxyOff()
 }
 
 //export websocketAddr
