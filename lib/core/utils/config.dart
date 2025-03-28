@@ -19,8 +19,8 @@ class _ChatOptions {
 
   factory _ChatOptions.fromJson(Map<String, dynamic> parsedJson) {
     return _ChatOptions(
-      onBoardingStatus: parsedJson['onBoardingStatus'],
-      acceptedTermsVersion: parsedJson['acceptedTermsVersion'],
+      onBoardingStatus: parsedJson['onBoardingStatus'] ?? false,
+      acceptedTermsVersion: parsedJson['acceptedTermsVersion'] ?? 0,
     );
   }
 }
