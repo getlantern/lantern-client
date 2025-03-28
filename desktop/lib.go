@@ -345,25 +345,9 @@ func country() *C.char {
 	return C.CString(country)
 }
 
-//export sdkVersion
-func sdkVersion() *C.char {
-	version := common.LibraryVersion
-	return C.CString(version)
-}
-
 //export hasSucceedingProxy
 func hasSucceedingProxy() *C.char {
 	return booltoCString(getApp().HasSucceedingProxy())
-}
-
-//export onBoardingStatus
-func onBoardingStatus() *C.char {
-	return C.CString("true")
-}
-
-//export acceptedTermsVersion
-func acceptedTermsVersion() *C.char {
-	return C.CString("0")
 }
 
 //export proUser

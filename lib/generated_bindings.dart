@@ -465,16 +465,6 @@ class NativeLibrary {
   late final _country =
       _countryPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> sdkVersion() {
-    return _sdkVersion();
-  }
-
-  late final _sdkVersionPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'sdkVersion');
-  late final _sdkVersion =
-      _sdkVersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> hasSucceedingProxy() {
     return _hasSucceedingProxy();
   }
@@ -484,26 +474,6 @@ class NativeLibrary {
           'hasSucceedingProxy');
   late final _hasSucceedingProxy =
       _hasSucceedingProxyPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> onBoardingStatus() {
-    return _onBoardingStatus();
-  }
-
-  late final _onBoardingStatusPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'onBoardingStatus');
-  late final _onBoardingStatus =
-      _onBoardingStatusPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> acceptedTermsVersion() {
-    return _acceptedTermsVersion();
-  }
-
-  late final _acceptedTermsVersionPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'acceptedTermsVersion');
-  late final _acceptedTermsVersion =
-      _acceptedTermsVersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> proUser() {
     return _proUser();
