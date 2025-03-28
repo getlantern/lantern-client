@@ -16,19 +16,19 @@ import (
 
 //export isUserFirstTime
 func isUserFirstTime() *C.char {
-	firstVisit := getApp().Settings().GetUserFirstVisit()
+	firstVisit := app().Settings().GetUserFirstVisit()
 	stringValue := fmt.Sprintf("%t", firstVisit)
 	return C.CString(stringValue)
 }
 
 //export setFirstTimeVisit
 func setFirstTimeVisit() {
-	getApp().Settings().SetUserFirstVisit(false)
+	app().Settings().SetUserFirstVisit(false)
 }
 
 //export isUserLoggedIn
 func isUserLoggedIn() *C.char {
-	loggedIn := getApp().IsUserLoggedIn()
+	loggedIn := app().IsUserLoggedIn()
 	stringValue := fmt.Sprintf("%t", loggedIn)
 	log.Debugf("User logged in %v", stringValue)
 	return C.CString(stringValue)
@@ -36,7 +36,7 @@ func isUserLoggedIn() *C.char {
 
 func getUserSalt(email string) ([]byte, error) {
 	lowerCaseEmail := strings.ToLower(email)
-	a := getApp()
+	a := app()
 	salt := a.Settings().GetSalt()
 	if len(salt) == 16 {
 		log.Debugf("salt return from cache %v", salt)
@@ -60,7 +60,7 @@ func getUserSalt(email string) ([]byte, error) {
 
 //export signup
 func signup(email *C.char, password *C.char) *C.char {
-	a := getApp()
+	a := app()
 	lowerCaseEmail := strings.ToLower(C.GoString(email))
 
 	salt, err := a.AuthClient().SignUp(lowerCaseEmail, C.GoString(password))
@@ -78,7 +78,7 @@ func signup(email *C.char, password *C.char) *C.char {
 
 //export login
 func login(email *C.char, password *C.char) *C.char {
-	a := getApp()
+	a := app()
 	lowerCaseEmail := strings.ToLower(C.GoString(email))
 	user, salt, err := a.AuthClient().Login(lowerCaseEmail, C.GoString(password), getDeviceID())
 	if err != nil {
@@ -110,7 +110,7 @@ func login(email *C.char, password *C.char) *C.char {
 //export logout
 func logout() *C.char {
 	ctx := context.Background()
-	a := getApp()
+	a := app()
 	email := a.Settings().GetEmailAddress()
 	deviceId := getDeviceID()
 	token := a.Settings().GetToken()
@@ -158,7 +158,7 @@ func deviceLimitFlow(login *protos.LoginResponse) error {
 		Devices: protoDevices,
 	}
 
-	getApp().SetUserData(context.Background(), login.LegacyID, user)
+	app().SetUserData(context.Background(), login.LegacyID, user)
 	return nil
 }
 
@@ -171,7 +171,7 @@ func startRecoveryByEmail(email *C.char) *C.char {
 	prepareRequestBody := &protos.StartRecoveryByEmailRequest{
 		Email: lowerCaseEmail,
 	}
-	recovery, err := getApp().AuthClient().StartRecoveryByEmail(context.Background(), prepareRequestBody)
+	recovery, err := app().AuthClient().StartRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -203,7 +203,7 @@ func completeRecoveryByEmail(email *C.char, code *C.char, password *C.char) *C.c
 	}
 
 	log.Debugf("new Verifier %v and salt %v", verifierKey.Bytes(), newsalt)
-	recovery, err := getApp().AuthClient().CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
+	recovery, err := app().AuthClient().CompleteRecoveryByEmail(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -223,7 +223,7 @@ func validateRecoveryByEmail(email *C.char, code *C.char) *C.char {
 		Email: lowerCaseEmail,
 		Code:  C.GoString(code),
 	}
-	recovery, err := getApp().AuthClient().ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
+	recovery, err := app().AuthClient().ValidateEmailRecoveryCode(context.Background(), prepareRequestBody)
 	if err != nil {
 		return sendError(err)
 	}
@@ -239,7 +239,7 @@ func validateRecoveryByEmail(email *C.char, code *C.char) *C.char {
 //export deleteAccount
 func deleteAccount(password *C.char) *C.char {
 	ctx := context.Background()
-	a := getApp()
+	a := app()
 	authClient := a.AuthClient()
 	email := a.Settings().GetEmailAddress()
 	lowerCaseEmail := strings.ToLower(email)

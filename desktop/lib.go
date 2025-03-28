@@ -13,7 +13,7 @@ import (
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/jibber_jabber"
-	"github.com/getlantern/lantern-client/desktop/app"
+	desktop "github.com/getlantern/lantern-client/desktop/app"
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
@@ -30,7 +30,7 @@ const (
 var (
 	log = golog.LoggerFor("lantern-client.main")
 
-	lanternApp *app.App
+	lanternApp *desktop.App
 	mu         sync.RWMutex
 	setupOnce  sync.Once
 )
@@ -48,7 +48,7 @@ var issueMap = map[string]string{
 	"Other":                       "9",
 }
 
-func getApp() *app.App {
+func app() *desktop.App {
 	mu.RLock()
 	defer mu.RUnlock()
 	return lanternApp
@@ -58,24 +58,24 @@ func getApp() *app.App {
 func setup() {
 	mu.Lock()
 	defer mu.Unlock()
+
 	a := lanternApp
 	if a != nil {
 		return
 	}
-	setupOnce.Do(func() {
-		a, err := app.NewApp()
-		if err != nil {
-			log.Fatal(err)
-		}
-		lanternApp = a
 
-		go a.Run(context.Background())
-	})
+	a, err := desktop.NewApp()
+	if err != nil {
+		log.Fatal(err)
+	}
+	lanternApp = a
+
+	go a.Run(context.Background())
 }
 
 //export sysProxyOff
 func sysProxyOff() {
-	a := getApp()
+	a := app()
 	if a == nil {
 		return
 	}
@@ -85,7 +85,7 @@ func sysProxyOff() {
 //export sysProxyOn
 func sysProxyOn() *C.char {
 	log.Debug("sysProxyOn")
-	a := getApp()
+	a := app()
 	if a == nil {
 		return C.CString("app not initialized")
 	}
@@ -97,16 +97,16 @@ func sysProxyOn() *C.char {
 }
 
 func getDeviceID() string {
-	return getApp().Settings().GetDeviceID()
+	return app().Settings().GetDeviceID()
 }
 
 func saveUserSalt(salt []byte) {
-	getApp().Settings().SaveSalt(salt)
+	app().Settings().SaveSalt(salt)
 }
 
 //export websocketAddr
 func websocketAddr() *C.char {
-	a := getApp()
+	a := app()
 	if a == nil {
 		log.Error("cannot get websocket address: app not initialized")
 		return C.CString("")
@@ -117,7 +117,7 @@ func websocketAddr() *C.char {
 //export setProxyAll
 func setProxyAll(value *C.char) {
 	proxyAll, _ := strconv.ParseBool(C.GoString(value))
-	go getApp().Settings().SetProxyAll(proxyAll)
+	go app().Settings().SetProxyAll(proxyAll)
 }
 
 // this method is reposible for checking if the user has updated plan or bought plans
@@ -126,7 +126,7 @@ func setProxyAll(value *C.char) {
 func hasPlanUpdatedOrBuy() *C.char {
 	// Get the cached user data
 	log.Debugf("DEBUG: Checking if user has updated plan or bought new plan")
-	a := getApp()
+	a := app()
 	cacheUserData, isOldFound := a.UserData()
 	if isOldFound {
 		user, err := a.ProClient().UserData(context.Background())
@@ -146,7 +146,7 @@ func hasPlanUpdatedOrBuy() *C.char {
 
 //export applyRef
 func applyRef(referralCode *C.char) *C.char {
-	_, err := getApp().ProClient().ReferralAttach(context.Background(), C.GoString(referralCode))
+	_, err := app().ProClient().ReferralAttach(context.Background(), C.GoString(referralCode))
 	if err != nil {
 		return sendError(err)
 	}
@@ -156,7 +156,7 @@ func applyRef(referralCode *C.char) *C.char {
 //export devices
 func devices() *C.char {
 	log.Debug("devices")
-	user, found := getApp().UserData()
+	user, found := app().UserData()
 	if !found {
 		// for now just return empty array
 		b, _ := json.Marshal("[]")
@@ -168,7 +168,7 @@ func devices() *C.char {
 
 //export approveDevice
 func approveDevice(code *C.char) *C.char {
-	resp, err := getApp().ProClient().LinkCodeApprove(context.Background(), C.GoString(code))
+	resp, err := app().ProClient().LinkCodeApprove(context.Background(), C.GoString(code))
 	if err != nil {
 		return sendError(err)
 	}
@@ -177,7 +177,7 @@ func approveDevice(code *C.char) *C.char {
 
 //export userLinkCode
 func userLinkCode(email *C.char) *C.char {
-	resp, err := getApp().ProClient().UserLinkCodeRequest(context.Background(), C.GoString(email))
+	resp, err := app().ProClient().UserLinkCodeRequest(context.Background(), C.GoString(email))
 	if err != nil {
 		return sendError(err)
 	}
@@ -186,7 +186,7 @@ func userLinkCode(email *C.char) *C.char {
 
 //export removeDevice
 func removeDevice(deviceId *C.char) *C.char {
-	resp, err := getApp().ProClient().DeviceRemove(context.Background(), C.GoString(deviceId))
+	resp, err := app().ProClient().DeviceRemove(context.Background(), C.GoString(deviceId))
 	if err != nil {
 		log.Error(err)
 		return sendError(err)
@@ -197,7 +197,7 @@ func removeDevice(deviceId *C.char) *C.char {
 //export userLinkValidate
 func userLinkValidate(code *C.char) *C.char {
 	ctx := context.Background()
-	a := getApp()
+	a := app()
 	proClient := a.ProClient()
 	resp, err := proClient.UserLinkValidate(ctx, C.GoString(code))
 	if err != nil {
@@ -216,7 +216,7 @@ func userLinkValidate(code *C.char) *C.char {
 //export expiryDate
 func expiryDate() *C.char {
 	log.Debug("expiryDate")
-	user, found := getApp().UserData()
+	user, found := app().UserData()
 	if !found {
 		return sendError(log.Errorf("User data not found"))
 	}
@@ -227,7 +227,7 @@ func expiryDate() *C.char {
 
 //export userData
 func userData() *C.char {
-	a := getApp()
+	a := app()
 	if a == nil {
 		return C.CString("")
 	}
@@ -246,12 +246,12 @@ func userData() *C.char {
 
 //export emailAddress
 func emailAddress() *C.char {
-	return C.CString(getApp().Settings().GetEmailAddress())
+	return C.CString(app().Settings().GetEmailAddress())
 }
 
 //export emailExists
 func emailExists(email *C.char) *C.char {
-	_, err := getApp().ProClient().EmailExists(context.Background(), C.GoString(email))
+	_, err := app().ProClient().EmailExists(context.Background(), C.GoString(email))
 	if err != nil {
 		return sendError(err)
 	}
@@ -267,7 +267,7 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 		"email":          C.GoString(email),
 		"plan":           C.GoString(plan),
 	}
-	_, err := getApp().ProClient().PurchaseRequest(ctx, purchaseData)
+	_, err := app().ProClient().PurchaseRequest(ctx, purchaseData)
 	if err != nil {
 		return sendError(err)
 	}
@@ -280,7 +280,7 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 //
 //export redeemResellerCode
 func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.char {
-	response, err := getApp().ProClient().RedeemResellerCode(context.Background(), &protos.RedeemResellerCodeRequest{
+	response, err := app().ProClient().RedeemResellerCode(context.Background(), &protos.RedeemResellerCodeRequest{
 		Currency:       C.GoString(currency),
 		DeviceName:     C.GoString(deviceName),
 		Email:          C.GoString(email),
@@ -301,7 +301,7 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 
 //export referral
 func referral() *C.char {
-	a := getApp()
+	a := app()
 	if user, ok := a.UserData(); ok {
 		return C.CString(user.Referral)
 	}
@@ -317,7 +317,7 @@ func myDeviceId() *C.char {
 
 //export lang
 func lang() *C.char {
-	lang := getApp().GetLanguage()
+	lang := app().GetLanguage()
 	log.Debugf("DEBUG: Language is %v", lang)
 	if lang == "" {
 		// Default language is English
@@ -328,23 +328,23 @@ func lang() *C.char {
 
 //export setSelectLang
 func setSelectLang(lang *C.char) {
-	getApp().SetLanguage(C.GoString(lang))
+	app().SetLanguage(C.GoString(lang))
 }
 
 //export country
 func country() *C.char {
-	country := getApp().Settings().GetCountry()
+	country := app().Settings().GetCountry()
 	return C.CString(country)
 }
 
 //export hasSucceedingProxy
 func hasSucceedingProxy() *C.char {
-	return booltoCString(getApp().HasSucceedingProxy())
+	return booltoCString(app().HasSucceedingProxy())
 }
 
 //export proUser
 func proUser() *C.char {
-	if isProUser, ok := getApp().IsProUserFast(); isProUser && ok {
+	if isProUser, ok := app().IsProUserFast(); isProUser && ok {
 		return C.CString("true")
 	}
 	return C.CString("false")
@@ -357,7 +357,7 @@ func deviceName() string {
 
 //export deviceLinkingCode
 func deviceLinkingCode() *C.char {
-	resp, err := getApp().ProClient().LinkCodeRequest(context.Background(), deviceName())
+	resp, err := app().ProClient().LinkCodeRequest(context.Background(), deviceName())
 	if err != nil {
 		return sendError(err)
 	}
@@ -366,9 +366,9 @@ func deviceLinkingCode() *C.char {
 
 //export paymentRedirect
 func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.char {
-	country := getApp().Settings().GetCountry()
+	country := app().Settings().GetCountry()
 	ctx := context.Background()
-	resp, err := getApp().ProClient().PaymentRedirect(ctx, &protos.PaymentRedirectRequest{
+	resp, err := app().ProClient().PaymentRedirect(ctx, &protos.PaymentRedirectRequest{
 		Plan:        C.GoString(planID),
 		Provider:    C.GoString(provider),
 		Currency:    strings.ToUpper(C.GoString(currency)),
@@ -385,13 +385,13 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 
 //export exitApp
 func exitApp() {
-	getApp().Exit(nil)
+	app().Exit(nil)
 }
 
 //export reportIssue
 func reportIssue(email, issueType, description *C.char) *C.char {
 	issueTypeStr := C.GoString(issueType)
-	a := getApp()
+	a := app()
 	deviceID := a.Settings().GetDeviceID()
 	uc := a.UserConfig()
 	issueIndex := issueMap[issueTypeStr]
@@ -434,7 +434,7 @@ func reportIssue(email, issueType, description *C.char) *C.char {
 
 //export updatePaymentMethod
 func updatePaymentMethod() *C.char {
-	a := getApp()
+	a := app()
 	_, err := a.ProClient().DesktopPaymentMethods(context.Background())
 	if err != nil {
 		return sendError(err)
@@ -446,7 +446,7 @@ func updatePaymentMethod() *C.char {
 //export checkUpdates
 func checkUpdates() *C.char {
 	log.Debug("Checking for updates")
-	ss := app.LoadSettings("")
+	ss := desktop.LoadSettings("")
 	userID := ss.GetUserID()
 	deviceID := ss.GetDeviceID()
 	op := ops.Begin("check_update").
@@ -471,18 +471,18 @@ func useOSLocale() (string, error) {
 		userLocale = defaultLocale
 	}
 	log.Debugf("Using OS locale of current user: %v", userLocale)
-	getApp().SetLanguage(userLocale)
+	app().SetLanguage(userLocale)
 	return userLocale, nil
 }
 
 // clearLocalUserData clears the local user data from the settings
 func clearLocalUserData() {
-	setting := getApp().Settings()
+	setting := app().Settings()
 	saveUserSalt([]byte{})
 	setting.SetEmailAddress("")
 	setting.SetProUser(false)
 	setting.SetExpirationDate("")
-	getApp().SetUserLoggedIn(false)
+	app().SetUserLoggedIn(false)
 }
 
 func main() {}
