@@ -18,13 +18,17 @@ const TAB_DEVELOPER = 'developer';
 class SessionModel extends Model {
   late final EventManager eventManager;
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  final ValueNotifier<ConfigOptions?> configNotifier =
-      ValueNotifier<ConfigOptions?>(null);
+  final ValueNotifier<ConfigOptions> configNotifier =
+      ValueNotifier<ConfigOptions>(ConfigOptions(
+    devices: Devices.create(),
+    country: '',
+  ));
   final ValueNotifier<String> langNotifier = ValueNotifier('en_us');
   late ValueNotifier<bool?> proUserNotifier;
-  final ValueNotifier<User?> userNotifier = ValueNotifier(null);
+  final ValueNotifier<User> userNotifier = ValueNotifier(User.create());
+  final ValueNotifier<Devices> devicesNotifier =
+      ValueNotifier(Devices.create());
 
-  ValueNotifier<Devices> devicesNotifier = ValueNotifier(Devices.create());
   late ValueNotifier<bool?> isTestPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
@@ -147,7 +151,6 @@ class SessionModel extends Model {
     return ValueListenableBuilder<ConfigOptions?>(
       valueListenable: configNotifier,
       builder: (context, config, child) {
-        // Extract chatEnabled from config or use default value (false)
         final devMode = config?.developmentMode ?? false;
         return builder(context, devMode, child);
       },
@@ -237,10 +240,10 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ValueListenableBuilder<String?>(
-      valueListenable: userEmail,
-      builder: (context, email, child) {
-        return builder(context, email ?? '', child);
+    return ValueListenableBuilder<User?>(
+      valueListenable: userNotifier,
+      builder: (context, user, child) {
+        return builder(context, user?.email ?? '', child);
       },
     );
   }
@@ -630,7 +633,6 @@ class SessionModel extends Model {
     return ValueListenableBuilder<ConfigOptions?>(
       valueListenable: configNotifier,
       builder: (context, config, child) {
-        // Extract chatEnabled from config or use default value (false)
         final sdkVersion = config?.sdkVersion ?? '';
         return builder(context, sdkVersion, child);
       },

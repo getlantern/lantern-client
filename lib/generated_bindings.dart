@@ -182,14 +182,6 @@ class NativeLibrary {
       _lookup<ffi.NativeFunction<ffi.Void Function()>>('setup');
   late final _setup = _setupPtr.asFunction<void Function()>();
 
-  ffi.Pointer<ffi.Char> start() {
-    return _start();
-  }
-
-  late final _startPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('start');
-  late final _start = _startPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   void sysProxyOff() {
     return _sysProxyOff();
   }

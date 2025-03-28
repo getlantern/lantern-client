@@ -30,6 +30,7 @@ func beforeSend(event *sentry.Event, hint *sentry.EventHint, sentryOpts Opts) *s
 	return event
 }
 
+// LogPanic sends a fatal-level message to Sentry and flushes the event.
 func LogPanic(msg string) {
 	sentry.ConfigureScope(func(scope *sentry.Scope) {
 		scope.SetLevel(sentry.LevelFatal)
@@ -39,6 +40,7 @@ func LogPanic(msg string) {
 	sentryFlush()
 }
 
+// OnExit logs a fatal error to Sentry
 func OnExit(err error) {
 	sentry.ConfigureScope(func(scope *sentry.Scope) {
 		scope.SetLevel(sentry.LevelFatal)
@@ -48,6 +50,7 @@ func OnExit(err error) {
 	sentryFlush()
 }
 
+// sentryFlush attempts to send buffered events to Sentry before timeout
 func sentryFlush() {
 	if result := sentry.Flush(common.SentryTimeout); !result {
 		log.Error("Flushing to Sentry timed out")

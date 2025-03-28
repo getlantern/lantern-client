@@ -84,6 +84,9 @@ class WebsocketSubscriber {
   }
 
   void _handleSettings(Map<String, dynamic> message) {
+    final user = sessionModel.userNotifier.value;
+    sessionModel.userNotifier.value.referral =
+        message['referralCode'] ?? user.referral;
     sessionModel.userEmail.value =
         message['emailAddress'] ?? sessionModel.userEmail.value;
     sessionModel.proxyAllNotifier.value =

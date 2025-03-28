@@ -73,18 +73,6 @@ func setup() {
 	})
 }
 
-//export start
-func start() *C.char {
-	a := getApp()
-	if a == nil {
-		return C.CString("app not initialized")
-	} else if a.IsRunning() {
-		return C.CString("app already running")
-	}
-	go a.Run(context.Background())
-	return C.CString("")
-}
-
 //export sysProxyOff
 func sysProxyOff() {
 	a := getApp()
@@ -281,7 +269,7 @@ func emailExists(email *C.char) *C.char {
 //export testProviderRequest
 func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *C.char {
 	ctx := context.Background()
-	puchaseData := map[string]interface{}{
+	purchaseData := map[string]interface{}{
 		"idempotencyKey": strconv.FormatInt(time.Now().UnixNano(), 10),
 		"provider":       C.GoString(paymentProvider),
 		"email":          C.GoString(email),
