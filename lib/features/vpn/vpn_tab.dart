@@ -1,4 +1,5 @@
 import 'package:lantern/common/ui/custom/internet_checker.dart';
+import 'package:lantern/features/account/privacy_disclosure.dart';
 import 'package:lantern/features/account/split_tunneling.dart';
 import 'package:lantern/features/messaging/messaging.dart';
 import 'package:lantern/features/vpn/vpn.dart';

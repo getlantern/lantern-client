@@ -1,5 +1,6 @@
 import 'dart:isolate';
 
+import 'package:ffi/ffi.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -25,8 +26,14 @@ class NoPlansUpdate implements Exception {
   NoPlansUpdate(this.message);
 }
 
+typedef UserDataNative = Pointer<Utf8> Function();
+typedef UserData = Pointer<Utf8> Function();
+
 class LanternFFI {
-  static final NativeLibrary _lanternFFI = NativeLibrary(_getLanternLib());
+  static final DynamicLibrary _lib = _getLanternLib();
+  static final NativeLibrary _lanternFFI = NativeLibrary(_lib);
+  static final UserData _userData =
+      _lib.lookup<NativeFunction<UserDataNative>>('userData').asFunction();
 
   static DynamicLibrary _getLanternLib() {
     if (Platform.isMacOS) {
@@ -45,7 +52,7 @@ class LanternFFI {
   static SendPort? _proxySendPort;
   static final Completer<void> _isolateInitialized = Completer<void>();
 
-  static startDesktopService() => _lanternFFI.start();
+  static void setup() => _lanternFFI.setup();
 
   static void sysProxyOn() {
     final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();
@@ -116,8 +123,11 @@ class LanternFFI {
     });
   }
 
-  static Future<User> ffiUserData() async {
-    final res = await _lanternFFI.userData().cast<Utf8>().toDartString();
+  static Future<User?> ffiUserData() async {
+    final Pointer<Utf8> result = _userData();
+    final String res = result.toDartString();
+    malloc.free(result);
+    if (res == "") return null;
     // it's necessary to use mergeFromProto3Json here instead of fromJson; otherwise, a FormatException with
     // message Invalid radix-10 number is thrown.In addition, all possible JSON fields have to be defined on
     // the User protobuf message or JSON decoding fails because of an "unknown field name" error:

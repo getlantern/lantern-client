@@ -51,6 +51,7 @@ type ConfigOptions struct {
 	Chat                 ChatOptions            `json:"chat"`
 	ProxyAll             bool                   `json:"proxyAll"`
 	Country              string                 `json:"country"`
+	IsUserLoggedIn       bool                   `json:"isUserLoggedIn"`
 }
 
 func (s *configService) StartService(channel ws.UIChannel) (err error) {
@@ -107,6 +108,7 @@ func (app *App) sendConfigOptions() {
 		Devices:              app.devices(),
 		ProxyAll:             app.settings.GetProxyAll(),
 		Country:              app.settings.GetCountry(),
+		IsUserLoggedIn:       app.settings.IsUserLoggedIn(),
 		Chat: ChatOptions{
 			AcceptedTermsVersion: 0,
 			OnBoardingStatus:     false,
