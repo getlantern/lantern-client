@@ -19,10 +19,12 @@ class SessionModel extends Model {
   late final EventManager eventManager;
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
   final ValueNotifier<ConfigOptions> configNotifier =
-      ValueNotifier<ConfigOptions>(ConfigOptions(
-    devices: Devices.create(),
-    country: '',
-  ));
+      ValueNotifier<ConfigOptions>(
+    ConfigOptions(
+      devices: Devices.create(),
+      country: '',
+    ),
+  );
   final ValueNotifier<String> langNotifier = ValueNotifier('en_us');
   late ValueNotifier<bool?> proUserNotifier;
   final ValueNotifier<User> userNotifier = ValueNotifier(User.create());
@@ -37,7 +39,6 @@ class SessionModel extends Model {
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<String?> linkingCodeNotifier;
-  late ValueNotifier<bool?> hasUserSignedInNotifier;
   late ValueNotifier<bool?> isAuthEnabled;
   late FfiListNotifier<Plan> plansNotifier;
   late FfiListNotifier<PaymentMethod> paymentMethodsNotifier;
@@ -61,11 +62,6 @@ class SessionModel extends Model {
       */
       proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
       country = singleValueNotifier('geo_country_code', 'US');
-
-      /// This warning is not needed for the Non pro user
-      /// This flow is not needed anymore
-      /// We don't user create account if email address is not verified
-      hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
       proUserNotifier = singleValueNotifier('prouser', false);
       userEmail = singleValueNotifier(
         'emailAddress',
@@ -330,10 +326,11 @@ class SessionModel extends Model {
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     if (isDesktop()) {
-      return ValueListenableBuilder<bool?>(
-        valueListenable: hasUserSignedInNotifier,
-        builder: (context, userSignedIn, child) {
-          return builder(context, userSignedIn ?? false, child);
+      return ValueListenableBuilder<ConfigOptions?>(
+        valueListenable: configNotifier,
+        builder: (context, config, child) {
+          final devMode = config?.hasUserSignedIn ?? false;
+          return builder(context, devMode, child);
         },
       );
     }

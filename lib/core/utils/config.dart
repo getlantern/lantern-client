@@ -4,7 +4,7 @@ import 'common.dart';
 
 extension BoolParsing on String {
   bool parseBool() {
-    return this.toLowerCase() == 'true';
+    return toLowerCase() == 'true';
   }
 }
 
@@ -32,6 +32,7 @@ class ConfigOptions {
   final bool chatEnabled;
   final bool splitTunneling;
   final bool hasSucceedingProxy;
+  final bool isUserLoggedIn;
   final bool fetchedGlobalConfig;
   final bool fetchedProxiesConfig;
 
@@ -58,6 +59,7 @@ class ConfigOptions {
     this.hasSucceedingProxy = false,
     this.fetchedGlobalConfig = false,
     this.fetchedProxiesConfig = false,
+    this.isUserLoggedIn = false,
     this.expirationDate = '',
     this.sdkVersion = '',
     this.httpProxyAddr = '',
@@ -79,30 +81,32 @@ class ConfigOptions {
     if (plansResponse is List<dynamic>) {
       for (var item in plansResponse) {
         var id = item['id'] ?? item['name'];
-        plans[id] = planFromJson(item) as Plan;
+        plans[id] = planFromJson(item);
       }
     }
     final paymentMethods = paymentMethodsFromJson(parsedJson['paymentMethods']);
 
     return ConfigOptions(
-        developmentMode: parsedJson['developmentMode'],
-        authEnabled: parsedJson['authEnabled'],
-        chatEnabled: parsedJson['chatEnabled'],
-        httpProxyAddr: parsedJson['httpProxyAddr'],
-        socksProxyAddr: parsedJson['socksProxyAddr'],
-        splitTunneling: parsedJson['splitTunneling'],
-        hasSucceedingProxy: parsedJson['hasSucceedingProxy'],
-        fetchedGlobalConfig: parsedJson['fetchedGlobalConfig'],
-        fetchedProxiesConfig: parsedJson['fetchedProxiesConfig'],
-        plans: plans,
-        chat: _ChatOptions.fromJson(parsedJson['chat']),
-        paymentMethods: paymentMethods,
-        devices: _parseDevices(parsedJson),
-        replicaAddr: parsedJson['replicaAddr'].toString(),
-        deviceId: parsedJson['deviceId'].toString(),
-        expirationDate: parsedJson['expirationDate'].toString(),
-        sdkVersion: parsedJson['sdkVersion'].toString(),
-        country: parsedJson['country'] ?? "");
+      developmentMode: parsedJson['developmentMode'] ?? false,
+      authEnabled: parsedJson['authEnabled'] ?? false,
+      isUserLoggedIn: parsedJson['isUserLoggedIn'] ?? false,
+      chatEnabled: parsedJson['chatEnabled'] ?? false,
+      httpProxyAddr: parsedJson['httpProxyAddr'] ?? '',
+      socksProxyAddr: parsedJson['socksProxyAddr'] ?? '',
+      splitTunneling: parsedJson['splitTunneling'] ?? false,
+      hasSucceedingProxy: parsedJson['hasSucceedingProxy'] ?? false,
+      fetchedGlobalConfig: parsedJson['fetchedGlobalConfig'] ?? false,
+      fetchedProxiesConfig: parsedJson['fetchedProxiesConfig'] ?? false,
+      plans: plans,
+      chat: _ChatOptions.fromJson(parsedJson['chat'] ?? const _ChatOptions()),
+      paymentMethods: paymentMethods,
+      devices: _parseDevices(parsedJson),
+      replicaAddr: parsedJson['replicaAddr'] ?? '',
+      deviceId: parsedJson['deviceId'] ?? '',
+      expirationDate: parsedJson['expirationDate'] ?? '',
+      sdkVersion: parsedJson['sdkVersion'] ?? '',
+      country: parsedJson['country'] ?? '',
+    );
   }
 
   static Devices _parseDevices(Map json) {
