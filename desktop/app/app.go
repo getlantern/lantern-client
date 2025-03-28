@@ -65,17 +65,13 @@ type App struct {
 	exitFuncs            []func()
 	flashlight           *flashlight.Flashlight // Flashlight library for networking and proxying.
 	authClient           auth.AuthClient        // Client for managing authentication.
-	proClient            proclient.ProClient    // Client for managing interaction with the Pro server.
-	isFlashlightRunning  bool                   // tracks whether or not Flashlight started.
-	sysProxyOn           bool                   // tracks whether or not the system proxy is enabled.
-
+	proClient            proclient.ProClient    // Client for managing interaction with the Pro server
 	// Websocket-related settings
 	websocketAddr  string       // Address for WebSocket connections.
 	ws             ws.UIChannel // UI channel for WebSocket communication.
 	wsServer       *http.Server
 	cachedUserData sync.Map // Cached user data.
-
-	mu sync.RWMutex
+	mu             sync.RWMutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
