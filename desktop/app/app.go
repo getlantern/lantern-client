@@ -306,7 +306,6 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) error {
 
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	app.sendConfigOptions()
-	app.setFlashlightRunning(true)
 	ctx := context.Background()
 	go app.fetchOrCreateUser(ctx)
 	if app.Settings().GetUserID() != 0 {
@@ -338,30 +337,6 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 	} else {
 		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
 	}
-}
-
-func (app *App) setFlashlightRunning(isRunning bool) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.isFlashlightRunning = isRunning
-}
-
-func (app *App) setSysProxyOn(isOn bool) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	app.sysProxyOn = isOn
-}
-
-func (app *App) IsRunning() bool {
-	app.mu.RLock()
-	defer app.mu.RUnlock()
-	return app.isFlashlightRunning
-}
-
-func (app *App) SysProxyEnabled() bool {
-	app.mu.RLock()
-	defer app.mu.RUnlock()
-	return app.sysProxyOn
 }
 
 // IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
@@ -494,9 +469,6 @@ func (app *App) Exit(err error) bool {
 }
 
 func (app *App) doExit(err error) {
-	app.setFlashlightRunning(false)
-	app.setSysProxyOn(false)
-
 	if err != nil {
 		log.Errorf("Exiting app %d(%d) because of %v", os.Getpid(), os.Getppid(), err)
 		if shouldReportToSentry() {

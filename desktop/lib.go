@@ -79,10 +79,6 @@ func sysProxyOff() {
 	if a == nil {
 		return
 	}
-	if !a.SysProxyEnabled() {
-		log.Error("system proxy is not currently enabled")
-		return
-	}
 	go a.SysProxyOff()
 }
 
@@ -92,10 +88,6 @@ func sysProxyOn() *C.char {
 	a := getApp()
 	if a == nil {
 		return C.CString("app not initialized")
-	}
-	if a.SysProxyEnabled() {
-		log.Error("system proxy is already enabled")
-		return C.CString("false")
 	}
 	if err := a.SysproxyOn(); err != nil {
 		log.Error(err)
