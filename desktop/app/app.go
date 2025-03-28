@@ -307,13 +307,16 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) error {
 func (app *App) afterStart(cl *flashlightClient.Client) {
 	app.sendConfigOptions()
 	ctx := context.Background()
+	// Fetch or create a user in the background
 	go app.fetchOrCreateUser(ctx)
 	if app.Settings().GetUserID() != 0 {
 		// fetch plan only if user is created
 		go app.proClient.DesktopPaymentMethods(ctx)
 	}
+
 	go app.fetchDeviceLinkingCode(ctx)
 
+	// Listen for changes to the system proxy setting
 	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
 		enable := val.(bool)
 		if enable {
@@ -322,7 +325,7 @@ func (app *App) afterStart(cl *flashlightClient.Client) {
 			app.SysProxyOff()
 		}
 	})
-
+	// Add exit function to turn off the system proxy when the app exits
 	app.AddExitFunc("turning off system proxy", func() {
 		app.SysProxyOff()
 	})
