@@ -39,6 +39,7 @@ class SessionModel extends Model {
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<String?> linkingCodeNotifier;
+  late ValueNotifier<bool?> hasUserSignedInNotifier;
   late ValueNotifier<bool?> isAuthEnabled;
   late FfiListNotifier<Plan> plansNotifier;
   late FfiListNotifier<PaymentMethod> paymentMethodsNotifier;
@@ -62,6 +63,11 @@ class SessionModel extends Model {
       */
       proxyAvailable = singleValueNotifier('hasSucceedingProxy', true);
       country = singleValueNotifier('geo_country_code', 'US');
+
+      /// This warning is not needed for the Non pro user
+      /// This flow is not needed anymore
+      /// We don't user create account if email address is not verified
+      hasUserSignedInNotifier = singleValueNotifier('IsUserLoggedIn', false);
       proUserNotifier = singleValueNotifier('prouser', false);
       userEmail = singleValueNotifier(
         'emailAddress',
@@ -326,11 +332,10 @@ class SessionModel extends Model {
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     if (isDesktop()) {
-      return ValueListenableBuilder<ConfigOptions?>(
-        valueListenable: configNotifier,
-        builder: (context, config, child) {
-          final devMode = config?.hasUserSignedIn ?? false;
-          return builder(context, devMode, child);
+      return ValueListenableBuilder<bool?>(
+        valueListenable: hasUserSignedInNotifier,
+        builder: (context, userSignedIn, child) {
+          return builder(context, userSignedIn ?? false, child);
         },
       );
     }
