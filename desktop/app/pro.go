@@ -10,12 +10,10 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
+// UserConfig returns the current user configuration after applying settings.
 func (app *App) UserConfig() common.UserConfig {
 	settings := app.Settings()
-	if settings == nil {
-		return common.NewUserConfig(common.DefaultAppName, "", 0, "", nil, "")
-	}
-	return userConfigFromSettings(app.Settings())()
+	return userConfig(settings)()
 }
 
 func (app *App) userID() int64 {
@@ -23,8 +21,8 @@ func (app *App) userID() int64 {
 	return uc.GetUserID()
 }
 
-// userConfigFromSettings returns the user configuration based on the latest settings.
-func userConfigFromSettings(settings *Settings) func() common.UserConfig {
+// userConfig returns the user configuration based on the latest settings.
+func userConfig(settings *Settings) func() common.UserConfig {
 	return func() common.UserConfig {
 		userID, deviceID := settings.GetUserID(), settings.GetDeviceID()
 		token, lang := settings.GetToken(), settings.GetLanguage()

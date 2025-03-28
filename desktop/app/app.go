@@ -51,25 +51,23 @@ func init() {
 
 // App is the core of the Lantern desktop application, managing components and configurations.
 type App struct {
-	hasExited                 atomic.Bool      // Tracks if the app has exited.
-	fetchedGlobalConfig       atomic.Bool      // Indicates if the global configuration was fetched.
-	fetchedProxiesConfig      atomic.Bool      // Tracks whether the proxy configuration was fetched.
-	hasSucceedingProxy        atomic.Bool      // Tracks if a succeeding proxy is available.
-	Flags                     flashlight.Flags // Command-line flags passed to the app.
-	configDir                 string           // Directory for storing configuration files.
-	exited                    eventual.Value   // Signals when the app has exited.
-	settings                  *Settings        // User settings for the application.
-	configService             *configService   // Config service used by the applicaiton.
-	statsTracker              *statsTracker    // Tracks stats for service usage by the client.
-	muExitFuncs               sync.RWMutex
-	exitFuncs                 []func()
-	flashlight                *flashlight.Flashlight   // Flashlight library for networking and proxying.
-	authClient                auth.AuthClient          // Client for managing authentication.
-	proClient                 proclient.ProClient      // Client for managing interaction with the Pro server.
-	selectedTab               Tab                      // Tracks the currently selected UI tab.
-	connectionStatusCallbacks []func(isConnected bool) // Listeners for connection status changes.
-	isFlashlightRunning       bool                     // tracks whether or not Flashlight started.
-	sysProxyOn                bool                     // tracks whether or not the system proxy is enabled.
+	hasExited            atomic.Bool      // Tracks if the app has exited.
+	fetchedGlobalConfig  atomic.Bool      // Indicates if the global configuration was fetched.
+	fetchedProxiesConfig atomic.Bool      // Tracks whether the proxy configuration was fetched.
+	hasSucceedingProxy   atomic.Bool      // Tracks if a succeeding proxy is available.
+	Flags                flashlight.Flags // Command-line flags passed to the app.
+	configDir            string           // Directory for storing configuration files.
+	exited               eventual.Value   // Signals when the app has exited.
+	settings             *Settings        // User settings for the application.
+	configService        *configService   // Config service used by the applicaiton.
+	statsTracker         *statsTracker    // Tracks stats for service usage by the client.
+	muExitFuncs          sync.RWMutex
+	exitFuncs            []func()
+	flashlight           *flashlight.Flashlight // Flashlight library for networking and proxying.
+	authClient           auth.AuthClient        // Client for managing authentication.
+	proClient            proclient.ProClient    // Client for managing interaction with the Pro server.
+	isFlashlightRunning  bool                   // tracks whether or not Flashlight started.
+	sysProxyOn           bool                   // tracks whether or not the system proxy is enabled.
 
 	// Websocket-related settings
 	websocketAddr  string       // Address for WebSocket connections.
@@ -124,20 +122,18 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 	// Load settings and initialize trackers and services.
 	ss := LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
-	userConfig := userConfigFromSettings(ss)
+	uc := userConfig(ss)
 
 	app := &App{
-		Flags:                     flags,
-		configDir:                 configDir,
-		exited:                    eventual.NewValue(),
-		settings:                  ss,
-		connectionStatusCallbacks: make([]func(isConnected bool), 0),
-		selectedTab:               VPNTab,
-		configService:             new(configService),
-		authClient:                auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), userConfig),
-		proClient:                 proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), userConfig),
-		statsTracker:              statsTracker,
-		ws:                        ws.NewUIChannel(),
+		Flags:         flags,
+		configDir:     configDir,
+		exited:        eventual.NewValue(),
+		settings:      ss,
+		configService: new(configService),
+		authClient:    auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), uc),
+		proClient:     proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), uc),
+		statsTracker:  statsTracker,
+		ws:            ws.NewUIChannel(),
 	}
 
 	// Start the WebSocket server for UI communication.

@@ -43,6 +43,7 @@ type ConfigOptions struct {
 	FetchedProxiesConfig bool                   `json:"fetchedProxiesConfig"`
 	Plans                []protos.Plan          `json:"plans"`
 	PaymentMethods       []protos.PaymentMethod `json:"paymentMethods"`
+	User                 *protos.User           `json:"user"`
 	Devices              protos.Devices         `json:"devices"`
 	SdkVersion           string                 `json:"sdkVersion"`
 	AppVersion           string                 `json:"appVersion"`

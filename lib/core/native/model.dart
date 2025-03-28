@@ -11,10 +11,6 @@ abstract class Model {
       HashMap();
   final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
   Event? event;
-  final Map<String, FfiListNotifier> _ffiListNotifierCache = HashMap();
-
-  final ValueNotifier<ConfigOptions?> configNotifier =
-      ValueNotifier<ConfigOptions?>(null);
 
   Model(String name) {
     if (isMobile()) {
