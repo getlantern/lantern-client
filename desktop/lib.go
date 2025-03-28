@@ -287,7 +287,7 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 		"email":          C.GoString(email),
 		"plan":           C.GoString(plan),
 	}
-	_, err := getApp().ProClient().PurchaseRequest(ctx, puchaseData)
+	_, err := getApp().ProClient().PurchaseRequest(ctx, purchaseData)
 	if err != nil {
 		return sendError(err)
 	}

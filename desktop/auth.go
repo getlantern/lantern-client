@@ -16,8 +16,8 @@ import (
 
 //export isUserFirstTime
 func isUserFirstTime() *C.char {
-	firstVist := getApp().Settings().GetUserFirstVisit()
-	stringValue := fmt.Sprintf("%t", firstVist)
+	firstVisit := getApp().Settings().GetUserFirstVisit()
+	stringValue := fmt.Sprintf("%t", firstVisit)
 	return C.CString(stringValue)
 }
 
