@@ -1,18 +1,18 @@
 # 
 # Translators:
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
-# e2f <projects@e2f.com>, 2025
-# Emerson Castaneda, 2025
 # Adriano Gomes, 2025
-# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2025
+# Emerson Castaneda, 2025
+# e2f <projects@e2f.com>, 2025
 # strel, 2025
+# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2025
+# Aimara pena, 2025
 # Katherine Mojena, 2025
 # Derek F <derek@getlantern.org>, 2025
-# Aimara pena, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Aimara pena, 2025\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
 "Language-Team: Spanish (Cuba) (https://app.transifex.com/lantern-1/teams/94371/es_CU/)\n"
 "Language: es_CU\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
