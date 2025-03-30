@@ -571,13 +571,13 @@ func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
 	return resp.Code, nil
 }
 
-func (app *App) devices() protos.Devices {
+func (app *App) devices() *protos.Devices {
 	user, found := app.UserData()
 	if !found || user == nil {
-		return protos.Devices{}
+		return nil
 	}
 	log.Debugf("Devices: %v", user.Devices)
-	return protos.Devices{
+	return &protos.Devices{
 		Devices: user.Devices,
 	}
 }

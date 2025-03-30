@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: protos_shared/vpn.proto
 //
-// @dart = 2.12
+// @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
@@ -13,6 +13,8 @@ import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
+
+export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 class ServerInfo extends $pb.GeneratedMessage {
   factory ServerInfo({
@@ -71,7 +73,7 @@ class ServerInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasCity() => $_has(0);
   @$pb.TagNumber(1)
-  void clearCity() => clearField(1);
+  void clearCity() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get country => $_getSZ(1);
@@ -80,7 +82,7 @@ class ServerInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasCountry() => $_has(1);
   @$pb.TagNumber(2)
-  void clearCountry() => clearField(2);
+  void clearCountry() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get countryCode => $_getSZ(2);
@@ -89,7 +91,7 @@ class ServerInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasCountryCode() => $_has(2);
   @$pb.TagNumber(3)
-  void clearCountryCode() => clearField(3);
+  void clearCountryCode() => $_clearField(3);
 }
 
 class Bandwidth extends $pb.GeneratedMessage {
@@ -154,7 +156,7 @@ class Bandwidth extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasPercent() => $_has(0);
   @$pb.TagNumber(1)
-  void clearPercent() => clearField(1);
+  void clearPercent() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $fixnum.Int64 get mibUsed => $_getI64(1);
@@ -163,7 +165,7 @@ class Bandwidth extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasMibUsed() => $_has(1);
   @$pb.TagNumber(2)
-  void clearMibUsed() => clearField(2);
+  void clearMibUsed() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $fixnum.Int64 get mibAllowed => $_getI64(2);
@@ -172,7 +174,7 @@ class Bandwidth extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasMibAllowed() => $_has(2);
   @$pb.TagNumber(3)
-  void clearMibAllowed() => clearField(3);
+  void clearMibAllowed() => $_clearField(3);
 
   @$pb.TagNumber(4)
   $fixnum.Int64 get ttlSeconds => $_getI64(3);
@@ -181,7 +183,7 @@ class Bandwidth extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasTtlSeconds() => $_has(3);
   @$pb.TagNumber(4)
-  void clearTtlSeconds() => clearField(4);
+  void clearTtlSeconds() => $_clearField(4);
 }
 
 class AppData extends $pb.GeneratedMessage {
@@ -246,7 +248,7 @@ class AppData extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasPackageName() => $_has(0);
   @$pb.TagNumber(1)
-  void clearPackageName() => clearField(1);
+  void clearPackageName() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get name => $_getSZ(1);
@@ -255,7 +257,7 @@ class AppData extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
-  void clearName() => clearField(2);
+  void clearName() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $core.List<$core.int> get icon => $_getN(2);
@@ -264,7 +266,7 @@ class AppData extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasIcon() => $_has(2);
   @$pb.TagNumber(3)
-  void clearIcon() => clearField(3);
+  void clearIcon() => $_clearField(3);
 
   @$pb.TagNumber(4)
   $core.bool get allowedAccess => $_getBF(3);
@@ -273,7 +275,7 @@ class AppData extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasAllowedAccess() => $_has(3);
   @$pb.TagNumber(4)
-  void clearAllowedAccess() => clearField(4);
+  void clearAllowedAccess() => $_clearField(4);
 }
 
 class AppsData extends $pb.GeneratedMessage {
@@ -317,7 +319,7 @@ class AppsData extends $pb.GeneratedMessage {
   static AppsData? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<AppData> get appsList => $_getList(0);
+  $pb.PbList<AppData> get appsList => $_getList(0);
 }
 
 class Device extends $pb.GeneratedMessage {
@@ -377,7 +379,7 @@ class Device extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearId() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get name => $_getSZ(1);
@@ -386,7 +388,7 @@ class Device extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
-  void clearName() => clearField(2);
+  void clearName() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $fixnum.Int64 get created => $_getI64(2);
@@ -395,7 +397,7 @@ class Device extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasCreated() => $_has(2);
   @$pb.TagNumber(3)
-  void clearCreated() => clearField(3);
+  void clearCreated() => $_clearField(3);
 }
 
 class Devices extends $pb.GeneratedMessage {
@@ -439,7 +441,7 @@ class Devices extends $pb.GeneratedMessage {
   static Devices? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<Device> get devices => $_getList(0);
+  $pb.PbList<Device> get devices => $_getList(0);
 }
 
 class Plans extends $pb.GeneratedMessage {
@@ -483,7 +485,7 @@ class Plans extends $pb.GeneratedMessage {
   static Plans? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<Plan> get plan => $_getList(0);
+  $pb.PbList<Plan> get plan => $_getList(0);
 }
 
 class Plan extends $pb.GeneratedMessage {
@@ -492,14 +494,14 @@ class Plan extends $pb.GeneratedMessage {
     $core.String? description,
     $core.bool? bestValue,
     $fixnum.Int64? usdPrice,
-    $core.Map<$core.String, $fixnum.Int64>? price,
-    $core.Map<$core.String, $fixnum.Int64>? expectedMonthlyPrice,
+    $pb.PbMap<$core.String, $fixnum.Int64>? price,
+    $pb.PbMap<$core.String, $fixnum.Int64>? expectedMonthlyPrice,
     $core.String? totalCostBilledOneTime,
     $core.String? oneMonthCost,
     $core.String? totalCost,
     $core.String? formattedBonus,
     $core.String? renewalText,
-    $core.Map<$core.String, $fixnum.Int64>? renewalBonusExpected,
+    $pb.PbMap<$core.String, $fixnum.Int64>? renewalBonusExpected,
   }) {
     final $result = create();
     if (id != null) {
@@ -588,7 +590,7 @@ class Plan extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearId() => clearField(1);
+  void clearId() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get description => $_getSZ(1);
@@ -597,7 +599,7 @@ class Plan extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasDescription() => $_has(1);
   @$pb.TagNumber(2)
-  void clearDescription() => clearField(2);
+  void clearDescription() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $core.bool get bestValue => $_getBF(2);
@@ -606,7 +608,7 @@ class Plan extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasBestValue() => $_has(2);
   @$pb.TagNumber(3)
-  void clearBestValue() => clearField(3);
+  void clearBestValue() => $_clearField(3);
 
   @$pb.TagNumber(4)
   $fixnum.Int64 get usdPrice => $_getI64(3);
@@ -615,13 +617,13 @@ class Plan extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasUsdPrice() => $_has(3);
   @$pb.TagNumber(4)
-  void clearUsdPrice() => clearField(4);
+  void clearUsdPrice() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.Map<$core.String, $fixnum.Int64> get price => $_getMap(4);
+  $pb.PbMap<$core.String, $fixnum.Int64> get price => $_getMap(4);
 
   @$pb.TagNumber(6)
-  $core.Map<$core.String, $fixnum.Int64> get expectedMonthlyPrice => $_getMap(5);
+  $pb.PbMap<$core.String, $fixnum.Int64> get expectedMonthlyPrice => $_getMap(5);
 
   @$pb.TagNumber(7)
   $core.String get totalCostBilledOneTime => $_getSZ(6);
@@ -630,7 +632,7 @@ class Plan extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.bool hasTotalCostBilledOneTime() => $_has(6);
   @$pb.TagNumber(7)
-  void clearTotalCostBilledOneTime() => clearField(7);
+  void clearTotalCostBilledOneTime() => $_clearField(7);
 
   @$pb.TagNumber(8)
   $core.String get oneMonthCost => $_getSZ(7);
@@ -639,7 +641,7 @@ class Plan extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $core.bool hasOneMonthCost() => $_has(7);
   @$pb.TagNumber(8)
-  void clearOneMonthCost() => clearField(8);
+  void clearOneMonthCost() => $_clearField(8);
 
   @$pb.TagNumber(9)
   $core.String get totalCost => $_getSZ(8);
@@ -648,7 +650,7 @@ class Plan extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $core.bool hasTotalCost() => $_has(8);
   @$pb.TagNumber(9)
-  void clearTotalCost() => clearField(9);
+  void clearTotalCost() => $_clearField(9);
 
   @$pb.TagNumber(10)
   $core.String get formattedBonus => $_getSZ(9);
@@ -657,7 +659,7 @@ class Plan extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $core.bool hasFormattedBonus() => $_has(9);
   @$pb.TagNumber(10)
-  void clearFormattedBonus() => clearField(10);
+  void clearFormattedBonus() => $_clearField(10);
 
   @$pb.TagNumber(11)
   $core.String get renewalText => $_getSZ(10);
@@ -666,17 +668,17 @@ class Plan extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   $core.bool hasRenewalText() => $_has(10);
   @$pb.TagNumber(11)
-  void clearRenewalText() => clearField(11);
+  void clearRenewalText() => $_clearField(11);
 
   @$pb.TagNumber(13)
-  $core.Map<$core.String, $fixnum.Int64> get renewalBonusExpected => $_getMap(11);
+  $pb.PbMap<$core.String, $fixnum.Int64> get renewalBonusExpected => $_getMap(11);
 }
 
 class PaymentProviders extends $pb.GeneratedMessage {
   factory PaymentProviders({
     $core.String? name,
     $core.Iterable<$core.String>? logoUrls,
-    $core.Map<$core.String, $core.String>? data,
+    $pb.PbMap<$core.String, $core.String>? data,
   }) {
     final $result = create();
     if (name != null) {
@@ -729,13 +731,13 @@ class PaymentProviders extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
-  void clearName() => clearField(1);
+  void clearName() => $_clearField(1);
 
   @$pb.TagNumber(3)
-  $core.List<$core.String> get logoUrls => $_getList(1);
+  $pb.PbList<$core.String> get logoUrls => $_getList(1);
 
   @$pb.TagNumber(4)
-  $core.Map<$core.String, $core.String> get data => $_getMap(2);
+  $pb.PbMap<$core.String, $core.String> get data => $_getMap(2);
 }
 
 class PaymentMethod extends $pb.GeneratedMessage {
@@ -790,10 +792,10 @@ class PaymentMethod extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasMethod() => $_has(0);
   @$pb.TagNumber(1)
-  void clearMethod() => clearField(1);
+  void clearMethod() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.List<PaymentProviders> get providers => $_getList(1);
+  $pb.PbList<PaymentProviders> get providers => $_getList(1);
 }
 
 class User extends $pb.GeneratedMessage {
@@ -918,7 +920,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUserId() => clearField(1);
+  void clearUserId() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get email => $_getSZ(1);
@@ -927,7 +929,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasEmail() => $_has(1);
   @$pb.TagNumber(2)
-  void clearEmail() => clearField(2);
+  void clearEmail() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get telephone => $_getSZ(2);
@@ -936,7 +938,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasTelephone() => $_has(2);
   @$pb.TagNumber(3)
-  void clearTelephone() => clearField(3);
+  void clearTelephone() => $_clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get userStatus => $_getSZ(3);
@@ -945,7 +947,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasUserStatus() => $_has(3);
   @$pb.TagNumber(4)
-  void clearUserStatus() => clearField(4);
+  void clearUserStatus() => $_clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get userLevel => $_getSZ(4);
@@ -954,7 +956,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.bool hasUserLevel() => $_has(4);
   @$pb.TagNumber(5)
-  void clearUserLevel() => clearField(5);
+  void clearUserLevel() => $_clearField(5);
 
   @$pb.TagNumber(6)
   $core.String get locale => $_getSZ(5);
@@ -963,7 +965,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.bool hasLocale() => $_has(5);
   @$pb.TagNumber(6)
-  void clearLocale() => clearField(6);
+  void clearLocale() => $_clearField(6);
 
   @$pb.TagNumber(7)
   $fixnum.Int64 get expiration => $_getI64(6);
@@ -972,10 +974,10 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.bool hasExpiration() => $_has(6);
   @$pb.TagNumber(7)
-  void clearExpiration() => clearField(7);
+  void clearExpiration() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.List<Device> get devices => $_getList(7);
+  $pb.PbList<Device> get devices => $_getList(7);
 
   @$pb.TagNumber(9)
   $core.String get code => $_getSZ(8);
@@ -984,7 +986,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $core.bool hasCode() => $_has(8);
   @$pb.TagNumber(9)
-  void clearCode() => clearField(9);
+  void clearCode() => $_clearField(9);
 
   @$pb.TagNumber(10)
   $fixnum.Int64 get expireAt => $_getI64(9);
@@ -993,7 +995,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $core.bool hasExpireAt() => $_has(9);
   @$pb.TagNumber(10)
-  void clearExpireAt() => clearField(10);
+  void clearExpireAt() => $_clearField(10);
 
   @$pb.TagNumber(11)
   $core.String get referral => $_getSZ(10);
@@ -1002,7 +1004,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   $core.bool hasReferral() => $_has(10);
   @$pb.TagNumber(11)
-  void clearReferral() => clearField(11);
+  void clearReferral() => $_clearField(11);
 
   @$pb.TagNumber(12)
   $core.String get token => $_getSZ(11);
@@ -1011,7 +1013,7 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(12)
   $core.bool hasToken() => $_has(11);
   @$pb.TagNumber(12)
-  void clearToken() => clearField(12);
+  void clearToken() => $_clearField(12);
 
   @$pb.TagNumber(13)
   $core.bool get yinbiEnabled => $_getBF(12);
@@ -1020,16 +1022,16 @@ class User extends $pb.GeneratedMessage {
   @$pb.TagNumber(13)
   $core.bool hasYinbiEnabled() => $_has(12);
   @$pb.TagNumber(13)
-  void clearYinbiEnabled() => clearField(13);
+  void clearYinbiEnabled() => $_clearField(13);
 
   @$pb.TagNumber(14)
-  $core.List<$core.String> get inviters => $_getList(13);
+  $pb.PbList<$core.String> get inviters => $_getList(13);
 
   @$pb.TagNumber(15)
-  $core.List<$core.String> get invitees => $_getList(14);
+  $pb.PbList<$core.String> get invitees => $_getList(14);
 
   @$pb.TagNumber(16)
-  $core.List<Purchase> get purchases => $_getList(15);
+  $pb.PbList<Purchase> get purchases => $_getList(15);
 }
 
 class Purchase extends $pb.GeneratedMessage {
@@ -1079,7 +1081,7 @@ class Purchase extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasPlan() => $_has(0);
   @$pb.TagNumber(1)
-  void clearPlan() => clearField(1);
+  void clearPlan() => $_clearField(1);
 }
 
 /// API
@@ -1140,7 +1142,7 @@ class BaseResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)
-  void clearStatus() => clearField(1);
+  void clearStatus() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get error => $_getSZ(1);
@@ -1149,7 +1151,7 @@ class BaseResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasError() => $_has(1);
   @$pb.TagNumber(2)
-  void clearError() => clearField(2);
+  void clearError() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get errorId => $_getSZ(2);
@@ -1158,7 +1160,7 @@ class BaseResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasErrorId() => $_has(2);
   @$pb.TagNumber(3)
-  void clearErrorId() => clearField(3);
+  void clearErrorId() => $_clearField(3);
 }
 
 class PaymentRedirectRequest extends $pb.GeneratedMessage {
@@ -1238,7 +1240,7 @@ class PaymentRedirectRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasPlan() => $_has(0);
   @$pb.TagNumber(1)
-  void clearPlan() => clearField(1);
+  void clearPlan() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get provider => $_getSZ(1);
@@ -1247,7 +1249,7 @@ class PaymentRedirectRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasProvider() => $_has(1);
   @$pb.TagNumber(2)
-  void clearProvider() => clearField(2);
+  void clearProvider() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get currency => $_getSZ(2);
@@ -1256,7 +1258,7 @@ class PaymentRedirectRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasCurrency() => $_has(2);
   @$pb.TagNumber(3)
-  void clearCurrency() => clearField(3);
+  void clearCurrency() => $_clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get email => $_getSZ(3);
@@ -1265,7 +1267,7 @@ class PaymentRedirectRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasEmail() => $_has(3);
   @$pb.TagNumber(4)
-  void clearEmail() => clearField(4);
+  void clearEmail() => $_clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get deviceName => $_getSZ(4);
@@ -1274,7 +1276,7 @@ class PaymentRedirectRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.bool hasDeviceName() => $_has(4);
   @$pb.TagNumber(5)
-  void clearDeviceName() => clearField(5);
+  void clearDeviceName() => $_clearField(5);
 
   @$pb.TagNumber(6)
   $core.String get countryCode => $_getSZ(5);
@@ -1283,7 +1285,7 @@ class PaymentRedirectRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.bool hasCountryCode() => $_has(5);
   @$pb.TagNumber(6)
-  void clearCountryCode() => clearField(6);
+  void clearCountryCode() => $_clearField(6);
 
   @$pb.TagNumber(7)
   $core.String get locale => $_getSZ(6);
@@ -1292,7 +1294,7 @@ class PaymentRedirectRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.bool hasLocale() => $_has(6);
   @$pb.TagNumber(7)
-  void clearLocale() => clearField(7);
+  void clearLocale() => $_clearField(7);
 }
 
 class RedeemResellerCodeRequest extends $pb.GeneratedMessage {
@@ -1367,7 +1369,7 @@ class RedeemResellerCodeRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasEmail() => $_has(0);
   @$pb.TagNumber(1)
-  void clearEmail() => clearField(1);
+  void clearEmail() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get resellerCode => $_getSZ(1);
@@ -1376,7 +1378,7 @@ class RedeemResellerCodeRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasResellerCode() => $_has(1);
   @$pb.TagNumber(2)
-  void clearResellerCode() => clearField(2);
+  void clearResellerCode() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get deviceName => $_getSZ(2);
@@ -1385,7 +1387,7 @@ class RedeemResellerCodeRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasDeviceName() => $_has(2);
   @$pb.TagNumber(3)
-  void clearDeviceName() => clearField(3);
+  void clearDeviceName() => $_clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get currency => $_getSZ(3);
@@ -1394,7 +1396,7 @@ class RedeemResellerCodeRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasCurrency() => $_has(3);
   @$pb.TagNumber(4)
-  void clearCurrency() => clearField(4);
+  void clearCurrency() => $_clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get idempotencyKey => $_getSZ(4);
@@ -1403,7 +1405,7 @@ class RedeemResellerCodeRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.bool hasIdempotencyKey() => $_has(4);
   @$pb.TagNumber(5)
-  void clearIdempotencyKey() => clearField(5);
+  void clearIdempotencyKey() => $_clearField(5);
 
   @$pb.TagNumber(6)
   $core.String get provider => $_getSZ(5);
@@ -1412,7 +1414,7 @@ class RedeemResellerCodeRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.bool hasProvider() => $_has(5);
   @$pb.TagNumber(6)
-  void clearProvider() => clearField(6);
+  void clearProvider() => $_clearField(6);
 }
 
 class PaymentRedirectResponse extends $pb.GeneratedMessage {
@@ -1477,7 +1479,7 @@ class PaymentRedirectResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)
-  void clearStatus() => clearField(1);
+  void clearStatus() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get error => $_getSZ(1);
@@ -1486,7 +1488,7 @@ class PaymentRedirectResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasError() => $_has(1);
   @$pb.TagNumber(2)
-  void clearError() => clearField(2);
+  void clearError() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get errorId => $_getSZ(2);
@@ -1495,7 +1497,7 @@ class PaymentRedirectResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasErrorId() => $_has(2);
   @$pb.TagNumber(3)
-  void clearErrorId() => clearField(3);
+  void clearErrorId() => $_clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get redirect => $_getSZ(3);
@@ -1504,7 +1506,7 @@ class PaymentRedirectResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasRedirect() => $_has(3);
   @$pb.TagNumber(4)
-  void clearRedirect() => clearField(4);
+  void clearRedirect() => $_clearField(4);
 }
 
 class LinkResponse extends $pb.GeneratedMessage {
@@ -1574,7 +1576,7 @@ class LinkResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool hasUserID() => $_has(0);
   @$pb.TagNumber(1)
-  void clearUserID() => clearField(1);
+  void clearUserID() => $_clearField(1);
 
   @$pb.TagNumber(2)
   $core.String get token => $_getSZ(1);
@@ -1583,7 +1585,7 @@ class LinkResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool hasToken() => $_has(1);
   @$pb.TagNumber(2)
-  void clearToken() => clearField(2);
+  void clearToken() => $_clearField(2);
 
   @$pb.TagNumber(3)
   $core.String get status => $_getSZ(2);
@@ -1592,7 +1594,7 @@ class LinkResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool hasStatus() => $_has(2);
   @$pb.TagNumber(3)
-  void clearStatus() => clearField(3);
+  void clearStatus() => $_clearField(3);
 
   @$pb.TagNumber(4)
   $core.String get error => $_getSZ(3);
@@ -1601,7 +1603,7 @@ class LinkResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool hasError() => $_has(3);
   @$pb.TagNumber(4)
-  void clearError() => clearField(4);
+  void clearError() => $_clearField(4);
 
   @$pb.TagNumber(5)
   $core.String get errorId => $_getSZ(4);
@@ -1610,7 +1612,393 @@ class LinkResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.bool hasErrorId() => $_has(4);
   @$pb.TagNumber(5)
-  void clearErrorId() => clearField(5);
+  void clearErrorId() => $_clearField(5);
+}
+
+class ChatOptions extends $pb.GeneratedMessage {
+  factory ChatOptions({
+    $core.bool? onBoardingStatus,
+    $core.int? acceptedTermsVersion,
+  }) {
+    final $result = create();
+    if (onBoardingStatus != null) {
+      $result.onBoardingStatus = onBoardingStatus;
+    }
+    if (acceptedTermsVersion != null) {
+      $result.acceptedTermsVersion = acceptedTermsVersion;
+    }
+    return $result;
+  }
+  ChatOptions._() : super();
+  factory ChatOptions.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ChatOptions.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChatOptions', createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'onBoardingStatus')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'acceptedTermsVersion', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ChatOptions clone() => ChatOptions()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ChatOptions copyWith(void Function(ChatOptions) updates) => super.copyWith((message) => updates(message as ChatOptions)) as ChatOptions;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ChatOptions create() => ChatOptions._();
+  ChatOptions createEmptyInstance() => create();
+  static $pb.PbList<ChatOptions> createRepeated() => $pb.PbList<ChatOptions>();
+  @$core.pragma('dart2js:noInline')
+  static ChatOptions getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ChatOptions>(create);
+  static ChatOptions? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get onBoardingStatus => $_getBF(0);
+  @$pb.TagNumber(1)
+  set onBoardingStatus($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasOnBoardingStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearOnBoardingStatus() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get acceptedTermsVersion => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set acceptedTermsVersion($core.int v) { $_setSignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAcceptedTermsVersion() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAcceptedTermsVersion() => $_clearField(2);
+}
+
+class ConfigOptions extends $pb.GeneratedMessage {
+  factory ConfigOptions({
+    $core.bool? developmentMode,
+    $core.String? replicaAddr,
+    $core.String? httpProxyAddr,
+    $core.String? socksProxyAddr,
+    $core.bool? authEnabled,
+    $core.bool? chatEnabled,
+    $core.bool? splitTunneling,
+    $core.bool? hasSucceedingProxy,
+    $core.bool? fetchedGlobalConfig,
+    $core.bool? fetchedProxiesConfig,
+    $core.Iterable<Plan>? plans,
+    $core.Iterable<PaymentMethod>? paymentMethods,
+    Devices? devices,
+    $core.String? sdkVersion,
+    $core.String? appVersion,
+    $core.String? deviceId,
+    $core.String? expirationDate,
+    ChatOptions? chat,
+    $core.bool? proxyAll,
+    $core.String? country,
+    $core.bool? isUserLoggedIn,
+  }) {
+    final $result = create();
+    if (developmentMode != null) {
+      $result.developmentMode = developmentMode;
+    }
+    if (replicaAddr != null) {
+      $result.replicaAddr = replicaAddr;
+    }
+    if (httpProxyAddr != null) {
+      $result.httpProxyAddr = httpProxyAddr;
+    }
+    if (socksProxyAddr != null) {
+      $result.socksProxyAddr = socksProxyAddr;
+    }
+    if (authEnabled != null) {
+      $result.authEnabled = authEnabled;
+    }
+    if (chatEnabled != null) {
+      $result.chatEnabled = chatEnabled;
+    }
+    if (splitTunneling != null) {
+      $result.splitTunneling = splitTunneling;
+    }
+    if (hasSucceedingProxy != null) {
+      $result.hasSucceedingProxy = hasSucceedingProxy;
+    }
+    if (fetchedGlobalConfig != null) {
+      $result.fetchedGlobalConfig = fetchedGlobalConfig;
+    }
+    if (fetchedProxiesConfig != null) {
+      $result.fetchedProxiesConfig = fetchedProxiesConfig;
+    }
+    if (plans != null) {
+      $result.plans.addAll(plans);
+    }
+    if (paymentMethods != null) {
+      $result.paymentMethods.addAll(paymentMethods);
+    }
+    if (devices != null) {
+      $result.devices = devices;
+    }
+    if (sdkVersion != null) {
+      $result.sdkVersion = sdkVersion;
+    }
+    if (appVersion != null) {
+      $result.appVersion = appVersion;
+    }
+    if (deviceId != null) {
+      $result.deviceId = deviceId;
+    }
+    if (expirationDate != null) {
+      $result.expirationDate = expirationDate;
+    }
+    if (chat != null) {
+      $result.chat = chat;
+    }
+    if (proxyAll != null) {
+      $result.proxyAll = proxyAll;
+    }
+    if (country != null) {
+      $result.country = country;
+    }
+    if (isUserLoggedIn != null) {
+      $result.isUserLoggedIn = isUserLoggedIn;
+    }
+    return $result;
+  }
+  ConfigOptions._() : super();
+  factory ConfigOptions.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ConfigOptions.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ConfigOptions', createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'developmentMode')
+    ..aOS(2, _omitFieldNames ? '' : 'replicaAddr')
+    ..aOS(3, _omitFieldNames ? '' : 'httpProxyAddr')
+    ..aOS(4, _omitFieldNames ? '' : 'socksProxyAddr')
+    ..aOB(5, _omitFieldNames ? '' : 'authEnabled')
+    ..aOB(6, _omitFieldNames ? '' : 'chatEnabled')
+    ..aOB(7, _omitFieldNames ? '' : 'splitTunneling')
+    ..aOB(8, _omitFieldNames ? '' : 'hasSucceedingProxy')
+    ..aOB(9, _omitFieldNames ? '' : 'fetchedGlobalConfig')
+    ..aOB(10, _omitFieldNames ? '' : 'fetchedProxiesConfig')
+    ..pc<Plan>(11, _omitFieldNames ? '' : 'plans', $pb.PbFieldType.PM, subBuilder: Plan.create)
+    ..pc<PaymentMethod>(12, _omitFieldNames ? '' : 'paymentMethods', $pb.PbFieldType.PM, subBuilder: PaymentMethod.create)
+    ..aOM<Devices>(13, _omitFieldNames ? '' : 'devices', subBuilder: Devices.create)
+    ..aOS(14, _omitFieldNames ? '' : 'sdkVersion')
+    ..aOS(15, _omitFieldNames ? '' : 'appVersion')
+    ..aOS(16, _omitFieldNames ? '' : 'deviceId')
+    ..aOS(17, _omitFieldNames ? '' : 'expirationDate')
+    ..aOM<ChatOptions>(18, _omitFieldNames ? '' : 'chat', subBuilder: ChatOptions.create)
+    ..aOB(19, _omitFieldNames ? '' : 'proxyAll')
+    ..aOS(20, _omitFieldNames ? '' : 'country')
+    ..aOB(21, _omitFieldNames ? '' : 'isUserLoggedIn')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ConfigOptions clone() => ConfigOptions()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ConfigOptions copyWith(void Function(ConfigOptions) updates) => super.copyWith((message) => updates(message as ConfigOptions)) as ConfigOptions;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ConfigOptions create() => ConfigOptions._();
+  ConfigOptions createEmptyInstance() => create();
+  static $pb.PbList<ConfigOptions> createRepeated() => $pb.PbList<ConfigOptions>();
+  @$core.pragma('dart2js:noInline')
+  static ConfigOptions getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ConfigOptions>(create);
+  static ConfigOptions? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get developmentMode => $_getBF(0);
+  @$pb.TagNumber(1)
+  set developmentMode($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasDevelopmentMode() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDevelopmentMode() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get replicaAddr => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set replicaAddr($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasReplicaAddr() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearReplicaAddr() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get httpProxyAddr => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set httpProxyAddr($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasHttpProxyAddr() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearHttpProxyAddr() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get socksProxyAddr => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set socksProxyAddr($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasSocksProxyAddr() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSocksProxyAddr() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get authEnabled => $_getBF(4);
+  @$pb.TagNumber(5)
+  set authEnabled($core.bool v) { $_setBool(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasAuthEnabled() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearAuthEnabled() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.bool get chatEnabled => $_getBF(5);
+  @$pb.TagNumber(6)
+  set chatEnabled($core.bool v) { $_setBool(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasChatEnabled() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearChatEnabled() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.bool get splitTunneling => $_getBF(6);
+  @$pb.TagNumber(7)
+  set splitTunneling($core.bool v) { $_setBool(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasSplitTunneling() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearSplitTunneling() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.bool get hasSucceedingProxy => $_getBF(7);
+  @$pb.TagNumber(8)
+  set hasSucceedingProxy($core.bool v) { $_setBool(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasHasSucceedingProxy() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearHasSucceedingProxy() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.bool get fetchedGlobalConfig => $_getBF(8);
+  @$pb.TagNumber(9)
+  set fetchedGlobalConfig($core.bool v) { $_setBool(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasFetchedGlobalConfig() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearFetchedGlobalConfig() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.bool get fetchedProxiesConfig => $_getBF(9);
+  @$pb.TagNumber(10)
+  set fetchedProxiesConfig($core.bool v) { $_setBool(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasFetchedProxiesConfig() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearFetchedProxiesConfig() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $pb.PbList<Plan> get plans => $_getList(10);
+
+  @$pb.TagNumber(12)
+  $pb.PbList<PaymentMethod> get paymentMethods => $_getList(11);
+
+  @$pb.TagNumber(13)
+  Devices get devices => $_getN(12);
+  @$pb.TagNumber(13)
+  set devices(Devices v) { $_setField(13, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasDevices() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearDevices() => $_clearField(13);
+  @$pb.TagNumber(13)
+  Devices ensureDevices() => $_ensure(12);
+
+  @$pb.TagNumber(14)
+  $core.String get sdkVersion => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set sdkVersion($core.String v) { $_setString(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasSdkVersion() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearSdkVersion() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.String get appVersion => $_getSZ(14);
+  @$pb.TagNumber(15)
+  set appVersion($core.String v) { $_setString(14, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasAppVersion() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearAppVersion() => $_clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.String get deviceId => $_getSZ(15);
+  @$pb.TagNumber(16)
+  set deviceId($core.String v) { $_setString(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasDeviceId() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearDeviceId() => $_clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.String get expirationDate => $_getSZ(16);
+  @$pb.TagNumber(17)
+  set expirationDate($core.String v) { $_setString(16, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasExpirationDate() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearExpirationDate() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  ChatOptions get chat => $_getN(17);
+  @$pb.TagNumber(18)
+  set chat(ChatOptions v) { $_setField(18, v); }
+  @$pb.TagNumber(18)
+  $core.bool hasChat() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearChat() => $_clearField(18);
+  @$pb.TagNumber(18)
+  ChatOptions ensureChat() => $_ensure(17);
+
+  @$pb.TagNumber(19)
+  $core.bool get proxyAll => $_getBF(18);
+  @$pb.TagNumber(19)
+  set proxyAll($core.bool v) { $_setBool(18, v); }
+  @$pb.TagNumber(19)
+  $core.bool hasProxyAll() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearProxyAll() => $_clearField(19);
+
+  @$pb.TagNumber(20)
+  $core.String get country => $_getSZ(19);
+  @$pb.TagNumber(20)
+  set country($core.String v) { $_setString(19, v); }
+  @$pb.TagNumber(20)
+  $core.bool hasCountry() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearCountry() => $_clearField(20);
+
+  @$pb.TagNumber(21)
+  $core.bool get isUserLoggedIn => $_getBF(20);
+  @$pb.TagNumber(21)
+  set isUserLoggedIn($core.bool v) { $_setBool(20, v); }
+  @$pb.TagNumber(21)
+  $core.bool hasIsUserLoggedIn() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearIsUserLoggedIn() => $_clearField(21);
 }
 
 

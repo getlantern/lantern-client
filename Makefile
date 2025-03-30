@@ -17,24 +17,10 @@ build/protoc-gen-go:
 codegen: protos routes
 
 # You can install the dart protoc support by running 'dart pub global activate protoc_plugin'
-protos: lib/features/vpn internalsdk/protos/vpn.pb.go
-
-lib/messaging/protos_flutteronly/messaging.pb.dart: protos_flutteronly/messaging.proto
-	@protoc --dart_out=./lib/messaging --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_flutteronly/messaging.proto
-
-lib/features/vpn/protos_shared/vpn.pb.dart: protos_shared/vpn.proto
-	@protoc --dart_out=./lib/features/vpn --plugin=protoc-gen-dart=$$HOME/.pub-cache/bin/protoc-gen-dart protos_shared/vpn.proto
-
-internalsdk/protos/%.pb.go: protos_shared/%.proto
-	@echo "Generating Go protobuf for $<"
-	@protoc --plugin=protoc-gen-go=build/protoc-gen-go \
-             --go_out=internalsdk \
-             $<
-
-internalsdk/protos/vpn.pb.go: protos_shared/vpn.proto
+protos:
 	@protoc --go_out=internalsdk protos_shared/vpn.proto
-
-internalsdk/protos/auth.pb.go: protos_shared/auth.proto
+	@protoc --dart_out=lib/features/messaging protos_flutteronly/messaging.proto
+	@protoc --dart_out=lib/features/vpn protos_shared/vpn.proto
 	@protoc --go_out=internalsdk protos_shared/auth.proto
 
 # Compiles autorouter routes

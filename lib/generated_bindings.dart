@@ -249,15 +249,6 @@ class NativeLibrary {
   late final _applyRef = _applyRefPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
-  ffi.Pointer<ffi.Char> devices() {
-    return _devices();
-  }
-
-  late final _devicesPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('devices');
-  late final _devices =
-      _devicesPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> approveDevice(
     ffi.Pointer<ffi.Char> code,
   ) {
@@ -337,16 +328,6 @@ class NativeLibrary {
   late final _userData =
       _userDataPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> emailAddress() {
-    return _emailAddress();
-  }
-
-  late final _emailAddressPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'emailAddress');
-  late final _emailAddress =
-      _emailAddressPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> emailExists(
     ffi.Pointer<ffi.Char> email,
   ) {
@@ -415,25 +396,6 @@ class NativeLibrary {
           ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>)>();
 
-  ffi.Pointer<ffi.Char> referral() {
-    return _referral();
-  }
-
-  late final _referralPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('referral');
-  late final _referral =
-      _referralPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> myDeviceId() {
-    return _myDeviceId();
-  }
-
-  late final _myDeviceIdPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'myDeviceId');
-  late final _myDeviceId =
-      _myDeviceIdPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> lang() {
     return _lang();
   }
@@ -455,25 +417,6 @@ class NativeLibrary {
           'setSelectLang');
   late final _setSelectLang =
       _setSelectLangPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
-
-  ffi.Pointer<ffi.Char> country() {
-    return _country();
-  }
-
-  late final _countryPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('country');
-  late final _country =
-      _countryPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> hasSucceedingProxy() {
-    return _hasSucceedingProxy();
-  }
-
-  late final _hasSucceedingProxyPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'hasSucceedingProxy');
-  late final _hasSucceedingProxy =
-      _hasSucceedingProxyPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> proUser() {
     return _proUser();

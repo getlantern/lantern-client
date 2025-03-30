@@ -12,6 +12,7 @@ import (
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 const (
@@ -20,38 +21,8 @@ const (
 
 type configService struct {
 	service     *ws.Service
-	listeners   []func(ConfigOptions)
+	listeners   []func(*protos.ConfigOptions)
 	listenersMx sync.RWMutex
-}
-
-type ChatOptions struct {
-	OnBoardingStatus     bool `json:"onBoardingStatus"`
-	AcceptedTermsVersion int  `json:"acceptedTermsVersion"`
-}
-
-// ConfigOptions are the config options that Lantern is running with
-type ConfigOptions struct {
-	DevelopmentMode      bool                   `json:"developmentMode"`
-	ReplicaAddr          string                 `json:"replicaAddr"`
-	HttpProxyAddr        string                 `json:"httpProxyAddr"`
-	SocksProxyAddr       string                 `json:"socksProxyAddr"`
-	AuthEnabled          bool                   `json:"authEnabled"`
-	ChatEnabled          bool                   `json:"chatEnabled"`
-	SplitTunneling       bool                   `json:"splitTunneling"`
-	HasSucceedingProxy   bool                   `json:"hasSucceedingProxy"`
-	FetchedGlobalConfig  bool                   `json:"fetchedGlobalConfig"`
-	FetchedProxiesConfig bool                   `json:"fetchedProxiesConfig"`
-	Plans                []protos.Plan          `json:"plans"`
-	PaymentMethods       []protos.PaymentMethod `json:"paymentMethods"`
-	Devices              protos.Devices         `json:"devices"`
-	SdkVersion           string                 `json:"sdkVersion"`
-	AppVersion           string                 `json:"appVersion"`
-	DeviceId             string                 `json:"deviceId"`
-	ExpirationDate       string                 `json:"expirationDate"`
-	Chat                 ChatOptions            `json:"chat"`
-	ProxyAll             bool                   `json:"proxyAll"`
-	Country              string                 `json:"country"`
-	IsUserLoggedIn       bool                   `json:"isUserLoggedIn"`
 }
 
 func (s *configService) StartService(channel ws.UIChannel) (err error) {
@@ -59,14 +30,18 @@ func (s *configService) StartService(channel ws.UIChannel) (err error) {
 	return err
 }
 
-func (s *configService) sendConfigOptions(cfg *ConfigOptions) {
-	b, _ := json.Marshal(&cfg)
+func (s *configService) sendConfigOptions(cfg *protos.ConfigOptions) {
+	b, err := protojson.Marshal(cfg)
+	if err != nil {
+		log.Errorf("Unable to marshal config options: %v", err)
+		return
+	}
 	log.Debugf("Sending config options to client %s", string(b))
 	s.service.Out <- cfg
 }
 
 // AddListener adds a listener for any updates to the startup
-func (s *configService) AddListener(f func(ConfigOptions)) {
+func (s *configService) AddListener(f func(*protos.ConfigOptions)) {
 	s.listenersMx.Lock()
 	s.listeners = append(s.listeners, f)
 	s.listenersMx.Unlock()
@@ -88,7 +63,7 @@ func (app *App) sendConfigOptions() {
 	log.Debugf("DEBUG: Devices: %s", string(devices))
 	log.Debugf("Expiration date: %s", app.settings.GetExpirationDate())
 
-	app.configService.sendConfigOptions(&ConfigOptions{
+	configOptions := &protos.ConfigOptions{
 		DevelopmentMode:      common.IsDevEnvironment(),
 		AppVersion:           common.ApplicationVersion,
 		ReplicaAddr:          "",
@@ -109,9 +84,10 @@ func (app *App) sendConfigOptions() {
 		ProxyAll:             app.settings.GetProxyAll(),
 		Country:              app.settings.GetCountry(),
 		IsUserLoggedIn:       app.settings.IsUserLoggedIn(),
-		Chat: ChatOptions{
+		Chat: &protos.ChatOptions{
 			AcceptedTermsVersion: 0,
 			OnBoardingStatus:     false,
 		},
-	})
+	}
+	app.configService.sendConfigOptions(configOptions)
 }

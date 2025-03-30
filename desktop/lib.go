@@ -3,7 +3,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"strconv"
 	"strings"
 	"sync"
@@ -153,19 +152,6 @@ func applyRef(referralCode *C.char) *C.char {
 	return C.CString("true")
 }
 
-//export devices
-func devices() *C.char {
-	log.Debug("devices")
-	user, found := app().UserData()
-	if !found {
-		// for now just return empty array
-		b, _ := json.Marshal("[]")
-		return C.CString(string(b))
-	}
-	b, _ := json.Marshal(user.Devices)
-	return C.CString(string(b))
-}
-
 //export approveDevice
 func approveDevice(code *C.char) *C.char {
 	resp, err := app().ProClient().LinkCodeApprove(context.Background(), C.GoString(code))
@@ -244,11 +230,6 @@ func userData() *C.char {
 	return C.CString(string(b))
 }
 
-//export emailAddress
-func emailAddress() *C.char {
-	return C.CString(app().Settings().GetEmailAddress())
-}
-
 //export emailExists
 func emailExists(email *C.char) *C.char {
 	_, err := app().ProClient().EmailExists(context.Background(), C.GoString(email))
@@ -299,22 +280,6 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 	return C.CString("true")
 }
 
-//export referral
-func referral() *C.char {
-	a := app()
-	if user, ok := a.UserData(); ok {
-		return C.CString(user.Referral)
-	}
-	referralCode := a.Settings().GetReferralCode()
-	return C.CString(referralCode)
-}
-
-//export myDeviceId
-func myDeviceId() *C.char {
-	deviceId := getDeviceID()
-	return C.CString(deviceId)
-}
-
 //export lang
 func lang() *C.char {
 	lang := app().GetLanguage()
@@ -329,17 +294,6 @@ func lang() *C.char {
 //export setSelectLang
 func setSelectLang(lang *C.char) {
 	app().SetLanguage(C.GoString(lang))
-}
-
-//export country
-func country() *C.char {
-	country := app().Settings().GetCountry()
-	return C.CString(country)
-}
-
-//export hasSucceedingProxy
-func hasSucceedingProxy() *C.char {
-	return booltoCString(app().HasSucceedingProxy())
 }
 
 //export proUser
