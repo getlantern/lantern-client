@@ -18,18 +18,16 @@ const TAB_DEVELOPER = 'developer';
 class SessionModel extends Model {
   late final EventManager eventManager;
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
-  final ValueNotifier<ConfigOptions> configNotifier =
-      ValueNotifier<ConfigOptions>(
-    ConfigOptions(
-      devices: Devices.create(),
-      country: '',
-    ),
-  );
+  late ValueNotifier<ConfigOptions?> configNotifier =
+      ValueNotifier<ConfigOptions?>(null);
   final ValueNotifier<String> langNotifier = ValueNotifier('en_us');
   late ValueNotifier<bool?> proUserNotifier;
   final ValueNotifier<User> userNotifier = ValueNotifier(User.create());
   final ValueNotifier<Devices> devicesNotifier =
       ValueNotifier(Devices.create());
+  final ValueNotifier<List<Plan>> plansNotifier = ValueNotifier([]);
+  final ValueNotifier<List<PaymentMethod>> paymentMethodsNotifier =
+      ValueNotifier([]);
 
   late ValueNotifier<bool?> isTestPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
@@ -41,8 +39,6 @@ class SessionModel extends Model {
   late ValueNotifier<String?> linkingCodeNotifier;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
   late ValueNotifier<bool?> isAuthEnabled;
-  late FfiListNotifier<Plan> plansNotifier;
-  late FfiListNotifier<PaymentMethod> paymentMethodsNotifier;
   ValueNotifier<Bandwidth?> bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
 
   SessionModel() : super('session') {
@@ -84,9 +80,6 @@ class SessionModel extends Model {
       proxyAvailable = ValueNotifier(false);
       userEmail = ValueNotifier("");
       proUserNotifier = ValueNotifier(false);
-      plansNotifier = FfiListNotifier<Plan>('/plans/', () => {});
-      paymentMethodsNotifier =
-          FfiListNotifier<PaymentMethod>('/paymentMethods/', () => {});
       hasUserSignedInNotifier = ValueNotifier(false);
       serverInfoNotifier = ValueNotifier<ServerInfo?>(null);
       proxyAllNotifier = ValueNotifier(false);
@@ -693,15 +686,15 @@ class SessionModel extends Model {
         },
       );
     }
-    return FfiListBuilder<Plan>(
-      '/plans/',
-      plansNotifier,
-      (BuildContext context, ChangeTrackingList<Plan> value, Widget? child) =>
-          builder(
-        context,
-        value.map.entries.map((e) => PathAndValue(e.key, e.value)),
-        child,
-      ),
+    return ValueListenableBuilder<List<Plan>>(
+      valueListenable: plansNotifier,
+      builder: (context, plans, child) {
+        return builder(
+          context,
+          plans.map((plan) => PathAndValue(plan.id, plan)),
+          child,
+        );
+      },
     );
   }
 
@@ -717,14 +710,11 @@ class SessionModel extends Model {
         },
       );
     }
-    return FfiListBuilder<PaymentMethod>(
-      '/paymentMethods/',
-      paymentMethodsNotifier,
-      (BuildContext context, ChangeTrackingList<PaymentMethod> value,
-              Widget? child) =>
-          builder(
+    return ValueListenableBuilder<List<PaymentMethod>>(
+      valueListenable: paymentMethodsNotifier,
+      builder: (context, value, child) => builder(
         context,
-        value.map.entries.map((e) => PathAndValue(e.key, e.value)),
+        value.map((e) => PathAndValue(e.method, e)),
         child,
       ),
     );

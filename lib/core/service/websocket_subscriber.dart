@@ -1,5 +1,8 @@
+import 'dart:convert';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lantern/core/service/websocket.dart';
-import 'package:lantern/core/utils/config.dart';
+import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/features/home/session_model.dart';
 import 'package:lantern/features/vpn/protos_shared/vpn.pb.dart';
 import 'package:logger/logger.dart';
@@ -38,6 +41,10 @@ class WebsocketSubscriber {
       _instance ??= WebsocketSubscriber._internal();
 
   Future<void> connect() async => await _ws.connect();
+
+  void dispose() {
+    _ws.close();
+  }
 
   void _listenMessages() {
     _webSocketLogger.i("Listening to WebSocket messages");
@@ -121,7 +128,7 @@ class WebsocketSubscriber {
   }
 
   void _handleConfig(Map<String, dynamic> message) {
-    final config = ConfigOptions.fromJson(message);
+    final config = ConfigOptions.create()..mergeFromProto3Json(message);
 
     sessionModel.isAuthEnabled.value = config.authEnabled;
     sessionModel.configNotifier.value = config;
@@ -139,14 +146,12 @@ class WebsocketSubscriber {
   }
 }
 
-void _updatePlans(Map<String, Plan>? plans) {
-  if (plans == null) return;
-  sessionModel.plansNotifier.value.clearPaths();
-  sessionModel.plansNotifier.value.map.addAll(plans);
+void _updatePlans(List<Plan> plans) {
+  if (plans.isEmpty) return;
+  sessionModel.plansNotifier.value = plans;
 }
 
-void _updatePaymentMethods(Map<String, PaymentMethod>? paymentMethods) {
-  if (paymentMethods == null) return;
-  sessionModel.paymentMethodsNotifier.value.clearPaths();
-  sessionModel.paymentMethodsNotifier.value.map.addAll(paymentMethods);
+void _updatePaymentMethods(List<PaymentMethod> paymentMethods) {
+  if (paymentMethods.isEmpty) return;
+  sessionModel.paymentMethodsNotifier.value = paymentMethods;
 }

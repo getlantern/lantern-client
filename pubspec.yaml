@@ -30,7 +30,7 @@ dependencies:
 
   # State management and Data handling
   provider: ^6.1.2
-  protobuf: any
+  protobuf: ^4.0.0
   uuid: ^4.5.1
 
   sliver_tools: ^0.2.12

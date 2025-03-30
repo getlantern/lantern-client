@@ -1,8 +1,5 @@
 import 'dart:collection';
-import 'package:lantern/core/subscribers/ffi_list_subscriber.dart';
 import 'package:lantern/features/messaging/messaging.dart';
-
-import '../utils/common_desktop.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;

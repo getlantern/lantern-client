@@ -4,7 +4,7 @@ SHELL := /bin/bash
 #1 Disable implicit rules
 .SUFFIXES:
 
-.PHONY: codegen protos routes mocks test integration-test sourcedump build-framework build-framework-debug clean archive require-version set-version show-version reset-build-number install-gomobile assert-go-version
+.PHONY: codegen protos routes mocks test integration-test sourcedump build-framework build-framework-debug clean archive require-version set-version show-version reset-build-number install-gomobile
 
 INTERNALSDK_FRAMEWORK_DIR = ios/internalsdk
 INTERNALSDK_FRAMEWORK_NAME = Internalsdk.xcframework
@@ -672,7 +672,7 @@ sourcedump: require-version
 	find vendor/github.com/getlantern -name LICENSE -exec rm {} \; && \
 	tar -czf $$here/lantern-android-sources-$$VERSION.tar.gz .
 
-ios: assert-go-version install-gomobile
+ios: install-gomobile
 	echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	echo "Generating Ios.xcFramework"
@@ -685,7 +685,7 @@ ios: assert-go-version install-gomobile
 	@mv ./$(INTERNALSDK_FRAMEWORK_NAME) $(INTERNALSDK_FRAMEWORK_DIR)/$(INTERNALSDK_FRAMEWORK_NAME)
 	@echo "Framework generated"
 
-build-release-framework: assert-go-version install-gomobile
+build-release-framework: install-gomobile
 	@echo "Nuking $(INTERNALSDK_FRAMEWORK_DIR) and $(MINISQL_FRAMEWORK_DIR)"
 	rm -Rf $(INTERNALSDK_FRAMEWORK_DIR) $(MINISQL_FRAMEWORK_DIR)
 	@echo "generating Ios.xcFramework"
@@ -703,10 +703,6 @@ install-gomobile:
 	@echo "installing gomobile"
 	go install golang.org/x/mobile/cmd/gomobile@latest
 	gomobile init
-
-
-assert-go-version:
-	@if go version | grep -q -v $(GO_VERSION); then echo "go $(GO_VERSION) is required." && exit 1; fi
 
 .PHONY: swift-format
 swift-format:
