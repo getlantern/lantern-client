@@ -1,4 +1,3 @@
-import 'package:lantern/core/providers/user.dart';
 import 'package:lantern/core/service/lantern_ffi_service.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
@@ -41,15 +40,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _refreshUserData();
+    if (isDesktop()) {
+      _refreshUserData();
+    }
   }
 
   Future<void> _refreshUserData() async {
     try {
-      final userData = await LanternFFI.ffiUserData();
-      if (mounted && userData != null) {
-        context.read<UserProvider>().updateUser(userData);
-      }
+      await LanternFFI.ffiUserData();
     } catch (e) {
       debugPrint("Error fetching user data: $e");
     }

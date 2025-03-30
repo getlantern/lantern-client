@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
-import 'package:lantern/core/providers/user.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
@@ -67,7 +66,6 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (_) => BottomBarChangeNotifier()),
           ChangeNotifierProvider(create: (_) => VPNChangeNotifier()),
           ChangeNotifierProvider(create: (_) => InternetStatusProvider()),
-          ChangeNotifierProvider(create: (_) => UserProvider()),
         ],
         child: const LanternApp(),
       ),
