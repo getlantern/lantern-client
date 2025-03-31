@@ -95,10 +95,6 @@ func sysProxyOn() *C.char {
 	return C.CString("true")
 }
 
-func getDeviceID() string {
-	return app().Settings().GetDeviceID()
-}
-
 func saveUserSalt(salt []byte) {
 	app().Settings().SaveSalt(salt)
 }
@@ -223,7 +219,11 @@ func userData() *C.char {
 		return C.CString("")
 	}
 
-	b, _ := protojson.Marshal(user)
+	b, err := protojson.Marshal(user)
+	if err != nil {
+		log.Errorf("Unable to marshal user data: %v", err)
+		return C.CString("")
+	}
 
 	log.Debugf("Got user data %s", string(b))
 
