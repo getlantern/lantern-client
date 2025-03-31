@@ -40,15 +40,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (isDesktop()) {
+    if (isDesktop() && ModalRoute.of(context)?.isCurrent == true) {
       _refreshUserData();
     }
   }
 
   Future<void> _refreshUserData() async {
     try {
-      appLogger.d("Refreshing user data");
-      await LanternFFI.ffiUserData();
+      //await LanternFFI.userData();
     } catch (e) {
       appLogger.e("Error fetching user data", error: e);
     }

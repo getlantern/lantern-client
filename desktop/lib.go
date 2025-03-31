@@ -223,7 +223,6 @@ func userData() *C.char {
 	}
 
 	log.Debugf("Got user data %s", string(b))
-
 	return C.CString(string(b))
 }
 

@@ -26,6 +26,7 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
+	lru "github.com/hashicorp/golang-lru/v2"
 	"github.com/joho/godotenv"
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
@@ -66,12 +67,13 @@ type App struct {
 	flashlight           *flashlight.Flashlight // Flashlight library for networking and proxying.
 	authClient           auth.AuthClient        // Client for managing authentication.
 	proClient            proclient.ProClient    // Client for managing interaction with the Pro server
+
 	// Websocket-related settings
-	websocketAddr  string       // Address for WebSocket connections.
-	ws             ws.UIChannel // UI channel for WebSocket communication.
-	wsServer       *http.Server
-	cachedUserData sync.Map // Cached user data.
-	mu             sync.RWMutex
+	websocketAddr string       // Address for WebSocket connections.
+	ws            ws.UIChannel // UI channel for WebSocket communication.
+	wsServer      *http.Server
+	userCache     *lru.Cache[int64, *protos.User] // Cached user data.
+	mu            sync.RWMutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
@@ -114,7 +116,11 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		})
 	}
 	golog.SetPrepender(logging.Timestamped)
-
+	userCache, err := lru.New[int64, *protos.User](100)
+	if err != nil {
+		log.Errorf("Unable to create user cache")
+		return nil, err
+	}
 	// Load settings and initialize trackers and services.
 	ss := LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
@@ -125,10 +131,11 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		configDir:     configDir,
 		exited:        eventual.NewValue(),
 		settings:      ss,
-		configService: new(configService),
+		configService: &configService{},
 		authClient:    auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), uc),
 		proClient:     proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), uc),
 		statsTracker:  statsTracker,
+		userCache:     userCache,
 		ws:            ws.NewUIChannel(),
 	}
 

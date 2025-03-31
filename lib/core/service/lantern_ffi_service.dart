@@ -118,15 +118,19 @@ class LanternFFI {
     });
   }
 
-  static Future<User?> ffiUserData() async {
+  static Future<User?> userData() async {
     final Pointer<Utf8> result = _lanternFFI.userData().cast<Utf8>();
-    final String res = result.toDartString();
-    malloc.free(result);
-    // it's necessary to use mergeFromProto3Json here instead of fromJson; otherwise, a FormatException with
-    // message Invalid radix-10 number is thrown.In addition, all possible JSON fields have to be defined on
-    // the User protobuf message or JSON decoding fails because of an "unknown field name" error:
-    // Protobuf JSON decoding failed at: root["telephone"]. Unknown field name 'telephone'
-    return User.create()..mergeFromProto3Json(jsonDecode(res));
+    final String userData = result.toDartString();
+
+    if (userData.isEmpty) {
+      return null;
+    }
+
+    try {
+      return User.create()..mergeFromProto3Json(jsonDecode(userData));
+    } catch (e) {
+      return null;
+    }
   }
 
   static Future<String> approveDevice(String code) async {
@@ -137,7 +141,7 @@ class LanternFFI {
     checkAPIError(json, 'wrong_device_linking_code'.i18n);
     final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
     // refresh user data after successfully linking device
-    await ffiUserData();
+    await userData();
     return json;
   }
 
@@ -149,7 +153,7 @@ class LanternFFI {
     checkAPIError(json, 'cannot_remove_device'.i18n);
     final result = LinkResponse.create()..mergeFromProto3Json(jsonDecode(json));
     // refresh user data after removing a device
-    await ffiUserData();
+    await userData();
     return;
   }
 
