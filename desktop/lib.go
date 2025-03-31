@@ -55,21 +55,18 @@ func app() *desktop.App {
 
 //export setup
 func setup() {
-	mu.Lock()
-	defer mu.Unlock()
+	setupOnce.Do(func() {
+		mu.Lock()
+		defer mu.Unlock()
 
-	a := lanternApp
-	if a != nil {
-		return
-	}
+		a, err := desktop.NewApp()
+		if err != nil {
+			log.Fatal(err)
+		}
+		lanternApp = a
 
-	a, err := desktop.NewApp()
-	if err != nil {
-		log.Fatal(err)
-	}
-	lanternApp = a
-
-	go a.Run(context.Background())
+		go a.Run(context.Background())
+	})
 }
 
 //export sysProxyOff
