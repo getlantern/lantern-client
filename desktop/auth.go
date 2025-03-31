@@ -80,7 +80,7 @@ func signup(email *C.char, password *C.char) *C.char {
 func login(email *C.char, password *C.char) *C.char {
 	a := app()
 	lowerCaseEmail := strings.ToLower(C.GoString(email))
-	user, salt, err := a.AuthClient().Login(lowerCaseEmail, C.GoString(password), getDeviceID())
+	user, salt, err := a.AuthClient().Login(lowerCaseEmail, C.GoString(password), app().Settings().GetDeviceID())
 	if err != nil {
 		return sendError(err)
 	}
@@ -112,7 +112,7 @@ func logout() *C.char {
 	ctx := context.Background()
 	a := app()
 	email := a.Settings().GetEmailAddress()
-	deviceId := getDeviceID()
+	deviceId := a.Settings().GetDeviceID()
 	token := a.Settings().GetToken()
 	userId := a.Settings().GetUserID()
 
