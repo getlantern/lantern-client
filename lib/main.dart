@@ -3,12 +3,9 @@ import 'dart:ui' as ui;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lantern/app.dart';
-import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
-import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/replica/ui/utils.dart';
-import 'package:lantern/features/vpn/vpn_notifier.dart';
 import 'package:lantern/features/window/windows_protocol_registry.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:window_manager/window_manager.dart';
@@ -23,8 +20,13 @@ Future<void> main() async {
   } catch (error) {
     appLogger.e("Error loading .env file: $error");
   }
+
   initServices();
+
   if (isDesktop()) {
+    LanternFFI.setup();
+    await WebsocketSubscriber().connect();
+
     if (Platform.isWindows) {
       await initializeWebViewEnvironment();
       ProtocolRegistrar.instance.register('lantern');
@@ -32,9 +34,6 @@ Future<void> main() async {
     }
     await windowManager.ensureInitialized();
     await windowManager.setSize(const ui.Size(360, 712));
-
-    LanternFFI.setup();
-    WebsocketSubscriber().connect();
   } else {
     await _initGoogleMobileAds();
     // Inject all the services
@@ -61,14 +60,7 @@ Future<void> main() async {
       options.enableNdkScopeSync = true;
     },
     appRunner: () => runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => BottomBarChangeNotifier()),
-          ChangeNotifierProvider(create: (_) => VPNChangeNotifier()),
-          ChangeNotifierProvider(create: (_) => InternetStatusProvider()),
-        ],
-        child: const LanternApp(),
-      ),
+      const LanternApp(),
     ),
   );
 }

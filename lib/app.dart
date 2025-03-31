@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lantern/core/app/app_dimens.dart';
 import 'package:lantern/core/router/router.dart';
+import 'package:lantern/core/service/lantern_ffi_service.dart';
 import 'package:lantern/core/utils/common.dart' as PlatformUtils;
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/messaging/messaging.dart';
@@ -175,34 +176,41 @@ class _LanternAppState extends State<LanternApp>
   Widget build(BuildContext context) {
     final currentLocal = View.of(context).platformDispatcher.locale;
     print('selected local: ${currentLocal.languageCode}');
-    return sessionModel.language(
-      (context, lang, child) {
-        Localization.locale = lang.startsWith('en') ? "en_us" : lang;
-        return GlobalLoaderOverlay(
-          overlayColor: Colors.black.withOpacity(0.5),
-          overlayWidgetBuilder: (_) => Center(
-            child: AnimatedLoadingBorder(
-              borderWidth: 5,
-              borderColor: yellow3,
-              cornerRadius: 100,
-              child: SvgPicture.asset(
-                ImagePaths.lantern_logo,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => BottomBarChangeNotifier()),
+        ChangeNotifierProvider(create: (_) => VPNChangeNotifier()),
+        ChangeNotifierProvider(create: (_) => InternetStatusProvider()),
+      ],
+      child: sessionModel.language(
+        (context, lang, child) {
+          Localization.locale = lang.startsWith('en') ? "en_us" : lang;
+          return GlobalLoaderOverlay(
+            overlayColor: Colors.black.withOpacity(0.5),
+            overlayWidgetBuilder: (_) => Center(
+              child: AnimatedLoadingBorder(
+                borderWidth: 5,
+                borderColor: yellow3,
+                cornerRadius: 100,
+                child: SvgPicture.asset(
+                  ImagePaths.lantern_logo,
+                ),
               ),
             ),
-          ),
-          child: ScreenUtilInit(
-            designSize:
-                PlatformUtils.isDesktop() ? desktopWindowSize : mobileSize,
-            minTextAdapt: true,
-            child: I18n(
-              initialLocale: currentLocale(lang),
-              child: ScaffoldMessenger(
-                child: _buildMaterialApp(context, lang),
+            child: ScreenUtilInit(
+              designSize:
+                  PlatformUtils.isDesktop() ? desktopWindowSize : mobileSize,
+              minTextAdapt: true,
+              child: I18n(
+                initialLocale: currentLocale(lang),
+                child: ScaffoldMessenger(
+                  child: _buildMaterialApp(context, lang),
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

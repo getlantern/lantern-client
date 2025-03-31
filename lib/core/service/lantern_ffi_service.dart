@@ -26,14 +26,9 @@ class NoPlansUpdate implements Exception {
   NoPlansUpdate(this.message);
 }
 
-typedef UserDataNative = Pointer<Utf8> Function();
-typedef UserData = Pointer<Utf8> Function();
-
 class LanternFFI {
-  static final DynamicLibrary _lib = _getLanternLib();
-  static final NativeLibrary _lanternFFI = NativeLibrary(_lib);
-  static final UserData _userData =
-      _lib.lookup<NativeFunction<UserDataNative>>('userData').asFunction();
+  static final DynamicLibrary _lanternLib = _getLanternLib();
+  static final NativeLibrary _lanternFFI = NativeLibrary(_lanternLib);
 
   static DynamicLibrary _getLanternLib() {
     if (Platform.isMacOS) {
@@ -52,12 +47,12 @@ class LanternFFI {
   static SendPort? _proxySendPort;
   static final Completer<void> _isolateInitialized = Completer<void>();
 
-  static void setup() => _lanternFFI.setup();
-
   static void sysProxyOn() {
     final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();
     checkAPIError(response, 'cannot_connect_to_vpn'.i18n);
   }
+
+  static void setup() => _lanternFFI.setup();
 
   static void sysProxyOff() => _lanternFFI.sysProxyOff();
 
@@ -124,10 +119,9 @@ class LanternFFI {
   }
 
   static Future<User?> ffiUserData() async {
-    final Pointer<Utf8> result = _userData();
+    final Pointer<Utf8> result = _lanternFFI.userData().cast<Utf8>();
     final String res = result.toDartString();
     malloc.free(result);
-    if (res == "") return null;
     // it's necessary to use mergeFromProto3Json here instead of fromJson; otherwise, a FormatException with
     // message Invalid radix-10 number is thrown.In addition, all possible JSON fields have to be defined on
     // the User protobuf message or JSON decoding fails because of an "unknown field name" error:

@@ -47,9 +47,10 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _refreshUserData() async {
     try {
+      appLogger.d("Refreshing user data");
       await LanternFFI.ffiUserData();
     } catch (e) {
-      debugPrint("Error fetching user data: $e");
+      appLogger.e("Error fetching user data", error: e);
     }
   }
 
