@@ -26,7 +26,6 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
-	lru "github.com/hashicorp/golang-lru/v2"
 	"github.com/joho/godotenv"
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
@@ -72,7 +71,7 @@ type App struct {
 	websocketAddr string       // Address for WebSocket connections.
 	ws            ws.UIChannel // UI channel for WebSocket communication.
 	wsServer      *http.Server
-	userCache     *lru.Cache[int64, *protos.User] // Cached user data.
+	userCache     sync.Map // Cached user data.
 	mu            sync.RWMutex
 }
 
@@ -116,11 +115,6 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		})
 	}
 	golog.SetPrepender(logging.Timestamped)
-	userCache, err := lru.New[int64, *protos.User](100)
-	if err != nil {
-		log.Errorf("Unable to create user cache")
-		return nil, err
-	}
 	// Load settings and initialize trackers and services.
 	ss := LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
@@ -135,7 +129,6 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 		authClient:    auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), uc),
 		proClient:     proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), uc),
 		statsTracker:  statsTracker,
-		userCache:     userCache,
 		ws:            ws.NewUIChannel(),
 	}
 

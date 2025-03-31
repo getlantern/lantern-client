@@ -253,7 +253,6 @@ require (
 	github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.25.1 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
-	github.com/hashicorp/golang-lru/v2 v2.0.7
 	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/jaffee/commandeer v0.6.0 // indirect
 	github.com/keighl/mandrill v0.0.0-20170605120353-1775dd4b3b41 // indirect

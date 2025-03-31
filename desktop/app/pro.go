@@ -35,11 +35,11 @@ func userConfig(settings *Settings) func() common.UserConfig {
 
 // SetUserData stores the user data in the cache
 func (app *App) SetUserData(ctx context.Context, userID int64, u *protos.User) {
-	current, found := app.UserData()
+	current, found := app.UserData(userID)
 	if found && reflect.DeepEqual(current, u) {
 		return
 	}
-	app.userCache.Add(u.UserId, u)
+	app.userCache.Store(userID, u)
 }
 
 // SetUserDevices updates the list of devices associated with a user in the cache.
@@ -49,7 +49,7 @@ func (app *App) SetUserDevices(userID int64, devices []*protos.Device) {
 		return
 	}
 	user.Devices = devices
-	app.userCache.Add(userID, user)
+	app.userCache.Store(userID, user)
 }
 
 // UserData retrieves the user data from the cache.
@@ -61,11 +61,11 @@ func (app *App) UserData(args ...int64) (*protos.User, bool) {
 	if userID == 0 {
 		return nil, false
 	}
-	res, ok := app.userCache.Get(userID)
+	res, ok := app.userCache.Load(userID)
 	if !ok {
 		return nil, false
 	}
-	return res, true
+	return res.(*protos.User), true
 }
 
 func (app *App) RefreshUserData() (*protos.User, error) {
@@ -83,7 +83,7 @@ func (app *App) RefreshUserData() (*protos.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	app.userCache.Add(userID, res.User)
+	app.userCache.Store(userID, res.User)
 	return res.User, nil
 }
 
