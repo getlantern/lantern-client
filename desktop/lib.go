@@ -147,9 +147,7 @@ func applyRef(referralCode *C.char) *C.char {
 
 //export approveDevice
 func approveDevice(code *C.char) *C.char {
-	a := app()
-	deviceID := a.Settings().GetDeviceID()
-	resp, err := app().ProClient().LinkCodeRedeem(context.Background(), deviceID, C.GoString(code))
+	resp, err := app().ProClient().LinkCodeApprove(context.Background(), C.GoString(code))
 	if err != nil {
 		return sendError(err)
 	}
