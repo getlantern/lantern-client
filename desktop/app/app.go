@@ -551,15 +551,11 @@ func (app *App) fetchOrCreateUser(ctx context.Context) {
 		ss.SetUserFirstVisit(true)
 		app.proClient.RetryCreateUser(ctx, app, 5*time.Minute)
 	} else {
-		app.proClient.UpdateUserData(ctx, app)
+		app.RefreshUserData()
 	}
 }
 
 func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
-	deviceName := func() string {
-		deviceName, _ := osversion.GetHumanReadable()
-		return deviceName
-	}
 	resp, err := app.proClient.LinkCodeRequest(ctx, deviceName())
 	if err != nil {
 		return "", errors.New("Could not create new Pro user: %v", err)
@@ -571,14 +567,31 @@ func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
 	return resp.Code, nil
 }
 
-func (app *App) devices() *protos.Devices {
-	user, found := app.UserData()
-	if !found || user == nil {
-		return nil
+func deviceName() string {
+	deviceName, _ := osversion.GetHumanReadable()
+	return deviceName
+}
+
+func (app *App) currentDevice() *protos.Device {
+	deviceID := app.Settings().GetDeviceID()
+	return &protos.Device{
+		Id:   deviceID,
+		Name: deviceName(),
 	}
-	log.Debugf("Devices: %v", user.Devices)
+}
+
+func (app *App) devices() *protos.Devices {
+	devices := []*protos.Device{app.currentDevice()}
+	user, found := app.UserData()
+	if !found || user == nil || user.Devices == nil {
+		return &protos.Devices{
+			Devices: devices,
+		}
+	}
+	devices = append(devices, user.Devices...)
+	log.Debugf("Devices: %v", devices)
 	return &protos.Devices{
-		Devices: user.Devices,
+		Devices: devices,
 	}
 }
 

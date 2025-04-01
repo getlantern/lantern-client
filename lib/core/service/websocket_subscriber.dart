@@ -139,6 +139,7 @@ class WebsocketSubscriber {
     sessionModel.isAuthEnabled.value = config.authEnabled;
     sessionModel.configNotifier.value = config;
     sessionModel.country.value = config.country;
+    sessionModel.devicesNotifier.value = config.devices;
 
     _updatePlans(config.plans);
     _updatePaymentMethods(config.paymentMethods);

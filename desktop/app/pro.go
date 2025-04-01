@@ -7,7 +7,6 @@ import (
 	"github.com/getlantern/errors"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/common"
-	"github.com/getlantern/lantern-client/internalsdk/pro"
 	"github.com/getlantern/lantern-client/internalsdk/protos"
 )
 
@@ -83,27 +82,35 @@ func (app *App) RefreshUserData() (*protos.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	app.userCache.Store(userID, res.User)
-	return res.User, nil
+	app.userCache.Store(userID, res)
+	return user, nil
 }
 
-func (app *App) IsProUser(ctx context.Context, uc common.UserConfig) (isPro bool, ok bool) {
+func (app *App) IsProUser(ctx context.Context, uc common.UserConfig) (bool, bool) {
 	user, found := app.UserData()
 	if !found {
 		resp, err := app.fetchUserData(ctx, uc)
 		if err != nil {
 			return false, false
 		}
-		user = resp.User
+		user = resp
 	}
 	return isActive(user), true
 }
 
-func (app *App) fetchUserData(ctx context.Context, uc common.UserConfig) (*pro.UserDataResponse, error) {
+func (app *App) fetchUserData(ctx context.Context, uc common.UserConfig) (*protos.User, error) {
 	userID := uc.GetUserID()
 	log.Debugf("Fetching user status with device ID '%v', user ID '%v' and proToken %v",
 		uc.GetDeviceID(), userID, uc.GetToken())
-	return app.ProClient().UserData(ctx)
+	resp, err := app.ProClient().UserData(ctx)
+	if err != nil {
+		return nil, err
+	}
+	user := resp.User
+	if user.Devices == nil {
+		user.Devices = []*protos.Device{}
+	}
+	return user, nil
 }
 
 // isActive determines whether the given status is an active status
