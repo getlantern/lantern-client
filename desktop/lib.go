@@ -147,9 +147,14 @@ func applyRef(referralCode *C.char) *C.char {
 
 //export approveDevice
 func approveDevice(code *C.char) *C.char {
-	resp, err := app().ProClient().LinkCodeApprove(context.Background(), C.GoString(code))
+	a := app()
+	deviceID := a.Settings().GetDeviceID()
+	resp, err := app().ProClient().LinkCodeRedeem(context.Background(), deviceID, C.GoString(code))
 	if err != nil {
 		return sendError(err)
+	}
+	if resp.Status == "ok" {
+		go app().RefreshUserData()
 	}
 	return sendJson(resp)
 }
@@ -169,6 +174,9 @@ func removeDevice(deviceId *C.char) *C.char {
 	if err != nil {
 		log.Error(err)
 		return sendError(err)
+	}
+	if resp.Status == "ok" {
+		go app().RefreshUserData()
 	}
 	return sendJson(resp)
 }

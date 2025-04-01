@@ -311,8 +311,10 @@ func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, devic
 func (c *proClient) UserLinkCodeRequest(ctx context.Context, email string) (bool, error) {
 	var resp LinkCodeResponse
 	uc := c.userConfig()
+	deviceName := uc.GetDeviceID()
+	log.Debugf("Requesting link code with device %s", deviceName)
 	err := c.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
-		"deviceName": uc.GetDeviceID(),
+		"deviceName": deviceName,
 		"email":      email,
 		"locale":     uc.GetLanguage(),
 	}, nil, &resp)

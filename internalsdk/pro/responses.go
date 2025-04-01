@@ -40,7 +40,7 @@ type LinkCodeResponse struct {
 type LinkCodeRedeemResponse struct {
 	*protos.BaseResponse `json:",inline"`
 	Status               string `json:"status"`
-	UserID               int64  `json:"userId"`
+	UserID               int64  `json:"userID"`
 	Token                string `json:"token"`
 }
 

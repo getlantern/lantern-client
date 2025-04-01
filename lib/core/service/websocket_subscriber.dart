@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:fixnum/src/int64.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lantern/core/service/websocket.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/features/home/session_model.dart';
@@ -92,10 +94,14 @@ class WebsocketSubscriber {
 
   void _handleSettings(Map<String, dynamic> message) {
     final user = sessionModel.userNotifier.value;
-    sessionModel.userNotifier.value.referral =
-        message['referralCode'] ?? user.referral;
-    sessionModel.userEmail.value =
-        message['emailAddress'] ?? sessionModel.userEmail.value;
+    final isPro = message['userPro']?.toString() == 'true';
+
+    user.referral = message['referralCode'] ?? user.referral;
+    user.email = message['emailAddress'] ?? user.email;
+    user.userStatus = isPro ? 'active' : '';
+    sessionModel.userNotifier.value = user;
+
+    sessionModel.expiryDateNotifier.value = message['expirydate'] ?? '';
     sessionModel.proxyAllNotifier.value =
         (message['proxyAll'] as bool?) ?? sessionModel.proxyAllNotifier.value;
     sessionModel.proUserNotifier.value =

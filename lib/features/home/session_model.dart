@@ -28,6 +28,7 @@ class SessionModel extends Model {
   final ValueNotifier<List<Plan>> plansNotifier = ValueNotifier([]);
   final ValueNotifier<List<PaymentMethod>> paymentMethodsNotifier =
       ValueNotifier([]);
+  final ValueNotifier<String> expiryDateNotifier = ValueNotifier('');
 
   late ValueNotifier<bool?> isTestPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
@@ -250,10 +251,10 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return ValueListenableBuilder<User?>(
-      valueListenable: userNotifier,
-      builder: (context, user, child) {
-        return builder(context, user?.expiration.toString() ?? '', child);
+    return ValueListenableBuilder<String>(
+      valueListenable: expiryDateNotifier,
+      builder: (context, value, child) {
+        return builder(context, value, child);
       },
     );
   }

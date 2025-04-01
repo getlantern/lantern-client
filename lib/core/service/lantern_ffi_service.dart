@@ -134,26 +134,20 @@ class LanternFFI {
   }
 
   static Future<String> approveDevice(String code) async {
-    final json = await _lanternFFI
+    final json = _lanternFFI
         .approveDevice(code.toPointerChar())
         .cast<Utf8>()
         .toDartString();
     checkAPIError(json, 'wrong_device_linking_code'.i18n);
-    final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
-    // refresh user data after successfully linking device
-    await userData();
     return json;
   }
 
   static Future<void> removeDevice(String deviceId) async {
-    final json = await _lanternFFI
+    final json = _lanternFFI
         .removeDevice(deviceId.toPointerChar())
         .cast<Utf8>()
         .toDartString();
     checkAPIError(json, 'cannot_remove_device'.i18n);
-    final result = LinkResponse.create()..mergeFromProto3Json(jsonDecode(json));
-    // refresh user data after removing a device
-    await userData();
     return;
   }
 
