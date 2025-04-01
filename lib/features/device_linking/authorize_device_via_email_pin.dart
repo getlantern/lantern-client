@@ -74,7 +74,6 @@ class AuthorizeDeviceViaEmailPin extends StatelessWidget {
       context.loaderOverlay.show();
 
       await sessionModel.validateDeviceRecoveryCode(code);
-      await sessionModel.approveDevice(code);
 
       pinCodeController.clear();
       context.loaderOverlay.hide();

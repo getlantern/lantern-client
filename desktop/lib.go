@@ -153,9 +153,6 @@ func approveDevice(code *C.char) *C.char {
 	if err != nil {
 		return sendError(err)
 	}
-	if resp.Status == "ok" {
-		go app().RefreshUserData()
-	}
 	return sendJson(resp)
 }
 
@@ -175,9 +172,6 @@ func removeDevice(deviceId *C.char) *C.char {
 		log.Error(err)
 		return sendError(err)
 	}
-	if resp.Status == "ok" {
-		go app().RefreshUserData()
-	}
 	return sendJson(resp)
 }
 
@@ -191,6 +185,8 @@ func userLinkValidate(code *C.char) *C.char {
 		log.Error(err)
 		return sendError(err)
 	}
+	// set pro user and update user ID and token
+	a.Settings().SetProUser(true)
 	err = a.SetUserIDAndToken(resp.UserID, resp.Token)
 	if err != nil {
 		return sendError(err)
