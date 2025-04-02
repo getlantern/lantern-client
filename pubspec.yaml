@@ -41,7 +41,7 @@ dependencies:
   flag: ^7.0.0
 
   #Loogs and crash reporting
-  sentry_flutter: ^8.10.1
+  sentry_flutter: ^8.14.1
 
   badges: ^3.1.2
   dotted_border: ^2.1.0

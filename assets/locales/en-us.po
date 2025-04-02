@@ -1845,5 +1845,8 @@ msgstr "We're having trouble connecting to our servers. Please wait a moment or 
 msgid "by_clicking_continue"
 msgstr "By clicking Continue, you agree to let Lantern store your Device ID and email"
 
+msgid "i_agree_to_let_lantern"
+msgstr "I agree to let Lantern collect and store my Device ID and email to help recover purchases and improve service. "
+
 
 
