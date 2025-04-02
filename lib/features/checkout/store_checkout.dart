@@ -1,6 +1,6 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/service/app_purchase.dart';
+import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/utils.dart';
 
 enum _CheckOutState { withEmail, withoutEmail }
@@ -32,6 +32,7 @@ class _StoreCheckoutState extends State<StoreCheckout>
         }
         return null;
       });
+  bool _isPrivacyChecked = false;
 
   _CheckOutState state = _CheckOutState.withEmail;
 
@@ -75,10 +76,29 @@ class _StoreCheckoutState extends State<StoreCheckout>
                 const SizedBox(height: 20.0),
                 CText("email_hint_pro".i18n, style: tsBody1),
                 const SizedBox(height: 24.0),
+                CheckboxListTile(
+                  value: _isPrivacyChecked,
+                  contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  controlAffinity: ListTileControlAffinity.leading,
+                  onChanged: (value) {
+                    setState(() {
+                      _isPrivacyChecked = value!;
+                    });
+                  },
+                  title: CText(
+                    'i_agree_to_let_lantern'.i18n,
+                    style: tsBody2Short!.copiedWith(
+                      color: grey5,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24.0),
                 SizedBox(
                   width: double.infinity,
                   child: Button(
                     text: "continue".i18n,
+                    disabled: !_isPrivacyChecked,
                     onPressed: () {
                       state = _CheckOutState.withEmail;
                       _validateEmailAndContinue();
@@ -89,21 +109,26 @@ class _StoreCheckoutState extends State<StoreCheckout>
                 CText(
                   'by_clicking_continue'.i18n,
                   textAlign: TextAlign.center,
-                  style:
-                  tsBody1.copiedWith(fontWeight: FontWeight.w400, color: grey5),
+                  style: tsBody1.copiedWith(
+                      fontWeight: FontWeight.w400, color: grey5),
                 ),
                 const SizedBox(height: 16.0),
                 Center(
                   child: TextButton(
-                      onPressed: () {
-                        state = _CheckOutState.withoutEmail;
-                        startPurchaseFlow();
-                      },
-                      child: CText(
-                        "continue_without_email".i18n.toUpperCase(),
-                        style: tsButtonPink,
-                      )),
-                )
+                    onPressed: _isPrivacyChecked
+                        ? () {
+                            state = _CheckOutState.withoutEmail;
+                            startPurchaseFlow();
+                          }
+                        : null,
+                    child: CText(
+                      "continue_without_email".i18n.toUpperCase(),
+                      style: tsButtonPink!.copiedWith(
+                        color: _isPrivacyChecked ? pink5 : grey5,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           );
@@ -148,7 +173,8 @@ class _StoreCheckoutState extends State<StoreCheckout>
 
   void _proceedToCheckoutIOS() {
     final appPurchase = sl<AppPurchase>();
-    final email = (state == _CheckOutState.withEmail ? emailController.text : "");
+    final email =
+        (state == _CheckOutState.withEmail ? emailController.text : "");
     // Just as safe check
     if (email.isNotEmpty && !EmailValidator.validate(email)) {
       showError(context, error: 'please_enter_a_valid_email_address'.i18n);
