@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"net/url"
-	"strconv"
 )
 
 func (app *App) serveWebsocket() error {
@@ -22,23 +20,25 @@ func (app *App) serveWebsocket() error {
 		return err
 	}
 	port := l.Addr().(*net.TCPAddr).Port
-	go server.Serve(l)
 
-	u := url.URL{Scheme: "ws", Host: "127.0.0.1:" + strconv.Itoa(port), Path: "/data"}
-	log.Debugf("serving websocket connections at %s", u.String())
-	app.setWebsocketAddr(fmt.Sprintf("127.0.0.1:%d", port))
+	websocketAddr := fmt.Sprintf("127.0.0.1:%d", port)
+
+	log.Debugf("serving websocket connections at %s", websocketAddr)
+	app.setWebsocket(server, websocketAddr)
+
+	go server.Serve(l)
 	return nil
 }
 
-func (app *App) setWebsocketAddr(addr string) {
+func (app *App) setWebsocket(s *http.Server, addr string) {
 	app.mu.Lock()
-	defer app.mu.Unlock()
+	app.wsServer = s
 	app.websocketAddr = addr
+	app.mu.Unlock()
 }
 
 func (app *App) WebsocketAddr() string {
-	if app == nil {
-		return ""
-	}
+	app.mu.RLock()
+	defer app.mu.RUnlock()
 	return app.websocketAddr
 }

@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"net"
 	"net/http"
@@ -11,8 +10,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/getsentry/sentry-go"
-
+	"github.com/getlantern/appdir"
 	"github.com/getlantern/errors"
 	"github.com/getlantern/eventual"
 	"github.com/getlantern/flashlight/v7"
@@ -28,9 +26,11 @@ import (
 	"github.com/getlantern/golog"
 	"github.com/getlantern/osversion"
 	"github.com/getlantern/profiling"
+	"github.com/joho/godotenv"
 
 	"github.com/getlantern/lantern-client/desktop/autoupdate"
 	"github.com/getlantern/lantern-client/desktop/datacap"
+	"github.com/getlantern/lantern-client/desktop/sentry"
 	"github.com/getlantern/lantern-client/desktop/ws"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
@@ -51,31 +51,28 @@ func init() {
 
 // App is the core of the Lantern desktop application, managing components and configurations.
 type App struct {
-	hasExited                 atomic.Bool      // Tracks if the app has exited.
-	fetchedGlobalConfig       atomic.Bool      // Indicates if the global configuration was fetched.
-	fetchedProxiesConfig      atomic.Bool      // Tracks whether the proxy configuration was fetched.
-	hasSucceedingProxy        atomic.Bool      // Tracks if a succeeding proxy is available.
-	Flags                     flashlight.Flags // Command-line flags passed to the app.
-	configDir                 string           // Directory for storing configuration files.
-	exited                    eventual.Value   // Signals when the app has exited.
-	settings                  *Settings        // User settings for the application.
-	configService             *configService   // Config service used by the applicaiton.
-	statsTracker              *statsTracker    // Tracks stats for service usage by the client.
-	muExitFuncs               sync.RWMutex
-	exitFuncs                 []func()
-	flashlight                *flashlight.Flashlight   // Flashlight library for networking and proxying.
-	authClient                auth.AuthClient          // Client for managing authentication.
-	proClient                 proclient.ProClient      // Client for managing interaction with the Pro server.
-	selectedTab               Tab                      // Tracks the currently selected UI tab.
-	connectionStatusCallbacks []func(isConnected bool) // Listeners for connection status changes.
+	hasExited            atomic.Bool      // Tracks if the app has exited.
+	fetchedGlobalConfig  atomic.Bool      // Indicates if the global configuration was fetched.
+	fetchedProxiesConfig atomic.Bool      // Tracks whether the proxy configuration was fetched.
+	hasSucceedingProxy   atomic.Bool      // Tracks if a succeeding proxy is available.
+	Flags                flashlight.Flags // Command-line flags passed to the app.
+	configDir            string           // Directory for storing configuration files.
+	exited               eventual.Value   // Signals when the app has exited.
+	settings             *Settings        // User settings for the application.
+	configService        *configService   // Config service used by the applicaiton.
+	statsTracker         *statsTracker    // Tracks stats for service usage by the client.
+	muExitFuncs          sync.RWMutex
+	exitFuncs            []func()
+	flashlight           *flashlight.Flashlight // Flashlight library for networking and proxying.
+	authClient           auth.AuthClient        // Client for managing authentication.
+	proClient            proclient.ProClient    // Client for managing interaction with the Pro server
 
 	// Websocket-related settings
-	websocketAddr  string                                         // Address for WebSocket connections.
-	ws             ws.UIChannel                                   // UI channel for WebSocket communication.
-	cachedUserData sync.Map                                       // Cached user data.
-	onUserData     []func(current *protos.User, new *protos.User) // Listeners for user data changes.
-
-	mu sync.RWMutex
+	websocketAddr string       // Address for WebSocket connections.
+	ws            ws.UIChannel // UI channel for WebSocket communication.
+	wsServer      *http.Server
+	userCache     sync.Map // Cached user data.
+	mu            sync.RWMutex
 }
 
 // NewApp creates a new desktop app that initializes the app and acts as a moderator between all desktop components.
@@ -98,32 +95,48 @@ func NewApp() (*App, error) {
 
 // NewAppWithFlags creates a new App instance with the given flags and configuration directory.
 func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
+
 	log.Debugf("Config directory %s sticky %v readable %v", configDir, flags.StickyConfig, flags.ReadableConfig)
+
+	// Load application configuration from .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Errorf("Error loading .env file: %v", err)
+	} else {
+		log.Debug("Successfully loaded .env file")
+	}
+
+	logging.EnableFileLogging(common.DefaultAppName, appdir.Logs(common.DefaultAppName))
+
+	if shouldReportToSentry() {
+		sentry.InitSentry(sentry.Opts{
+			DSN:             common.SentryDSN,
+			MaxMessageChars: common.SentryMaxMessageChars,
+		})
+	}
+	golog.SetPrepender(logging.Timestamped)
 	// Load settings and initialize trackers and services.
 	ss := LoadSettings(configDir)
 	statsTracker := NewStatsTracker()
+	uc := userConfig(ss)
 
 	app := &App{
-		Flags:                     flags,
-		configDir:                 configDir,
-		exited:                    eventual.NewValue(),
-		settings:                  ss,
-		connectionStatusCallbacks: make([]func(isConnected bool), 0),
-		selectedTab:               VPNTab,
-		configService:             new(configService),
-		statsTracker:              statsTracker,
-		ws:                        ws.NewUIChannel(),
+		Flags:         flags,
+		configDir:     configDir,
+		exited:        eventual.NewValue(),
+		settings:      ss,
+		configService: &configService{},
+		authClient:    auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), uc),
+		proClient:     proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), uc),
+		statsTracker:  statsTracker,
+		ws:            ws.NewUIChannel(),
 	}
 
 	// Start the WebSocket server for UI communication.
 	if err := app.serveWebsocket(); err != nil {
-		log.Error(err)
+		return nil, err
 	}
 	golog.OnFatal(app.exitOnFatal)
-
-	app.onProStatusChange(func(isPro bool) {
-		statsTracker.SetIsPro(isPro)
-	})
 
 	datacap.AddDataCapListener(func(hitDataCap bool) {
 		statsTracker.SetHitDataCap(hitDataCap)
@@ -138,9 +151,8 @@ func NewAppWithFlags(flags flashlight.Flags, configDir string) (*App, error) {
 	return app, nil
 }
 
-// Run starts the application and initializes necessary components.
-func (app *App) Run(ctx context.Context) {
-	golog.OnFatal(app.exitOnFatal)
+// Run creates a new instance of App, initializes necessary components, and starts running the application.
+func (app *App) Run(ctx context.Context) error {
 	go func() {
 		app.Settings().SetCountry(geolookup.GetCountry(0))
 		for <-geolookup.OnRefresh() {
@@ -149,13 +161,6 @@ func (app *App) Run(ctx context.Context) {
 	}()
 
 	log.Debug(app.Flags)
-	proClient := proclient.NewClient(fmt.Sprintf("https://%s", common.ProAPIHost), app.UserConfig)
-	authClient := auth.NewClient(fmt.Sprintf("https://%s", common.DFBaseUrl), app.UserConfig)
-
-	app.mu.Lock()
-	app.proClient = proClient
-	app.authClient = authClient
-	app.mu.Unlock()
 
 	settings := app.Settings()
 
@@ -189,9 +194,8 @@ func (app *App) Run(ctx context.Context) {
 			})
 		}()
 	}
-	var err error
 	// Initialize flashlight
-	app.flashlight, err = flashlight.New(
+	flashlight, err := flashlight.New(
 		common.DefaultAppName,
 		common.ApplicationVersion,
 		common.RevisionDate,
@@ -213,42 +217,26 @@ func (app *App) Run(ctx context.Context) {
 		flashlight.WithOnSucceedingProxy(app.onSucceedingProxy),
 	)
 	if err != nil {
-		app.Exit(err)
-		return
+		return err
 	}
-	app.beforeStart(ctx, listenAddr)
+	app.mu.Lock()
+	app.flashlight = flashlight
+	app.mu.Unlock()
+	if err := app.beforeStart(ctx, listenAddr); err != nil {
+		return err
+	}
 
-	app.flashlight.Run(
+	go flashlight.Run(
 		listenAddr,
 		socksAddr,
 		app.afterStart,
 		func(err error) { _ = app.Exit(err) },
 	)
+
+	return nil
 }
 
-// UserConfig returns the current user configuration after applying settings.
-func (app *App) UserConfig() common.UserConfig {
-	settings := app.Settings()
-	userID, deviceID, token := settings.GetUserID(), settings.GetDeviceID(), settings.GetToken()
-	return common.NewUserConfig(
-		common.DefaultAppName,
-		deviceID,
-		userID,
-		token,
-		nil,
-		settings.GetLanguage(),
-	)
-}
-
-// IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
-func (app *App) IsFeatureEnabled(feature string) bool {
-	if app.flashlight == nil {
-		return false
-	}
-	return app.flashlight.EnabledFeatures()[feature]
-}
-
-func (app *App) beforeStart(ctx context.Context, listenAddr string) {
+func (app *App) beforeStart(ctx context.Context, listenAddr string) error {
 	log.Debug("Got first config")
 
 	if app.Flags.CpuProfile != "" || app.Flags.MemProfile != "" {
@@ -258,7 +246,7 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 	}
 
 	if err := setUpSysproxyTool(); err != nil {
-		app.Exit(err)
+		return err
 	}
 
 	if app.Flags.ClearProxySettings {
@@ -279,9 +267,8 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 		os.Exit(0)
 	}
 
-	if e := app.settings.StartService(app.ws); e != nil {
-		app.Exit(fmt.Errorf("unable to register settings service: %q", e))
-		return
+	if e := app.Settings().StartService(app.ws); e != nil {
+		return fmt.Errorf("unable to register settings service: %q", e)
 	}
 
 	isProUser := func() (bool, bool) {
@@ -302,32 +289,83 @@ func (app *App) beforeStart(ctx context.Context, listenAddr string) {
 		log.Errorf("Unable to serve connection status: %v", err)
 	}
 
+	if err := app.servePro(app.ws); err != nil {
+		log.Errorf("Unable to serve pro data to UI: %v", err)
+	}
+
 	app.AddExitFunc("stopping loconf scanner", LoconfScanner(app.settings, app.configDir, 4*time.Hour, isProUser, func() string {
 		return "/img/lantern_logo.png"
 	}))
-	//app.AddExitFunc("stopping notifier", notifier.NotificationsLoop(app.analyticsSession))
+
+	return nil
+}
+
+func (app *App) afterStart(cl *flashlightClient.Client) {
+	app.sendConfigOptions()
+	ctx := context.Background()
+	// Fetch or create a user in the background
+	go app.fetchOrCreateUser(ctx)
+	if app.Settings().GetUserID() != 0 {
+		// fetch plan only if user is created
+		go app.proClient.DesktopPaymentMethods(ctx)
+	}
+
+	go app.fetchDeviceLinkingCode(ctx)
+
+	// Listen for changes to the system proxy setting
+	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
+		enable := val.(bool)
+		if enable {
+			app.SysproxyOn()
+		} else {
+			app.SysProxyOff()
+		}
+	})
+	// Add exit function to turn off the system proxy when the app exits
+	app.AddExitFunc("turning off system proxy", func() {
+		app.SysProxyOff()
+	})
+	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
+	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
+		app.Settings().SetAddr(addr.(string))
+	} else {
+		log.Errorf("Couldn't retrieve HTTP proxy addr in time")
+	}
+	if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
+		app.Settings().SetSOCKSAddr(socksAddr.(string))
+	} else {
+		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
+	}
+}
+
+// IsFeatureEnabled checks whether or not the given feature is enabled by flashlight
+func (app *App) IsFeatureEnabled(feature string) bool {
+	if app.flashlight == nil {
+		return false
+	}
+	return app.flashlight.EnabledFeatures()[feature]
 }
 
 // Connect turns on proxying
 func (app *App) Connect() {
 	ops.Begin("connect").End()
-	app.settings.SetDisconnected(false)
+	app.Settings().SetDisconnected(false)
 }
 
 // Disconnect turns off proxying
 func (app *App) Disconnect() {
 	ops.Begin("disconnect").End()
-	app.settings.SetDisconnected(true)
+	app.Settings().SetDisconnected(true)
 }
 
 // GetLanguage returns the user language
 func (app *App) GetLanguage() string {
-	return app.settings.GetLanguage()
+	return app.Settings().GetLanguage()
 }
 
 // SetLanguage sets the user language
 func (app *App) SetLanguage(lang string) {
-	app.settings.SetLanguage(lang)
+	app.Settings().SetLanguage(lang)
 	log.Debugf("Setting language to %v", lang)
 	app.SendMessageToUI("pro", map[string]interface{}{
 		"language": lang,
@@ -335,7 +373,7 @@ func (app *App) SetLanguage(lang string) {
 }
 
 func (app *App) SetUserLoggedIn(value bool) {
-	app.settings.SetUserLoggedIn(value)
+	app.Settings().SetUserLoggedIn(value)
 	app.SendMessageToUI("pro", map[string]interface{}{
 		"login": value,
 	})
@@ -353,69 +391,15 @@ func (app *App) SendMessageToUI(service string, message interface{}) {
 	}
 }
 
-func (app *App) SendUpdateUserDataToUI() {
-	user, found := app.GetUserData(app.Settings().GetUserID())
-	if !found {
-		return
-	}
-	if user.UserLevel == "" {
-		user.UserLevel = "free"
-	}
-	b, _ := json.Marshal(user)
-	log.Debugf("SendUpdateUserDataToUI: %s", string(b))
-	app.ws.SendMessage("pro", user)
-}
-
 // OnSettingChange sets a callback cb to get called when attr is changed from server.
 // When calling multiple times for same attr, only the last one takes effect.
 func (app *App) OnSettingChange(attr SettingName, cb func(interface{})) {
-	app.settings.OnChange(attr, cb)
+	app.Settings().OnChange(attr, cb)
 }
 
 // OnStatsChange adds a listener for Stats changes.
 func (app *App) OnStatsChange(fn func(stats.Stats)) {
 	app.statsTracker.AddListener(fn)
-}
-
-func (app *App) afterStart(cl *flashlightClient.Client) {
-	ctx := context.Background()
-	go app.fetchOrCreateUser(ctx)
-	if app.settings.GetUserID() != 0 {
-		// fetch plan only if user is created
-		go app.proClient.DesktopPaymentMethods(ctx)
-	}
-	go app.fetchDeviceLinkingCode(ctx)
-
-	app.OnSettingChange(SNSystemProxy, func(val interface{}) {
-		enable := val.(bool)
-		if enable {
-			app.SysproxyOn()
-		} else {
-			app.SysProxyOff()
-		}
-	})
-
-	app.AddExitFunc("turning off system proxy", func() {
-		app.SysProxyOff()
-	})
-	app.AddExitFunc("flushing to opentelemetry", otel.Stop)
-	if addr, ok := flashlightClient.Addr(6 * time.Second); ok {
-		app.settings.SetAddr(addr.(string))
-	} else {
-		log.Errorf("Couldn't retrieve HTTP proxy addr in time")
-	}
-	if socksAddr, ok := flashlightClient.Socks5Addr(6 * time.Second); ok {
-		app.settings.SetSOCKSAddr(socksAddr.(string))
-	} else {
-		log.Errorf("Couldn't retrieve SOCKS proxy addr in time")
-	}
-	if err := app.servePro(app.ws); err != nil {
-		log.Errorf("Unable to serve pro data to UI: %v", err)
-	}
-	// send configs to UI
-	app.SendMessageToUI("pro", map[string]interface{}{
-		"login": app.settings.IsUserLoggedIn(),
-	})
 }
 
 func (app *App) SendConfig() {
@@ -486,15 +470,8 @@ func (app *App) Exit(err error) bool {
 func (app *App) doExit(err error) {
 	if err != nil {
 		log.Errorf("Exiting app %d(%d) because of %v", os.Getpid(), os.Getppid(), err)
-		if ShouldReportToSentry() {
-			sentry.ConfigureScope(func(scope *sentry.Scope) {
-				scope.SetLevel(sentry.LevelFatal)
-			})
-
-			sentry.CaptureException(err)
-			if result := sentry.Flush(common.SentryTimeout); !result {
-				log.Error("Flushing to Sentry timed out")
-			}
+		if shouldReportToSentry() {
+			sentry.OnExit(err)
 		}
 	} else {
 		log.Debugf("Exiting app %d(%d)", os.Getpid(), os.Getppid())
@@ -549,14 +526,7 @@ func (app *App) WaitForExit() error {
 
 // is only used in the panicwrap parent process.
 func (app *App) LogPanicAndExit(msg string) {
-	sentry.ConfigureScope(func(scope *sentry.Scope) {
-		scope.SetLevel(sentry.LevelFatal)
-	})
-
-	sentry.CaptureMessage(msg)
-	if result := sentry.Flush(common.SentryTimeout); !result {
-		log.Error("Flushing to Sentry timed out")
-	}
+	sentry.LogPanic(msg)
 }
 
 func (app *App) exitOnFatal(err error) {
@@ -566,7 +536,7 @@ func (app *App) exitOnFatal(err error) {
 
 // IsPro indicates whether or not the app is pro
 func (app *App) IsPro() bool {
-	isPro, _ := app.IsProUserFast(app.UserConfig())
+	isPro, _ := app.IsProUserFast()
 	return isPro
 }
 
@@ -581,15 +551,11 @@ func (app *App) fetchOrCreateUser(ctx context.Context) {
 		ss.SetUserFirstVisit(true)
 		app.proClient.RetryCreateUser(ctx, app, 5*time.Minute)
 	} else {
-		app.proClient.UpdateUserData(ctx, app)
+		app.RefreshUserData()
 	}
 }
 
 func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
-	deviceName := func() string {
-		deviceName, _ := osversion.GetHumanReadable()
-		return deviceName
-	}
 	resp, err := app.proClient.LinkCodeRequest(ctx, deviceName())
 	if err != nil {
 		return "", errors.New("Could not create new Pro user: %v", err)
@@ -601,22 +567,38 @@ func (app *App) fetchDeviceLinkingCode(ctx context.Context) (string, error) {
 	return resp.Code, nil
 }
 
-func (app *App) devices() protos.Devices {
-	user, found := app.GetUserData(app.Settings().GetUserID())
+func deviceName() string {
+	deviceName, _ := osversion.GetHumanReadable()
+	return deviceName
+}
 
-	if !found && user == nil {
-		return protos.Devices{}
+func (app *App) currentDevice() *protos.Device {
+	deviceID := app.Settings().GetDeviceID()
+	return &protos.Device{
+		Id:   deviceID,
+		Name: deviceName(),
 	}
-	log.Debugf("Devices: %v", user.Devices)
-	return protos.Devices{
-		Devices: user.Devices,
+}
+
+func (app *App) devices() *protos.Devices {
+	devices := []*protos.Device{app.currentDevice()}
+	user, found := app.UserData()
+	if !found || user == nil || user.Devices == nil {
+		return &protos.Devices{
+			Devices: devices,
+		}
+	}
+	devices = append(devices, user.Devices...)
+	log.Debugf("Devices: %v", devices)
+	return &protos.Devices{
+		Devices: devices,
 	}
 }
 
 // ProxyAddrReachable checks if Lantern's HTTP proxy responds with the correct status
 // within the deadline.
 func (app *App) ProxyAddrReachable(ctx context.Context) error {
-	req, err := http.NewRequest("GET", "http://"+app.settings.GetAddr(), nil)
+	req, err := http.NewRequest("GET", "http://"+app.Settings().GetAddr(), nil)
 	if err != nil {
 		return err
 	}
@@ -636,8 +618,8 @@ func recordStopped() {
 		End()
 }
 
-// ShouldReportToSentry determines if we should report errors/panics to Sentry
-func ShouldReportToSentry() bool {
+// shouldReportToSentry determines if we should report errors/panics to Sentry
+func shouldReportToSentry() bool {
 	return !common.IsDevEnvironment()
 }
 

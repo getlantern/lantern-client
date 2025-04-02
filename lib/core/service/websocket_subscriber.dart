@@ -1,10 +1,15 @@
-import 'package:collection/collection.dart';
+import 'dart:convert';
+
+import 'package:fixnum/src/int64.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:lantern/core/service/websocket.dart';
+import 'package:lantern/core/utils/common.dart';
+import 'package:lantern/features/home/session_model.dart';
+import 'package:lantern/features/vpn/protos_shared/vpn.pb.dart';
 import 'package:logger/logger.dart';
 
-import '../utils/common.dart';
-import '../utils/common_desktop.dart';
-
-var _webSocketLogger = Logger(
+final _webSocketLogger = Logger(
   level: Level.all,
   filter: DevelopmentFilter(),
   output: ConsoleOutput(),
@@ -22,137 +27,138 @@ enum _WebsocketMessageType {
   bandwidth,
   vpnstatus,
   settings,
-  stats,
+  stats
 }
 
 class WebsocketSubscriber {
   static WebsocketSubscriber? _instance;
-
-  late WebsocketImpl _ws;
+  late final WebsocketImpl _ws;
 
   WebsocketSubscriber._internal() {
     _ws = WebsocketImpl.instance()!;
-    listenMessages();
+    _listenMessages();
   }
+
+  factory WebsocketSubscriber() =>
+      _instance ??= WebsocketSubscriber._internal();
 
   Future<void> connect() async => await _ws.connect();
 
-  factory WebsocketSubscriber() {
-    _instance ??= WebsocketSubscriber._internal();
-    return _instance!;
+  void dispose() {
+    _ws.close();
   }
 
-  void listenMessages() {
-    _webSocketLogger.i("Listening to websocket messages");
+  void _listenMessages() {
+    _webSocketLogger.i("Listening to WebSocket messages");
+
     _ws.messageStream.listen(
-      (json) {
-        _webSocketLogger.d("websocket message: $json");
-        if (json["type"] == null) return;
-        final message = json["message"];
-        _WebsocketMessageType? messageType = _WebsocketMessageType.values
-            .firstWhereOrNull((e) => e.name == json["type"]);
-        if (message == null || messageType == null) return;
-        switch (messageType) {
-          case _WebsocketMessageType.settings:
-            _webSocketLogger.i("websocket message[Setting]: $json");
-            final referralCode = message['referralCode'];
-            if (referralCode != null) {
-              sessionModel.referralNotifier.value = referralCode;
-            }
-            final emailAddresses = message['emailAddress'];
-            if (emailAddresses != null) {
-              sessionModel.userEmail.value = emailAddresses;
-            }
-
-            final deviceID = message['deviceID'];
-            if (deviceID != null) {
-              sessionModel.deviceIdNotifier.value = deviceID;
-            }
-
-            final proxyAll = message['proxyAll'];
-            if (proxyAll != null) {
-              sessionModel.proxyAllNotifier.value = proxyAll as bool;
-            }
-
-            final userPro = message['userPro'];
-            if (userPro != null) {
-              sessionModel.proUserNotifier.value = userPro.toString() == 'true';
-            }
-
-          case _WebsocketMessageType.stats:
-            if (message['countryCode'] != null) {
-              sessionModel.serverInfoNotifier.value = ServerInfo.create()
-                ..mergeFromProto3Json({
-                  'city': message['city'],
-                  'country': message['country'],
-                  'countryCode': message['countryCode'],
-                });
-            }
-          case _WebsocketMessageType.pro:
-            _webSocketLogger.i("Websocket message[Pro]: $message");
-            final deviceLinkingCode = message['deviceLinkingCode'];
-
-            if (deviceLinkingCode != null) {
-              sessionModel.linkingCodeNotifier.value = deviceLinkingCode;
-            }
-            final userSignedIn = message['login'];
-            if (userSignedIn != null) {
-              sessionModel.hasUserSignedInNotifier.value = userSignedIn as bool;
-            }
-            final language = message['language'];
-            if (language != null) {
-              sessionModel.langNotifier.value = language;
-            }
-
-          case _WebsocketMessageType.bandwidth:
-            _webSocketLogger.i("Websocket message[Bandwidth]: $message");
-            sessionModel.bandwidthNotifier.value = Bandwidth.create()
-              ..mergeFromProto3Json(message);
-          case _WebsocketMessageType.config:
-            _webSocketLogger.i("Websocket message[config]: $message");
-            final ConfigOptions config = ConfigOptions.fromJson(message);
-
-            sessionModel.isAuthEnabled.value = config.authEnabled;
-            sessionModel.configNotifier.value = config;
-            sessionModel.country.value = config.country;
-            _updatePlans(config.plans);
-            _updatePaymentMethods(config.paymentMethods);
-            break;
-
-          case _WebsocketMessageType.vpnstatus:
-            final res = message["connected"];
-            if (res != null) {
-              final vpnStatus =
-                  res.toString() == "true" ? "connected" : "disconnected";
-              _webSocketLogger.i("Websocket message[VPNStatus]: $vpnStatus");
-            }
-            break;
-        }
-      },
+      _handleMessage,
       onError: (error) => _webSocketLogger
-          .e("websocket error: ${error.description}", error: error),
+          .e("WebSocket error: ${error.description}", error: error),
     );
   }
-}
 
-/// Method to update plans
-void _updatePlans(Map<String, Plan>? plans) {
-  if (plans != null) {
-    sessionModel.plansNotifier.value.clearPaths();
-    plans.forEach((key, plan) {
-      sessionModel.plansNotifier.value.map[key] = plan;
-    });
+  void _handleMessage(Map<String, dynamic> json) {
+    final type = json["type"] as String?;
+    final message = json["message"];
+
+    if (type == null || message == null) return;
+
+    final messageType = _WebsocketMessageType.values.firstWhere(
+      (e) => e.name == type,
+    );
+
+    _webSocketLogger.d("WebSocket message [$type]: $message");
+
+    switch (messageType) {
+      case _WebsocketMessageType.settings:
+        _handleSettings(message);
+        break;
+      case _WebsocketMessageType.stats:
+        _handleStats(message);
+        break;
+      case _WebsocketMessageType.pro:
+        _handlePro(message);
+        break;
+      case _WebsocketMessageType.bandwidth:
+        _handleBandwidth(message);
+        break;
+      case _WebsocketMessageType.config:
+        _handleConfig(message);
+        break;
+      case _WebsocketMessageType.vpnstatus:
+        _handleVpnStatus(message);
+        break;
+    }
+  }
+
+  void _handleSettings(Map<String, dynamic> message) {
+    final user = sessionModel.userNotifier.value;
+    final isPro = message['userPro']?.toString() == 'true';
+
+    user.referral = message['referralCode'] ?? user.referral;
+    user.email = message['emailAddress'] ?? user.email;
+    user.userStatus = isPro ? 'active' : '';
+    sessionModel.userNotifier.value = user;
+
+    sessionModel.expiryDateNotifier.value = message['expirydate'] ?? '';
+    sessionModel.proxyAllNotifier.value =
+        (message['proxyAll'] as bool?) ?? sessionModel.proxyAllNotifier.value;
+    sessionModel.proUserNotifier.value =
+        message['userPro']?.toString() == 'true';
+  }
+
+  void _handleStats(Map<String, dynamic> message) {
+    if (message['countryCode'] != null) {
+      sessionModel.serverInfoNotifier.value = ServerInfo.create()
+        ..mergeFromProto3Json({
+          'city': message['city'],
+          'country': message['country'],
+          'countryCode': message['countryCode'],
+        });
+    }
+  }
+
+  void _handlePro(Map<String, dynamic> message) {
+    sessionModel.linkingCodeNotifier.value =
+        message['deviceLinkingCode'] ?? sessionModel.linkingCodeNotifier.value;
+    sessionModel.hasUserSignedInNotifier.value =
+        message['login'] as bool? ?? sessionModel.hasUserSignedInNotifier.value;
+    sessionModel.langNotifier.value =
+        message['language'] ?? sessionModel.langNotifier.value;
+  }
+
+  void _handleBandwidth(Map<String, dynamic> message) {
+    sessionModel.bandwidthNotifier.value = Bandwidth.create()
+      ..mergeFromProto3Json(message);
+  }
+
+  void _handleConfig(Map<String, dynamic> message) {
+    final config = ConfigOptions.create()..mergeFromProto3Json(message);
+
+    sessionModel.isAuthEnabled.value = config.authEnabled;
+    sessionModel.configNotifier.value = config;
+    sessionModel.country.value = config.country;
+    sessionModel.devicesNotifier.value = config.devices;
+
+    _updatePlans(config.plans);
+    _updatePaymentMethods(config.paymentMethods);
+  }
+
+  void _handleVpnStatus(Map<String, dynamic> message) {
+    final vpnStatus = (message["connected"]?.toString() == "true")
+        ? "connected"
+        : "disconnected";
+    _webSocketLogger.i("WebSocket message [VPNStatus]: $vpnStatus");
   }
 }
 
-// Method to update payment methods
-void _updatePaymentMethods(Map<String, PaymentMethod>? paymentMethods) {
-  if (paymentMethods != null) {
-    sessionModel.paymentMethodsNotifier.value.clearPaths();
-    paymentMethods.forEach((key, paymentMethod) {
-      if (paymentMethod != null) {
-        sessionModel.paymentMethodsNotifier.value.map[key] = paymentMethod;
-      }
-    });
-  }
+void _updatePlans(List<Plan> plans) {
+  if (plans.isEmpty) return;
+  sessionModel.plansNotifier.value = plans;
+}
+
+void _updatePaymentMethods(List<PaymentMethod> paymentMethods) {
+  if (paymentMethods.isEmpty) return;
+  sessionModel.paymentMethodsNotifier.value = paymentMethods;
 }

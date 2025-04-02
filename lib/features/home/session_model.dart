@@ -18,24 +18,28 @@ const TAB_DEVELOPER = 'developer';
 class SessionModel extends Model {
   late final EventManager eventManager;
   ValueNotifier<bool> networkAvailable = ValueNotifier(true);
+  late ValueNotifier<ConfigOptions?> configNotifier =
+      ValueNotifier<ConfigOptions?>(null);
+  final ValueNotifier<String> langNotifier = ValueNotifier('en_us');
+  late ValueNotifier<bool?> proUserNotifier;
+  final ValueNotifier<User> userNotifier = ValueNotifier(User.create());
+  final ValueNotifier<Devices> devicesNotifier =
+      ValueNotifier(Devices.create());
+  final ValueNotifier<List<Plan>> plansNotifier = ValueNotifier([]);
+  final ValueNotifier<List<PaymentMethod>> paymentMethodsNotifier =
+      ValueNotifier([]);
+  final ValueNotifier<String> expiryDateNotifier = ValueNotifier('');
+
   late ValueNotifier<bool?> isTestPlayVersion;
   late ValueNotifier<bool?> isStoreVersion;
   late ValueNotifier<bool?> proxyAvailable;
-  late ValueNotifier<bool?> proUserNotifier;
-  late ValueNotifier<ConfigOptions?> configNotifier;
   late ValueNotifier<String?> country;
-  late ValueNotifier<String?> referralNotifier;
-  late ValueNotifier<String?> deviceIdNotifier;
-  ValueNotifier<String?> langNotifier = ValueNotifier('en_us');
   late ValueNotifier<bool> proxyAllNotifier;
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<String?> linkingCodeNotifier;
-  late ValueNotifier<Devices?> devicesNotifier;
   late ValueNotifier<bool?> hasUserSignedInNotifier;
   late ValueNotifier<bool?> isAuthEnabled;
-  late FfiListNotifier<Plan> plansNotifier;
-  late FfiListNotifier<PaymentMethod> paymentMethodsNotifier;
   ValueNotifier<Bandwidth?> bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
 
   SessionModel() : super('session') {
@@ -72,20 +76,14 @@ class SessionModel extends Model {
       );
     } else {
       bandwidthNotifier = ValueNotifier<Bandwidth?>(null);
-      configNotifier = ValueNotifier<ConfigOptions?>(null);
       country = ValueNotifier('US');
       linkingCodeNotifier = ValueNotifier('');
       proxyAvailable = ValueNotifier(false);
       userEmail = ValueNotifier("");
       proUserNotifier = ValueNotifier(false);
-      plansNotifier = FfiListNotifier<Plan>('/plans/', () => {});
-      paymentMethodsNotifier =
-          FfiListNotifier<PaymentMethod>('/paymentMethods/', () => {});
       hasUserSignedInNotifier = ValueNotifier(false);
       serverInfoNotifier = ValueNotifier<ServerInfo?>(null);
       proxyAllNotifier = ValueNotifier(false);
-      referralNotifier = ValueNotifier('');
-      deviceIdNotifier = ValueNotifier('');
       isAuthEnabled = ValueNotifier(false);
       isStoreVersion = ValueNotifier(false);
       isTestPlayVersion = ValueNotifier(false);
@@ -105,27 +103,20 @@ class SessionModel extends Model {
     return methodChannel.invokeMethod('updateUserDetail', {});
   }
 
-  Widget configValueBuilder<T>(
-    String path,
-    ValueWidgetBuilder<T> builder,
-    T Function(ConfigOptions? options) onConfigUpdate,
-  ) {
-    return SubscribedSingleValueBuilder<ConfigOptions?>(
-      path,
-      configNotifier,
-      (BuildContext context, ConfigOptions? value, Widget? child) =>
-          value == null
-              ? const SizedBox()
-              : builder(context, onConfigUpdate(value), child),
-    );
-  }
-
   Widget proUser(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
-      return subscribedSingleValueBuilder<bool>('prouser',
-          builder: builder, defaultValue: false);
+      return subscribedSingleValueBuilder<bool>(
+        'prouser',
+        builder: builder,
+        defaultValue: false,
+      );
     }
-    return FfiValueBuilder<bool>('prouser', proUserNotifier, builder);
+    return ValueListenableBuilder<bool?>(
+      valueListenable: proUserNotifier,
+      builder: (context, value, child) {
+        return builder(context, value ?? false, child);
+      },
+    );
   }
 
   Widget bandwidth(ValueWidgetBuilder<Bandwidth> builder) {
@@ -138,7 +129,12 @@ class SessionModel extends Model {
         },
       );
     }
-    return FfiValueBuilder<Bandwidth>('bandwidth', bandwidthNotifier, builder);
+    return ValueListenableBuilder<Bandwidth?>(
+      valueListenable: bandwidthNotifier,
+      builder: (context, bandwidth, child) {
+        return builder(context, bandwidth ?? Bandwidth.create(), child);
+      },
+    );
   }
 
   Widget developmentMode(ValueWidgetBuilder<bool> builder) {
@@ -148,8 +144,13 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'developmentMode', builder, (value) => value?.developmentMode ?? false);
+    return ValueListenableBuilder<ConfigOptions?>(
+      valueListenable: configNotifier,
+      builder: (context, config, child) {
+        final devMode = config?.developmentMode ?? false;
+        return builder(context, devMode, child);
+      },
+    );
   }
 
   Widget paymentTestMode(ValueWidgetBuilder<bool> builder) {
@@ -176,8 +177,13 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<int>('accepted_terms_version',
           builder: builder, defaultValue: 0);
     }
-    return configValueBuilder('accepted_terms_version', builder,
-        (value) => value?.chat.acceptedTermsVersion ?? 0);
+    return ValueListenableBuilder<ConfigOptions?>(
+      valueListenable: configNotifier,
+      builder: (context, config, child) {
+        final acceptedTermsVersion = config?.chat.acceptedTermsVersion ?? 0;
+        return builder(context, acceptedTermsVersion, child);
+      },
+    );
   }
 
   Widget forceCountry(ValueWidgetBuilder<String> builder) {
@@ -217,7 +223,10 @@ class SessionModel extends Model {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('lang', builder: builder);
     }
-    return FfiValueBuilder<String>('lang', langNotifier, builder);
+    return ValueListenableBuilder<String>(
+      valueListenable: langNotifier,
+      builder: builder,
+    );
   }
 
   Widget emailAddress(ValueWidgetBuilder<String> builder) {
@@ -227,7 +236,12 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('emailAddress', userEmail, builder);
+    return ValueListenableBuilder<User?>(
+      valueListenable: userNotifier,
+      builder: (context, user, child) {
+        return builder(context, user?.email ?? '', child);
+      },
+    );
   }
 
   Widget expiryDate(ValueWidgetBuilder<String> builder) {
@@ -237,8 +251,12 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'expirydatestr', builder, (value) => value?.expirationDate ?? '');
+    return ValueListenableBuilder<String>(
+      valueListenable: expiryDateNotifier,
+      builder: (context, value, child) {
+        return builder(context, value, child);
+      },
+    );
   }
 
   Widget referralCode(ValueWidgetBuilder<String> builder) {
@@ -248,14 +266,24 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('referralCode', referralNotifier, builder);
+    return ValueListenableBuilder<User?>(
+      valueListenable: userNotifier,
+      builder: (context, user, child) {
+        return builder(context, user?.referral ?? '', child);
+      },
+    );
   }
 
   Widget deviceId(ValueWidgetBuilder<String> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<String>('deviceid', builder: builder);
     }
-    return FfiValueBuilder<String>('deviceid', deviceIdNotifier, builder);
+    return ValueListenableBuilder<ConfigOptions?>(
+      valueListenable: configNotifier,
+      builder: (context, config, child) {
+        return builder(context, config?.deviceId ?? '', child);
+      },
+    );
   }
 
   Widget devices(ValueWidgetBuilder<Devices> builder) {
@@ -269,8 +297,12 @@ class SessionModel extends Model {
       );
     }
     // update the logic of devices
-    return configValueBuilder(
-        'devices', builder, (options) => options!.devices);
+    return ValueListenableBuilder<Devices?>(
+      valueListenable: devicesNotifier,
+      builder: (context, devices, child) {
+        return builder(context, devices ?? Devices.create(), child);
+      },
+    );
   }
 
   /// This only supports desktop fo now
@@ -294,11 +326,18 @@ class SessionModel extends Model {
 
   Widget isUserSignedIn(ValueWidgetBuilder<bool> builder) {
     if (isDesktop()) {
-      return FfiValueBuilder<bool>(
-          'isUserLoggedIn', hasUserSignedInNotifier, builder);
+      return ValueListenableBuilder<bool?>(
+        valueListenable: hasUserSignedInNotifier,
+        builder: (context, userSignedIn, child) {
+          return builder(context, userSignedIn ?? false, child);
+        },
+      );
     }
-    return subscribedSingleValueBuilder<bool>('IsUserLoggedIn',
-        builder: builder, defaultValue: false);
+    return subscribedSingleValueBuilder<bool>(
+      'IsUserLoggedIn',
+      builder: builder,
+      defaultValue: false,
+    );
   }
 
   /// Auth Method channel
@@ -524,8 +563,13 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'replicaAddr', builder, (value) => value?.replicaAddr ?? '');
+    return ValueListenableBuilder<ConfigOptions?>(
+      valueListenable: configNotifier,
+      builder: (context, config, child) {
+        final replicaAddr = config?.replicaAddr ?? '';
+        return builder(context, replicaAddr, child);
+      },
+    );
   }
 
   Widget countryCode(ValueWidgetBuilder<String> builder) {
@@ -536,7 +580,12 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>('lang', country, builder);
+    return ValueListenableBuilder<String>(
+      valueListenable: langNotifier,
+      builder: (context, value, child) {
+        return builder(context, value ?? '', child);
+      },
+    );
   }
 
   Future<String> getReplicaAddr() async {
@@ -560,8 +609,13 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'chatEnabled', builder, (value) => value?.chatEnabled ?? false);
+    return ValueListenableBuilder<ConfigOptions?>(
+      valueListenable: configNotifier,
+      builder: (context, config, child) {
+        final chatEnabled = config?.chatEnabled ?? false;
+        return builder(context, chatEnabled, child);
+      },
+    );
   }
 
   Widget sdkVersion(ValueWidgetBuilder<String> builder) {
@@ -572,8 +626,13 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return configValueBuilder(
-        'sdkVersion', builder, (value) => value?.sdkVersion ?? "");
+    return ValueListenableBuilder<ConfigOptions?>(
+      valueListenable: configNotifier,
+      builder: (context, config, child) {
+        final sdkVersion = config?.sdkVersion ?? '';
+        return builder(context, sdkVersion, child);
+      },
+    );
   }
 
   Future<bool> getChatEnabled() async {
@@ -628,15 +687,15 @@ class SessionModel extends Model {
         },
       );
     }
-    return FfiListBuilder<Plan>(
-      '/plans/',
-      plansNotifier,
-      (BuildContext context, ChangeTrackingList<Plan> value, Widget? child) =>
-          builder(
-        context,
-        value.map.entries.map((e) => PathAndValue(e.key, e.value)),
-        child,
-      ),
+    return ValueListenableBuilder<List<Plan>>(
+      valueListenable: plansNotifier,
+      builder: (context, plans, child) {
+        return builder(
+          context,
+          plans.map((plan) => PathAndValue(plan.id, plan)),
+          child,
+        );
+      },
     );
   }
 
@@ -652,14 +711,11 @@ class SessionModel extends Model {
         },
       );
     }
-    return FfiListBuilder<PaymentMethod>(
-      '/paymentMethods/',
-      paymentMethodsNotifier,
-      (BuildContext context, ChangeTrackingList<PaymentMethod> value,
-              Widget? child) =>
-          builder(
+    return ValueListenableBuilder<List<PaymentMethod>>(
+      valueListenable: paymentMethodsNotifier,
+      builder: (context, value, child) => builder(
         context,
-        value.map.entries.map((e) => PathAndValue(e.key, e.value)),
+        value.map((e) => PathAndValue(e.method, e)),
         child,
       ),
     );
@@ -714,8 +770,10 @@ class SessionModel extends Model {
         },
       );
     }
-    return FfiValueBuilder<ServerInfo?>(
-        'serverInfo', serverInfoNotifier, builder);
+    return ValueListenableBuilder<ServerInfo?>(
+      valueListenable: serverInfoNotifier,
+      builder: builder,
+    );
   }
 
   Future<void> trackUserAction(
@@ -750,8 +808,12 @@ class SessionModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<String>(
-        'deviceLinkingCode', linkingCodeNotifier, builder);
+    return ValueListenableBuilder<String?>(
+      valueListenable: linkingCodeNotifier,
+      builder: (context, _, child) {
+        return builder(context, linkingCodeNotifier.value ?? '', child);
+      },
+    );
   }
 
   Future<void> redeemResellerCode(
@@ -879,12 +941,20 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<bool>('/splitTunneling',
           builder: builder, defaultValue: false);
     }
-    return configValueBuilder(
-        'splitTunneling', builder, (value) => value?.splitTunneling ?? false);
+    return ValueListenableBuilder<ConfigOptions?>(
+      valueListenable: configNotifier,
+      builder: (context, config, child) {
+        final splitTunnelingEnabled = config?.splitTunneling ?? false;
+        return builder(context, splitTunnelingEnabled, child);
+      },
+    );
   }
 
   Widget proxyAll(ValueWidgetBuilder<bool> builder) {
-    return FfiValueBuilder<bool>('proxyAll', proxyAllNotifier, builder);
+    return ValueListenableBuilder<bool>(
+      valueListenable: proxyAllNotifier,
+      builder: builder,
+    );
   }
 
   Future<void> setSplitTunneling<T>(bool on) async {

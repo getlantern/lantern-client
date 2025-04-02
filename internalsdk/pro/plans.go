@@ -8,9 +8,9 @@ import (
 )
 
 // Plans returns the plans available to a user
-func (c *proClient) Plans(ctx context.Context) ([]protos.Plan, error) {
+func (c *proClient) Plans(ctx context.Context) ([]*protos.Plan, error) {
 	if v, ok := c.plansCache.Load("plans"); ok {
-		resp := v.([]protos.Plan)
+		resp := v.([]*protos.Plan)
 		log.Debugf("Returning plans from cache %s", v)
 		return resp, nil
 	}
@@ -22,18 +22,18 @@ func (c *proClient) Plans(ctx context.Context) ([]protos.Plan, error) {
 }
 
 // DesktopPaymentMethods returns plans and payment methods available for desktop users
-func (c *proClient) DesktopPaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error) {
+func (c *proClient) DesktopPaymentMethods(ctx context.Context) ([]*protos.PaymentMethod, error) {
 	return c.paymentMethodsByPlatform(ctx, "desktop")
 }
 
 // PaymentMethodsByPlatform returns the plans and payments from cache for the given platform
 // if available; if not then call FetchPaymentMethods
-func (c *proClient) paymentMethodsByPlatform(ctx context.Context, platform string) ([]protos.PaymentMethod, error) {
+func (c *proClient) paymentMethodsByPlatform(ctx context.Context, platform string) ([]*protos.PaymentMethod, error) {
 	if platform != "desktop" && platform != "android" {
 		return nil, errors.New("invalid platform")
 	}
 	if v, ok := c.plansCache.Load("paymentMethods"); ok {
-		resp := v.([]protos.PaymentMethod)
+		resp := v.([]*protos.PaymentMethod)
 		log.Debugf("Returning payment methods from cache %s", v)
 		return resp, nil
 	}
@@ -59,8 +59,7 @@ func (c *proClient) FetchPaymentMethodsAndCache(ctx context.Context) (*PaymentMe
 	if !ok {
 		return nil, errors.New("No desktop payment providers found")
 	}
-	for i := range desktopPaymentMethods {
-		paymentMethod := &desktopPaymentMethods[i]
+	for _, paymentMethod := range desktopPaymentMethods {
 		for j, provider := range paymentMethod.Providers {
 			if resp.Logo[provider.Name] != nil {
 				logos := resp.Logo[provider.Name].([]interface{})

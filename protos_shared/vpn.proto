@@ -134,3 +134,34 @@ message LinkResponse {
   string error = 4;
   string errorId = 5;
 }
+
+// Config
+
+message ChatOptions {
+  bool on_boarding_status = 1;
+  int32 accepted_terms_version = 2;
+}
+
+message ConfigOptions {
+  bool development_mode = 1;
+  string replica_addr = 2;
+  string http_proxy_addr = 3;
+  string socks_proxy_addr = 4;
+  bool auth_enabled = 5;
+  bool chat_enabled = 6;
+  bool split_tunneling = 7;
+  bool has_succeeding_proxy = 8;
+  bool fetched_global_config = 9;
+  bool fetched_proxies_config = 10;
+  repeated Plan plans = 11;
+  repeated PaymentMethod payment_methods = 12;
+  Devices devices = 13;
+  string sdk_version = 14;
+  string app_version = 15;
+  string device_id = 16;
+  string expiration_date = 17;
+  ChatOptions chat = 18;
+  bool proxy_all = 19;
+  string country = 20;
+  bool is_user_logged_in = 21;
+}

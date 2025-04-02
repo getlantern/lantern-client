@@ -1,8 +1,5 @@
 import 'dart:collection';
-import 'package:lantern/core/subscribers/ffi_list_subscriber.dart';
 import 'package:lantern/features/messaging/messaging.dart';
-
-import '../utils/common_desktop.dart';
 
 abstract class Model {
   late MethodChannel methodChannel;
@@ -11,9 +8,6 @@ abstract class Model {
       HashMap();
   final Map<String, SubscribedListNotifier> _listNotifierCache = HashMap();
   Event? event;
-  final Map<String, FfiListNotifier> _ffiListNotifierCache = HashMap();
-
-  late ValueNotifier<ConfigOptions?> configNotifier;
 
   Model(String name) {
     if (isMobile()) {
