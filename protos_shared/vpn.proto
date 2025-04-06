@@ -1,6 +1,6 @@
 syntax = "proto3";
 option java_package = "io.lantern.model";
-option go_package = "/protos";
+option go_package = "github.com/getlantern/lantern-client/internalsdk/protos";
 
 message ServerInfo {
   string city = 1;
@@ -120,19 +120,78 @@ message RedeemResellerCodeRequest {
   string provider = 6;
 }
 
+message Icon {
+  repeated string icons = 1;
+}
+
+message PaymentMethodsResponse {
+  BaseResponse base = 1;
+  map<string, PaymentMethodsList> providers = 2;
+  repeated Plan plans = 3;
+  map<string, Icon> icons = 4;
+}
+
+message PaymentMethodsList {
+  repeated PaymentMethod methods = 1;
+}
+
+message PlansResponse {
+  BaseResponse base = 1;
+  repeated Plan plans = 2;
+}
+
 message PaymentRedirectResponse {
-  string status = 1;
-  string error = 2;
-  string errorId = 3;
-  string redirect = 4;
+  BaseResponse base = 1;
+  string redirect = 2;
+}
+
+message UserDataResponse {
+  BaseResponse base = 1;
+  User user = 2;
 }
 
 message LinkResponse {
-  int64 userID = 1;
+  BaseResponse base = 1;
+  int64 userID = 2;
+  string token = 3;
+}
+
+message LinkCodeResponse {
+  BaseResponse base = 1;
+  string code = 2;
+  int64 expire_at = 3;
+}
+
+message LinkCodeRedeemResponse {
+  BaseResponse base = 1;
+  string status = 2;
+  int64 user_id = 3;
+  string token = 4;
+}
+
+message ProPurchaseResponse {
+  BaseResponse base = 1;
+  string payment_status = 2;
+  Plan plan = 3;
+  string status = 4;
+}
+
+message UserRecovery {
+  string status = 1;
+  int64 user_id = 2;
+  string token = 3;
+}
+
+message OkResponse {
+  string status = 1;
+}
+
+message RestorePurchaseRequest {
+  string provider = 1;
   string token = 2;
-  string status = 3;
-  string error = 4;
-  string errorId = 5;
+  string device_name = 3;
+  string email = 4;
+  string code = 5;
 }
 
 // Config
@@ -154,7 +213,7 @@ message ConfigOptions {
   bool fetched_global_config = 9;
   bool fetched_proxies_config = 10;
   repeated Plan plans = 11;
-  repeated PaymentMethod payment_methods = 12;
+  PaymentMethodsList payment_methods = 12;
   Devices devices = 13;
   string sdk_version = 14;
   string app_version = 15;
@@ -165,3 +224,4 @@ message ConfigOptions {
   string country = 20;
   bool is_user_logged_in = 21;
 }
+

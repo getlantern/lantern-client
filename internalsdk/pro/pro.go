@@ -42,28 +42,28 @@ type ProClient interface {
 	webclient.RESTClient
 	Client
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
-	DesktopPaymentMethods(ctx context.Context) ([]*protos.PaymentMethod, error)
-	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
-	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
-	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
-	FetchPaymentMethodsAndCache(ctx context.Context) (*PaymentMethodsResponse, error)
+	DesktopPaymentMethods(ctx context.Context) (*protos.PaymentMethodsList, error)
+	PaymentMethods(ctx context.Context) (*protos.PaymentMethodsResponse, error)
+	PaymentMethodsV4(ctx context.Context) (*protos.PaymentMethodsResponse, error)
+	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*protos.PaymentRedirectResponse, error)
+	FetchPaymentMethodsAndCache(ctx context.Context) (*protos.PaymentMethodsResponse, error)
 	Plans(ctx context.Context) ([]*protos.Plan, error)
 	PollUserData(ctx context.Context, session ClientSession, maxElapsedTime time.Duration, client Client)
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
 	RetryCreateUser(ctx context.Context, ss ClientSession, maxElapsedTime time.Duration)
-	UserCreate(ctx context.Context) (*UserDataResponse, error)
-	UserData(ctx context.Context) (*UserDataResponse, error)
-	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*PurchaseResponse, error)
-	RestorePurchase(ctx context.Context, req map[string]interface{}) (*OkResponse, error)
-	EmailRequest(ctx context.Context, email string) (*OkResponse, error)
+	UserCreate(ctx context.Context) (*protos.UserDataResponse, error)
+	UserData(ctx context.Context) (*protos.UserDataResponse, error)
+	PurchaseRequest(ctx context.Context, data map[string]interface{}) (*protos.ProPurchaseResponse, error)
+	RestorePurchase(ctx context.Context, req map[string]interface{}) (*protos.OkResponse, error)
+	EmailRequest(ctx context.Context, email string) (*protos.OkResponse, error)
 	ReferralAttach(ctx context.Context, refCode string) (bool, error)
 	//Device Linking
 	LinkCodeApprove(ctx context.Context, code string) (*protos.BaseResponse, error)
-	LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error)
-	LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error)
+	LinkCodeRequest(ctx context.Context, deviceName string) (*protos.LinkCodeResponse, error)
+	LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*protos.LinkCodeRedeemResponse, error)
 	UserLinkCodeRequest(ctx context.Context, email string) (bool, error)
-	UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error)
-	DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error)
+	UserLinkValidate(ctx context.Context, code string) (*protos.UserRecovery, error)
+	DeviceRemove(ctx context.Context, deviceId string) (*protos.LinkResponse, error)
 	DeviceAdd(ctx context.Context, deviceName string) (bool, error)
 }
 
@@ -120,8 +120,8 @@ func (c *proClient) EmailExists(ctx context.Context, email string) (*protos.Base
 	return &resp, nil
 }
 
-func (c *proClient) EmailRequest(ctx context.Context, email string) (*OkResponse, error) {
-	var resp OkResponse
+func (c *proClient) EmailRequest(ctx context.Context, email string) (*protos.OkResponse, error) {
+	var resp protos.OkResponse
 	params := c.defaultParams()
 	params["email"] = email
 	err := c.PostJSONReadingJSON(ctx, "/user-email-request", params, nil, &resp)
@@ -132,8 +132,8 @@ func (c *proClient) EmailRequest(ctx context.Context, email string) (*OkResponse
 }
 
 // PaymentRedirect returns a checkout/redirect URL to be used to complete a Lantern Pro purchase with a payment provider
-func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error) {
-	var resp PaymentRedirectResponse
+func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*protos.PaymentRedirectResponse, error) {
+	var resp protos.PaymentRedirectResponse
 	uc := c.userConfig()
 	req.Locale = uc.GetLanguage()
 	b, _ := protojson.Marshal(req)
@@ -148,8 +148,8 @@ func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedi
 
 // PaymentMethods returns a list of plans along with payment providers and available payment methods
 // This methods has been deparacted in flavor of PaymentMethodsV4
-func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error) {
-	var resp PaymentMethodsResponse
+func (c *proClient) PaymentMethods(ctx context.Context) (*protos.PaymentMethodsResponse, error) {
+	var resp protos.PaymentMethodsResponse
 	err := c.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
@@ -158,14 +158,14 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 }
 
 // PaymentMethods returns a list of plans, payment providers and logo available payment methods
-func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error) {
-	var resp PaymentMethodsResponse
+func (c *proClient) PaymentMethodsV4(ctx context.Context) (*protos.PaymentMethodsResponse, error) {
+	var resp protos.PaymentMethodsResponse
 	err := c.GetJSON(ctx, "/plans-v4", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
 	}
-	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
-		return nil, errors.New("error received from server: %v", resp.BaseResponse.Error)
+	if resp.Base != nil && resp.Base.Error != "" {
+		return nil, errors.New("error received from server: %v", resp.Base.Error)
 	}
 
 	// process plans for currency
@@ -192,28 +192,26 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 }
 
 // UserCreate creates a new user
-func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
-	var resp UserDataResponse
+func (c *proClient) UserCreate(ctx context.Context) (*protos.UserDataResponse, error) {
+	var resp protos.UserDataResponse
 	err := c.PostFormReadingJSON(ctx, "/user-create", nil, &resp)
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
 	}
-	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
-		return nil, errors.New("error received: %v", resp.BaseResponse.Error)
+	if resp.Base != nil && resp.Base.Error != "" {
+		return nil, errors.New("error received: %v", resp.Base.Error)
 	}
-	log.Debugf("UserCreate response is %v", resp)
 	return &resp, nil
 }
 
 // UserData returns data associated with a user
-func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
-	var resp UserDataResponse
+func (c *proClient) UserData(ctx context.Context) (*protos.UserDataResponse, error) {
+	var resp protos.UserDataResponse
 	err := c.GetJSON(ctx, "/user-data", nil, &resp)
 	if err != nil {
 		log.Errorf("Failed to fetch user data: %v", err)
 		return nil, errors.New("error fetching user data: %v", err)
 	}
-	log.Debugf("UserData response is %v", resp)
 	return &resp, nil
 }
 
@@ -231,8 +229,8 @@ func (c *proClient) RedeemResellerCode(ctx context.Context, req *protos.RedeemRe
 }
 
 // DeviceRemove removes the device with the given ID from a user's Pro account
-func (c *proClient) DeviceRemove(ctx context.Context, deviceId string) (*LinkResponse, error) {
-	var resp LinkResponse
+func (c *proClient) DeviceRemove(ctx context.Context, deviceId string) (*protos.LinkResponse, error) {
+	var resp protos.LinkResponse
 	params := c.defaultParams()
 	params["deviceID"] = deviceId
 	err := c.PostJSONReadingJSON(ctx, "/user-link-remove", params, nil, &resp)
@@ -275,11 +273,11 @@ func (c *proClient) LinkCodeApprove(ctx context.Context, code string) (*protos.B
 }
 
 // LinkCodeRequest returns a code that can be used to link a device to an existing Pro account
-func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*LinkCodeResponse, error) {
+func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*protos.LinkCodeResponse, error) {
 	if deviceName == "" {
 		return nil, errMissingDeviceName
 	}
-	var resp LinkCodeResponse
+	var resp protos.LinkCodeResponse
 	uc := c.userConfig()
 	err := c.PostJSONReadingJSON(ctx, "/link-code-request", map[string]interface{}{
 		"deviceName": deviceName,
@@ -292,8 +290,8 @@ func (c *proClient) LinkCodeRequest(ctx context.Context, deviceName string) (*Li
 }
 
 // LinkCodeRequest returns a code that can be used to link a device to an existing Pro account
-func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*LinkCodeRedeemResponse, error) {
-	var resp LinkCodeRedeemResponse
+func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, deviceCode string) (*protos.LinkCodeRedeemResponse, error) {
+	var resp protos.LinkCodeRedeemResponse
 	err := c.PostJSONReadingJSON(ctx, "/link-code-redeem", map[string]interface{}{
 		"deviceName": deviceName,
 		"code":       deviceCode,
@@ -301,15 +299,15 @@ func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, devic
 	if err != nil {
 		return nil, err
 	}
-	if resp.BaseResponse != nil && resp.Status != "ok" {
-		return nil, errors.New("%v redeeming link code: %v", resp.ErrorId, resp.Error)
+	if resp.Base != nil && resp.Status != "ok" {
+		return nil, errors.New("%v redeeming link code: %v", resp.Base.ErrorId, resp.Base.Error)
 	}
 	return &resp, nil
 }
 
 // UserLinkCodeRequest requests an account recovery email for linking to an existing pro account
 func (c *proClient) UserLinkCodeRequest(ctx context.Context, email string) (bool, error) {
-	var resp LinkCodeResponse
+	var resp protos.LinkCodeResponse
 	uc := c.userConfig()
 	deviceName := uc.GetDeviceID()
 	log.Debugf("Requesting link code with device %s", deviceName)
@@ -321,15 +319,15 @@ func (c *proClient) UserLinkCodeRequest(ctx context.Context, email string) (bool
 	if err != nil {
 		return false, err
 	}
-	if resp.BaseResponse != nil && resp.Status != "ok" {
-		return false, errors.New("error requesting link code: %v", resp.Error)
+	if resp.Base != nil && resp.Base.Status != "ok" {
+		return false, errors.New("error requesting link code: %v", resp.Base.Error)
 	}
 	return true, nil
 }
 
 // UserLinkValidate validates the given recovery code and finishes linking the device, returning the user_id and pro_token for the account.
-func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRecovery, error) {
-	var resp UserRecovery
+func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*protos.UserRecovery, error) {
+	var resp protos.UserRecovery
 	uc := c.userConfig()
 	err := c.PostJSONReadingJSON(ctx, "/user-link-validate", map[string]interface{}{
 		"code":   code,
@@ -346,21 +344,21 @@ func (c *proClient) UserLinkValidate(ctx context.Context, code string) (*UserRec
 }
 
 // PurchaseRequest is used to request a purchase of a Pro plan is will be used for all most all the payment providers
-func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interface{}) (*PurchaseResponse, error) {
-	var resp PurchaseResponse
+func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interface{}) (*protos.ProPurchaseResponse, error) {
+	var resp protos.ProPurchaseResponse
 	err := c.PostFormReadingJSON(ctx, "/purchase", req, &resp)
 	if err != nil {
 		return nil, err
 	}
-	if resp.BaseResponse != nil && resp.Status != "ok" {
-		return nil, errors.New("error purchasing pro plan: %v", resp.Error)
+	if resp.Base != nil && resp.Base.Status != "ok" {
+		return nil, errors.New("error purchasing pro plan: %v", resp.Base.Error)
 	}
 	return &resp, nil
 }
 
 // RestorePurchase is used to restore a purchase for Google and apple play users
-func (c *proClient) RestorePurchase(ctx context.Context, req map[string]interface{}) (*OkResponse, error) {
-	var resp OkResponse
+func (c *proClient) RestorePurchase(ctx context.Context, req map[string]interface{}) (*protos.OkResponse, error) {
+	var resp protos.OkResponse
 	err := c.PostFormReadingJSON(ctx, "/restore-purchase", req, &resp)
 	if err != nil {
 		return nil, log.Errorf("%v", err)

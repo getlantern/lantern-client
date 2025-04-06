@@ -22,18 +22,18 @@ func (c *proClient) Plans(ctx context.Context) ([]*protos.Plan, error) {
 }
 
 // DesktopPaymentMethods returns plans and payment methods available for desktop users
-func (c *proClient) DesktopPaymentMethods(ctx context.Context) ([]*protos.PaymentMethod, error) {
+func (c *proClient) DesktopPaymentMethods(ctx context.Context) (*protos.PaymentMethodsList, error) {
 	return c.paymentMethodsByPlatform(ctx, "desktop")
 }
 
 // PaymentMethodsByPlatform returns the plans and payments from cache for the given platform
 // if available; if not then call FetchPaymentMethods
-func (c *proClient) paymentMethodsByPlatform(ctx context.Context, platform string) ([]*protos.PaymentMethod, error) {
+func (c *proClient) paymentMethodsByPlatform(ctx context.Context, platform string) (*protos.PaymentMethodsList, error) {
 	if platform != "desktop" && platform != "android" {
 		return nil, errors.New("invalid platform")
 	}
 	if v, ok := c.plansCache.Load("paymentMethods"); ok {
-		resp := v.([]*protos.PaymentMethod)
+		resp := v.(*protos.PaymentMethodsList)
 		log.Debugf("Returning payment methods from cache %s", v)
 		return resp, nil
 	}
@@ -50,7 +50,7 @@ func (c *proClient) paymentMethodsByPlatform(ctx context.Context, platform strin
 
 // FetchPaymentMethodsAndCache returns the plans and payment plans available to a user
 // Updates cache with the fetched data
-func (c *proClient) FetchPaymentMethodsAndCache(ctx context.Context) (*PaymentMethodsResponse, error) {
+func (c *proClient) FetchPaymentMethodsAndCache(ctx context.Context) (*protos.PaymentMethodsResponse, error) {
 	resp, err := c.PaymentMethodsV4(context.Background())
 	if err != nil {
 		return nil, errors.New("Could not get payment methods: %v", err)
@@ -59,12 +59,11 @@ func (c *proClient) FetchPaymentMethodsAndCache(ctx context.Context) (*PaymentMe
 	if !ok {
 		return nil, errors.New("No desktop payment providers found")
 	}
-	for _, paymentMethod := range desktopPaymentMethods {
+	for _, paymentMethod := range desktopPaymentMethods.Methods {
 		for j, provider := range paymentMethod.Providers {
-			if resp.Logo[provider.Name] != nil {
-				logos := resp.Logo[provider.Name].([]interface{})
-				for _, logo := range logos {
-					paymentMethod.Providers[j].LogoUrls = append(paymentMethod.Providers[j].LogoUrls, logo.(string))
+			if logos, ok := resp.Icons[provider.Name]; ok {
+				for _, logo := range logos.Icons {
+					paymentMethod.Providers[j].LogoUrls = append(paymentMethod.Providers[j].LogoUrls, logo)
 				}
 			}
 		}

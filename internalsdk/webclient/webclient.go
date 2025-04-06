@@ -15,6 +15,7 @@ import (
 	"github.com/go-resty/resty/v2"
 
 	"github.com/moul/http2curl"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -229,9 +230,14 @@ func (c *restClient) PostPROTOC(ctx context.Context, path string, params any, bo
 }
 
 func unmarshalJSON(path string, b []byte, target any) error {
-	err := json.Unmarshal(b, target)
-	if err != nil {
-		log.Errorf("Error unmarshalling JSON from %v: %v\n\n", path, err, string(b))
+	switch v := target.(type) {
+	case proto.Message:
+		return protojson.Unmarshal(b, v)
+	default:
+		err := json.Unmarshal(b, target)
+		if err != nil {
+			log.Errorf("Error unmarshalling JSON from %v: %v\n\n", path, err, string(b))
+		}
+		return err
 	}
-	return err
 }

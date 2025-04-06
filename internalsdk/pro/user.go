@@ -34,7 +34,7 @@ func (c *proClient) createUser(ctx context.Context, session ClientSession) error
 		return errors.New("Could not create new Pro user: %v", err)
 	}
 	user := resp.User
-	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
+	if resp.Base != nil && resp.Base.Error != "" {
 		return errors.New("Could not create new Pro user: %v", err)
 	}
 	log.Debugf("Successfully created new user with id %d", user.UserId)
