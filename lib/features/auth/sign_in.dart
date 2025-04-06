@@ -20,10 +20,12 @@ class _SignInState extends State<SignIn> {
   final _emailFormKey = GlobalKey<FormState>();
   late final _emailController = CustomTextEditingController(
     formKey: _emailFormKey,
-    validator: (value) => EmailValidator.validate(value ?? '')
+    validator: (value) =>
+    EmailValidator.validate(value ?? '')
         ? null
         : 'please_enter_a_valid_email_address'.i18n,
   );
+  bool _isPrivacyChecked = false;
 
   @override
   void initState() {
@@ -71,23 +73,38 @@ class _SignInState extends State<SignIn> {
                 },
               ),
             ),
+            if (Platform.isIOS) ...{
+              const SizedBox(height: 24),
+              CheckboxListTile(
+                value: _isPrivacyChecked,
+                contentPadding: EdgeInsets.zero,
+                dense: true,
+                controlAffinity: ListTileControlAffinity.leading,
+                onChanged: (value) {
+                  setState(() {
+                    _isPrivacyChecked = value!;
+                  });
+                },
+                title: CText(
+                  'i_agree_to_let_lantern'.i18n,
+                  style: tsBody2Short!.copiedWith(
+                    color: grey5,
+                  ),
+                ),
+              ),
+            },
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: Button(
-                  disabled: _emailController.text.isEmpty ||
+                  disabled: (Platform.isIOS && !_isPrivacyChecked) ||
+                      _emailController.text.isEmpty ||
                       _emailFormKey?.currentState?.validate() == false,
                   text: widget.authFlow.isReset ? "next".i18n : 'continue'.i18n,
                   onPressed: onTapResolved),
             ),
             const SizedBox(height: 24),
-            CText(
-              'by_clicking_continue'.i18n,
-              textAlign: TextAlign.center,
-              style:
-                  tsBody1.copiedWith(fontWeight: FontWeight.w400, color: grey5),
-            ),
-            const SizedBox(height: 24),
+
             if (widget.authFlow.isSignIn &&
                 sessionModel.hasUserSignedInNotifier.value == false)
               RichText(
@@ -100,7 +117,8 @@ class _SignInState extends State<SignIn> {
                       text: "create_account".i18n.toUpperCase(),
                       style: tsBody1.copyWith(
                           fontWeight: FontWeight.w500, color: pink5),
-                      recognizer: TapGestureRecognizer()..onTap = openPlans,
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = openPlans,
                     ),
                   ],
                 ),
