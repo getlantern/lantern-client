@@ -42,12 +42,12 @@ type ProClient interface {
 	webclient.RESTClient
 	Client
 	EmailExists(ctx context.Context, email string) (*protos.BaseResponse, error)
-	DesktopPaymentMethods(ctx context.Context) ([]protos.PaymentMethod, error)
+	DesktopPaymentMethods(ctx context.Context) ([]*protos.PaymentMethod, error)
 	PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error)
 	PaymentRedirect(ctx context.Context, req *protos.PaymentRedirectRequest) (*PaymentRedirectResponse, error)
 	FetchPaymentMethodsAndCache(ctx context.Context) (*PaymentMethodsResponse, error)
-	Plans(ctx context.Context) ([]protos.Plan, error)
+	Plans(ctx context.Context) ([]*protos.Plan, error)
 	PollUserData(ctx context.Context, session ClientSession, maxElapsedTime time.Duration, client Client)
 	RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error)
 	RetryCreateUser(ctx context.Context, ss ClientSession, maxElapsedTime time.Duration)
@@ -170,7 +170,7 @@ func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsRespon
 
 	// process plans for currency
 	for i := range resp.Plans {
-		plan := &resp.Plans[i]
+		plan := resp.Plans[i]
 		parts := strings.Split(plan.Id, "-")
 		if len(parts) != 3 {
 			continue
@@ -311,8 +311,10 @@ func (c *proClient) LinkCodeRedeem(ctx context.Context, deviceName string, devic
 func (c *proClient) UserLinkCodeRequest(ctx context.Context, email string) (bool, error) {
 	var resp LinkCodeResponse
 	uc := c.userConfig()
+	deviceName := uc.GetDeviceID()
+	log.Debugf("Requesting link code with device %s", deviceName)
 	err := c.PostJSONReadingJSON(ctx, "/user-link-request", map[string]interface{}{
-		"deviceName": uc.GetDeviceID(),
+		"deviceName": deviceName,
 		"email":      email,
 		"locale":     uc.GetLanguage(),
 	}, nil, &resp)

@@ -61,7 +61,6 @@ class WebsocketImpl implements WebsocketService {
       _retries = 0;
       _rcTimer?.cancel();
       _rcTimer = null;
-
     } catch (e) {
       await close();
       print("Exception opening websocket connection ${e.toString()}");
@@ -102,7 +101,8 @@ class WebsocketImpl implements WebsocketService {
     }
     _retries++;
     if (_rcTimer == null) {
-      _rcTimer = new Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+      _rcTimer =
+          new Timer.periodic(const Duration(milliseconds: 1000), (timer) {
         print('websocket reconnect');
         _channel = WebSocketChannel.connect(uri);
         _channel!.stream.listen(

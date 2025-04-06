@@ -1,5 +1,6 @@
 import 'dart:isolate';
 
+import 'package:ffi/ffi.dart';
 import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -26,7 +27,8 @@ class NoPlansUpdate implements Exception {
 }
 
 class LanternFFI {
-  static final NativeLibrary _lanternFFI = NativeLibrary(_getLanternLib());
+  static final DynamicLibrary _lanternLib = _getLanternLib();
+  static final NativeLibrary _lanternFFI = NativeLibrary(_lanternLib);
 
   static DynamicLibrary _getLanternLib() {
     if (Platform.isMacOS) {
@@ -45,12 +47,12 @@ class LanternFFI {
   static SendPort? _proxySendPort;
   static final Completer<void> _isolateInitialized = Completer<void>();
 
-  static startDesktopService() => _lanternFFI.start();
-
   static void sysProxyOn() {
     final response = _lanternFFI.sysProxyOn().cast<Utf8>().toDartString();
     checkAPIError(response, 'cannot_connect_to_vpn'.i18n);
   }
+
+  static void setup() => _lanternFFI.setup();
 
   static void sysProxyOff() => _lanternFFI.sysProxyOff();
 
@@ -116,36 +118,36 @@ class LanternFFI {
     });
   }
 
-  static Future<User> ffiUserData() async {
-    final res = await _lanternFFI.userData().cast<Utf8>().toDartString();
-    // it's necessary to use mergeFromProto3Json here instead of fromJson; otherwise, a FormatException with
-    // message Invalid radix-10 number is thrown.In addition, all possible JSON fields have to be defined on
-    // the User protobuf message or JSON decoding fails because of an "unknown field name" error:
-    // Protobuf JSON decoding failed at: root["telephone"]. Unknown field name 'telephone'
-    return User.create()..mergeFromProto3Json(jsonDecode(res));
+  static Future<User?> userData() async {
+    final Pointer<Utf8> result = _lanternFFI.userData().cast<Utf8>();
+    final String userData = result.toDartString();
+
+    if (userData.isEmpty) {
+      return null;
+    }
+
+    try {
+      return User.create()..mergeFromProto3Json(jsonDecode(userData));
+    } catch (e) {
+      return null;
+    }
   }
 
   static Future<String> approveDevice(String code) async {
-    final json = await _lanternFFI
+    final json = _lanternFFI
         .approveDevice(code.toPointerChar())
         .cast<Utf8>()
         .toDartString();
     checkAPIError(json, 'wrong_device_linking_code'.i18n);
-    final result = BaseResponse.create()..mergeFromProto3Json(jsonDecode(json));
-    // refresh user data after successfully linking device
-    await ffiUserData();
     return json;
   }
 
   static Future<void> removeDevice(String deviceId) async {
-    final json = await _lanternFFI
+    final json = _lanternFFI
         .removeDevice(deviceId.toPointerChar())
         .cast<Utf8>()
         .toDartString();
     checkAPIError(json, 'cannot_remove_device'.i18n);
-    final result = LinkResponse.create()..mergeFromProto3Json(jsonDecode(json));
-    // refresh user data after removing a device
-    await ffiUserData();
     return;
   }
 

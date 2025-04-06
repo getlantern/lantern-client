@@ -174,13 +174,21 @@ class NativeLibrary {
   late final _deleteAccount = _deleteAccountPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
 
-  ffi.Pointer<ffi.Char> start() {
-    return _start();
+  void setup() {
+    return _setup();
   }
 
-  late final _startPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('start');
-  late final _start = _startPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
+  late final _setupPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('setup');
+  late final _setup = _setupPtr.asFunction<void Function()>();
+
+  void sysProxyOff() {
+    return _sysProxyOff();
+  }
+
+  late final _sysProxyOffPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function()>>('sysProxyOff');
+  late final _sysProxyOff = _sysProxyOffPtr.asFunction<void Function()>();
 
   ffi.Pointer<ffi.Char> sysProxyOn() {
     return _sysProxyOn();
@@ -191,14 +199,6 @@ class NativeLibrary {
           'sysProxyOn');
   late final _sysProxyOn =
       _sysProxyOnPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  void sysProxyOff() {
-    return _sysProxyOff();
-  }
-
-  late final _sysProxyOffPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>('sysProxyOff');
-  late final _sysProxyOff = _sysProxyOffPtr.asFunction<void Function()>();
 
   ffi.Pointer<ffi.Char> websocketAddr() {
     return _websocketAddr();
@@ -248,15 +248,6 @@ class NativeLibrary {
           ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>>('applyRef');
   late final _applyRef = _applyRefPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>)>();
-
-  ffi.Pointer<ffi.Char> devices() {
-    return _devices();
-  }
-
-  late final _devicesPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('devices');
-  late final _devices =
-      _devicesPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> approveDevice(
     ffi.Pointer<ffi.Char> code,
@@ -337,16 +328,6 @@ class NativeLibrary {
   late final _userData =
       _userDataPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
-  ffi.Pointer<ffi.Char> emailAddress() {
-    return _emailAddress();
-  }
-
-  late final _emailAddressPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'emailAddress');
-  late final _emailAddress =
-      _emailAddressPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> emailExists(
     ffi.Pointer<ffi.Char> email,
   ) {
@@ -415,25 +396,6 @@ class NativeLibrary {
           ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>)>();
 
-  ffi.Pointer<ffi.Char> referral() {
-    return _referral();
-  }
-
-  late final _referralPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('referral');
-  late final _referral =
-      _referralPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> myDeviceId() {
-    return _myDeviceId();
-  }
-
-  late final _myDeviceIdPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'myDeviceId');
-  late final _myDeviceId =
-      _myDeviceIdPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
   ffi.Pointer<ffi.Char> lang() {
     return _lang();
   }
@@ -455,55 +417,6 @@ class NativeLibrary {
           'setSelectLang');
   late final _setSelectLang =
       _setSelectLangPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
-
-  ffi.Pointer<ffi.Char> country() {
-    return _country();
-  }
-
-  late final _countryPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>('country');
-  late final _country =
-      _countryPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> sdkVersion() {
-    return _sdkVersion();
-  }
-
-  late final _sdkVersionPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'sdkVersion');
-  late final _sdkVersion =
-      _sdkVersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> hasSucceedingProxy() {
-    return _hasSucceedingProxy();
-  }
-
-  late final _hasSucceedingProxyPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'hasSucceedingProxy');
-  late final _hasSucceedingProxy =
-      _hasSucceedingProxyPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> onBoardingStatus() {
-    return _onBoardingStatus();
-  }
-
-  late final _onBoardingStatusPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'onBoardingStatus');
-  late final _onBoardingStatus =
-      _onBoardingStatusPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
-
-  ffi.Pointer<ffi.Char> acceptedTermsVersion() {
-    return _acceptedTermsVersion();
-  }
-
-  late final _acceptedTermsVersionPtr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
-          'acceptedTermsVersion');
-  late final _acceptedTermsVersion =
-      _acceptedTermsVersionPtr.asFunction<ffi.Pointer<ffi.Char> Function()>();
 
   ffi.Pointer<ffi.Char> proUser() {
     return _proUser();
@@ -874,33 +787,33 @@ final class GoSlice extends ffi.Struct {
   external int cap;
 }
 
-typedef GoInt81 = ffi.SignedChar;
-typedef DartGoInt81 = int;
-typedef GoUint81 = ffi.UnsignedChar;
-typedef DartGoUint81 = int;
-typedef GoInt161 = ffi.Short;
-typedef DartGoInt161 = int;
-typedef GoUint161 = ffi.UnsignedShort;
-typedef DartGoUint161 = int;
-typedef GoInt321 = ffi.Int;
-typedef DartGoInt321 = int;
-typedef GoUint321 = ffi.UnsignedInt;
-typedef DartGoUint321 = int;
-typedef GoInt641 = ffi.LongLong;
-typedef DartGoInt641 = int;
-typedef GoUint641 = ffi.UnsignedLongLong;
-typedef DartGoUint641 = int;
-typedef GoInt1 = GoInt641;
-typedef GoUint1 = GoUint641;
-typedef GoUintptr1 = ffi.Size;
-typedef DartGoUintptr1 = int;
-typedef GoFloat321 = ffi.Float;
-typedef DartGoFloat321 = double;
-typedef GoFloat641 = ffi.Double;
-typedef DartGoFloat641 = double;
-typedef GoString1 = _GoString_;
-typedef GoMap1 = ffi.Pointer<ffi.Void>;
-typedef GoChan1 = ffi.Pointer<ffi.Void>;
+typedef GoInt8$1 = ffi.SignedChar;
+typedef DartGoInt8$1 = int;
+typedef GoUint8$1 = ffi.UnsignedChar;
+typedef DartGoUint8$1 = int;
+typedef GoInt16$1 = ffi.Short;
+typedef DartGoInt16$1 = int;
+typedef GoUint16$1 = ffi.UnsignedShort;
+typedef DartGoUint16$1 = int;
+typedef GoInt32$1 = ffi.Int;
+typedef DartGoInt32$1 = int;
+typedef GoUint32$1 = ffi.UnsignedInt;
+typedef DartGoUint32$1 = int;
+typedef GoInt64$1 = ffi.LongLong;
+typedef DartGoInt64$1 = int;
+typedef GoUint64$1 = ffi.UnsignedLongLong;
+typedef DartGoUint64$1 = int;
+typedef GoInt$1 = GoInt64$1;
+typedef GoUint$1 = GoUint64$1;
+typedef GoUintptr$1 = ffi.Size;
+typedef DartGoUintptr$1 = int;
+typedef GoFloat32$1 = ffi.Float;
+typedef DartGoFloat32$1 = double;
+typedef GoFloat64$1 = ffi.Double;
+typedef DartGoFloat64$1 = double;
+typedef GoString$1 = _GoString_;
+typedef GoMap$1 = ffi.Pointer<ffi.Void>;
+typedef GoChan$1 = ffi.Pointer<ffi.Void>;
 
 const int __has_safe_buffers = 1;
 

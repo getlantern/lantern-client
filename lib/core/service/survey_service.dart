@@ -39,7 +39,8 @@ class SurveyService {
   void _countryListener() {
     if (isDesktop()) {
       if (sessionModel.configNotifier.value != null) {
-        createSpotCheckByCountry(sessionModel.configNotifier.value!.country.toLowerCase());
+        createSpotCheckByCountry(
+            sessionModel.configNotifier.value!.country.toLowerCase());
         return;
       }
     }
@@ -114,7 +115,7 @@ class SurveyService {
     if (Platform.isWindows || Platform.isLinux) {
       return const SizedBox();
     }
-    return spotCheck?? SizedBox();
+    return spotCheck ?? SizedBox();
   }
 
   Future<String> get _surveyConfigPath async {

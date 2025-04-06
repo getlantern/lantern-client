@@ -527,7 +527,13 @@ class MessagingModel extends Model {
         builder: builder,
       );
     }
-    return sessionModel.configValueBuilder('onBoardingStatus', builder, (value) => value?.chat.onBoardingStatus ?? null);
+    return ValueListenableBuilder<ConfigOptions?>(
+      valueListenable: sessionModel.configNotifier,
+      builder: (context, config, child) {
+        final onBoardingStatus = config?.chat.onBoardingStatus ?? false;
+        return builder(context, onBoardingStatus, child);
+      },
+    );
   }
 
   Future<void> markCopiedRecoveryKey<T>() async {
@@ -542,7 +548,12 @@ class MessagingModel extends Model {
         builder: builder,
       );
     }
-    return FfiValueBuilder<bool>('copiedRecoveryStatus', copiedRecoveryStatusNotifier, builder);
+    return ValueListenableBuilder<bool?>(
+      valueListenable: copiedRecoveryStatusNotifier,
+      builder: (context, copiedRecoveryStatus, child) {
+        return builder(context, copiedRecoveryStatus ?? false, child);
+      },
+    );
   }
 
   Future<void> saveNotificationsTS<T>() async {

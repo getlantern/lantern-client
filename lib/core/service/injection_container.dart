@@ -16,5 +16,4 @@ void initServices() {
     sl.registerLazySingleton(() => AppPurchase());
     sl<AppPurchase>().init();
   }
-
 }

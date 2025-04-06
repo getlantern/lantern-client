@@ -6,9 +6,9 @@ import (
 
 type PaymentMethodsResponse struct {
 	*protos.BaseResponse `json:",inline"`
-	Providers            map[string][]protos.PaymentMethod `json:"providers"`
-	Plans                []protos.Plan                     `json:"plans"`
-	Logo                 map[string]interface{}            `json:"icons"`
+	Providers            map[string][]*protos.PaymentMethod `json:"providers"`
+	Plans                []*protos.Plan                     `json:"plans"`
+	Logo                 map[string]interface{}             `json:"icons"`
 }
 
 type PaymentRedirectResponse struct {
@@ -18,7 +18,7 @@ type PaymentRedirectResponse struct {
 
 type PlansResponse struct {
 	*protos.BaseResponse `json:",inline"`
-	Plans                []protos.Plan `json:"plans"`
+	Plans                []*protos.Plan `json:"plans"`
 }
 
 type UserDataResponse struct {
@@ -40,7 +40,7 @@ type LinkCodeResponse struct {
 type LinkCodeRedeemResponse struct {
 	*protos.BaseResponse `json:",inline"`
 	Status               string `json:"status"`
-	UserID               int64  `json:"userId"`
+	UserID               int64  `json:"userID"`
 	Token                string `json:"token"`
 }
 

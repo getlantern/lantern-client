@@ -1,6 +1,7 @@
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
+import 'package:lantern/features/vpn/vpn_status.dart';
 
 final vpnModel = VpnModel();
 
@@ -23,8 +24,13 @@ class VpnModel extends Model {
 
   Widget vpnStatus(BuildContext context, ValueWidgetBuilder<String> builder) {
     if (isDesktop()) {
-      return FfiValueBuilder<String>(
-          'vpnStatus', context.read<VPNChangeNotifier>().vpnStatus, builder);
+      final notifier = context.read<VPNChangeNotifier>();
+      return ValueListenableBuilder<String>(
+        valueListenable: notifier.vpnStatus,
+        builder: (context, vpnStatus, child) {
+          return builder(context, vpnStatus, child);
+        },
+      );
     }
     return subscribedSingleValueBuilder<String>(
       '/vpn_status',

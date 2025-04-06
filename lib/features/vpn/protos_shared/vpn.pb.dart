@@ -1615,6 +1615,392 @@ class LinkResponse extends $pb.GeneratedMessage {
   void clearErrorId() => $_clearField(5);
 }
 
+class ChatOptions extends $pb.GeneratedMessage {
+  factory ChatOptions({
+    $core.bool? onBoardingStatus,
+    $core.int? acceptedTermsVersion,
+  }) {
+    final $result = create();
+    if (onBoardingStatus != null) {
+      $result.onBoardingStatus = onBoardingStatus;
+    }
+    if (acceptedTermsVersion != null) {
+      $result.acceptedTermsVersion = acceptedTermsVersion;
+    }
+    return $result;
+  }
+  ChatOptions._() : super();
+  factory ChatOptions.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ChatOptions.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ChatOptions', createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'onBoardingStatus')
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'acceptedTermsVersion', $pb.PbFieldType.O3)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ChatOptions clone() => ChatOptions()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ChatOptions copyWith(void Function(ChatOptions) updates) => super.copyWith((message) => updates(message as ChatOptions)) as ChatOptions;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ChatOptions create() => ChatOptions._();
+  ChatOptions createEmptyInstance() => create();
+  static $pb.PbList<ChatOptions> createRepeated() => $pb.PbList<ChatOptions>();
+  @$core.pragma('dart2js:noInline')
+  static ChatOptions getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ChatOptions>(create);
+  static ChatOptions? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get onBoardingStatus => $_getBF(0);
+  @$pb.TagNumber(1)
+  set onBoardingStatus($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasOnBoardingStatus() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearOnBoardingStatus() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get acceptedTermsVersion => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set acceptedTermsVersion($core.int v) { $_setSignedInt32(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasAcceptedTermsVersion() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAcceptedTermsVersion() => $_clearField(2);
+}
+
+class ConfigOptions extends $pb.GeneratedMessage {
+  factory ConfigOptions({
+    $core.bool? developmentMode,
+    $core.String? replicaAddr,
+    $core.String? httpProxyAddr,
+    $core.String? socksProxyAddr,
+    $core.bool? authEnabled,
+    $core.bool? chatEnabled,
+    $core.bool? splitTunneling,
+    $core.bool? hasSucceedingProxy,
+    $core.bool? fetchedGlobalConfig,
+    $core.bool? fetchedProxiesConfig,
+    $core.Iterable<Plan>? plans,
+    $core.Iterable<PaymentMethod>? paymentMethods,
+    Devices? devices,
+    $core.String? sdkVersion,
+    $core.String? appVersion,
+    $core.String? deviceId,
+    $core.String? expirationDate,
+    ChatOptions? chat,
+    $core.bool? proxyAll,
+    $core.String? country,
+    $core.bool? isUserLoggedIn,
+  }) {
+    final $result = create();
+    if (developmentMode != null) {
+      $result.developmentMode = developmentMode;
+    }
+    if (replicaAddr != null) {
+      $result.replicaAddr = replicaAddr;
+    }
+    if (httpProxyAddr != null) {
+      $result.httpProxyAddr = httpProxyAddr;
+    }
+    if (socksProxyAddr != null) {
+      $result.socksProxyAddr = socksProxyAddr;
+    }
+    if (authEnabled != null) {
+      $result.authEnabled = authEnabled;
+    }
+    if (chatEnabled != null) {
+      $result.chatEnabled = chatEnabled;
+    }
+    if (splitTunneling != null) {
+      $result.splitTunneling = splitTunneling;
+    }
+    if (hasSucceedingProxy != null) {
+      $result.hasSucceedingProxy = hasSucceedingProxy;
+    }
+    if (fetchedGlobalConfig != null) {
+      $result.fetchedGlobalConfig = fetchedGlobalConfig;
+    }
+    if (fetchedProxiesConfig != null) {
+      $result.fetchedProxiesConfig = fetchedProxiesConfig;
+    }
+    if (plans != null) {
+      $result.plans.addAll(plans);
+    }
+    if (paymentMethods != null) {
+      $result.paymentMethods.addAll(paymentMethods);
+    }
+    if (devices != null) {
+      $result.devices = devices;
+    }
+    if (sdkVersion != null) {
+      $result.sdkVersion = sdkVersion;
+    }
+    if (appVersion != null) {
+      $result.appVersion = appVersion;
+    }
+    if (deviceId != null) {
+      $result.deviceId = deviceId;
+    }
+    if (expirationDate != null) {
+      $result.expirationDate = expirationDate;
+    }
+    if (chat != null) {
+      $result.chat = chat;
+    }
+    if (proxyAll != null) {
+      $result.proxyAll = proxyAll;
+    }
+    if (country != null) {
+      $result.country = country;
+    }
+    if (isUserLoggedIn != null) {
+      $result.isUserLoggedIn = isUserLoggedIn;
+    }
+    return $result;
+  }
+  ConfigOptions._() : super();
+  factory ConfigOptions.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory ConfigOptions.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'ConfigOptions', createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'developmentMode')
+    ..aOS(2, _omitFieldNames ? '' : 'replicaAddr')
+    ..aOS(3, _omitFieldNames ? '' : 'httpProxyAddr')
+    ..aOS(4, _omitFieldNames ? '' : 'socksProxyAddr')
+    ..aOB(5, _omitFieldNames ? '' : 'authEnabled')
+    ..aOB(6, _omitFieldNames ? '' : 'chatEnabled')
+    ..aOB(7, _omitFieldNames ? '' : 'splitTunneling')
+    ..aOB(8, _omitFieldNames ? '' : 'hasSucceedingProxy')
+    ..aOB(9, _omitFieldNames ? '' : 'fetchedGlobalConfig')
+    ..aOB(10, _omitFieldNames ? '' : 'fetchedProxiesConfig')
+    ..pc<Plan>(11, _omitFieldNames ? '' : 'plans', $pb.PbFieldType.PM, subBuilder: Plan.create)
+    ..pc<PaymentMethod>(12, _omitFieldNames ? '' : 'paymentMethods', $pb.PbFieldType.PM, subBuilder: PaymentMethod.create)
+    ..aOM<Devices>(13, _omitFieldNames ? '' : 'devices', subBuilder: Devices.create)
+    ..aOS(14, _omitFieldNames ? '' : 'sdkVersion')
+    ..aOS(15, _omitFieldNames ? '' : 'appVersion')
+    ..aOS(16, _omitFieldNames ? '' : 'deviceId')
+    ..aOS(17, _omitFieldNames ? '' : 'expirationDate')
+    ..aOM<ChatOptions>(18, _omitFieldNames ? '' : 'chat', subBuilder: ChatOptions.create)
+    ..aOB(19, _omitFieldNames ? '' : 'proxyAll')
+    ..aOS(20, _omitFieldNames ? '' : 'country')
+    ..aOB(21, _omitFieldNames ? '' : 'isUserLoggedIn')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  ConfigOptions clone() => ConfigOptions()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  ConfigOptions copyWith(void Function(ConfigOptions) updates) => super.copyWith((message) => updates(message as ConfigOptions)) as ConfigOptions;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static ConfigOptions create() => ConfigOptions._();
+  ConfigOptions createEmptyInstance() => create();
+  static $pb.PbList<ConfigOptions> createRepeated() => $pb.PbList<ConfigOptions>();
+  @$core.pragma('dart2js:noInline')
+  static ConfigOptions getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<ConfigOptions>(create);
+  static ConfigOptions? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get developmentMode => $_getBF(0);
+  @$pb.TagNumber(1)
+  set developmentMode($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasDevelopmentMode() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearDevelopmentMode() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get replicaAddr => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set replicaAddr($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasReplicaAddr() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearReplicaAddr() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get httpProxyAddr => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set httpProxyAddr($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasHttpProxyAddr() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearHttpProxyAddr() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get socksProxyAddr => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set socksProxyAddr($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasSocksProxyAddr() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearSocksProxyAddr() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.bool get authEnabled => $_getBF(4);
+  @$pb.TagNumber(5)
+  set authEnabled($core.bool v) { $_setBool(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasAuthEnabled() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearAuthEnabled() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.bool get chatEnabled => $_getBF(5);
+  @$pb.TagNumber(6)
+  set chatEnabled($core.bool v) { $_setBool(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasChatEnabled() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearChatEnabled() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.bool get splitTunneling => $_getBF(6);
+  @$pb.TagNumber(7)
+  set splitTunneling($core.bool v) { $_setBool(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasSplitTunneling() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearSplitTunneling() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.bool get hasSucceedingProxy => $_getBF(7);
+  @$pb.TagNumber(8)
+  set hasSucceedingProxy($core.bool v) { $_setBool(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasHasSucceedingProxy() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearHasSucceedingProxy() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.bool get fetchedGlobalConfig => $_getBF(8);
+  @$pb.TagNumber(9)
+  set fetchedGlobalConfig($core.bool v) { $_setBool(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasFetchedGlobalConfig() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearFetchedGlobalConfig() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.bool get fetchedProxiesConfig => $_getBF(9);
+  @$pb.TagNumber(10)
+  set fetchedProxiesConfig($core.bool v) { $_setBool(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasFetchedProxiesConfig() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearFetchedProxiesConfig() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $pb.PbList<Plan> get plans => $_getList(10);
+
+  @$pb.TagNumber(12)
+  $pb.PbList<PaymentMethod> get paymentMethods => $_getList(11);
+
+  @$pb.TagNumber(13)
+  Devices get devices => $_getN(12);
+  @$pb.TagNumber(13)
+  set devices(Devices v) { $_setField(13, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasDevices() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearDevices() => $_clearField(13);
+  @$pb.TagNumber(13)
+  Devices ensureDevices() => $_ensure(12);
+
+  @$pb.TagNumber(14)
+  $core.String get sdkVersion => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set sdkVersion($core.String v) { $_setString(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasSdkVersion() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearSdkVersion() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.String get appVersion => $_getSZ(14);
+  @$pb.TagNumber(15)
+  set appVersion($core.String v) { $_setString(14, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasAppVersion() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearAppVersion() => $_clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.String get deviceId => $_getSZ(15);
+  @$pb.TagNumber(16)
+  set deviceId($core.String v) { $_setString(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasDeviceId() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearDeviceId() => $_clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.String get expirationDate => $_getSZ(16);
+  @$pb.TagNumber(17)
+  set expirationDate($core.String v) { $_setString(16, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasExpirationDate() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearExpirationDate() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  ChatOptions get chat => $_getN(17);
+  @$pb.TagNumber(18)
+  set chat(ChatOptions v) { $_setField(18, v); }
+  @$pb.TagNumber(18)
+  $core.bool hasChat() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearChat() => $_clearField(18);
+  @$pb.TagNumber(18)
+  ChatOptions ensureChat() => $_ensure(17);
+
+  @$pb.TagNumber(19)
+  $core.bool get proxyAll => $_getBF(18);
+  @$pb.TagNumber(19)
+  set proxyAll($core.bool v) { $_setBool(18, v); }
+  @$pb.TagNumber(19)
+  $core.bool hasProxyAll() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearProxyAll() => $_clearField(19);
+
+  @$pb.TagNumber(20)
+  $core.String get country => $_getSZ(19);
+  @$pb.TagNumber(20)
+  set country($core.String v) { $_setString(19, v); }
+  @$pb.TagNumber(20)
+  $core.bool hasCountry() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearCountry() => $_clearField(20);
+
+  @$pb.TagNumber(21)
+  $core.bool get isUserLoggedIn => $_getBF(20);
+  @$pb.TagNumber(21)
+  set isUserLoggedIn($core.bool v) { $_setBool(20, v); }
+  @$pb.TagNumber(21)
+  $core.bool hasIsUserLoggedIn() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearIsUserLoggedIn() => $_clearField(21);
+}
+
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

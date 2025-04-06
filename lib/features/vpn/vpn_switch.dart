@@ -1,10 +1,12 @@
 import 'dart:ui' as ui;
 
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lantern/common/ui/custom/internet_checker.dart';
 import 'package:lantern/core/service/ad_service.dart';
 import 'package:lantern/core/service/survey_service.dart';
 import 'package:lantern/core/utils/common.dart';
+import 'package:lantern/core/utils/common.dart' as PlatformUtils;
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/vpn/vpn.dart';
 import 'package:lantern/features/vpn/vpn_notifier.dart';
@@ -56,11 +58,11 @@ class _VPNSwitchState extends State<VPNSwitch> {
         current: vpnNotifier.vpnStatus.value,
         values: [VpnStatus.disconnected.name, VpnStatus.connected.name],
         iconBuilder: (context, local, global) => const SizedBox(),
-        height: 72,
-        spacing: 28.0,
+        height: PlatformUtils.isDesktop() ? 70.h : 60.h,
+        spacing: 10.h,
         active: isSwitchEnabled(
             vpnNotifier.vpnStatus.value, vpnNotifier, internetStatusProvider),
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+        //padding: const EdgeInsets.symmetric(horizontal: 5),
         indicatorSize: const ui.Size(60, 60),
         animationDuration: const Duration(milliseconds: 350),
         animationCurve: Curves.easeIn,

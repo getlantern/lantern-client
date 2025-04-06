@@ -360,3 +360,65 @@ final $typed_data.Uint8List linkResponseDescriptor = $convert.base64Decode(
     'Rva2VuEhYKBnN0YXR1cxgDIAEoCVIGc3RhdHVzEhQKBWVycm9yGAQgASgJUgVlcnJvchIYCgdl'
     'cnJvcklkGAUgASgJUgdlcnJvcklk');
 
+@$core.Deprecated('Use chatOptionsDescriptor instead')
+const ChatOptions$json = {
+  '1': 'ChatOptions',
+  '2': [
+    {'1': 'on_boarding_status', '3': 1, '4': 1, '5': 8, '10': 'onBoardingStatus'},
+    {'1': 'accepted_terms_version', '3': 2, '4': 1, '5': 5, '10': 'acceptedTermsVersion'},
+  ],
+};
+
+/// Descriptor for `ChatOptions`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List chatOptionsDescriptor = $convert.base64Decode(
+    'CgtDaGF0T3B0aW9ucxIsChJvbl9ib2FyZGluZ19zdGF0dXMYASABKAhSEG9uQm9hcmRpbmdTdG'
+    'F0dXMSNAoWYWNjZXB0ZWRfdGVybXNfdmVyc2lvbhgCIAEoBVIUYWNjZXB0ZWRUZXJtc1ZlcnNp'
+    'b24=');
+
+@$core.Deprecated('Use configOptionsDescriptor instead')
+const ConfigOptions$json = {
+  '1': 'ConfigOptions',
+  '2': [
+    {'1': 'development_mode', '3': 1, '4': 1, '5': 8, '10': 'developmentMode'},
+    {'1': 'replica_addr', '3': 2, '4': 1, '5': 9, '10': 'replicaAddr'},
+    {'1': 'http_proxy_addr', '3': 3, '4': 1, '5': 9, '10': 'httpProxyAddr'},
+    {'1': 'socks_proxy_addr', '3': 4, '4': 1, '5': 9, '10': 'socksProxyAddr'},
+    {'1': 'auth_enabled', '3': 5, '4': 1, '5': 8, '10': 'authEnabled'},
+    {'1': 'chat_enabled', '3': 6, '4': 1, '5': 8, '10': 'chatEnabled'},
+    {'1': 'split_tunneling', '3': 7, '4': 1, '5': 8, '10': 'splitTunneling'},
+    {'1': 'has_succeeding_proxy', '3': 8, '4': 1, '5': 8, '10': 'hasSucceedingProxy'},
+    {'1': 'fetched_global_config', '3': 9, '4': 1, '5': 8, '10': 'fetchedGlobalConfig'},
+    {'1': 'fetched_proxies_config', '3': 10, '4': 1, '5': 8, '10': 'fetchedProxiesConfig'},
+    {'1': 'plans', '3': 11, '4': 3, '5': 11, '6': '.Plan', '10': 'plans'},
+    {'1': 'payment_methods', '3': 12, '4': 3, '5': 11, '6': '.PaymentMethod', '10': 'paymentMethods'},
+    {'1': 'devices', '3': 13, '4': 1, '5': 11, '6': '.Devices', '10': 'devices'},
+    {'1': 'sdk_version', '3': 14, '4': 1, '5': 9, '10': 'sdkVersion'},
+    {'1': 'app_version', '3': 15, '4': 1, '5': 9, '10': 'appVersion'},
+    {'1': 'device_id', '3': 16, '4': 1, '5': 9, '10': 'deviceId'},
+    {'1': 'expiration_date', '3': 17, '4': 1, '5': 9, '10': 'expirationDate'},
+    {'1': 'chat', '3': 18, '4': 1, '5': 11, '6': '.ChatOptions', '10': 'chat'},
+    {'1': 'proxy_all', '3': 19, '4': 1, '5': 8, '10': 'proxyAll'},
+    {'1': 'country', '3': 20, '4': 1, '5': 9, '10': 'country'},
+    {'1': 'is_user_logged_in', '3': 21, '4': 1, '5': 8, '10': 'isUserLoggedIn'},
+  ],
+};
+
+/// Descriptor for `ConfigOptions`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List configOptionsDescriptor = $convert.base64Decode(
+    'Cg1Db25maWdPcHRpb25zEikKEGRldmVsb3BtZW50X21vZGUYASABKAhSD2RldmVsb3BtZW50TW'
+    '9kZRIhCgxyZXBsaWNhX2FkZHIYAiABKAlSC3JlcGxpY2FBZGRyEiYKD2h0dHBfcHJveHlfYWRk'
+    'chgDIAEoCVINaHR0cFByb3h5QWRkchIoChBzb2Nrc19wcm94eV9hZGRyGAQgASgJUg5zb2Nrc1'
+    'Byb3h5QWRkchIhCgxhdXRoX2VuYWJsZWQYBSABKAhSC2F1dGhFbmFibGVkEiEKDGNoYXRfZW5h'
+    'YmxlZBgGIAEoCFILY2hhdEVuYWJsZWQSJwoPc3BsaXRfdHVubmVsaW5nGAcgASgIUg5zcGxpdF'
+    'R1bm5lbGluZxIwChRoYXNfc3VjY2VlZGluZ19wcm94eRgIIAEoCFISaGFzU3VjY2VlZGluZ1By'
+    'b3h5EjIKFWZldGNoZWRfZ2xvYmFsX2NvbmZpZxgJIAEoCFITZmV0Y2hlZEdsb2JhbENvbmZpZx'
+    'I0ChZmZXRjaGVkX3Byb3hpZXNfY29uZmlnGAogASgIUhRmZXRjaGVkUHJveGllc0NvbmZpZxIb'
+    'CgVwbGFucxgLIAMoCzIFLlBsYW5SBXBsYW5zEjcKD3BheW1lbnRfbWV0aG9kcxgMIAMoCzIOLl'
+    'BheW1lbnRNZXRob2RSDnBheW1lbnRNZXRob2RzEiIKB2RldmljZXMYDSABKAsyCC5EZXZpY2Vz'
+    'UgdkZXZpY2VzEh8KC3Nka192ZXJzaW9uGA4gASgJUgpzZGtWZXJzaW9uEh8KC2FwcF92ZXJzaW'
+    '9uGA8gASgJUgphcHBWZXJzaW9uEhsKCWRldmljZV9pZBgQIAEoCVIIZGV2aWNlSWQSJwoPZXhw'
+    'aXJhdGlvbl9kYXRlGBEgASgJUg5leHBpcmF0aW9uRGF0ZRIgCgRjaGF0GBIgASgLMgwuQ2hhdE'
+    '9wdGlvbnNSBGNoYXQSGwoJcHJveHlfYWxsGBMgASgIUghwcm94eUFsbBIYCgdjb3VudHJ5GBQg'
+    'ASgJUgdjb3VudHJ5EikKEWlzX3VzZXJfbG9nZ2VkX2luGBUgASgIUg5pc1VzZXJMb2dnZWRJbg'
+    '==');
+
