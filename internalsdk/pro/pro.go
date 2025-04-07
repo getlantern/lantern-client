@@ -149,7 +149,9 @@ func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedi
 // PaymentMethods returns a list of plans along with payment providers and available payment methods
 // This methods has been deparacted in flavor of PaymentMethodsV4
 func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error) {
-	var resp PaymentMethodsResponse
+	resp := PaymentMethodsResponse{
+		BaseResponse: &protos.BaseResponse{},
+	}
 	err := c.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
@@ -159,7 +161,9 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 
 // PaymentMethods returns a list of plans, payment providers and logo available payment methods
 func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error) {
-	var resp PaymentMethodsResponse
+	resp := PaymentMethodsResponse{
+		BaseResponse: &protos.BaseResponse{},
+	}
 	err := c.GetJSON(ctx, "/plans-v4", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err

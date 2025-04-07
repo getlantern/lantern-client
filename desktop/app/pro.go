@@ -106,10 +106,18 @@ func (app *App) fetchUserData(ctx context.Context, uc common.UserConfig) (*proto
 	if err != nil {
 		return nil, err
 	}
+
 	user := resp.User
 	if user.Devices == nil {
 		user.Devices = []*protos.Device{}
 	}
+
+	ss := app.Settings()
+	ss.SetUserIDAndToken(user.UserId, user.Token)
+	ss.SetReferralCode(user.Code)
+	ss.SetEmailAddress(user.Email)
+	ss.SetExpiration(user.Expiration)
+
 	return user, nil
 }
 
