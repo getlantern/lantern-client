@@ -216,8 +216,9 @@ func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 	if err != nil {
 		log.Errorf("Failed to fetch user data: %v", err)
 		return nil, errors.New("error fetching user data: %v", err)
+	} else if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
+		return nil, errors.New(resp.BaseResponse.Error)
 	}
-	log.Debugf("UserData response is %v", resp)
 	return &resp, nil
 }
 
