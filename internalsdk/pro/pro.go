@@ -197,9 +197,8 @@ func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 	err := c.PostFormReadingJSON(ctx, "/user-create", nil, &resp)
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
-	}
-	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
-		return nil, errors.New("error received: %v", resp.BaseResponse.Error)
+	} else if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
+		return nil, errors.New(resp.BaseResponse.Error)
 	}
 	log.Debugf("UserCreate response is %v", resp)
 	return &resp, nil
@@ -212,8 +211,9 @@ func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 	if err != nil {
 		log.Errorf("Failed to fetch user data: %v", err)
 		return nil, errors.New("error fetching user data: %v", err)
+	} else if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
+		return nil, errors.New(resp.BaseResponse.Error)
 	}
-	log.Debugf("UserData response is %v", resp)
 	return &resp, nil
 }
 
