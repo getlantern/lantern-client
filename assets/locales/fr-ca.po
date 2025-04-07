@@ -1,10 +1,10 @@
 # 
 # Translators:
-# fffw <fffw@getlantern.org>, 2025
-# axel <axel+transifex@axelsimon.net>, 2025
 # todd <todd@getlantern.org>, 2025
-# e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2025
+# fffw <fffw@getlantern.org>, 2025
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2025
+# axel <axel+transifex@axelsimon.net>, 2025
+# e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2025
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2025
 # AO <ao@localizationlab.org>, 2025
 # Derek F <derek@getlantern.org>, 2025
@@ -2049,4 +2049,7 @@ msgid "domain_fronting_error"
 msgstr ""
 
 msgid "by_clicking_continue"
+msgstr ""
+
+msgid "i_agree_to_let_lantern"
 msgstr ""

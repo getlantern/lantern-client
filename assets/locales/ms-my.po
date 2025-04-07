@@ -1,12 +1,12 @@
 # 
 # Translators:
-# abuyop <abuyop@gmail.com>, 2025
-# Lantern, 2025
 # Ahmed Noor Kader Mustajir Md Eusoff (kader) <sir.ade@gmail.com>, 2025
+# Lantern, 2025
 # e2f_my c2 <tx_e2f_my_c2@ate2f.com>, 2025
-# Alyssa Chung <lisiachung7@gmail.com>, 2025
-# e2f <projects@e2f.com>, 2025
 # tx_e2f_ms t9 <tx_e2f_ms_t9@ate2f.com>, 2025
+# abuyop <abuyop@gmail.com>, 2025
+# e2f <projects@e2f.com>, 2025
+# Alyssa Chung <lisiachung7@gmail.com>, 2025
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2025
 # Derek F <derek@getlantern.org>, 2025
 # 
@@ -2005,4 +2005,7 @@ msgid "domain_fronting_error"
 msgstr ""
 
 msgid "by_clicking_continue"
+msgstr ""
+
+msgid "i_agree_to_let_lantern"
 msgstr ""

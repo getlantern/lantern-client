@@ -1,14 +1,14 @@
 # 
 # Translators:
 # tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2025
-# Derek F <derek@getlantern.org>, 2025
-# Diversity83 83, 2025
 # e2f <projects@e2f.com>, 2025
+# Diversity83 83, 2025
 # tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2025
+# Derek F <derek@getlantern.org>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2025\n"
+"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
 "Language-Team: Urdu (https://app.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -1999,4 +1999,7 @@ msgid "domain_fronting_error"
 msgstr ""
 
 msgid "by_clicking_continue"
+msgstr ""
+
+msgid "i_agree_to_let_lantern"
 msgstr ""

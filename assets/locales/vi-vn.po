@@ -1988,3 +1988,6 @@ msgstr ""
 
 msgid "by_clicking_continue"
 msgstr ""
+
+msgid "i_agree_to_let_lantern"
+msgstr ""
