@@ -149,9 +149,7 @@ func (c *proClient) PaymentRedirect(ctx context.Context, req *protos.PaymentRedi
 // PaymentMethods returns a list of plans along with payment providers and available payment methods
 // This methods has been deparacted in flavor of PaymentMethodsV4
 func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse, error) {
-	resp := PaymentMethodsResponse{
-		BaseResponse: &protos.BaseResponse{},
-	}
+	var resp PaymentMethodsResponse
 	err := c.GetJSON(ctx, "/plans-v3", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
@@ -161,9 +159,7 @@ func (c *proClient) PaymentMethods(ctx context.Context) (*PaymentMethodsResponse
 
 // PaymentMethods returns a list of plans, payment providers and logo available payment methods
 func (c *proClient) PaymentMethodsV4(ctx context.Context) (*PaymentMethodsResponse, error) {
-	resp := PaymentMethodsResponse{
-		BaseResponse: &protos.BaseResponse{},
-	}
+	var resp PaymentMethodsResponse
 	err := c.GetJSON(ctx, "/plans-v4", c.defaultParams(), &resp)
 	if err != nil {
 		return nil, err
@@ -201,9 +197,8 @@ func (c *proClient) UserCreate(ctx context.Context) (*UserDataResponse, error) {
 	err := c.PostFormReadingJSON(ctx, "/user-create", nil, &resp)
 	if err != nil {
 		return nil, errors.New("error fetching user data: %v", err)
-	}
-	if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
-		return nil, errors.New("error received: %v", resp.BaseResponse.Error)
+	} else if resp.BaseResponse != nil && resp.BaseResponse.Error != "" {
+		return nil, errors.New(resp.BaseResponse.Error)
 	}
 	log.Debugf("UserCreate response is %v", resp)
 	return &resp, nil
