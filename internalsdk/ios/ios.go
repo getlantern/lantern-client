@@ -23,7 +23,7 @@ import (
 const (
 	maxDNSGrabAge = 1 * time.Hour // this doesn't need to be long because our fake DNS records have a TTL of only 1 second. We use a smaller value than on Android to be conservative with memory usag.
 
-	quotaSaveInterval            = 1 * time.Minute
+	quotaSaveInterval = 1 * time.Minute
 
 	logMemoryInterval = 5 * time.Second
 	forceGCInterval   = 250 * time.Millisecond
@@ -131,13 +131,12 @@ func (c *cw) Reconfigure() {
 		// the OS will automatically restart the service, at which point we'll read the new config anyway.
 		panic(log.Errorf("Unable to load dialers on reconfigure: %v", err))
 	}
+	c.dialer = dialer.NewProxylessDialer()
 
-	c.dialer = dialer.New(&dialer.Options{
+	// TODO: This options doesn't have any of the callback functionality we presumably want.
+	c.dialer.OnOptions(&dialer.Options{
 		Dialers: dialers,
 	})
-	if err != nil {
-		log.Errorf("Unable to create dialer on reconfigure: %v", err)
-	}
 }
 
 func (c *cw) Close() error {
@@ -210,7 +209,8 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, errors.New("No dialers found")
 	}
 	tracker := stats.NewTracker()
-	dialer := dialer.New(&dialer.Options{
+	proxyless := dialer.NewProxylessDialer()
+	proxyless.OnOptions(&dialer.Options{
 		Dialers: dialers,
 		OnSuccess: func(pd dialer.ProxyDialer) {
 			tracker.SetHasSucceedingProxy(true)
@@ -225,9 +225,6 @@ func (c *iosClient) start() (ClientWriter, error) {
 			}
 		},
 	})
-	if err != nil {
-		return nil, err
-	}
 
 	// get stats updates
 	go c.statsTrackerUpdates(tracker)
@@ -252,7 +249,7 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, errors.New("Unable to start dnsgrab: %v", err)
 	}
 
-	c.tcpHandler = newProxiedTCPHandler(c, dialer, grabber)
+	c.tcpHandler = newProxiedTCPHandler(c, proxyless, grabber)
 	c.udpHandler = newDirectUDPHandler(c, c.udpDialer, grabber, c.capturedDNSHost)
 
 	ipStack := tun2socks.NewLWIPStack()
