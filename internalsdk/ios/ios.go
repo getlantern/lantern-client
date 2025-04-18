@@ -113,7 +113,6 @@ type BandwidthTracker interface {
 type cw struct {
 	ipStack       io.WriteCloser
 	client        *iosClient
-	dialer        dialer.Dialer
 	quotaTextPath string
 }
 
@@ -125,18 +124,9 @@ func (c *cw) Write(b []byte) (int, error) {
 }
 
 func (c *cw) Reconfigure() {
-	dialers, err := c.client.loadDialers()
-	if err != nil {
-		// this causes the NetworkExtension process to die. Since the VPN is configured as "on-demand",
-		// the OS will automatically restart the service, at which point we'll read the new config anyway.
-		panic(log.Errorf("Unable to load dialers on reconfigure: %v", err))
+	if c.client != nil {
+		c.client.reconfigure()
 	}
-	c.dialer = dialer.NewProxylessDialer()
-
-	// TODO: This options doesn't have any of the callback functionality we presumably want.
-	c.dialer.OnOptions(&dialer.Options{
-		Dialers: dialers,
-	})
 }
 
 func (c *cw) Close() error {
@@ -164,6 +154,8 @@ type iosClient struct {
 	started          time.Time
 	bandwidthTracker BandwidthTracker
 	statsTracker     StatsTracker
+	dialer           dialer.Dialer
+	tracker          stats.Tracker
 }
 
 func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, configDir string, mtu int,
@@ -186,6 +178,8 @@ func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, confi
 		started:          time.Now(),
 		bandwidthTracker: bandwidthTracker,
 		statsTracker:     statsTracker,
+		dialer:           dialer.NewProxylessDialer(),
+		tracker:          stats.NewTracker(),
 	}
 	optimizeMemoryUsage(&c.memoryAvailable)
 	go c.gcPeriodically()
@@ -208,26 +202,10 @@ func (c *iosClient) start() (ClientWriter, error) {
 	if len(dialers) == 0 {
 		return nil, errors.New("No dialers found")
 	}
-	tracker := stats.NewTracker()
-	proxyless := dialer.NewProxylessDialer()
-	proxyless.OnOptions(&dialer.Options{
-		Dialers: dialers,
-		OnSuccess: func(pd dialer.ProxyDialer) {
-			tracker.SetHasSucceedingProxy(true)
-			countryCode, country, city := pd.Location()
-			previousStats := tracker.Latest()
-			if previousStats.CountryCode == "" || previousStats.CountryCode != countryCode {
-				tracker.SetActiveProxyLocation(
-					city,
-					country,
-					countryCode,
-				)
-			}
-		},
-	})
+	c.onDialers(dialers)
 
 	// get stats updates
-	go c.statsTrackerUpdates(tracker)
+	go c.statsTrackerUpdates()
 	// get bandwidth updates
 	go bandwidthUpdates(c.bandwidthTracker)
 
@@ -249,7 +227,7 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, errors.New("Unable to start dnsgrab: %v", err)
 	}
 
-	c.tcpHandler = newProxiedTCPHandler(c, proxyless, grabber)
+	c.tcpHandler = newProxiedTCPHandler(c, c.dialer, grabber)
 	c.udpHandler = newDirectUDPHandler(c, c.udpDialer, grabber, c.capturedDNSHost)
 
 	ipStack := tun2socks.NewLWIPStack()
@@ -268,6 +246,34 @@ func (c *iosClient) start() (ClientWriter, error) {
 	return c.clientWriter, nil
 }
 
+func (c *iosClient) reconfigure() {
+	dialers, err := c.loadDialers()
+	if err != nil {
+		// this causes the NetworkExtension process to die. Since the VPN is configured as "on-demand",
+		// the OS will automatically restart the service, at which point we'll read the new config anyway.
+		panic(log.Errorf("Unable to load dialers on reconfigure: %v", err))
+	}
+	c.onDialers(dialers)
+}
+
+func (c *iosClient) onDialers(dialers []dialer.ProxyDialer) {
+	c.dialer.OnOptions(&dialer.Options{
+		Dialers: dialers,
+		OnSuccess: func(pd dialer.ProxyDialer) {
+			c.tracker.SetHasSucceedingProxy(true)
+			countryCode, country, city := pd.Location()
+			previousStats := c.tracker.Latest()
+			if previousStats.CountryCode == "" || previousStats.CountryCode != countryCode {
+				c.tracker.SetActiveProxyLocation(
+					city,
+					country,
+					countryCode,
+				)
+			}
+		},
+	})
+}
+
 func bandwidthUpdates(bt BandwidthTracker) {
 	go func() {
 
@@ -284,8 +290,8 @@ func bandwidthUpdates(bt BandwidthTracker) {
 		}
 	}()
 }
-func (c *iosClient) statsTrackerUpdates(tracker stats.Tracker) {
-	tracker.AddListener(func(st stats.Stats) {
+func (c *iosClient) statsTrackerUpdates() {
+	c.tracker.AddListener(func(st stats.Stats) {
 		if st.City != "" && st.Country != "" && st.CountryCode != "" {
 			log.Debug("updating stats")
 			c.statsTracker.UpdateStats(st.City, st.Country, st.CountryCode, st.HTTPSUpgrades, st.AdsBlocked, st.HasSucceedingProxy)
