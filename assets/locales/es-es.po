@@ -2,21 +2,21 @@
 # Translators:
 # fffw <fffw@getlantern.org>, 2025
 # Lantern, 2025
-# Emerson Castaneda, 2025
 # Giorgio Maone <giorgio@maone.net>, 2025
 # tx_e2f_es t35 <tx_e2f_es_t35@ate2f.com>, 2025
-# e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2025
-# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2025
-# strel, 2025
-# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2025
+# Emerson Castaneda, 2025
 # e2f <projects@e2f.com>, 2025
-# Aimara pena, 2025
-# e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2025
 # Derek F <derek@getlantern.org>, 2025
+# tx_e2f_es t1 <tx_e2f_es_t1@ate2f.com>, 2025
+# Aimara pena, 2025
+# e2f_es r1 <tx_e2f_es_r1@ate2f.com>, 2025
+# strel, 2025
+# e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2025
+# e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
+"Last-Translator: e2f_es r3 <tx_e2f_es_r3@ate2f.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/lantern-1/teams/94371/es/)\n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"

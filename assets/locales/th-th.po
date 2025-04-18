@@ -1,16 +1,16 @@
 # 
 # Translators:
+# e2f <projects@e2f.com>, 2025
 # Lantern, 2025
+# Thai Localization, 2025
+# Derek F <derek@getlantern.org>, 2025
 # Acclaro Thailand <bkk-project@acclaro.com>, 2025
 # Amazing Nev <nev@nevagency.com>, 2025
-# e2f <projects@e2f.com>, 2025
-# Thai Localization, 2025
 # tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2025
-# Derek F <derek@getlantern.org>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
+"Last-Translator: tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2025\n"
 "Language-Team: Thai (https://app.transifex.com/lantern-1/teams/94371/th/)\n"
 "Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
