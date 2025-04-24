@@ -19,6 +19,7 @@ import (
 	"github.com/getlantern/flashlight/v7"
 	"github.com/getlantern/flashlight/v7/bandwidth"
 	"github.com/getlantern/flashlight/v7/client"
+	fcommon "github.com/getlantern/flashlight/v7/common"
 	"github.com/getlantern/flashlight/v7/config"
 	"github.com/getlantern/flashlight/v7/dialer"
 	"github.com/getlantern/flashlight/v7/geolookup"
@@ -506,6 +507,7 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 	session := &panickingSessionImpl{wrappedSession}
 
 	appdir.SetHomeDir(configDir)
+	fcommon.SetConfigDir(configDir)
 	session.SetStaging(false)
 
 	log.Debugf("Starting lantern: configDir %s locale %s sticky config %t",

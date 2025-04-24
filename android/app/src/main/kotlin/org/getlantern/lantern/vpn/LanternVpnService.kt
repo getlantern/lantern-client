@@ -75,6 +75,13 @@ class LanternVpnService : VpnService(), Runnable {
 
     override fun run() {
         try {
+            // If flashlight has not successfully started with a valid
+            // SOCKS5 address, we should not start the VPN, as it will
+            // simply fail.
+            if (LanternApp.session.sOCKS5Addr.isNullOrEmpty()) {
+                Logger.e(TAG, "socksAddr is null or empty")
+                return
+            }
             Logger.d(TAG, "Loading Lantern library")
             getOrInitProvider()?.run(
                 this,
