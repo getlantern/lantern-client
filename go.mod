@@ -1,8 +1,6 @@
 module github.com/getlantern/lantern-client
 
-go 1.23
-
-toolchain go1.23.3
+go 1.24.1
 
 //replace github.com/getlantern/flashlight/v7 => ../flashlight
 
@@ -32,7 +30,7 @@ require (
 	github.com/eycorsican/go-tun2socks v1.16.12-0.20201107203946-301549c435ff
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/getlantern/appdir v0.0.0-20200615192800-a0ef1968f4da
-	github.com/getlantern/autoupdate v0.0.0-20240926204302-11d9aa2df948
+	github.com/getlantern/autoupdate v0.0.0-20250424174856-0404978f0400
 	github.com/getlantern/common v1.2.1-0.20230427204521-6ac18c21db39
 	github.com/getlantern/diagnostics v0.0.0-20230503185158-c2fc28ed22fe
 	github.com/getlantern/dnsgrab v0.0.0-20240830183253-5c3e2386c39e
@@ -54,7 +52,7 @@ require (
 	github.com/getlantern/netx v0.0.0-20240830183145-c257516187f0
 	github.com/getlantern/notifier v0.0.0-20240830181717-11f4c6c3fa95
 	github.com/getlantern/ops v0.0.0-20231025133620-f368ab734534
-	github.com/getlantern/osversion v0.0.0-20250401204410-e7af9e80ad74
+	github.com/getlantern/osversion v0.0.0-20250424174400-d834340603cf
 	github.com/getlantern/pathdb v0.0.0-20231026090702-54ee1ddd99eb
 	github.com/getlantern/profiling v0.0.0-20160317154340-2a15afbadcff
 	github.com/getlantern/replica v0.15.0
@@ -198,7 +196,7 @@ require (
 	github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede // indirect
 	github.com/getlantern/geo v0.0.0-20241129152027-2fc88c10f91e // indirect
 	github.com/getlantern/go-socks5 v0.0.0-20171114193258-79d4dd3e2db5 // indirect
-	github.com/getlantern/go-update v0.0.0-20230221120840-8d795213a8bc // indirect
+	github.com/getlantern/go-update v0.0.0-20250424174722-01d3413d1e6d // indirect
 	github.com/getlantern/gonat v0.0.0-20201001145726-634575ba87fb // indirect
 	github.com/getlantern/gowin v0.0.0-20160824205538-88fa116ddffc // indirect
 	github.com/getlantern/grtrack v0.0.0-20231025115619-bfbfadb228f3 // indirect
