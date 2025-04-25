@@ -105,6 +105,10 @@ class GoTun2SocksProvider(
         dnsGrabAddr: String,
     ) {
         Logger.d(TAG, "run")
+        if (socksAddr.isNullOrEmpty()) {
+            Logger.e(TAG, "socksAddr is null or empty")
+            return
+        }
 
         val defaultLocale = Locale.getDefault()
         try {
