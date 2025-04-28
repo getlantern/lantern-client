@@ -264,10 +264,15 @@ jobs:
         run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
 
       - name: Rename builds
+        env:
+          android_dist: "${{env.prefix}}-${{env.version}}"
         run: |
           if [[ "${{ env.platform }}" == "android" || "${{ env.platform }}" == "all" ]]; then
-            diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
-            diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
+            diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.android_dist }}.apk
+            diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.android_dist }}.aab
+            cp ${{ env.android_dist }}.apk ${{ env.prefix }}.apk
+            shasum -a 256 ${{ env.android_dist }}.apk | cut -d " " -f 1 > ${{ env.android_dist }}.apk.sha256
+
           fi
 
           if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then

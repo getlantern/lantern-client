@@ -200,12 +200,6 @@ jobs:
           brew install joshdk/tap/retry
           brew install imagemagick || true
 
-      - name: Setup Xcode
-        if: matrix.platform == 'macos'
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: ${{ inputs.xcode_version }}
-
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
