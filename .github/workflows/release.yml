@@ -103,7 +103,7 @@ jobs:
     secrets: inherit
     needs: set-version
     with:
-      macos_version: macos-14
+      macos_version: macos-latest
       xcode_version: latest-stable
       version: ${{ needs.set-version.outputs.version }}
       version_file: ${{ needs.set-version.outputs.version_file }}
