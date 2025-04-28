@@ -2,12 +2,14 @@
 package main
 
 import (
+    "os"
 	"context"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
+    "github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/issue"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
@@ -338,6 +340,22 @@ func paymentRedirect(planID, currency, provider, email, deviceName *C.char) *C.c
 //export exitApp
 func exitApp() {
 	app().Exit(nil)
+}
+
+//export collectLogs
+func collectLogs(path *C.char) *C.char {
+    maxLogSize := 10247680
+    pathStr := C.GoString(path)
+    f, err := os.Create(pathStr)
+    if err != nil {
+     return sendError(err)
+    }
+    defer f.Close()
+    folder := "logs"
+    if _, err := logging.ZipLogFiles(f, folder, int64(maxLogSize), int64(maxLogSize)); err != nil {
+     return sendError(err)
+    }
+    return C.CString("true")
 }
 
 //export reportIssue
