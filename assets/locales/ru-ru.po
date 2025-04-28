@@ -1,27 +1,27 @@
 # 
 # Translators:
 # Serg <sergkoshkin@yandex.ru>, 2025
-# Vitaliy Grishenko, 2025
-# Lowrider <pams@imail.ru>, 2025
-# e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2025
-# Николай Кочкин <urfiner@gmail.com>, 2025
-# IvanLykov <chabib@list.ru>, 2025
-# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2025
-# Helen R <helen.russel88@gmail.com>, 2025
 # e2f <projects@e2f.com>, 2025
-# Helen Russel <coo@workogram.com>, 2025
-# Deanna D, 2025
-# Tina T, 2025
-# e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2025
-# sayanvd <sayanvd@yandex.ru>, 2025
+# Helen R <helen.russel88@gmail.com>, 2025
 # e2f_ru r1 <tx_e2f_ru_r1@ate2f.com>, 2025
+# Lowrider <pams@imail.ru>, 2025
+# Helen Russel <coo@workogram.com>, 2025
+# Tina T, 2025
+# Anna Evdokimova <anna.evdokimova@yahoo.com>, 2025
+# Vitaliy Grishenko, 2025
+# IvanLykov <chabib@list.ru>, 2025
 # tx_e2f_ru c4 <tx_e2f_ru_c4@ate2f.com>, 2025
-# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2025
 # Derek F <derek@getlantern.org>, 2025
+# Николай Кочкин <urfiner@gmail.com>, 2025
+# e2f_ru r4 <tx_e2f_ru_r4@ate2f.com>, 2025
+# Deanna D, 2025
+# sayanvd <sayanvd@yandex.ru>, 2025
+# e2f_ru r3 <tx_e2f_ru_r3@ate2f.com>, 2025
+# e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Derek F <derek@getlantern.org>, 2025\n"
+"Last-Translator: e2f_ru c1 <tx_e2f_ru_c1@ate2f.com>, 2025\n"
 "Language-Team: Russian (Russia) (https://app.transifex.com/lantern-1/teams/94371/ru_RU/)\n"
 "Language: ru_RU\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
