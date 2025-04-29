@@ -175,7 +175,7 @@ jobs:
           name: Lantern.ipa
 
       - name: Upload Lantern to TestFlight
-        uses: apple-actions/upload-testflight-build@v3
+        uses: apple-actions/upload-testflight-build@v3.0.0
         if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
         with:
           app-path: Lantern.ipa
