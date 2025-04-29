@@ -48,7 +48,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-latest
+          - os: macos-15
             platform: macos
           - os: windows-latest
             platform: windows
