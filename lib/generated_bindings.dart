@@ -855,6 +855,8 @@ const int _DARWIN_FEATURE_UNIX_CONFORMANCE = 3;
 
 const int __has_ptrcheck = 0;
 
+const int __has_bounds_safety_attributes = 0;
+
 const int __DARWIN_NULL = 0;
 
 const int __PTHREAD_SIZE__ = 8176;

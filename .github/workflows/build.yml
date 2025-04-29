@@ -48,7 +48,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-15
+          - os: macos-latest
             platform: macos
           - os: windows-latest
             platform: windows
@@ -104,6 +104,16 @@ jobs:
         with:
           p12-file-base64: ${{ secrets.MACOS_BNS_CERT }}
           p12-password: ${{ secrets.MACOS_BNS_CERT_PASS }}
+
+      - name: Setup Xcode
+        if: matrix.platform == 'macos' || matrix.platform == 'ios'
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ inputs.xcode_version }}
+
+      - name: Check Xcode version
+        if: matrix.platform == 'macos' || matrix.platform == 'ios'
+        run: /usr/bin/xcodebuild -version
 
       - name: Install provisioning Profile for macos
         if: matrix.platform == 'macos'
@@ -199,12 +209,6 @@ jobs:
           brew tap joshdk/tap
           brew install joshdk/tap/retry
           brew install imagemagick || true
-
-      - name: Setup Xcode
-        if: matrix.platform == 'macos'
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: ${{ inputs.xcode_version }}
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2

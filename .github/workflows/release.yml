@@ -175,7 +175,7 @@ jobs:
           name: Lantern.ipa
 
       - name: Upload Lantern to TestFlight
-        uses: apple-actions/upload-testflight-build@v1
+        uses: apple-actions/upload-testflight-build@v3.0.0
         if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
         with:
           app-path: Lantern.ipa
@@ -264,10 +264,18 @@ jobs:
         run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
 
       - name: Rename builds
+        env:
+          android_dist: "${{env.prefix}}-${{env.version}}"
+          android_dist_versionless: ${{env.prefix}}
         run: |
           if [[ "${{ env.platform }}" == "android" || "${{ env.platform }}" == "all" ]]; then
-            diff lantern-installer.apk ${{ env.prefix }}.apk || mv -f lantern-installer.apk ${{ env.prefix }}.apk
-            diff lantern-installer.aab ${{ env.prefix }}.aab || mv -f lantern-installer.aab ${{ env.prefix }}.aab
+            mv lantern-installer.apk ${{ env.android_dist }}.apk
+            mv lantern-installer.aab ${{ env.android_dist }}.aab
+
+            cp ${{ env.android_dist }}.apk ${{ env.android_dist_versionless }}.apk
+            cp ${{ env.android_dist }}.aab ${{ env.android_dist_versionless }}.aab
+
+            shasum -a 256 ${{ env.android_dist }}.apk | cut -d " " -f 1 > ${{ env.android_dist }}.apk.sha256
           fi
 
           if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
