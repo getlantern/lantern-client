@@ -161,7 +161,7 @@ It is compiled from Go using [Gomobile](https://github.com/golang/mobile) to app
 * For compiled code lives in `./android/app/libs` and is called `liblantern-ARCH.aar`.
 
 #### IOS
-* To generate XCodeFramework run `make build-framework`
+* To generate XCodeFramework run `make ios`
 
 For compiled code lives in `./ios/internalsdk/` and is called `Internalsdk.xcframework`.
 
