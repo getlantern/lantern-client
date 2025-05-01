@@ -213,9 +213,9 @@ class LanternFFI {
 
 
   static Future<void> collectLogs(List<String> list) {
-    final fn = list[0].toPointerChar();
+    final path = list[0].toPointerChar();
     final result = _lanternFFI
-        .collectLogs(fn)
+        .collectLogs(path)
         .cast<Utf8>()
         .toDartString();
 

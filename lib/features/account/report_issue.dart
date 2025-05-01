@@ -241,16 +241,6 @@ class _ReportIssueState extends State<ReportIssue> {
       AppLoadingDialog.showLoadingDialog(context);
       await sessionModel.shareLogs();
       AppLoadingDialog.dismissLoadingDialog(context);
-      CDialog.showInfo(
-        context,
-        title: 'report_sent'.i18n,
-        description: 'thank_you_for_reporting_your_issue'.i18n,
-        actionLabel: 'continue'.i18n,
-        agreeAction: () async {
-          resetController();
-          return true;
-        },
-      );
     } catch (error, stackTrace) {
       print(stackTrace);
       AppLoadingDialog.dismissLoadingDialog(context);

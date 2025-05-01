@@ -749,18 +749,21 @@ class SessionModel extends Model {
   Future<void> shareLogs() async {
     final Directory documentDirectory =
         await getApplicationDocumentsDirectory();
-    final String fn = '${documentDirectory.path}/logs.zip';
+    final String path = '${documentDirectory.path}/logs.zip';
     if (isDesktop()) {
-      await compute(LanternFFI.collectLogs, [fn]);
+      await compute(LanternFFI.collectLogs, [path]);
     } else {
       await methodChannel.invokeMethod('collectLogs', <String, dynamic>{
-        'fn': fn,
+        'path': path,
       });
     }
-    await Share.shareXFiles(
-      [XFile(fn)],
-      text: 'Here are my diagnostic logs from Lantern',
-    );
+    final file = File(path);
+    if (await file.exists()) {
+        await Share.shareXFiles(
+          [XFile(path)],
+          text: 'Here are my diagnostic logs from Lantern',
+        );
+    }
   }
 
   Widget getUserId(ValueWidgetBuilder<String> builder) {

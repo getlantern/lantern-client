@@ -301,8 +301,8 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		}
 		return true, nil
 	case "collectLogs":
-		fn := arguments.Get("fn").String()
-		err := collectLogs(fn)
+		path := arguments.Get("path").String()
+		err := collectLogs(path)
 		if err != nil {
 			return nil, err
 		}
