@@ -2,6 +2,8 @@ import 'package:intl/intl.dart';
 import 'package:lantern/core/utils/utils.dart';
 import 'package:lantern/core/widgtes/custom_bottom_bar.dart';
 import 'package:lantern/features/replica/common.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../core/utils/common.dart';
 import '../../core/utils/common_desktop.dart';
@@ -742,6 +744,26 @@ class SessionModel extends Model {
       'issue': issue,
       'description': description
     }).then((value) => value.toString());
+  }
+
+  Future<void> shareLogs() async {
+    final Directory documentDirectory =
+        await getApplicationDocumentsDirectory();
+    final String path = '${documentDirectory.path}/logs.zip';
+    if (isDesktop()) {
+      await compute(LanternFFI.collectLogs, [path]);
+    } else {
+      await methodChannel.invokeMethod('collectLogs', <String, dynamic>{
+        'path': path,
+      });
+    }
+    final file = File(path);
+    if (await file.exists()) {
+        await Share.shareXFiles(
+          [XFile(path)],
+          text: 'Here are my diagnostic logs from Lantern',
+        );
+    }
   }
 
   Widget getUserId(ValueWidgetBuilder<String> builder) {

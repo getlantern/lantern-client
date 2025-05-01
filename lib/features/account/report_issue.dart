@@ -166,13 +166,27 @@ class _ReportIssueState extends State<ReportIssue> {
             ),
             const Spacer(),
             Tooltip(
-                message: isDesktop() ? '' : AppKeys.sendReport,
+              message: isDesktop() ? '' : AppKeys.sendReport,
+              child: Button(
+                width: 200,
+                disabled: isButtonDisabled(),
+                text: 'send_report'.i18n,
+                onPressed: onSendReportTap,
+              ),
+            ),
+            if (!Platform.isLinux) ...[
+              const SizedBox(
+                height: 26.0,
+              ),
+              Tooltip(
+                message: isDesktop() ? '' : "Share logs",
                 child: Button(
                   width: 200,
-                  disabled: isButtonDisabled(),
-                  text: 'send_report'.i18n,
-                  onPressed: onSendReportTap,
-                )),
+                  text: "Share logs",
+                  onPressed: onShareLogsTap,
+                ),
+              ),
+            ],
             const SizedBox(
               height: 56.0,
             ),
@@ -210,6 +224,23 @@ class _ReportIssueState extends State<ReportIssue> {
           return true;
         },
       );
+    } catch (error, stackTrace) {
+      print(stackTrace);
+      AppLoadingDialog.dismissLoadingDialog(context);
+      CDialog.showError(
+        context,
+        error: error,
+        stackTrace: stackTrace,
+        description: error.localizedDescription, // This is coming localized
+      );
+    }
+  }
+
+  Future<void> onShareLogsTap() async {
+    try {
+      AppLoadingDialog.showLoadingDialog(context);
+      await sessionModel.shareLogs();
+      AppLoadingDialog.dismissLoadingDialog(context);
     } catch (error, stackTrace) {
       print(stackTrace);
       AppLoadingDialog.dismissLoadingDialog(context);

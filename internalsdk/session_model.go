@@ -16,6 +16,7 @@ import (
 
 	"github.com/getlantern/errors"
 	"github.com/getlantern/flashlight/v7/config"
+	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/lantern-client/internalsdk/auth"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/getlantern/lantern-client/internalsdk/ios"
@@ -295,6 +296,13 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		issue := arguments.Get("issue").String()
 		description := arguments.Get("description").String()
 		err := reportIssue(m, email, issue, description)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
+	case "collectLogs":
+		path := arguments.Get("path").String()
+		err := collectLogs(path)
 		if err != nil {
 			return nil, err
 		}
@@ -1565,6 +1573,20 @@ func (session *SessionModel) cacheUserDetail(userDetail *protos.User) error {
 	}
 	log.Debugf("User caching successful: %+v", userDetail)
 	return session.SetUserIDAndToken(int64(userDetail.UserId), userDetail.Token)
+}
+
+func collectLogs(path string) error {
+	maxLogSize := 10247680
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	folder := "logs"
+	if _, err := logging.ZipLogFiles(f, folder, int64(maxLogSize), int64(maxLogSize)); err != nil {
+		return err
+	}
+	return nil
 }
 
 func reportIssue(session *SessionModel, email string, issue string, description string) error {

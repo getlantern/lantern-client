@@ -211,6 +211,20 @@ class LanternFFI {
     return Future.value();
   }
 
+
+  static Future<void> collectLogs(List<String> list) {
+    final path = list[0].toPointerChar();
+    final result = _lanternFFI
+        .collectLogs(path)
+        .cast<Utf8>()
+        .toDartString();
+
+    checkAPIError(result, 'we_are_experiencing_technical_difficulties'.i18n);
+
+    return Future.value();
+  }
+
+
   static Future<String> paymentRedirect(List<String> list) {
     final planID = list[0].toPointerChar();
     final currency = list[1].toPointerChar();
