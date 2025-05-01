@@ -43,7 +43,7 @@ const (
 // To run this, you need to specify the integration test tag:
 // go test -tags=integration -run TestProxyinAll
 func TestProxyinAll(t *testing.T) {
-	if testing.Short() || true {
+	if testing.Short() {
 		t.Skip("Skip test in short mode")
 	}
 
