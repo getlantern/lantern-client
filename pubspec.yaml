@@ -144,6 +144,7 @@ dependencies:
   surveysparrow_flutter_sdk: ^1.2.1
   background_downloader: ^8.9.4
   flutter_riverpod: ^2.6.1
+  ffigen: ^18.1.0
 
 
 dev_dependencies:
@@ -153,7 +154,6 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  ffigen: ^18.0.0
   flutter_lints: ^5.0.0
   mockito: ^5.4.4
   auto_route_generator: ^9.0.0
