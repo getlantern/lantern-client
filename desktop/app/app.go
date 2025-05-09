@@ -80,7 +80,10 @@ func NewApp() (*App, error) {
 	// filter macOS system arguments
 	filterSystemArgs()
 
-	flags := flashlight.ParseFlags()
+	flags, err := initializeAppConfig()
+	if err != nil {
+		return nil, err
+	}
 	if flags.Pprof {
 		go startPprof("localhost:6060")
 	}
