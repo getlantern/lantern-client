@@ -30,7 +30,7 @@ type configService struct {
 }
 
 // initializeAppConfig initializes application configuration and flags based on environment variables
-func initializeAppConfig() (flashlight.Flags, error) {
+func initializeAppConfig() (string, flashlight.Flags, error) {
 	flags := flashlight.ParseFlags()
 	if flags.Pprof {
 		go startPprof("localhost:6060")
@@ -67,7 +67,7 @@ func initializeAppConfig() (flashlight.Flags, error) {
 		configDir = resolveConfigDir(configDir)
 	}
 	if err := createDirIfNotExists(configDir, defaultConfigDirPerm); err != nil {
-		return flags, fmt.Errorf("Unable to create config directory %s: %v", configDir, err)
+		return "", flags, fmt.Errorf("Unable to create config directory %s: %v", configDir, err)
 	}
 	flags.StickyConfig = stickyConfig
 	flags.ReadableConfig = readableConfig
@@ -75,7 +75,7 @@ func initializeAppConfig() (flashlight.Flags, error) {
 
 	log.Debugf("Config options: directory %v sticky %v readable %v", configDir,
 		stickyConfig, readableConfig)
-	return flags, nil
+	return configDir, flags, nil
 }
 
 func (s *configService) StartService(channel ws.UIChannel) (err error) {
