@@ -48,9 +48,20 @@ jobs:
     strategy:
       matrix:
         include:
+          - os: macos-latest
+            platform: macos
+          - os: windows-latest
+            platform: windows
           - os: ubuntu-latest-16-cores
             platform: android
             target: apk
+          - os: ubuntu-latest-16-cores
+            platform: android
+            target: aab
+          - os: ubuntu-latest
+            platform: linux
+          - os: macos-latest
+            platform: ios
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
