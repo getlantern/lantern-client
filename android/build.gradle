@@ -28,7 +28,7 @@ ext {
 
     compileSdkVersion = 35
     targetSdkVersion = 35
-    minSdkVersion = 23
+    minSdkVersion = 21
     buildToolsVersion = '34.0.0'
     buildNumber = 'dev'
     espressoVersion = '3.5.0'
