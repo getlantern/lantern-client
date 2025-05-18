@@ -95,7 +95,6 @@ CIBASE := $(shell printf "CI=$${CI:-false}" | base64)
 
 STAGING = false
 UPDATE_SERVER_URL ?=
-override VERSION ?= 9999.99.99
 
 LDFLAGS := -X github.com/getlantern/lantern-client/internalsdk/common.RevisionDate=$(REVISION_DATE) -X github.com/getlantern/lantern-client/internalsdk/common.BuildDate=$(BUILD_DATE)
 
