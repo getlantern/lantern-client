@@ -531,7 +531,7 @@ $(WINDOWS_LIB_NAME): export GOOS = windows
 $(WINDOWS_LIB_NAME): export GOARCH = 386
 $(WINDOWS_LIB_NAME): export LIB_NAME = $(WINDOWS_LIB_NAME)
 $(WINDOWS_LIB_NAME): export BUILD_TAGS += walk_use_cgo
-$(WINDOWS_LIB_NAME): export EXTRA_LDFLAGS +=
+$(WINDOWS_LIB_NAME): export EXTRA_LDFLAGS += -H=windowsgui -s -w
 $(WINDOWS_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS_LIB_NAME): export BUILD_RACE =
 $(WINDOWS_LIB_NAME): export Environment = production
@@ -546,7 +546,7 @@ $(WINDOWS64_LIB_NAME): export GOOS = windows
 $(WINDOWS64_LIB_NAME): export GOARCH = amd64
 $(WINDOWS64_LIB_NAME): export LIB_NAME = $(WINDOWS64_LIB_NAME)
 $(WINDOWS64_LIB_NAME): export BUILD_TAGS += walk_use_cgo
-$(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS +=
+$(WINDOWS64_LIB_NAME): export EXTRA_LDFLAGS += -H=windowsgui -s
 $(WINDOWS64_LIB_NAME): export GO_BUILD_FLAGS += -a -buildmode=c-shared
 $(WINDOWS64_LIB_NAME): export BUILD_RACE =
 $(WINDOWS64_LIB_NAME): desktop-lib
