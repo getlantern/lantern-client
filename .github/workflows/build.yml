@@ -34,7 +34,6 @@ jobs:
       contents: "read"
       id-token: "write"
     env:
-      version: ${{ inputs.version }}
       prefix: ${{ inputs.prefix }}
       AC_USERNAME: ${{ secrets.AC_USERNAME }}
       AC_PASSWORD: ${{ secrets.AC_PASSWORD }}
@@ -45,6 +44,7 @@ jobs:
       SENTRY_ORG: getlantern
       SENTRY_PROJECT_IOS: lantern-ios
       SENTRY_PROJECT_ANDROID: android
+      VERSION: ${{ inputs.version }}
     strategy:
       matrix:
         include:
@@ -254,7 +254,7 @@ jobs:
         env:
           RUN_NUMBER: ${{ github.run_number }}
         run: |
-          NEW_VERSION="${{ env.version }}+${RUN_NUMBER}"
+          NEW_VERSION="${{ env.VERSION }}+${RUN_NUMBER}"
           echo "Updating pubspec.yaml to version: $NEW_VERSION"
           sed -i.bak -E "s/^version: .*/version: $NEW_VERSION/" pubspec.yaml
           cat pubspec.yaml
@@ -263,9 +263,7 @@ jobs:
 
       - name: Build Lantern Library
         shell: bash
-        run: make ${{matrix.platform}}
-        env:
-          VERSION: ${{ env.version }}
+        run: make ${{matrix.platform}} VERSION=${{ env.VERSION }}
 
       - name: Activate plugins
         run: |
@@ -300,13 +298,9 @@ jobs:
         run: |
           New-Item -Path "./dist/${{ env.APP_VERSION }}" -ItemType Directory -Force
           flutter_distributor package --platform windows --targets exe --skip-clean
-        env:
-          VERSION: ${{ env.version }}
 
       - name: Build Flutter app (Android)
         if: matrix.platform == 'android'
-        env:
-          VERSION: ${{ env.version }}
         run: |
           make ${{ matrix.platform }}-${{ matrix.target }}-release
 
@@ -320,9 +314,7 @@ jobs:
 
       - name: Build Flutter app (iOS, Linux, macOS)
         if: matrix.platform != 'windows' && matrix.platform != 'android'
-        run: make ${{ matrix.platform }}-release
-        env:
-          VERSION: ${{ env.version }}
+        run: make ${{ matrix.platform }}-release VERSION=${{ env.VERSION }}
 
       - name: Rename installer
         if: matrix.platform == 'windows'
