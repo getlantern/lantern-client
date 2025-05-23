@@ -103,8 +103,9 @@ jobs:
     secrets: inherit
     needs: set-version
     with:
-      macos_version: macos-latest
+      macos_version: macos-15
       xcode_version: latest-stable
+      flutter_version: 3.29.3
       version: ${{ needs.set-version.outputs.version }}
       version_file: ${{ needs.set-version.outputs.version_file }}
       prefix: ${{ needs.set-version.outputs.prefix }}
