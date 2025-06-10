@@ -18,7 +18,8 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 8.1.9
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
+  sdk: ^3.6.0
+  flutter: 3.32.1
 
 dependencies:
   # SDKs
@@ -146,7 +147,6 @@ dependencies:
   flutter_riverpod: ^2.6.1
   ffigen: ^18.1.0
 
-
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -217,7 +217,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
 
 #  Windows related setup
 msix_config:
