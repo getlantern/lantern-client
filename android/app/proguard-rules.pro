@@ -1,6 +1,5 @@
 # Add project specific ProGuard rules here.
 # By default, the flags in this file are appended to flags specified
-# in /Users/todd/Library/Android/sdk/tools/proguard/proguard-android.txt
 # You can edit the include path and order by changing the proguardFiles
 # directive in build.gradle.
 #
@@ -8,6 +7,19 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+
+# Keep AutoSafeParcelables
+-keep public class * extends org.microg.safeparcel.AutoSafeParcelable {
+    @org.microg.safeparcel.SafeParcelable.Field *;
+    @org.microg.safeparcel.SafeParceled *;
+}
+
+# Keep asInterface method cause it's accessed from SafeParcel
+-keepattributes InnerClasses
+-keepclassmembers interface * extends android.os.IInterface {
+    public static class *;
+}
+-keep public class * extends android.os.Binder { public static *; }
 
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
@@ -26,6 +38,7 @@
 # Make sure we get line numbers in stack traces, but don't reveal source file names
 -renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
+
 
 # This is generated automatically by the Android Gradle plugin.
 -dontwarn com.google.android.libraries.places.api.Places
