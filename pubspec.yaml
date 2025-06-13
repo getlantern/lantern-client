@@ -18,8 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 8.1.9
 
 environment:
-  sdk: ^3.6.0
-  flutter: 3.32.4
+  sdk: '>=3.2.3 <4.0.0'
 
 dependencies:
   # SDKs
@@ -45,7 +44,7 @@ dependencies:
   sentry_flutter: ^8.14.1
 
   badges: ^3.1.2
-  dotted_border: ^3.0.1
+  dotted_border: ^2.1.0
   styled_text: ^8.1.0
   emoji_picker_flutter: ^4.3.0
   pin_code_text_field: ^1.8.0
@@ -79,10 +78,10 @@ dependencies:
   flutter_pdfview: ^1.3.3
 
   # Navigation & Localization
-  auto_route: ^10.1.0+1
+  auto_route: ^9.3.0+1
   i18n_extension: ^15.0.4
   i18n_extension_importer: ^0.0.6
-  intl: ^0.20.2
+  intl: ^0.19.0
 
   # QR
   qr_flutter: ^4.1.0
@@ -98,18 +97,18 @@ dependencies:
 
   # URL & Sharing utilities
   url_launcher: ^6.3.1
-  share_plus: ^11.0.0
+  share_plus: ^10.1.4
   flutter_inappwebview: ^6.1.5
   desktop_webview_window: ^0.2.3
 
   # Desktop
-  window_manager: ^0.5.0
-  tray_manager: ^0.5.0
+  window_manager: ^0.4.3
+  tray_manager: ^0.3.2
 
   flutter_dotenv: ^5.2.1
 
   # Notifications & Logging
-  flutter_local_notifications: ^19.2.1
+  flutter_local_notifications: ^18.0.1
   logger: ^2.5.0
 
   # Error handling
@@ -120,32 +119,33 @@ dependencies:
 
   # Path, permission & Markdown handling
   path_provider: ^2.1.5
-  permission_handler: ^12.0.0+1
+  permission_handler: ^11.3.1
   flutter_markdown: ^0.7.6+1
 
   # Purchase
   in_app_purchase: ^3.2.1
 
   # Ads
-  google_mobile_ads: ^6.0.0
+  google_mobile_ads: ^5.3.1
 
   retry: ^3.1.2
   # Generate bindings to native libraries
   ffi: ^2.1.4
   # Deeplink handling
-  app_links: ^6.4.0
+  app_links: ^6.3.3
   # Service Locator
   get_it: ^7.7.0
   #Loading
   animated_loading_border: ^0.0.2
   shimmer: ^3.0.0
   # windows related
-  win32_registry: ^2.1.0
+  win32_registry: ^1.1.5
   # Survey sdk
   surveysparrow_flutter_sdk: ^1.2.1
-  background_downloader: ^9.2.2
+  background_downloader: ^8.9.4
   flutter_riverpod: ^2.6.1
-  ffigen: ^19.0.0
+  ffigen: ^18.1.0
+
 
 dev_dependencies:
   integration_test:
@@ -154,9 +154,9 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
+  flutter_lints: ^5.0.0
   mockito: ^5.4.4
-  auto_route_generator: ^10.2.3
+  auto_route_generator: ^9.0.0
   build_runner: ^2.4.13
   msix: ^3.16.8
 
@@ -217,6 +217,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
 
 #  Windows related setup
 msix_config:

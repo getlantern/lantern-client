@@ -24,6 +24,9 @@ on:
       xcode_version:
         type: string
         required: true
+      flutter_version:
+        type: string
+        required: true
       macos_version:
         type: string
         required: true
@@ -211,11 +214,11 @@ jobs:
           brew install imagemagick || true
 
       - name: Install Flutter
-        uses: subosito/flutter-action@v2.20.0
+        uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-          flutter-version-file: pubspec.yaml
-      - run: flutter --version
+          flutter-version: ${{ inputs.flutter_version }}
+
       - name: Setup JDK
         if: matrix.platform == 'android'
         uses: actions/setup-java@v4
