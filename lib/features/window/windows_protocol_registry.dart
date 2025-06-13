@@ -14,15 +14,13 @@ class ProtocolRegistrar {
       String appPath = Platform.resolvedExecutable;
 
       String protocolRegKey = 'Software\\Classes\\$scheme';
-      RegistryValue protocolRegValue = RegistryValue.fromString(
+      RegistryValue protocolRegValue = const RegistryValue.string(
         'URL Protocol',
-        RegistryValueType.string,
         '',
       );
       String protocolCmdRegKey = 'shell\\open\\command';
-      RegistryValue protocolCmdRegValue = RegistryValue.fromString(
+      RegistryValue protocolCmdRegValue = RegistryValue.string(
         '',
-        RegistryValueType.string,
         '"$appPath" "%1"',
       );
 
