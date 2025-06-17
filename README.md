@@ -596,3 +596,13 @@ We can't use Google Play Services because:
 - A lot of our users don't even have Google Play Services installed
 - Google is blocked in a lot of placess
 - Some people view using Google for delivering messages as a privacy issue
+
+
+## Forcing speficic protocols
+
+If you're trying to test specific transports, we now have the ability to force them using environment variables. To run with
+proxyless and unbounded, for example, you can run:
+
+```
+LANTERN_TRANSPORTS="broflake,proxyless" flutter run -d macos
+```
