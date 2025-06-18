@@ -326,8 +326,8 @@ github.com/getlantern/fdcount v0.0.0-20210503151800-5decd65b3731/go.mod h1:XZwE+
 github.com/getlantern/filepersist v0.0.0-20160317154340-c5f0cd24e799/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c h1:mcz27xtAkb1OuOLBct/uFfL1p3XxAIcFct82GbT+UZM=
 github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c/go.mod h1:8DGAx0LNUfXNnEH+fXI0s3OCBA/351kZCiz/8YSK3i8=
-github.com/getlantern/flashlight/v7 v7.6.231 h1:003ykByMQTwUKb4hmn3OzPlH8/noZGAcN4ISgSwlcyU=
-github.com/getlantern/flashlight/v7 v7.6.231/go.mod h1:Tz5w1GNmW2RegmEF6M9WNV1GJUV6b8d0T+H+FH/y/7A=
+github.com/getlantern/flashlight/v7 v7.6.232 h1:kSWobMxLMz5LcHcJd+OqaqTWPOrGUIS7lOcMjUcPp54=
+github.com/getlantern/flashlight/v7 v7.6.232/go.mod h1:sKufNYxHhSigrM1pDs4DodXEMv2pZBcxL9/MGT+WQ+w=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede h1:yrU6Px3ZkvCsDLPryPGi6FN+2iqFPq+JeCb7EFoDBhw=
 github.com/getlantern/framed v0.0.0-20190601192238-ceb6431eeede/go.mod h1:nhnoiS6DE6zfe+BaCMU4YI01UpsuiXnDqM5S8jxHuuI=
 github.com/getlantern/fronted v0.0.0-20250613043431-4eb545c2da45 h1:aey6CO0ARQuoq5potW8HVUZFU7te8+JI2b8Rn28CobY=
@@ -390,8 +390,8 @@ github.com/getlantern/keepcurrent v0.0.0-20240126172110-2e0264ca385d/go.mod h1:e
 github.com/getlantern/keyman v0.0.0-20180207174507-f55e7280e93a/go.mod h1:FMf0g72BHs14jVcD8i8ubEk4sMB6JdidBn67d44i3ws=
 github.com/getlantern/keyman v0.0.0-20230503155501-4e864ca2175b h1:iyEuk8ARQC9HfraqC4r3leBhU55R1TV7bAiyPYE54kA=
 github.com/getlantern/keyman v0.0.0-20230503155501-4e864ca2175b/go.mod h1:ZJ+yDaZkJ/JU9j7EQa3UUh6ouedrNDDLA5OiowS1Iuk=
-github.com/getlantern/kindling v0.0.0-20250617200038-e026fc36f4aa h1:4d6IyPX/HQJrloFpyG4149v5TtclzHCJKlRFDhS3aLc=
-github.com/getlantern/kindling v0.0.0-20250617200038-e026fc36f4aa/go.mod h1:HD0J725mTvBXeBTepQa9wwpPL5LYLqER7hsF8I9sXkE=
+github.com/getlantern/kindling v0.0.0-20250618182126-cc504e0c6470 h1:DewUHcUZwSh8hy8Z6wGDX8G4xk5dwk1Io7YKp8UNuxc=
+github.com/getlantern/kindling v0.0.0-20250618182126-cc504e0c6470/go.mod h1:HD0J725mTvBXeBTepQa9wwpPL5LYLqER7hsF8I9sXkE=
 github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a h1:z7G1v79GB1qRrkcbzF0nrLzV/+dwdGmamEZAp0ff+z0=
 github.com/getlantern/lampshade v0.0.0-20201109225444-b06082e15f3a/go.mod h1:cGOfTjvllC9bcwS7cVW6tGT6fXc8Dki384uFjm7XBnw=
 github.com/getlantern/lantern-algeneva v0.0.0-20240930181006-6d3c00db1d5d h1:ACBwPR4du54Qw+X5ajsbMqOFR8euGZRdMGkvTDS7I60=
@@ -448,8 +448,8 @@ github.com/getlantern/proxy/v3 v3.0.0-20240328103708-9185589b6a99/go.mod h1:I5Sv
 github.com/getlantern/psmux v1.5.15-0.20200903210100-947ca5d91683/go.mod h1:GtXRvtMItoflWGLPE7GNq+AdL7BnmpaaNLtDQVD1XHU=
 github.com/getlantern/psmux v1.5.15 h1:VUCEk8MIsvAj90wNYRyY2fE9ZL4LIRhi1W5V9aycA9A=
 github.com/getlantern/psmux v1.5.15/go.mod h1:nyp/sr4uTbWpUh7Q2WovRb07LeLNUxDg8kAdS726FIw=
-github.com/getlantern/quicwrapper v0.0.0-20250417060014-acb01527c4c2 h1:4TMpZ++GTJtfBGx38IE8JRezp461s0CcWwPOGMyIfTU=
-github.com/getlantern/quicwrapper v0.0.0-20250417060014-acb01527c4c2/go.mod h1:8JUff02h2OIo2TSuJDJmTVphoh3MzeE7V5gbjPa+r0w=
+github.com/getlantern/quicwrapper v0.0.0-20250610202231-252f48357c93 h1:9jDA8Ojs4j/d4EBd2ap6r7YkGH/YFUccHuDU7DBIs+o=
+github.com/getlantern/quicwrapper v0.0.0-20250610202231-252f48357c93/go.mod h1:8JUff02h2OIo2TSuJDJmTVphoh3MzeE7V5gbjPa+r0w=
 github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7 h1:47FJ5kTeXc3I1VPpi2hWW9I16/Y3K0cpUq/B7oWJGF8=
 github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7/go.mod h1:OOqKCIkspqXtIWEex4uhH1H9l7NGekT9i3Hs591ZDk4=
 github.com/getlantern/replica v0.15.0 h1:rq3PiaSJdDgZ8B/Xofa0Ff/b0QzGePqFe8/+bxg0Hx8=

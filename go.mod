@@ -6,16 +6,16 @@ toolchain go1.24.4
 
 //replace github.com/getlantern/flashlight/v7 => ../flashlight
 
-// replace github.com/getlantern/ipproxy => ../ipproxy
-// replace github.com/getlantern/kindling => ../kindling
+//replace github.com/getlantern/broflake => ../unbounded
 
-// replace github.com/getlantern/fronted => ../fronted
+// replace github.com/getlantern/ipproxy => ../ipproxy
+//replace github.com/getlantern/kindling => ../kindling
+
+//replace github.com/getlantern/fronted => ../fronted
 
 // replace github.com/getlantern/pathdb => ../pathDb/pathDb
 
 replace github.com/elazarl/goproxy => github.com/getlantern/goproxy v0.0.0-20220805074304-4a43a9ed4ec6
-
-replace github.com/lucas-clemente/quic-go => github.com/getlantern/quic-go v0.31.1-0.20230104154904-d810c964a217
 
 replace github.com/keighl/mandrill => github.com/getlantern/mandrill v0.0.0-20221004112352-e7c04248adcb
 
@@ -40,7 +40,7 @@ require (
 	github.com/getlantern/eventual v1.0.0
 	github.com/getlantern/eventual/v2 v2.0.2
 	github.com/getlantern/filepersist v0.0.0-20210901195658-ed29a1cb0b7c
-	github.com/getlantern/flashlight/v7 v7.6.231
+	github.com/getlantern/flashlight/v7 v7.6.232
 	github.com/getlantern/fronted v0.0.0-20250613043431-4eb545c2da45
 	github.com/getlantern/geolookup v0.0.0-20230327091034-aebe73c6eef4
 	github.com/getlantern/golog v0.0.0-20230503153817-8e72de7e0a65
@@ -95,7 +95,7 @@ require (
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/flynn/noise v1.0.0 // indirect
 	github.com/getlantern/dnstt v0.0.0-20250530230749-4d64f4edcf0f // indirect
-	github.com/getlantern/kindling v0.0.0-20250617200038-e026fc36f4aa // indirect
+	github.com/getlantern/kindling v0.0.0-20250618182126-cc504e0c6470 // indirect
 	github.com/getlantern/lantern-water v0.0.0-20241218135103-60224336cf1d // indirect
 	github.com/getlantern/sing-vmess v0.0.0-20241209111030-0f2c02b4eb9a // indirect
 	github.com/goccy/go-yaml v1.15.13 // indirect
@@ -228,7 +228,7 @@ require (
 	github.com/getlantern/preconn v1.0.0 // indirect
 	github.com/getlantern/proxy/v3 v3.0.0-20240328103708-9185589b6a99 // indirect
 	github.com/getlantern/psmux v1.5.15 // indirect
-	github.com/getlantern/quicwrapper v0.0.0-20250417060014-acb01527c4c2 // indirect
+	github.com/getlantern/quicwrapper v0.0.0-20250610202231-252f48357c93 // indirect
 	github.com/getlantern/ratelimit v0.0.0-20220926192648-933ab81a6fc7 // indirect
 	github.com/getlantern/rot13 v0.0.0-20220822172233-370767b2f782 // indirect
 	github.com/getlantern/rotator v0.0.0-20160829164113-013d4f8e36a2 // indirect
