@@ -10,7 +10,12 @@ echo "Fetching all proxies for "$@""
 # if they exist. If not, fetch them from the lantern-cloud.
 TMPDIR="${TMP:-/tmp}/hit_lc_proxy"
 mkdir -p "$TMPDIR"
-OUTFILE="$TMPDIR/all_proxies.txt"
+OUTFILE="$TMPDIR/"$@"all_proxies.txt"
+# If the OUTFILE is older than 1 hour, delete it to force a refresh.
+if [ -f "$OUTFILE" ] && [ "$(find "$OUTFILE" -mtime +1)" ]; then
+  echo "Cached proxies are older than 1 hour. Refreshing..."
+  rm -f "$OUTFILE"
+fi
 if [ -f "$OUTFILE" ]; then
   echo "Using cached proxies from $OUTFILE"
   ALLPROXIES=$(cat "$OUTFILE")
