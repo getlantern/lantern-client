@@ -28,6 +28,7 @@ class ImagePaths {
   static const mastercard = 'assets/images/mastercard.svg';
   static const visa = 'assets/images/visa.svg';
   static const unionpay = 'assets/images/unionpay.svg';
+  static const alipay = 'assets/images/alipay.svg';
   static const mnp = 'assets/images/mnp.svg';
   static const qiwi = 'assets/images/qiwi.svg';
   static const btc = 'assets/images/btc.svg';
