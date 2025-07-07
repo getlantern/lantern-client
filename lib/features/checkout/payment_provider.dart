@@ -79,8 +79,8 @@ class PaymentIconRow extends StatelessWidget {
         }
 
         return Container(
-          width: iconSize + 8,
-          height: iconSize + 8,
+          width: iconSize + spacing * 2,
+          height: iconSize + spacing * 2,
           margin: EdgeInsets.only(
             right: i < defaultAssets.length - 1 ? spacing : 0,
           ),
