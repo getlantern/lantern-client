@@ -18,7 +18,13 @@ class PaymentIconRow extends StatelessWidget {
     this.useNetwork = false,
   });
 
-  Future<bool> _canLoad(String url) async {
+  static final Map<String, Future<bool>> _cache = {};
+
+  Future<bool> _canLoad(String url) {
+    return _cache[url] ??= _checkUrl(url);
+  }
+
+  Future<bool> _checkUrl(String url) async {
     try {
       final response =
           await http.head(Uri.parse(url)).timeout(const Duration(seconds: 2));
@@ -129,6 +135,7 @@ class PaymentProviderOption extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               PaymentIconRow(
+                useNetwork: useNetwork,
                 defaultAssets: defaultLogoPaths,
                 networkIconUrls: networkIconUrls,
                 iconSize: 40,
@@ -144,7 +151,7 @@ class PaymentProviderOption extends StatelessWidget {
                   vertical: VisualDensity.minimumDensity,
                 ),
                 activeColor: black,
-                fillColor: MaterialStateProperty.resolveWith<Color>(
+                fillColor: WidgetStateProperty.resolveWith<Color>(
                   (_) => isSelected ? black : grey3,
                 ),
                 onChanged: (_) => onChanged(),
