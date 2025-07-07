@@ -223,29 +223,18 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
     for (final pathAndValue in sortProviders(paymentMethods)) {
       final paymentMethod = pathAndValue.value;
       if (widgets.length == 2) {
-        widgets.add(options());
+        if (paymentMethods.length != 2) widgets.add(options());
         if (!showMoreOptions) break;
       }
-      widgets.addAll(paymentProviders(paymentMethod));
-    }
-    return widgets;
-  }
-
-  List<PaymentProvider> paymentProviders(PaymentMethod paymentMethods) {
-    var providers = <PaymentProvider>[];
-
-    for (final provider in paymentMethods.providers) {
-      providers.add(
-        PaymentProvider(
-          logoPaths: provider.logoUrls,
-          onChanged: () => selectPaymentProvider(provider.name.toPaymentEnum()),
-          selectedPaymentProvider: selectedPaymentProvider!,
-          paymentType: provider.name.toPaymentEnum(),
-          useNetwork: true,
+      widgets.addAll(
+        buildPaymentProviders(
+          paymentMethods: paymentMethod,
+          selectedProvider: selectedPaymentProvider!,
+          onSelected: selectPaymentProvider,
         ),
       );
     }
-    return providers;
+    return widgets;
   }
 
   bool enableContinueButton() {
