@@ -161,7 +161,7 @@ List<PaymentProviderOption> buildPaymentProviders({
   required PaymentMethod paymentMethods,
   required Providers selectedProvider,
   required void Function(Providers) onSelected,
-  bool useNetwork = true,
+  bool useNetwork = false,
 }) {
   var providers = <PaymentProviderOption>[];
   for (final provider in paymentMethods.providers) {
@@ -180,6 +180,7 @@ List<PaymentProviderOption> buildPaymentProviders({
       PaymentProviderOption(
         defaultLogoPaths: defaultAssets,
         networkIconUrls: provider.logoUrls,
+        useNetwork: useNetwork,
         paymentType: provider.name.toPaymentEnum(),
         onChanged: () => onSelected(providerEnum),
         selectedPaymentProvider: selectedProvider!,
