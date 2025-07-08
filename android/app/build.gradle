@@ -33,8 +33,6 @@ android {
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
 
-    buildFeatures.buildConfig = true
-
     // Use now as the user-visible version
     def now = new Date()
 
