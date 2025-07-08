@@ -5,6 +5,7 @@ plugins {
     id 'org.jlleitschuh.gradle.ktlint'
     id 'kotlin-parcelize'
     id 'com.google.protobuf'
+    id "io.sentry.android.gradle" version "4.11.0"
 }
 
 android {
@@ -47,7 +48,6 @@ android {
     }
     // Use legacy packaging to helps reduce apk size
     packagingOptions{
-        exclude "DebugProbesKt.bin"
         jniLibs {
             useLegacyPackaging true
         }
@@ -77,10 +77,17 @@ android {
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        manifestPlaceholders = [
+                TapsellMediationAppKey                  : "ad680da7-f319-42cb-bdde-3b6c43486eaa",
+                TapsellMediationAdmobAdapterSignature   : "ca-app-pub-2685698271254859~9283700921",
+                TapsellMediationApplovinAdapterSignature: "YOUR_APPLOVIN_SIGNATURE",
+                TapsellMediationAppMarket               : "GooglePlay",
+        ]
+
     }
-//    kotlin {
-//        jvmToolchain(17)
-//    }
+    kotlin {
+        jvmToolchain(17)
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -193,25 +200,6 @@ android {
     }
     namespace 'org.getlantern.lantern'
 }
-
-tasks.register('zipDebugSymbols') {
-    description "Generates a ZIP file containing debug symbols for the app"
-    doLast {
-        def flutterRootDir = rootDir.parentFile
-        def debugSymbolsDir = file("${flutterRootDir}/build/app/intermediates/merged_native_libs/prodPlay/mergeProdPlayNativeLibs/out/lib")
-        def outputDir = file("${flutterRootDir}/build/outputs/debug-symbols")
-        outputDir.mkdirs()
-        copy {
-            from debugSymbolsDir
-            into outputDir
-        }
-        ant.zip(destfile: "${outputDir}/debug-symbols.zip") {
-            fileset(dir: debugSymbolsDir)
-        }
-        println "Debug symbols ZIP created at: ${outputDir}/debug-symbols.zip"
-    }
-}
-
 
 def androidArch() {
     def value = project.getProperties().get("androidArch")
@@ -355,7 +343,8 @@ dependencies {
 
     implementation files('libs/opuslib-release.aar')
     implementation 'com.github.getlantern:secrets-android:f6a7a69f3d'
-
+//    implementation 'com.github.getlantern:db-android:6c0525eeb9'
+//    implementation 'com.github.getlantern:messaging-android:eabf104396'
 
     implementation 'com.github.getlantern:db-android:a137a028d4'
     implementation 'com.github.getlantern:messaging-android:4c346e64ee'
@@ -376,3 +365,51 @@ dependencies {
     testImplementation "io.mockk:mockk:1.13.5"
 }
 
+
+sentry {
+
+    // Disables or enables debug log output, e.g. for for sentry-cli.
+    // Default is disabled.
+    debug = false
+
+    // The slug of the Sentry organization to use for uploading proguard mappings/source contexts.
+    org = "getlantern"
+
+    // The slug of the Sentry project to use for uploading proguard mappings/source contexts.
+    projectName = "android"
+
+    // The authentication token to use for uploading proguard mappings/source contexts.
+    // WARNING: Do not expose this token in your build.gradle files, but rather set an environment
+    // variable and read it into this property.
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
+
+    // The url of your Sentry instance. If you're using SAAS (not self hosting) you do not have to
+    // set this. If you are self hosting you can set your URL here
+    url = null
+
+    // Disables or enables the handling of Proguard mapping for Sentry.
+    // If enabled the plugin will generate a UUID and will take care of
+    // uploading the mapping to Sentry. If disabled, all the logic
+    // related to proguard mapping will be excluded.
+    // Default is enabled.
+    includeProguardMapping = true
+
+
+    // Whether the plugin should attempt to auto-upload the mapping file to Sentry or not.
+    // If disabled the plugin will run a dry-run and just generate a UUID.
+    // The mapping file has to be uploaded manually via sentry-cli in this case.
+    // Default is enabled.
+    autoUploadProguardMapping = true
+
+    // Disables or enables the automatic configuration of Native Symbols
+    // for Sentry. This executes sentry-cli automatically so
+    // you don't need to do it manually.
+    // Default is disabled.
+    uploadNativeSymbols = false
+
+    // Does or doesn't include the source code of native code for Sentry.
+    // This executes sentry-cli with the --include-sources param. automatically so
+    // you don't need to do it manually.
+    // Default is disabled.
+    includeNativeSources = false
+}
