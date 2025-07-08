@@ -18,7 +18,8 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 8.1.9
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
+  sdk: ">=3.2.3 <4.0.0"
+  flutter: 3.32.5
 
 dependencies:
   # SDKs
@@ -49,7 +50,7 @@ dependencies:
   emoji_picker_flutter: ^4.3.0
   pin_code_text_field: ^1.8.0
   scrollable_positioned_list: ^0.3.8
-  infinite_scroll_pagination: ^5.1.0
+  infinite_scroll_pagination: ^4.0.0
   email_validator: ^3.0.0
   credit_card_validator: ^2.1.0
   flutter_multi_formatter: ^2.13.0
@@ -146,7 +147,6 @@ dependencies:
   flutter_riverpod: ^2.6.1
   ffigen: ^19.0.0
 
-
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -217,7 +217,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
 
 #  Windows related setup
 msix_config:
