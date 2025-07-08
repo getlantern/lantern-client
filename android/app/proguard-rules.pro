@@ -165,11 +165,14 @@
 #
 ###---------------End: proguard configuration for Gson  ----------
 #
-#
+###---------------Begin: proguard configuration for background_downloader  ----------
+-keepclassmembers class java.lang.invoke.StringConcatFactory { *; }
+-dontwarn java.lang.invoke.StringConcatFactory
+###---------------End: proguard configuration for background_downloader  ----------
 ###---------------Begin: proguard configuration for Retrofit  ----------
 ## Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
 ## EnclosingMethod is required to use InnerClasses.
--keepattributes Signature, InnerClasses, EnclosingMethod
+-keepattributes InnerClasses, EnclosingMethod
 #
 ## Retain service method parameters when optimizing.
 #-keepclassmembers,allowshrinking,allowobfuscation interface * {
