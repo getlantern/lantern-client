@@ -192,22 +192,22 @@ class InAppBilling(
         val params = QueryProductDetailsParams.newBuilder().setProductList(productList).build()
 
         ensureConnected {
-            queryProductDetailsAsync(params) { billingResult, skuDetailsList ->
+             queryProductDetailsAsync(params, ProductDetailsResponseListener { billingResult, productDetailsList ->
                 if (!billingResult.responseCodeOK()) {
                     isRetriable(billingResult).then { updateProducts() }
                     return@queryProductDetailsAsync
                 }
-                Logger.d(TAG, "Got ${skuDetailsList.size} skus")
-                synchronized(this) {
-                    skus.clear()
-                    skuDetailsList.forEach {
-                        val id = it.productId
-                        skus[id] = it
-                    }
-                }
+         Logger.d(TAG, "Got ${productDetailsList.size} skus")
+        synchronized(this) {
+            skus.clear()
+            productDetailsList.forEach {
+                val id = it.productId
+                skus[id] = it
             }
         }
+    })
     }
+}
 
 
     private inline fun Boolean.then(crossinline block: () -> Unit) {
@@ -247,7 +247,6 @@ class InAppBilling(
                 if (purchases == null) {
                     return@queryPurchasesAsync
                 }
-                Logger.d(TAG, "Got ${purchases.size} purchases")
                 handleAcknowledgedPurchases(purchases)
             }
         }
