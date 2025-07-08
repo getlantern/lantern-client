@@ -90,7 +90,7 @@ require (
 	atomicgo.dev/schedule v0.1.0 // indirect
 	github.com/Jigsaw-Code/outline-sdk/x v0.0.2 // indirect
 	github.com/alitto/pond/v2 v2.1.6 // indirect
-	github.com/cloudflare/circl v1.5.0 // indirect
+	github.com/cloudflare/circl v1.6.1 // indirect
 	github.com/coder/websocket v1.8.12 // indirect
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/flynn/noise v1.0.0 // indirect
