@@ -1,7 +1,7 @@
 buildscript {
     ext.signal_version = '2.8.1'
     ext.protoc_version = '4.26.1'
-    ext.desugarJdk     = '2.0.4'
+    ext.desugarJdk     = '2.1.5'
 
     repositories {
         google()
