@@ -372,10 +372,11 @@ class MessageBubble extends StatelessWidget {
 
     if (wasRemotelyDeleted) {
       return DottedBorder(
-        color: grey4,
-        dashPattern: [3],
-        strokeWidth: 1,
-        customPath: (size) => borderRadius.toPath(size),
+        options: RectDottedBorderOptions(
+          color: grey4,
+          dashPattern: [3],
+          strokeWidth: 1,
+        ),
         child: ClipPath(
           clipper: borderRadius.toClipper(),
           clipBehavior: Clip.hardEdge,
