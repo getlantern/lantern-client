@@ -2,6 +2,7 @@ import 'package:lantern/core/utils/common.dart';
 import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/checkout/payment_provider.dart';
 import 'package:lantern/core/utils/utils.dart';
+import 'package:lantern/features/checkout/utils.dart';
 import 'package:retry/retry.dart';
 
 @RoutePage(name: 'Checkout')
@@ -272,7 +273,8 @@ class _CheckoutState extends State<Checkout>
   }
 
   Future<void> _openWebview(String url) async =>
-      await openWebview(context, url, 'lantern_pro_checkout'.i18n);
+      await openPaymentWebview(context, url,
+          title: 'lantern_pro_checkout'.i18n);
 
   void _proceedWithBTCPay() async {
     try {
@@ -377,7 +379,7 @@ class _CheckoutState extends State<Checkout>
         provider,
       );
       context.loaderOverlay.hide();
-      openWebview(context, redirectUrl);
+      _openWebview(redirectUrl);
       // as soon user click we should start polling userData
       Future.delayed(const Duration(seconds: 2), hasPlansUpdateOrBuy);
     } catch (error, stackTrace) {
