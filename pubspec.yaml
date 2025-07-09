@@ -108,7 +108,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
 
   # Notifications & Logging
-  flutter_local_notifications: ^19.3.0
+  flutter_local_notifications: ^18.0.1
   logger: ^2.5.0
 
   # Error handling
@@ -126,7 +126,7 @@ dependencies:
   in_app_purchase: ^3.2.1
 
   # Ads
-  google_mobile_ads: ^6.0.0
+  google_mobile_ads: ^5.3.1
 
   retry: ^3.1.2
   # Generate bindings to native libraries
