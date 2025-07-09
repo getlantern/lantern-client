@@ -315,7 +315,8 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
   }
 
   Future<void> _openWebview(String url) async =>
-      await openWebview(context, url, 'lantern_pro_checkout'.i18n);
+      await openPaymentWebview(context, url,
+          title: 'lantern_pro_checkout'.i18n);
 
   void _proceedWithBTCPay() async {
     try {
@@ -362,8 +363,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
           paymentProvider: Providers.shepherd);
 
       context.loaderOverlay.hide();
-
-      final shepherdURL = securePaymentRedirectUrl(value);
+      final shepherdURL = value;
       await _openWebview(shepherdURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
@@ -404,7 +404,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
         provider,
       );
       context.loaderOverlay.hide();
-      openWebview(context, securePaymentRedirectUrl(redirectUrl));
+      _openWebview(redirectUrl);
       // as soon user click we should start polling userData
       Future.delayed(const Duration(seconds: 2), hasPlansUpdateOrBuy);
     } catch (error, stackTrace) {
