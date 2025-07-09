@@ -4,6 +4,7 @@ import 'package:lantern/core/utils/common_desktop.dart';
 import 'package:lantern/features/checkout/payment_provider.dart';
 import 'package:lantern/features/checkout/plan_details.dart';
 import 'package:lantern/core/utils/utils.dart';
+import 'package:lantern/features/checkout/utils.dart';
 import 'package:retry/retry.dart';
 
 @RoutePage(name: 'CheckoutLegacy')
@@ -361,7 +362,8 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
           paymentProvider: Providers.shepherd);
 
       context.loaderOverlay.hide();
-      final shepherdURL = value;
+
+      final shepherdURL = securePaymentRedirectUrl(value);
       await _openWebview(shepherdURL);
     } catch (error, stackTrace) {
       context.loaderOverlay.hide();
@@ -402,7 +404,7 @@ class _CheckoutLegacyState extends State<CheckoutLegacy>
         provider,
       );
       context.loaderOverlay.hide();
-      openWebview(context, redirectUrl);
+      openWebview(context, securePaymentRedirectUrl(redirectUrl));
       // as soon user click we should start polling userData
       Future.delayed(const Duration(seconds: 2), hasPlansUpdateOrBuy);
     } catch (error, stackTrace) {
