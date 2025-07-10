@@ -127,17 +127,12 @@ class _StoreCheckoutState extends State<StoreCheckout>
       return;
     }
     FocusManager.instance.primaryFocus?.unfocus();
-    CDialog(
-      title: 'What Info We Collect',
-      description: "collect_info_message".i18n,
-      agreeText: 'accept_and_continue'.i18n,
-      dismissText: 'decline'.i18n,
-      agreeAction: () async {
-        context.maybePop();
+    CDialog.showIOSConsentDialog(
+      context,
+      onConsent: () {
         startPurchaseFlow();
-        return false;
       },
-    ).show(context);
+    );
   }
 
   void startPurchaseFlow() {
