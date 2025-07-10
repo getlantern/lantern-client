@@ -1848,8 +1848,8 @@ msgstr "By clicking Continue, you agree to let Lantern store your Device ID and 
 msgid "i_agree_to_let_lantern"
 msgstr "I agree to let Lantern collect and store my Device ID and email to help recover purchases and improve service. "
 
-msgstr "msgid "what_info_we_collect"
-msgid "What Info We Collect"
+msgid "what_info_we_collect"
+msgstr "What Info We Collect"
 
 msgid "collect_info_message"
 msgstr "To provide your Pro service, we collect your device ID and email. This lets you use your purchase on up to 3 devices and restore it if you delete or reinstall the app."
