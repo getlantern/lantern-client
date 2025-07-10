@@ -115,24 +115,16 @@ class _StoreCheckoutState extends State<StoreCheckout>
       return;
     }
     if (Platform.isIOS) {
-      showUserConsentDialog();
+      CDialog.showIOSConsentDialog(
+        context,
+        onConsent: () {
+          startPurchaseFlow();
+        },
+      );
       return;
     } else {
       startPurchaseFlow();
     }
-  }
-
-  void showUserConsentDialog() {
-    if (!Platform.isIOS) {
-      return;
-    }
-    FocusManager.instance.primaryFocus?.unfocus();
-    CDialog.showIOSConsentDialog(
-      context,
-      onConsent: () {
-        startPurchaseFlow();
-      },
-    );
   }
 
   void startPurchaseFlow() {
