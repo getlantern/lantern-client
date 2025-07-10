@@ -187,28 +187,23 @@ class CDialog extends StatefulWidget {
         );
       },
     );
+  }
 
-    // CDialog(
-    //   icon: const CAssetImage(path: ImagePaths.cloudOff, color: Colors.grey),
-    //   title: 'Check your internet connection'.i18n,
-    //   agreeText: 'Got it',
-    //   // crossAxisAlignment: CrossAxisAlignment.start,
-    //   description: Column(
-    //     // mainAxisSize: MainAxisSize.max,
-    //     // crossAxisAlignment: CrossAxisAlignment.start,
-    //     mainAxisAlignment: MainAxisAlignment.start,
-    //     children: <Widget>[
-    //       Container(
-    //           color: Colors.amber,
-    //           child: CText('Please try',
-    //               style: tsBody1, textAlign: TextAlign.start)),
-    //       RichText(
-    //           text: TextSpan(children: [
-    //         TextSpan(text: '1. ', style: tsBody1),
-    //       ]))
-    //     ],
-    //   ),
-    // ).show(context);
+  static void showIOSConsentDialog(
+    BuildContext context, {
+    required VoidCallback onConsent,
+  }) {
+    CDialog(
+      title: 'What Info We Collect',
+      description: "collect_info_message".i18n,
+      agreeText: 'accept_and_continue'.i18n,
+      dismissText: 'decline'.i18n,
+      agreeAction: () async {
+        context.maybePop();
+        onConsent.call();
+        return false;
+      },
+    ).show(context);
   }
 
   CDialog({

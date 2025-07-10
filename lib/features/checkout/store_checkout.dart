@@ -32,7 +32,6 @@ class _StoreCheckoutState extends State<StoreCheckout>
         }
         return null;
       });
-  bool _isPrivacyChecked = false;
 
   _CheckOutState state = _CheckOutState.withEmail;
 
@@ -41,9 +40,11 @@ class _StoreCheckoutState extends State<StoreCheckout>
     return BaseScreen(
         resizeToAvoidBottomInset: false,
         title: const AppBarProHeader(),
-        body: sessionModel.emailAddress((BuildContext context,
-            String emailAddress,
-            Widget? child,) {
+        body: sessionModel.emailAddress((
+          BuildContext context,
+          String emailAddress,
+          Widget? child,
+        ) {
           return Container(
             padding: const EdgeInsetsDirectional.only(top: 24, bottom: 32),
             child: Column(
@@ -73,32 +74,11 @@ class _StoreCheckoutState extends State<StoreCheckout>
                 ),
                 const SizedBox(height: 20.0),
                 CText("email_hint_pro".i18n, style: tsBody1),
-                if(Platform.isIOS) ...{
-                  const SizedBox(height: 24.0),
-                  CheckboxListTile(
-                    value: _isPrivacyChecked,
-                    contentPadding: EdgeInsets.zero,
-                    dense: true,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    onChanged: (value) {
-                      setState(() {
-                        _isPrivacyChecked = value!;
-                      });
-                    },
-                    title: CText(
-                      'i_agree_to_let_lantern'.i18n,
-                      style: tsBody2Short!.copiedWith(
-                        color: grey5,
-                      ),
-                    ),
-                  ),
-                },
                 const SizedBox(height: 24.0),
                 SizedBox(
                   width: double.infinity,
                   child: Button(
                     text: "continue".i18n,
-                    disabled: Platform.isIOS && !_isPrivacyChecked,
                     onPressed: () {
                       state = _CheckOutState.withEmail;
                       _validateEmailAndContinue();
@@ -106,19 +86,16 @@ class _StoreCheckoutState extends State<StoreCheckout>
                   ),
                 ),
                 const SizedBox(height: 16.0),
-
                 Center(
                   child: TextButton(
-                    onPressed: _isPrivacyChecked
-                        ? () {
+                    onPressed: () {
                       state = _CheckOutState.withoutEmail;
                       startPurchaseFlow();
-                    }
-                        : null,
+                    },
                     child: CText(
                       "continue_without_email".i18n.toUpperCase(),
                       style: tsButtonPink!.copiedWith(
-                        color: _isPrivacyChecked ? pink5 : grey5,
+                        color: pink5,
                       ),
                     ),
                   ),
@@ -137,8 +114,17 @@ class _StoreCheckoutState extends State<StoreCheckout>
       showError(context, error: 'please_enter_a_valid_email_address'.i18n);
       return;
     }
-
-    startPurchaseFlow();
+    if (Platform.isIOS) {
+      CDialog.showIOSConsentDialog(
+        context,
+        onConsent: () {
+          startPurchaseFlow();
+        },
+      );
+      return;
+    } else {
+      startPurchaseFlow();
+    }
   }
 
   void startPurchaseFlow() {
@@ -168,7 +154,7 @@ class _StoreCheckoutState extends State<StoreCheckout>
   void _proceedToCheckoutIOS() {
     final appPurchase = sl<AppPurchase>();
     final email =
-    (state == _CheckOutState.withEmail ? emailController.text : "");
+        (state == _CheckOutState.withEmail ? emailController.text : "");
     // Just as safe check
     if (email.isNotEmpty && !EmailValidator.validate(email)) {
       showError(context, error: 'please_enter_a_valid_email_address'.i18n);
