@@ -5,13 +5,13 @@
 # axel <axel+transifex@axelsimon.net>, 2025
 # Derek F <derek@getlantern.org>, 2025
 # e2f_fr r4 <tx_e2f_fr_r4@ate2f.com>, 2025
-# AO <ao@localizationlab.org>, 2025
 # e2f_fr r15 <tx_e2f_fr_r15@ate2f.com>, 2025
 # e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2025
+# AO <ao@localizationlab.org>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_fr r16 <tx_e2f_fr_r16@ate2f.com>, 2025\n"
+"Last-Translator: AO <ao@localizationlab.org>, 2025\n"
 "Language-Team: French (Canada) (https://app.transifex.com/lantern-1/teams/94371/fr_CA/)\n"
 "Language: fr_CA\n"
 "Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
@@ -2053,3 +2053,15 @@ msgstr ""
 
 msgid "i_agree_to_let_lantern"
 msgstr ""
+
+msgid "what_info_we_collect"
+msgstr ""
+
+msgid "collect_info_message"
+msgstr ""
+
+msgid "accept_and_continue"
+msgstr ""
+
+msgid "decline"
+msgstr "Refuser"

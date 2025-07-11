@@ -5,7 +5,6 @@
 # M. Utkun Uyar, 2025
 # Lantern, 2025
 # Alexander B. <road2monstercat@gmail.com>, 2025
-# Aşkın Özgür <askin@askin.ws>, 2025
 # e2f <projects@e2f.com>, 2025
 # Kudret <kudretemre@hotmail.com.tr>, 2025
 # Zeynel Cebeci <cebeciz@gmail.com>, 2025
@@ -15,10 +14,11 @@
 # efe kerem sözeri <eksozeri@hotmail.com>, 2025
 # Emre Deniz, 2025
 # e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2025
+# Aşkın Özgür <askin@askin.ws>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tr c1 <tx_e2f_tr_c1@ate2f.com>, 2025\n"
+"Last-Translator: Aşkın Özgür <askin@askin.ws>, 2025\n"
 "Language-Team: Turkish (https://app.transifex.com/lantern-1/teams/94371/tr/)\n"
 "Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -2004,3 +2004,15 @@ msgstr ""
 
 msgid "i_agree_to_let_lantern"
 msgstr ""
+
+msgid "what_info_we_collect"
+msgstr ""
+
+msgid "collect_info_message"
+msgstr ""
+
+msgid "accept_and_continue"
+msgstr ""
+
+msgid "decline"
+msgstr "Reddet"

@@ -9,7 +9,6 @@
 # e2f <projects@e2f.com>, 2025
 # 刘位, 2025
 # 苏培 喻 <ysp90@hotmail.com>, 2025
-# Rockman Lau <im@rockman.us>, 2025
 # fffw <fffw@getlantern.org>, 2025
 # CN R10 <tx_e2f_cn_r10@ate2f.com>, 2025
 # TW C2 <tx_e2f_tw_c2@ate2f.com>, 2025
@@ -24,10 +23,11 @@
 # Chi-Hsun Tsai, 2025
 # Aki, 2025
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2025
+# Rockman Lau <im@rockman.us>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2025\n"
+"Last-Translator: Rockman Lau <im@rockman.us>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/lantern-1/teams/94371/zh_CN/)\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1891,3 +1891,15 @@ msgstr ""
 
 msgid "i_agree_to_let_lantern"
 msgstr ""
+
+msgid "what_info_we_collect"
+msgstr ""
+
+msgid "collect_info_message"
+msgstr ""
+
+msgid "accept_and_continue"
+msgstr ""
+
+msgid "decline"
+msgstr "拒绝"
