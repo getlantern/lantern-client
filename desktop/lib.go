@@ -2,15 +2,15 @@
 package main
 
 import (
-    "os"
 	"context"
+	"os"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
 
-    "github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/issue"
+	"github.com/getlantern/flashlight/v7/logging"
 	"github.com/getlantern/flashlight/v7/ops"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/jibber_jabber"
@@ -44,7 +44,7 @@ var issueMap = map[string]string{
 	"Slow":                        "4",
 	"Chat not working":            "7",
 	"Discover not working":        "8",
-	"Cannot link device":          "5",
+	"Cannot link devices":         "5",
 	"Application crashes":         "6",
 	"Other":                       "9",
 }
@@ -344,18 +344,18 @@ func exitApp() {
 
 //export collectLogs
 func collectLogs(path *C.char) *C.char {
-    maxLogSize := 10247680
-    pathStr := C.GoString(path)
-    f, err := os.Create(pathStr)
-    if err != nil {
-     return sendError(err)
-    }
-    defer f.Close()
-    folder := "logs"
-    if _, err := logging.ZipLogFiles(f, folder, int64(maxLogSize), int64(maxLogSize)); err != nil {
-     return sendError(err)
-    }
-    return C.CString("true")
+	maxLogSize := 10247680
+	pathStr := C.GoString(path)
+	f, err := os.Create(pathStr)
+	if err != nil {
+		return sendError(err)
+	}
+	defer f.Close()
+	folder := "logs"
+	if _, err := logging.ZipLogFiles(f, folder, int64(maxLogSize), int64(maxLogSize)); err != nil {
+		return sendError(err)
+	}
+	return C.CString("true")
 }
 
 //export reportIssue
