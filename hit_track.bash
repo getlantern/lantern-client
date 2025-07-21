@@ -10,7 +10,7 @@ echo "Fetching all proxies for "$@""
 # if they exist. If not, fetch them from the lantern-cloud.
 TMPDIR="${TMP:-/tmp}/hit_lc_proxy"
 mkdir -p "$TMPDIR"
-OUTFILE="$TMPDIR/"$@"all_proxies.txt"
+OUTFILE="$TMPDIR/"$@"_all_proxies.txt"
 # If the OUTFILE is older than 1 hour, delete it to force a refresh.
 if [ -f "$OUTFILE" ] && [ "$(find "$OUTFILE" -mtime +1)" ]; then
   echo "Cached proxies are older than 1 hour. Refreshing..."
@@ -21,9 +21,14 @@ if [ -f "$OUTFILE" ]; then
   ALLPROXIES=$(cat "$OUTFILE")
 else
   echo "No cached proxies found. Fetching from lantern-cloud..."
-  $LANTERN_CLOUD/bin/lc routes list -T "$@" > "$OUTFILE"
+  $LANTERN_CLOUD/bin/lc routes list -T "$@" > "$OUTFILE" || {
+    echo "Failed to fetch proxies from lantern-cloud."
+    exit 1
+  }
   ALLPROXIES=$(cat "$OUTFILE")
 fi
+
+echo "All proxies fetched successfully: $ALLPROXIES"
 
 if [ -z "$ALLPROXIES" ]; then
   echo "No proxies found. Please check your configuration or network connection."
@@ -38,7 +43,7 @@ fi
 
 # The proxies will be in the format: "routeId track IP", and we want to choose 
 # a random IP from the list.
-PROXYLINE=$(echo "$ALLPROXIES" | tail -n +2 | sort -R | tail -n 1)
+PROXYLINE=$(echo "$ALLPROXIES" | tail -n +2 | tail -r | tail -n +3 | tail -r)
 if [ -z "$PROXYLINE" ]; then
   echo "No valid proxy line found. Please check your configuration."
   exit 1
