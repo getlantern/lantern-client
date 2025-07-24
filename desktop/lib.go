@@ -255,10 +255,6 @@ func testProviderRequest(email *C.char, paymentProvider *C.char, plan *C.char) *
 	return C.CString("true")
 }
 
-// The function returns two C strings: the first represents success, and the second represents an error.
-// If the redemption is successful, the first string contains "true", and the second string is nil.
-// If an error occurs during redemption, the first string is nil, and the second string contains the error message.
-//
 //export redeemResellerCode
 func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.char {
 	response, err := app().ProClient().RedeemResellerCode(context.Background(), &protos.RedeemResellerCodeRequest{
@@ -277,6 +273,8 @@ func redeemResellerCode(email, currency, deviceName, resellerCode *C.char) *C.ch
 		return sendError(err)
 	}
 	log.Debug("redeeming reseller code success")
+	// set pro user and update user ID and token
+	app().Settings().SetProUser(true)
 	return C.CString("true")
 }
 

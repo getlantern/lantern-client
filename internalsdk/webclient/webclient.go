@@ -112,6 +112,9 @@ func NewRESTClient(opts *Opts) RESTClient {
 			// Process request parameters
 			processParams(req, method, reqParams)
 
+			if body != nil {
+				req.SetBody(body)
+			}
 			resp, err := req.Execute(method, path)
 			if err != nil {
 				return nil, err
