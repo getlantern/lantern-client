@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"unicode"
 
-	"github.com/getlantern/errors"
 	"github.com/getlantern/golog"
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/go-resty/resty/v2"
@@ -119,15 +118,21 @@ func NewRESTClient(opts *Opts) RESTClient {
 				command, _ := http2curl.GetCurlCommand(req.RawRequest)
 				log.Debugf("curl command: %v", command)
 			}
-			responseBody := sanitizeResponseBody(resp.Body())
-			// on some cases, we are getting non-printable characters in the response body
-			cleanedResponseBody := sanitizeResponseBody(responseBody)
-
-			log.Debugf("response body: %v status code %v", string(cleanedResponseBody), resp.StatusCode())
-
-			if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
-				return nil, errors.New("%s status code %d", string(cleanedResponseBody), resp.StatusCode())
+			var responseBody []byte
+			if headers[ContentType] != ContentTypeProtobuf {
+				responseBody = sanitizeResponseBody(resp.Body())
+			} else {
+				// If the content type is protobuf, we return the raw body
+				// as it will be unmarshalled into a proto.Message later
+				responseBody = resp.Body()
 			}
+			if resp.StatusCode() < 200 || resp.StatusCode() >= 300 {
+				//this is needed to handle the case where the response is not a success
+				//and we are getting some non readable error message
+				cleanupBody := sanitizeResponseBody(resp.Body())
+				return nil, fmt.Errorf("error %s status code %d", string(cleanupBody), resp.StatusCode())
+			}
+			log.Debugf("response body: %v status code %v", string(responseBody), resp.StatusCode())
 			return responseBody, nil
 		},
 	}
