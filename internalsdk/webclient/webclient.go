@@ -110,7 +110,7 @@ func NewRESTClient(opts *Opts) RESTClient {
 			}
 
 			// Process request parameters
-			processParams(req, method, reqParams)
+			processParams(req, method, reqParams, body)
 			resp, err := req.Execute(method, path)
 			if err != nil {
 				return nil, err
@@ -134,24 +134,25 @@ func NewRESTClient(opts *Opts) RESTClient {
 	return rc
 }
 
-func processParams(req *resty.Request, method string, params any) {
-	if params == nil {
-		return
-	}
-
-	switch p := params.(type) {
-	case map[string]any:
-		stringParams := make(map[string]string, len(p))
-		for key, value := range p {
-			stringParams[key] = fmt.Sprint(value)
+func processParams(req *resty.Request, method string, params any, body []byte) {
+	if params != nil {
+		switch p := params.(type) {
+		case map[string]any:
+			stringParams := make(map[string]string, len(p))
+			for key, value := range p {
+				stringParams[key] = fmt.Sprint(value)
+			}
+			if method == http.MethodGet {
+				req.SetQueryParams(stringParams)
+			} else {
+				req.SetFormData(stringParams)
+			}
+		default:
+			req.SetBody(params)
 		}
-		if method == http.MethodGet {
-			req.SetQueryParams(stringParams)
-		} else {
-			req.SetFormData(stringParams)
-		}
-	default:
-		req.SetBody(params)
+	} else if body != nil && len(body) > 0 {
+		// If params is nil but body is provided, we assume it's a POST or PUT request
+		req.SetBody(body)
 	}
 }
 
