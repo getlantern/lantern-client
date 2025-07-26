@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:lantern/core/app/app_loading_dialog.dart';
 import 'package:lantern/core/localization/localization_constants.dart';
 import 'package:lantern/core/utils/common.dart';
@@ -80,14 +81,14 @@ class Settings extends StatelessWidget {
                   ),
                 ),
               ),
-              mirrorLTR(context: context, child: const ContinueArrow())
+              mirrorLTR(context: context, child: const ContinueArrow()),
             ],
           ),
           ListItemFactory.settingsItem(
             icon: ImagePaths.update,
             content: 'check_for_updates'.i18n,
             trailingArray: [
-              mirrorLTR(context: context, child: const ContinueArrow())
+              mirrorLTR(context: context, child: const ContinueArrow()),
             ],
             onTap: () => checkForUpdateTap(context),
           ),
@@ -103,7 +104,7 @@ class Settings extends StatelessWidget {
                         mirrorLTR(
                           context: context,
                           child: const ContinueArrow(),
-                        )
+                        ),
                       ],
                       onTap: () => context.pushRoute(BlockedUsers()),
                     )
@@ -144,10 +145,31 @@ class Settings extends StatelessWidget {
                   mirrorLTR(
                     context: context,
                     child: const ContinueArrow(),
-                  )
+                  ),
                 ],
               ),
             ),
+          sessionModel.proxyless(
+            (BuildContext context, bool proxylessEnabled, Widget? child) =>
+          ListItemFactory.settingsItem(
+            icon: ImagePaths.proxyall,
+            content: 'proxyless'.i18n,
+            trailingArray: [
+              SizedBox(
+                width: 44.0,
+                height: 24.0,
+                child: CupertinoSwitch(
+                  value: proxylessEnabled,
+                  activeTrackColor: CupertinoColors.activeGreen,
+                  onChanged: (bool? value) {
+                    var newValue = value ?? false;
+                    sessionModel.setProxyless(newValue);
+                  },
+                ),
+              ),
+            ],
+          ),
+          ),
           //* Proxy all
           if (isDesktop())
             sessionModel.proxyAll(
