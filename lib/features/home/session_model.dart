@@ -994,6 +994,10 @@ class SessionModel extends Model {
       return subscribedSingleValueBuilder<bool>('/proxyless',
         builder: builder, defaultValue: true,);
     }
+    return ValueListenableBuilder<bool>(
+      valueListenable: proxylessNotifier,
+      builder: builder,
+    );
   }
 
   Future<void> setProxyless<T>(bool on) async {
