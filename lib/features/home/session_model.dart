@@ -990,8 +990,10 @@ class SessionModel extends Model {
   }
 
   Widget proxyless(ValueWidgetBuilder<bool> builder) {
-    return subscribedSingleValueBuilder<bool>('/proxyless',
-      builder: builder, defaultValue: true,);
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>('/proxyless',
+        builder: builder, defaultValue: true,);
+    }
   }
 
   Future<void> setProxyless<T>(bool on) async {
