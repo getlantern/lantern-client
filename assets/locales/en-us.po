@@ -1867,7 +1867,7 @@ msgid "decline"
 msgstr "Decline"
 
 msgid "proxyless"
-msgstr "Use Proxyless Dialing"
+msgstr "Proxyless Dialing"
 
 
 
