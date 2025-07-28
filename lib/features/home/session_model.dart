@@ -995,11 +995,13 @@ class SessionModel extends Model {
   }
 
   Future<void> setProxyless<T>(bool on) async {
-    unawaited(
-      methodChannel.invokeMethod('setProxyless', <String, dynamic>{
-        'on': on,
-      }),
-    );
+    if (Platform.isAndroid) {
+      unawaited(
+        methodChannel.invokeMethod('setProxyless', <String, dynamic>{
+          'on': on,
+        }),
+      );
+    }
   }
 
   Widget appsData({

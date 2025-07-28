@@ -163,8 +163,30 @@ class Settings extends StatelessWidget {
               (BuildContext context, bool proxylessEnabled, Widget? child) =>
               ListItemFactory.settingsItem(
                 icon: ImagePaths.proxyall,
-                content: 'proxyless'.i18n,
-                onTap: () => openInfoProxyless(context),
+                content: CInkWell(
+                  onTap: () => openInfoProxyless(context),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: CText(
+                          'proxyless'.i18n,
+                          softWrap: false,
+                          style: tsSubtitle1.short,
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsetsDirectional.only(start: 4.0),
+                        child: CAssetImage(
+                          key: ValueKey('proxyless_icon'),
+                          path: ImagePaths.info,
+                          size: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 trailingArray: [
                   SizedBox(
                     width: 44.0,
