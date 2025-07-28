@@ -21,6 +21,15 @@ class Settings extends StatelessWidget {
     );
   }
 
+  void openInfoProxyless(BuildContext context) {
+    CDialog.showInfo(
+      context,
+      title: 'proxyless'.i18n,
+      description: 'description_proxyless_dialog'.i18n,
+      iconPath: ImagePaths.key,
+    );
+  }
+
   void changeLanguage(BuildContext context) async =>
       await context.pushRoute(Language());
 
@@ -149,27 +158,29 @@ class Settings extends StatelessWidget {
                 ],
               ),
             ),
-          sessionModel.proxyless(
-            (BuildContext context, bool proxylessEnabled, Widget? child) =>
-          ListItemFactory.settingsItem(
-            icon: ImagePaths.proxyall,
-            content: 'proxyless'.i18n,
-            trailingArray: [
-              SizedBox(
-                width: 44.0,
-                height: 24.0,
-                child: CupertinoSwitch(
-                  value: proxylessEnabled,
-                  activeTrackColor: CupertinoColors.activeGreen,
-                  onChanged: (bool? value) {
-                    var newValue = value ?? false;
-                    sessionModel.setProxyless(newValue);
-                  },
-                ),
+          if (Platform.isAndroid)
+            sessionModel.proxyless(
+              (BuildContext context, bool proxylessEnabled, Widget? child) =>
+              ListItemFactory.settingsItem(
+                icon: ImagePaths.proxyall,
+                content: 'proxyless'.i18n,
+                onTap: () => openInfoProxyless(context),
+                trailingArray: [
+                  SizedBox(
+                    width: 44.0,
+                    height: 24.0,
+                    child: CupertinoSwitch(
+                      value: proxylessEnabled,
+                      activeTrackColor: CupertinoColors.activeGreen,
+                      onChanged: (bool? value) {
+                        var newValue = value ?? false;
+                        sessionModel.setProxyless(newValue);
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          ),
+            ),
           //* Proxy all
           if (isDesktop())
             sessionModel.proxyAll(
