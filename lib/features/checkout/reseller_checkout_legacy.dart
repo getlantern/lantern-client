@@ -168,9 +168,7 @@ class _ResellerCodeCheckoutState extends State<ResellerCodeCheckout> {
         context,
         error: error,
         stackTrace: stackTrace,
-        description: (error as PlatformException)
-            .message
-            .toString(), // This is coming localized
+        description: error.localizedDescription // This is coming localized
       );
     }
   }
