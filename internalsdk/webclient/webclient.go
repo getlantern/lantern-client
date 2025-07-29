@@ -13,7 +13,6 @@ import (
 	"github.com/getlantern/lantern-client/internalsdk/common"
 	"github.com/go-resty/resty/v2"
 
-	"github.com/moul/http2curl"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -115,8 +114,7 @@ func NewRESTClient(opts *Opts) RESTClient {
 				return nil, err
 			}
 			if common.IsDevEnvironment() {
-				command, _ := http2curl.GetCurlCommand(req.RawRequest)
-				log.Debugf("curl command: %v", command)
+				log.Debugf("curl command: %v", req.GenerateCurlCommand())
 			}
 			var responseBody []byte
 			if headers[ContentType] != ContentTypeProtobuf {
