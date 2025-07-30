@@ -321,13 +321,14 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 		password := arguments.Get("password").String()
 		err := signup(m, email, password)
 		if err != nil {
+			log.Error(err)
 			return nil, err
 		}
 		return true, nil
 	case "createUser":
 		err := m.userCreate(context.Background())
 		if err != nil {
-			log.Error(err)
+			return nil, log.Error(err)
 		}
 		return true, nil
 	case "updateUserDetail":
@@ -1841,7 +1842,6 @@ func signup(session *SessionModel, email string, password string) error {
 	lowerCaseEmail := strings.ToLower(email)
 	salt, err := session.authClient.SignUp(email, password)
 	if err != nil {
-		// log.Errorf("Error while signing up %v", err)
 		return err
 	}
 	//Request successfull then save salt

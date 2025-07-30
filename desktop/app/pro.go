@@ -68,10 +68,13 @@ func (app *App) UserData(args ...int64) (*protos.User, bool) {
 }
 
 func (app *App) RefreshUserData() (*protos.User, error) {
+	log.Debugf("Refreshing user data for user ID %d", app.Settings().GetUserID())
 	user, found := app.UserData()
 	if found {
+		log.Debugf("User data found in cache for user ID %d", app.Settings().GetUserID())
 		return user, nil
 	}
+	log.Debugf("User data not found in cache, fetching from Pro API for user ID %d", app.Settings().GetUserID())
 	userID := app.Settings().GetUserID()
 	if userID == 0 {
 		return nil, errors.New("no user ID found")
@@ -83,6 +86,7 @@ func (app *App) RefreshUserData() (*protos.User, error) {
 		return nil, err
 	}
 	app.userCache.Store(userID, res)
+	app.sendConfigOptions()
 	return user, nil
 }
 
@@ -117,6 +121,7 @@ func (app *App) fetchUserData(ctx context.Context, uc common.UserConfig) (*proto
 	ss.SetReferralCode(user.Code)
 	ss.SetEmailAddress(user.Email)
 	ss.SetExpiration(user.Expiration)
+	ss.SetProUser(isProUser(user))
 
 	return user, nil
 }

@@ -220,7 +220,7 @@ func (c *proClient) UserData(ctx context.Context) (*UserDataResponse, error) {
 // RedeemResellerCode redeems a reseller code for the given user
 func (c *proClient) RedeemResellerCode(ctx context.Context, req *protos.RedeemResellerCodeRequest) (*protos.BaseResponse, error) {
 	var resp protos.BaseResponse
-	if err := c.PostFormReadingJSON(ctx, "/purchase", req, &resp); err != nil {
+	if err := c.PostJSONReadingJSON(ctx, "/purchase", req, nil, &resp); err != nil {
 		log.Errorf("Failed to redeem reseller code: %v", err)
 		return nil, err
 	}

@@ -536,16 +536,20 @@ func (app *App) IsPro() bool {
 }
 
 func (app *App) fetchOrCreateUser(ctx context.Context) {
+	log.Debugf("Fetching or creating user with ID %d", app.Settings().GetUserID())
 	ss := app.Settings()
 	lang := ss.GetLanguage()
 	if lang == "" {
 		// set default language
 		ss.SetLanguage("en_us")
 	}
+	log.Debugf("User language set to %s", lang)
 	if userID := ss.GetUserID(); userID == 0 {
+		log.Debug("Creating new user")
 		ss.SetUserFirstVisit(true)
 		app.proClient.RetryCreateUser(ctx, app, 5*time.Minute)
 	} else {
+		log.Debugf("User already exists with ID %d, fetching user data", userID)
 		app.RefreshUserData()
 	}
 }
