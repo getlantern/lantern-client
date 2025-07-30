@@ -353,7 +353,7 @@ func (c *proClient) PurchaseRequest(ctx context.Context, req map[string]interfac
 		return nil, err
 	}
 	if resp.BaseResponse != nil && resp.Status != "ok" {
-		return nil, errors.New("error purchasing pro plan: %v", resp.Error)
+		return nil, errors.New("%v", resp.Error)
 	}
 	return &resp, nil
 }

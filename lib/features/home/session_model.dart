@@ -406,7 +406,7 @@ class SessionModel extends Model {
     if (isDesktop()) {
       return compute(LanternFFI.validateRecoveryByEmail, [email, code]);
     }
-    return methodChannel.invokeMethod('validateRecoveryCode', <String, dynamic>{
+    return methodChannel.invokeMethod('validateRecoveryByEmail', <String, dynamic>{
       'email': email,
       'code': code,
     });
