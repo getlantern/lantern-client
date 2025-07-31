@@ -8,7 +8,7 @@ echo "Fetching all proxies for "$@""
 
 # First check for all proxies in a temporary directory from a prior run, and use them
 # if they exist. If not, fetch them from the lantern-cloud.
-TMPDIR="${TMP:-/tmp}/hit_lc_proxy"
+TMPDIR="${TMP:-/tmp}/hit_track"
 mkdir -pv "$TMPDIR"
 OUTFILE="$TMPDIR/"$@"_all_proxies.txt"
 # If the OUTFILE is older than 1 hour, delete it to force a refresh.
@@ -22,7 +22,7 @@ if [ -f "$OUTFILE" ]; then
 else
   echo "No cached proxies found. Fetching from lantern-cloud..."
   $LANTERN_CLOUD/bin/lc routes list -T "$@" > "$OUTFILE" || {
-    echo "Failed to fetch proxies from lantern-cloud."
+    echo "Failed to fetch proxies from lantern-cloud. Are you running Tailscale?"
     exit 1
   }
   ALLPROXIES=$(cat "$OUTFILE")
