@@ -154,8 +154,9 @@ type iosClient struct {
 	started          time.Time
 	bandwidthTracker BandwidthTracker
 	statsTracker     StatsTracker
-	dialer           dialer.Dialer
+	dialer           *protectedDialer
 	tracker          stats.Tracker
+	useProxyless     func() bool
 }
 
 func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, configDir string, mtu int,
@@ -178,8 +179,13 @@ func Client(packetsOut Writer, udpDialer UDPDialer, memChecker MemChecker, confi
 		started:          time.Now(),
 		bandwidthTracker: bandwidthTracker,
 		statsTracker:     statsTracker,
-		dialer:           dialer.NewProxylessDialer(),
-		tracker:          stats.NewTracker(),
+		dialer: &protectedDialer{
+			// This starts out as a purely proxyless dialer until we have
+			// proxies to use (either loaded from disk or fetched from the
+			// server).
+			dialer: dialer.NewProxylessDialer(),
+		},
+		tracker: stats.NewTracker(),
 	}
 	optimizeMemoryUsage(&c.memoryAvailable)
 	go c.gcPeriodically()
@@ -227,7 +233,7 @@ func (c *iosClient) start() (ClientWriter, error) {
 		return nil, errors.New("Unable to start dnsgrab: %v", err)
 	}
 
-	c.tcpHandler = newProxiedTCPHandler(c, c.dialer, grabber)
+	c.tcpHandler = newProxiedTCPHandler(c, c.dialer.Get, grabber)
 	c.udpHandler = newDirectUDPHandler(c, c.udpDialer, grabber, c.capturedDNSHost)
 
 	ipStack := tun2socks.NewLWIPStack()
@@ -257,21 +263,32 @@ func (c *iosClient) reconfigure() {
 }
 
 func (c *iosClient) onDialers(dialers []dialer.ProxyDialer) {
-	c.dialer.OnOptions(&dialer.Options{
-		Dialers: dialers,
-		OnSuccess: func(pd dialer.ProxyDialer) {
-			c.tracker.SetHasSucceedingProxy(true)
-			countryCode, country, city := pd.Location()
-			previousStats := c.tracker.Latest()
-			if previousStats.CountryCode == "" || previousStats.CountryCode != countryCode {
-				c.tracker.SetActiveProxyLocation(
-					city,
-					country,
-					countryCode,
-				)
-			}
+	newDialer := c.dialer.Get().OnOptions(
+		&dialer.Options{
+			Dialers: dialers,
+			OnError: func(err error, hasSucceeding bool) {
+				log.Errorf("Error in dialer: %v", err)
+			},
+			OnSuccess: func(d dialer.ProxyDialer) {
+				c.tracker.SetHasSucceedingProxy(true)
+				countryCode, country, city := d.Location()
+				previousStats := c.tracker.Latest()
+				if previousStats.CountryCode == "" || previousStats.CountryCode != countryCode {
+					c.tracker.SetActiveProxyLocation(
+						city,
+						country,
+						countryCode,
+					)
+				}
+			},
+			BanditDir: filepath.Join(c.configDir, "bandit"),
+			OnNewDialer: func(dialer dialer.Dialer) {
+				c.dialer.set(dialer)
+			},
+			UseProxyless: c.useProxyless,
 		},
-	})
+	)
+	c.dialer.set(newDialer)
 }
 
 func bandwidthUpdates(bt BandwidthTracker) {
@@ -357,4 +374,23 @@ func userConfigFor(userID int, proToken, deviceID string) *UserConfig {
 			"",  // Language currently unused
 		),
 	}
+}
+
+// protectedDialer protects a dialer.Dialer with a RWMutex. We can't use an atomic.Value here
+// because dialer.Dialer is an interface.
+type protectedDialer struct {
+	sync.RWMutex
+	dialer dialer.Dialer
+}
+
+func (pd *protectedDialer) Get() dialer.Dialer {
+	pd.RLock()
+	defer pd.RUnlock()
+	return pd.dialer
+}
+
+func (pd *protectedDialer) set(dialer dialer.Dialer) {
+	pd.Lock()
+	defer pd.Unlock()
+	pd.dialer = dialer
 }

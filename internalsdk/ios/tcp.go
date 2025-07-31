@@ -38,9 +38,9 @@ type proxiedTCPHandler struct {
 	mx                    sync.RWMutex
 }
 
-func newProxiedTCPHandler(c *iosClient, dialer dialer.Dialer, grabber dnsgrab.Server) *proxiedTCPHandler {
+func newProxiedTCPHandler(c *iosClient, dialer func() dialer.Dialer, grabber dnsgrab.Server) *proxiedTCPHandler {
 	result := &proxiedTCPHandler{
-		dialOut:               dialer.DialContext,
+		dialOut:               dialer().DialContext,
 		client:                c,
 		grabber:               grabber,
 		mtu:                   c.mtu,

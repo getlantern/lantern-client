@@ -11,10 +11,13 @@ TMPDIR="${TMP:-/tmp}/hit_lc_proxy/$PROXY"
 OUTFILE="$TMPDIR/user.conf"
 
 rm -rf "$TMPDIR"
-mkdir -p "$TMPDIR"
+mkdir -pv "$TMPDIR"
 
 echo "Generating config for ${PROXY} in ${OUTFILE}..."
-CONFIG=$($LANTERN_CLOUD/bin/lc route dump-config $PROXY)
+CONFIG=$($LANTERN_CLOUD/bin/lc route dump-config $PROXY) || {
+  echo "Failed to fetch proxy configuration from lantern-cloud. On Tailnet?"
+  exit 1
+}
 # wrap the proxy config to match the format expected by flashlight.
 # [ConfigResponse (getlantern/flashlight/apipb/types.proto)]
 OUTPUT="{\"country\": \"US\",\"proxy\":{\"proxies\":[${CONFIG}]}}"

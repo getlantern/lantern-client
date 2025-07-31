@@ -25,6 +25,7 @@ class ImagePaths {
   static const email = 'assets/images/email.svg';
   static const translate = 'assets/images/translate.svg';
   static const update = 'assets/images/update.svg';
+  static const proxyall = 'assets/images/proxyall.svg';
   static const mastercard = 'assets/images/mastercard.svg';
   static const visa = 'assets/images/visa.svg';
   static const unionpay = 'assets/images/unionpay.svg';
