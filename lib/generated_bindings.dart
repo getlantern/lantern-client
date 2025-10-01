@@ -26,6 +26,34 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
+  int _GoStringLen(
+    _GoString_ s,
+  ) {
+    return __GoStringLen(
+      s,
+    );
+  }
+
+  late final __GoStringLenPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function(_GoString_)>>(
+          '_GoStringLen');
+  late final __GoStringLen =
+      __GoStringLenPtr.asFunction<int Function(_GoString_)>();
+
+  ffi.Pointer<ffi.Char> _GoStringPtr(
+    _GoString_ s,
+  ) {
+    return __GoStringPtr(
+      s,
+    );
+  }
+
+  late final __GoStringPtrPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function(_GoString_)>>(
+          '_GoStringPtr');
+  late final __GoStringPtr =
+      __GoStringPtrPtr.asFunction<ffi.Pointer<ffi.Char> Function(_GoString_)>();
+
   ffi.Pointer<ffi.Char> isUserFirstTime() {
     return _isUserFirstTime();
   }
