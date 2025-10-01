@@ -26,6 +26,34 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
+  int _GoStringLen(
+    _GoString_ s,
+  ) {
+    return __GoStringLen(
+      s,
+    );
+  }
+
+  late final __GoStringLenPtr =
+      _lookup<ffi.NativeFunction<ffi.Size Function(_GoString_)>>(
+          '_GoStringLen');
+  late final __GoStringLen =
+      __GoStringLenPtr.asFunction<int Function(_GoString_)>();
+
+  ffi.Pointer<ffi.Char> _GoStringPtr(
+    _GoString_ s,
+  ) {
+    return __GoStringPtr(
+      s,
+    );
+  }
+
+  late final __GoStringPtrPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function(_GoString_)>>(
+          '_GoStringPtr');
+  late final __GoStringPtr =
+      __GoStringPtrPtr.asFunction<ffi.Pointer<ffi.Char> Function(_GoString_)>();
+
   ffi.Pointer<ffi.Char> isUserFirstTime() {
     return _isUserFirstTime();
   }
@@ -365,9 +393,6 @@ class NativeLibrary {
       ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
-  /// The function returns two C strings: the first represents success, and the second represents an error.
-  /// If the redemption is successful, the first string contains "true", and the second string is nil.
-  /// If an error occurs during redemption, the first string is nil, and the second string contains the error message.
   ffi.Pointer<ffi.Char> redeemResellerCode(
     ffi.Pointer<ffi.Char> email,
     ffi.Pointer<ffi.Char> currency,
