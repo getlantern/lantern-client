@@ -365,6 +365,9 @@ class NativeLibrary {
       ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
+  /// The function returns two C strings: the first represents success, and the second represents an error.
+  /// If the redemption is successful, the first string contains "true", and the second string is nil.
+  /// If an error occurs during redemption, the first string is nil, and the second string contains the error message.
   ffi.Pointer<ffi.Char> redeemResellerCode(
     ffi.Pointer<ffi.Char> email,
     ffi.Pointer<ffi.Char> currency,
