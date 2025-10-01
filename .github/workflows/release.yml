@@ -4,7 +4,7 @@ on:
   # Triggers the workflow on push when pushing to a version tag
   push:
     tags:
-      - '*lantern-*'
+      - "*lantern-*"
   workflow_dispatch:
 
 permissions:
@@ -58,7 +58,7 @@ jobs:
         run: |
           import sys, os
           ref = os.environ.get("GITHUB_REF","")
-          
+
           if "refs/tags" in ref:
             tag = ref.strip()
             if tag.startswith('refs/tags/android-lantern-'):
@@ -73,7 +73,7 @@ jobs:
             suffix = parts[1] if len(parts) > 1 else ''
             beta = 'beta' in suffix
             internal = 'internal' in suffix
-          
+
             if beta:
               li = 'lantern-installer-preview'
               vf = 'version-android-beta.txt'
@@ -90,7 +90,7 @@ jobs:
             li = 'lantern-installer-dev'
             vf = 'version-android-dev.txt'
             version = '9999.99.99-dev'
-          
+
           print('Setting version to ' + version)
           print('Setting prefix to ' + li)
           print('Setting version file to ' + vf)
@@ -113,7 +113,7 @@ jobs:
 
   push-binaries:
     runs-on: macos-latest
-    needs: [ determine-platform,set-version, build ]
+    needs: [determine-platform, set-version, build]
     env:
       version: ${{ needs.set-version.outputs.version }}
       version_file: ${{ needs.set-version.outputs.version_file }}
@@ -174,14 +174,14 @@ jobs:
         with:
           name: Lantern.ipa
 
-      - name: Upload Lantern to TestFlight
-        uses: apple-actions/upload-testflight-build@v3.0.0
-        if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
-        with:
-          app-path: Lantern.ipa
-          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      # - name: Upload Lantern to TestFlight
+      #   uses: apple-actions/upload-testflight-build@v3.0.0
+      #   if: (needs.set-version.outputs.prefix == 'lantern-installer-preview'|| needs.set-version.outputs.prefix == 'lantern-installer') && (needs.determine-platform.outputs.platform == 'ios' || needs.determine-platform.outputs.platform == 'all')
+      #   with:
+      #     app-path: Lantern.ipa
+      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+      #     api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+      #     api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
 
       - name: Upload Android App bundle to Play Store (beta)
         if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
@@ -207,7 +207,7 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: "3.8"
       - name: Install s3cmd
         run: pip install s3cmd
 
@@ -306,7 +306,7 @@ jobs:
   create-release:
     uses: ./.github/workflows/prerelease-notification.yml
     secrets: inherit
-    needs: [ determine-platform,set-version, build, push-binaries ]
+    needs: [determine-platform, set-version, build, push-binaries]
     with:
       version: ${{ needs.set-version.outputs.prefix }}-${{ needs.set-version.outputs.version }}
       platform: ${{ needs.determine-platform.outputs.platform }}
