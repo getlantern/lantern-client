@@ -1,31 +1,31 @@
 # 
 # Translators:
 # 🤖Nariman نریمان, 2024
-# Pedram Azizallahi <pedram672004@yahoo.com>, 2025
-# 6d974eae263d7aab17b09900ac13d6de_bb09837, 2025
-# ali jafarizadeh <ebrahimigv@gmail.com>, 2025
-# Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2025
-# Mokah <unfilternet@getlantern.org>, 2025
-# Amir Moezzi <amirreza.mz@yahoo.com>, 2025
 # b0b47d46632b78a09a40de799fda9a65, 2025
-# zar24 <zarghamjan@yahoo.com>, 2025
-# AHMAD MASOUD BARAKZAI, 2025
-# Chip Stehr <chip@getlantern.org>, 2025
-# Mary Sol <salar.adlparvar@gmail.com>, 2025
-# Evan <alireza.firoozi68@gmail.com>, 2025
+# Amir Moezzi <amirreza.mz@yahoo.com>, 2025
+# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2025
+# Mokah <unfilternet@getlantern.org>, 2025
 # NoProfile, 2025
 # Sina <sina@asl19.org>, 2025
-# Derek F <derek@getlantern.org>, 2025
-# Mohammad Ghaffari <mhmd.ghaffari@gmail.com>, 2025
-# Jigar, 2025
-# Vaseto Nora <n.nouri67@gmail.com>, 2025
-# Mersen M, 2025
-# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2025
+# ali jafarizadeh <ebrahimigv@gmail.com>, 2025
+# Mary Sol <salar.adlparvar@gmail.com>, 2025
 # Lantern, 2025
+# AHMAD MASOUD BARAKZAI, 2025
+# zar24 <zarghamjan@yahoo.com>, 2025
+# Chip Stehr <chip@getlantern.org>, 2025
+# 6d974eae263d7aab17b09900ac13d6de_bb09837, 2025
+# Vaseto Nora <n.nouri67@gmail.com>, 2025
+# Pedram Azizallahi <pedram672004@yahoo.com>, 2025
+# Evan <alireza.firoozi68@gmail.com>, 2025
+# Mersen M, 2025
+# Jigar, 2025
+# Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2025
+# Derek F <derek@getlantern.org>, 2025
+# e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Lantern, 2025\n"
+"Last-Translator: e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2025\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
