@@ -120,6 +120,7 @@ type Session interface {
 	// used to implement GetInternalHeaders() map[string]string
 	// Should return a JSON encoded map[string]string {"key":"val","key2":"val", ...}
 	SerializedInternalHeaders() (string, error)
+	ProxylessEnabled() (bool, error)
 }
 
 // PanickingSession wraps the Session interface but panics instead of returning errors
@@ -239,6 +240,15 @@ func (s *panickingSessionImpl) SplitTunnelingEnabled() bool {
 	panicIfNecessary(err)
 	return result
 }
+
+func (s *panickingSessionImpl) ProxylessEnabled() (bool, error) {
+	result, err := s.wrapped.ProxylessEnabled()
+	if err != nil {
+		panicIfNecessary(err)
+	}
+	return result, nil
+}
+
 func (s *panickingSessionImpl) ChatEnable() bool {
 	return s.wrapped.ChatEnable()
 }
@@ -581,6 +591,14 @@ func run(configDir, locale string, settings Settings, wrappedSession Session) {
 		}),
 		flashlight.WithOnSucceedingProxy(func() {
 			session.SetOnSuccess(true)
+		}),
+		flashlight.WithUseProxyless(func() bool {
+			proxyless, err := session.ProxylessEnabled()
+			if err != nil {
+				log.Errorf("Error checking if proxyless is enabled: %v", err)
+				return false
+			}
+			return proxyless
 		}),
 	)
 	if err != nil {

@@ -50,7 +50,7 @@ class _SplitTunnelingState extends State<SplitTunneling> {
                   height: 24.0,
                   child: CupertinoSwitch(
                     value: splitTunnelingEnabled,
-                    activeColor: CupertinoColors.activeGreen,
+                    activeTrackColor: CupertinoColors.activeGreen,
                     onChanged: (bool? value) {
                       var newValue = value ?? false;
                       sessionModel.setSplitTunneling(newValue);
