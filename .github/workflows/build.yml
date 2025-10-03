@@ -222,7 +222,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-          cache: 'gradle'
+          cache: "gradle"
 
       - name: Set gradle properties
         if: matrix.platform == 'android'
@@ -238,14 +238,14 @@ jobs:
         if: matrix.platform == 'android'
         uses: timheuer/base64-to-file@v1.2
         with:
-          fileName: 'keystore.release.jks'
-          fileDir: './android/app'
+          fileName: "keystore.release.jks"
+          fileDir: "./android/app"
           encodedString: ${{ secrets.KEYSTORE }}
 
       - name: Decode APP_ENV
         uses: timheuer/base64-to-file@v1.2
         with:
-          fileName: 'app.env'
+          fileName: "app.env"
           fileDir: ${{ github.workspace }}
           encodedString: ${{ secrets.APP_ENV }}
 
