@@ -60,8 +60,6 @@ jobs:
             target: aab
           - os: ubuntu-latest
             platform: linux
-          - os: macos-latest
-            platform: ios
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
