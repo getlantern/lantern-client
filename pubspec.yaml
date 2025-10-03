@@ -163,6 +163,7 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 dependency_overrides:
+  webview_flutter_android: 3.16.2
 
 # The following section is specific to Flutter.
 flutter:
