@@ -78,6 +78,19 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
+// Workaround for AGP 8.6+ defaultProguardFile ordering with R8
+subprojects { sp ->
+    if (sp.path != ':app') {
+        sp.afterEvaluate {
+            tasks.matching { t -> t.name.startsWith('minify') && t.name.endsWith('WithR8') }
+                 .configureEach {
+                     dependsOn(':app:extractProguardFiles')
+                     mustRunAfter(':app:extractProguardFiles')
+                 }
+        }
+    }
+}
+
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
