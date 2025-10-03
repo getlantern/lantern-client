@@ -90,6 +90,13 @@
 -dontwarn sun.nio.ch.DirectBuffer
 -dontwarn sun.reflect.Reflection
 
+-keep class io.flutter.plugins.GeneratedPluginRegistrant { *; }
+
+-keep class com.baseflow.permissionhandler.** { *; }
+
+-keep class io.flutter.embedding.engine.plugins.** { *; }
+-keep class io.flutter.plugin.common.** { *; }
+
 # Lantern
 -keep class org.getlantern.** { *; }
 -keep class io.lantern.** { *; }
