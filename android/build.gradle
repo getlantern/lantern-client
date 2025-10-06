@@ -1,28 +1,14 @@
-buildscript {
-    ext.signal_version = '2.8.1'
-    ext.protoc_version = '4.26.1'
-    ext.desugarJdk     = '2.1.5'
-
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://maven.google.com' }
-        maven { url 'https://jitpack.io' }
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.6.0'
-        classpath "com.google.protobuf:protobuf-gradle-plugin:0.9.1"
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:11.3.1")
-    }
+plugins {
+    id "com.android.application" version "8.6.0" apply false
+    id "org.jetbrains.kotlin.android" version "2.1.10" apply false
+    id "com.google.protobuf" version "0.9.1" apply false
+    id "org.jlleitschuh.gradle.ktlint" version "11.3.1" apply false
 }
 
 ext {
-    commonPlugins = new File(projectDir, 'common-plugins.gradle')
-    internalScript = new File(projectDir, 'internal.gradle')
+    signal_version = '2.8.1'
+    protoc_version = '4.26.1'
+    desugarJdk = '2.1.5'
 
     enableTestCodeCoverage = true
 
@@ -35,11 +21,6 @@ ext {
     supportTestVersion = '1.0'
 
     lanternDir = projectDir.parentFile.parentFile
-    qualityScript = new File(lanternDir, 'quality.gradle')
-    deployScript = new File(lanternDir, 'deploy.gradle')
-
-    libs = fileTree(dir: 'libs', include: ['*.jar'])
-    mavenAntTasks = 'org.apache.maven:maven-ant-tasks:2.1.3'
 }
 
 allprojects {

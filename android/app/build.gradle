@@ -1,14 +1,19 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id 'dev.flutter.flutter-gradle-plugin'
-    id 'org.jlleitschuh.gradle.ktlint'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
     id 'com.google.protobuf'
+    id 'dev.flutter.flutter-gradle-plugin'
+    id 'org.jlleitschuh.gradle.ktlint'
 }
 
 android {
+    namespace 'org.getlantern.lantern'
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
     ndkVersion "27.0.12077973"
+    flavorDimensions "versionCode"
+    useLibrary 'org.apache.http.legacy'
 
     bundle {
         density {
@@ -25,12 +30,13 @@ android {
         }
     }
 
-    flavorDimensions "versionCode"
-
-    useLibrary 'org.apache.http.legacy'
-
-    compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
+    // Use legacy packaging to helps reduce apk size
+    packagingOptions{
+        exclude "DebugProbesKt.bin"
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
 
     // Use now as the user-visible version
     def now = new Date()
@@ -45,13 +51,7 @@ android {
         def start = new Date(2015, 1, 1).getTime()
         code = (int) ((now.getTime() - start) / 1000)
     }
-    // Use legacy packaging to helps reduce apk size
-    packagingOptions{
-        exclude "DebugProbesKt.bin"
-        jniLibs {
-            useLegacyPackaging true
-        }
-    }
+
     defaultConfig {
         multiDexEnabled = true
         minSdkVersion rootProject.minSdkVersion
@@ -191,7 +191,6 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
-    namespace 'org.getlantern.lantern'
 }
 
 tasks.register('zipDebugSymbols') {
