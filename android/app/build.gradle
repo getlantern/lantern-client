@@ -134,7 +134,7 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources true
             debuggable false
             signingConfig signingConfigs.release
