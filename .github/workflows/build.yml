@@ -247,6 +247,11 @@ jobs:
           fileDir: ${{ github.workspace }}
           encodedString: ${{ secrets.APP_ENV }}
 
+      - name: Install Inno Setup 6
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: choco install -y innosetup
+
       - name: Update app version in pubspec.yaml
         shell: bash
         env:
