@@ -248,20 +248,20 @@ jobs:
       - name: Clone binaries repo
         run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
 
-      - name: Rename builds
-        env:
-          android_dist: "${{env.prefix}}-${{env.version}}"
-          android_dist_versionless: ${{env.prefix}}
-        run: |
-          if [[ "${{ env.platform }}" == "android" ]]; then
-            mv lantern-installer.apk ${{ env.android_dist }}.apk
-            mv lantern-installer.aab ${{ env.android_dist }}.aab
+      # - name: Rename builds
+      #   env:
+      #     android_dist: "${{env.prefix}}-${{env.version}}"
+      #     android_dist_versionless: ${{env.prefix}}
+      #   run: |
+      #     if [[ "${{ env.platform }}" == "android" ]]; then
+      #       mv lantern-installer.apk ${{ env.android_dist }}.apk
+      #       mv lantern-installer.aab ${{ env.android_dist }}.aab
 
-            cp ${{ env.android_dist }}.apk ${{ env.android_dist_versionless }}.apk
-            cp ${{ env.android_dist }}.aab ${{ env.android_dist_versionless }}.aab
+      #       cp ${{ env.android_dist }}.apk ${{ env.android_dist_versionless }}.apk
+      #       cp ${{ env.android_dist }}.aab ${{ env.android_dist_versionless }}.aab
 
-            shasum -a 256 ${{ env.android_dist }}.apk | cut -d " " -f 1 > ${{ env.android_dist }}.apk.sha256
-          fi
+      #       shasum -a 256 ${{ env.android_dist }}.apk | cut -d " " -f 1 > ${{ env.android_dist }}.apk.sha256
+      #     fi
 
       # - name: Prepare sha256 sums
       #   run: |
