@@ -88,6 +88,11 @@ android {
         coreLibraryDesugaringEnabled = true
     }
 
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
