@@ -76,6 +76,10 @@ android {
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+
+        buildFeatures {
+            buildConfig true
+        }
     }
 //    kotlin {
 //        jvmToolchain(17)
