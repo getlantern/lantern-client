@@ -22,10 +22,11 @@
 # Abdolreza Shafaeiy <Abdolreza@outlook.com>, 2025
 # Derek F <derek@getlantern.org>, 2025
 # e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2025
+# Transifex Bot <>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_fa r1 <tx_e2f_fa_r1@ate2f.com>, 2025\n"
+"Last-Translator: Transifex Bot <>, 2025\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/lantern-1/teams/94371/fa_IR/)\n"
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"

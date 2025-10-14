@@ -24,10 +24,11 @@
 # Derek F <derek@getlantern.org>, 2025
 # Lantern, 2025
 # e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2025
+# Transifex Bot <>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_tw c1 <tx_e2f_tw_c1@ate2f.com>, 2025\n"
+"Last-Translator: Transifex Bot <>, 2025\n"
 "Language-Team: Chinese (China) (https://app.transifex.com/lantern-1/teams/94371/zh_CN/)\n"
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"

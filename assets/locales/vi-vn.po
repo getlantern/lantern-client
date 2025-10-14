@@ -8,10 +8,11 @@
 # Derek F <derek@getlantern.org>, 2025
 # e2f <projects@e2f.com>, 2025
 # e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2025
+# Transifex Bot <>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: e2f_vi r1 <tx_e2f_vi_r1@ate2f.com>, 2025\n"
+"Last-Translator: Transifex Bot <>, 2025\n"
 "Language-Team: Vietnamese (https://app.transifex.com/lantern-1/teams/94371/vi/)\n"
 "Language: vi\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
