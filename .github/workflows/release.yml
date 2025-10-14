@@ -144,40 +144,40 @@ jobs:
         with:
           name: windows64-installer-signed
 
-      # - name: Download the apk build output
-      #   if: needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all'
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: android-apk-build
+      - name: Download the apk build output
+        if: needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all'
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk-build
 
-      # - name: Download the aab build output
-      #   if: needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all'
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: android-aab-build
+      - name: Download the aab build output
+        if: needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all'
+        uses: actions/download-artifact@v4
+        with:
+          name: android-aab-build
 
-      # - name: Download the Debug Symbols
-      #   if: needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all'
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: debug-symbols.zip
+      - name: Download the Debug Symbols
+        if: needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all'
+        uses: actions/download-artifact@v4
+        with:
+          name: debug-symbols.zip
 
-      # - name: Download the mapping file
-      #   if: needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all'
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: mapping.txt
+      - name: Download the mapping file
+        if: needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all'
+        uses: actions/download-artifact@v4
+        with:
+          name: mapping.txt
 
-      # - name: Upload Android App bundle to Play Store (beta)
-      #   if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
-      #   uses: r0adkll/upload-google-play@v1
-      #   with:
-      #     serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-      #     packageName: org.getlantern.lantern
-      #     releaseFiles: lantern-installer.aab
-      #     track: beta
-      #     debugSymbols: debug-symbols.zip
-      #     mappingFile: mapping.txt
+      - name: Upload Android App bundle to Play Store (beta)
+        if: needs.set-version.outputs.prefix == 'lantern-installer-preview' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: org.getlantern.lantern
+          releaseFiles: lantern-installer.aab
+          track: beta
+          debugSymbols: debug-symbols.zip
+          mappingFile: mapping.txt
 
       # - name: Upload Android App bundle to Play Store (production)
       #   if: needs.set-version.outputs.prefix == 'lantern-installer' && (needs.determine-platform.outputs.platform == 'android' || needs.determine-platform.outputs.platform == 'all')
@@ -248,31 +248,31 @@ jobs:
       - name: Clone binaries repo
         run: git clone --depth 1 https://github.com/getlantern/lantern-binaries
 
-      # - name: Rename builds
-      #   env:
-      #     android_dist: "${{env.prefix}}-${{env.version}}"
-      #     android_dist_versionless: ${{env.prefix}}
-      #   run: |
-      #     if [[ "${{ env.platform }}" == "android" ]]; then
-      #       mv lantern-installer.apk ${{ env.android_dist }}.apk
-      #       mv lantern-installer.aab ${{ env.android_dist }}.aab
+      - name: Rename builds
+        env:
+          android_dist: "${{env.prefix}}-${{env.version}}"
+          android_dist_versionless: ${{env.prefix}}
+        run: |
+          if [[ "${{ env.platform }}" == "android" ]]; then
+            mv lantern-installer.apk ${{ env.android_dist }}.apk
+            mv lantern-installer.aab ${{ env.android_dist }}.aab
 
-      #       cp ${{ env.android_dist }}.apk ${{ env.android_dist_versionless }}.apk
-      #       cp ${{ env.android_dist }}.aab ${{ env.android_dist_versionless }}.aab
+            cp ${{ env.android_dist }}.apk ${{ env.android_dist_versionless }}.apk
+            cp ${{ env.android_dist }}.aab ${{ env.android_dist_versionless }}.aab
 
-      #       shasum -a 256 ${{ env.android_dist }}.apk | cut -d " " -f 1 > ${{ env.android_dist }}.apk.sha256
-      #     fi
+            shasum -a 256 ${{ env.android_dist }}.apk | cut -d " " -f 1 > ${{ env.android_dist }}.apk.sha256
+          fi
 
-      # - name: Prepare sha256 sums
-      #   run: |
-      #     if [[ "${{ env.platform }}" == "android" || "${{ env.platform }}" == "all" ]]; then
-      #       shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
-      #       shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
-      #     fi
+      - name: Prepare sha256 sums
+        run: |
+          if [[ "${{ env.platform }}" == "android" || "${{ env.platform }}" == "all" ]]; then
+            shasum -a 256 ${{ env.prefix }}.apk | cut -d " " -f 1 > ${{ env.prefix }}.apk.sha256
+            shasum -a 256 ${{ env.prefix }}.aab | cut -d " " -f 1 > ${{ env.prefix }}.aab.sha256
+          fi
 
-      #     if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
-      #       shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
-      #     fi
+          if [[ "${{ env.platform }}" == "ios" || "${{ env.platform }}" == "all" ]]; then
+            shasum -a 256 ${{ env.prefix }}.ipa | cut -d " " -f 1 > ${{ env.prefix }}.ipa.sha256
+          fi
 
       - name: Commit
         run: |
