@@ -85,7 +85,7 @@ dependencies:
 
   # QR
   qr_flutter: ^4.1.0
-  qr_code_scanner: ^1.0.1
+  qr_code_scanner_plus: ^2.0.13
 
   # Timer & Overlay
   stop_watch_timer: ^3.2.2
