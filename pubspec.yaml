@@ -145,6 +145,7 @@ dependencies:
   background_downloader: ^9.2.6
   flutter_riverpod: ^3.0.1
   ffigen: ^19.1.0
+  connectivity_plus: ^7.0.0
 
 dev_dependencies:
   integration_test:
