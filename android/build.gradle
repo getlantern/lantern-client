@@ -27,6 +27,19 @@ ext {
     libs = fileTree(dir: 'libs', include: ['*.jar'])
 }
 
+gradle.projectsEvaluated {
+    def app = rootProject.project(":app")
+    def extract = app.tasks.findByName("extractProguardFiles")
+    if (extract != null) {
+        subprojects { sub ->
+            if (sub.path != ":app" && sub.plugins.hasPlugin("com.android.library")) {
+                sub.tasks.matching { it.name.startsWith("minify") && it.name.endsWith("WithR8") }
+                   .configureEach { dependsOn(extract) }
+            }
+        }
+    }
+}
+
 allprojects {
     repositories {
         google()

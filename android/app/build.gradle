@@ -81,9 +81,10 @@ android {
             buildConfig true
         }
     }
-//    kotlin {
-//        jvmToolchain(17)
-//    }
+
+    // kotlin {
+    //     jvmToolchain(17)
+    // }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -96,7 +97,7 @@ android {
     }
 
 
-    lintOptions {
+    lint {
         checkReleaseBuilds false
         abortOnError false
     }
