@@ -1,5 +1,5 @@
 import 'package:lantern/features/messaging/messaging.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import 'qr_scanner_border_painter.dart';
