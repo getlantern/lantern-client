@@ -18,8 +18,8 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 8.1.9
 
 environment:
-  sdk: ">=3.2.3 <4.0.0"
-  flutter: 3.35.5
+  sdk: ^3.6.0
+  flutter: 3.29.3
 
 dependencies:
   # SDKs
@@ -30,22 +30,22 @@ dependencies:
     sdk: flutter
 
   # State management and Data handling
-  provider: ^6.1.5+1
-  protobuf: ^5.0.0
+  provider: ^6.1.2
+  protobuf: ^4.0.0
   uuid: ^4.5.1
 
   sliver_tools: ^0.2.12
 
   # UI Enhancements & User Input
   flutter_advanced_switch: ^3.1.0
-  animated_toggle_switch: ^0.8.5
-  flag: ^7.0.2
+  animated_toggle_switch: ^0.8.3
+  flag: ^7.0.0
 
   #Loogs and crash reporting
-  sentry_flutter: ^9.6.0
+  sentry_flutter: ^8.14.1
 
   badges: ^3.1.2
-  dotted_border: ^3.1.0
+  dotted_border: ^2.1.0
   styled_text: ^8.1.0
   emoji_picker_flutter: ^4.3.0
   pin_code_text_field: ^1.8.0
@@ -53,42 +53,43 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   email_validator: ^3.0.0
   credit_card_validator: ^2.1.0
-  flutter_multi_formatter: ^2.13.10
+  flutter_multi_formatter: ^2.13.0
 
   # Media & File handling
-  audioplayers: ^6.5.1
-  video_player: ^2.10.0
-  video_thumbnail: ^0.5.6
-  file_picker: ^8.3.7
+  audioplayers: ^6.0.0
+  video_player: ^2.9.1
+  video_thumbnail: ^0.5.3
+  file_picker: ^8.1.2
   filesize: ^2.0.1
-  flutter_image_compress: ^2.4.0
-  fluttertoast: ^9.0.0
+  flutter_image_compress: ^2.3.0
+  fluttertoast: ^8.2.8
 
   flutter_screenutil: ^5.9.3
 
   # Networking
   cached_network_image: ^3.4.1
-  dio: ^5.9.0
-  internet_connection_checker_plus: ^2.9.0
+  dio: ^5.7.0
+  internet_connection_checker_plus: ^2.7.0
   dart_ping: ^9.0.1
 
   # caching
   flutter_cache_manager: ^3.4.1
   # change this with flutter_downloader
   mime: ^2.0.0
-  flutter_pdfview: ^1.4.3
+  flutter_pdfview: ^1.3.3
 
   # Navigation & Localization
-  auto_route: ^10.1.2
-  i18n_extension: ^15.0.7
+  auto_route: ^9.3.0+1
+  i18n_extension: ^15.0.4
   i18n_extension_importer: ^0.0.6
+  intl: ^0.20.2
 
   # QR
   qr_flutter: ^4.1.0
-  qr_code_scanner_plus: ^2.0.13
+  qr_code_scanner: ^1.0.1
 
   # Timer & Overlay
-  stop_watch_timer: ^3.2.2
+  stop_watch_timer: ^3.2.1
   loader_overlay: ^5.0.0
 
   # Keyboard & Color utilities
@@ -96,56 +97,55 @@ dependencies:
   hexcolor: ^3.0.1
 
   # URL & Sharing utilities
-  url_launcher: ^6.3.2
-  share_plus: ^12.0.0
+  url_launcher: ^6.3.1
+  share_plus: ^10.1.4
   flutter_inappwebview: ^6.1.5
   desktop_webview_window: ^0.2.3
 
   # Desktop
-  window_manager: ^0.5.1
-  tray_manager: ^0.5.1
+  window_manager: ^0.4.3
+  tray_manager: ^0.3.2
 
-  flutter_dotenv: ^6.0.0
+  flutter_dotenv: ^5.2.1
 
   # Notifications & Logging
-  flutter_local_notifications: ^19.4.2
-  logger: ^2.6.1
+  flutter_local_notifications: ^18.0.1
+  logger: ^2.5.0
 
   # Error handling
-  device_info_plus: ^12.1.0
+  device_info_plus: ^11.3.0
 
   # Package information
-  package_info_plus: ^9.0.0
+  package_info_plus: ^8.2.1
 
   # Path, permission & Markdown handling
   path_provider: ^2.1.5
-  permission_handler: ^12.0.1
-  flutter_markdown: ^0.7.7+1
+  permission_handler: ^11.3.1
+  flutter_markdown: ^0.7.6+1
 
   # Purchase
-  in_app_purchase: ^3.2.3
+  in_app_purchase: ^3.2.1
 
   # Ads
-  google_mobile_ads: ^6.0.0
+  google_mobile_ads: ^5.3.1
 
   retry: ^3.1.2
   # Generate bindings to native libraries
   ffi: ^2.1.4
   # Deeplink handling
-  app_links: ^6.4.1
+  app_links: ^6.4.0
   # Service Locator
-  get_it: ^8.2.0
+  get_it: ^7.7.0
   #Loading
   animated_loading_border: ^0.0.2
   shimmer: ^3.0.0
   # windows related
-  win32_registry: ^2.1.0
+  win32_registry: ^1.1.5
   # Survey sdk
-  surveysparrow_flutter_sdk: ^1.2.2
-  background_downloader: ^9.2.6
-  flutter_riverpod: ^3.0.1
-  ffigen: ^19.1.0
-  connectivity_plus: ^7.0.0
+  surveysparrow_flutter_sdk: ^1.2.1
+  background_downloader: ^8.9.4
+  flutter_riverpod: ^2.6.1
+  ffigen: ^18.1.0
 
 dev_dependencies:
   integration_test:
@@ -154,11 +154,16 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  flutter_lints: ^6.0.0
-  mockito: ^5.5.0
-  auto_route_generator: ^10.2.4
-  build_runner: ^2.7.1
-  msix: ^3.16.12
+  flutter_lints: ^5.0.0
+  mockito: ^5.4.4
+  auto_route_generator: ^9.0.0
+  build_runner: ^2.4.13
+  msix: ^3.16.8
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+dependency_overrides:
 
 # The following section is specific to Flutter.
 flutter:
