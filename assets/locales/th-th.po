@@ -7,10 +7,11 @@
 # Amazing Nev <nev@nevagency.com>, 2025
 # Derek F <derek@getlantern.org>, 2025
 # tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2025
+# Transifex Bot <>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_th c5 <tx_e2f_th_c5@ate2f.com>, 2025\n"
+"Last-Translator: Transifex Bot <>, 2025\n"
 "Language-Team: Thai (https://app.transifex.com/lantern-1/teams/94371/th/)\n"
 "Language: th\n"
 "Plural-Forms: nplurals=1; plural=0;\n"

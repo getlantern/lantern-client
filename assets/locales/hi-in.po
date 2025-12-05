@@ -9,10 +9,11 @@
 # Kalyan Dikshit <dikshitrocks93@gmail.com>, 2025
 # Derek F <derek@getlantern.org>, 2025
 # tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2025
+# Transifex Bot <>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_hi_r3 tx_e2f_hi_r3 <tx_e2f_hi_r3@ate2f.com>, 2025\n"
+"Last-Translator: Transifex Bot <>, 2025\n"
 "Language-Team: Hindi (India) (https://app.transifex.com/lantern-1/teams/94371/hi_IN/)\n"
 "Language: hi_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"

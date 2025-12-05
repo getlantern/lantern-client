@@ -5,10 +5,11 @@
 # Derek F <derek@getlantern.org>, 2025
 # tx_e2f_pk r6 <tx_e2f_pk_r6@ate2f.com>, 2025
 # tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2025
+# Transifex Bot <>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_ur c1 <tx_e2f_ur_c1@ate2f.com>, 2025\n"
+"Last-Translator: Transifex Bot <>, 2025\n"
 "Language-Team: Urdu (https://app.transifex.com/lantern-1/teams/94371/ur/)\n"
 "Language: ur\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"

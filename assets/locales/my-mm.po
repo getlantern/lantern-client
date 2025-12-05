@@ -7,10 +7,11 @@
 # Derek F <derek@getlantern.org>, 2025
 # tx_e2f_my t1 <divinahramaroson@gmail.com>, 2025
 # tx_e2f_bu r4 <tx_e2f_bu_r4@ate2f.com>, 2025
+# Transifex Bot <>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: tx_e2f_bu r4 <tx_e2f_bu_r4@ate2f.com>, 2025\n"
+"Last-Translator: Transifex Bot <>, 2025\n"
 "Language-Team: Burmese (https://app.transifex.com/lantern-1/teams/94371/my/)\n"
 "Language: my\n"
 "Plural-Forms: nplurals=1; plural=0;\n"

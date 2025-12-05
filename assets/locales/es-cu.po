@@ -9,10 +9,11 @@
 # Derek F <derek@getlantern.org>, 2025
 # Katherine Mojena, 2025
 # Aimara pena, 2025
+# Transifex Bot <>, 2025
 # 
 msgid ""
 msgstr ""
-"Last-Translator: Aimara pena, 2025\n"
+"Last-Translator: Transifex Bot <>, 2025\n"
 "Language-Team: Spanish (Cuba) (https://app.transifex.com/lantern-1/teams/94371/es_CU/)\n"
 "Language: es_CU\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
