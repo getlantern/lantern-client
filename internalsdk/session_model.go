@@ -80,6 +80,7 @@ const (
 	pathCurrencyCode           = "currency_Code"
 	pathReplicaAddr            = "replicaAddr"
 	pathSplitTunneling         = "/splitTunneling"
+	pathProxyless              = "/proxyless"
 	pathLang                   = "lang"
 	pathAcceptedTermsVersion   = "accepted_terms_version"
 	pathAdsEnabled             = "adsEnabled"
@@ -590,6 +591,13 @@ func (m *SessionModel) doInvokeMethod(method string, arguments Arguments) (inter
 			return nil, err
 		}
 		return true, nil
+	case "setProxyless":
+		proxyless := arguments.Get("on").Bool()
+		err := m.setProxyless(proxyless)
+		if err != nil {
+			return nil, err
+		}
+		return true, nil
 
 	case "denyAppAccess":
 		appName := arguments.Get("packageName").String()
@@ -848,6 +856,12 @@ func checkSplitTunneling(m *SessionModel) error {
 func (session *SessionModel) setSplitTunneling(tunneling bool) error {
 	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
 		return pathdb.Put(tx, pathSplitTunneling, tunneling, "")
+	})
+}
+
+func (session *SessionModel) setProxyless(proxyless bool) error {
+	return pathdb.Mutate(session.db, func(tx pathdb.TX) error {
+		return pathdb.Put(tx, pathProxyless, proxyless, "")
 	})
 }
 
@@ -1309,6 +1323,10 @@ func (m *SessionModel) ChatEnable() bool {
 
 func (m *SessionModel) SplitTunnelingEnabled() (bool, error) {
 	return pathdb.Get[bool](m.db, pathSplitTunneling)
+}
+
+func (m *SessionModel) ProxylessEnabled() (bool, error) {
+	return pathdb.Get[bool](m.db, pathProxyless)
 }
 
 func (m *SessionModel) SetShowInterstitialAds(adsEnable bool) {

@@ -86,6 +86,7 @@ func (c testSession) SetShowAppOpenAds(enabled bool)                     {}
 func (c testSession) SetHasConfigFetched(enabled bool)                   {}
 func (c testSession) SetHasProxyFetched(enabled bool)                    {}
 func (c testSession) ChatEnable() bool                                   { return false }
+func (c testSession) ProxylessEnabled() (bool, error)                    { return false, nil }
 
 func (c testSession) SetOnSuccess(enabled bool) {
 	if !enabled {

@@ -37,6 +37,7 @@ class SessionModel extends Model {
   late ValueNotifier<bool?> proxyAvailable;
   late ValueNotifier<String?> country;
   late ValueNotifier<bool> proxyAllNotifier;
+  late ValueNotifier<bool> proxylessNotifier;
   late ValueNotifier<ServerInfo?> serverInfoNotifier;
   late ValueNotifier<String?> userEmail;
   late ValueNotifier<String?> linkingCodeNotifier;
@@ -91,6 +92,7 @@ class SessionModel extends Model {
       isTestPlayVersion = ValueNotifier(false);
     }
     if (Platform.isAndroid) {
+      proxylessNotifier = ValueNotifier(true);
       // By default when user starts the app we need to make sure that screenshot is disabled
       // if user goes to chat then screenshot will be disabled
       enableScreenShot();
@@ -961,7 +963,7 @@ class SessionModel extends Model {
   Widget splitTunneling(ValueWidgetBuilder<bool> builder) {
     if (isMobile()) {
       return subscribedSingleValueBuilder<bool>('/splitTunneling',
-          builder: builder, defaultValue: false);
+          builder: builder, defaultValue: false,);
     }
     return ValueListenableBuilder<ConfigOptions?>(
       valueListenable: configNotifier,
@@ -985,6 +987,27 @@ class SessionModel extends Model {
         'on': on,
       }),
     );
+  }
+
+  Widget proxyless(ValueWidgetBuilder<bool> builder) {
+    if (Platform.isAndroid) {
+      return subscribedSingleValueBuilder<bool>('/proxyless',
+        builder: builder, defaultValue: true,);
+    }
+    return ValueListenableBuilder<bool>(
+      valueListenable: proxylessNotifier,
+      builder: builder,
+    );
+  }
+
+  Future<void> setProxyless<T>(bool on) async {
+    if (Platform.isAndroid) {
+      unawaited(
+        methodChannel.invokeMethod('setProxyless', <String, dynamic>{
+          'on': on,
+        }),
+      );
+    }
   }
 
   Widget appsData({
