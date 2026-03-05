@@ -1,4 +1,3 @@
-# 
 # Translators:
 # Ngoc Hoang <ngocit09@gmail.com>, 2025
 # Anh Phan <vietnamesel10n@gmail.com>, 2025

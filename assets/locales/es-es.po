@@ -1,4 +1,3 @@
-# 
 # Translators:
 # Giorgio Maone <giorgio@maone.net>, 2025
 # fffw <fffw@getlantern.org>, 2025

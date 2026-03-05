@@ -1,4 +1,3 @@
-# 
 # Translators:
 # e2f_es r2 <tx_e2f_es_r2@ate2f.com>, 2024
 # Adriano Gomes, 2025

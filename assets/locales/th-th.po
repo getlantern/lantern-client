@@ -1,4 +1,3 @@
-# 
 # Translators:
 # Thai Localization, 2025
 # e2f <projects@e2f.com>, 2025

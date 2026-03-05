@@ -1,4 +1,3 @@
-# 
 # Translators:
 # e2f <projects@e2f.com>, 2025
 # Diversity83 83, 2025
