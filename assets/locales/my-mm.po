@@ -1,4 +1,3 @@
-# 
 # Translators:
 # Lantern, 2025
 # Tun Tun Aung <tuntunaung@codingclassroom.org>, 2025

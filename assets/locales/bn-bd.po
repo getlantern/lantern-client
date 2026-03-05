@@ -1,4 +1,3 @@
-# 
 # Translators:
 # Al Shahrior Hasan Sagor <shahrior3814@gmail.com>, 2025
 # Lantern, 2025

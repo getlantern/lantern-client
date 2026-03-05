@@ -1,4 +1,3 @@
-# 
 # Translators:
 # Layla Taha <layla@asl19.org>, 2022
 # Abdulaziz AlObaili <dr.alobaili@gmail.com>, 2025

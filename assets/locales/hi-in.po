@@ -1,4 +1,3 @@
-# 
 # Translators:
 # Minnie Kaur <tuteja.minnie@gmail.com>, 2025
 # tx_e2f_hi c3 <tx_e2f_hi_c3@ate2f.com>, 2025
