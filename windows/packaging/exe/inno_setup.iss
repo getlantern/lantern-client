@@ -43,8 +43,15 @@ Name: "{app}\{{APP_NAME}}\WebView2"; Permissions: everyone-modify
 
 [Downloads]
 Source: "https://go.microsoft.com/fwlink/p/?LinkId=2124703"; DestFile: "{tmp}\MicrosoftEdgeWebView2Setup.exe"; Flags: external
+; Visual C++ 2015–2022 Redistributable (x64)
+Source: "https://aka.ms/vs/17/release/vc_redist.x64.exe"; DestFile: "{tmp}\vc_redist.x64.exe"; Flags: external
 
 [Run]
+; Install VC++ runtime if needed (fixes MSVCP140/VCRUNTIME errors)
+Filename: "{tmp}\vc_redist.x64.exe"; Parameters: "/install /quiet /norestart"; \
+  StatusMsg: "Installing Microsoft Visual C++ 2015–2022 Runtime (x64)…"; \
+  Check: NeedsVCRedist and FileExists(ExpandConstant('{tmp}\vc_redist.x64.exe')); \
+  Flags: runhidden
 Filename: "{tmp}\MicrosoftEdgeWebView2Setup.exe"; Parameters: "/silent /install"; StatusMsg: "Installing WebView2 Runtime..."; Check: NeedsWebView2Runtime and FileExists(ExpandConstant('{tmp}\MicrosoftEdgeWebView2Setup.exe'))
 ; Launch the app after WebView2 has been installed
 Filename: "{app}\\{{EXECUTABLE_NAME}}"; Description: "{cm:LaunchProgram,{{DISPLAY_NAME}}}"; Flags: {% if PRIVILEGES_REQUIRED == 'admin' %}runascurrentuser{% endif %} nowait postinstall skipifsilent
@@ -61,5 +68,21 @@ begin
   else
   begin
     Result := True; // WebView2 is not installed
+  end;
+end;
+
+
+function NeedsVCRedist(): Boolean;
+var
+  Installed: Cardinal;
+begin
+  // HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64 Installed = 1
+  if RegQueryDWordValue(HKLM64, 'Software\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Installed', Installed) then
+  begin
+    Result := (Installed <> 1);
+  end
+  else
+  begin
+    Result := not FileExists(ExpandConstant('{sys}\MSVCP140.dll'));
   end;
 end;
