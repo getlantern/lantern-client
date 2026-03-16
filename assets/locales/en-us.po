@@ -284,6 +284,12 @@ msgstr ""
 "If enabled all traffic will be sent through Lantern (more secure). If "
 "disabled, only blocked traffic will be sent through Lantern (faster)."
 
+msgid "description_proxyless_dialog"
+msgstr ""
+"If enabled, Lantern will always try to access sites directly using "
+"various tricks to bypass censorship (faster). If disabled, Lantern will "
+"never try to use proxyless strategies."
+
 msgid "Account"
 msgstr "Account"
 
@@ -1859,6 +1865,9 @@ msgstr "Accept and Continue"
 
 msgid "decline"
 msgstr "Decline"
+
+msgid "proxyless"
+msgstr "Proxyless Dialing"
 
 
 

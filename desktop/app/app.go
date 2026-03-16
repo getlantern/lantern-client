@@ -210,6 +210,9 @@ func (app *App) Run(ctx context.Context) error {
 		flashlight.WithOnConfig(app.onConfigUpdate),
 		flashlight.WithOnProxies(app.onProxiesUpdate),
 		flashlight.WithOnSucceedingProxy(app.onSucceedingProxy),
+		flashlight.WithUseProxyless(func() bool {
+			return !settings.GetProxyAll()
+		}), // Use proxyless if ProxyAll is not set
 	)
 	if err != nil {
 		return err
