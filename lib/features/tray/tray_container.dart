@@ -84,7 +84,6 @@ class _TrayContainerState extends State<TrayContainer> with TrayListener {
             label: 'show'.i18n,
             onClick: (item) {
               windowManager.focus();
-              windowManager.setSkipTaskbar(false);
             }),
         MenuItem.separator(),
         MenuItem(
